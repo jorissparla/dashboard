@@ -1,21 +1,37 @@
 import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {fetchNews} from './actions/index'
 
 class AppCard extends Component {
+
+    constructor(props) {
+        super(props)
+    }
+
+componentDidMount() {
+    this.props.fetchNews()
+}
+
     render() {
+        const { index} = this.props || 0;
+        const newsItem = this.props.news[index];
+      //  console.log('Card', newsItem)
+        if (!newsItem) {
+            return <div>Loading...</div>
+        }
         return (
             
-                <div className="col s4">
+                <div className="col s3">
                     <div className="card">
                         <div className="card-image">
-                            <img src="http://materializecss.com/images/sample-1.jpg"/>
-                            <span className="card-title">Card Title</span>
+                            <img src={newsItem.img} alt=""/>
+                            <span className="card-title">{newsItem.title}</span>
                         </div>
                         <div className="card-content">
-                            <p>I am a very simple card. I am good at containing small bits of information. I
-                                am convenient because I require little markup to use effectively.</p>
+                            <p>{newsItem.body}.</p>
                         </div>
                         <div className="card-action">
-                            <a href="#">This is a link</a>
+                            <a href={newsItem.link}>This is a link</a>
                         </div>
                     </div>
                 </div>
@@ -23,4 +39,9 @@ class AppCard extends Component {
     }
 }
 
-export default AppCard;
+const mapStateToProps =(state) =>
+{
+   return {news: state.summary.news}
+}
+
+export default connect( mapStateToProps, {fetchNews})(AppCard);

@@ -22,11 +22,8 @@ const config = {
     },
     	    plotOptions: {
 	        series: {
-	            pointWidth: 50//width of the column bars irrespective of the chart size
-	        },
-                     column: {
-                depth: 25
-            }
+	            pointWidth: 20//width of the column bars irrespective of the chart size
+	        }
 	    },
     series: [
         {
@@ -44,36 +41,44 @@ const config = {
     }
 };
 
-class AppChart extends Component {
+class AppChartCombi extends Component {
     constructor(props) {
         super(props);
     }
     componentDidMount() {
-        this
-            .props
-            .fetchSummary();
+        this.props.fetchSummary();
     }
 
     renderSummary(val, team, title, color, type) {
+        // first get all teams
+        let teams = []
         const mySummary= this.props.summary.reverse()
-        const filteredSummary = mySummary
-            .filter(item => item.team === team)
-            .reduce(({
-                xvalues,
-                data
-            }, item) => {
-                xvalues.push(item.weekNr);
-                data.push(item[val]);
-                return {xvalues, data};
-            }, {
-                xvalues: [],
-                data: []
-            });
+        mySummary.map(({team}) => {
+            if (teams.indexOf(team) === -1 )
+                teams.push(team)    
+        })
+        config.series=[]
+        // now loop through teams
+        teams.map(team => {
+            let filteredSummary = mySummary
+                .filter(item => item.team === team)
+                .reduce(({
+                    xvalues,
+                    data
+                }, item) => {
+                    xvalues.push(item.weekNr);
+                    data.push(item[val]);
+                    return {xvalues, data};
+                }, {
+                    xvalues: [],
+                    data: []
+                });
+                config.series.push({ name: team, data: filteredSummary.data, type:type, dataLabels: { enabled: true}})
+                config.xAxis.categories = filteredSummary.xvalues;
+        })
+
         // console.log('series',config.series[0].data)
-        config.xAxis.categories = filteredSummary.xvalues; 
-        config.series[0] = {data : filteredSummary.data, name: team, color: color, type: type, dataLabels: { enabled: true}} 
-       // config.series[1].data = filteredSummary.data;
-     //   config.series[1].name = team;        
+
         config.title.text = title;
 
     }
@@ -96,4 +101,4 @@ const mapStateToProps = (state) => {
     return {summary: state.summary.summary}
 }
 
-export default connect(mapStateToProps, {fetchSummary})(AppChart);
+export default connect(mapStateToProps, {fetchSummary})(AppChartCombi);
