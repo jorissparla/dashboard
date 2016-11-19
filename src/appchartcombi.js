@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import ReactHighCharts from 'react-highcharts';
 import {connect} from 'react-redux';
 import {fetchSummary} from './actions/index'
-import {data} from './data'
+
 
 const config = {
     chart: {
@@ -42,9 +42,7 @@ const config = {
 };
 
 class AppChartCombi extends Component {
-    constructor(props) {
-        super(props);
-    }
+
     componentDidMount() {
         this.props.fetchSummary();
     }
@@ -55,7 +53,8 @@ class AppChartCombi extends Component {
         const mySummary= this.props.summary.reverse()
         mySummary.map(({team}) => {
             if (teams.indexOf(team) === -1 )
-                teams.push(team)    
+                teams.push(team)  
+                return team  
         })
         config.series=[]
         // now loop through teams
@@ -75,6 +74,7 @@ class AppChartCombi extends Component {
                 });
                 config.series.push({ name: team, data: filteredSummary.data, type:type, dataLabels: { enabled: true}})
                 config.xAxis.categories = filteredSummary.xvalues;
+                return team
         })
 
         // console.log('series',config.series[0].data)
@@ -84,12 +84,12 @@ class AppChartCombi extends Component {
     }
 
     render() {
-        const {data, title, type, value, team, color} = this.props;
+        const { title, type, value, team, color} = this.props;
         //console.log('Render()', this.props, this.state);
         this.renderSummary(value, team, title, color, type)
         return (
             <div className="col s3">
-                <div className = "card">
+                <div className="card">
                 <ReactHighCharts config={config}/>
                 </div>
             </div>

@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import ReactHighCharts from 'react-highcharts';
 import {connect} from 'react-redux';
 import {fetchSummary} from './actions/index'
-import {data} from './data'
 
 const config = {
     chart: {
@@ -45,9 +44,7 @@ const config = {
 };
 
 class AppChart extends Component {
-    constructor(props) {
-        super(props);
-    }
+
     componentDidMount() {
         this
             .props
@@ -84,7 +81,7 @@ class AppChart extends Component {
         this.renderSummary(value, team, title, color, type)
         return (
             <div className="col s3">
-                <div className = "card">
+                <div className="card">
                 <ReactHighCharts config={config}/>
                 </div>
             </div>

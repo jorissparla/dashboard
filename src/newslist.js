@@ -4,9 +4,6 @@ import {fetchNews} from './actions/index'
 import { Link } from 'react-router';
 
 class NewsList extends Component {
-    constructor(props) {
-        super(props)
-    }
 
     componentDidMount() {
         this.props.fetchNews()

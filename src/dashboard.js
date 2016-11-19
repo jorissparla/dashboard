@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 //import logo from './logo.svg';
 import './App.css';
 import AppCard from './appcard';
-import AppNavBar from './appnav';
+//import AppNavBar from './appnav';
 import AppList from './applist'
-import AppChart from './appchart'
+//import AppChart from './appchart'
 import AppChartCombi from './appchartcombi'
 import AppChartPie from './appchartpie'
 
