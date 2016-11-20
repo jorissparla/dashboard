@@ -21,12 +21,14 @@ class NewsList extends Component {
                             <img className="App-image" src={item.img}  alt="Contact Person"/>
                                 
                         </div>
-                        <div className="col s6">
-                            {item.body.substring(0,100)+"..."}
+                        <div className="col s7">
+                            {item.body.substring(0,255)+"..."}
                         </div>
-                        <div className="col s2">
-                            <Link to={"/news/"+item.id}  className="btn-floating btn-lmedium waves-effect waves-light blue"><i className="material-icons">mode_edit</i></Link>
+                        <div className="col s3">
+                            <Link to={"/news/"+item.id}  className="btn-floating btn-small right waves-effect waves-light blue"><i className="material-icons">mode_edit</i></Link>
+                             <Link to={"/news/"+item.id}  className="btn-floating btn-small waves-effect waves-light red"><i className="material-icons">delete</i></Link>
                         </div>                        
+                       
                            </div>
                     </li>
              

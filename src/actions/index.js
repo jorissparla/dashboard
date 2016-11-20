@@ -22,7 +22,7 @@ const fetchNews = () => {
 }
 
 const createNews =(props) => {
-  const request= axios.post(ROOT_URL+'/news/add', props);
+  const request= axios.put(ROOT_URL+'/news', props);
   return {
     type: CREATE_NEWS,
     payload: request

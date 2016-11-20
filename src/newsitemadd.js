@@ -9,108 +9,57 @@ const handleDefaultImage = () => {
   console.log('clicked')
 }
 
-class NewsItemAdd extends Component {
+const doSubmit = values => createNews(values);
 
-  onSubmit(props) {
-    this
-      .props
-      .createNews(props)
+const inputField = field => {
+  return (
+  <div className="input-field col s4">
+      <input {...field.input} placeholder={field.input.placeholder} />
+  </div>
+  )
+}
+const inputFieldDoubleWidth = field => {
+  return (
+  <div className="input-field col s8">
+      <input {...field.input} placeholder={field.input.placeholder} />
+  </div>
+  )
+}
 
-  }
-
+const NewsItemAdd  =(props) => {
+ const {handleSubmit, createNews, resetForm} = props;
   // const { handleSubmit, pristine, reset, submitting } = props
-  render() {
-    const {handleSubmit, createNews, resetForm} = this.props;
-    console.log('Render', this.props)
-
     return (
       <div className="row">
-        <form className="col s12" onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+        <form className="col s12" onSubmit={handleSubmit(doSubmit)}>
           <div className="row">
-            <div className="input-field col s4">
-              <Field
-                name="title"
-                placeholder="Title"
-                id="title"
-                className="validate"
-                component={title => <div>
-                <input type="text" {...title} placeholder="title"/> {title.touched && title.error && <span>{title.error}</span>}
-              </div>}/>
-              <button type="submit" className="btn btn-primary">Save</button>
+              <Field name="title" component={inputField} placeholder="title" />
+              <div className="col s4">
+                <button type="submit" className="btn btn-primary">Save</button>
+              </div>
             </div>
-            <div className="input-field col s12">
-              <Field
-                name="body"
-                component={body => <div>
-                <input
-                  type="text"
-                  {...body}
-                  placeholder="Description"
-                  className="materialize-textarea"/>
-              </div>}/>
-            </div>
+              <div className="row">
+              <Field name="body" component={inputFieldDoubleWidth} type="text-area" placeholder="Description"/>
           </div>
           <div className="row">
-            <div className="input-field col s6">
-              <Field
-                name="img"
-                id="img"
-                type="text"
-                placeholder="Image"
-                className="validate"
-                component={img => <div>
-                <input
-                  type="text"
-                  {...img}
-                  placeholder="Image"
-                  />
-              </div>}/>
-            </div>
+              <Field name="img" id="img" type="text" placeholder="Image" component={inputFieldDoubleWidth} />
             <div>
               <button className="btn grey" onClick={handleDefaultImage}>Default Image</button>
               <img src="" alt=""/>
             </div>
           </div>
           <div className="row">
-            <div className="input-field col s08">
-              <Field
-                name="link"
-                id="password"
-                type="text"
-                placeholder="link"
-                className="validate"
-                component={link => <div>
-                <input type="text" {...link} placeholder="link"/>
-              </div>}/>
-            </div>
-            <div className="input-field col s04">
-              <Field
-                name="link_text"
-                id="email"
-                type="text"
-                placeholder="text for link"
-                className="validate"
-                component=
-                { link_text => <div> <input type="text" {...link_text} /> </div> }/>
-            </div>
+             <Field name="link" component={inputFieldDoubleWidth} type="text" placeholder="Link"/>
+            <Field name="link_text" component={inputField} type="text" placeholder="Description"/>
           </div>
           <div className="row">
-            <div className="col s4">
-              <Field
-                name="expire_date"
-                id="email"
-                type="date"
-                className="validate"
-                component=
-                {expire_date=> <div> <input type="text" {...expire_date}/> </div> }/>
-            </div>
+             <Field name="expire_date" component={inputField} type="date" placeholder="expire_date"/>            
           </div>
         </form>
       </div>
 
     );
   }
-}
 
 const checkValid = (obj) => {
 
@@ -125,12 +74,20 @@ const validate = () => {
   return errors;
 }
 
-export default reduxForm(
-  { form: 'newsitemadd', validate: validate}, 
-  (state)=> 
-    { return {
-      initialValues: {
-        img: 'http://blogs.infor.com/bibliotheken/wp-content/uploads/sites/49/2016/11/DFP_Blog' +
-        '_Header_1000x160.jpg'
-      }
-    }}, {createNews})(NewsItemAdd);
+export default reduxForm({
+  form: 'newsitemadd',
+  validate: validate,
+  initialValues: {
+    img: 'http://blogs.infor.com/bibliotheken/wp-content/uploads/sites/49/2016/11/DFP_Blog' +
+        '_Header_1000x160.jpg',
+    expire_date: '2016-12-12'
+  }
+}, (state) => {
+  return {
+    initialValues: {
+      img: 'http://blogs.infor.com/bibliotheken/wp-content/uploads/sites/49/2016/11/DFP_Blog' +
+          '_Header_1000x160.jpg', 
+    expire_date: '12/12/2016'
+    }
+  }
+}, {createNews})(NewsItemAdd);
