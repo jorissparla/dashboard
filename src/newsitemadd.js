@@ -1,6 +1,7 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {Field, reduxForm} from 'redux-form';
 import {createNews} from './actions/index'
+import {Link, browserHistory} from 'react-router';
 const {DOM: {
     input
   }} = React
@@ -9,64 +10,105 @@ const handleDefaultImage = () => {
   console.log('clicked')
 }
 
-const doSubmit = values => createNews(values);
+const doSubmit = values => {
+  createNews(values);
+  browserHistory.push('/news')
+}
 
 const inputField = field => {
+  console.log(field)
+  const classw = "input-field col s" + (field.width || "4");
   return (
-  <div className="input-field col s4">
-      <input {...field.input} placeholder={field.input.placeholder} />
-  </div>
+    <div className={classw}>
+      <input {...field.input} placeholder={field.placeholder} type={field.type}/>
+    </div>
   )
 }
-const inputFieldDoubleWidth = field => {
+const inputImageField = field => {
+  console.log(field)
+  const classw = "input-field col s" + (field.width || "4");
   return (
-  <div className="input-field col s8">
-      <input {...field.input} placeholder={field.input.placeholder} />
-  </div>
-  )
-}
+    <div>
+      <div className={classw}>
+        <input {...field.input} placeholder={field.placeholder} type={field.type}/>
 
-const NewsItemAdd  =(props) => {
- const {handleSubmit, createNews, resetForm} = props;
-  // const { handleSubmit, pristine, reset, submitting } = props
-    return (
-      <div className="row">
-        <form className="col s12" onSubmit={handleSubmit(doSubmit)}>
-          <div className="row">
-              <Field name="title" component={inputField} placeholder="title" />
-              <div className="col s4">
-                <button type="submit" className="btn btn-primary">Save</button>
-              </div>
-            </div>
-              <div className="row">
-              <Field name="body" component={inputFieldDoubleWidth} type="text-area" placeholder="Description"/>
-          </div>
-          <div className="row">
-              <Field name="img" id="img" type="text" placeholder="Image" component={inputFieldDoubleWidth} />
-            <div>
-              <button className="btn grey" onClick={handleDefaultImage}>Default Image</button>
-              <img src="" alt=""/>
-            </div>
-          </div>
-          <div className="row">
-             <Field name="link" component={inputFieldDoubleWidth} type="text" placeholder="Link"/>
-            <Field name="link_text" component={inputField} type="text" placeholder="Description"/>
-          </div>
-          <div className="row">
-             <Field name="expire_date" component={inputField} type="date" placeholder="expire_date"/>            
-          </div>
-        </form>
       </div>
+      <div className="col s2">
+        <img src={field.input.value} alt="" width="200px"/>
+      </div>
+    </div>
+  )
+}
 
-    );
-  }
+const NewsItemAdd = (props) => {
+  const {handleSubmit, createNews, resetForm} = props;
+  // const { handleSubmit, pristine, reset, submitting } = props
+  return (
+    <div className="row">
+      <form className="col s12" onSubmit={handleSubmit(doSubmit)}>
+        <div className="row">
+          <Field name="title" component={inputField} placeholder="title"/>
+          <div className="col s4">
+            <p>
+              <button type="submit" className="btn btn-primary blue">Save</button>
+              <Link to="/news" type="cancel" className="btn btn-primary black">Cancel</Link>
+            </p>
+          </div>
+        </div>
+        <div className="row">
+          <Field
+            name="body"
+            component={inputField}
+            type="text"
+            placeholder="Description"
+            width={12}/>
+        </div>
+        <div className="row">
+          <Field
+            name="img"
+            id="img"
+            type="text"
+            placeholder="Image"
+            component={inputImageField}
+            width={8}/>
+          <div></div>
+        </div>
+        <div className="row">
+          <Field
+            name="link"
+            component={inputField}
+            type="text"
+            placeholder="Link"
+            width={8}/>
+          <Field
+            name="link_text"
+            component={inputField}
+            type="text"
+            placeholder="Description"/>
+        </div>
+        <div className="row">
+          <div className="left">
+            Expires:
+          </div>
+          <Field
+            name="expire_date"
+            component={inputField}
+            type="date"
+            placeholder="expire_date"
+            width={2}/>
+        </div>
+      </form>
+    </div>
 
-const checkValid = (obj) => {
+  );
+}
+
+/*const checkValid = (obj) => {
 
   return obj.touched && obj.invalid
     ? 'btn-danger'
     : '';
-}
+}*/
 
 const validate = () => {
   const errors = {};
@@ -74,20 +116,15 @@ const validate = () => {
   return errors;
 }
 
+const defaultDate = () => new Date(Date.now() + 14 * 24 * 3600000)
+  .toISOString()
+  .substr(0, 10);
+
 export default reduxForm({
   form: 'newsitemadd',
   validate: validate,
   initialValues: {
-    img: 'http://blogs.infor.com/bibliotheken/wp-content/uploads/sites/49/2016/11/DFP_Blog' +
-        '_Header_1000x160.jpg',
-    expire_date: '2016-12-12'
+    img: 'https://media.licdn.com/media/p/6/005/0b2/35e/09bf0b3.png',
+    expire_date: defaultDate()
   }
-}, (state) => {
-  return {
-    initialValues: {
-      img: 'http://blogs.infor.com/bibliotheken/wp-content/uploads/sites/49/2016/11/DFP_Blog' +
-          '_Header_1000x160.jpg', 
-    expire_date: '12/12/2016'
-    }
-  }
-}, {createNews})(NewsItemAdd);
+}, null, {createNews})(NewsItemAdd);

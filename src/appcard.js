@@ -28,7 +28,7 @@ componentDidMount() {
                             <p>{newsItem.body}.</p>
                         </div>
                         <div className="card-action">
-                            <a href={newsItem.link}>This is a link</a>
+                            <a href={newsItem.link}>{newsItem.link_text}</a>
                         </div>
                     </div>
                 </div>

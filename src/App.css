@@ -28,5 +28,37 @@
 }
 
 .App-image {
-  height: 50px
+  height: auto;
+  width: 100%;
+  
+}
+
+.App-avatar {
+      width: 80px;
+    height: 80px;
+        border-radius: 5px;
+}
+
+.color1 {
+  background-color: #29b6f6
+}
+
+.margin1 {
+      background-color: white;
+    border-top: 1px solid rgba(160,160,160,0.2);
+}
+
+.App-text {
+      display: flex;
+    font-size: 18px;
+    font-weight: 300;
+    line-height: normal;
+    color: white
+}
+
+.App-small-text {
+  font-size: 8px;
+}
+.App-card {
+  align-items: flex-start; flex-direction: column; justify-content: flex-end;
 }
