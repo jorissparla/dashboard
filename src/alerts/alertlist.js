@@ -27,11 +27,7 @@ class AlertList extends Component {
                                 className="btn-floating btn-small right waves-effect waves-light blue">
                                 <i className="material-icons">mode_edit</i>
                             </Link>
-                            <Link
-                                to={"/alerts/" + item.id}
-                                className="btn-floating btn-small waves-effect waves-light red">
-                                <i className="material-icons">delete</i>
-                            </Link>
+
 
                         </div>
                       

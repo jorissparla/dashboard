@@ -4,8 +4,9 @@ import './App.css';
 import AppCard from './appcard';
 import AppCardContainer from './appcardcontainer';
 import AppList from './applist'
-import AppChartCombi from './appchartcombi'
-import AppChartPie from './appchartpie'
+import AppChartCombi from './charts/appchartcombi'
+import AppChart from './charts/appchart'
+import AppChartPie from './charts/appchartpie'
 import KudoList from './kudos/kudolist'
 import AlertWidget from './alerts/alertwidget'
 import Load from './load';
@@ -16,7 +17,7 @@ class DashBoard extends Component {
     return (
         <div className="row">
           <div className="col s2">  
-            <AlertWidget />
+            <AppList/>
           </div>
           <div className="col s9">
           <div className="row">
@@ -25,7 +26,7 @@ class DashBoard extends Component {
               <KudoList />
             </div>
             <div className="row">
-              <AppChartCombi data={[1,2,3]} title="Backlog" type="line" value="supportBacklog" team="Logistics"/>
+              <AppChart data={[1,2,3]} title="Backlog" type="line" value="supportBacklog" team="Logistics"/>
               <AppChartCombi data={[1,2,3]} title="Surveys" type="column" value="surveyScore"  color="#9575cd" team="Logistics"/>
               <AppChartCombi data={[1,2,3]} title="Input" type="area" value="opened"  color="#ffb300'" team="Logistics"/>
               

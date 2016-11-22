@@ -5,6 +5,7 @@ import App from './App';
 import NewsList from './news/newslist';
 import AlertsList from './alerts/alertlist';
 import AlertItem from './alerts/alertitem';
+import AlertItemAdd from './alerts/alertitemadd';
 import NewsItem from './news/newsitem';
 import NewsItemAdd from './news/newsitemadd';
 import DashBoard from './dashboard'
@@ -16,7 +17,9 @@ export default (
     <IndexRoute component={DashBoard} />
     <Route path="/main/:id" component={DashBoard} />
      <Route path="alerts" component={AlertsList} />
+     <Route path="alerts/new" component={AlertItemAdd} />
         <Route path="alerts/:id" component={AlertItem} />
+        
      <Route path="news" component={NewsList} />
           <Route path="news/new" component={NewsItemAdd} />
       <Route path="news/:id" component={NewsItem} />

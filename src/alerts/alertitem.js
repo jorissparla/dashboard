@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {reduxForm, Field} from 'redux-form'
 import {browserHistory, Link} from 'react-router';
-import {fetchAlertItem, updateAlerts} from '../actions/index'
+import {fetchAlertItem, updateAlerts, deleteAlert} from '../actions/index'
 import DropdownList from 'react-widgets/lib/DropdownList'
 
 const aTypes = [
@@ -14,7 +14,6 @@ const aTypes = [
 
 const inputField = ({ input, ...rest }) => {
     const classw = "input-field col s" + (rest.width || "4");
-    //console.log(field)
     return (
         <div className={classw}>
             <input {...input} {...rest} />
@@ -23,31 +22,10 @@ const inputField = ({ input, ...rest }) => {
 }
 
 
-const inputIcon = field => {
-    return (
-        <div>
-            <div className="btn-floating red">
-                <i
-                    className="material-icons"
-                    onClick={() => {
-                    field.input.value = 'Poep';
-                    //field.touched = true;
-                    console.log('field', field)
-                }}>warning</i>
-            </div>
-            <div className="btn-floating yellow">
-                <i className="material-icons">star</i>
-            </div>
-            <input {...field.input} placeholder={field.placeholder}/>
-        </div>
-    )
-}
-
-
-
 const doSubmit = values => {
+    console.log('DOSUBMIT',values)
     updateAlerts(values);
-    browserHistory.push('/alerts')
+    browserHistory.push('/alerts');
 }
 
 class AlertItem extends Component {
@@ -58,13 +36,22 @@ class AlertItem extends Component {
             .fetchAlertItem(this.props.params.id)
     }
 
+    onDeleteClick(e) {
+        console.log('onDeleteClick')
+        e.preventDefault();
+        this.props.deleteAlert(this.props.params.id).
+        then(()=> {
+        browserHistory.push('/alerts')
+    });
+  }
+
     render() {
         const {handleSubmit, fetchAlertItem, submitting} = this.props
         if (!this.props.alerts[0]) {
             return <div>Loading</div>
         }
         const alert = this.props.alerts[0]
-        console.log(this.props)
+        console.log(this.props);
         return (
 
             <div className="row">
@@ -77,6 +64,7 @@ class AlertItem extends Component {
                             <p>
                                 <button type="submit" className="btn btn-primary blue">Save</button>
                                 <Link to="/news" type="cancel" className="btn btn-primary black">Cancel</Link>
+                                <button className="btn btn-primary red" onClick={this.onDeleteClick.bind(this)}>Delete</button>
                             </p>
                         </div>
                 </form>
@@ -92,4 +80,4 @@ const mapStateToProps = state => {
 }
 AlertItem = reduxForm({form: 'alertitem'})(AlertItem)
 
-export default connect(mapStateToProps, {fetchAlertItem})(AlertItem)
+export default connect(mapStateToProps, {fetchAlertItem, deleteAlert})(AlertItem)

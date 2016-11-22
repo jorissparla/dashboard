@@ -9,6 +9,7 @@ export const FETCH_KUDOS = 'FETCH_KUDOS'
 export const FETCH_ALERTS ='FETCH_ALERTS';
 export const CREATE_ALERTS ='CREATE_ALERTS';
 export const UPDATE_ALERTS ='UPDATE_ALERTS';
+export const DELETE_ALERT ='DELETE_ALERT';
 
 const ROOT_URL = 'http://localhost:3000/api'
 
@@ -77,7 +78,7 @@ const fetchAlertItem = (id) => {
 }
 
 
-const createAlerts =(props) => {
+const createAlert =(props) => {
   const request= axios.put(ROOT_URL+'/alerts', props);
   return {
     type: CREATE_ALERTS,
@@ -93,6 +94,21 @@ const updateAlerts =(props) => {
   }
 }
 
+export function deleteAlert(id) {
+  const request = axios.delete(ROOT_URL+'/alerts/'+id  );
+  return {
+    type : DELETE_ALERT,
+    payload: request
+  };
+}
+export function deleteNews(id) {
+  const request = axios.delete(ROOT_URL+'/news/'+id  );
+  return {
+    type : DELETE_NEWS,
+    payload: request
+  };
+}
+
 
 exports.fetchSummary = fetchSummary;
 exports.fetchKudos = fetchKudos;
@@ -102,6 +118,8 @@ exports.createNews = createNews;
 exports.updateNews = updateNews;
 exports.fetchAlerts = fetchAlerts;
 exports.fetchAlertItem = fetchAlertItem;
-exports.createAlerts = createAlerts;
+exports.createAlert = createAlert;
 exports.updateAlerts = updateAlerts;
+exports.deleteAlert = deleteAlert;
+exports.deleteNews = deleteNews;
 

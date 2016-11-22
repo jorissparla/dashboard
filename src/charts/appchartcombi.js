@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import ReactHighCharts from 'react-highcharts';
 import {connect} from 'react-redux';
-import {fetchSummary} from './actions/index'
+import {fetchSummary} from '../actions/index'
 
 
 const config = {

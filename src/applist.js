@@ -15,7 +15,7 @@ class AppList extends Component {
                         </div>
                     </li>
                     <li className="collection-item avatar black lighten-2 white-text">
-                        <i className="material-icons circle">folder</i>
+                        <i className="material-icons circle">folder</i>24
                         <span className="title">Support Reps Birthday</span>
                         <a href="#!" className="secondary-content">
                             <i className="material-icons">grade</i>
