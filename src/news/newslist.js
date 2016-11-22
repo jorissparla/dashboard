@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {fetchNews} from './actions/index'
+import {fetchNews} from '../actions/index'
 import {Link} from 'react-router';
 
 class NewsList extends Component {

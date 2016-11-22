@@ -5,6 +5,7 @@ import { reducer as formReducer } from 'redux-form';
 
 const rootReducer = combineReducers({
   summary: SummaryReducer,
+  alerts: AlertsReducer,
   form: formReducer
 });
 

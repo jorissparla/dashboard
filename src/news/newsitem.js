@@ -2,13 +2,21 @@ import React, {Component} from 'react';
 import {Field, reduxForm} from 'redux-form';
 import {connect} from 'react-redux';
 import {Link, browserHistory} from 'react-router';
-import {fetchNewsItem, updateNews} from './actions/index'
+import {fetchNewsItem, updateNews} from '../actions/index'
 
 const inputField = field => {
     const classw = "input-field col s" + (field.width || "4");
     return (
         <div className={classw}>
             <input {...field.input} placeholder={field.placeholder} type={field.type}/>
+        </div>
+    )
+}
+const inputFieldDate = field => {
+    const classw = "input-field col s" + (field.width || "4");
+    return (
+        <div className={classw}>
+            <input className="datepicker" {...field.input} placeholder={field.placeholder} type={field.type} />
         </div>
     )
 }
@@ -109,8 +117,9 @@ class NewsItem extends Component {
                         </div>
                         <Field
                             name="expire_date"
-                            component={inputField}
+                            component={inputFieldDate}
                             type="date"
+                            className="datepicker"
                             placeholder="expire_date"
                             width={2}/>
                     </div>

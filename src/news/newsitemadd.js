@@ -1,6 +1,6 @@
 import React from 'react';
 import {Field, reduxForm} from 'redux-form';
-import {createNews} from './actions/index'
+import {createNews} from '../actions/index'
 import {Link, browserHistory} from 'react-router';
 const {DOM: {
     input

@@ -68,7 +68,7 @@ const fetchAlerts = () => {
   };
 }
 
-const fetchAlertsItem = (id) => {
+const fetchAlertItem = (id) => {
     const request = axios.get(ROOT_URL+'/alerts/'+id)
       return {
     type : FETCH_ALERTS,
@@ -101,7 +101,7 @@ exports.fetchNewsItem = fetchNewsItem;
 exports.createNews = createNews;
 exports.updateNews = updateNews;
 exports.fetchAlerts = fetchAlerts;
-exports.fetchAlertsItem = fetchAlertsItem;
+exports.fetchAlertItem = fetchAlertItem;
 exports.createAlerts = createAlerts;
 exports.updateAlerts = updateAlerts;
 
