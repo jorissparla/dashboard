@@ -28,9 +28,8 @@ class AlertList extends Component {
                                 <i className="material-icons">mode_edit</i>
                             </Link>
 
-
                         </div>
-                      
+
                     </div>
                 </li>
 
@@ -44,17 +43,24 @@ class AlertList extends Component {
             return <div>Loading</div>
         }
         return (
-            <ul className="collection with-header">
-                <li className="collection-header App-align">
-                    <h4>AlertsItems</h4>
-                    <Link to={"/alerts/new"} className="btn waves-effect waves-light ">
-                        <i className="material-icons">add</i>Add
+            <div>
+                <ul className="collection with-header">
+                    <div className="row">
+                        <li className="collection-header App-align ">
+                            <h4>Alerts</h4>
+
+                        </li>
+                    </div>
+                    {this.renderAlertsItems(alerts)}
+                </ul>
+                <div className="fixed-action-button">
+                    <Link
+                        to={"/alerts/new"}
+                        className="btn-floating btn-large waves-effect waves-light orange ">
+                        <i className="material-icons">add</i>
                     </Link>
-                </li>
-
-                {this.renderAlertsItems(alerts)}
-            </ul>
-
+                </div>
+            </div>
         );
     }
 }

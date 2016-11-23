@@ -11,7 +11,7 @@ export const CREATE_ALERTS ='CREATE_ALERTS';
 export const UPDATE_ALERTS ='UPDATE_ALERTS';
 export const DELETE_ALERT ='DELETE_ALERT';
 
-const ROOT_URL = 'http://localhost:3000/api'
+const ROOT_URL = 'http://localhost:3001/api'
 
 const fetchSummary = () => {
     const request = axios.get(ROOT_URL+'/summary')

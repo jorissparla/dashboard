@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {fetchKudos} from '../actions/index'
 import {Link} from 'react-router';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
+import moment from 'moment';
 
 const colorList = [
     "purple",
@@ -26,9 +27,14 @@ const indexList = [
     34,
     56,
     24,
-    12,
+    52,
     19
 ]
+
+const getDay =date => moment(date).format("DD")
+
+const displayNrKudos = ( nr, len ) => { return nr>len? len : nr}
+
 
 class KudoList extends Component {
 
@@ -41,43 +47,61 @@ class KudoList extends Component {
 
     myTimer() {
         const t1 = this.state.tijd;
+        console.log('TIJD', t1)
         this.setState({
             tijd: t1 + 1
         })
+        this.setState({ nrKudos: this.props.kudos.length, displayedNrKudos: displayNrKudos(this.props.showNumberKudos || 4,  this.props.kudos.length) })
+        const {nrKudos, displayedNrKudos, tijd} = this.state
+        if (tijd > nrKudos - displayedNrKudos) {
+        this.setState({
+            tijd: 0
+        })  
+        }
     }
 
     componentWillMount() {
         this
             .props
             .fetchKudos()
-        setInterval(this.myTimer.bind(this), 15000)
+        setInterval(this.myTimer.bind(this), this.props.refreshRate||15000)
+
     }
 
-    renderItems(items) {
+    componentDidMount() {
+         
+    }
+    
 
-        return items.map((item, index) => {
+    renderItems(kudos) {
+        const nrKudos = displayNrKudos(this.props.showNumberKudos || 4,  this.props.kudos.length)
+        
+        const index = this.state.tijd;
+        if (index < kudos.length - nrKudos) {
+            var kl = kudos.slice(index, index + nrKudos);
+        } else 
+            var kl = kudos.slice(0, nrKudos);
+        return kl.map((item, index) => {
             return <KudoItem
                 name={item.ownerrep_name}
                 key={index}
                 customer={item.customer_name}
-                color={colorList[index % 6]}
+                color={colorList[index % nrKudos]}
                 gender={gender(item.gender)}
-                nr={indexList[index % 6]}/>
+                date = {getDay(item.survey_date)}
+                nr={indexList[index % nrKudos]}/>
         })
     }
 
     render() {
         const kudos = this.props.kudos;
+        
         if (!kudos) {
             return <div>
                 Loading
             </div>
         }
-        const index = this.state.tijd;
-        if (index < kudos.length - 6) {
-            var kl = kudos.slice(index, index + 6);
-        } else 
-            var kl = kudos.slice(0, 6);
+       
         return (
 
             <div>
@@ -91,7 +115,7 @@ class KudoList extends Component {
       transitionAppearTimeout={500}
       transitionEnter={false}
       transitionLeave={false}>
-                    {this.renderItems(kl)}
+                    {this.renderItems(kudos)}
                 </ReactCSSTransitionGroup>
 
             </div>

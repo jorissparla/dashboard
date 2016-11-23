@@ -23,7 +23,7 @@ class DashBoard extends Component {
           <div className="row">
               <AppCard index={0}/>
               <AppCard index={3}/>
-              <KudoList />
+              <KudoList refreshRate={10000} showNumberKudos={6}/>
             </div>
             <div className="row">
               <AppChart data={[1,2,3]} title="Backlog" type="line" value="supportBacklog" team="Logistics"/>
