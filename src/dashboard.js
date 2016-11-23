@@ -10,10 +10,23 @@ import AppChartPie from './charts/appchartpie'
 import KudoList from './kudos/kudolist'
 import AlertWidget from './alerts/alertwidget'
 import Load from './load';
+import NewsCardContainer from './news/newscardcontainer';
+
+const test1 = () => {
+  return (
+                <div className="row">
+              <AppChart data={[1,2,3]} title="Backlog" type="line" value="supportBacklog" team="Logistics"/>
+              <AppChartCombi  title="Surveys" type="column" value="surveyScore"  color="#9575cd" team="Logistics"/>
+              <AppChartCombi  title="Input" type="area" value="opened"  color="#ffb300'" team="Logistics"/>
+              
+
+             <AppCard index={3}/>
+            </div>
+  )
+}
 
 class DashBoard extends Component {
   render() {
-    console.log('DASHBOARD',this.props.params.id)
     return (
         <div className="row">
           <div className="col s2">  
@@ -21,17 +34,8 @@ class DashBoard extends Component {
           </div>
           <div className="col s9">
           <div className="row">
-              <AppCard index={0}/>
-              <AppCard index={3}/>
-              <KudoList refreshRate={10000} showNumberKudos={6}/>
-            </div>
-            <div className="row">
-              <AppChart data={[1,2,3]} title="Backlog" type="line" value="supportBacklog" team="Logistics"/>
-              <AppChartCombi data={[1,2,3]} title="Surveys" type="column" value="surveyScore"  color="#9575cd" team="Logistics"/>
-              <AppChartCombi data={[1,2,3]} title="Input" type="area" value="opened"  color="#ffb300'" team="Logistics"/>
-              
-
-
+             <NewsCardContainer refreshRate={20000} />
+            <KudoList refreshRate={10000} showNumberKudos={6}/>
             </div>
             </div>
           </div>

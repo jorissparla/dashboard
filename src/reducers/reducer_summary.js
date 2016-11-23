@@ -1,4 +1,4 @@
-import {FETCH_SUMMARY, FETCH_NEWS, SHOW_NEWS, DELETE_NEWS, FETCH_KUDOS} from '../actions/index';
+import {FETCH_SUMMARY, FETCH_NEWS, SHOW_NEWS, FETCH_KUDOS} from '../actions/index';
 const INITIAL_STATE = { summary:[], news:[],all: [], post:null };
 
 const SummaryReducer =   ( state = INITIAL_STATE, action) => {

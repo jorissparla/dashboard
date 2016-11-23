@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Field, reduxForm} from 'redux-form';
 import {connect} from 'react-redux';
 import {Link, browserHistory} from 'react-router';
-import {fetchNewsItem, updateNews} from '../actions/index'
+import {fetchNewsItem, updateNews, deleteNews} from '../actions/index'
 
 const inputField = field => {
     const classw = "input-field col s" + (field.width || "4");
@@ -59,6 +59,14 @@ class NewsItem extends Component {
         // console.log(this.props)
     }
 
+    onDeleteClick(e) {
+        console.log('onDeleteClick')
+        e.preventDefault();
+        this.props.deleteNews(this.props.params.id).then(()=> {
+            browserHistory.push('/news')
+        });
+  }
+
 
     render() {
         const { handleSubmit, fetchNewsItem, submitting} = this.props
@@ -75,6 +83,7 @@ class NewsItem extends Component {
                             <p>
                                 <button type="submit" className="btn btn-primary blue">Save</button>
                                 <Link to="/news" type="cancel" className="btn btn-primary black">Cancel</Link>
+                                <button className="btn btn-primary red" onClick={this.onDeleteClick.bind(this)}>Delete</button>
                             </p>
                         </div>
                     </div>
@@ -144,4 +153,4 @@ const mapStateToProps = (state) => {
 
 NewsItem = reduxForm({form:'newsitem'})(NewsItem)
 export default // NewsItem = reduxForm(    {form: 'newsitem'},
-        connect(mapStateToProps, {fetchNewsItem, updateNews})(NewsItem);
+        connect(mapStateToProps, {fetchNewsItem, updateNews, deleteNews})(NewsItem);

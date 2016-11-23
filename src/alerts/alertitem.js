@@ -3,7 +3,6 @@ import {connect} from 'react-redux';
 import {reduxForm, Field} from 'redux-form'
 import {browserHistory, Link} from 'react-router';
 import {fetchAlertItem, updateAlerts, deleteAlert} from '../actions/index'
-import DropdownList from 'react-widgets/lib/DropdownList'
 
 const aTypes = [
     { type: 'Notification',value: 'Notification' },
@@ -39,19 +38,17 @@ class AlertItem extends Component {
     onDeleteClick(e) {
         console.log('onDeleteClick')
         e.preventDefault();
-        this.props.deleteAlert(this.props.params.id).
-        then(()=> {
-        browserHistory.push('/alerts')
-    });
+        this.props.deleteAlert(this.props.params.id).then(()=> {
+            browserHistory.push('/alerts')
+        });
   }
 
     render() {
-        const {handleSubmit, fetchAlertItem, submitting} = this.props
+        const {handleSubmit, fetchAlertItem} = this.props
         if (!this.props.alerts[0]) {
             return <div>Loading</div>
         }
-        const alert = this.props.alerts[0]
-        console.log(this.props);
+        //const alert = this.props.alerts[0]
         return (
 
             <div className="row">

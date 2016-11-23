@@ -61,9 +61,7 @@ class KudoList extends Component {
     }
 
     componentWillMount() {
-        this
-            .props
-            .fetchKudos()
+        this.props.fetchKudos()
         setInterval(this.myTimer.bind(this), this.props.refreshRate||15000)
 
     }
