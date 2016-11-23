@@ -17,7 +17,7 @@ class DashBoard extends Component {
     return (
         <div className="row">
           <div className="col s2">  
-            <AppList/>
+            <AlertWidget/>
           </div>
           <div className="col s9">
           <div className="row">
