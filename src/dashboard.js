@@ -12,6 +12,7 @@ import AlertWidget from './alerts/alertwidget'
 import Load from './load';
 import NewsCardContainer from './news/newscardcontainer';
 import AppChartContainer from './charts/appchartcontainer'
+import HistoryChartContainer from './charts/historycontainer'
 
 const test1 = () => {
   return (
@@ -46,13 +47,15 @@ class DashBoard extends Component {
         <div className="col s2">
           <AlertWidget/>
         </div>
-        <div className="col s9">
+        <div className="col s10">
           <div className="row">
             <NewsCardContainer refreshRate={33000}/>
             <KudoList refreshRate={10000} showNumberKudos={6}/>
           </div>
             <div className="row">
           <AppChartContainer data={['Tools', 'Logistics', 'Finance']} refreshRate={16000}/>
+          <HistoryChartContainer refreshRate={16000}/>
+
               <AppChartCombi
                 title="Surveys"
                 type="column"

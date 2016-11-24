@@ -101,7 +101,7 @@ class KudoList extends Component {
        
         return (
 
-            <div class ="container">
+            <div className ="container">
                 <h3 className="left-align">
                     <i className="material-icons">favorite_border</i>
                     Kudos

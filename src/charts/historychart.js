@@ -17,6 +17,11 @@ const config = {
 
         ]
     },
+    yAxis: {
+        categories: [
+
+        ]
+    },
     	    plotOptions: {
 	        series: {
 	            pointWidth: 50//width of the column bars irrespective of the chart size
@@ -42,27 +47,36 @@ const config = {
 };
 
 
- const  renderSummary =(config,val, team, title, color, type, summary) => {
-        const mySummary= summary.slice(); //.sort((a,b)=> a.weekNr > b.weekNr)
-        const filteredSummary = mySummary
-            .filter(item => item.team === team)
+ const  renderSummary =(config,xval, val, title, color, type, summary) => {
+        xval = (!xval) ? "weekNr":xval;
+        const range = summary.map(item=> item[val] )
+        console.log( 'MAX', range,Math.floor(Math.min(...range)/10 -1)*10, Math.floor(Math.max(...range)/10 +1)*10)
+
+        const filteredSummary = summary //.sort((a,b)=> a.row > b.row)
             .reduce(({xvalues, data}, item) => {
-                xvalues.push(item.weekNr);
+                xvalues.push(item[xval]);
                 data.push(item[val]);
                 return {xvalues, data};
             }, {  xvalues: [], data: [] });
         // console.log('series',config.series[0].data)
         config.xAxis.categories = filteredSummary.xvalues; 
-        config.series[0] = {data : filteredSummary.data, name: team, color: color, type: type, dataLabels: { enabled: true}} 
+        if (range.length >0 ) {
+            config.yAxis = {};
+            config.yAxis.floor = Math.floor(Math.min(...range)/10 -1)*10;
+            config.yAxis.ceiling = Math.floor(Math.max(...range)/10 +1)*10;
+        }
+
+
+        config.series[0] = {data : filteredSummary.data, name: xval, color: color, type: type, dataLabels: { enabled: true}} 
         config.title.text = title;
         return config;
     }
 
-const summaryChart = ({value, team, title, color, type, data}) => {
+const historyChart = ({xvalue, value,  title, color, type, data}) => {
         
-        console.log('Appchart',team, data)
-        //console.log('Render()', this.props, this.state);
-        const newConfig = renderSummary(config, value, team, title, color, type, data)
+        
+        const newConfig = renderSummary(config, xvalue, value,  title, color, type, data)
+        console.log('HistoryChart',config)
         return (
             <div className="col s4">
                 <div className="card">
@@ -71,4 +85,4 @@ const summaryChart = ({value, team, title, color, type, data}) => {
             </div>
         );
     }
-export default summaryChart;
+export default historyChart;

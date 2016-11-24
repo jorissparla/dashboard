@@ -77,8 +77,6 @@ class AppChart extends Component {
 
     render() {
         const {data, title, type, value, team, color} = this.props;
-        console.log('Appchart',team, data, config)
-        //console.log('Render()', this.props, this.state);
         this.renderSummary(value, team, title, color, type)
         return (
             <div className="col s4">

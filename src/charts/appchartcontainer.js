@@ -10,7 +10,6 @@ class AppChartContainer extends Component {
 
     myTimer() {
         const data  = (!this.props.data) ? ['Logistics']: this.props.data ;
-        console.log('AppChartContainerTimer', this.state)
         this.setState({
             index: this.state.index + 1,
             nrTeams: data.length
@@ -40,13 +39,13 @@ class AppChartContainer extends Component {
         const data  = (!this.props.data) ? ['Logistics']: this.props.data ;
        
         const team = data[this.state.index||0];
-        const summary= this.props.summary.reverse();
-         console.log('AppChartContainer',  data, team, summary)
+        const summary= this.props.summary; //.reverse();
         return (
             <div>
             <SummaryChart  data={summary}
                 title="Backlog"
                 type="line"
+                xvalue="weekNr"
                 value="supportBacklog"
                 team={team}/>
             </div>
