@@ -47,7 +47,6 @@ class KudoList extends Component {
 
     myTimer() {
         const t1 = this.state.tijd;
-        console.log('TIJD', t1)
         this.setState({
             tijd: t1 + 1
         })
@@ -102,8 +101,8 @@ class KudoList extends Component {
        
         return (
 
-            <div>
-                <h3 className="">
+            <div class ="container">
+                <h3 className="left-align">
                     <i className="material-icons">favorite_border</i>
                     Kudos
                 </h3>

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 
 import './App.css';
 import AppCard from './appcard';
@@ -11,37 +11,69 @@ import KudoList from './kudos/kudolist'
 import AlertWidget from './alerts/alertwidget'
 import Load from './load';
 import NewsCardContainer from './news/newscardcontainer';
+import AppChartContainer from './charts/appchartcontainer'
 
 const test1 = () => {
   return (
-                <div className="row">
-              <AppChart data={[1,2,3]} title="Backlog" type="line" value="supportBacklog" team="Logistics"/>
-              <AppChartCombi  title="Surveys" type="column" value="surveyScore"  color="#9575cd" team="Logistics"/>
-              <AppChartCombi  title="Input" type="area" value="opened"  color="#ffb300'" team="Logistics"/>
-              
+    <div className="row">
+      <AppChart
+        data={[1, 2, 3]}
+        title="Backlog"
+        type="line"
+        value="supportBacklog"
+        team="Logistics"/>
+      <AppChartCombi
+        title="Surveys"
+        type="column"
+        value="surveyScore"
+        color="#9575cd"
+        team="Logistics"/>
+      <AppChartCombi
+        title="Input"
+        type="area"
+        value="opened"
+        color="#ffb300'"
+        team="Logistics"/>
 
-             <AppCard index={3}/>
-            </div>
+    </div>
   )
 }
 
 class DashBoard extends Component {
   render() {
     return (
-        <div className="row">
-          <div className="col s2">  
-            <AlertWidget/>
-          </div>
-          <div className="col s9">
+      <div className="row">
+        <div className="col s2">
+          <AlertWidget/>
+        </div>
+        <div className="col s9">
           <div className="row">
-             <NewsCardContainer refreshRate={20000} />
+            <NewsCardContainer refreshRate={33000}/>
             <KudoList refreshRate={10000} showNumberKudos={6}/>
-            </div>
-            </div>
           </div>
-          
+            <div className="row">
+          <AppChartContainer data={['Tools', 'Logistics', 'Finance']} refreshRate={16000}/>
+              <AppChartCombi
+                title="Surveys"
+                type="column"
+                value="surveyScore"
+                color="#9575cd"
+                team="Logistics"/>
+              <AppChartCombi
+                title="Input"
+                type="area"
+                value="opened"
+                color="#ffb300'"
+                team="Logistics"/>
+               
+    </div>
+        </div>
+
+      </div>
+
     );
   }
 }
-// <AppChartPie data={[1,2,3]} title="Input" type="pie" value="supportBacklog"  color="#ffb300'" team="Logistics"/>
+// <AppChartPie data={[1,2,3]} title="Input" type="pie" value="supportBacklog"
+// color="#ffb300'" team="Logistics"/>
 export default DashBoard;

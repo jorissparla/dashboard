@@ -8,7 +8,6 @@ const NewsCard = props => {
         if (!newsItem) {
             return <div></div>
         }
-         console.log('NEWSCARD', props.data)
         return (
             
                 <div className="col s3">

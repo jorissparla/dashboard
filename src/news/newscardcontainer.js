@@ -7,7 +7,6 @@ class NewsCardContainer extends Component {
 
 
     myTimer() {
-        console.log("NCTIMER", this.state)
         this.setState({
             index: this.state.index + 1,
             nrNewsItems: this.props.news.length
