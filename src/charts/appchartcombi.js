@@ -50,7 +50,7 @@ class AppChartCombi extends Component {
     renderSummary(val, team, title, color, type) {
         // first get all teams
         let teams = []
-        const mySummary= this.props.summary.reverse()
+        const mySummary= this.props.summary;
         mySummary.map(({team}) => {
             if (teams.indexOf(team) === -1 )
                 teams.push(team)  

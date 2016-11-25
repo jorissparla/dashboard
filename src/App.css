@@ -1,5 +1,6 @@
 .App {
-  text-align: center;
+  text-align: left;
+  margin-left: 20px;
 }
 
 .App-logo {
@@ -110,6 +111,22 @@
     box-sizing: content-box;   
 }
 
-div.card-panel.col.s1.roundedBorder {
-  border-radius: 10%
+.numberBox {
+  border: 1px solid green ;
+      background: deepskyblue;
+    border: 0.2em solid #666;
+    color: white;
+    text-align: center;
+    border-radius: 10px;  
+      box-shadow: #222
+}
+
+div.card-panel.col.s1.roundedCorner {
+  border-radius: 10%;
+  margin-left:10px;
+
+}
+
+.kudolist {
+  margin-left: 30px;
 }

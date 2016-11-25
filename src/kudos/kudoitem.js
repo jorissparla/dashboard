@@ -14,7 +14,7 @@ const KudoItem = props => {
             <div className="divider"></div>
             <div className="card-image">
                 <img src={imgC} alt="" className="circle ava"/>
-                <div className="numberCircle">{props.date}</div>
+                <div className="numberBox">{props.date}</div>
             </div>
             <div className="card-content white-text">
                 <h6>{props.name}</h6>

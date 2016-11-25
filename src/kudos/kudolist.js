@@ -31,7 +31,7 @@ const indexList = [
     19
 ]
 
-const getDay =date => moment(date).format("DD")
+const getDay =date => moment(date).format("ddd, DD MMM")
 
 const displayNrKudos = ( nr, len ) => { return nr>len? len : nr}
 
@@ -101,19 +101,15 @@ class KudoList extends Component {
        
         return (
 
-            <div className ="container">
-                <h3 className="left-align">
+            <div className ="kudolist">
+                <h4 className="left-align">
                     <i className="material-icons">favorite_border</i>
-                    Kudos
-                </h3>
-                <ReactCSSTransitionGroup
-                    transitionName="example"
-      transitionAppear={true}
-      transitionAppearTimeout={500}
-      transitionEnter={false}
-      transitionLeave={false}>
+                    Kudos ({kudos.length})
+                </h4>
+                <div className="kudolist">
                     {this.renderItems(kudos)}
-                </ReactCSSTransitionGroup>
+                </div>
+                   
 
             </div>
         );
