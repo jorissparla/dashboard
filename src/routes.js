@@ -9,12 +9,13 @@ import AlertItemAdd from './alerts/alertitemadd';
 import NewsItem from './news/newsitem';
 import NewsItemAdd from './news/newsitemadd';
 import DashBoard from './dashboard'
+import DashBoardContainer from './dashboardcontainer'
 
 
 
 export default (
   <Route path="/" component={App}>
-    <IndexRoute component={DashBoard} />
+    <IndexRoute component={DashBoardContainer} />
     <Route path="/main/:id" component={DashBoard} />
      <Route path="alerts" component={AlertsList} />
      <Route path="alerts/new" component={AlertItemAdd} />

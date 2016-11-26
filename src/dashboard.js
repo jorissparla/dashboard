@@ -14,34 +14,9 @@ import NewsCardContainer from './news/newscardcontainer';
 import AppChartContainer from './charts/appchartcontainer'
 import HistoryChartContainer from './charts/historycontainer'
 
-const test1 = () => {
-  return (
-    <div className="row">
-      <AppChart
-        data={[1, 2, 3]}
-        title="Backlog"
-        type="line"
-        value="supportBacklog"
-        team="Logistics"/>
-      <AppChartCombi
-        title="Surveys"
-        type="column"
-        value="surveyScore"
-        color="#9575cd"
-        team="Logistics"/>
-      <AppChartCombi
-        title="Input"
-        type="area"
-        value="opened"
-        color="#ffb300'"
-        team="Logistics"/>
 
-    </div>
-  )
-}
 
-class DashBoard extends Component {
-  render() {
+const  DashBoard =() => {
     return (
       <div className="row">
         <div className="col s2">
@@ -76,7 +51,6 @@ class DashBoard extends Component {
 
     );
   }
-}
 // <AppChartPie data={[1,2,3]} title="Input" type="pie" value="supportBacklog"
 // color="#ffb300'" team="Logistics"/>
 export default DashBoard;
