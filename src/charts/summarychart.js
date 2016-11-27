@@ -1,6 +1,19 @@
 import React from 'react';
 import ReactHighCharts from 'react-highcharts';
 
+const teamColor = team => {
+        switch(team) {
+            case 'Tools':
+                return '#90caf9'
+            case 'Logistics':
+                return '#ffa726'
+            case 'Finance':
+                return '#66bb6a'
+            default:
+                return '#ff0000'
+        }
+} 
+
 const config = {
     chart: {
         type: 'column'
@@ -53,7 +66,7 @@ const config = {
             }, {  xvalues: [], data: [] });
         // console.log('series',config.series[0].data)
         config.xAxis.categories = filteredSummary.xvalues; 
-        config.series[0] = {data : filteredSummary.data, name: team, color: color, type: type, dataLabels: { enabled: true}} 
+        config.series[0] = {data : filteredSummary.data, name: team, team: team, color: teamColor(team), type: type, dataLabels: { enabled: true}} 
         config.title.text = title;
         return config;
     }

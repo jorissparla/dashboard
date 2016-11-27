@@ -50,7 +50,6 @@ const config = {
  const  renderSummary =(config,xval, val, title, color, type, summary) => {
         xval = (!xval) ? "weekNr":xval;
         const range = summary.map(item=> item[val] )
-        console.log( 'MAX', range,Math.floor(Math.min(...range)/10 -1)*10, Math.floor(Math.max(...range)/10 +1)*10)
 
         const filteredSummary = summary //.sort((a,b)=> a.row > b.row)
             .reduce(({xvalues, data}, item) => {

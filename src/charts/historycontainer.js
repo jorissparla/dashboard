@@ -41,7 +41,6 @@ class HistoryChartContainer extends Component {
        
         const column = data[this.state.index||0];
         const history= this.props.history; //.reverse();
-         console.log('HistoryChartContainer',  data, column, history)
          const title = "Backlog ".concat(column)
         return (
             <div>

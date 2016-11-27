@@ -9,7 +9,13 @@ class DashBoardContainer extends Component {
 
     componentWillMount () {
     this.setState({index: 2})
+    setInterval(this.myTimer.bind(this), this.props.refreshInterval || 90000)
 }
+
+    myTimer() {
+        const newIndex = (this.state.index === 1? 2:1)
+        this.setState({index: newIndex})
+    }
 
     render () {
         return (
