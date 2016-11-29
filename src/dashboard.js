@@ -20,14 +20,15 @@ import GoLiveList from './golives/golivelist'
 const  DashBoard =() => {
     return (
       <div className="row">
-        <div className="col s2">
+        <div className="col s3">
+                    <GoLiveList />
           <AlertWidget/>
-            <GoLiveList />
+
         </div>
-        <div className="col s10">
+        <div className="col s9">
           <div className="row">
             <NewsCardContainer refreshRate={33000}/>
-            <KudoList refreshRate={10000} showNumberKudos={6}/>
+            <KudoList refreshRate={10000} showNumberKudos={4}/>
           </div>
             <div className="row">
           <AppChartContainer data={['Tools', 'Logistics', 'Finance']} refreshRate={16000}/>

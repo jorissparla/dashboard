@@ -20,6 +20,14 @@ const inputField = ({ input, ...rest }) => {
         </div>
     )
 }
+const inputDateField = ({ input, ...rest }) => {
+    const classw = "input-field col s" + (rest.width || "4");
+    return (
+        <div className={classw}>
+            <input className="datepicker" {...input} {...rest} />
+        </div>
+    )
+}
 
 const renderOptions = (aTypes) => {
     return (
@@ -57,7 +65,7 @@ class AlertItemAdd extends Component {
 
             <div className="row">
                 <form className="col s4" onSubmit={handleSubmit(doSubmit)}>
-                  <Field name="alertdate" component={inputField} placeholder="Date" id="alertdate" width={8} type='date'/>
+                  <Field name="alertdate" component={inputDateField} placeholder="Date" id="alertdate" width={8} type='date'/>
                     <Field name="title" component={inputField} placeholder="title" id="title" width={6}/>
                     <Field name="body" component={inputField} placeholder="text" width={8}/>
                     <Field name="alerttype" component={selectField} data={aTypes} width={3} placeholder="type"/>

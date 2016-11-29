@@ -9,14 +9,16 @@ class GoLiveList extends Component {
     }
 
     renderItems (items) {
-        console.log('GOLIVELIST',items)
-        return items.map( (item) => {
-            console.log('GOLIVE', item)
+        return items.map( (item, index) => {
+            const cls0 = (index===1?"active":"")
+            const cls1 = "collapsible-header "+(index===1?"active":"")
+            let class3 ="collapsible-body hide"
+            if (index === 1) { class3 = "collapsible-body show"; }
             const key = item.customerid+"-"+item.version;
             return ( 
-                <li className="active" key={key}>
-                <div className="collapsible-header active"><i className="mdi-av-web"></i>{item.customername}</div>
-                <div className="collapsible-body active"><p>{item.comments}.</p></div>
+                <li className="" key={key}>
+                <div className="collapsible-header"><i className="mdi-av-web"></i>{item.customername}</div>
+                <div className={class3}><p>{item.comments}.</p></div>
               </li>
               )
         })
@@ -28,11 +30,12 @@ class GoLiveList extends Component {
         if (!golives ) {
             return (<div>Loading...</div>)
         }
+        const goLives1 = golives.slice(0,4)
         return (
         <div className="col s12 ">
             <h6>Upcoming Go Lives</h6>
-            <ul className="collapsible">
-                {this.renderItems(golives)}
+              <ul className="collapsible" data-collapsible="expandable">
+                {this.renderItems(goLives1)}
             </ul>
           </div>
         )

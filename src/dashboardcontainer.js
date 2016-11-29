@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import DashBoard from './dashboard';
 import DashBoardStats from './dashboardstats';
+import GoLiveList from './golives/golivelist'
 
 
 
@@ -29,7 +30,8 @@ class DashBoardContainer extends Component {
 renderDashBoard (index) {
     switch (index) {
         case 1: 
-            return <DashBoard/>
+            //return <DashBoard/>
+            return <DashBoard />
         case 2: 
             return <DashBoardStats/>
     default:

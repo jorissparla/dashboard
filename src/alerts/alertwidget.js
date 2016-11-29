@@ -15,20 +15,29 @@ class AlertWidget extends Component {
     }
 
     renderAlertsItems(alerts) {
-        return alerts.map(item => {
+        return alerts.map((item, index) => {
+            let class1 = "collapsible-header " 
+            let class2 =""
+            let class3 ="collapsible-body hide"
+            if (index ===0) { class1 = class1+ "active"; }
+            if (index ===0) { class2 = class2+ "active"; }
+            if (index ===0) { class3 = "collapsible-body show"; }
             return (
 
-                <li className="collection-item App-align " key={item.id}>
-                        <span className=" new badge black" data-badge-caption=" ">{formatDate(item
-                                .createdate)
-                                }</span>
-<h5 className="left-align ">{item.title}</h5>
+/*                <li className="collection-item App-align " key={item.id}>
+                    <span className=" new badge black" data-badge-caption=" ">{formatDate(item.createdate)
+}</span>
+                    <h5 className="left-align ">{item.title}</h5>
                     <div className="divider"></div>
                     <div className="left-align ">
-                        {item.body} 
+                        {item.body}
                     </div>
 
-             </li>
+                </li>*/
+                <li className={class2} key={item.id}>
+                <div className={class1}><i className="material-icons">add_alert</i>{item.title}</div>
+                <div className={class3}><p>{item.body}.</p></div>
+              </li>
 
             )
         })
@@ -41,35 +50,28 @@ class AlertWidget extends Component {
         }
         return (
             <div className="col s12">
-            <ul className="collection with-header ">
-                <li className="collection-header App-align blue white-text row ">
-                <div className="col s8">
-                    <h5>Alerts</h5>
-                    </div><div className="col s4"><Link to={"/alerts/new"} className="btn-floating btn-small orange waves-effect waves-light align-right ">
-                        <i className="material-icons">add</i>
-                    </Link>
-                    </div>
-                </li>
-                <div className="row">
-                <form className="col s12">
-                <div className="row">
-                <div className="col s6">
-                <div className="input-field  align-center">
-                    <input type="text" placeholder="text" />
-                    </div>
-                    </div>
-                <div className="input-field col s6">
-                  <input type="date" placholder="date" className="datepicker" />
-                    </div>
-                    </div>
-                    </form>
-                    </div>
-                {this.renderAlertsItems(alerts)}
-            </ul>
+                 <ul className="collapsible " data-collapsible="expandable">
+                    <li className="collection-header App-align blue white-text row ">
+                        <div className="col s8">
+                            <h5>Alerts</h5>
+                        </div>
+                        <div className="col s4">
+                            <Link
+                                to={"/alerts/new"}
+                                className="btn-floating btn-small orange waves-effect waves-light align-right ">
+                                <i className="material-icons">add</i>
+                            </Link>
+                        </div>
+                    </li>
+
+                    {this.renderAlertsItems(alerts)}
+                </ul>
             </div>
 
         );
-    }}
+    }
+}
+
 const mapStateToProps = (state) => {
     return {alerts: state.alerts.alerts}
 }
