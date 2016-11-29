@@ -1,6 +1,7 @@
 import axios from 'axios';
 export const FETCH_SUMMARY = 'FETCH_SUMMARY';
 export const FETCH_HISTORY = 'FETCH_HISTORY';
+export const FETCH_GOLIVES = 'FETCH_GOLIVES';
 export const FETCH_NEWS = 'FETCH_NEWS';
 export const SHOW_NEWS = 'SHOW_NEWS';
 export const CREATE_NEWS = 'CREATE_NEWS';
@@ -20,7 +21,18 @@ const fetchSummary = () => {
     type : FETCH_SUMMARY,
     payload: request
   };
+
+
 }
+
+const fetchGoLives = () => {
+    const request = axios.get(ROOT_URL+'/golives')
+      return {
+    type : FETCH_GOLIVES,
+    payload: request
+  };
+}
+
 const fetchHistory = () => {
     const request = axios.get(ROOT_URL+'/history')
       return {
@@ -119,6 +131,7 @@ export function deleteNews(id) {
 
 
 exports.fetchSummary = fetchSummary;
+exports.fetchGoLives = fetchGoLives;
 exports.fetchHistory = fetchHistory;
 exports.fetchKudos = fetchKudos;
 exports.fetchNews = fetchNews;

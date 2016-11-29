@@ -40,6 +40,7 @@ class AlertWidget extends Component {
             return <div>Loading</div >
         }
         return (
+            <div className="col s12">
             <ul className="collection with-header ">
                 <li className="collection-header App-align blue white-text row ">
                 <div className="col s8">
@@ -49,9 +50,23 @@ class AlertWidget extends Component {
                     </Link>
                     </div>
                 </li>
-
+                <div className="row">
+                <form className="col s12">
+                <div className="row">
+                <div className="col s6">
+                <div className="input-field  align-center">
+                    <input type="text" placeholder="text" />
+                    </div>
+                    </div>
+                <div className="input-field col s6">
+                  <input type="date" placholder="date" className="datepicker" />
+                    </div>
+                    </div>
+                    </form>
+                    </div>
                 {this.renderAlertsItems(alerts)}
             </ul>
+            </div>
 
         );
     }}

@@ -13,6 +13,7 @@ import Load from './load';
 import NewsCardContainer from './news/newscardcontainer';
 import AppChartContainer from './charts/appchartcontainer'
 import HistoryChartContainer from './charts/historycontainer'
+import GoLiveList from './golives/golivelist'
 
 
 
@@ -21,6 +22,7 @@ const  DashBoard =() => {
       <div className="row">
         <div className="col s2">
           <AlertWidget/>
+            <GoLiveList />
         </div>
         <div className="col s10">
           <div className="row">
@@ -43,6 +45,7 @@ const  DashBoard =() => {
                 value="opened"
                 color="#ffb300'"
                 team="Logistics"/>
+              
                
     </div>
         </div>

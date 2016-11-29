@@ -34,6 +34,15 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/js/materialize.min.js"></script>
       <script> $(document).ready(function() {
     $('select').material_select();
+    $('.collapsible').collapsible();
+      $('.datepicker').pickadate({
+    selectMonths: true, // Creates a dropdown to control month
+    selectYears: 15 ,
+    closeOnSelect: true,
+    format: 'dd-mm-yyyy',
+
+ });
+       
     console.log('============================================================')
   });</script>
   </body>

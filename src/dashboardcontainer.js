@@ -8,7 +8,7 @@ import DashBoardStats from './dashboardstats';
 class DashBoardContainer extends Component {
 
     componentWillMount () {
-    this.setState({index: 2})
+    this.setState({index: 1})
     setInterval(this.myTimer.bind(this), this.props.refreshInterval || 90000)
 }
 

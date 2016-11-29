@@ -14,7 +14,10 @@
   padding: 20px;
   color: white;
 }
-
+body
+{
+	background-color: #EDEDED !important;
+}
 .App-intro {
   font-size: large;
 }
@@ -54,11 +57,14 @@
     font-size: 18px;
     font-weight: 300;
     line-height: normal;
-    color: white
+    color: white;
+    	font-family: Sans-Serif;
+
 }
 
 .App-small-text {
-  font-size: 12px;
+  font-size: 16px;
+  font-weight: 20em;
 }
 .App-card {
   align-items: flex-start; flex-direction: column; justify-content: flex-end;
@@ -105,7 +111,7 @@
     border: 0.2em solid #666;
     color: white;
     text-align: center;
-    border-radius: 50%;    
+    border-radius: 20%;    
 
     line-height: 2em;
     box-sizing: content-box;   
@@ -113,7 +119,8 @@
 
 .numberBox {
   border: 1px solid green ;
-      background: deepskyblue;
+      background: orangered;
+      font-weight: 20;
     border: 0.2em solid #666;
     color: white;
     text-align: center;
@@ -121,7 +128,7 @@
       box-shadow: #222
 }
 
-div.card-panel.col.s1.roundedCorner {
+div.card-panel.col.s2.roundedCorner {
   border-radius: 10%;
   margin-left:10px;
 
@@ -129,4 +136,37 @@ div.card-panel.col.s1.roundedCorner {
 
 .kudolist {
   margin-left: 30px;
+}
+
+.slide-fade li {
+  transition: all 0.4s ease-out;
+  opacity: 0;
+}
+.slide-fade li.show {
+  opacity: 1;
+}
+
+.slide-fade div.card-panel {
+  transition: all 0.4s ease-out;
+  opacity: 0;
+}
+.slide-fade div.card-panel.show {
+  opacity: 1;
+}
+.aname {
+  border-radius: 20%;
+	animation: fade 2s ease-in-out forwards;
+  animation-direction: reverse;
+
+}
+
+@keyframes fade {
+  from {
+    opacity: 1;
+     transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+     transform: translateX(100px);
+  }
 }
