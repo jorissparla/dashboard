@@ -10,7 +10,6 @@ class HistoryChartContainer extends Component {
 
     myTimer() {
         const data  = (!this.props.data) ? ['LN', 'Tools', 'Logistics', 'Finance']: this.props.data ;
-        console.log('HistoryChartContainerTimer', this.state)
         this.setState({
             index: this.state.index + 1,
             nrCols: data.length

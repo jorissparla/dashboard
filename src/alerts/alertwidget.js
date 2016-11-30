@@ -7,7 +7,8 @@ import moment from 'moment'
 const formatDate = date => moment(date).format("MMM, D")
 
 
-const rotate = (ar, index) => ar.slice(index, index+1).concat(ar.slice(0,index)).concat(ar.slice(index+1))
+//const rotate = (ar, index) => ar.slice(index, index+1).concat(ar.slice(0,index)).concat(ar.slice(index+1))
+const rotate = (ar, index) => ar.slice(index, ar.length).concat(ar.slice(0, index))
 
 class AlertWidget extends Component {
 

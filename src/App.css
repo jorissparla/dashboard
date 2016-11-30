@@ -133,6 +133,19 @@ body
       box-shadow: #222
 }
 
+.numbercirkel {
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    background: black;
+    border: 2px solid #666;
+    color: white;
+    float: right;
+
+  font: 16px Roboto, sans-serif;
+    font-weight: 400;
+}
+
 div.card-panel.col.s2.roundedCorner {
   border-radius: 10%;
   margin-left:10px;
@@ -165,6 +178,8 @@ div.card-panel.col.s2.roundedCorner {
 
 }
 
+
+
 @keyframes fade {
   from {
     opacity: 1;
@@ -176,10 +191,35 @@ div.card-panel.col.s2.roundedCorner {
   }
 }
 
+@keyframes fadeup {
+  from {
+    opacity: 1;
+     transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+     transform: translateY(100px);
+  }
+}
+
 .show {
   display: block;
 }
 
 .hide {
   display:none
+}
+
+.ralign {
+  text-align: right;
+  width: 10%;
+  float: right;
+  font-size: 24px Roboto;
+  font-weight: 900;
+}
+
+.lalign {
+  text-align: left;
+  width: 90%;
+  float: left;
 }

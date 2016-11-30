@@ -57,7 +57,6 @@ const config = {
                 data.push(item[val]);
                 return {xvalues, data};
             }, {  xvalues: [], data: [] });
-        // console.log('series',config.series[0].data)
         config.xAxis.categories = filteredSummary.xvalues; 
         if (range.length >0 ) {
             config.yAxis = {};
@@ -75,7 +74,6 @@ const historyChart = ({xvalue, value,  title, color, type, data}) => {
         
         
         const newConfig = renderSummary(config, xvalue, value,  title, color, type, data)
-        console.log('HistoryChart',config)
         return (
             <div className="col s4">
                 <div className="card">

@@ -79,7 +79,6 @@ const config = {
                 data.push({y:item[val], color: arColors[(index % 7)]});
                 return {xvalues, data};
             }, {  xvalues: [], data: [] });
-        // console.log('series',config.series[0].data)
         config.xAxis.categories = filteredSummary.xvalues; 
         config.series[0] = {data : filteredSummary.data, name: team, team: team, 
              type: type, dataLabels: { enabled: true}} 
@@ -89,8 +88,6 @@ const config = {
 
 const summaryChart = ({value, team, title, color, type, data}) => {
         
-        console.log('Appchart',team, data)
-        //console.log('Render()', this.props, this.state);
         const newConfig = renderSummary(config, value, team, title, color, type, data)
         return (
             <div className="col s4">
