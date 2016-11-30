@@ -6,12 +6,32 @@ import moment from 'moment'
 
 const formatDate = date => moment(date).format("MMM, D")
 
+
+const rotate = (ar, index) => ar.slice(index, index+1).concat(ar.slice(0,index)).concat(ar.slice(index+1))
+
 class AlertWidget extends Component {
 
+    
+    componentWillMount() {
+                this.setState({ index: 0 })
+    }
+    
+
     componentDidMount() {
-        this
-            .props
-            .fetchAlerts()
+        this.props.fetchAlerts()
+        this.setState({ index: 0 })
+        setInterval(this.myTimer.bind(this), 5000)
+
+    }
+
+    myTimer() {
+        if (this.props.alerts) {
+            this.setState({ index: this.state.index+1 })
+            if (this.state.index > this.props.alerts.length) {
+                this.setState({index: 0})
+            }
+        }
+
     }
 
     renderAlertsItems(alerts) {
@@ -23,17 +43,6 @@ class AlertWidget extends Component {
             if (index ===0) { class2 = class2+ "active"; }
             if (index ===0) { class3 = "collapsible-body show"; }
             return (
-
-/*                <li className="collection-item App-align " key={item.id}>
-                    <span className=" new badge black" data-badge-caption=" ">{formatDate(item.createdate)
-}</span>
-                    <h5 className="left-align ">{item.title}</h5>
-                    <div className="divider"></div>
-                    <div className="left-align ">
-                        {item.body}
-                    </div>
-
-                </li>*/
                 <li className={class2} key={item.id}>
                 <div className={class1}><i className="material-icons">add_alert</i>{item.title}</div>
                 <div className={class3}><p>{item.body}.</p></div>
@@ -46,8 +55,9 @@ class AlertWidget extends Component {
     render() {
         const alerts = this.props.alerts;
         if (!alerts) {
-            return <div>Loading</div >
+            return <div>Loading</div>
         }
+        const index = (!this.state.index)? 0: this.state.index;
         return (
             <div className="col s12">
                  <ul className="collapsible " data-collapsible="expandable">
@@ -64,7 +74,7 @@ class AlertWidget extends Component {
                         </div>
                     </li>
 
-                    {this.renderAlertsItems(alerts)}
+                    {this.renderAlertsItems(rotate(alerts, index))}
                 </ul>
             </div>
 

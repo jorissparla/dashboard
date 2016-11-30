@@ -50,12 +50,14 @@ class KudoList extends Component {
         this.setState({
             tijd: t1 + 1
         })
-        this.setState({ nrKudos: this.props.kudos.length, displayedNrKudos: displayNrKudos(this.props.showNumberKudos || 4,  this.props.kudos.length) })
-        const {nrKudos, displayedNrKudos, tijd} = this.state
-        if (tijd > nrKudos - displayedNrKudos) {
-        this.setState({
-            tijd: 0
-        })  
+        if (this.props.kudos) {
+            this.setState({ nrKudos: this.props.kudos.length, displayedNrKudos: displayNrKudos(this.props.showNumberKudos || 4,  this.props.kudos.length) })
+            const {nrKudos, displayedNrKudos, tijd} = this.state
+            if (tijd > nrKudos - displayedNrKudos) {
+                this.setState({
+                    tijd: 0
+                })  
+            }
         }
     }
 
