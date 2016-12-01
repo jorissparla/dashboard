@@ -177,7 +177,23 @@ div.card-panel.col.s2.roundedCorner {
   animation-direction: reverse;
 
 }
+.fade-enter {
+  opacity: 0.01;
+}
 
+.fade-enter.fade-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.fade-leave {
+  opacity: 1;
+}
+
+.fade-leave.fade-leave-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
+}
 
 
 @keyframes fade {
@@ -194,11 +210,11 @@ div.card-panel.col.s2.roundedCorner {
 @keyframes fadeup {
   from {
     opacity: 1;
-     transform: translateY(0);
+     transform: translateX(0);
   }
   to {
     opacity: 0;
-     transform: translateY(100px);
+     transform: translateX(100px);
   }
 }
 
@@ -222,4 +238,130 @@ div.card-panel.col.s2.roundedCorner {
   text-align: left;
   width: 90%;
   float: left;
+}
+
+.animating li {
+  transform: translateY(-100%) scaleY(1);
+  animation-name: insert-from-top;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  opacity: 0;
+}
+.animating li:nth-child(1) {
+  animation-delay: 0.075s;
+  z-index: 1;
+}
+.animating li:nth-child(2) {
+  animation-delay: 0.15s;
+  z-index: 2;
+}
+.animating li:nth-child(3) {
+  animation-delay: 0.225s;
+  z-index: 3;
+}
+.animating li:nth-child(4) {
+  animation-delay: 0.3s;
+  z-index: 4;
+}
+.animating li:nth-child(5) {
+  animation-delay: 0.375s;
+  z-index: 5;
+}
+.animating li:nth-child(6) {
+  animation-delay: 0.45s;
+  z-index: 6;
+}
+.animating li:nth-child(7) {
+  animation-delay: 0.525s;
+  z-index: 7;
+}
+.animating li:nth-child(8) {
+  animation-delay: 0.6s;
+  z-index: 8;
+}
+.animating li:nth-child(9) {
+  animation-delay: 0.675s;
+  z-index: 9;
+}
+.animating li:nth-child(10) {
+  animation-delay: 0.75s;
+  z-index: 10;
+}
+.animating li:nth-child(11) {
+  animation-delay: 0.825s;
+  z-index: 11;
+}
+.animating li:nth-child(12) {
+  animation-delay: 0.9s;
+  z-index: 12;
+}
+.animating li:nth-child(13) {
+  animation-delay: 0.975s;
+  z-index: 13;
+}
+.animating li:nth-child(14) {
+  animation-delay: 1.05s;
+  z-index: 14;
+}
+.animating li:nth-child(15) {
+  animation-delay: 1.125s;
+  z-index: 15;
+}
+.animating li:nth-child(16) {
+  animation-delay: 1.2s;
+  z-index: 16;
+}
+.animating li:nth-child(17) {
+  animation-delay: 1.275s;
+  z-index: 17;
+}
+.animating li:nth-child(18) {
+  animation-delay: 1.35s;
+  z-index: 18;
+}
+.animating li:nth-child(19) {
+  animation-delay: 1.425s;
+  z-index: 19;
+}
+.animating li:nth-child(20) {
+  animation-delay: 1.5s;
+  z-index: 20;
+}
+
+@keyframes insert-from-top {
+  30% {
+    opacity: 1;
+    transform: translateY(30%);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fadeup-enter {
+  opacity: 0.01;
+}
+
+.fadeup-enter.fadeup-enter-active {
+  opacity: 1;
+  transition: opacity 500ms ease-in;
+}
+
+.fadeup-leave {
+  opacity: 1;
+}
+
+.fadeup-leave.fadeup-leave-active {
+  opacity: 0.01;
+  transition: opacity 300ms ease-in;
+}
+
+.fadeup-appear {
+  opacity: 0.01;
+}
+
+.fadeup-appear.fadeup-appear-active {
+  opacity: 1;
+  transition: opacity .5s ease-in;
 }

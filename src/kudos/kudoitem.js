@@ -8,9 +8,7 @@ const KudoItem = props => {
     const classC = "card-panel col s2 roundedCorner aname " + color + " lighten-2";
     return (
         <div className={classC} key={props.name}>
-        <ReactCSSTransitionGroup  transitionName="fade"
-          transitionEnterTimeout={500}
-          transitionLeaveTimeout={300}>
+
             <div className="card-action white-text App-small-text">
 
                 {props.customer.toUpperCase() || "Kongsberg"}
@@ -23,7 +21,7 @@ const KudoItem = props => {
             <div className="card-content white-text">
                 <h6>{props.name}</h6>
             </div>
-</ReactCSSTransitionGroup>
+
         </div>
 
     )

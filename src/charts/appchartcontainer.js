@@ -31,9 +31,14 @@ class AppChartContainer extends Component {
     componentDidMount() {
         this.props.fetchSummary();
       
-        setInterval(this.myTimer.bind(this), this.props.refreshRate||15000)
+        this.timerhandle = setInterval(this.myTimer.bind(this), this.props.refreshRate||15000)
 
     }
+
+    componentWillUnmount() {
+        clearInterval(this.timerhandle)
+    }
+
 
     render () {
         const data  = (!this.props.data) ? ['Logistics']: this.props.data ;

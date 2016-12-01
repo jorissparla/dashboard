@@ -1,14 +1,13 @@
 import React, {Component} from 'react';
 import DashBoard from './dashboard';
 import DashBoardStats from './dashboardstats';
-import GoLiveList from './golives/golivelist'
 
 
 
 
 class DashBoardContainer extends Component {
 
-    componentWillMount () {
+    componentDidMount () {
     this.setState({index: 1})
     setInterval(this.myTimer.bind(this), this.props.refreshInterval || 90000)
 }
@@ -19,6 +18,9 @@ class DashBoardContainer extends Component {
     }
 
     render () {
+        if (!this.state) {
+            return <div>Loading...</div>
+        }
         return (
             <div>
                 {this.renderDashBoard(this.state.index)}
@@ -35,7 +37,7 @@ renderDashBoard (index) {
         case 2: 
             return <DashBoardStats/>
     default:
-        return <div>Invali Dashboard</div>
+        return <div>Invalid Dashboard</div>
     }
 }
 }

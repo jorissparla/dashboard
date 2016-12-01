@@ -7,7 +7,6 @@ import moment from 'moment'
 const formatDate = date => moment(date).format("MMM, D")
 
 
-//const rotate = (ar, index) => ar.slice(index, index+1).concat(ar.slice(0,index)).concat(ar.slice(index+1))
 const rotate = (ar, index) => ar.slice(index, ar.length).concat(ar.slice(0, index))
 
 class AlertWidget extends Component {
@@ -21,8 +20,11 @@ class AlertWidget extends Component {
     componentDidMount() {
         this.props.fetchAlerts()
         this.setState({ index: 0 })
-        setInterval(this.myTimer.bind(this), 5000)
+        this.timerhandle=setInterval(this.myTimer.bind(this), 5000)
 
+    }
+    componentWillUnmount() {
+        clearInterval(this.timerhandle)
     }
 
     myTimer() {
@@ -40,9 +42,11 @@ class AlertWidget extends Component {
             let class1 = "collapsible-header " 
             let class2 =""
             let class3 ="collapsible-body hide"
-            if (index ===0) { class1 = class1+ "active"; }
-            if (index ===0) { class2 = class2+ "active"; }
-            if (index ===0) { class3 = "collapsible-body show"; }
+            if (index ===0) { 
+                class1 += "active"; 
+                class2 += "active";
+                class3 = "collapsible-body show";
+            }
             return (
                 <li className={class2} key={item.id}>
                 <div className={class1}><i className="material-icons">add_alert</i>{item.title}</div>

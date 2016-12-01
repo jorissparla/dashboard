@@ -69,7 +69,7 @@ class NewsItem extends Component {
 
 
     render() {
-        const { handleSubmit, fetchNewsItem, submitting} = this.props
+        const { handleSubmit} = this.props
         if (!this.props.news) {
             return <div>Loading...</div>
         }

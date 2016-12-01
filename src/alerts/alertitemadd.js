@@ -1,9 +1,7 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
 import {reduxForm, Field} from 'redux-form'
 import {browserHistory, Link} from 'react-router';
 import {createAlert} from '../actions/index'
-import moment from 'moment';
 
 const aTypes = [
     { type: 'Notification',value: 'Notification' },
@@ -12,7 +10,7 @@ const aTypes = [
 
 ]
 
-const inputField = ({ input, ...rest }) => {
+const inputField = ({ input, ...rest })=> {
     const classw = "input-field col s" + (rest.width || "4");
     return (
         <div className={classw}>
@@ -20,6 +18,7 @@ const inputField = ({ input, ...rest }) => {
         </div>
     )
 }
+
 const inputDateField = ({ input, ...rest }) => {
     const classw = "input-field col s" + (rest.width || "4");
     return (
@@ -60,7 +59,7 @@ const doSubmit = values => {
 class AlertItemAdd extends Component {
 
     render() {
-        const {handleSubmit, createAlert, submitting} = this.props
+        const {handleSubmit} = this.props
         return (
 
             <div className="row">

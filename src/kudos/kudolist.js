@@ -2,9 +2,8 @@ import React, {Component} from 'react';
 import KudoItem from './kudoitem'
 import {connect} from 'react-redux';
 import {fetchKudos} from '../actions/index'
-import {Link} from 'react-router';
-import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 import moment from 'moment';
+import ReactCSSTransitionGroup from  'react-addons-css-transition-group';
 
 const colorList = [
     "purple",
@@ -62,58 +61,65 @@ class KudoList extends Component {
     }
 
     componentWillMount() {
-        this.props.fetchKudos()
-        setInterval(this.myTimer.bind(this), this.props.refreshRate||15000)
+    
 
     }
 
     componentDidMount() {
-         
+        this.props.fetchKudos()
+        this.timerhandle =setInterval(this.myTimer.bind(this), this.props.refreshRate||15000)
+    }
+
+    componentWillUnmount() {
+        clearInterval(this.timerhandle)
     }
     
 
     renderItems(kudos) {
-        const nrKudos = displayNrKudos(this.props.showNumberKudos || 4,  this.props.kudos.length)
+        const nrKudos= displayNrKudos(this.props.showNumberKudos || 4,  this.props.kudos.length)
         
-        const index = this.state.tijd;
+        const index= this.state.tijd;
+        let kl = kudos.slice(0, nrKudos);
         if (index < kudos.length - nrKudos) {
-            var kl = kudos.slice(index, index + nrKudos);
-        } else 
-            var kl = kudos.slice(0, nrKudos);
-        return kl.map((item, index) => {
+             kl = kudos.slice(index, index + nrKudos);
+        }
+        return kl.map((item, index)=> {
             return <KudoItem
                 name={item.ownerrep_name}
                 key={index}
                 customer={item.customer_name}
                 color={colorList[index % nrKudos]}
                 gender={gender(item.gender)}
-                date = {getDay(item.survey_date)}
+                date={getDay(item.survey_date)}
                 nr={indexList[index % nrKudos]}/>
         })
     }
 
     render() {
-        const kudos = this.props.kudos;
+        const kudos=this.props.kudos;
         
-        if (!kudos) {
+        if (!kudos ) {
             return <div>
                 Loading
             </div>
         }
        
         return (
-
-            <div className ="kudolist aname">
-                <h4 className="left-align">
-                    <i className="material-icons">favorite_border</i>
-                    Kudos ({kudos.length})
+            <ReactCSSTransitionGroup transitionName="fade"
+                transitionEnterTimeout={500}
+                transitionLeaveTimeout={300}>
+                <div className="kudolist aname">
+                    <h4 className="left-align">
+                        <i className="material-icons">favorite_border</i>
+                        Kudos ({kudos.length})
                 </h4>
-                <div className="kudolist">
-                    {this.renderItems(kudos)}
-                </div>
-                   
+                    <div className="kudolist">
+                        {this.renderItems(kudos)}
+                    </div>
 
-            </div>
+
+                </div>
+            </ReactCSSTransitionGroup>
         );
     };
 }

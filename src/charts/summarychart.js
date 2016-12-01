@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactHighCharts from 'react-highcharts';
 
-const teamColor = team => {
+/*const teamColor = team => {
         switch(team) {
             case 'Tools':
                 return '#90caf9'
@@ -12,7 +12,7 @@ const teamColor = team => {
             default:
                 return '#ff0000'
         }
-} 
+} */
 
 const arColors = [
     '#c62828',
@@ -73,7 +73,7 @@ const config = {
  const  renderSummary =(config,val, team, title, color, type, summary) => {
         const mySummary= summary.slice(); //.sort((a,b)=> a.weekNr > b.weekNr)
         const filteredSummary = mySummary
-            .filter(item => item.team === team)
+            .filter(item => item.team === team).slice(1,7)
             .reduce(({xvalues, data}, item, index) => {
                 xvalues.push(item.weekNr);
                 data.push({y:item[val], color: arColors[(index % 7)]});

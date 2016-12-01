@@ -1,16 +1,8 @@
-import React, {Component} from 'react';
+import React from 'react';
 
 import './App.css';
-import AppCard from './appcard';
-import AppCardContainer from './appcardcontainer';
-import AppList from './applist'
 import AppChartCombi from './charts/appchartcombi'
-import AppChart from './charts/appchart'
-import AppChartPie from './charts/appchartpie'
-import KudoList from './kudos/kudolist'
 import AlertWidget from './alerts/alertwidget'
-import Load from './load';
-import NewsCardContainer from './news/newscardcontainer';
 import AppChartContainer from './charts/appchartcontainer'
 import HistoryChartContainer from './charts/historycontainer'
 

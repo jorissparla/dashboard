@@ -3,9 +3,7 @@ import {Field, reduxForm} from 'redux-form';
 import {createNews} from '../actions/index'
 import {Link, browserHistory} from 'react-router';
 
-const handleDefaultImage = () => {
-  console.log('clicked')
-}
+
 
 const doSubmit = values => {
   createNews(values);
@@ -38,7 +36,7 @@ const inputImageField = field => {
 }
 
 const NewsItemAdd = (props) => {
-  const {handleSubmit, createNews, resetForm} = props;
+  const {handleSubmit} = props;
   // const { handleSubmit, pristine, reset, submitting } = props
   return (
     <div className="row">

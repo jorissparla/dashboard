@@ -31,9 +31,14 @@ class HistoryChartContainer extends Component {
     componentDidMount() {
         this.props.fetchHistory();
       
-        setInterval(this.myTimer.bind(this), this.props.refreshRate||15000)
+        this.timerhandle = setInterval(this.myTimer.bind(this), this.props.refreshRate||15000)
 
     }
+
+    componentWillUnmount() {
+        clearInterval(this.timerhandle)
+    }
+
 
     render () {
         const data  = (!this.props.data) ? ['LN', 'Tools', 'Logistics', 'Finance']: this.props.data ;
