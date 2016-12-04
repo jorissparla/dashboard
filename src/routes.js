@@ -22,7 +22,6 @@ const requireAuth = (nextState, replace) => {
   }
 }
 
-
 export default (
   <Route path="/" component={App} auth={auth} >
     <IndexRoute component={DashBoardContainer} auth={auth} />
