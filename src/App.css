@@ -156,6 +156,21 @@ div.card-panel.col.s2.roundedCorner {
   margin-left: 30px;
 }
 
+.kudoname {
+  font-family: Billabong;
+  font-size: 30px;
+  font-color: black;
+  padding-top: 10px;
+  margin-top: 10px;
+  margin-left: 10px;
+  transform: rotate(-7deg)
+}
+
+.kudoheader {
+  height: 50px;
+  width: 120px;
+}
+
 .slide-fade li {
   transition: all 0.4s ease-out;
   opacity: 0;

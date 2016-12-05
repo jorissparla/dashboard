@@ -1,9 +1,9 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import React, {Component} from 'react'
+import {connect} from 'react-redux'
 import {fetchAlerts} from '../actions/index'
-import {Link} from 'react-router';
+import {Link} from 'react-router'
 import moment from 'moment'
-//import Spinner from '../utils/spinner'
+import Spinner from '../utils/spinner'
 
 const formatDate = date => moment(date).format("MMM, D")
 
@@ -44,9 +44,9 @@ class AlertWidget extends Component {
             let class2 =""
             let class3 ="collapsible-body hide"
             if (index ===0) { 
-                class1 += "active"; 
-                class2 += "active";
-                class3 = "collapsible-body show";
+                class1 += "active" 
+                class2 += "active"
+                class3 = "collapsible-body show"
             }
             return (
                 <li className={class2} key={item.id}>
@@ -59,11 +59,11 @@ class AlertWidget extends Component {
     }
 
     render() {
-        const alerts = this.props.alerts;
+        const alerts = this.props.alerts
         if (!alerts) {
-            return <div>Loading</div>
+            return <div><Spinner /></div>
         }
-        const index = (!this.state.index)? 0: this.state.index;
+        const index = (!this.state.index)? 0: this.state.index
         return (
             <div className="col s12">
                  <ul className="collapsible " data-collapsible="expandable">
@@ -84,7 +84,7 @@ class AlertWidget extends Component {
                 </ul>
             </div>
 
-        );
+        )
     }
 }
 

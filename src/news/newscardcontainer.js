@@ -1,7 +1,8 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {fetchNews} from '../actions/index';
-import NewsCard from './newscard';
+import React, {Component} from 'react'
+import {connect} from 'react-redux'
+import {fetchNews} from '../actions/index'
+import NewsCard from './newscard'
+import Spinner from '../utils/spinner'
 
 class NewsCardContainer extends Component {
 
@@ -34,14 +35,14 @@ class NewsCardContainer extends Component {
     }
 
     render() {
-     let newsItem = this.props.news[this.state.index];    
+     let newsItem = this.props.news[this.state.index]    
         if (!newsItem) {
-            return <div>Loading...</div>
+            return <div><Spinner /></div>
         }
         newsItem = this.props.news[this.state.index]
         return (
             <NewsCard data={newsItem} />
-        );
+        )
     }
 }
 
@@ -50,4 +51,4 @@ const mapStateToProps =(state) =>
    return {news: state.summary.news}
 }
 
-export default connect( mapStateToProps, {fetchNews})(NewsCardContainer);
+export default connect( mapStateToProps, {fetchNews})(NewsCardContainer)
