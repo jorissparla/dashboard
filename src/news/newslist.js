@@ -56,6 +56,20 @@ class NewsList extends Component {
     )
   }
 }
+
+const { func, arrayOf, shape, string } = React.PropTypes
+
+NewsList.propTypes = {
+  fetchNews: func,
+  news: arrayOf(shape({
+    body: string,
+    image: string,
+    link: string,
+    link_text: string,
+    expire_date: string
+  }))
+}
+
 const mapStateToProps = (state) => {
   return {news: state.summary.news}
 }

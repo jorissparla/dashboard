@@ -8,7 +8,7 @@ const inputField = field => {
   const classw = 'input-field col s' + (field.width || '4')
   return (
     <div className={classw}>
-      <input {...field.input} placeholder={field.placeholder} type={field.type}/>
+      <input {...field.input} placeholder={field.placeholder} type={field.type} />
     </div>
   )
 }
@@ -27,11 +27,11 @@ const inputImageField = field => {
   return (
     <div>
       <div className={classw}>
-        <input {...field.input} placeholder={field.placeholder} type={field.type}/>
+        <input {...field.input} placeholder={field.placeholder} type={field.type} />
 
       </div>
       <div className='col s2'>
-        <img src={field.input.value} alt='' width='200px'/>
+        <img src={field.input.value} alt='' width='200px' />
       </div>
     </div>
   )
@@ -60,11 +60,10 @@ class NewsItem extends Component {
 
   onDeleteClick (e) {
     e.preventDefault()
-    this.props.deleteNews(this.props.params.id).then(()=> {
+    this.props.deleteNews(this.props.params.id).then(() => {
       browserHistory.push('/news')
     })
   }
-
 
   render () {
     const { handleSubmit} = this.props
@@ -75,7 +74,7 @@ class NewsItem extends Component {
       <div className='row'>
         <form className='col s12' onSubmit={handleSubmit(doSubmit)}>
           <div className='row'>
-            <Field name='title' component={inputField} placeholder='title'/>
+            <Field name='title' component={inputField} placeholder='title' />
             <div className='col s4'>
               <p>
                 <button type='submit' className='btn btn-primary blue'>Save</button>
@@ -90,7 +89,7 @@ class NewsItem extends Component {
               component={inputField}
               type='text'
               placeholder='Description'
-              width={12}/>
+              width={12} />
           </div>
           <div className='row'>
             <Field
@@ -99,7 +98,7 @@ class NewsItem extends Component {
               type='text'
               placeholder='Image'
               component={inputImageField}
-              width={8}/>
+              width={8} />
             <div />
           </div>
           <div className='row'>
@@ -108,12 +107,12 @@ class NewsItem extends Component {
               component={inputField}
               type='text'
               placeholder='Link'
-              width={8}/>
+              width={8} />
             <Field
               name='link_text'
               component={inputField}
               type='text'
-              placeholder='Description'/>
+              placeholder='Description' />
           </div>
           <div className='row'>
             <div className='left'>
@@ -125,7 +124,7 @@ class NewsItem extends Component {
               type='date'
               className='datepicker'
               placeholder='expire_date'
-              width={2}/>
+              width={2} />
           </div>
         </form>
       </div>
@@ -136,7 +135,7 @@ class NewsItem extends Component {
 const replaceDate = (values) => {
   if (values) {
     values.expire_date = values.expire_date.substr(0, 10)
-  } 
+  }
   return values
 }
 
@@ -145,7 +144,7 @@ const mapStateToProps = (state) => {
     initialValues: replaceDate(state.summary.news[0])}
 }
 
-const { func, object, arrayOf } = React.PropTypes
+const { func, object, shape, string, arrayOf } = React.PropTypes
 
 NewsItem.propTypes = {
   fetchNewsItem: func,
@@ -153,10 +152,16 @@ NewsItem.propTypes = {
   deleteNews: func,
   initialize: func,
   handleSubmit: func,
-  news: arrayOf(object),
+  news: arrayOf(shape({
+    body: string,
+    image: string,
+    link: string,
+    link_text: string,
+    expire_date: string
+  })),
   params: object
 }
 
-NewsItem = reduxForm({form:'newsitem'})(NewsItem)
+NewsItem = reduxForm({form: 'newsitem'})(NewsItem)
 export default // NewsItem = reduxForm(    {form: 'newsitem'},
         connect(mapStateToProps, {fetchNewsItem, updateNews, deleteNews})(NewsItem)

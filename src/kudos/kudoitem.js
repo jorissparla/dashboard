@@ -1,4 +1,6 @@
-import React from 'react'; const KudoItem = props => {
+import React from 'react'
+
+const KudoItem = props => {
   const color = props.color || 'blue'
   const nr = props.nr || '14'
   const gender = props.gender || 'men'
@@ -19,6 +21,17 @@ import React from 'react'; const KudoItem = props => {
       </div>
     </div>
   )
+}
+
+const { string, number } = React.PropTypes
+
+KudoItem.propTypes = {
+  color: string,
+  name: string,
+  customer: string,
+  nr: number,
+  date: string
+
 }
 
 export default KudoItem

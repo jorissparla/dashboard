@@ -1,119 +1,117 @@
-import React from 'react';
-import {Field, reduxForm} from 'redux-form';
+import React from 'react'
+import {Field, reduxForm} from 'redux-form'
 import {createNews} from '../actions/index'
-import {Link, browserHistory} from 'react-router';
-
-
+import {Link, browserHistory} from 'react-router'
 
 const doSubmit = values => {
-  createNews(values);
+  createNews(values)
   browserHistory.push('/news')
 }
 
 const inputField = field => {
   console.log(field)
-  const classw = "input-field col s" + (field.width || "4");
+  const classw = 'input-field col s' + (field.width || '4')
   return (
     <div className={classw}>
-      <input {...field.input} placeholder={field.placeholder} type={field.type}/>
+      <input {...field.input} placeholder={field.placeholder} type={field.type} />
     </div>
   )
 }
 const inputImageField = field => {
   console.log(field)
-  const classw = "input-field col s" + (field.width || "4");
+  const classw = 'input-field col s' + (field.width || '4')
   return (
     <div>
       <div className={classw}>
-        <input {...field.input} placeholder={field.placeholder} type={field.type}/>
+        <input {...field.input} placeholder={field.placeholder} type={field.type} />
 
       </div>
-      <div className="col s2">
-        <img src={field.input.value} alt="" width="200px"/>
+      <div className='col s2'>
+        <img src={field.input.value} alt='' width='200px' />
       </div>
     </div>
   )
 }
 
 const NewsItemAdd = (props) => {
-  const {handleSubmit} = props;
+  const {handleSubmit} = props
   // const { handleSubmit, pristine, reset, submitting } = props
   return (
-    <div className="row">
-      <form className="col s12" onSubmit={handleSubmit(doSubmit)}>
-        <div className="row">
-          <Field name="title" component={inputField} placeholder="title"/>
-          <div className="col s4">
+    <div className='row'>
+      <form className='col s12' onSubmit={handleSubmit(doSubmit)}>
+        <div className='row'>
+          <Field name='title' component={inputField} placeholder='title' />
+          <div className='col s4'>
             <p>
-              <button type="submit" className="btn btn-primary blue">Save</button>
-              <Link to="/news" type="cancel" className="btn btn-primary black">Cancel</Link>
+              <button type='submit' className='btn btn-primary blue'>Save</button>
+              <Link to='/news' type='cancel' className='btn btn-primary black'>Cancel</Link>
             </p>
           </div>
         </div>
-        <div className="row">
+        <div className='row'>
           <Field
-            name="body"
+            name='body'
             component={inputField}
-            type="text"
-            placeholder="Description"
-            width={12}/>
+            type='text'
+            placeholder='Description'
+            width={12} />
         </div>
-        <div className="row">
+        <div className='row'>
           <Field
-            name="img"
-            id="img"
-            type="text"
-            placeholder="Image"
+            name='img'
+            id='img'
+            type='text'
+            placeholder='Image'
             component={inputImageField}
-            width={8}/>
-          <div></div>
+            width={8} />
+          <div />
         </div>
-        <div className="row">
+        <div className='row'>
           <Field
-            name="link"
+            name='link'
             component={inputField}
-            type="text"
-            placeholder="Link"
-            width={8}/>
+            type='text'
+            placeholder='Link'
+            width={8} />
           <Field
-            name="link_text"
+            name='link_text'
             component={inputField}
-            type="text"
-            placeholder="Description"/>
+            type='text'
+            placeholder='Description' />
         </div>
-        <div className="row">
-          <div className="left">
+        <div className='row'>
+          <div className='left'>
             Expires:
           </div>
           <Field
-            name="expire_date"
+            name='expire_date'
             component={inputField}
-            type="date"
-            placeholder="expire_date"
-            width={2}/>
+            type='date'
+            placeholder='expire_date'
+            width={2} />
         </div>
       </form>
     </div>
 
-  );
+  )
+}
+const { func } = React.PropTypes
+
+NewsItemAdd.propTypes = {
+  createNews: func,
+  handleSubmit: func
+
 }
 
-/*const checkValid = (obj) => {
-
-  return obj.touched && obj.invalid
-    ? 'btn-danger'
-    : '';
-}*/
-
 const validate = () => {
-  const errors = {};
+  const errors = {}
 
-  return errors;
+  return errors
 }
 
 const defaultDate = () => new Date(Date.now() + 14 * 24 * 3600000)
   .toISOString()
-  .substr(0, 10);
+  .substr(0, 10)
 
 export default reduxForm({
   form: 'newsitemadd',
@@ -122,4 +120,4 @@ export default reduxForm({
     img: 'https://media.licdn.com/media/p/6/005/0b2/35e/09bf0b3.png',
     expire_date: defaultDate()
   }
-}, null, {createNews})(NewsItemAdd);
+}, null, {createNews})(NewsItemAdd)
