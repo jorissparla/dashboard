@@ -24,7 +24,18 @@ const DashBoardStats = () => {
             type='column'
             refreshRate={11000} />
           <HistoryChartContainer refreshRate={16000} />
-
+          <AppChartContainer
+            data={['Tools', 'Logistics', 'Finance']}
+            value='opened'
+            title='Opened'
+            type='area'
+            refreshRate={11000} />
+          <AppChartContainer
+            data={['Tools', 'Logistics', 'Finance']}
+            value='Closed'
+            title='Closed'
+            type='area'
+            refreshRate={11000} />
           <AppChartCombi
             title='Surveys'
             type='column'

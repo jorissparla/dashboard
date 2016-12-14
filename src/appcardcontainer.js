@@ -14,13 +14,12 @@ const AppCardContainer = props => {
   if (!news) {
     props.fetchNews()
   }
-  console.log('APPCARDCONTAINER', props)
 
   return (
 
     <div className='test'>
-          <AppCard index={index} />
-        </div>
+      <AppCard index={index} />
+    </div>
   )
 }
 

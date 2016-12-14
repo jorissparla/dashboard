@@ -7,7 +7,7 @@ class DashBoardContainer extends Component {
 
   componentDidMount () {
     this.setState({
-      index: 0
+      index: 2
     })
     setInterval(this.myTimer.bind(this), this.props.refreshInterval || 90000)
   }
@@ -31,7 +31,6 @@ class DashBoardContainer extends Component {
   }
 
   renderDashBoard (index) {
-    console.log('RENDER', index, Award)
     switch (index) {
       case 1:
         return <DashBoard />
