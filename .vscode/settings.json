@@ -1,6 +1,8 @@
 // Place your settings in this file to overwrite default and user settings.
 {
   "editor.tabSize": 2,
+  "editor.fontLigatures": true,
+  "editor.fontFamily": "'Operator Mono Light'",
   "react.beautify.formatter": "esformatter",
    "eslint.autoFixOnSave": true
 }

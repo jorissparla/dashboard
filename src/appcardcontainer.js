@@ -1,33 +1,31 @@
-import React, {Component} from 'react';
+import React, {Component} from 'react'
 
-import {connect} from 'react-redux';
-import {fetchNews} from './actions/index';
+import {connect} from 'react-redux'
+import {fetchNews} from './actions/index'
 import AppCard from './appcard'
 
-
-
 const AppCardContainer = props => {
-    const {news} = props;
-    let index = 1;
+  const {news} = props
+  let index = 1
 
-    const myTimer = (index) => index+1;
-    setInterval(myTimer, 10000)
+  const myTimer = (index) => index + 1
+  setInterval(myTimer, 10000)
 
-    if (!news) {
-        props.fetchNews()
-    }
-    console.log('APPCARDCONTAINER', props)
-    
-    return (
+  if (!news) {
+    props.fetchNews()
+  }
+  console.log('APPCARDCONTAINER', props)
 
-        <div>
-            <AppCard index={index}/>
+  return (
+
+    <div className='test'>
+          <AppCard index={index} />
         </div>
-    );
+  )
 }
 
 const mapStateToProps = (state) => {
-    return {news: state.summary.news}
+  return {news: state.summary.news}
 }
 
-export default connect(mapStateToProps, {fetchNews})(AppCardContainer);
+export default connect(mapStateToProps, {fetchNews})(AppCardContainer)
