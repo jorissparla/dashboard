@@ -1,5 +1,6 @@
 import axios from 'axios'
 export const FETCH_SUMMARY = 'FETCH_SUMMARY'
+export const FETCH_CHAT = 'FETCH_CHAT'
 export const FETCH_HISTORY = 'FETCH_HISTORY'
 export const FETCH_GOLIVES = 'FETCH_GOLIVES'
 export const FETCH_NEWS = 'FETCH_NEWS'
@@ -18,40 +19,48 @@ const ROOT_URL = 'http://nlbavwtls22:3001/api'
 const fetchSummary = () => {
   const request = axios.get(ROOT_URL + '/summary')
   return {
-        type: FETCH_SUMMARY,
-        payload: request
-      }
+    type: FETCH_SUMMARY,
+    payload: request
+  }
+}
+
+const fetchChat = () => {
+  const request = axios.get(ROOT_URL + '/chat')
+  return {
+    type: FETCH_CHAT,
+    payload: request
+  }
 }
 
 const fetchGoLives = () => {
   const request = axios.get(ROOT_URL + '/golives')
   return {
-        type: FETCH_GOLIVES,
-        payload: request
-      }
+    type: FETCH_GOLIVES,
+    payload: request
+  }
 }
 
 const fetchHistory = () => {
   const request = axios.get(ROOT_URL + '/history')
   return {
-        type: FETCH_HISTORY,
-        payload: request
-      }
+    type: FETCH_HISTORY,
+    payload: request
+  }
 }
 const fetchNews = () => {
   const request = axios.get(ROOT_URL + '/news')
   return {
-        type: FETCH_NEWS,
-        payload: request
-      }
+    type: FETCH_NEWS,
+    payload: request
+  }
 }
 
 const fetchNewsItem = (id) => {
   const request = axios.get(ROOT_URL + '/news/' + id)
   return {
-        type: FETCH_NEWS,
-        payload: request
-      }
+    type: FETCH_NEWS,
+    payload: request
+  }
 }
 
 const createNews = (props) => {
@@ -73,25 +82,25 @@ const updateNews = (props) => {
 const fetchKudos = () => {
   const request = axios.get(ROOT_URL + '/kudos')
   return {
-        type: FETCH_KUDOS,
-        payload: request
-      }
+    type: FETCH_KUDOS,
+    payload: request
+  }
 }
 
 const fetchAlerts = () => {
   const request = axios.get(ROOT_URL + '/alerts')
   return {
-        type: FETCH_ALERTS,
-        payload: request
-      }
+    type: FETCH_ALERTS,
+    payload: request
+  }
 }
 
 const fetchAlertItem = (id) => {
   const request = axios.get(ROOT_URL + '/alerts/' + id)
   return {
-        type: FETCH_ALERTS,
-        payload: request
-      }
+    type: FETCH_ALERTS,
+    payload: request
+  }
 }
 
 const createAlert = (props) => {
@@ -111,7 +120,7 @@ const updateAlerts = (props) => {
 }
 
 export function deleteAlert (id) {
-  const request = axios.delete(ROOT_URL + '/alerts/' + id )
+  const request = axios.delete(ROOT_URL + '/alerts/' + id)
   return {
     type: DELETE_ALERT,
     payload: request
@@ -126,6 +135,7 @@ export function deleteNews (id) {
 }
 
 exports.fetchSummary = fetchSummary
+exports.fetchChat = fetchChat
 exports.fetchGoLives = fetchGoLives
 exports.fetchHistory = fetchHistory
 exports.fetchKudos = fetchKudos

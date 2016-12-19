@@ -1,19 +1,19 @@
 import React from 'react'
 import {connect} from 'react-redux'
-import {fetchSummary} from '../actions/index'
+import {fetchChat} from '../actions/index'
 import SummaryChart from './summarychart'
 
 const { func, string, number, object, arrayOf } = React.PropTypes
 
-const AppChartContainer = React.createClass({
+const ChatChartContainer = React.createClass({
   propTypes: {
-    fetchSummary: func,
+    fetchChat: func,
     data: arrayOf(object),
     refreshRate: number,
     value: string,
     title: string,
     type: string,
-    summary: arrayOf(object)
+    chat: string
   },
   myTimer () {
     const data = (!this.props.data) ? ['Logistics'] : this.props.data
@@ -34,7 +34,7 @@ const AppChartContainer = React.createClass({
   },
 
   componentDidMount () {
-    this.props.fetchSummary()
+    this.props.fetchChat()
 
     this.timerhandle = setInterval(this.myTimer, this.props.refreshRate || 15000)
   },
@@ -44,19 +44,20 @@ const AppChartContainer = React.createClass({
   },
 
   render () {
+    console.info('ChatChartContainer')
     const data = (!this.props.data) ? ['Logistics'] : this.props.data
-    const value = (!this.props.value) ? 'supportBacklog' : this.props.value
+    const value = (!this.props.value) ? 'percentage' : this.props.value
     const title = (!this.props.title) ? value : this.props.title
-    const type = (!this.props.type) ? 'line' : this.props.type
+    const type = (!this.props.type) ? 'column' : this.props.type
     const team = data[this.state.index || 0]
-    const summary = this.props.summary // .reverse()
-    // console.dir('Summary', summary)
+    const chat = this.props.chat // .reverse()
+
     return (
       <div>
-        <SummaryChart data={summary}
+        <SummaryChart data={chat}
           title={title}
           type={type}
-          xvalue='weekNr'
+          xvalue='weeknr'
           value={value}
           team={team} />
       </div>
@@ -65,7 +66,7 @@ const AppChartContainer = React.createClass({
 })
 
 const mapStateToProps = (state) => {
-  return {summary: state.summary.summary}
+  return {chat: state.summary.chat}
 }
 
-export default connect(mapStateToProps, {fetchSummary})(AppChartContainer)
+export default connect(mapStateToProps, {fetchChat})(ChatChartContainer)

@@ -57,7 +57,7 @@ const config = {
 }
 
 const renderSummary = (config, val, team, title, color, type, summary) => {
-  const mySummary = summary.slice() // .sort((a,b)=> a.weekNr > b.weekNr)
+  const mySummary = (summary || []).slice()// .sort((a,b)=> a.weekNr > b.weekNr)
   const filteredSummary = mySummary
             .filter(item => item.team === team).reverse().slice(0, 6).reverse()
             .reduce(({xvalues, data}, item, index) => {

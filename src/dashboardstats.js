@@ -4,6 +4,7 @@ import './App.css'
 import AppChartCombi from './charts/appchartcombi'
 import AlertWidget from './alerts/alertwidget'
 import AppChartContainer from './charts/appchartcontainer'
+import ChatChartContainer from './charts/chatchartcontainer'
 import HistoryChartContainer from './charts/historycontainer'
 
 const DashBoardStats = () => {
@@ -36,12 +37,12 @@ const DashBoardStats = () => {
             title='Closed'
             type='area'
             refreshRate={11000} />
-          <AppChartCombi
-            title='Surveys'
+          <ChatChartContainer
+            title='Chats'
             type='column'
-            value='surveyScore'
+            value='percentage'
             color='#9575cd'
-            team='Logistics' />
+            refreshRate={12000} />
           <AppChartCombi
             title='Input'
             type='area'
