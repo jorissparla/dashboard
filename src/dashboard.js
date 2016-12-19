@@ -13,8 +13,7 @@ const DashBoard = () => {
   return (
     <div className='row'>
       <div className='col s3'>
-        <GoLiveList />
-        <AlertWidget />
+        <GoLiveList nrItems={10} />
       </div>
       <div className='col s9'>
         <div className='row'>
@@ -29,12 +28,6 @@ const DashBoard = () => {
             type='column'
             value='surveyScore'
             color='#9575cd'
-            team='Logistics' />
-          <AppChartCombi
-            title='Input'
-            type='area'
-            value='opened'
-            color='#ffb300'
             team='Logistics' />
         </div>
       </div>

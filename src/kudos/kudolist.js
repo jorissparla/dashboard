@@ -88,7 +88,7 @@ class KudoList extends Component {
       <ReactCSSTransitionGroup transitionName='fade'
         transitionEnterTimeout={500}
         transitionLeaveTimeout={300}>
-        <div className='kudolist aname'>
+        <div className='kudolist aname animating'>
           <h4 className='left-align'>
             <i className='material-icons'>favorite_border</i>
               Kudos ({kudos.length})

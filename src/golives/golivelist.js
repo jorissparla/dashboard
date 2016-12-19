@@ -21,7 +21,7 @@ class GoLiveList extends Component {
     this.setState({
       index: 0
     })
-    this.timerhandle = setInterval(this.myTimer.bind(this), 6000)
+    this.timerhandle = setInterval(this.myTimer.bind(this), 16000)
   }
 
   componentWillUnmount () {
@@ -45,10 +45,10 @@ class GoLiveList extends Component {
     return items.map((item, index) => {
       let class1 = 'collapsible-header '
       let class2 = ''
-      let class3 = 'collapsible-body hide'
+      let class3 = 'collapsible-body hide golive-noshow'
       if (index === 0) {
         class1 += 'active'
-        class2 += 'active'
+        class2 += 'active golive-header'
         class3 = 'collapsible-body show'
       }
       const key = item.customerid + '-' + item.version
@@ -61,7 +61,7 @@ class GoLiveList extends Component {
             <span className='ralign'>{ getDay(item.date) }</span>
           </div>
           <div className={class3}>
-            <p>
+            <p className='golive'>
               { comments }.</p>
           </div>
         </li>
@@ -71,24 +71,22 @@ class GoLiveList extends Component {
   }
 
   render () {
-    const {golives} = this.props
-
+    const { golives, nrItems = 4 } = this.props
     if (!golives) {
       return (<div>
         <Spinner />
       </div>)
     }
+    const displayNr = Math.min(nrItems, golives.length)
     const index = (!this.state.index) ? 0 : this.state.index
-    const goLives1 = rotate(golives, index).slice(0, 4)
+    const goLives1 = rotate(golives, index).slice(0, displayNr)
     return (
-      <ReactCSSTransitionGroup transitionName='fade' transitionEnterTimeout={1000} transitionLeaveTimeout={1000}>
-        <div className='col s12 '>
-          <h6>Upcoming Go Lives</h6>
-          <ul className='collapsible' data-collapsible='expandable'>
-            { this.renderItems(goLives1) }
-          </ul>
-        </div>
-      </ReactCSSTransitionGroup>
+      <div className='col s12 '>
+        <h6>Upcoming Go Lives</h6>
+        <ul className='collapsible animating' data-collapsible='expandable'>
+          { this.renderItems(goLives1) }
+        </ul>
+      </div>
     )
   }
 }

@@ -56,12 +56,12 @@ const config = {
   }
 }
 
-const renderSummary = (config, val, team, title, color, type, summary) => {
+const renderSummary = (config, val, team, title, color, type, summary, xvalue) => {
   const mySummary = (summary || []).slice()// .sort((a,b)=> a.weekNr > b.weekNr)
   const filteredSummary = mySummary
             .filter(item => item.team === team).reverse().slice(0, 6).reverse()
             .reduce(({xvalues, data}, item, index) => {
-              xvalues.push(item.weekNr)
+              xvalues.push(item[xvalue])
               data.push({y: item[val], color: arColors[(index % 7)]})
               return {xvalues, data}
             }, { xvalues: [], data: [] })
@@ -76,8 +76,8 @@ const renderSummary = (config, val, team, title, color, type, summary) => {
   return config
 }
 
-const summaryChart = ({value, team, title, color, type, data}) => {
-  const newConfig = renderSummary(config, value, team, title, color, type, data)
+const summaryChart = ({value, team, title, color, type, data, xvalue = 'weekNr'}) => {
+  const newConfig = renderSummary(config, value, team, title, color, type, data, xvalue)
   return (
     <div className='col s4'>
       <div className='card'>

@@ -9,7 +9,7 @@ const KudoItem = props => {
   return (
     <div className={classC} key={props.name}>
       <div className='card-action white-text App-small-text kudoheader'>
-        {props.customer.toUpperCase().substr(0, 50) || 'Kongsberg'}
+        {props.customer.toUpperCase().substr(0, 30) || 'Kongsberg'}
       </div>
       <div className='divider' />
       <div className='card-image'>

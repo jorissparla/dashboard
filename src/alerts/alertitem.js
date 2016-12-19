@@ -1,4 +1,4 @@
-import React  from 'react'
+import React from 'react'
 import {connect} from 'react-redux'
 import {reduxForm, Field} from 'redux-form'
 import {browserHistory, Link} from 'react-router'
@@ -57,10 +57,10 @@ let AlertItem = React.createClass({
     return (
       <div className='row'>
         <form className='col s4' onSubmit={this.submitIt}>
-          <Field name='title' component={inputField} placeholder='title' id='title' width={8}/>
-          <Field name='body' component={inputField} placeholder='text' width={8} multiLine={true} rows={2}/>
-          <Field name='alerttype' component={inputField} data={aTypes} width={3} placeholder='type'/>
-          <Field name='username' component={inputField} placeholder='username'/>
+          <Field name='title' component={inputField} placeholder='title' id='title' width={8} />
+          <Field name='body' component={inputField} placeholder='text' width={8} rows={2} />
+          <Field name='alerttype' component={inputField} data={aTypes} width={3} placeholder='type' />
+          <Field name='username' component={inputField} placeholder='username' />
           <div className='col s8'>
             <p>
               <button type='submit' className='btn btn-primary blue'>Save</button>

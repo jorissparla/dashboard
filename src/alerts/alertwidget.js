@@ -67,9 +67,11 @@ class AlertWidget extends Component {
               <h5>Alerts</h5>
             </div>
             <div className='col s4'>
-              <Link to={'/alerts/new'} className='btn-floating btn-small orange waves-effect waves-light align-right '>
-                <i className='material-icons'>add</i>
-              </Link>
+              {/*
+                <Link to={'/alerts/new'} className='btn-floating btn-small orange waves-effect waves-light align-right '>
+                  <i className='material-icons'>add</i>
+                </Link>
+                */}
             </div>
           </li>
           {this.renderAlertsItems(rotate(alerts, index))}

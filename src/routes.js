@@ -10,6 +10,7 @@ import NewsItem from './news/newsitem'
 import NewsItemAdd from './news/newsitemadd'
 import DashBoard from './dashboard'
 import DashBoardContainer from './dashboardcontainer'
+import GoLives from './golives/golivelist'
 import AuthService from './utils/authservice'
 import Award from './awards/award'
 import Login from './login/login'
@@ -34,6 +35,7 @@ export default (
     <Route path='news' component={NewsList} />
     <Route path='news/new' component={NewsItemAdd} />
     <Route path='news/:id' component={NewsItem} />
+    <Route path='golives' component={GoLives} />
     <Route path='login' component={Login} auth={auth} />
   </Route>
 

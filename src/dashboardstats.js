@@ -38,6 +38,7 @@ const DashBoardStats = () => {
             type='area'
             refreshRate={11000} />
           <ChatChartContainer
+            data={['Tools', 'Logistics', 'Finance']}
             title='Chats'
             type='column'
             value='percentage'

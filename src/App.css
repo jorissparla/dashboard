@@ -58,6 +58,75 @@ body
   background-color: #29b6f6
 }
 
+.golive {
+  transition: 1.5s all;
+  opacity:1;
+  font-family: "Roboto", sans-serif;
+  font-size: 16px;
+  
+}
+
+.golive-noshow {
+  transition: 1.5s all;
+  font-size: 15px;
+  opacity:0.5;
+  font-family: "Roboto", sans-serif;
+  
+}
+.golive-header {
+  transition: 1.5s all;
+  font-size: 20px;
+  font-family: Oswald;
+}
+
+.animating li {
+  transform: translateY(-100%) scaleY(1);
+  animation-name: insert-from-top;
+  animation-duration: 1s;
+  animation-fill-mode: forwards;
+  opacity: 0;
+}
+.animating li:nth-child(1) {
+  animation-delay: 0.25s;
+  z-index: 1;
+}
+.animating li:nth-child(2) {
+  animation-delay: 0.45s;
+  z-index: 2;
+}
+.animating li:nth-child(3) {
+  animation-delay: 0.625s;
+  z-index: 3;
+}
+.animating li:nth-child(4) {
+  animation-delay: 0.8s;
+  z-index: 4;
+}
+.animating li:nth-child(5) {
+  animation-delay: 0.975s;
+  z-index: 5;
+}
+.animating li:nth-child(6) {
+  animation-delay: 1.45s;
+  z-index: 6;
+}
+.animating li:nth-child(7) {
+  animation-delay: 1.525s;
+  z-index: 7;
+}
+.animating li:nth-child(8) {
+  animation-delay: 1.6s;
+  z-index: 8;
+}
+.animating li:nth-child(9) {
+  animation-delay: 1.675s;
+  z-index: 9;
+}
+.animating li:nth-child(10) {
+  animation-delay: 0.75s;
+  z-index: 10;
+}
+
 .margin1 {
       background-color: white;
     border-top: 1px solid rgba(160,160,160,0.2);
@@ -74,7 +143,7 @@ body
 }
 
 .App-small-text {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 20em;
 }
 .App-card {
@@ -173,7 +242,7 @@ div.card-panel.col.s2.roundedCorner {
 }
 
 .kudoheader {
-  height: 50px;
+  height: 80px;
   width: 120px;
 }
 
@@ -182,7 +251,9 @@ div.card-panel.col.s2.roundedCorner {
   opacity: 0;
 }
 .slide-fade li.show {
+  transition: all 0.4s ease-out;
   opacity: 1;
+  color: yellow
 }
 
 .slide-fade div.card-panel {
@@ -200,6 +271,7 @@ div.card-panel.col.s2.roundedCorner {
 }
 .fade-enter {
   opacity: 0.01;
+  transition: 1.5 all;
 }
 
 .fade-enter.fade-enter-active {
@@ -209,6 +281,7 @@ div.card-panel.col.s2.roundedCorner {
 
 .fade-leave {
   opacity: 1;
+  transition: 1s all;
 }
 
 .fade-leave.fade-leave-active {
