@@ -44,13 +44,6 @@ const DashBoardStats = () => {
             value='percentage'
             color='#9575cd'
             refreshRate={12000} />
-          <AppChartCombi
-            title='Input'
-            type='area'
-            value='opened'
-            color='#ffb300'
-            team='Logistics' />
-
         </div>
       </div>
 

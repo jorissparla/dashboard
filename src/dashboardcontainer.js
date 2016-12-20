@@ -13,7 +13,7 @@ class DashBoardContainer extends Component {
   }
 
   myTimer () {
-    const newIndex = (this.state.index === 2 ? 0 : this.state.index + 1)
+    const newIndex = (this.state.index === 1 ? 0 : this.state.index + 1)
     this.setState({
       index: newIndex
     })
@@ -34,10 +34,8 @@ class DashBoardContainer extends Component {
     switch (index) {
       case 1:
         return <DashBoard />
-      case 2:
-        return <DashBoardStats />
       case 0:
-        return <Award />
+        return <DashBoardStats />
       default:
         return <div>Invalid Dashboard</div>
     }

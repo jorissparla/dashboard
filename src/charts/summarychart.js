@@ -11,6 +11,19 @@ const arColors = [
   '#4527a0'
 ]
 
+Math.easeOutBounce = function (pos) {
+  if ((pos) < (1 / 2.75)) {
+    return (7.5625 * pos * pos)
+  }
+  if (pos < (2 / 2.75)) {
+    return (7.5625 * (pos -= (1.5 / 2.75)) * pos + 0.75)
+  }
+  if (pos < (2.5 / 2.75)) {
+    return (7.5625 * (pos -= (2.25 / 2.75)) * pos + 0.9375)
+  }
+  return (7.5625 * (pos -= (2.625 / 2.75)) * pos + 0.984375)
+}
+
 const config = {
   chart: {
     type: 'column'
@@ -29,7 +42,11 @@ const config = {
   },
   plotOptions: {
     series: {
-      pointWidth: 50// width of the column bars irrespective of the chart size
+      pointWidth: 50, // width of the column bars irrespective of the chart size
+      animation: {
+        duration: 2000,
+        easing: 'easeOutBounce'
+      }
     },
     column: {
       depth: 25
