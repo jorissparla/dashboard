@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactHighCharts from 'react-highcharts'
+import 'highcharts/highcharts-3d'
 
 const arColors = [
   '#c62828',
@@ -24,6 +25,22 @@ Math.easeOutBounce = function (pos) {
   return (7.5625 * (pos -= (2.625 / 2.75)) * pos + 0.984375)
 }
 
+Math.easeInOutCubic = function (pos) {
+  if ((pos /= 0.5) < 1) return 0.5 * Math.pow(pos, 3)
+  return 0.5 * (Math.pow((pos - 2), 3) + 2)
+}
+
+Math.bouncePast = function (pos) {
+  if (pos < (1 / 2.75)) {
+    return (7.5625 * pos * pos)
+  } else if (pos < (2 / 2.75)) {
+    return 2 - (7.5625 * (pos -= (1.5 / 2.75)) * pos + 0.75)
+  } else if (pos < (2.5 / 2.75)) {
+    return 2 - (7.5625 * (pos -= (2.25 / 2.75)) * pos + 0.9375)
+  } else {
+    return 2 - (7.5625 * (pos -= (2.625 / 2.75)) * pos + 0.984375)
+  }
+}
 const config = {
   chart: {
     type: 'column'
@@ -41,10 +58,13 @@ const config = {
     ]
   },
   plotOptions: {
+    area: {
+      color: 'b39ddb'
+    },
     series: {
       pointWidth: 50, // width of the column bars irrespective of the chart size
       animation: {
-        duration: 2000,
+        duration: 3000,
         easing: 'easeOutBounce'
       }
     },
@@ -74,14 +94,18 @@ const config = {
 }
 
 const renderSummary = (config, val, team, title, color, type, summary, xvalue) => {
+  console.log('color', color)
+  if (color) {
+    config.plotOptions.area.color = color
+  }
   const mySummary = (summary || []).slice()// .sort((a,b)=> a.weekNr > b.weekNr)
   const filteredSummary = mySummary
-            .filter(item => item.team === team).reverse().slice(0, 6).reverse()
-            .reduce(({xvalues, data}, item, index) => {
-              xvalues.push(item[xvalue])
-              data.push({y: item[val], color: arColors[(index % 7)]})
-              return {xvalues, data}
-            }, { xvalues: [], data: [] })
+    .filter(item => item.team === team).reverse().slice(0, 6).reverse()
+    .reduce(({xvalues, data}, item, index) => {
+      xvalues.push(item[xvalue])
+      data.push({ y: item[val], color: arColors[(index % 7)] })
+      return {xvalues, data}
+    }, { xvalues: [], data: [] })
   config.xAxis.categories = filteredSummary.xvalues
   config.series[0] = {
     data: filteredSummary.data,

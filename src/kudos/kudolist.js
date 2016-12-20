@@ -89,7 +89,7 @@ class KudoList extends Component {
         transitionEnterTimeout={500}
         transitionLeaveTimeout={300}>
         <div className='kudolist aname animating'>
-          <h4 className='left-align'>
+          <h4 className='left-align kudotitle'>
             <i className='material-icons'>favorite_border</i>
               Kudos ({kudos.length})
           </h4>

@@ -1,66 +1,60 @@
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import React, {Component} from 'react'
+import {connect} from 'react-redux'
 import {fetchHistory} from '../actions/index'
 import HistoryChart from './historychart'
 
-
 class HistoryChartContainer extends Component {
+  myTimer () {
+    const data = (!this.props.data) ? ['LN', 'Tools', 'Logistics', 'Finance'] : this.props.data
+    this.setState({
+      index: this.state.index + 1,
+      nrCols: data.length
+    })
 
-
-
-    myTimer() {
-        const data  = (!this.props.data) ? ['LN', 'Tools', 'Logistics', 'Finance']: this.props.data ;
-        this.setState({
-            index: this.state.index + 1,
-            nrCols: data.length
-        })
-
-        const {nrCols, index} = this.state;
-        if (index > nrCols - 1) {
-        this.setState({
-            index: 0
-        })  
-        }
+    const {nrCols, index} = this.state
+    if (index > nrCols - 1) {
+      this.setState({
+        index: 0
+      })
     }
-    
-    componentWillMount () {
-          this.setState({ index: 0 })
-    }
-    
+  }
 
-    componentDidMount() {
-        this.props.fetchHistory();
-      
-        this.timerhandle = setInterval(this.myTimer.bind(this), this.props.refreshRate||15000)
+  componentWillMount () {
+    this.setState({ index: 0 })
+  }
 
-    }
+  componentDidMount () {
+    this.props.fetchHistory()
+    this.timerhandle = setInterval(this.myTimer.bind(this), this.props.refreshRate || 15000)
+  }
 
-    componentWillUnmount() {
-        clearInterval(this.timerhandle)
-    }
+  componentWillUnmount () {
+    clearInterval(this.timerhandle)
+  }
 
+  render () {
+    const data = (!this.props.data) ? ['LN', 'Tools', 'Logistics', 'Finance'] : this.props.data
 
-    render () {
-        const data  = (!this.props.data) ? ['LN', 'Tools', 'Logistics', 'Finance']: this.props.data ;
-       
-        const column = data[this.state.index||0];
-        const history= this.props.history; //.reverse();
-         const title = "Backlog ".concat(column)
-        return (
-            <div>
-            <HistoryChart  data={history}
-                title={title}
-                type="area"
-                xvalue="hour"
-                value={column}
-                />
-            </div>
-        )
-    }
+    const column = data[this.state.index || 0]
+    const history = this.props.history // .reverse();
+    const color = this.props.history
+    const title = 'Backlog '.concat(column)
+    return (
+      <div>
+        <HistoryChart data={history}
+          title={title}
+          type='area'
+          color='#ffb74d'
+          xvalue='hour'
+          value={column}
+            />
+      </div>
+    )
+  }
 }
 
 const mapStateToProps = (state) => {
-    return {history: state.summary.history}
+  return {history: state.summary.history}
 }
 
-export default connect(mapStateToProps, {fetchHistory})(HistoryChartContainer);
+export default connect(mapStateToProps, {fetchHistory})(HistoryChartContainer)

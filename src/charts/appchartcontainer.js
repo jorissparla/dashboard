@@ -50,6 +50,7 @@ const AppChartContainer = React.createClass({
     const type = (!this.props.type) ? 'line' : this.props.type
     const team = data[this.state.index || 0]
     const summary = this.props.summary // .reverse()
+    const color = this.props.color
     // console.dir('Summary', summary)
     return (
       <div>
@@ -58,6 +59,7 @@ const AppChartContainer = React.createClass({
           type={type}
           xvalue='weekNr'
           value={value}
+          color={color}
           team={team} />
       </div>
     )

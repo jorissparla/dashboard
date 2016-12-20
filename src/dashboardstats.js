@@ -17,6 +17,7 @@ const DashBoardStats = () => {
         <div className='row'>
           <AppChartContainer
             data={['Tools', 'Logistics', 'Finance']}
+            title='Support Backlog'
             refreshRate={16000} />
           <AppChartContainer
             data={['Tools', 'Logistics', 'Finance']}
@@ -24,17 +25,21 @@ const DashBoardStats = () => {
             title='Survey'
             type='column'
             refreshRate={11000} />
-          <HistoryChartContainer refreshRate={16000} />
+          <HistoryChartContainer
+            color='#ffb74d'
+            refreshRate={16000} />
           <AppChartContainer
             data={['Tools', 'Logistics', 'Finance']}
             value='opened'
             title='Opened'
+            color='#b39ddb'
             type='area'
             refreshRate={11000} />
           <AppChartContainer
             data={['Tools', 'Logistics', 'Finance']}
             value='Closed'
             title='Closed'
+            color='#ffc600'
             type='area'
             refreshRate={11000} />
           <ChatChartContainer

@@ -1,3 +1,4 @@
+
 .App {
   text-align: left;
   margin-left: 20px;
@@ -230,10 +231,13 @@ div.card-panel.col.s2.roundedCorner {
 .kudolist {
   margin-left: 30px;
 }
-
+.kudotitle {
+  font-family: 'Oswald';
+  font-size: 20px;
+}
 .kudoname {
-  font-family: Billabong;
-  font-size: 30px;
+  font-family: Oswald;
+  font-size: 24px;
   font-color: black;
   padding-top: 10px;
   margin-top: 10px;
