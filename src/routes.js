@@ -14,15 +14,16 @@ import GoLives from './golives/golivelist'
 import AuthService from './utils/authservice'
 import Award from './awards/award'
 import Login from './login/login'
+import InstaPanel from './social/insta'
 
 const auth = new AuthService('iJs8Cf5YV9H3n9QvfV6RUfZTSy3rmHAE', 'jsparla.eu.auth0.com')
 
 // validate authentication for private routes
-const requireAuth = (nextState, replace) => {
+/*const requireAuth = (nextState, replace) => {
   if (!auth.loggedIn()) {
     replace({ pathname: '/login' })
   }
-}
+}*/
 
 export default (
   <Route path='/' component={App} auth={auth} >
@@ -36,6 +37,11 @@ export default (
     <Route path='news/new' component={NewsItemAdd} />
     <Route path='news/:id' component={NewsItem} />
     <Route path='golives' component={GoLives} />
+    <Route path='social' 
+      component={()=> { 
+        console.info('in social')
+        return <div><InstaPanel/></div>} }
+    />
     <Route path='login' component={Login} auth={auth} />
   </Route>
 

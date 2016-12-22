@@ -37,7 +37,7 @@ const NewsItemAdd = (props) => {
   const {handleSubmit} = props
   // const { handleSubmit, pristine, reset, submitting } = props
   return (
-    <div className='row'>
+    <div className='row card-1'>
       <form className='col s12' onSubmit={handleSubmit(doSubmit)}>
         <div className='row'>
           <Field name='title' component={inputField} placeholder='title' />

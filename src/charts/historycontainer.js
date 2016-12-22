@@ -37,14 +37,14 @@ class HistoryChartContainer extends Component {
 
     const column = data[this.state.index || 0]
     const history = this.props.history // .reverse();
-    const color = this.props.history
+    const color = this.props.color || '#ffb74d'
     const title = 'Backlog '.concat(column)
     return (
       <div>
         <HistoryChart data={history}
           title={title}
           type='area'
-          color='#ffb74d'
+          color={color}
           xvalue='hour'
           value={column}
             />

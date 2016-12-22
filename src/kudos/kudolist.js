@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import KudoItem from './kudoitem'
 import {connect} from 'react-redux'
 import {fetchKudos} from '../actions/index'
-import moment from 'moment'
+//import moment from 'moment'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
 const colorList = ['purple', 'orange', 'blue', 'green', 'lime lighten-2', 'red']
@@ -17,7 +17,7 @@ const gender = g => {
 
 const indexList = [23, 34, 56, 24, 52, 19]
 
-const getDay = date => moment(date).format('ddd, DD MMM')
+//const getDay = date => moment(date).format('ddd, DD MMM')
 
 const displayNrKudos = (nr, len) => { return nr > len ? len : nr }
 
@@ -70,7 +70,7 @@ class KudoList extends Component {
         customer={item.customer_name}
         color={colorList[index % nrKudos]}
         gender={gender(item.gender)}
-        date={getDay(item.survey_date)}
+        date={item.survey_date}
         nr={indexList[index % nrKudos]} />
     })
   }

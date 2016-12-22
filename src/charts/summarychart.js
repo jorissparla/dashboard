@@ -25,22 +25,6 @@ Math.easeOutBounce = function (pos) {
   return (7.5625 * (pos -= (2.625 / 2.75)) * pos + 0.984375)
 }
 
-Math.easeInOutCubic = function (pos) {
-  if ((pos /= 0.5) < 1) return 0.5 * Math.pow(pos, 3)
-  return 0.5 * (Math.pow((pos - 2), 3) + 2)
-}
-
-Math.bouncePast = function (pos) {
-  if (pos < (1 / 2.75)) {
-    return (7.5625 * pos * pos)
-  } else if (pos < (2 / 2.75)) {
-    return 2 - (7.5625 * (pos -= (1.5 / 2.75)) * pos + 0.75)
-  } else if (pos < (2.5 / 2.75)) {
-    return 2 - (7.5625 * (pos -= (2.25 / 2.75)) * pos + 0.9375)
-  } else {
-    return 2 - (7.5625 * (pos -= (2.625 / 2.75)) * pos + 0.984375)
-  }
-}
 const config = {
   chart: {
     type: 'column'
@@ -61,15 +45,15 @@ const config = {
     area: {
       color: 'b39ddb'
     },
+    column: {
+      depth: 25
+    },
     series: {
       pointWidth: 50, // width of the column bars irrespective of the chart size
       animation: {
         duration: 3000,
         easing: 'easeOutBounce'
       }
-    },
-    column: {
-      depth: 25
     }
   },
   series: [

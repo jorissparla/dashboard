@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import DashBoard from './dashboard'
 import DashBoardStats from './dashboardstats'
-import Award from './awards/award'
+//import Award from './awards/award'
 
 class DashBoardContainer extends Component {
 

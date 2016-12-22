@@ -3347,6 +3347,12 @@ jsonify@~0.0.0:
   version "0.0.0"
   resolved "https://registry.yarnpkg.com/jsonify/-/jsonify-0.0.0.tgz#2c74b6ee41d93ca51b7b5aaee8f503631d252a73"
 
+jsonp-p@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/jsonp-p/-/jsonp-p-2.0.0.tgz#98de9a1ed70bd16afb33198a701c8729301238a3"
+  dependencies:
+    jsonp "^0.2.0"
+
 jsonp@^0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/jsonp/-/jsonp-0.2.0.tgz#95fcd751cf0a67adb9a5a9c4628ffeb97bec63e8"
@@ -4458,7 +4464,7 @@ qs@^6.2.1, qs@~6.3.0:
   version "6.3.0"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.3.0.tgz#f403b264f23bc01228c74131b407f18d5ea5d442"
 
-query-string@^4.1.0, query-string@^4.2.2:
+query-string@^4.1.0, query-string@^4.2.2, query-string@^4.2.3:
   version "4.2.3"
   resolved "https://registry.yarnpkg.com/query-string/-/query-string-4.2.3.tgz#9f27273d207a25a8ee4c7b8c74dcd45d556db822"
   dependencies:
@@ -4531,7 +4537,7 @@ react-dev-utils@^0.3.0:
     sockjs-client "1.0.3"
     strip-ansi "3.0.1"
 
-"react-dom@^15.0.0 || ^16.0.0", react-dom@^15.4.1:
+"react-dom@^15.0.0 || ^16.0.0", react-dom@^15.3.0, react-dom@^15.4.1:
   version "15.4.1"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.4.1.tgz#d54c913261aaedb17adc20410d029dcc18a1344a"
   dependencies:
@@ -4544,6 +4550,13 @@ react-highcharts@11.0.0:
   resolved "https://registry.yarnpkg.com/react-highcharts/-/react-highcharts-11.0.0.tgz#3664a65acf1166acb997dab5e7e5c6691ba306e8"
   dependencies:
     highcharts "^5.0.0"
+
+react-instagram-embed@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/react-instagram-embed/-/react-instagram-embed-1.1.2.tgz#f9ed9b3e07729dbb1f9dccd9dc86c392c9943840"
+  dependencies:
+    jsonp-p "^2.0.0"
+    query-string "^4.2.3"
 
 react-overlays@^0.6.10:
   version "0.6.10"
@@ -4648,6 +4661,21 @@ react-slick@^0.14.5:
     react-responsive-mixin "^0.4.0"
     slick-carousel "^1.6.0"
 
+react-snow-effect@^1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/react-snow-effect/-/react-snow-effect-1.1.4.tgz#7af69e78d757e8ec4fac6beba300e65a20fa7d07"
+  dependencies:
+    react "^15.3.0"
+    react-dom "^15.3.0"
+
+react-social-embed@0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/react-social-embed/-/react-social-embed-0.0.3.tgz#73ba1e51b8b724b01fbde28cbf2863a945049f83"
+  dependencies:
+    babel-runtime "^6.11.6"
+    jsonp-p "^2.0.0"
+    query-string "^4.2.3"
+
 react-sparklines@1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/react-sparklines/-/react-sparklines-1.6.0.tgz#0fe5987b1895301ce724c40d78ab9a26e8a9c2bf"
@@ -4669,7 +4697,7 @@ react-widgets@^3.4.5:
     deconstruct-number-format "0.0.1"
     format-number-with-string "0.0.2"
 
-"react@^15.0.0 || ^16.0.0", react@^15.4.1:
+"react@^15.0.0 || ^16.0.0", react@^15.3.0, react@^15.4.1:
   version "15.4.1"
   resolved "https://registry.yarnpkg.com/react/-/react-15.4.1.tgz#498e918602677a3983cd0fd206dfe700389a0dd6"
   dependencies:

@@ -1,8 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import {fetchAlerts} from '../actions/index'
-import {Link} from 'react-router'
-import moment from 'moment'
 import Spinner from '../utils/spinner'
 
 // const formatDate = date => moment(date).format('MMM, D')

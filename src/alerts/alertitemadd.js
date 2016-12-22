@@ -63,7 +63,7 @@ class AlertItemAdd extends Component {
   render () {
     const { handleSubmit } = this.props
     return (
-      <div className='row'>
+      <div className='card-1'>
         <form className='col s4' onSubmit={handleSubmit(doSubmit)}>
           <Field name='alertdate' component={inputDateField} placeholder='Date' id='alertdate' width={8} type='date' />
           <Field name='title' component={inputField} placeholder='title' id='title' width={6} />
