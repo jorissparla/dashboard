@@ -1,5 +1,4 @@
 import React from 'react'
-import InstagramEmbed from 'react-social-embed'
 
 const InstaPanel = (props) => {
   return (
