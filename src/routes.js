@@ -14,8 +14,9 @@ import GoLives from './golives/golivelist'
 import AuthService from './utils/authservice'
 import Award from './awards/award'
 import Login from './login/login'
-import InstaPanel from './social/insta'
-
+import KudoList1 from './kudos/kudolist1'
+import KudoList from './kudos/kudolist'
+import Signin from './auth/signin'
 const auth = new AuthService('iJs8Cf5YV9H3n9QvfV6RUfZTSy3rmHAE', 'jsparla.eu.auth0.com')
 
 // validate authentication for private routes
@@ -37,6 +38,9 @@ export default (
     <Route path='news/new' component={NewsItemAdd} />
     <Route path='news/:id' component={NewsItem} />
     <Route path='golives' component={GoLives} />
+    <Route path='kudos' component={KudoList} />
+    <Route path='kudos1' component={KudoList1} />
+    <Route path='signin' component={Signin} />
     <Route path='social' 
       component={()=> { 
         console.info('in social')

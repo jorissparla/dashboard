@@ -2,7 +2,7 @@ import React from 'react'
 
 // import logo from './logo.svg';
 import './App.css'
-import AppNavBar from './appnav'
+import { AppNavBar, Header} from './appnav'
 // import DashBoardContainer from './dashboardcontainer'
 const { arrayOf, object } = React.PropTypes
 const App = React.createClass({
@@ -13,7 +13,7 @@ const App = React.createClass({
     console.log('APPPPPP')
     return (
       <div className='App'>
-        <AppNavBar />
+        <Header />
         {this.props.children}
       </div>
     )

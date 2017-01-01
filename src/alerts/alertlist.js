@@ -5,37 +5,31 @@ import {Link} from 'react-router';
 
 class AlertList extends Component {
 
-    componentDidMount() {
-        this
-            .props
-            .fetchAlerts()
-    }
+	componentDidMount() {
+			this.props.fetchAlerts()
+	}
 
-    renderAlertsItems(alerts) {
-        return alerts.map(item => {
-            return (
-
-                <li className="collection-item App-align" key={item.id}>
-                    <div className="row">
-                        <h5>{item.title}</h5>
-                        <div className="col s7 ">
-                            {item.body}
-                        </div>
-                        <div className="right">
-                            <Link
-                                to={"/alerts/" + item.id}
-                                className="btn-floating btn-small right waves-effect waves-light blue">
-                                <i className="material-icons">mode_edit</i>
-                            </Link>
-
-                        </div>
-
-                    </div>
-                </li>
-
-            )
-        })
-    }
+	renderAlertsItems(alerts) {
+		return alerts.map(item => {
+			return (
+					<li className="collection-item App-align" key={item.id}>
+							<div className="row">
+									<h5>{item.title}</h5>
+									<div className="col s7 ">
+											{item.body}
+									</div>
+									<div className="right">
+											<Link
+													to={"/alerts/" + item.id}
+													className="btn-floating btn-small right waves-effect waves-light blue">
+													<i className="material-icons">mode_edit</i>
+											</Link>
+									</div>
+							</div>
+					</li>
+			)
+		})
+	}
 
     render() {
         const alerts = this.props.alerts;

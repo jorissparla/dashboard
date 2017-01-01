@@ -4,5 +4,6 @@
   "editor.fontLigatures": true,
   "editor.fontFamily": "'Operator Mono Light'",
   "react.beautify.formatter": "esformatter",
-   "eslint.autoFixOnSave": true
+  "eslint.autoFixOnSave": true,
+  "eslint.enable": true
 }

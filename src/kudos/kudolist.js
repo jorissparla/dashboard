@@ -60,7 +60,7 @@ class KudoList extends Component {
 
     const index = this.state.tijd
     let kl = kudos.slice(0, nrKudos)
-    if (index < kudos.length - nrKudos) {
+    if (index <= kudos.length - nrKudos) {
       kl = kudos.slice(index, index + nrKudos)
     }
     return kl.map((item, index) => {
