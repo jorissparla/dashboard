@@ -40,7 +40,7 @@ const signinUser = ( { email, password } ) => {
                 // - Save the JWT token
         localStorage.setItem('token', response.data.token);
                 // - redirect to the route '/feature'
-        browserHistory.push('/feature');
+        browserHistory.push('/');
     })
     .catch(() => {
         // If request is bad...
@@ -48,6 +48,12 @@ const signinUser = ( { email, password } ) => {
         dispatch(authError('Bad Login Info'))
   })
 })}
+
+const signoutUser = () => {
+    localStorage.removeItem('token');
+
+  return { type: UNAUTH_USER };
+}
 
 
 const fetchSummary = () => {
@@ -170,6 +176,7 @@ const deleteNews = (id) => {
 
 exports.fetchSummary = fetchSummary
 exports.signinUser = signinUser
+exports.signoutUser = signoutUser
 exports.authError = authError
 exports.fetchChat = fetchChat
 exports.fetchGoLives = fetchGoLives

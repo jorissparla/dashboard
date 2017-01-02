@@ -5,6 +5,7 @@ import { TextField } from 'redux-form-material-ui'
 import Paper from 'material-ui/Paper'
 import { signinUser } from '../actions';
 import { connect } from 'react-redux'
+import ErrorDialog from '../errordialog'
 
 
 const style = {
@@ -43,6 +44,7 @@ let Signin = React.createClass({
     if (this.props.errorMessage) {
       return (
         <div className="alert alert-danger">
+        <ErrorDialog message={this.props.errorMessage} />
           <strong>Oops!</strong> {this.props.errorMessage}
         </div>
       );

@@ -2,7 +2,7 @@ import React from 'react'
 
 // import logo from './logo.svg';
 import './App.css'
-import { Header} from './appnav'
+import Header  from './appnav'
 // import DashBoardContainer from './dashboardcontainer'
 const { arrayOf, object } = React.PropTypes
 const App = React.createClass({

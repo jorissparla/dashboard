@@ -17,7 +17,8 @@ import Login from './login/login'
 import KudoList1 from './kudos/kudolist1'
 import KudoList from './kudos/kudolist'
 import Signin from './auth/signin'
-const auth = new AuthService('iJs8Cf5YV9H3n9QvfV6RUfZTSy3rmHAE', 'jsparla.eu.auth0.com')
+import Signout from './auth/signout'
+import RequireAuth from './auth/require_auth'
 
 // validate authentication for private routes
 /*const requireAuth = (nextState, replace) => {
@@ -27,10 +28,10 @@ const auth = new AuthService('iJs8Cf5YV9H3n9QvfV6RUfZTSy3rmHAE', 'jsparla.eu.aut
 }*/
 
 export default (
-  <Route path='/' component={App} auth={auth} >
-    <IndexRoute component={DashBoardContainer} auth={auth} />
+  <Route path='/' component={App}  >
+    <IndexRoute component={DashBoardContainer}  />
     <Route path='/main/:id' component={DashBoard} />
-    <Route path='alerts' component={AlertsList} />
+    <Route path='alerts' component={RequireAuth(AlertsList)} />
     <Route path='award' component={Award} />
     <Route path='alerts/new' component={AlertItemAdd} />
     <Route path='alerts/:id' component={AlertItem} />
@@ -41,7 +42,8 @@ export default (
     <Route path='kudos' component={KudoList} />
     <Route path='kudos1' component={KudoList1} />
     <Route path='signin' component={Signin} />
-    <Route path='login' component={Login} auth={auth} />
+    <Route path='login' component={Login}  />
+    <Route path='signout' component={Signout}  />
   </Route>
 
 )
