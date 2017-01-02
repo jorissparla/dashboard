@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Field, reduxForm } from 'redux-form'
-import { AutoComplete as MUIAutoComplete } from 'material-ui'
-import FlatButton from 'material-ui/FlatButton';
 import RaisedButton from 'material-ui/RaisedButton';
 import { TextField } from 'redux-form-material-ui'
 import Paper from 'material-ui/Paper'
+import { signinUser } from '../actions';
+import { connect } from 'react-redux'
 
 
 const style = {
@@ -17,7 +17,7 @@ const style = {
   display: 'flex',
   },
   button: {
-    margin: '10px',
+    margin: '20px',
     justifyContent: 'flex-start',
     alignSelf: 'flex-start'
 
@@ -26,12 +26,34 @@ const style = {
 const required = value => value == null ? 'Required' : undefined
 const email = value => value &&
   !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? 'Invalid email' : undefined
+/*
+ const doSubmit = (values) => {
+    window.alert(`You submitted Parent:\n\n${JSON.stringify(values, null, 2)}`)
+  console.log(values)
+}
+*/
 
-const Signin = React.createClass({
+let Signin = React.createClass({
+  doSubmit ({email, password}) {
+      window.alert(`You submitted Parent:\n\n${JSON.stringify({email, password}, null, 2)}`)
+      this.props.signinUser({ email, password })
+  },
+
+  renderAlert() {
+    if (this.props.errorMessage) {
+      return (
+        <div className="alert alert-danger">
+          <strong>Oops!</strong> {this.props.errorMessage}
+        </div>
+      );
+    }
+  },
   render() {
+    console.log('props', this.props)
+    const { handleSubmit } = this.props;
     return (
       <Paper style={style.paper}  zDepth={2} >
-      <form action="">
+      <form onSubmit={handleSubmit(this.doSubmit)}>
           <div>
             <Field name="email"
               component={TextField}
@@ -48,18 +70,25 @@ const Signin = React.createClass({
               ref="password" withRef/>
           </div>
           <div>
-          <RaisedButton label="Sign In" primary={true} style={style.button}/>
+          {this.renderAlert()}
+          <RaisedButton label="Login" primary={true} style={style.button} type='submit' />
           </div>
-          
       </form>
       </Paper>
     )
   }
 })
 
-export default reduxForm({
+function mapStateToProps(state) {
+  return { errorMessage: state.auth.error };
+}
+
+
+Signin = reduxForm({
   form: 'sigin',
   defaultValues: {
 
   }
 })(Signin)
+
+export default connect(mapStateToProps, {signinUser})(Signin)

@@ -1,17 +1,15 @@
 import React, {Component} from 'react'
-import KudoItem from './kudoitem'
+//import KudoItem from './kudoitem'
 import {connect} from 'react-redux'
 import {fetchKudos} from '../actions/index'
 import moment from 'moment'
-import Slider from 'react-slick'
 import { GridList,  GridTile} from 'material-ui/GridList'
-import IconButton from 'material-ui/IconButton';
+//import IconButton from 'material-ui/IconButton';
 import Subheader from 'material-ui/Subheader'
 import getMuiTheme from 'material-ui/styles/getMuiTheme'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider'
 import {deepOrange500} from 'material-ui/styles/colors';
-import StarBorder from 'material-ui/svg-icons/toggle/star-border';
-import Paper from 'material-ui/Paper'
+//import Paper from 'material-ui/Paper'
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 
 
@@ -69,7 +67,7 @@ const mapGender = g => {
   }
 }
 
-const nrKudos = 4
+//const nrKudos = 4
 const indexList = [23, 34, 56, 24, 52, 19]
 
 const subTitle = (name) => <span>by <b>{name}</b></span>
@@ -149,7 +147,7 @@ class KudoList1 extends Component {
         subtitle={subTitle(ownerrep_name)} 
         actionIcon={DateView(survey_date)}
       >
-        <img src={img} />
+        <img src={img} alt=''/>
       </GridTile>
       )
     })

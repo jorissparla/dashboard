@@ -41,11 +41,6 @@ export default (
     <Route path='kudos' component={KudoList} />
     <Route path='kudos1' component={KudoList1} />
     <Route path='signin' component={Signin} />
-    <Route path='social' 
-      component={()=> { 
-        console.info('in social')
-        return <div><InstaPanel/></div>} }
-    />
     <Route path='login' component={Login} auth={auth} />
   </Route>
 

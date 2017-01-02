@@ -1,4 +1,6 @@
 import axios from 'axios'
+import { browserHistory } from 'react-router'
+
 export const FETCH_SUMMARY = 'FETCH_SUMMARY'
 export const FETCH_CHAT = 'FETCH_CHAT'
 export const FETCH_HISTORY = 'FETCH_HISTORY'
@@ -14,7 +16,39 @@ export const CREATE_ALERTS = 'CREATE_ALERTS'
 export const UPDATE_ALERTS = 'UPDATE_ALERTS'
 export const DELETE_ALERT = 'DELETE_ALERT'
 
+export const AUTH_USER = 'AUTH_USER'
+export const  UNAUTH_USER ='UNAUTH_USER'
+export const  AUTH_ERROR ='AUTH_ERROR'
+export const  FETCH_MESSAGE ='FETCH_MESSAGE'
+
 const ROOT_URL = 'http://nlbavwtls22:3001/api'
+
+
+
+const authError = (error) => {
+  return {
+    type: AUTH_ERROR,
+    payload: error
+  };
+}
+
+const signinUser = ( { email, password } ) => {
+  return ((dispatch) => {
+    axios.post(`${ROOT_URL}/signin`, {email, password})
+    .then((response)=> {
+        dispatch({ type: AUTH_USER });
+                // - Save the JWT token
+        localStorage.setItem('token', response.data.token);
+                // - redirect to the route '/feature'
+        browserHistory.push('/feature');
+    })
+    .catch(() => {
+        // If request is bad...
+        // - Show an error to the user
+        dispatch(authError('Bad Login Info'))
+  })
+})}
+
 
 const fetchSummary = () => {
   const request = axios.get(ROOT_URL + '/summary')
@@ -119,14 +153,14 @@ const updateAlerts = (props) => {
   }
 }
 
-export function deleteAlert (id) {
+const deleteAlert = (id) => {
   const request = axios.delete(ROOT_URL + '/alerts/' + id)
   return {
     type: DELETE_ALERT,
     payload: request
   }
 }
-export function deleteNews (id) {
+const deleteNews = (id) => {
   const request = axios.delete(ROOT_URL + '/news/' + id)
   return {
     type: DELETE_NEWS,
@@ -135,6 +169,8 @@ export function deleteNews (id) {
 }
 
 exports.fetchSummary = fetchSummary
+exports.signinUser = signinUser
+exports.authError = authError
 exports.fetchChat = fetchChat
 exports.fetchGoLives = fetchGoLives
 exports.fetchHistory = fetchHistory
@@ -149,4 +185,3 @@ exports.createAlert = createAlert
 exports.updateAlerts = updateAlerts
 exports.deleteAlert = deleteAlert
 exports.deleteNews = deleteNews
-
