@@ -35,7 +35,7 @@ export default (
     <Route path='award' component={Award} />
     <Route path='alerts/new' component={AlertItemAdd} />
     <Route path='alerts/:id' component={AlertItem} />
-    <Route path='news' component={NewsList} />
+    <Route path='news' component={RequireAuth(NewsList)} />
     <Route path='news/new' component={NewsItemAdd} />
     <Route path='news/:id' component={NewsItem} />
     <Route path='golives' component={GoLives} />
