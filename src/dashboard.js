@@ -8,10 +8,12 @@ import NewsCardContainer from './news/newscardcontainer'
 import AppChartContainer from './charts/appchartcontainer'
 import HistoryChartContainer from './charts/historycontainer'
 import GoLiveList from './golives/golivelist'
+import {StyleLoaderM} from './common'
 
 const DashBoard = () => {
   return (
     <div className='row'>
+     <StyleLoaderM />
       <div className='col s3'>
         <GoLiveList nrItems={10} />
       </div>

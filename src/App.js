@@ -7,7 +7,7 @@ import Header  from './appnav'
 const { arrayOf, object } = React.PropTypes
 const App = React.createClass({
   propTypes: {
-    children: arrayOf(object)
+    children: object
   },
   render () {
     return (

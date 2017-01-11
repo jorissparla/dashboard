@@ -1,8 +1,10 @@
 import React, {Component} from 'react'
 import DashBoard from './dashboard'
 import DashBoardStats from './dashboardstats'
+import {StyleLoader} from './common'
 //import Award from './awards/award'
 
+console.log('StyleLoader',StyleLoader)
 class DashBoardContainer extends Component {
 
   componentDidMount () {
@@ -25,6 +27,9 @@ class DashBoardContainer extends Component {
     }
     return (
       <div>
+        <div>
+        <StyleLoader stylesheetPath='https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css' />
+        </div>
         { this.renderDashBoard(this.state.index) }
       </div>
     )

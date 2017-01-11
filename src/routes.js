@@ -6,8 +6,10 @@ import NewsList from './news/newslist'
 import AlertsList from './alerts/alertlist'
 import AlertItem from './alerts/alertitem'
 import AlertItemAdd from './alerts/alertitemadd'
+import AlertItemAddNew from './alerts/alertitemaddnew'
 import NewsItem from './news/newsitem'
 import NewsItemAdd from './news/newsitemadd'
+import NewNews from './news/newnews'
 import DashBoard from './dashboard'
 import DashBoardContainer from './dashboardcontainer'
 import GoLives from './golives/golivelist'
@@ -19,6 +21,7 @@ import KudoList from './kudos/kudolist'
 import Signin from './auth/signin'
 import Signout from './auth/signout'
 import RequireAuth from './auth/require_auth'
+import TestForm from './test/TestForm'
 
 // validate authentication for private routes
 /*const requireAuth = (nextState, replace) => {
@@ -33,10 +36,12 @@ export default (
     <Route path='/main/:id' component={DashBoard} />
     <Route path='alerts' component={RequireAuth(AlertsList)} />
     <Route path='award' component={Award} />
-    <Route path='alerts/new' component={AlertItemAdd} />
+    <Route path='test' component={TestForm} />
+    <Route path='alerts/new' component={AlertItemAddNew} />
     <Route path='alerts/:id' component={AlertItem} />
     <Route path='news' component={RequireAuth(NewsList)} />
     <Route path='news/new' component={NewsItemAdd} />
+    <Route path='news/new1' component={NewNews} />
     <Route path='news/:id' component={NewsItem} />
     <Route path='golives' component={GoLives} />
     <Route path='kudos' component={KudoList} />

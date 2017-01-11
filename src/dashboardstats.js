@@ -6,10 +6,12 @@ import AlertWidget from './alerts/alertwidget'
 import AppChartContainer from './charts/appchartcontainer'
 import ChatChartContainer from './charts/chatchartcontainer'
 import HistoryChartContainer from './charts/historycontainer'
+import {StyleLoaderM } from './common'
 
 const DashBoardStats = () => {
   return (
     <div className='row'>
+     <StyleLoaderM />
       <div className='col s2'>
         <AlertWidget />
       </div>
