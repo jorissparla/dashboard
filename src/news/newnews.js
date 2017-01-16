@@ -53,7 +53,7 @@ class NewNews extends Component {
             name='img'
             id='img'
             type='text'
-            placeholder='Image'
+            placeholder='Image URL'
             component={inputImageField}
             />
         </CardSection>

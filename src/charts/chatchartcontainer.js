@@ -50,7 +50,7 @@ const ChatChartContainer = React.createClass({
     const title = (!this.props.title) ? value : this.props.title
     const type = (!this.props.type) ? 'column' : this.props.type
     const team = data[this.state.index || 0]
-    const chat = this.props.chat // .reverse()
+    const chat = this.props.chat.reverse().slice(0, 6).reverse() // .reverse()
 
     return (
       <div>
