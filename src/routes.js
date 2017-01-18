@@ -5,6 +5,7 @@ import App from './App'
 import NewsList from './news/newslist'
 import AlertsList from './alerts/alertlist'
 import AlertItem from './alerts/alertitem'
+import ChatList from './chat/ChatList'
 import AlertItemAdd from './alerts/alertitemadd'
 import AlertItemAddNew from './alerts/alertitemaddnew'
 import NewsItem from './news/newsitem'
@@ -41,6 +42,7 @@ export default (
     <Route path='alerts/:id' component={AlertItem} />
     <Route path='news' component={RequireAuth(NewsList)} />
     <Route path='news/new' component={NewsItemAdd} />
+    <Route path='chat' component={RequireAuth(ChatList)} />
     <Route path='news/new1' component={NewNews} />
     <Route path='news/:id' component={NewsItem} />
     <Route path='golives' component={GoLives} />
