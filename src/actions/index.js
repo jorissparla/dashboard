@@ -3,6 +3,8 @@ import { browserHistory } from 'react-router'
 
 export const FETCH_SUMMARY = 'FETCH_SUMMARY'
 export const FETCH_CHAT = 'FETCH_CHAT'
+export const CREATE_CHAT = 'CREATE_CHAT'
+export const FETCH_RANGES = 'FETCH_RANGES'
 export const FETCH_HISTORY = 'FETCH_HISTORY'
 export const FETCH_GOLIVES = 'FETCH_GOLIVES'
 export const FETCH_NEWS = 'FETCH_NEWS'
@@ -68,6 +70,22 @@ const fetchChat = () => {
   const request = axios.get(ROOT_URL + '/chat')
   return {
     type: FETCH_CHAT,
+    payload: request
+  }
+}
+
+const createChat = (chatData) => {
+  const request = axios.put(ROOT_URL + '/chat', chatData)
+  return {
+    type: CREATE_CHAT,
+    payload: request
+  }
+}
+
+const fetchRanges = () => {
+  const request = axios.get(ROOT_URL + '/ranges')
+  return {
+    type: FETCH_RANGES,
     payload: request
   }
 }
@@ -179,6 +197,8 @@ exports.signinUser = signinUser
 exports.signoutUser = signoutUser
 exports.authError = authError
 exports.fetchChat = fetchChat
+exports.createChat = createChat
+exports.fetchRanges = fetchRanges
 exports.fetchGoLives = fetchGoLives
 exports.fetchHistory = fetchHistory
 exports.fetchKudos = fetchKudos

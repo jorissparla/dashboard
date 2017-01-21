@@ -5,15 +5,9 @@ import {Link} from 'react-router'
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import Subheader from 'material-ui/Subheader';
-import Avatar from 'material-ui/Avatar';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import ContentAdd from 'material-ui/svg-icons/content/add';
 import UserAvatar  from 'react-user-avatar'
-import IconButton from 'material-ui/IconButton';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
-import IconMenu from 'material-ui/IconMenu';
-import MenuItem from 'material-ui/MenuItem';
-import ActionHome from 'material-ui/svg-icons/action/home'
-import ModeEdit from 'material-ui/svg-icons/editor/mode-edit'
-import {red500, yellow500, blue500} from 'material-ui/styles/colors';
 
 const colorAr = ['#BA68C8', '#81D4FA', '#FF7043','#8BC34A','#FFFF00','#E57373']
 
@@ -82,7 +76,18 @@ class ChatList extends Component {
     }
     return (
       <List style={listStyle}> 
-        <Subheader style={subheaderStyle}>Chat</Subheader>
+        <Subheader style={subheaderStyle}>
+        <div style={{ flexGrow: 2}}>
+        Chat
+        </div>
+        <div style={{ flexGrow: 1}}>
+          <Link to={'/chat/new'}>
+            <FloatingActionButton >
+              <ContentAdd />
+            </FloatingActionButton>
+          </Link>
+        </div>
+        </Subheader>
         <Divider inset={true} />
         {this.renderChat(chat.reverse())}
       </List>
@@ -94,15 +99,21 @@ class ChatList extends Component {
 const styles = {
   listStyle: {
     backgroundColor: 'white',
-    marginRight: 20
+    marginRight: 20,
+
   },
+
   subheaderStyle : { 
     fontSize: 56, 
     fontFamily: 'Oswald',
     color: 'dodgerblue',
     marginLeft: 20,
     marginTop: 20,
-    padding: 10
+    padding: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    display: 'flex'
   },
   iconStyle :{ 
     marginRight: 20, 
@@ -121,9 +132,6 @@ const styles = {
   fontWeight: '900'
   }
 }
-
-const { func, arrayOf, shape, string } = React.PropTypes
-
 
 
 const mapStateToProps = (state) => {

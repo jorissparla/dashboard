@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import Paper from 'material-ui/Paper';
 import {reduxForm, Field} from 'redux-form'
 import TextField from 'material-ui/TextField'
 import { CardSection } from '../common'
@@ -21,14 +20,6 @@ const inputField = ({input, ...rest}) => {
   )
 }
 
-const inputDateField = ({input, ...rest}) => {
-  const classw = 'input-field col s' + (rest.width || '4')
-  return (
-    <div className={classw}>
-      <input className='datepicker' {...input} {...rest} />
-    </div>
-  )
-}
 
 const selectField = field => {
   console.log('FIELD', field)
@@ -43,16 +34,6 @@ const selectField = field => {
     </div>
   )
 }
-
-const renderDateField = ({ input, label,  ...custom }) => {
-  console.log('renderDateField', input, custom)
-  return (
-  <myDatePicker hintText={label} container='inline'
-    {...input}
-    {...custom}
-  />)
-}
-
 const renderTextField = ({ input, label, meta: { touched, error }, ...custom }) => (
   <TextField hintText={label}
     floatingLabelText={label}
@@ -62,16 +43,18 @@ const renderTextField = ({ input, label, meta: { touched, error }, ...custom }) 
   />
 )
 
-const renderOptions = (aTypes) => {
-  return (
-  aTypes.map(item => {
-    return (
-      <option value={item.type}>
-        { item.value }
-      </option>)
-  })
-  )
+const styles = {
+  containerStyle: {
+    height: 100,
+    width: 100,
+    margin: 20,
+    textAlign: 'center',
+  },
+  formStyle: {
+    backgroundColor: '#EDEDED'
+  }
 }
+
 class AlertItemForm extends Component {
  
   render() {
@@ -96,20 +79,18 @@ class AlertItemForm extends Component {
   }
 }
 
-const styles = {
-  containerStyle: {
-    height: 100,
-    width: 100,
-    margin: 20,
-    textAlign: 'center',
-  },
-  formStyle: {
-    backgroundColor: '#EDEDED'
-  }
+const renderOptions = (aTypes) => {
+  return (
+  aTypes.map(item => {
+    return (
+      <option value={item.type}>
+        { item.value }
+      </option>)
+  })
+  )
 }
-const defaultDate = () => new Date(Date.now() + 14 * 24 * 3600000)
-  .toISOString()
-  .substr(0, 10)
+
+
 
 export default reduxForm({
   form: 'alertitemadd',

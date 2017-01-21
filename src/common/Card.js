@@ -1,16 +1,6 @@
 import React from 'react';
 import Paper from 'material-ui/Paper'
 
-
-const Card = (props) => {
-  const cardStyle = {...styles.containerStyle, ...props.style}
-  return (
-    <Paper zDepth={1} style={cardStyle}>
-      {props.children}
-    </Paper>
-  )
-}
-
 const styles = {
   containerStyle: {
     borderWidth: 1,
@@ -33,5 +23,16 @@ const styles = {
     minWidth: '200px'
   }
 };
+
+const Card = (props) => {
+  const cardStyle = {...styles.containerStyle, ...props.style}
+  return (
+    <Paper zDepth={1} style={cardStyle}>
+      {props.children}
+    </Paper>
+  )
+}
+
+
 
 export { Card };

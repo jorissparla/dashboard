@@ -1,5 +1,18 @@
 import React from 'react';
 
+const styles = {
+  containerStyle: {
+    borderBottomWidth: '1px',
+    padding: '5px',
+    backgroundColor: '#fff',
+    flexDirection: 'row',
+    display: 'flex',
+    flex: 1,
+    marginTop: '5px',
+    alignItems: 'space-between'
+  }
+};
+
 const CardSection = (props) => {
   const cardSectionStyle = {...styles.containerStyle, ...props.style}
   return (
@@ -9,17 +22,6 @@ const CardSection = (props) => {
   );
 };
 
-const styles = {
-  containerStyle: {
-    borderBottomWidth: '1px',
-    padding: '5px',
-    backgroundColor: '#fff',
-    flexDirection: 'row',
-    marginTop: '5px',
-    display: 'flex',
-    flex: 1,
-    marginTop: '5px',
-  }
-};
+
 
 export { CardSection };

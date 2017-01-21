@@ -1,4 +1,4 @@
-import {FETCH_SUMMARY, FETCH_CHAT, FETCH_HISTORY, FETCH_NEWS, SHOW_NEWS, FETCH_KUDOS, FETCH_GOLIVES} from '../actions/index'
+import {FETCH_SUMMARY, FETCH_CHAT, FETCH_RANGES, FETCH_HISTORY, FETCH_NEWS, SHOW_NEWS, FETCH_KUDOS, FETCH_GOLIVES} from '../actions/index'
 const INITIAL_STATE = { summary: [], news: [], all: [], history: [], post: null }
 
 const SummaryReducer = (state = INITIAL_STATE, action) => {
@@ -7,6 +7,8 @@ const SummaryReducer = (state = INITIAL_STATE, action) => {
       return {...state, summary: action.payload.data}
     case FETCH_CHAT:
       return {...state, chat: action.payload.data}
+    case FETCH_RANGES:
+      return {...state, ranges: action.payload.data}
     case FETCH_GOLIVES:
       return {...state, golives: action.payload.data}
     case FETCH_HISTORY:

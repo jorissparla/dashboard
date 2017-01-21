@@ -8,7 +8,7 @@ const rootReducer = combineReducers({
   summary: SummaryReducer,
   alerts: AlertsReducer,
   form: formReducer,
-  auth: authReducer
+  auth: authReducer,
 
 });
 

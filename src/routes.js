@@ -6,15 +6,17 @@ import NewsList from './news/newslist'
 import AlertsList from './alerts/alertlist'
 import AlertItem from './alerts/alertitem'
 import ChatList from './chat/ChatList'
-import AlertItemAdd from './alerts/alertitemadd'
+import ChatContainer from './chat/ChatContainer'
+
+//import AlertItemAdd from './alerts/alertitemadd'
 import AlertItemAddNew from './alerts/alertitemaddnew'
 import NewsItem from './news/newsitem'
 import NewsItemAdd from './news/newsitemadd'
 import NewNews from './news/newnews'
 import DashBoard from './dashboard'
+import DashBoardStats from './dashboardstats'
 import DashBoardContainer from './dashboardcontainer'
 import GoLives from './golives/golivelist'
-import AuthService from './utils/authservice'
 import Award from './awards/award'
 import Login from './login/login'
 import KudoList1 from './kudos/kudolist1'
@@ -34,7 +36,8 @@ import TestForm from './test/TestForm'
 export default (
   <Route path='/' component={App}  >
     <IndexRoute component={DashBoardContainer}  />
-    <Route path='/main/:id' component={DashBoard} />
+    <Route path='/main/1' component={DashBoard} />
+    <Route path='/main/2' component={DashBoardStats} />
     <Route path='alerts' component={RequireAuth(AlertsList)} />
     <Route path='award' component={Award} />
     <Route path='test' component={TestForm} />
@@ -43,6 +46,7 @@ export default (
     <Route path='news' component={RequireAuth(NewsList)} />
     <Route path='news/new' component={NewsItemAdd} />
     <Route path='chat' component={RequireAuth(ChatList)} />
+    <Route path='chat/new' component={RequireAuth(ChatContainer)} />
     <Route path='news/new1' component={NewNews} />
     <Route path='news/:id' component={NewsItem} />
     <Route path='golives' component={GoLives} />

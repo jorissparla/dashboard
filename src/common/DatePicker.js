@@ -8,6 +8,7 @@ export default ({ input, label, meta: { touched, error }, ...custom }) => {
           {...custom}
           value={input.value}
           selected={input.value}
+          underlineShow={false}
         />
 );
 }

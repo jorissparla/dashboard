@@ -4,7 +4,6 @@ import DashBoardStats from './dashboardstats'
 import {StyleLoader} from './common'
 //import Award from './awards/award'
 
-console.log('StyleLoader',StyleLoader)
 class DashBoardContainer extends Component {
 
   componentDidMount () {
