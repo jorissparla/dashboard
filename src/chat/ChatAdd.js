@@ -93,6 +93,7 @@ class ChatAdd extends React.Component {
           <Field name="weeknr" component={SelectField} hintText="Select a week">
             {ranges.map(range =>  <MenuItem key={range.Name} value={range.Name} primaryText={range.Name}/> )}
          </Field>
+         <Field name="fromDate" component={Input} disabled={true} type='text'/>
           </CardSection>
   
         <CardSection id='inputboxes'>

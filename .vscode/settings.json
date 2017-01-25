@@ -5,5 +5,6 @@
   "editor.fontFamily": "'Operator Mono Light'",
   "react.beautify.formatter": "esformatter",
   "eslint.autoFixOnSave": true,
-  "eslint.enable": true
+  "eslint.enable": true,
+  "vsicons.presets.angular": false
 }
