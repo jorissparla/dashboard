@@ -71,7 +71,9 @@ class KudoList extends Component {
         color={colorList[index % nrKudos]}
         gender={gender(item.gender)}
         date={item.survey_date}
-        nr={indexList[index % nrKudos]} />
+        nr={indexList[index % nrKudos]}
+        pic={item.pic}
+         />
     })
   }
 
