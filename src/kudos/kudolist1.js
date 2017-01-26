@@ -135,10 +135,11 @@ class KudoList1 extends Component {
       kl = kudos.slice(index, index + nrKudos)
     }
     console.log('List', index, kl, kudos)
-    return kl.map(({ownerrep_name, customer_name, gender, survey_date}, index) => {
+    return kl.map(({ownerrep_name, customer_name, gender, survey_date, pic}, index) => {
       const nr = indexList[index % nrKudos]
       const mgender = mapGender(gender)
-      const img = `https://randomuser.me/api/portraits/${mgender}/${nr}.jpg`
+      console.log('PIC', pic)
+      const img = pic ? `http://nlbavwtls22/ixs/_mugshots/${pic}` :`https://randomuser.me/api/portraits/${mgender}/${nr}.jpg`
       return (
       <GridTile 
        style={styles.gridItem}
