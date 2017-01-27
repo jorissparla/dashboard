@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import DashBoard from './dashboard'
 import DashBoardStats from './dashboardstats'
 import {StyleLoader} from './common'
+import KudoListAll from './kudos/kudolistall'
 //import Award from './awards/award'
 
 class DashBoardContainer extends Component {
@@ -14,7 +15,7 @@ class DashBoardContainer extends Component {
   }
 
   myTimer () {
-    const newIndex = (this.state.index === 1 ? 0 : this.state.index + 1)
+    const newIndex = (this.state.index === 2 ? 0 : this.state.index + 1)
     this.setState({
       index: newIndex
     })
@@ -36,8 +37,10 @@ class DashBoardContainer extends Component {
 
   renderDashBoard (index) {
     switch (index) {
-      case 1:
+      case 2:
         return <DashBoard />
+      case 1:
+        return <KudoListAll />
       case 0:
         return <DashBoardStats />
       default:
