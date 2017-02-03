@@ -19,7 +19,9 @@ const KudoItem = props => {
   const color = props.color || 'blue'
   const nr = props.nr || '14'
   const gender = props.gender || 'men'
-  const imgC = 'https://randomuser.me/api/portraits/' + gender + '/' + nr + '.jpg'
+  
+  const imgC = props.pic ? `${props.pic}` : 'https://randomuser.me/api/portraits/' + gender + '/' + nr + '.jpg';
+  console.log('IMG', imgC);
   const classC = 'card-panel col s2 roundedCorner aname  ' + color + ' lighten-2'
   const { day, month, year } = dateToDMY(props.date)
   console.log(` the date is ${day} - ${month} - ${year} from ${props.date}`)

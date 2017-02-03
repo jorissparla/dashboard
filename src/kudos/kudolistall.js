@@ -23,22 +23,20 @@ const styles = {
   root: {
     display: 'flex',
 
-    justifyContent: 'space-around',
+    justifyContent: 'flex-start',
   },
   gridList: {
-    width: 900,
-    height: 300,
     overflowY: 'auto',
-    marginTop: '20px',
-    flexGrow: '0.3',
+    marginTop: '10px',
+    flexGrow: '1',
+    height: '900px',
     padding: '10px',
-    animationName: 'insert-from-top',
-    animationDuration: '3s',
-    animationFillMode: 'forwards',
     opacity: 1,
         flexWrap: 'wrap',
     overflowX: 'auto',
     fontFamily: 'Oswald'
+
+    
   },
   gridItem: {
     transform: 'translateX(10px)',
@@ -58,7 +56,6 @@ const styles = {
 
   }
 }
-const displayNrKudos = (nr, len) => { return nr > len ? len : nr }
 const mapGender = g => {
   if (g === 'M') {
     return 'men'
@@ -68,7 +65,7 @@ const mapGender = g => {
 }
 
 //const nrKudos = 4
-const indexList = [23, 34, 56, 24, 52, 19]
+const indexList = [23, 34, 56, 24, 52, 19, 94, 8, 12, 49, 51]
 
 const subTitle = (name) => <span>by <b>{name}</b></span>
 
@@ -93,7 +90,7 @@ const DateView = (date) => {
 }
 
 
-class KudoList1 extends Component {
+class KudoListAll extends Component {
 
  constructor (props) {
     super(props)
@@ -109,7 +106,7 @@ class KudoList1 extends Component {
       tijd: t1 + 1
     })
     if (this.props.kudos) {
-      this.setState({ nrKudos: this.props.kudos.length, displayedNrKudos: displayNrKudos(this.props.showNumberKudos || 4, this.props.kudos.length) })
+      this.setState({ nrKudos: this.props.kudos.length, displayedNrKudos: this.props.kudos.length })
       const {nrKudos, displayedNrKudos, tijd} = this.state
       if (tijd > nrKudos - displayedNrKudos) {
         this.setState({
@@ -120,14 +117,14 @@ class KudoList1 extends Component {
   }
   componentDidMount () {
     this.props.fetchKudos()
-    this.timerhandle = setInterval(this.myTimer.bind(this), this.props.refreshRate || 15000)
+    //this.timerhandle = setInterval(this.myTimer.bind(this), this.props.refreshRate || 15000)
   }
 
   componentWillUnmount () {
-    clearInterval(this.timerhandle)
+    //clearInterval(this.timerhandle)
   }
   renderItems (kudos) {
-    const nrKudos = displayNrKudos(this.props.showNumberKudos || 4, this.props.kudos.length)
+    const nrKudos = this.props.kudos.length
     console.log('RENDER')
     const index = this.state.tijd
     let kl = kudos.slice(0, nrKudos)
@@ -168,16 +165,14 @@ class KudoList1 extends Component {
         transitionEnterTimeout={500}
         transitionLeaveTimeout={300}>
       <div style={styles.root} >
+
         <GridList
           cellHeight={180}
           style={styles.gridList}
-          cols={4}
+          cols={5}
         >
-         <Subheader>          
-         <h4 className='left-align kudotitle'>
-            <i className='material-icons'>favorite_border</i>
-              Kudos ({kudos.length})
-          </h4></Subheader>
+        
+
           {this.renderItems(kudos)}
         </GridList>
       </div>
@@ -189,7 +184,7 @@ class KudoList1 extends Component {
 
 const { string, func, shape, number, arrayOf } = React.PropTypes
 
-KudoList1.propTypes = {
+KudoListAll.propTypes = {
   fetchKudos: func,
   refreshRate: number,
   kudos: arrayOf(shape({
@@ -203,4 +198,4 @@ const mapStateToProps = state => {
   return {kudos: state.summary.kudos}
 }
 
-export default connect(mapStateToProps, {fetchKudos})(KudoList1)
+export default connect(mapStateToProps, {fetchKudos})(KudoListAll)
