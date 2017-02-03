@@ -3,6 +3,7 @@ import DashBoard from './dashboard'
 import DashBoardStats from './dashboardstats'
 import {StyleLoader} from './common'
 import KudoListAll from './kudos/kudolistall'
+import GoLives from './golives/golives'
 //import Award from './awards/award'
 
 class DashBoardContainer extends Component {
@@ -11,11 +12,11 @@ class DashBoardContainer extends Component {
     this.setState({
       index: 0
     })
-    setInterval(this.myTimer.bind(this), this.props.refreshInterval || 90000)
+    setInterval(this.myTimer.bind(this), this.props.refreshInterval || 30000)
   }
 
   myTimer () {
-    const newIndex = (this.state.index === 2 ? 0 : this.state.index + 1)
+    const newIndex = (this.state.index === 5 ? 0 : this.state.index + 1)
     this.setState({
       index: newIndex
     })
@@ -37,11 +38,15 @@ class DashBoardContainer extends Component {
 
   renderDashBoard (index) {
     switch (index) {
-      case 2:
+      case 4:
+      case 5:
         return <DashBoard />
-      case 1:
+      case 2:
         return <KudoListAll />
+      case 3:
+        return <GoLives />
       case 0:
+      case 1:
         return <DashBoardStats />
       default:
         return <div>Invalid Dashboard</div>

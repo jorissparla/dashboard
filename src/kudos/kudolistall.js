@@ -24,6 +24,8 @@ const styles = {
     display: 'flex',
 
     justifyContent: 'flex-start',
+        fontFamily: 'Oswald',
+        fontHeight: '32px'
   },
   gridList: {
     overflowY: 'auto',
@@ -165,7 +167,7 @@ class KudoListAll extends Component {
         transitionEnterTimeout={500}
         transitionLeaveTimeout={300}>
       <div style={styles.root} >
-
+        Kudos 
         <GridList
           cellHeight={180}
           style={styles.gridList}
