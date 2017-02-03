@@ -16,7 +16,8 @@ import NewNews from './news/newnews'
 import DashBoard from './dashboard'
 import DashBoardStats from './dashboardstats'
 import DashBoardContainer from './dashboardcontainer'
-import GoLives from './golives/golivelist'
+import GoLiveList from './golives/golivelist'
+import GoLives from './golives/golives'
 import Award from './awards/award'
 import Login from './login/login'
 import KudoList1 from './kudos/kudolist1'
@@ -49,6 +50,7 @@ export default (
     <Route path='chat/new' component={RequireAuth(ChatContainer)} />
     <Route path='news/new1' component={NewNews} />
     <Route path='news/:id' component={NewsItem} />
+    <Route path='golivelist' component={GoLiveList} />
     <Route path='golives' component={GoLives} />
     <Route path='kudos' component={KudoList} />
     <Route path='kudos1' component={KudoList1} />
