@@ -12,7 +12,7 @@ class DashBoardContainer extends Component {
     this.setState({
       index: 0
     })
-    setInterval(this.myTimer.bind(this), this.props.refreshInterval || 30000)
+    setInterval(this.myTimer.bind(this), this.props.refreshInterval || 45000)
   }
 
   myTimer () {

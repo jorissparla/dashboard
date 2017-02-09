@@ -25,7 +25,7 @@ class HistoryChartContainer extends Component {
 
   componentDidMount () {
     this.props.fetchHistory()
-    this.timerhandle = setInterval(this.myTimer.bind(this), this.props.refreshRate || 15000)
+    this.timerhandle = setInterval(this.myTimer.bind(this), this.props.refreshRate || 20000)
   }
 
   componentWillUnmount () {
@@ -33,7 +33,7 @@ class HistoryChartContainer extends Component {
   }
 
   render () {
-    const data = (!this.props.data) ? ['LN', 'Tools', 'Logistics', 'Finance'] : this.props.data
+    const data = (!this.props.data) ? [ 'Tools', 'Logistics', 'Finance', 'LN','LN','LN',] : this.props.data
 
     const column = data[this.state.index || 0]
     const history = this.props.history // .reverse();

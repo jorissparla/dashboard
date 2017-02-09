@@ -26,7 +26,7 @@ const config = {
   },
   plotOptions: {
     area: {
-      color: 'b39ddb'
+      color: '#b39ddb'
     },
     series: {
       pointWidth: 50// width of the column bars irrespective of the chart size
@@ -51,9 +51,16 @@ const config = {
   }
 }
 
+var arColors = [];
+  arColors['LN']='#ffa726';
+  arColors['Tools']='#90caf9';
+  arColors['Logistics']='#c62828';
+  arColors['Finance']='#01579b';
+
 const renderSummary = (config, xval, val, title, color, type, summary) => {
   xval = (!xval) ? 'weekNr' : xval
   const range = summary.map(item => item[val])
+  color = arColors[val]
   if (color) {
     config.plotOptions.area.color = color
   }
