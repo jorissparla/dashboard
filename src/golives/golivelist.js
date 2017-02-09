@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { fetchGoLives } from '../actions/index'
+import Flag from "react-flags"
 //import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import moment from 'moment'
 import Spinner from '../utils/spinner'

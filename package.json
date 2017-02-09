@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "devDependencies": {
+    "babel-polyfill": "6.22.0",
     "react-scripts": "0.7.0"
   },
   "dependencies": {
@@ -16,12 +17,14 @@
     "eslint-plugin-standard": "latest",
     "global": "^4.3.1",
     "material-ui": "^0.16.6",
+    "material-ui-country-flags": "3.0.1",
     "material-ui-table-edit": "3.0.0",
     "moment": "^2.17.0",
     "react": "^15.4.1",
     "react-addons-css-transition-group": "^15.4.1",
     "react-bootstrap": "0.30.7",
     "react-dom": "^15.4.1",
+    "react-flags": "0.1.12",
     "react-highcharts": "11.0.0",
     "react-instagram-embed": "^1.1.2",
     "react-redux": "4.4.6",

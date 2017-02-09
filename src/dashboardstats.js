@@ -20,37 +20,37 @@ const DashBoardStats = () => {
           <AppChartContainer
             data={['Tools', 'Logistics', 'Finance']}
             title='Support Backlog'
-            refreshRate={16000} />
+            refreshRate={20000} />
           <AppChartContainer
             data={['Tools', 'Logistics', 'Finance']}
             value='surveyScore'
             title='Survey'
             type='column'
-            refreshRate={11000} />
+            refreshRate={20000} />
           <HistoryChartContainer
             color='#ffb74d'
-            refreshRate={16000} />
+            refreshRate={20000} />
           <AppChartContainer
             data={['Tools', 'Logistics', 'Finance']}
             value='opened'
             title='Opened'
             color='#b39ddb'
             type='area'
-            refreshRate={11000} />
+            refreshRate={20000} />
           <AppChartContainer
             data={['Tools', 'Logistics', 'Finance']}
             value='Closed'
             title='Closed'
             color='#ffc600'
             type='area'
-            refreshRate={11000} />
+            refreshRate={20000} />
           <ChatChartContainer
             data={['Tools', 'Logistics', 'Finance']}
             title='Chats'
             type='column'
             value='percentage'
             color='#9575cd'
-            refreshRate={12000} />
+            refreshRate={20000} />
         </div>
       </div>
 
