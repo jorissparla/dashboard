@@ -12,7 +12,6 @@ import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
 import ActionHome from 'material-ui/svg-icons/action/home'
 import ModeEdit from 'material-ui/svg-icons/editor/mode-edit'
-import Flag from "react-flags"
 import { fetchGoLives } from '../actions'
 import moment from 'moment'
 
