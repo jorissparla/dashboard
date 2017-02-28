@@ -1,5 +1,5 @@
-import {FETCH_SUMMARY, FETCH_CHAT, FETCH_RANGES, FETCH_HISTORY, FETCH_NEWS, SHOW_NEWS, FETCH_KUDOS, FETCH_GOLIVES} from '../actions/index'
-const INITIAL_STATE = { summary: [], news: [], all: [], history: [], post: null }
+import {FETCH_SUMMARY, FETCH_CHAT, FETCH_RANGES, FETCH_HISTORY, FETCH_HISTORY_DAY, FETCH_NEWS, SHOW_NEWS, FETCH_KUDOS, FETCH_GOLIVES} from '../actions/index'
+const INITIAL_STATE = { summary: [], news: [], all: [], history: [], history_day: [], post: null }
 
 const SummaryReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
@@ -11,6 +11,8 @@ const SummaryReducer = (state = INITIAL_STATE, action) => {
       return {...state, ranges: action.payload.data}
     case FETCH_GOLIVES:
       return {...state, golives: action.payload.data}
+    case FETCH_HISTORY_DAY:
+     return {...state, history_day: action.payload.data}
     case FETCH_HISTORY:
       return {...state, history: action.payload.data}
     case FETCH_NEWS:

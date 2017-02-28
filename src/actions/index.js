@@ -6,6 +6,7 @@ export const FETCH_CHAT = 'FETCH_CHAT'
 export const CREATE_CHAT = 'CREATE_CHAT'
 export const FETCH_RANGES = 'FETCH_RANGES'
 export const FETCH_HISTORY = 'FETCH_HISTORY'
+export const FETCH_HISTORY_DAY = 'FETCH_HISTORY_DAY'
 export const FETCH_GOLIVES = 'FETCH_GOLIVES'
 export const FETCH_NEWS = 'FETCH_NEWS'
 export const SHOW_NEWS = 'SHOW_NEWS'
@@ -105,6 +106,16 @@ const fetchHistory = () => {
     payload: request
   }
 }
+
+const fetchHistoryDay = () => {
+  console.log(`FETCH_HISTORY_DAY`);
+  
+  const request = axios.get(ROOT_URL + '/historyday')
+  return {
+    type: FETCH_HISTORY_DAY,
+    payload: request
+  }
+}
 const fetchNews = () => {
   const request = axios.get(ROOT_URL + '/news')
   return {
@@ -201,6 +212,7 @@ exports.createChat = createChat
 exports.fetchRanges = fetchRanges
 exports.fetchGoLives = fetchGoLives
 exports.fetchHistory = fetchHistory
+exports.fetchHistoryDay = fetchHistoryDay
 exports.fetchKudos = fetchKudos
 exports.fetchNews = fetchNews
 exports.fetchNewsItem = fetchNewsItem
