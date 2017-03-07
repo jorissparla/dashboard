@@ -17,6 +17,7 @@ import DashBoard from './dashboard'
 import DashBoardStats from './dashboardstats'
 import DashBoardContainer from './dashboardcontainer'
 import HistoryDayContainer from './charts/historydaycontainer'
+import HistoryDayAll from './charts/historydayallcontainer'
 import GoLiveList from './golives/golivelist'
 import GoLives from './golives/golives'
 import Award from './awards/award'
@@ -62,6 +63,7 @@ export default (
     <Route path='login' component={Login}  />
     <Route path='signout' component={Signout}  />
     <Route path='historyday' component={HistoryDayContainer}  />
+    <Route path='historyall' component={HistoryDayAll}  />
 
   </Route>
 
