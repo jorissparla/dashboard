@@ -5,6 +5,7 @@ import {StyleLoader} from './common'
 import KudoListAll from './kudos/kudolistall'
 import GoLives from './golives/golives'
 import HistoryDayContainer from './charts/historydaycontainer'
+import HistoryDayAll from './charts/historydayallcontainer'
 //import Award from './awards/award'
 
 class DashBoardContainer extends Component {
@@ -47,7 +48,7 @@ class DashBoardContainer extends Component {
       case 3:
         return <GoLives />
       case 4:
-        return <HistoryDayContainer />
+        return <HistoryDayAll />
       case 0:
       case 1:
         return <DashBoardStats />
