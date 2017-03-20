@@ -53,7 +53,12 @@ class GoLiveList extends Component {
         class3 = 'collapsible-body show'
       }
       const key = item.customerid + '-' + item.version
-      const comments = (item.comments.length > 300) ? item.comments.substr(0, 299) + '...' : item.comments
+      let comments = '';
+      if (!item.comments) {
+        comments =''
+      } else {
+        comments = (item.comments.length > 300) ? item.comments.substr(0, 299) + '...' : item.comments
+      }
       return (
 
         <li className={class2} key={key}>
