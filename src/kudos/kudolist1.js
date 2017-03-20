@@ -104,7 +104,6 @@ class KudoList1 extends Component {
 
   myTimer () {
     const t1 = this.state.tijd
-    console.log('Kudos', t1)
     this.setState({
       tijd: t1 + 1
     })
@@ -128,7 +127,6 @@ class KudoList1 extends Component {
   }
   renderItems (kudos) {
     const nrKudos = displayNrKudos(this.props.showNumberKudos || 4, this.props.kudos.length)
-    console.log('RENDER')
     const index = this.state.tijd
     let kl = kudos.slice(0, nrKudos)
     if (index <= kudos.length - nrKudos) {
@@ -138,7 +136,6 @@ class KudoList1 extends Component {
     return kl.map(({ownerrep_name, customer_name, gender, survey_date, pic}, index) => {
       const nr = indexList[index % nrKudos]
       const mgender = mapGender(gender)
-      console.log('PIC', pic)
       const img = pic ? `${pic}` :`https://randomuser.me/api/portraits/${mgender}/${nr}.jpg`
       return (
       <GridTile 
