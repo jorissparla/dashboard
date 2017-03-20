@@ -42,6 +42,7 @@ class GoLiveList extends Component {
   }
 
   renderItems (items) {
+    if (!items) return <div>loading</div>
     return items.map((item, index) => {
       let class1 = 'collapsible-header '
       let class2 = ''
@@ -72,7 +73,7 @@ class GoLiveList extends Component {
 
   render () {
     const { golives, nrItems = 4 } = this.props
-    if (!golives) {
+    if (!golives || golives ===null ) {
       return (<div>
         <Spinner />
       </div>)

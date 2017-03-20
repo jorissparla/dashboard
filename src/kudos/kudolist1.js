@@ -132,7 +132,6 @@ class KudoList1 extends Component {
     if (index <= kudos.length - nrKudos) {
       kl = kudos.slice(index, index + nrKudos)
     }
-    console.log('List', index, kl, kudos)
     return kl.map(({ownerrep_name, customer_name, gender, survey_date, pic}, index) => {
       const nr = indexList[index % nrKudos]
       const mgender = mapGender(gender)
