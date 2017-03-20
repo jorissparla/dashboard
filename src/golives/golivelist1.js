@@ -7,17 +7,33 @@ import Spinner from '../utils/spinner';
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
 import Subheader from 'material-ui/Subheader';
+import Avatar from 'material-ui/Avatar';
 import styled from 'styled-components';
 
 const getDay = date => moment(date).format('MMM').toUpperCase().substr(0, 3) + moment(date).format('DD')
 const rotate = (ar, index) => ar.slice(index, ar.length).concat(ar.slice(0, index))
 
-const GoLiveItem = styled(ListItem) `
-
-
+const GoLiveListStyle=styled.div`
+  width: 25%;
 `
-const GoLiveCustomer = styled.span`
-  color: darkBlack
+
+const GoLiveItemStyle = styled(ListItem) `
+  background-color: white;
+  display:flex;
+  flex-direction: column;
+  align-items: space-between;
+`
+
+const GoLiveDateStyle=styled.span`
+  color: darkBlack;
+  font-family: Oswald;
+  font-weight: bold;
+  font-size: 20px;
+`
+const GoLiveCustomerStyle = styled.span`
+  color: darkblue;
+  font-family: Roboto;
+  font-size: 16px;
 `
 
 class GoLiveList1 extends Component {
@@ -34,7 +50,7 @@ class GoLiveList1 extends Component {
 
   renderItems (items) {
     if (!items) return <div>loading</div>
-    return items.map((item) => {
+    return items.map((item, index) => {
       const key = item.customerid + '-' + item.version
       let comments = '';
       if (!item.comments) {
@@ -42,17 +58,24 @@ class GoLiveList1 extends Component {
       } else {
         comments = (item.comments.length > 300) ? item.comments.substr(0, 299) + '...' : item.comments
       }
+      console.log(comments)
+      const i = index % 9;
+      const pic = `http://lorempixel.com/400/200/nature/${i}`
       return (
-        <GoLiveItem key={key}
-          primaryText={getDay(item.date) }
+        <GoLiveItemStyle key={key}>
+        <ListItem 
+          leftAvatar={<Avatar src={pic} />}
+          primaryText={ <GoLiveCustomerStyle>{item.customername}</GoLiveCustomerStyle>}
           secondaryText={
             <p>
-              <GoLiveCustomer>>{ item.customername }</GoLiveCustomer><br/>
+              <GoLiveDateStyle>{ getDay(item.date) }</GoLiveDateStyle>
               { comments}
             </p>
           }
           secondaryTextLines={2}
         />
+        <Divider />
+        </GoLiveItemStyle>
 
       )
     })
@@ -66,12 +89,12 @@ class GoLiveList1 extends Component {
       </div>)
     }
     return (
-      <div className='col s12 '>
-        <h6>Upcoming Go Lives</h6>
-        <ul className='collapsible animating' data-collapsible='expandable'>
-          { this.renderItems(goLives1) }
-        </ul>
-      </div>
+      <GoLiveListStyle >
+        <h3>Upcoming Go Lives</h3>
+       <List style={{backgroundColor:"white"}}>
+          { this.renderItems(golives) }
+        </List>
+      </GoLiveListStyle>
     )
   }
 }

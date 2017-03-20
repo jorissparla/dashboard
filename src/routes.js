@@ -56,6 +56,7 @@ export default (
     <Route path='news/new1' component={NewNews} />
     <Route path='news/:id' component={NewsItem} />
     <Route path='golivelist' component={GoLiveList} />
+    <Route path='golivelist1' component={GoLiveList1} />
     <Route path='golives' component={GoLives} />
     <Route path='kudos' component={KudoList} />
     <Route path='kudos1' component={KudoList1} />
