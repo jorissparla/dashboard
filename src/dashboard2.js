@@ -3,13 +3,11 @@ import React from 'react'
 import './App.css'
 import AppChartCombi from './charts/appchartcombi'
 import KudoList from './kudos/kudolist1'
-import KudoListComponent from './kudos/kudolistcomponent'
 //import AlertWidget from './alerts/alertwidget'
 import NewsCardContainer from './news/newscardcontainer'
 import AppChartContainer from './charts/appchartcontainer'
 import HistoryChartContainer from './charts/historycontainer'
 import GoLiveList from './golives/golivelist'
-import GoLiveListSide from './golives/golivelistside'
 import {StyleLoaderM} from './common'
 
 const DashBoard = () => {
@@ -17,15 +15,22 @@ const DashBoard = () => {
     <div className='row'>
      <StyleLoaderM />
       <div className='col s3'>
-        <GoLiveListSide nrItems={10} />
+        <GoLiveList nrItems={10} />
       </div>
       <div className='col s9'>
         <div className='row'>
           <NewsCardContainer refreshRate={33000} />
-          <KudoListComponent refreshRate={10000} showNumberKudos={4} />
+          <KudoList refreshRate={10000} showNumberKudos={4} />
         </div>
-        <div>
-          
+        <div className='row'>
+          <AppChartContainer data={['Tools', 'Logistics', 'Finance']} refreshRate={16000} />
+          <HistoryChartContainer refreshRate={16000} />
+          <AppChartCombi
+            title='Surveys'
+            type='column'
+            value='surveyScore'
+            color='#9575cd'
+            team='Logistics' />
         </div>
       </div>
     </div>
