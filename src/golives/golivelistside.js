@@ -6,38 +6,42 @@ import moment from 'moment'
 import Spinner from '../utils/spinner';
 import {List, ListItem} from 'material-ui/List';
 import Divider from 'material-ui/Divider';
-import Subheader from 'material-ui/Subheader';
-import Avatar from 'material-ui/Avatar';
 import styled from 'styled-components';
 
 const getDay = date => moment(date).format('MMM').toUpperCase().substr(0, 3) + moment(date).format('DD')
 const rotate = (ar, index) => ar.slice(index, ar.length).concat(ar.slice(0, index))
 
 const GoLiveListStyle=styled.div`
-  width: 100%;
   margin-right: 10px;
 `
 
-const GoLiveItemStyle = styled(ListItem) `
-  background-color: white;
+const GoLiveItemStyle = styled.div `
+  background-color: ${props => props['background-color'] && props['background-color'] };
+  
   display:flex;
   flex-direction: column;
   align-items: space-between;
 `
 
-const GoLiveDateStyle=styled.span`
+const GoLiveDateStyle=styled.div`
   color: darkBlack;
   font-family: Oswald;
   font-weight: bold;
-  font-size: 20px;
+  font-size: 18px;
+  justify-content: center;
+  padding-top: 10px;
 `
-const GoLiveCustomerStyle = styled.span`
+const GoLiveCustomerStyle = styled.div`
   color: darkblue;
   font-family: Roboto;
   font-size: 16px;
 `
 
-class GoLiveList1 extends Component {
+const H5Styled = styled.h5`
+  font-family: Oswald;
+`
+console.dir(H5Styled);
+class GoLiveListSide extends Component {
 
   componentDidMount () {
     this.props.fetchGoLives()
@@ -59,21 +63,15 @@ class GoLiveList1 extends Component {
       } else {
         comments = (item.comments.length > 300) ? item.comments.substr(0, 299) + '...' : item.comments
       }
-      console.log(comments)
-      const i = index % 9;
-      const pic = `http://lorempixel.com/400/200/nature/${i}`
+      let color = (index % 2) ? 'blanchedalmond': 'white'
       return (
-        <GoLiveItemStyle key={key}>
+        
+        <GoLiveItemStyle background-color={color} key={key}>
+        
         <ListItem 
-          leftAvatar={<Avatar src={pic} />}
-          primaryText={ <GoLiveCustomerStyle>{item.customername}</GoLiveCustomerStyle>}
-          secondaryText={
-            <p>
-              <GoLiveDateStyle>{ getDay(item.date) }</GoLiveDateStyle>
-              { comments}
-            </p>
-          }
-          secondaryTextLines={2}
+          leftAvatar={<GoLiveDateStyle>{ getDay(item.date) }</GoLiveDateStyle>}
+          primaryText={ <div><GoLiveCustomerStyle>{item.customername}</GoLiveCustomerStyle>   </div>}
+          //secondaryText= {item.version}
         />
         <Divider />
         </GoLiveItemStyle>
@@ -91,7 +89,7 @@ class GoLiveList1 extends Component {
     }
     return (
       <GoLiveListStyle >
-        <h3>Upcoming Go Lives</h3>
+        <H5Styled>Upcoming Go Lives</H5Styled>
        <List style={{backgroundColor:"white"}}>
        <Divider />
           { this.renderItems(golives) }
@@ -108,4 +106,4 @@ const mapStateToProps = state => {
 }
 export default connect(mapStateToProps, {
   fetchGoLives
-})(GoLiveList1)
+})(GoLiveListSide)
