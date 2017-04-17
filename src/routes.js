@@ -14,7 +14,7 @@ import NewsItem from './news/newsitem'
 import NewsItemAdd from './news/newsitemadd'
 import NewNews from './news/newnews'
 import DashBoard from './dashboard'
-import DashBoard1 from './dashboard1'
+import DashBoard0 from './dashboard0'
 import DashBoardStats from './dashboardstats'
 import DashBoardContainer from './dashboardcontainer'
 import HistoryDayContainer from './charts/historydaycontainer'
@@ -34,6 +34,8 @@ import Signout from './auth/signout'
 import RequireAuth from './auth/require_auth'
 import TestForm from './test/TestForm'
 import TestImage from './testimage'
+import Courses from './courses';
+import CourseAddForm from './courses/addcourse';
 
 // validate authentication for private routes
 /*const requireAuth = (nextState, replace) => {
@@ -45,8 +47,9 @@ import TestImage from './testimage'
 export default (
   <Route path='/' component={App}  >
     <IndexRoute component={DashBoardContainer}  />
+    <Route path='/courses' component={Courses} />
     <Route path='/main/1' component={DashBoard} />
-    <Route path='/main/0' component={DashBoard1} />
+    <Route path='/main/0' component={DashBoard0} />
     <Route path='/main/2' component={DashBoardStats} />
     <Route path='alerts' component={RequireAuth(AlertsList)} />
     <Route path='award' component={Award} />
@@ -72,6 +75,7 @@ export default (
     <Route path='signout' component={Signout}  />
     <Route path='historyday' component={HistoryDayContainer}  />
     <Route path='historyall' component={HistoryDayAll}  />
+    <Route path='courses/new' component={CourseAddForm} />
 
   </Route>
 

@@ -24,6 +24,8 @@ export const  UNAUTH_USER ='UNAUTH_USER'
 export const  AUTH_ERROR ='AUTH_ERROR'
 export const  FETCH_MESSAGE ='FETCH_MESSAGE'
 
+export const FETCH_COURSES ='FETCH_COURSES';
+
 const ROOT_URL = 'http://nlbavwtls22:3001/api'
 
 
@@ -203,6 +205,14 @@ const deleteNews = (id) => {
   }
 }
 
+const fetchCourses =() => {
+    const request = axios.get(ROOT_URL + '/courses/' )
+  return {
+    type: FETCH_COURSES,
+    payload: request
+  }
+}
+
 exports.fetchSummary = fetchSummary
 exports.signinUser = signinUser
 exports.signoutUser = signoutUser
@@ -224,3 +234,4 @@ exports.createAlert = createAlert
 exports.updateAlerts = updateAlerts
 exports.deleteAlert = deleteAlert
 exports.deleteNews = deleteNews
+exports.fetchCourses = fetchCourses;

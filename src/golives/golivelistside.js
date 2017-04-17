@@ -37,7 +37,7 @@ const GoLiveCustomerStyle = styled.div`
   font-size: 16px;
 `
 
-const H5Styled = styled.h5`
+const H5Styled = styled.h3`
   font-family: Oswald;
 `
 console.dir(H5Styled);
