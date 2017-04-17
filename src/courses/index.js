@@ -51,7 +51,10 @@ class CoursesContainer extends React.Component {
       return <div>loading</div>
     }
 
-    const courses = this.props.courses.filter(course=>course.crs_title.toUpperCase().includes(this.state.searchText.toUpperCase()))
+    const courses = this.props.courses.filter(
+      course=>course.crs_title.toUpperCase().includes(this.state.searchText.toUpperCase()) ||
+        course.crs_team.toUpperCase().includes(this.state.searchText.toUpperCase())
+      )
     return <Container>
       <TitleBar>
         Courses

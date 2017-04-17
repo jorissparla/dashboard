@@ -15,7 +15,7 @@ const StyledContainer = styled.div`
 `
 
 const StyledCard = styled(CourseCard)`
-  width: 20%;
+  width: 22%;
   min-width: 200px;
 
 `

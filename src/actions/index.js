@@ -25,6 +25,7 @@ export const  AUTH_ERROR ='AUTH_ERROR'
 export const  FETCH_MESSAGE ='FETCH_MESSAGE'
 
 export const FETCH_COURSES ='FETCH_COURSES';
+export const CREATE_COURSE ='CREATE_COURSE';
 
 const ROOT_URL = 'http://nlbavwtls22:3001/api'
 
@@ -213,6 +214,22 @@ const fetchCourses =() => {
   }
 }
 
+const createCourse =(props) => {
+    const request = axios.put(ROOT_URL + '/courses/', props )
+  return {
+    type: CREATE_COURSE,
+    payload: request
+  }
+}
+
+const fetchCourse =(id) => {
+    const request = axios.get(ROOT_URL + '/courses/'+ id )
+  return {
+    type: FETCH_COURSES,
+    payload: request
+  }
+}
+
 exports.fetchSummary = fetchSummary
 exports.signinUser = signinUser
 exports.signoutUser = signoutUser
@@ -235,3 +252,5 @@ exports.updateAlerts = updateAlerts
 exports.deleteAlert = deleteAlert
 exports.deleteNews = deleteNews
 exports.fetchCourses = fetchCourses;
+exports.createCourse = createCourse;
+exports.fetchCourse = fetchCourse;

@@ -3,6 +3,7 @@ import Paper from 'material-ui/Paper';
 import FontIcon from 'material-ui/FontIcon';
 import {blue500} from 'material-ui/styles/colors';
 import styled from 'styled-components';
+import {Link} from 'react-router'
 
 
 const StyledContainer = styled(Paper)`
@@ -10,21 +11,19 @@ const StyledContainer = styled(Paper)`
   flex-direction: column;
   border: 1 px solid blue;
   padding: 10px;
-  width:20%;
+  width:22%;
   min-width:200px;
-  :hover {
-    background:#2196F3;
-    color: white;
-  }
+    margin-bottom: 5px;
+
 `
 
 const Title = styled.div`
   font-family: Roboto;
-  font-size: 18px;
+  font-size: 24px;
   font-weight: 800;
   padding: 2px;
   color: #2196F3;
-  align-self: center;
+  text-align: center;
 
 `
 const StyledBody = styled.p`
@@ -33,7 +32,7 @@ const StyledBody = styled.p`
     font-size: 15px;
 `
 const StyledAddIcon = styled.div`
-  width:20%;
+  width:22%;
   min-width:200px;
   justify-content: center;
       align-items: center;
@@ -41,17 +40,28 @@ const StyledAddIcon = styled.div`
   font-size: 48px;
   height: 150px;
 
-`
 
+`
+const StyledLink = styled(Link)`
+  text-decoration: none;
+    :hover {
+    background:#0196F3;
+    color: white;
+  }
+`
 
 
 export default () => {
   return (
     <StyledContainer>
-      <StyledAddIcon>
+    <StyledLink to={'courses/new'}>      
+    <StyledAddIcon>
       <FontIcon className="material-icons" color={blue500} style={{fontSize:'48px'}}>add</FontIcon>
       </StyledAddIcon>
       <Title>Add a new course</Title>
+      </StyledLink>
+
     </StyledContainer>
+
   )
 }

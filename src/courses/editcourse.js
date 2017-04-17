@@ -8,10 +8,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Divider from 'material-ui/Divider';
 import UserAvatar  from 'react-user-avatar'
 import styled from 'styled-components';
-import { createCourse } from '../actions';
-import teams from './teams'
-
-
+import { fetchCourse } from '../actions';
+import teams from './teams';
 
 const buttonStyleCancel = {
   backgroundColor: 'black',
@@ -25,12 +23,22 @@ const StyledField= styled(Field)`
 const StyledButton = styled(RaisedButton)`
   margin: 5px;
 `
+const inputField = ({ input, ...rest }) => {
+  return (
+    <div >
+      <input {...input} {...rest} />
+    </div>
+  )
+}
 
-
-class Addcourse extends React.Component {
+class EditCourse extends React.Component {
   constructor() {
     super();
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+   componentDidMount() {
+     this.props.fetchCourse(this.props.params.id)
   }
 
   async handleSubmit(values) {
@@ -44,21 +52,22 @@ class Addcourse extends React.Component {
 
   render() {
     const { handleSubmit, pristine, reset, submitting } = this.props
+    console.log(this.props)
     return (
       <div>      
 
       <form onSubmit={handleSubmit(this.handleSubmit)}>
         <CardSection style={{ fontSize:'36px', fontFamily:'Oswald'}}>
-        Add Training Course
+        Edit Training Course
       </CardSection>
       <Card>
       <CardSection>
-          <StyledField name='title' hintText='Title'  underlineShow={true} component={Input} />  
+          <Field name='crs_title' hintText='Title'  underlineShow={true} component={Input} />  
         
-             <Field name= 'hours' hintText='Number of Hours' underlineShow={true}  component={Input} style={{ flex: 2}}/>hours 
+             <Field name= 'crs_hours' hintText='Number of Hours' underlineShow={true}  component={Input} style={{ flex: 2}}/>hours 
       </CardSection>
       <CardSection>
-          <StyledField name = 'description' hintText='Description' underlineShow={true} component={Input} fullWidth={true}/>  
+          <StyledField name = 'crs_description' hintText='Description' underlineShow={true} component={Input} fullWidth={true}/>  
       </CardSection>
       <CardSection>
           <Field name="team" component={SelectField} hintText="Select a team" style={{ flex: 2}}>
@@ -80,37 +89,16 @@ class Addcourse extends React.Component {
      </div>)
   }
 
-  componentDidMount() {
-    this.setState({ someKey: 'otherValue' });
-  }
+
 }
 
-const selector = formValueSelector('addcourse')
 
-Addcourse= reduxForm({
-  form: 'addcourse',
-   enableReinitialize: true,
-  keepDirtyOnReinitialize: true
-})(Addcourse)
+EditCourse= reduxForm({  form: 'editcourse'})(EditCourse)
 
-Addcourse = connect(
-  state => { 
-    const team = selector(state, 'team')
-    const title = selector(state, 'title')
-    const description = selector(state, 'description')
-    const hours = selector(state, 'hours') || 4
-    const link = selector(state, 'link')
-    return {
-      initialValues: {
-        crs_team: team,
-        crs_title: title,
-        crs_description: description,
-        crs_hours: hours,
-        crs_link: link,
-        hours: hours|| 4
-      }
-    }
+const mapStateToProps = (state) => {
+  console.log('state', state)
+  return { initialValues : state.courses.courses }
+}
 
-  }, {createCourse})(Addcourse)
+export default connect(mapStateToProps, {fetchCourse})(EditCourse)
 
-export default Addcourse;

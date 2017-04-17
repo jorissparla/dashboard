@@ -36,6 +36,7 @@ import TestForm from './test/TestForm'
 import TestImage from './testimage'
 import Courses from './courses';
 import CourseAddForm from './courses/addcourse';
+import CourseEditForm from './courses/editcourse';
 
 // validate authentication for private routes
 /*const requireAuth = (nextState, replace) => {
@@ -47,7 +48,7 @@ import CourseAddForm from './courses/addcourse';
 export default (
   <Route path='/' component={App}  >
     <IndexRoute component={DashBoardContainer}  />
-    <Route path='/courses' component={Courses} />
+
     <Route path='/main/1' component={DashBoard} />
     <Route path='/main/0' component={DashBoard0} />
     <Route path='/main/2' component={DashBoardStats} />
@@ -75,6 +76,8 @@ export default (
     <Route path='signout' component={Signout}  />
     <Route path='historyday' component={HistoryDayContainer}  />
     <Route path='historyall' component={HistoryDayAll}  />
+    <Route path='/courses' component={Courses} />    
+    <Route path='/courses/:id' component={CourseEditForm} />    
     <Route path='courses/new' component={CourseAddForm} />
 
   </Route>

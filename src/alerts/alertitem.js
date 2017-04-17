@@ -2,6 +2,13 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {reduxForm, Field} from 'redux-form'
 import {browserHistory, Link} from 'react-router'
+import { CardSection, Card, Input, MyDatePicker } from '../common'
+import {  SelectField } from 'redux-form-material-ui'
+import {blue500} from 'material-ui/styles/colors';
+import MenuItem from 'material-ui/MenuItem';
+import RaisedButton from 'material-ui/RaisedButton';
+import Divider from 'material-ui/Divider';
+import Paper from 'material-ui/Paper';
 import {fetchAlertItem, updateAlerts, deleteAlert} from '../actions/index'
 
 const aTypes = [
@@ -45,31 +52,38 @@ let AlertItem = React.createClass({
       browserHistory.push('/alerts')
     })
   },
-  submitIt (values) {
-    updateAlerts(values)
-    this.context.router.transitionTo('/alerts')
-    browserHistory.push('/alerts')
+  async submitIt (values) {
+    console.log('Submitting')
+    await updateAlerts(values)
+    window.location.href = '/alerts'
   },
   render () {
     if (!this.props.alerts[0]) {
       return <div>Loading</div>
     }
+    const { handleSubmit} = this.props;
     return (
-      <div className='row'>
-        <form className='col s4' onSubmit={this.submitIt}>
-          <Field name='title' component={inputField} placeholder='title' id='title' width={8} />
-          <Field name='body' component={inputField} placeholder='text' width={8} rows={2} />
-          <Field name='alerttype' component={inputField} data={aTypes} width={3} placeholder='type' />
-          <Field name='username' component={inputField} placeholder='username' />
-          <div className='col s8'>
-            <p>
-              <button type='submit' className='btn btn-primary blue'>Save</button>
-              <Link to='/news' type='cancel' className='btn btn-primary black'>Cancel</Link>
-              <button className='btn btn-primary red' onClick={this.onDeleteClick}>Delete</button>
-            </p>
-          </div>
+
+        <form  onSubmit={handleSubmit(this.submitIt)}>
+          <Card>
+          <CardSection>
+            <Field name='title' component={Input} placeholder='title' id='title' width={8} />
+            <Field name='body' component={Input} placeholder='text' width={8}  />
+            </CardSection>
+            <CardSection>
+            <Field name='alerttype' component={Input} data={aTypes} width={3} placeholder='type' />
+            <Field name='username' component={Input} placeholder='username' />
+            </CardSection>
+            <Divider/>
+            <CardSection>
+              <p>
+                <RaisedButton type='submit' backgroundColor={blue500} primary={true}>Save</RaisedButton>
+                <Link to='/news' type='cancel' className='btn btn-primary black'>Cancel</Link>
+                <RaisedButton  onClick={this.onDeleteClick}>Delete</RaisedButton>
+              </p>
+            </CardSection>
+          </Card>
         </form>
-      </div>
     )
   }
 })
