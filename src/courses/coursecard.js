@@ -66,15 +66,23 @@ const StyledLink = styled(Link)`
     color: white;
   }
 `
+const StyledHyperLink = styled(Link)`
+  text-decoration: none;
+  :hover {
+    cursor:pointer;
+  }
+`
 
 export default ({course, index}) => {
   const image = imgList[index % 6]
   return (
     <StyledContainer key={course.crs_UIC}>
       <StyledImage src={image} />
+      <StyledHyperLink to={course.crs_link} title={course.crs_link}>
       <Title>
         { course.crs_title }
       </Title>
+      </StyledHyperLink>
       <StyledBody>
         { course.crs_description }
       </StyledBody>

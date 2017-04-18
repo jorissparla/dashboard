@@ -8,7 +8,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 import Divider from 'material-ui/Divider';
 import UserAvatar  from 'react-user-avatar'
 import styled from 'styled-components';
-import { fetchCourse } from '../actions';
+import { updateCourse } from '../actions';
 import teams from './teams';
 
 const buttonStyleCancel = {
@@ -37,13 +37,10 @@ class EditCourse extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-   componentDidMount() {
-     this.props.fetchCourse(this.props.params.id)
-  }
 
   async handleSubmit(values) {
     const { crs_title, crs_description, crs_team, crs_hours, crs_link} = values;
-    const result = await this.props.createCourse(values);
+    const result = await this.props.updateCourse(values);
     window.alert(`You submitted Parent:\n\n${JSON.stringify(result, null, 2)}`)
    window.location.href = '/courses'
   }
@@ -70,13 +67,13 @@ class EditCourse extends React.Component {
           <StyledField name = 'crs_description' hintText='Description' underlineShow={true} component={Input} fullWidth={true}/>  
       </CardSection>
       <CardSection>
-          <Field name="team" component={SelectField} hintText="Select a team" style={{ flex: 2}}>
+          <Field name="crs_team" component={SelectField} hintText="Select a team" style={{ flex: 2}}>
             {teams().map(team=>  <MenuItem key={team.id} value={team.name} primaryText={team.name}/> )}
           </Field> 
         
       </CardSection>
       <CardSection>
-          <Field name='link' hintText='Link' component={Input}/>  
+          <Field name='crs_link' hintText='Link' component={Input} fullWidth={true}/>  
       </CardSection>
        <Divider/>
         <CardSection>
@@ -97,8 +94,8 @@ EditCourse= reduxForm({  form: 'editcourse'})(EditCourse)
 
 const mapStateToProps = (state) => {
   console.log('state', state)
-  return { initialValues : state.courses.courses }
+  return { initialValues : state.courses.courses[0] }
 }
 
-export default connect(mapStateToProps, {fetchCourse})(EditCourse)
+export default connect(mapStateToProps, {updateCourse})(EditCourse)
 
