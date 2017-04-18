@@ -41,14 +41,10 @@ class StudentList extends React.Component {
 		await this.props.fetchAccounts();
 	
 		await this.props.findStudents(this.props.course.crs_UIC)
-		console.log('componentDidMount',this.props)
 		const l = this.props.students.map((student)=> {
 			return {student, checked: this.props.enrolled.some(item=>item.acr_navid === student.navid)}
 		})
 		this.setState({enrolledList: l});
-
-		console.log('L😀', this.state)
-
 	}
 
 	handleSearchKeyPressed(e) {

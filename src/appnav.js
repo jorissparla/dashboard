@@ -48,15 +48,25 @@ const Header = React.createClass({
 
 	},
 	render () {
-		let homeLink = <Link to='/' />
-		return  <MuiThemeProvider muiTheme={muiTheme}><AppBar
-			style={styles}
-			title={<span style={styles.title}>Infor Support Dashboard</span>}
-			onTitleTouchTap={handleTouchTap}
-			
-			iconElementLeft={<IconButton linkButton={true} containerElement={ homeLink } ><ActionHome /></IconButton>}
-			iconElementRight={ this.renderButtons() }
-		/></MuiThemeProvider>}
+		let homeLink = <Link to={'/'} />
+		return  (
+			<MuiThemeProvider muiTheme={muiTheme}>
+				<AppBar
+					style={styles}
+					title={
+						<span style={styles.title}>
+							Infor Support Dashboard
+							</span>
+					}
+					onTitleTouchTap={handleTouchTap}
+					iconElementLeft={
+						<IconButton  containerElement={ homeLink } >
+							<ActionHome />
+						</IconButton>
+					}
+					iconElementRight={ this.renderButtons() }
+				/>
+			</MuiThemeProvider>)}
 	}
 )
 

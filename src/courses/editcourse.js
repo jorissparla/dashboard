@@ -33,6 +33,7 @@ class EditCourse extends React.Component {
 
   constructor() {
     super();
+    console.log('loaded')
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -55,8 +56,7 @@ class EditCourse extends React.Component {
 
   render() {
     const { handleSubmit, pristine, reset, submitting, course , students} = this.props
-    console.log(this.props)
-
+    console.log('props', this.props)
     return (
       <div>      
 
@@ -64,13 +64,12 @@ class EditCourse extends React.Component {
       <Paper zDepth={3}>
         <CardSection style={{ fontSize:'36px', fontFamily:'Oswald'}}>
         Edit Training Course
-      </CardSection>
+        </CardSection>
       </Paper>
       <Card>
       <CardSection>
-          <Field name='crs_title' hintText='Title'  underlineShow={true} component={Input} />  
-        
-             <Field name= 'crs_hours' hintText='Number of Hours' underlineShow={true}  component={Input} style={{ flex: 2}}/>hours 
+        <Field name='crs_title' hintText='Title'  underlineShow={true} component={Input} />  
+        <Field name= 'crs_hours' hintText='Number of Hours' underlineShow={true}  component={Input} style={{ flex: 2}}/>hours 
       </CardSection>
       <CardSection>
           <StyledField name = 'crs_description' hintText='Description' underlineShow={true} component={Input} fullWidth={true}/>  
@@ -101,10 +100,11 @@ class EditCourse extends React.Component {
 }
 
 
-EditCourse= reduxForm({  form: 'editcourse'})(EditCourse)
+EditCourse= reduxForm({ form: 'editcourse',  enableReinitialize: true})(EditCourse)
 
 const mapStateToProps = (state) => {
-  return {  course: state.courses.course,initialValues : state.courses.course, students: state.courses.students }
+  console.log('state', state)
+  return {  course: state.courses.course, initialValues : state.courses.course, students: state.courses.students }
 }
 
 export default connect(mapStateToProps, {updateCourse, fetchCourse, findStudents})(EditCourse)

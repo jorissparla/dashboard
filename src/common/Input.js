@@ -28,7 +28,6 @@ const styles = {
 const Input = ({ label, value, onChangeText, secureTextEntry, style, ...rest }) => {
   const { inputStyle } = styles
   const mergedStyle = {...inputStyle, ...style }
-  console.log('value', value)
   return (
       <TextField 
         hintText={label}
