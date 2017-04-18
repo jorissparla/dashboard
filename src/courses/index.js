@@ -7,7 +7,6 @@ import {blue500} from 'material-ui/styles/colors';
 import FontIcon from 'material-ui/FontIcon';
 import { fetchCourses} from '../actions'
 import CoursesList from './courselist';
-import CourseTabs from './coursetabs';
 
 const listOfTabNames = [
   'Logistics',

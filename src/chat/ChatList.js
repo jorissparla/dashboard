@@ -24,7 +24,7 @@ class ChatList extends Component {
 
   
   renderChat (chat) {
-     const {iconStyle, avatarStyle, dateStyle}= styles
+     const {iconStyle, avatarStyle}= styles
       return chat.map((item, index) => {
         return (
           <div key={item.id} style={{ flexDirection: 'row'}}>
@@ -126,10 +126,6 @@ const styles = {
     fontSize: 10, 
     width: '50px',
     justifyContent:'center'
-  },
-  dateStyle: {
-      fontSize: '16px',
-  fontWeight: '900'
   }
 }
 

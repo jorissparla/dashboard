@@ -2,13 +2,10 @@ import React from 'react'
 import {connect} from 'react-redux'
 import {reduxForm, Field} from 'redux-form'
 import {browserHistory, Link} from 'react-router'
-import { CardSection, Card, Input, MyDatePicker } from '../common'
-import {  SelectField } from 'redux-form-material-ui'
+import { CardSection, Card, Input } from '../common'
 import {blue500} from 'material-ui/styles/colors';
-import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
 import Divider from 'material-ui/Divider';
-import Paper from 'material-ui/Paper';
 import {fetchAlertItem, updateAlerts, deleteAlert} from '../actions/index'
 
 const aTypes = [
@@ -18,14 +15,7 @@ const aTypes = [
 
 ]
 
-const inputField = ({ input, ...rest }) => {
-  const classw = 'input-field col s' + (rest.width || '4')
-  return (
-    <div className={classw}>
-      <input {...input} {...rest} />
-    </div>
-  )
-}
+
 
 const { string, func, object, arrayOf, shape } = React.PropTypes
 
@@ -46,14 +36,12 @@ let AlertItem = React.createClass({
     this.props.fetchAlertItem(this.props.params.id)
   },
   onDeleteClick (e) {
-    console.log('onDeleteClick')
     e.preventDefault()
     this.props.deleteAlert(this.props.params.id).then(() => {
       browserHistory.push('/alerts')
     })
   },
   async submitIt (values) {
-    console.log('Submitting')
     await updateAlerts(values)
     window.location.href = '/alerts'
   },

@@ -25,8 +25,13 @@ export const  AUTH_ERROR ='AUTH_ERROR'
 export const  FETCH_MESSAGE ='FETCH_MESSAGE'
 
 export const FETCH_COURSES ='FETCH_COURSES';
+export const FETCH_COURSE ='FETCH_COURSE';
 export const CREATE_COURSE ='CREATE_COURSE';
 export const UPDATE_COURSE ='UPDATE_COURSE';
+
+export const FETCH_ACCOUNTS = 'FETCH_ACCOUNTS';
+export const FIND_STUDENTS = 'FIND_STUDENTS';
+export const ENROLL_STUDENT = 'ENROLL_STUDENT';
 
 const ROOT_URL = 'http://nlbavwtls22:3001/api'
 
@@ -62,6 +67,13 @@ const signoutUser = () => {
   return { type: UNAUTH_USER };
 }
 
+const fetchAccounts = () => {
+	const request = axios.get(ROOT_URL + '/accounts');
+	return {
+		type: FETCH_ACCOUNTS,
+		payload: request
+	};
+};
 
 const fetchSummary = () => {
   const request = axios.get(ROOT_URL + '/summary')
@@ -234,7 +246,23 @@ const updateCourse =(props) => {
 const fetchCourse =(id) => {
     const request = axios.get(ROOT_URL + '/courses/'+ id )
   return {
-    type: FETCH_COURSES,
+    type: FETCH_COURSE,
+    payload: request
+  }
+}
+
+const findStudents = (id) => {
+  const request = axios.get(ROOT_URL + '/findStudents/'+ id )
+  return {
+    type: FIND_STUDENTS,
+    payload: request
+  }
+}
+
+const toggleEnrollStudent = (props) => {
+  const request = axios.put(ROOT_URL + '/enrolledcoursetoggle/', props )
+  return {
+    type: ENROLL_STUDENT,
     payload: request
   }
 }
@@ -264,3 +292,6 @@ exports.fetchCourses = fetchCourses;
 exports.createCourse = createCourse;
 exports.fetchCourse = fetchCourse;
 exports.updateCourse = updateCourse;
+exports.fetchAccounts = fetchAccounts;
+exports.findStudents = findStudents;
+exports.toggleEnrollStudent = toggleEnrollStudent;

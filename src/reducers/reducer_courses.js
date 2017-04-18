@@ -1,6 +1,6 @@
-import { FETCH_COURSES } from '../actions/index';
+import { FETCH_COURSES, FETCH_COURSE, FIND_STUDENTS } from '../actions/index';
 const INITIAL_STATE = {
-  courses: []
+  courses: [], students: [], course: {}
 };
 
 const CourseReducer = (state = INITIAL_STATE, action) => {
@@ -9,6 +9,16 @@ const CourseReducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         courses: action.payload.data
+      }
+    case FETCH_COURSE:
+      return {
+        ...state,
+        course: action.payload.data[0]
+      }
+    case FIND_STUDENTS:
+      return {
+        ...state,
+        students: action.payload.data
       }
 
     default:

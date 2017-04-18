@@ -5,11 +5,13 @@ import { CardSection, Card, Input, MyDatePicker } from '../common'
 import {  SelectField } from 'redux-form-material-ui'
 import MenuItem from 'material-ui/MenuItem';
 import RaisedButton from 'material-ui/RaisedButton';
+import Paper from 'material-ui/Paper';
 import Divider from 'material-ui/Divider';
 import UserAvatar  from 'react-user-avatar'
 import styled from 'styled-components';
-import { updateCourse } from '../actions';
+import { updateCourse, fetchCourse, findStudents } from '../actions';
 import teams from './teams';
+import Enrolled from './enrolledialog';
 
 const buttonStyleCancel = {
   backgroundColor: 'black',
@@ -23,20 +25,21 @@ const StyledField= styled(Field)`
 const StyledButton = styled(RaisedButton)`
   margin: 5px;
 `
-const inputField = ({ input, ...rest }) => {
-  return (
-    <div >
-      <input {...input} {...rest} />
-    </div>
-  )
-}
 
 class EditCourse extends React.Component {
+    state = {
+    open: false,
+  };
+
   constructor() {
     super();
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
+  handleOpenDialog () {
+    window.alert('Open!')
+    this.setState({open: true});
+  }
 
   async handleSubmit(values) {
     const { crs_title, crs_description, crs_team, crs_hours, crs_link} = values;
@@ -44,19 +47,25 @@ class EditCourse extends React.Component {
     window.alert(`You submitted Parent:\n\n${JSON.stringify(result, null, 2)}`)
    window.location.href = '/courses'
   }
-
-  
+  async componentDidMount() {
+    const id = this.props.params.crs_UIC;
+    await this.props.fetchCourse(id)
+    await this.props.findStudents(id);
+  }
 
   render() {
-    const { handleSubmit, pristine, reset, submitting } = this.props
+    const { handleSubmit, pristine, reset, submitting, course , students} = this.props
     console.log(this.props)
+
     return (
       <div>      
 
       <form onSubmit={handleSubmit(this.handleSubmit)}>
+      <Paper zDepth={3}>
         <CardSection style={{ fontSize:'36px', fontFamily:'Oswald'}}>
         Edit Training Course
       </CardSection>
+      </Paper>
       <Card>
       <CardSection>
           <Field name='crs_title' hintText='Title'  underlineShow={true} component={Input} />  
@@ -79,7 +88,9 @@ class EditCourse extends React.Component {
         <CardSection>
           <StyledButton primary={true} label='Submit'  type='submit' />
           <StyledButton  secondary={true} label='Cancel'   type='reset' onClick={()=>  window.location.href = '/courses'}  />
+          <Enrolled course={course} students={students}/>
         </CardSection>
+        
       </Card>
 
     </form>
@@ -93,9 +104,8 @@ class EditCourse extends React.Component {
 EditCourse= reduxForm({  form: 'editcourse'})(EditCourse)
 
 const mapStateToProps = (state) => {
-  console.log('state', state)
-  return { initialValues : state.courses.courses[0] }
+  return {  course: state.courses.course,initialValues : state.courses.course, students: state.courses.students }
 }
 
-export default connect(mapStateToProps, {updateCourse})(EditCourse)
+export default connect(mapStateToProps, {updateCourse, fetchCourse, findStudents})(EditCourse)
 
