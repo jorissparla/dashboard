@@ -4,6 +4,7 @@ import './App.css'
 import AppChartCombi from './charts/appchartcombi'
 import KudoList from './kudos/kudolist1'
 import KudoListComponent from './kudos/kudolistcomponent'
+import KudoListComponentNew from './kudos/kudolistcomponentnew'
 //import AlertWidget from './alerts/alertwidget'
 import NewsCardContainer from './news/newscardcontainer'
 import AppChartContainer from './charts/appchartcontainer'
@@ -22,7 +23,7 @@ const DashBoard = () => {
       <div className='col s9'>
         <div className='row'>
           <NewsCardContainer refreshRate={33000} />
-          <KudoListComponent refreshRate={10000} showNumberKudos={4} />
+          <KudoListComponentNew refreshRate={10000} showNumberKudos={4} />
         </div>
         <div>
           
