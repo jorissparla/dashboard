@@ -73,7 +73,6 @@ class StudentList extends React.Component {
 			<div>
 			  <Paper zDepth={3} >
         <FontIcon className="material-icons" >
-        
 					<SearchField hintText="Search" underlineShow={false} onKeyPress={this.handleSearchKeyPressed}/>
 			</FontIcon>
 			</Paper>
@@ -134,8 +133,8 @@ StudentList.propTypes = {
 const mapStateToProps = state => {
 	console.dir(state);
 	return {enrolled: state.courses.students, students: state.main.accounts.filter(account =>
-       account.region === 'EMEA' && (account.team ==='TLS')
-      ).sort()};
+       account.region === 'EMEA' && (account.team ==='TLS' || account.team ==='LOG' || account.team ==='FIN')
+      ).sort((a,b)=> a.fullname>b.fullname)};
 };
 
 export default connect(mapStateToProps, {fetchAccounts, toggleEnrollStudent, findStudents})(StudentList);

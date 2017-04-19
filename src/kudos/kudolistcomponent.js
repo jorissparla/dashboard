@@ -30,7 +30,7 @@ const styles = {
   },
   gridList: {
     width: 900,
-    height: 600,
+    height: 900,
     overflowY: 'auto',
     marginTop: '5px',
     flexGrow: '0.3',
