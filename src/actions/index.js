@@ -25,6 +25,7 @@ export const  AUTH_ERROR ='AUTH_ERROR'
 export const  FETCH_MESSAGE ='FETCH_MESSAGE'
 
 export const FETCH_COURSES ='FETCH_COURSES';
+export const FIND_ENROLLEDCOURSES ='FIND_ENROLLEDCOURSES';
 export const FETCH_COURSE ='FETCH_COURSE';
 export const CREATE_COURSE ='CREATE_COURSE';
 export const UPDATE_COURSE ='UPDATE_COURSE';
@@ -259,6 +260,14 @@ const findStudents = (id) => {
   }
 }
 
+const findAllEnrolledCourses = () => {
+  const request = axios.get(ROOT_URL + '/listenrolledcourses')
+  return {
+    type: FIND_ENROLLEDCOURSES,
+    payload: request
+  }
+}
+
 const toggleEnrollStudent = (props) => {
   const request = axios.put(ROOT_URL + '/enrolledcoursetoggle/', props )
   return {
@@ -294,4 +303,5 @@ exports.fetchCourse = fetchCourse;
 exports.updateCourse = updateCourse;
 exports.fetchAccounts = fetchAccounts;
 exports.findStudents = findStudents;
+exports.findAllEnrolledCourses = findAllEnrolledCourses;
 exports.toggleEnrollStudent = toggleEnrollStudent;

@@ -76,7 +76,7 @@ export default (
     <Route path='historyday' component={HistoryDayContainer}  />
     <Route path='historyall' component={HistoryDayAll}  />
     <Route path='/courses' component={Courses} />    
-    <Route path='/courses/:crs_UIC' component={CourseEditForm} />    
+    <Route path='/courses/edit/:crs_UIC' component={CourseEditForm} />    
     <Route path='courses/new' component={CourseAddForm} />
 
   </Route>

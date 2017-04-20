@@ -1,7 +1,9 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import AddCourseCard from './addcoursecard';
 import CourseCard from './coursecard';
 import styled from 'styled-components';
+import {findAllEnrolledCourses } from '../actions';
 
 
 
@@ -25,18 +27,27 @@ class Courselist extends React.Component {
     super();
   }
 
+
+
   render() {
-    const { courses} = this.props;
-    console.log('courses', this.props)
+    const { courses, enrolled} = this.props;
+    if (!enrolled) {
+      return <div>Loading...</div>
+    }
     return (
       <StyledContainer>
         <AddCourseCard />
-        {courses.map((course, index)=><StyledCard course={course} index={index}/>)}
+        {courses.map((course, index)=><StyledCard course={course} key = {course.crs_UIC} index={index} count={enrolled.filter(r=>r.acr_crs_UIC===course.crs_UIC).length}/>)}
       </StyledContainer>)
   }
 
-  componentDidMount() {
+   async componentDidMount() {
+    await this.props.findAllEnrolledCourses()
   }
 }
 
-export default Courselist;
+const mapStateToProps = (state) => {
+  return {   enrolled: state.courses.enrolled }
+}
+
+export default connect(mapStateToProps, {findAllEnrolledCourses})(Courselist);

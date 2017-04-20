@@ -1,22 +1,20 @@
-import React from 'react'
+import React from "react";
 
-// import logo from './logo.svg';
-import './App.css'
-import Header  from './appnav'
-// import DashBoardContainer from './dashboardcontainer'
-const { arrayOf, object } = React.PropTypes
+import "./App.css";
+import Header from "./appnav";
+const { arrayOf, object } = React.PropTypes;
 const App = React.createClass({
   propTypes: {
     children: object
   },
-  render () {
+  render() {
     return (
-      <div className='App'>
+      <div className="App">
         <Header />
         {this.props.children}
       </div>
-    )
+    );
   }
-})
+});
 
-export default App
+export default App;
