@@ -37,7 +37,6 @@ export default class EnrolledDialog extends React.Component {
 
 
   handleCount (nr) {
-    console.log('Aantal', nr)
     this.setState({count: nr})
   }
 

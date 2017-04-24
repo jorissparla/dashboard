@@ -41,11 +41,9 @@ class CoursesContainer extends React.Component {
   }
 
   handleTabSwitch(e) {
-    console.log(e)
   }
 
   render() {
-    console.log('State', this.state.searchText)
     if (!this.props.courses[0]) {
       return <div>loading</div>
     }

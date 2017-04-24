@@ -45,6 +45,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
-    "lint": "eslint src/**/*.js server.js"
+    "lint": "eslint src/**/*.js server.js",
+    "testenv":"SET NODE_ENV=test",
+    "prodenv":"SET NODE_ENV=production"
   }
 }

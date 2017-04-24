@@ -129,8 +129,6 @@ const fetchHistory = () => {
 };
 
 const fetchHistoryDay = () => {
-  console.log(`FETCH_HISTORY_DAY`);
-
   const request = axios.get(ROOT_URL + "/historyday");
   return {
     type: FETCH_HISTORY_DAY,

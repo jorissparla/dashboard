@@ -22,7 +22,6 @@ const inputField = ({input, ...rest}) => {
 
 
 const selectField = field => {
-  console.log('FIELD', field)
   return (
     <div className='input-field col s12'>
       <select defaultValue={field.input.value}>

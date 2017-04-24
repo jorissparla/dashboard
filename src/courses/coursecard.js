@@ -85,7 +85,6 @@ float:right;
   margin-top: 15px;
 `;
 export default ({ course, index, count }) => {
-  console.log("course count", course.crs_title, count);
   const image = imgList[index % 7];
   return (
     <StyledContainer key={course.crs_UIC}>

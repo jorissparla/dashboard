@@ -18,7 +18,6 @@ class OkCancelDialog extends Component {
     this.props.handleCancel()
   };
   render () {
-    console.log('renderOKCancelDialog', this.state, this.props)
     const { title, body, open } = this.props
  const actions = [
       <FlatButton

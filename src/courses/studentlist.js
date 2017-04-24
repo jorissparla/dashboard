@@ -49,14 +49,12 @@ class StudentList extends React.Component {
 
 	handleSearchKeyPressed(e) {
    // If (e.key === 'Enter') {
-   //   console.log(e.target.value, this.state.searchTerm)
 		this.setState({searchTerm: e.target.value});
    // }
 	}
 
 	handleUpdate() {
 		const nr = this.state.enrolledList.reduce((total, item)=>item.checked? total+1:total, 0)
-		console.log('nr 😜', nr)
 		this.props.onCount(nr)
 	}
 
@@ -101,9 +99,7 @@ class StudentList extends React.Component {
 										const o = this.state.enrolledList;
 									
 										this.props.toggleEnrollStudent(val);
-										console.log('before',val, index, o[index]);
 										o[index].checked = (o[index].checked)? false: true;
-											console.log('after',val, index, o[index]);
 										this.setState({enrolledList: o});
 										this.handleUpdate();
 								}}

@@ -63,7 +63,6 @@ const Header = React.createClass({
     const picture =
       localStorage.getItem("picture") ||
       "https://randomuser.me/api/portraits/men/20.jpg";
-    console.log(picture);
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <AppBar

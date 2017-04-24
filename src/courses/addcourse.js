@@ -40,7 +40,6 @@ class Addcourse extends React.Component {
   };
   constructor() {
     super();
-    console.log('🤣 AddCourse')
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -60,7 +59,6 @@ class Addcourse extends React.Component {
 
     const { crs_title, crs_description, crs_team, crs_hours, crs_link, crs_type, crs_date} = values;
     const result = await this.props.createCourse(values);
-    console.log('values',values)
     const status = (result.payload.status ===200)? `Success`: `Error: ${result.payload.status}`;
     await this.setState({ msgopen: true, msgText:status})
     setInterval(()=>window.location.href = '/courses', 3000)

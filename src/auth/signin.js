@@ -27,12 +27,6 @@ const email = value =>
   (value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)
     ? "Invalid email"
     : undefined);
-/*
- const doSubmit = (values) => {
-    window.alert(`You submitted Parent:\n\n${JSON.stringify(values, null, 2)}`)
-  console.log(values)
-}
-*/
 
 let Signin = React.createClass({
   doSubmit({ email, password }) {

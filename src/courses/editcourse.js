@@ -61,7 +61,6 @@ class EditCourse extends React.Component {
   async handleSubmit(values) {
     const { crs_title, crs_description, crs_team, crs_hours, crs_link, crs_type, crs_daten} = values;
     const result = await this.props.updateCourse(values);
-    console.log('values',values)
     const status = (result.payload.status ===200)? `Success`: `Error: ${result.payload.status}`;
     await this.setState({ msgopen: true, msgText:status})
    setInterval(()=>window.location.href = '/courses', 3000)
@@ -107,8 +106,6 @@ class EditCourse extends React.Component {
           <SelectStyle>
             <Field name='crs_date' hintText='date' component={MyDatePicker} floatingLabelText='date' 
             format={(value, name) => { 
-                console.log('value being passed:', value);
-                console.log('is of type:', typeof value);
                 return value === '' ? null : (typeof value ==='string')? new Date(value) : value
             }}          
           autoOk={true} />

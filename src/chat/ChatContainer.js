@@ -23,7 +23,6 @@ class ChatContainer extends Component {
   }
   
   doSubmit  (values) {
-    console.log('doSubmit')
     const { weeknr, team, nrchats, responseintime, fromDate } = values
     const mappedValues = { weeknr, team, nrchats, responseintime, fromDate }
 
@@ -51,7 +50,6 @@ class ChatContainer extends Component {
   }  
 
   handleSubmit () {
-    console.log('handleSubmit')
     window.alert(this.state.body)
     this.setState({showDialog: false})
     this.props.createChat(this.state.values).
@@ -62,13 +60,11 @@ class ChatContainer extends Component {
       catch(error=> console.log('error',error))
   }
   handleCancel () {
-    console.log('handleCancel')
     this.setState({showDialog: false})
   }
   render () {
     const { ranges } = this.props
 
-    console.log('render', this.props, this.state)
     return (
       <Card >
         <ChatAdd 
