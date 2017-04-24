@@ -6,5 +6,6 @@
   "react.beautify.formatter": "esformatter",
   "eslint.autoFixOnSave": true,
   "eslint.enable": true,
-  "vsicons.presets.angular": false
+  "vsicons.presets.angular": false,
+  "prettier.singleQuote": false
 }

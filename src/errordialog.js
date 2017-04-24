@@ -7,26 +7,22 @@ import FlatButton from 'material-ui/FlatButton';
  */
 export default class ErrorDialog extends React.Component {
   state = {
-    open: true,
+    open: true
   };
 
   handleOpen = () => {
-    this.setState({open: true});
+    this.setState({ open: true });
   };
 
   handleClose = () => {
-    this.setState({open: false});
+    this.setState({ open: false });
   };
 
   render() {
     const actions = [
-      <FlatButton
-        label="Cancel"
-        primary={true}
-        onTouchTap={this.handleClose}
-      />
+      <FlatButton label="Cancel" primary={true} onTouchTap={this.handleClose} />
     ];
-    const { message='Error'} = this.props;
+    const { message = 'Error' } = this.props;
     return (
       <div>
         <Dialog

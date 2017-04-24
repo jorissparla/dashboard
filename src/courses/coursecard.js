@@ -1,20 +1,20 @@
-import React from 'react';
-import Paper from 'material-ui/Paper';
-import styled from 'styled-components';
-import FlatButton from 'material-ui/FlatButton';
-import Badge from 'material-ui/Badge';
-import { blue500 } from 'material-ui/styles/colors';
-import { Link } from 'react-router';
+import React from "react";
+import Paper from "material-ui/Paper";
+import styled from "styled-components";
+import FlatButton from "material-ui/FlatButton";
+import Badge from "material-ui/Badge";
+import { blue500 } from "material-ui/styles/colors";
+import { Link } from "react-router";
 
 const imgList = [
-  'https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/auth.png',
-  'https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/analytics.png',
-  'https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/storage.png',
-  'https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/hosting.png',
-  'https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/database.png',
-  'https://www.gstatic.com/mobilesdk/170215_mobilesdk/discoveryCards/2x/functions.png',
-  'https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/crash.png',
-  'https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/amb.png'
+  "https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/auth.png",
+  "https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/analytics.png",
+  "https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/storage.png",
+  "https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/hosting.png",
+  "https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/database.png",
+  "https://www.gstatic.com/mobilesdk/170215_mobilesdk/discoveryCards/2x/functions.png",
+  "https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/crash.png",
+  "https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/amb.png"
 ];
 
 const StyledContainer = styled(Paper)`
@@ -39,6 +39,7 @@ const Title = styled.div`
   padding: 2px;
   display: flex;
   align-items: space-between;
+  margin-top: 10px;
 `;
 const StyledBody = styled.p`
   margin: 5px;
@@ -75,6 +76,7 @@ const StyledHyperLink = styled(Link)`
     cursor:pointer;
   }
   display: flex;
+  justify-content: space-between;
 `;
 const StyledBadge = styled(Badge)`
 float:right;
@@ -83,16 +85,17 @@ float:right;
   margin-top: 15px;
 `;
 export default ({ course, index, count }) => {
-  console.log('course count', course.crs_title, count);
-  const image = imgList[index % 6];
+  console.log("course count", course.crs_title, count);
+  const image = imgList[index % 7];
   return (
     <StyledContainer key={course.crs_UIC}>
       <StyledImage src={image} />
       <StyledHyperLink to={course.crs_link} title={course.crs_link}>
         <Title>
           {course.crs_title}
-          <StyledBadge badgeContent={count} primary={true} />
+
         </Title>
+        <StyledBadge badgeContent={count} primary={true} />
       </StyledHyperLink>
       <StyledBody>
         {course.crs_description}
@@ -103,7 +106,7 @@ export default ({ course, index, count }) => {
           <FlatButton
             backgroundColor={blue500}
             label="Modify"
-            style={{ color: 'white' }}
+            style={{ color: "white" }}
           />
         </StyledLink>
       </BottomStyle>
