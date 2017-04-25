@@ -29,7 +29,7 @@ import KudoListAll from "./kudos/kudolistall";
 import Signin from "./auth/signin";
 import Signout from "./auth/signout";
 import RequireAuth from "./auth/require_auth";
-import Test from "./courses/card";
+import Test from "./courses/smallcard";
 import Courses from "./courses";
 import CourseAddForm from "./courses/addcourse";
 import CourseEditForm from "./courses/editcourse";
