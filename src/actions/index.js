@@ -29,6 +29,7 @@ export const FIND_ENROLLEDCOURSES = "FIND_ENROLLEDCOURSES";
 export const FETCH_COURSE = "FETCH_COURSE";
 export const CREATE_COURSE = "CREATE_COURSE";
 export const UPDATE_COURSE = "UPDATE_COURSE";
+export const COURSE_COMPLETE = "COURSE_COMPLETE";
 
 export const FETCH_ACCOUNTS = "FETCH_ACCOUNTS";
 export const FIND_STUDENTS = "FIND_STUDENTS";
@@ -278,6 +279,14 @@ const toggleEnrollStudent = props => {
   };
 };
 
+const toggleCourseComplete = props => {
+  const request = axios.put(ROOT_URL + "/enrolledcoursecomplete/", props);
+  return {
+    type: COURSE_COMPLETE,
+    payload: request
+  };
+};
+
 exports.fetchSummary = fetchSummary;
 exports.signinUser = signinUser;
 exports.signoutUser = signoutUser;
@@ -307,3 +316,4 @@ exports.fetchAccounts = fetchAccounts;
 exports.findStudents = findStudents;
 exports.findAllEnrolledCourses = findAllEnrolledCourses;
 exports.toggleEnrollStudent = toggleEnrollStudent;
+exports.toggleCourseComplete = toggleCourseComplete;

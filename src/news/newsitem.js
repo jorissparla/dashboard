@@ -1,167 +1,113 @@
-import React, {Component} from 'react'
-import {Field, reduxForm} from 'redux-form'
-import {connect} from 'react-redux'
-import {Link, browserHistory} from 'react-router'
-import {fetchNewsItem, updateNews, deleteNews} from '../actions/index'
+import React, { Component } from "react";
+import { Field, reduxForm } from "redux-form";
+import { connect } from "react-redux";
+import { Link, browserHistory } from "react-router";
+import { CardSection, Card, Input, MyDatePicker } from "../common";
+import { SelectField, DatePicker } from "redux-form-material-ui";
+import Divider from "material-ui/Divider";
+import Paper from "material-ui/Paper";
+import Avatar from "material-ui/Avatar";
+import TextField from "material-ui/TextField";
+import RaisedButton from "material-ui/RaisedButton";
+import FontIcon from "material-ui/FontIcon";
+import IconButton from "material-ui/IconButton";
+import ActionSearch from "material-ui/svg-icons/action/search";
+import { fullWhite } from "material-ui/styles/colors";
+import styled from "styled-components";
 
-const inputField = field => {
-  const classw = 'input-field col s' + (field.width || '4')
-  return (
-    <div className={classw}>
-      <input {...field.input} placeholder={field.placeholder} type={field.type} />
-    </div>
-  )
-}
-const inputFieldDate = field => {
-  const classw = 'input-field col s' + (field.width || '4')
-  return (
-    <div className={classw}>
-      <input className='datepicker' {...field.input} placeholder={field.placeholder} type={field.type} />
-    </div>
-  )
-}
+const Left = styled.div` width:10%; margin: 10px`;
+const Right = styled.div` width:80%`;
 
 const inputImageField = field => {
-  console.log(field)
-  const classw = 'input-field col s' + (field.width || '4')
+  console.log(field);
   return (
-    <div>
-      <div className={classw}>
-        <input {...field.input} placeholder={field.placeholder} type={field.type} />
+    <div style={{ display: "flex", alignContent: "center" }}>
+      <Left>
+        <Avatar src={field.input.value} />
+      </Left>
 
-      </div>
-      <div className='col s2'>
-        <img src={field.input.value} alt='' width='200px' />
-      </div>
     </div>
-  )
-}
+  );
+};
 
-const doSubmit = values => {
-  updateNews(values)
-  browserHistory.push('/news')
-}
+const NewsItem = ({
+  initialValues: newsitem,
+  onSave,
+  onDelete,
+  onCancel,
+  handleSubmit,
+  title
+}) => {
+  console.log(this);
 
-class NewsItem extends Component {
+  const handleDelete = e => {
+    e.preventDefault();
+    onDelete(newsitem.id);
+  };
+  return (
+    <form onSubmit={handleSubmit(onSave)}>
+      <Paper>
+        <CardSection style={{ fontSize: "36px", fontFamily: "Oswald" }}>
+          {title}
+        </CardSection>
+      </Paper>
+      <Paper>
+        <CardSection>
+          <RaisedButton primary={true} label="Save" type="submit" />
+          {onDelete &&
+            <RaisedButton
+              backgroundColor={"#212121"}
+              labelColor={fullWhite}
+              label="Delete"
+              onClick={handleDelete}
+            />}
+          <RaisedButton
+            label="Cancel"
+            onClick={() => browserHistory.push("/news")}
+          />
+        </CardSection>
+        <Divider />
+        <Field
+          name="title"
+          hintText="Enter the title of the newsitem"
+          underlineShow={true}
+          component={Input}
+          floatingLabelText="title"
+          fullWidth={true}
+        />
 
-  constructor (props) {
-    super(props)
-    this.onDeleteClick = this.onDeleteClick.bind(this)
-  }
-
-  componentDidMount () {
-    this.props.fetchNewsItem(this.props.params.id)
-    let initials = this.props.news[0]
-    if (initials) {
-      initials.expire_date = initials.expire_date.substr(0, 10)
-    }
-    this.props.initialize(initials)
-  }
-
-  onDeleteClick (e) {
-    e.preventDefault()
-    this.props.deleteNews(this.props.params.id).then(() => {
-      browserHistory.push('/news')
-    })
-  }
-
-  render () {
-    const { handleSubmit} = this.props
-    if (!this.props.news) {
-      return <div>Loading...</div>
-    }
-    return (
-      <div className='row'>
-        <form className='col s12' onSubmit={handleSubmit(doSubmit)}>
-          <div className='row'>
-            <Field name='title' component={inputField} placeholder='title' />
-            <div className='col s4'>
-              <p>
-                <button type='submit' className='btn btn-primary blue'>Save</button>
-                <Link to='/news' type='cancel' className='btn btn-primary black'>Cancel</Link>
-                <button className='btn btn-primary red' onClick={this.onDeleteClick}>Delete</button>
-              </p>
-            </div>
-          </div>
-          <div className='row'>
+        <Field
+          name="body"
+          hintText="Provide a detailed description"
+          underlineShow={true}
+          component={Input}
+          floatingLabelText="text"
+          fullWidth={true}
+          multiLine={true}
+          rows={4}
+          rowsMax={4}
+          fullWidth={true}
+        />
+        <div style={{ display: "flex", alignContent: "center" }}>
+          <Left>
+            <Field component={inputImageField} name="img" />
+          </Left>
+          <Right>
             <Field
-              name='body'
-              component={inputField}
-              type='text'
-              placeholder='Description'
-              width={12} />
-          </div>
-          <div className='row'>
-            <Field
-              name='img'
-              id='img'
-              type='text'
-              placeholder='Image'
-              component={inputImageField}
-              width={8} />
-            <div />
-          </div>
-          <div className='row'>
-            <Field
-              name='link'
-              component={inputField}
-              type='text'
-              placeholder='Link'
-              width={8} />
-            <Field
-              name='link_text'
-              component={inputField}
-              type='text'
-              placeholder='Description' />
-          </div>
-          <div className='row'>
-            <div className='left'>
-                    Expires:
-            </div>
-            <Field
-              name='expire_date'
-              component={inputFieldDate}
-              type='date'
-              className='datepicker'
-              placeholder='expire_date'
-              width={2} />
-          </div>
-        </form>
-      </div>
-    )
-  }
-}
+              name="img"
+              hintText="Copy the Image URL into the field"
+              underlineShow={true}
+              component={Input}
+              floatingLabelText="Image URL"
+              fullWidth={true}
+              onChange={e => console.log(e, newsitem)}
+            />
+          </Right>
+        </div>
+      </Paper>
 
-const replaceDate = (values) => {
-  if (values) {
-    values.expire_date = values.expire_date.substr(0, 10)
-  }
-  return values
-}
+    </form>
+  );
+};
 
-const mapStateToProps = (state) => {
-  return {news: state.summary.news,
-    initialValues: replaceDate(state.summary.news[0])}
-}
-
-const { func, object, shape, string, arrayOf } = React.PropTypes
-
-NewsItem.propTypes = {
-  fetchNewsItem: func,
-  updateNews: func,
-  deleteNews: func,
-  initialize: func,
-  handleSubmit: func,
-  news: arrayOf(shape({
-    body: string,
-    image: string,
-    link: string,
-    link_text: string,
-    expire_date: string
-  })),
-  params: object
-}
-
-NewsItem = reduxForm({form: 'newsitem'})(NewsItem)
-export default // NewsItem = reduxForm(    {form: 'newsitem'},
-        connect(mapStateToProps, {fetchNewsItem, updateNews, deleteNews})(NewsItem)
+export default reduxForm({ form: "_newsitem" })(NewsItem);

@@ -2,15 +2,13 @@ import React from "react";
 import { Route, IndexRoute } from "react-router";
 
 import App from "./App";
-import NewsList from "./news/newslist";
+
 import AlertsList from "./alerts/alertlist";
 import AlertItem from "./alerts/alertitem";
 import ChatList from "./chat/ChatList";
 import ChatContainer from "./chat/ChatContainer";
 import AlertItemAddNew from "./alerts/alertitemaddnew";
-import NewsItem from "./news/newsitem";
-import NewsItemAdd from "./news/newsitemadd";
-import NewNews from "./news/newnews";
+
 import DashBoard from "./dashboard";
 import DashBoard0 from "./dashboard0";
 import DashBoardStats from "./dashboardstats";
@@ -34,6 +32,10 @@ import Courses from "./courses";
 import CourseAddForm from "./courses/addcourse";
 import CourseEditForm from "./courses/editcourse";
 
+import NewsListContainer from "./news/newslistcontainer";
+import NewsItemContainer from "./news/newsitemcontainer";
+import NewsItemAddContainer from "./news/newsitemaddcontainer";
+
 // validate authentication for private routes
 /*const requireAuth = (nextState, replace) => {
   if (!auth.loggedIn()) {
@@ -50,15 +52,14 @@ export default (
     <Route path="/main/2" component={DashBoardStats} />
     <Route path="alerts" component={RequireAuth(AlertsList)} />
     <Route path="award" component={Award} />
-    <Route path="test" component={Test} />
+
     <Route path="alerts/new" component={AlertItemAddNew} />
     <Route path="alerts/:id" component={AlertItem} />
-    <Route path="news" component={RequireAuth(NewsList)} />
-    <Route path="news/new" component={NewsItemAdd} />
+    <Route path="/news" component={RequireAuth(NewsListContainer)} />
     <Route path="chat" component={RequireAuth(ChatList)} />
     <Route path="chat/new" component={RequireAuth(ChatContainer)} />
-    <Route path="news/new1" component={NewNews} />
-    <Route path="news/:id" component={NewsItem} />
+    <Route path="/news/add" component={NewsItemAddContainer} />
+    <Route path="/news/edit/:id" component={NewsItemContainer} />
     <Route path="golivelist" component={GoLiveList} />
     <Route path="golivelist1" component={GoLiveList1} />
     <Route path="golivelistside" component={GoLiveListSide} />
@@ -74,6 +75,7 @@ export default (
     <Route path="/courses" component={RequireAuth(Courses)} />
     <Route path="/courses/edit/:crs_UIC" component={CourseEditForm} />
     <Route path="courses/new" component={CourseAddForm} />
-
+    <Route path="test/edit/:id" component={NewsItemContainer} />
+    <Route path="test/new" component={NewsItemAddContainer} />
   </Route>
 );
