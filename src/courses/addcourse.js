@@ -2,22 +2,15 @@ import React from "react";
 import { connect } from "react-redux";
 import { Field, reduxForm, formValueSelector } from "redux-form";
 import { CardSection, Card, Input, MyDatePicker } from "../common";
-import { SelectField, DatePicker } from "redux-form-material-ui";
+import { SelectField } from "redux-form-material-ui";
 import Snackbar from "material-ui/Snackbar";
 import MenuItem from "material-ui/MenuItem";
 import RaisedButton from "material-ui/RaisedButton";
-import Paper from "material-ui/Paper";
 import Divider from "material-ui/Divider";
-import UserAvatar from "react-user-avatar";
 import styled from "styled-components";
 import { createCourse } from "../actions";
 import teams from "./teams";
 import coursetypes from "./types";
-
-const buttonStyleCancel = {
-  backgroundColor: "black",
-  labelColor: "white"
-};
 
 const StyledField = styled(Field)`
   margin-right: 5px;
@@ -55,15 +48,6 @@ class Addcourse extends React.Component {
   };
 
   async handleSubmit(values) {
-    const {
-      crs_title,
-      crs_description,
-      crs_team,
-      crs_hours,
-      crs_link,
-      crs_type,
-      crs_date
-    } = values;
     const result = await this.props.createCourse(values);
     const status = result.payload.status === 200
       ? `Success`
@@ -73,7 +57,7 @@ class Addcourse extends React.Component {
   }
 
   render() {
-    const { handleSubmit, pristine, reset, submitting } = this.props;
+    const { handleSubmit } = this.props;
     return (
       <div>
 

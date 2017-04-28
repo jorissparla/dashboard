@@ -9,6 +9,7 @@ export const FETCH_HISTORY = "FETCH_HISTORY";
 export const FETCH_HISTORY_DAY = "FETCH_HISTORY_DAY";
 export const FETCH_GOLIVES = "FETCH_GOLIVES";
 export const FETCH_NEWS = "FETCH_NEWS";
+export const FETCH_NEWS_ITEM = "FETCH_NEWS_ITEM";
 export const SHOW_NEWS = "SHOW_NEWS";
 export const CREATE_NEWS = "CREATE_NEWS";
 export const UPDATE_NEWS = "UPDATE_NEWS";
@@ -147,7 +148,7 @@ const fetchNews = () => {
 const fetchNewsItem = id => {
   const request = axios.get(ROOT_URL + "/news/" + id);
   return {
-    type: FETCH_NEWS,
+    type: FETCH_NEWS_ITEM,
     payload: request
   };
 };

@@ -9,10 +9,6 @@ const doSubmit = values => {
 };
 
 class NewsItemAddContainer extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <NewsItem initialValues={{}} onSave={doSubmit} title="New news item" />

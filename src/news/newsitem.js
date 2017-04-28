@@ -1,17 +1,11 @@
-import React, { Component } from "react";
+import React from "react";
 import { Field, reduxForm } from "redux-form";
-import { connect } from "react-redux";
-import { Link, browserHistory } from "react-router";
-import { CardSection, Card, Input, MyDatePicker } from "../common";
-import { SelectField, DatePicker } from "redux-form-material-ui";
+import { browserHistory } from "react-router";
+import { CardSection, Input } from "../common";
 import Divider from "material-ui/Divider";
 import Paper from "material-ui/Paper";
 import Avatar from "material-ui/Avatar";
-import TextField from "material-ui/TextField";
 import RaisedButton from "material-ui/RaisedButton";
-import FontIcon from "material-ui/FontIcon";
-import IconButton from "material-ui/IconButton";
-import ActionSearch from "material-ui/svg-icons/action/search";
 import { fullWhite } from "material-ui/styles/colors";
 import styled from "styled-components";
 
@@ -44,6 +38,7 @@ const NewsItem = ({
     e.preventDefault();
     onDelete(newsitem.id);
   };
+
   return (
     <form onSubmit={handleSubmit(onSave)}>
       <Paper>

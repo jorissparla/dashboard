@@ -52,11 +52,7 @@ const BottomStyle = styled.div`
   width:100%;
   justify-content: center;
 `;
-const StyledFlat = styled(FlatButton)`
-  width: 70%;
-  margin-left: 5px;
-  flex-grow: 3;
-`;
+
 const TeamSpan = styled.div`
   width: 20%;
   color: orange;

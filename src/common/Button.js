@@ -1,38 +1,37 @@
-import React from 'react';
-
-const Button = ({children, onPress}) => {
-  const { buttonStyle, textStyle } = styles;
-  return (
-    <div style={buttonStyle} onClick={onPress}>
-        <p style={textStyle}>{children}</p>
-    </div>
-
-  )
-}
+import React from "react";
 
 const styles = {
-  buttonStyle : {
+  buttonStyle: {
     flex: 1,
-    alignSelf: 'stretch',
-    backgroundColor: '#fff',
-    borderRadius: '5px',
-    borderWidth: '2px',
-    borderColor: '#007aff',
-    borderStyle: 'solid',
+    alignSelf: "stretch",
+    backgroundColor: "#fff",
+    borderRadius: "5px",
+    borderWidth: "2px",
+    borderColor: "#007aff",
+    borderStyle: "solid",
     marginLeft: 5,
     marginRight: 5,
-    display: 'flex',
-    justifyContent: 'center',
-    height: '40px'
+    display: "flex",
+    justifyContent: "center",
+    height: "40px"
   },
   textStyle: {
-    alignSelf: 'center',
-    color: '#007aff',
+    alignSelf: "center",
+    color: "#007aff",
     fontSize: 18,
-    fontWeight: '600',
+    fontWeight: "600",
     paddingTop: 10,
     paddingBottom: 10
   }
-}
+};
+
+const Button = ({ children, onPress }) => {
+  const { buttonStyle, textStyle } = styles;
+  return (
+    <div style={buttonStyle} onClick={onPress}>
+      <p style={textStyle}>{children}</p>
+    </div>
+  );
+};
 
 exports.Button = Button;

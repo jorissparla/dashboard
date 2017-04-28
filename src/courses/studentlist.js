@@ -5,10 +5,15 @@ import Avatar from "material-ui/Avatar";
 import TextField from "material-ui/TextField";
 import Paper from "material-ui/Paper";
 import FontIcon from "material-ui/FontIcon";
-import { blue500, red500 } from "material-ui/styles/colors";
+import { red500 } from "material-ui/styles/colors";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import { fetchAccounts, toggleEnrollStudent, findStudents , toggleCourseComplete} from "../actions";
+import {
+  fetchAccounts,
+  toggleEnrollStudent,
+  findStudents,
+  toggleCourseComplete
+} from "../actions";
 import Checkbox from "material-ui/Checkbox";
 import ActionFavorite from "material-ui/svg-icons/action/favorite";
 import ActionFavoriteBorder from "material-ui/svg-icons/action/favorite-border";
@@ -44,7 +49,9 @@ class StudentList extends React.Component {
     const l = this.props.students.map(student => {
       return {
         student,
-        checked: this.props.enrolled.some(item => item.acr_navid === student.navid)
+        checked: this.props.enrolled.some(
+          item => item.acr_navid === student.navid
+        )
       };
     });
     this.setState({ enrolledList: l });
@@ -90,7 +97,14 @@ class StudentList extends React.Component {
         <List>
           <Divider />
           {this.state.enrolledList.map((item, index) => {
-            const { uic, picture, fullname, location, team, navid } = item.student;
+            const {
+              uic,
+              picture,
+              fullname,
+              location,
+              team,
+              navid
+            } = item.student;
             const enabled = item.checked;
             return (
               <Container key={uic}>
@@ -106,7 +120,10 @@ class StudentList extends React.Component {
                     label="Enrolled"
                     checked={enabled}
                     onCheck={() => {
-                      let val = { acr_navid: navid, acr_crs_UIC: course.crs_UIC };
+                      let val = {
+                        acr_navid: navid,
+                        acr_crs_UIC: course.crs_UIC
+                      };
                       const o = this.state.enrolledList;
 
                       this.props.toggleEnrollStudent(val);
@@ -119,7 +136,10 @@ class StudentList extends React.Component {
                     label="Complete"
                     checked={enabled}
                     onCheck={() => {
-                      let val = { acr_navid: navid, acr_crs_UIC: course.crs_UIC };
+                      let val = {
+                        acr_navid: navid,
+                        acr_crs_UIC: course.crs_UIC
+                      };
                       const o = this.state.enrolledList;
 
                       this.props.toggleCourseComplete(val);
@@ -139,15 +159,6 @@ class StudentList extends React.Component {
   }
 }
 
-StudentList.defaultProps = {
-  students: []
-};
-
-StudentList.propTypes = {
-  students: React.PropTypes.array,
-  fetchAccounts: React.PropTypes.func
-};
-
 const mapStateToProps = state => {
   console.dir(state);
   return {
@@ -156,12 +167,17 @@ const mapStateToProps = state => {
       .filter(
         account =>
           account.region === "EMEA" &&
-          (account.team === "TLS" || account.team === "LOG" || account.team === "FIN")
+          (account.team === "TLS" ||
+            account.team === "LOG" ||
+            account.team === "FIN")
       )
       .sort((a, b) => a.fullname > b.fullname)
   };
 };
 
-export default connect(mapStateToProps, { fetchAccounts, toggleEnrollStudent, findStudents, toggleCourseComplete })(
-  StudentList
-);
+export default connect(mapStateToProps, {
+  fetchAccounts,
+  toggleEnrollStudent,
+  findStudents,
+  toggleCourseComplete
+})(StudentList);

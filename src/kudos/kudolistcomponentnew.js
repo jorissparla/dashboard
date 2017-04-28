@@ -4,19 +4,13 @@ import { fetchKudos } from "../actions/index";
 import moment from "moment";
 import getMuiTheme from "material-ui/styles/getMuiTheme";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-import Paper from "material-ui/Paper";
 import styled from "styled-components";
 import { Card } from "../courses/card";
 import { deepOrange500 } from "material-ui/styles/colors";
-//import Paper from 'material-ui/Paper'
 
 const Outer = styled.div`
   display: flex;
   flex-wrap:wrap;
-`;
-
-const H5Styled = styled.h5`
-  font-family: Oswald;
 `;
 
 const muiTheme = getMuiTheme({
@@ -25,9 +19,6 @@ const muiTheme = getMuiTheme({
   }
 });
 
-const displayNrKudos = (nr, len) => {
-  return nr > len ? len : nr;
-};
 const mapGender = g => {
   if (g === "M") {
     return "men";
@@ -45,24 +36,12 @@ const H3Styled = styled.h4`
   padding-left: 10px;
 `;
 
-const dateToDMY = date => {
-  return {
-    day: moment(date).format("DD"),
-    month: moment(date).format("MMM"),
-    year: moment(date).format("YYYY")
-  };
-};
 const dateToDMYString = date => {
   return (
     moment(date).format("DD") +
     moment(date).format("MMM") +
     moment(date).format("YYYY")
   );
-};
-
-const DateView = date => {
-  const { day, month, year } = dateToDMY(date);
-  return <DateBox day={day} month={month} year={year} />;
 };
 
 class KudoListComponent extends Component {

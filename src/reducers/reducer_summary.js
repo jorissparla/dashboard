@@ -1,29 +1,50 @@
-import {FETCH_SUMMARY, FETCH_CHAT, FETCH_RANGES, FETCH_HISTORY, FETCH_HISTORY_DAY, FETCH_NEWS, SHOW_NEWS, FETCH_KUDOS, FETCH_GOLIVES} from '../actions/index'
-const INITIAL_STATE = { summary: [], news: [], all: [], history: [], history_day: [], post: null }
+import {
+  FETCH_SUMMARY,
+  FETCH_CHAT,
+  FETCH_NEWS_ITEM,
+  FETCH_RANGES,
+  FETCH_HISTORY,
+  FETCH_HISTORY_DAY,
+  FETCH_NEWS,
+  SHOW_NEWS,
+  FETCH_KUDOS,
+  FETCH_GOLIVES
+} from "../actions/index";
+const INITIAL_STATE = {
+  summary: [],
+  news: [],
+  newsItem: [],
+  all: [],
+  history: [],
+  history_day: [],
+  post: null
+};
 
 const SummaryReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case FETCH_SUMMARY:
-      return {...state, summary: action.payload.data}
+      return { ...state, summary: action.payload.data };
     case FETCH_CHAT:
-      return {...state, chat: action.payload.data}
+      return { ...state, chat: action.payload.data };
     case FETCH_RANGES:
-      return {...state, ranges: action.payload.data}
+      return { ...state, ranges: action.payload.data };
     case FETCH_GOLIVES:
-      return {...state, golives: action.payload.data}
+      return { ...state, golives: action.payload.data };
     case FETCH_HISTORY_DAY:
-     return {...state, history_day: action.payload.data}
+      return { ...state, history_day: action.payload.data };
     case FETCH_HISTORY:
-      return {...state, history: action.payload.data}
+      return { ...state, history: action.payload.data };
     case FETCH_NEWS:
-      return {...state, news: action.payload.data}
+      return { ...state, news: action.payload.data };
+    case FETCH_NEWS_ITEM:
+      return { ...state, newsItem: action.payload.data };
     case FETCH_KUDOS:
-      return {...state, kudos: action.payload.data}
+      return { ...state, kudos: action.payload.data };
     case SHOW_NEWS:
-      return {...state, news: action.payload.data}
+      return { ...state, news: action.payload.data };
     default:
-      return state
+      return state;
   }
-}
+};
 
-export default SummaryReducer
+export default SummaryReducer;

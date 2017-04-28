@@ -1,22 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { fetchNews } from "../actions/index";
-import { Link } from "react-router";
 import NewsList from "./newslist";
 import { browserHistory } from "react-router";
 import ContentAdd from "material-ui/svg-icons/content/add";
-import ActionAndroid from "material-ui/svg-icons/action/android";
-import IconButton from "material-ui/IconButton";
-import RaisedButton from "material-ui/RaisedButton";
 import FloatingActionButton from "material-ui/FloatingActionButton";
 import Paper from "material-ui/Paper";
 
-class NewsListContainer extends React.Component {
-  constructor() {
-    super();
-    this.state = { someKey: "someValue" };
-  }
-
+class NewsListContainer extends Component {
   onOpen(id) {
     browserHistory.push(`/news/edit/${id}`);
   }

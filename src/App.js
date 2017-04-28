@@ -2,7 +2,7 @@ import React from "react";
 
 import "./App.css";
 import Header from "./appnav";
-const { arrayOf, object } = React.PropTypes;
+const { object } = React.PropTypes;
 const App = React.createClass({
   propTypes: {
     children: object

@@ -1,25 +1,24 @@
-import React, {Component} from 'react'
-import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
-import RaisedButton from 'material-ui/RaisedButton';
+import React, { Component } from "react";
+import Dialog from "material-ui/Dialog";
+import FlatButton from "material-ui/FlatButton";
 
 class OkCancelDialog extends Component {
   state = {
-    open: true,
+    open: true
   };
 
   handleOpen = () => {
-    this.setState({open: true});
-    this.props.handleSubmit()
+    this.setState({ open: true });
+    this.props.handleSubmit();
   };
 
   handleClose = () => {
-    this.setState({open: false});
-    this.props.handleCancel()
+    this.setState({ open: false });
+    this.props.handleCancel();
   };
-  render () {
-    const { title, body, open } = this.props
- const actions = [
+  render() {
+    const { title, body } = this.props;
+    const actions = [
       <FlatButton
         label="Cancel"
         primary={true}
@@ -30,7 +29,7 @@ class OkCancelDialog extends Component {
         primary={true}
         keyboardFocused={true}
         onTouchTap={this.handleClose}
-      />,
+      />
     ];
 
     return (
@@ -42,11 +41,11 @@ class OkCancelDialog extends Component {
           open={this.state.open || this.props.open}
           onRequestClose={this.handleClose}
         >
-          {body || 'Proceed?'}
+          {body || "Proceed?"}
         </Dialog>
       </div>
     );
   }
 }
 
-export { OkCancelDialog }
+export { OkCancelDialog };
