@@ -35,6 +35,7 @@ import NewsListContainer from "./news/newslistcontainer";
 import NewsItemContainer from "./news/newsitemcontainer";
 import NewsItemAddContainer from "./news/newsitemaddcontainer";
 
+import SupportCards from "./graphql/SupportCards";
 // validate authentication for private routes
 /*const requireAuth = (nextState, replace) => {
   if (!auth.loggedIn()) {
@@ -51,7 +52,7 @@ export default (
     <Route path="/main/2" component={DashBoardStats} />
     <Route path="alerts" component={RequireAuth(AlertsList)} />
     <Route path="award" component={Award} />
-
+    <Route path="test" component={SupportCards} />
     <Route path="alerts/new" component={AlertItemAddNew} />
     <Route path="alerts/:id" component={AlertItem} />
     <Route path="/news" component={RequireAuth(NewsListContainer)} />
