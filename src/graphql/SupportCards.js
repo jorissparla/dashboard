@@ -1,6 +1,7 @@
 import React from "react";
 import { gql, graphql } from "react-apollo";
 import { SmallCard } from "../common/SmallCard";
+import { Link } from "react-router";
 import styled from "styled-components";
 
 const cardColors = ["#FFAB40", "#80D8FF", "#8E24AA", "#607D8B"];
@@ -41,15 +42,17 @@ const SupportCards = ({
   return (
     <Div>
       {filteredCards.map(({ id, title, description, category, link }, i) => (
-        <SmallCard
-          key={id}
-          title={title}
-          text={description}
-          category={category}
-          buttonText="Open"
-          link={link}
-          canEdit={true}
-        />
+        <Link to={`test/view/${id}`}>
+          <SmallCard
+            key={id}
+            title={title}
+            text={description}
+            category={category}
+            buttonText="Open"
+            link={link}
+            canEdit={true}
+          />
+        </Link>
       ))}
     </Div>
   );
