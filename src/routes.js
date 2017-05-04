@@ -37,6 +37,9 @@ import NewsItemAddContainer from "./news/newsitemaddcontainer";
 
 import SupportCards from "./graphql/SupportCards";
 import SupportCardEdit from "./graphql/SupportCardEdit";
+import CourseList from "./graphql/CourseList";
+import CourseCard from "./graphql/CourseCard";
+import StudentListContainer from "./graphql/StudentListContainer";
 // validate authentication for private routes
 /*const requireAuth = (nextState, replace) => {
   if (!auth.loggedIn()) {
@@ -79,5 +82,8 @@ export default (
     <Route path="courses/new" component={CourseAddForm} />
     <Route path="test/edit/:id" component={NewsItemContainer} />
     <Route path="test/new" component={NewsItemAddContainer} />
+    <Route path="test/list" component={CourseList} />
+    <Route path="test/students" component={StudentListContainer} />
+    <Route path="test/list/:id" component={CourseCard} />
   </Route>
 );
