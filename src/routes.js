@@ -40,6 +40,7 @@ import SupportCardEdit from "./graphql/SupportCardEdit";
 import CourseList from "./graphql/CourseList";
 import CourseCard from "./graphql/CourseCard";
 import StudentListContainer from "./graphql/StudentListContainer";
+import StudentView from "./graphql/StudentView";
 // validate authentication for private routes
 /*const requireAuth = (nextState, replace) => {
   if (!auth.loggedIn()) {
@@ -84,6 +85,7 @@ export default (
     <Route path="test/new" component={NewsItemAddContainer} />
     <Route path="test/list" component={CourseList} />
     <Route path="test/students" component={StudentListContainer} />
+    <Route path="test/students/:id" component={StudentView} />
     <Route path="test/list/:id" component={CourseCard} />
   </Route>
 );

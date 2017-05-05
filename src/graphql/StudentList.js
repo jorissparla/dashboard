@@ -8,6 +8,10 @@ import { List, ListItem } from "material-ui/List";
 import Divider from "material-ui/Divider";
 import RaisedButton from "material-ui/RaisedButton";
 import Paper from "material-ui/Paper";
+import IconMenu from "material-ui/IconMenu";
+import MenuItem from "material-ui/MenuItem";
+import IconButton from "material-ui/IconButton";
+import MoreVertIcon from "material-ui/svg-icons/navigation/more-vert";
 //@ts-check
 import Avatar from "material-ui/Avatar";
 
@@ -25,19 +29,36 @@ class StudentList extends Component {
   constructor(props) {
     super(props);
     this.handleSearchChange = this.handleSearchChange.bind(this);
+    this.dropdownMenu = this.dropdownMenu.bind(this);
   }
 
   handleSearchChange(e) {
     this.setState({ searchText: e });
   }
 
+  dropdownMenu(id) {
+    return (
+      <IconMenu
+        iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+        anchorOrigin={{ horizontal: "left", vertical: "top" }}
+        targetOrigin={{ horizontal: "left", vertical: "top" }}
+      >
+        <MenuItem primaryText="View" onClick={() => alert("Clicked" + id)} />
+        <MenuItem primaryText="Send feedback" />
+        <MenuItem primaryText="Sign out" />
+      </IconMenu>
+    );
+  }
+
   render() {
     const { accounts } = this.props;
 
-    const filteredAccounts = accounts.filter(account =>
-      account.fullname
-        .toUpperCase()
-        .includes(this.state.searchText.toUpperCase())
+    const filteredAccounts = accounts.filter(
+      account =>
+        account.fullname
+          .toUpperCase()
+          .includes(this.state.searchText.toUpperCase()) ||
+        account.team.toUpperCase().includes(this.state.searchText.toUpperCase())
     );
     return (
       <Paper>
@@ -47,6 +68,8 @@ class StudentList extends Component {
             <ListItem
               key={item.id}
               primaryText={item.fullname}
+              secondaryText={`in Team ${item.team}, Location ${item.locationdetail ? item.locationdetail.location : item.location}`}
+              rightIcon={this.dropdownMenu(item.id)}
               leftAvatar={
                 item.picture
                   ? <Avatar src={item.picture.data} />

@@ -50,6 +50,7 @@ const accountsQuery = gql`
         picture {
           data
         }
+        location
         locationdetail {
           location
         }
