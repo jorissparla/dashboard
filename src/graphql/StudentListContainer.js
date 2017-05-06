@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { gql, graphql } from "react-apollo";
-import { SmallCard } from "../common/SmallCard";
 import { Link, withRouter } from "react-router";
 import styled from "styled-components";
 import Card from "./Card";
@@ -23,7 +22,7 @@ const Div = styled.div`
 
 class StudentListContainer extends Component {
   render() {
-    const { loading, error, account } = this.props.data;
+    const { loading, error, accounts } = this.props.data;
 
     if (loading) {
       return (
@@ -37,16 +36,19 @@ class StudentListContainer extends Component {
     }
     const count = 1; //accounts._studentsMeta.count;
     console.log("rerender");
-    return <StudentList accounts={account} />;
+    return <StudentList accounts={accounts} />;
   }
 }
 
 const accountsQuery = gql`
   query accountsQuery {
-    account (region: "EMEA" ) {
+    accounts (region: "EMEA") {
       id
+        firstname
+        lastname
         fullname
         team
+        region
         picture {
           data
         }
@@ -62,6 +64,7 @@ const accountsQuery = gql`
         }
     }
   }
+  
 `;
 
 export default graphql(accountsQuery)(withRouter(StudentListContainer));

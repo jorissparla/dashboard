@@ -11,6 +11,18 @@ import IconMenu from "material-ui/IconMenu";
 import MenuItem from "material-ui/MenuItem";
 import IconButton from "material-ui/IconButton";
 import MoreVertIcon from "material-ui/svg-icons/navigation/more-vert";
+import DropDownIcon
+  from "material-ui/svg-icons/navigation/arrow-drop-down-circle";
+import System from "material-ui/svg-icons/action/done-all";
+import MapsPlace from "material-ui/svg-icons/maps/place";
+import RaisedButton from "material-ui/RaisedButton";
+import ContentFilter from "material-ui/svg-icons/content/filter-list";
+import FileFileDownload from "material-ui/svg-icons/file/file-download";
+
+const Div = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
 
 const Container = styled.div`
   display: flex;
@@ -32,13 +44,21 @@ const Details = styled.div`
 const Title = styled.div`
   font-family:Oswald;
   font-size: 24px;
+  flex:1;
+  background:${props => (props.background ? "lightblue" : "white")}
 `;
 const Content = styled.div`
 
 `;
 
 class StudentView extends Component {
-  state = {};
+  state = { counter: 0 };
+
+  constructor(props) {
+    super(props);
+    this.renderCourses = this.renderCourses.bind(this);
+    this.updateEnrollStatus = this.updateEnrollStatus.bind(this);
+  }
 
   showCourseMenu() {
     return (
@@ -47,16 +67,50 @@ class StudentView extends Component {
         anchorOrigin={{ horizontal: "left", vertical: "top" }}
         targetOrigin={{ horizontal: "left", vertical: "top" }}
       >
-        <MenuItem primaryText="Refresh" />
-        <MenuItem primaryText="Send feedback" />
-        <MenuItem primaryText="Settings" />
+        <MenuItem primaryText="in Progress" />
+        <MenuItem primaryText="Completed" />
+        <MenuItem primaryText="Planned" />
         <MenuItem primaryText="Help" />
         <MenuItem primaryText="Sign out" />
       </IconMenu>
     );
   }
 
+  showEnrollMenu(enrol) {
+    return (
+      <IconMenu
+        iconButtonElement={<IconButton><DropDownIcon /></IconButton>}
+        anchorOrigin={{ horizontal: "left", vertical: "top" }}
+        targetOrigin={{ horizontal: "left", vertical: "top" }}
+      >
+        <MenuItem
+          primaryText="in Progress"
+          onClick={() => this.updateEnrollStatus(enrol, "In Progress")}
+        />
+        <MenuItem
+          primaryText="Completed"
+          onClick={() => this.updateEnrollStatus(enrol, "Completed")}
+        />
+        <MenuItem
+          primaryText="Planned"
+          onClick={() => this.updateEnrollStatus(enrol, "Planned")}
+        />
+        <MenuItem primaryText="Help" />
+        <MenuItem primaryText="Sign out" />
+      </IconMenu>
+    );
+  }
+
+  updateEnrollStatus(enrol, status) {
+    const { updateStatus } = this.props;
+    updateStatus(enrol.id, enrol.course.id, enrol.navid, status).then(
+      this.props.data.refetch()
+    );
+    this.setState({ counter: this.state.counter++ });
+  }
   renderCourses(enrollments) {
+    console.log("Props", this.props);
+    var _self = this.props;
     return (
       <List>
         {enrollments.map(enrol => (
@@ -65,13 +119,17 @@ class StudentView extends Component {
             leftAvatar={
               <Avatar
                 color={pinkA200}
-                backgroundColor={"#000000"}
+                backgroundColor={"#FFFFFF"}
                 style={{ left: 8 }}
               >
                 {enrol.status.slice(0, 3).toUpperCase()}
               </Avatar>
             }
-            secondaryText={<p>{enrol.course.description}</p>}
+            secondaryText={
+              <p
+              >{`${enrol.course.description}, ${enrol.course.hours} hours`}</p>
+            }
+            rightToggle={this.showEnrollMenu(enrol)}
           />
         ))}
       </List>
@@ -80,7 +138,7 @@ class StudentView extends Component {
 
   render() {
     const { loading, error, account } = this.props.data;
-
+    console.log("rerender");
     if (loading) {
       return <p>Loading ...</p>;
     }
@@ -112,7 +170,7 @@ class StudentView extends Component {
         </Paper>
         <Paper style={{ marginTop: 40 }}>
           <Container>
-            <Title>
+            <Title background>
               Courses {this.showCourseMenu()}
             </Title>
 
@@ -141,8 +199,10 @@ const queryProfile = gql`
         data
       }
       enrollments {
+        id
         status
         course {
+          id
           title
           hours
           description
@@ -152,6 +212,26 @@ const queryProfile = gql`
   }
 `;
 
-export default graphql(queryProfile, {
-  options: ownProps => ({ variables: { id: ownProps.params.id } })
-})(withRouter(StudentView));
+const updateStatus = gql`
+  mutation updateStatus($id: ID, $courseid: String, $navid: String, $status: String) {
+    setStudentCourseStatus(id: $id, courseid: $courseid, navid: $navid, status: $status) {
+      course {
+        title
+      }
+      status
+    }
+  }
+`;
+
+export default graphql(updateStatus, {
+  props: ({ mutate }) => ({
+    updateStatus: (id, courseid, navid, status) =>
+      mutate({
+        variables: { id, courseid, navid, status }
+      })
+  })
+})(
+  graphql(queryProfile, {
+    options: ownProps => ({ variables: { id: ownProps.params.id } })
+  })(withRouter(StudentView))
+);

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { Link, withRouter } from "react-router";
+import { Link, withRouter, browserHistory } from "react-router";
 import styled from "styled-components";
 import Card from "./Card";
 import SearchBar from "../common/SearchBar";
@@ -14,6 +14,7 @@ import IconButton from "material-ui/IconButton";
 import MoreVertIcon from "material-ui/svg-icons/navigation/more-vert";
 //@ts-check
 import Avatar from "material-ui/Avatar";
+import { pinkA200, transparent } from "material-ui/styles/colors";
 
 const StyledContainer = styled.div`
   margin-top: 10px;
@@ -37,13 +38,17 @@ class StudentList extends Component {
   }
 
   dropdownMenu(id) {
+    console.log("id", id);
     return (
       <IconMenu
         iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
         anchorOrigin={{ horizontal: "left", vertical: "top" }}
         targetOrigin={{ horizontal: "left", vertical: "top" }}
       >
-        <MenuItem primaryText="View" onClick={() => alert("Clicked" + id)} />
+        <MenuItem
+          primaryText="View"
+          onClick={() => browserHistory.push(`/test/students/${id}`)}
+        />
         <MenuItem primaryText="Send feedback" />
         <MenuItem primaryText="Sign out" />
       </IconMenu>
@@ -73,7 +78,15 @@ class StudentList extends Component {
               leftAvatar={
                 item.picture
                   ? <Avatar src={item.picture.data} />
-                  : <Avatar src="https://randomuser.me/api/portraits/men/48.jpg" />
+                  : <Avatar
+                      color={pinkA200}
+                      backgroundColor={transparent}
+                      style={{ left: 8 }}
+                    >
+                      {item.fullname
+                        .slice(0, 1)
+                        .concat(item.lastname.slice(0, 1))}
+                    </Avatar>
               }
             />
           ))}

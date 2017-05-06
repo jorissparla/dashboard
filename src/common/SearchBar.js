@@ -5,15 +5,16 @@ import FontIcon from "material-ui/FontIcon";
 import IconButton from "material-ui/IconButton";
 import ActionSearch from "material-ui/svg-icons/action/search";
 
-export default ({ onChange }) => {
+export default ({ onChange, hintText = "Search..", defaultValue = "" }) => {
   return (
     <Paper zDepth={3}>
       <FontIcon className="material-icons" style={{ margin: "10px" }}>
         <ActionSearch />
       </FontIcon>
       <TextField
-        hintText="Search"
+        hintText={hintText}
         underlineShow={false}
+        defaultValue={defaultValue}
         onChange={e => onChange(e.target.value)}
       />
 
