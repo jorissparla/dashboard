@@ -7,7 +7,15 @@ import Paper from "material-ui/Paper";
 import Divider from "material-ui/Divider";
 import MenuItem from "material-ui/MenuItem";
 import RaisedButton from "material-ui/RaisedButton";
+import Chip from "material-ui/Chip";
+import moment from "moment";
 import styled from "styled-components";
+import {
+  NormalButton,
+  NormalRaisedButton,
+  CancelRaisedButton,
+  TitleBar
+} from "../common/TitleBar";
 
 const buttonStyleCancel = {
   backgroundColor: "black",
@@ -65,10 +73,10 @@ class CourseForm extends Component {
   }
 
   handleSubmit(e) {
-    alert(JSON.stringify(e, null, 2));
+    this.props.onSave(e);
   }
   render() {
-    const { handleSubmit, course } = this.props;
+    const { handleSubmit, course, onSave, readOnly = true } = this.props;
     return (
       <form onSubmit={handleSubmit(this.handleSubmit)}>
 
@@ -76,6 +84,7 @@ class CourseForm extends Component {
           <CardSection>
             <Field
               name="title"
+              disabled={readOnly}
               hintText="Title"
               underlineShow={true}
               component={Input}
@@ -83,20 +92,25 @@ class CourseForm extends Component {
             />
             <Field
               name="hours"
+              disabled={readOnly}
+              textFieldStyle={{ width: 50 }}
               hintText="Number of Hours"
               underlineShow={true}
               component={Input}
               floatingLabelText="hours"
-              style={{ flex: 2 }}
+              style={{ flex: 2, width: 50 }}
             />
             <SelectStyle>
               <Field
                 name="status"
                 component={SelectField}
+                disabled={readOnly}
                 hintText="Status"
                 floatingLabelText="Status"
-                style={{ flex: 2 }}
+                style={{ flex: 2, marginTop: "-5px" }}
                 floatingLabelText="Status"
+                underlineShow={true}
+                underlineStyle={{ borderColor: "#039BE5" }}
               >
                 {status.map(({ id, name }) => (
                   <MenuItem key={id} value={name} primaryText={name} />
@@ -107,6 +121,7 @@ class CourseForm extends Component {
           <CardSection>
             <StyledField
               name="description"
+              disabled={readOnly}
               hintText="Description"
               underlineShow={true}
               component={Input}
@@ -120,6 +135,7 @@ class CourseForm extends Component {
             <SelectStyle>
               <Field
                 name="team"
+                disabled={readOnly}
                 component={SelectField}
                 hintText="Select a team"
                 floatingLabelText="team"
@@ -138,6 +154,7 @@ class CourseForm extends Component {
             <SelectStyle>
               <Field
                 name="type"
+                disabled={readOnly}
                 component={SelectField}
                 hintText="Select a type"
                 floatingLabelText="type"
@@ -157,6 +174,7 @@ class CourseForm extends Component {
               <Field
                 textFieldStyle={{ width: 150 }}
                 name="startdate"
+                disabled={readOnly}
                 hintText="startdate"
                 component={MyDatePicker}
                 floatingLabelText="start date"
@@ -172,6 +190,7 @@ class CourseForm extends Component {
               <Field
                 textFieldStyle={{ width: 150 }}
                 name="enddate"
+                disabled={readOnly}
                 hintText="enddate"
                 component={MyDatePicker}
                 floatingLabelText="end date"
@@ -186,23 +205,33 @@ class CourseForm extends Component {
           </CardSection>
           <CardSection>
             <Field
+              name="applicable"
+              disabled={readOnly}
+              component={Input}
+              floatingLabelText="Applicable for"
+              floatingLabelText="Applicable for"
+            />
+            <Field
               name="link"
+              disabled={readOnly}
               component={Input}
               floatingLabelText="link"
-              fullWidth={true}
               floatingLabelText="Link"
             />
 
           </CardSection>
           <Divider />
           <CardSection>
-            <StyledButton primary={true} label="Submit" type="submit" />
-            <StyledButton
+            {!readOnly && <NormalRaisedButton label="Submit" type="submit" />}
+            <CancelRaisedButton
               secondary={true}
               label="Cancel"
               type="reset"
               onClick={() => (window.location.href = "/courses")}
             />
+            <Chip style={{ margin: 4 }}>
+              {`Last updated  ${moment(course.lastmodified).calendar()}`}
+            </Chip>
           </CardSection>
 
         </Card>

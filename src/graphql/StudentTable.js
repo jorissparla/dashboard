@@ -10,8 +10,12 @@ import RaisedButton from "material-ui/RaisedButton";
 import Paper from "material-ui/Paper";
 import IconMenu from "material-ui/IconMenu";
 import MenuItem from "material-ui/MenuItem";
+import SortIcon from "material-ui/svg-icons/action/swap-vert";
 import IconButton from "material-ui/IconButton";
+import ChevronLeft from "material-ui/svg-icons/navigation/chevron-left";
+import ChevronRight from "material-ui/svg-icons/navigation/chevron-right";
 import MoreVertIcon from "material-ui/svg-icons/navigation/more-vert";
+import ArrowDownWard from "material-ui/svg-icons/navigation/arrow-downward";
 //@ts-check
 import Avatar from "material-ui/Avatar";
 import { pinkA200, transparent } from "material-ui/styles/colors";
@@ -36,12 +40,20 @@ const StyledContainer = styled.div`
 const headerStyle = {
   fontSize: 48,
   background: "#FAFAFA",
-  borderBottom: "1px solid rgba(0,0,0,0.12)",
   fontWeight: 800,
   textAlign: "left",
   color: "#000000"
 };
 
+const TableHeaderColumn1 = (val, index) => (
+  <TableHeaderColumn style={{ fontSize: 16, fontFamily: "Roboto" }} key={index}>
+    {val}
+  </TableHeaderColumn>
+);
+
+const TableColumnHeaders = values => {
+  return values.split(",").map((val, index) => TableHeaderColumn1(val, index));
+};
 class StudentTables extends Component {
   state = { searchText: "" };
   constructor(props) {
@@ -100,13 +112,13 @@ class StudentTables extends Component {
             adjustForCheckbox={false}
             displaySelectAll={false}
           >
-            <TableRow displayRowCheckbox={false}>
-              <TableHeaderColumn>ID</TableHeaderColumn>
-              <TableHeaderColumn>Name</TableHeaderColumn>
-              <TableHeaderColumn>Team</TableHeaderColumn>
-              <TableHeaderColumn>Location</TableHeaderColumn>
-              <TableHeaderColumn>Courses</TableHeaderColumn>
-              <TableHeaderColumn>Courses</TableHeaderColumn>
+            <TableRow>
+              <TableHeaderColumn style={{ fontSize: 16, fontFamily: "Roboto" }}>
+                ID
+              </TableHeaderColumn>
+              {TableHeaderColumn1("name")}}
+              {TableColumnHeaders("Team, Location, Courses")}
+              <TableHeaderColumn>Courses<ArrowDownWard /></TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody displayRowCheckbox={false}>

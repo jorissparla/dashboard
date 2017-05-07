@@ -7,6 +7,8 @@ import SearchBar from "../common/SearchBar";
 import StudentList from "./StudentList";
 import StudentTable from "./StudentTable";
 import CircularProgress from "material-ui/CircularProgress";
+import Drawer from "material-ui/Drawer";
+import MenuItem from "material-ui/MenuItem";
 
 const StyledContainer = styled.div`
   margin-top: 10px;
@@ -36,8 +38,6 @@ class StudentListContainer extends Component {
     if (error) {
       return <p>{error.message}</p>;
     }
-    const count = 1; //accounts._studentsMeta.count;
-    console.log("rerender");
     return <StudentTable accounts={accounts} />;
   }
 }

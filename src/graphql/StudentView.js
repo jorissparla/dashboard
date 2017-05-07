@@ -45,7 +45,7 @@ const Title = styled.div`
   font-family:Oswald;
   font-size: 24px;
   flex:1;
-  background:${props => (props.background ? "lightblue" : "white")}
+  background:${props => (props.background ? "#FAFAFA" : "white")}
 `;
 const Content = styled.div`
 
@@ -109,8 +109,6 @@ class StudentView extends Component {
     this.setState({ counter: this.state.counter++ });
   }
   renderCourses(enrollments) {
-    console.log("Props", this.props);
-    var _self = this.props;
     return (
       <List>
         {enrollments.map(enrol => (

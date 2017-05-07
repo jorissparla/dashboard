@@ -32,6 +32,46 @@ const styles = {
 
 class CourseCard extends Component {
   state = {};
+
+  constructor(props) {
+    super(props);
+    console.log("THIS", this);
+    this.handleSave = this.handleSave.bind(this);
+  }
+
+  handleSave({
+    id,
+    team,
+    title,
+    description,
+    link,
+    type,
+    hours,
+    startdate,
+    enddate,
+    status,
+    applicable
+  }) {
+    console.log("this.props", this.props);
+    this.props
+      .updateCourse(
+        id,
+        team,
+        title,
+        description,
+        link,
+        type,
+        hours,
+        startdate,
+        enddate,
+        status,
+        applicable
+      )
+      .then(this.props.data.refetch())
+      .then(alert("Updated"))
+      .catch(e => window.alert(JSON.stringify(e, null, 2)));
+  }
+
   render() {
     const { loading, error, course } = this.props.data;
 
@@ -47,7 +87,12 @@ class CourseCard extends Component {
         <Div>
 
           <Right>
-            <CourseForm initialValues={course} course={course} />
+            <CourseForm
+              initialValues={course}
+              course={course}
+              onSave={this.handleSave}
+              readOnly={false}
+            />
           </Right>
           <Left>
             <CourseStudentList students={course.enrollments} />
@@ -58,6 +103,19 @@ class CourseCard extends Component {
     );
   }
 }
+
+const CourseUpdate = gql`
+  mutation  updateCourse($id: ID, $team: String, $title: String, $description:String, 
+    $link: String, $type:String, $hours:Int, $startdate:String, $enddate:String, $status: String, $applicable:String ) {
+    updateCourse(id: $id, team: $team, title: $title, description: $description, 
+      link: $link, type: $type, hours: $hours, startdate: $startdate, enddate: $enddate, status:$status, applicable: $applicable ) {
+        id
+        applicable
+
+    }
+}
+  
+`;
 
 const CourseQuery = gql`
   query course($id: ID) {
@@ -72,10 +130,13 @@ const CourseQuery = gql`
         startdate
         enddate
         hours
+        applicable
+        lastmodified
         enrollments {
           id
           status
           student {
+            id
             fullname
             picture {
               data
@@ -87,6 +148,39 @@ const CourseQuery = gql`
     }
 `;
 
-export default graphql(CourseQuery, {
-  options: ownProps => ({ variables: { id: ownProps.params.id } })
-})(withRouter(CourseCard));
+export default graphql(CourseUpdate, {
+  props: ({ mutate }) => ({
+    updateCourse: (
+      id,
+      team,
+      title,
+      description,
+      link,
+      type,
+      hours,
+      startdate,
+      enddate,
+      status,
+      applicable
+    ) =>
+      mutate({
+        variables: {
+          id,
+          team,
+          title,
+          description,
+          link,
+          type,
+          hours,
+          startdate,
+          enddate,
+          status,
+          applicable
+        }
+      })
+  })
+})(
+  graphql(CourseQuery, {
+    options: ownProps => ({ variables: { id: ownProps.params.id } })
+  })(withRouter(CourseCard))
+);

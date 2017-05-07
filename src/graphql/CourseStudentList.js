@@ -6,6 +6,7 @@ import RaisedButton from "material-ui/RaisedButton";
 import Chip from "material-ui/Chip";
 import Avatar from "material-ui/Avatar";
 import Paper from "material-ui/Paper";
+import { TitleBar } from "../common/TitleBar";
 
 const Title = styled.div`
   font-family:Oswald;
@@ -27,15 +28,15 @@ const StudentList = ({ students }) => {
         display: "flex",
         flexWrap: "wrap",
         flexDirection: "column",
-        marginTop: 10
+        marginTop: 10,
+        marginRight: 5
       }}
     >
-      <Title>Registered</Title>
+      <TitleBar>Registered</TitleBar>
       <Div>
         {students.map(({ student }) => {
-          console.log("student", student);
           return (
-            <Chip style={{ margin: 4 }}>
+            <Chip style={{ margin: 4 }} key={student.id}>
               {student.picture
                 ? <Avatar src={student.picture.data} />
                 : <Avatar
@@ -44,7 +45,7 @@ const StudentList = ({ students }) => {
               {student.fullname}
             </Chip>
           );
-        })}{" "}
+        })}
       </Div>
     </Paper>
   );

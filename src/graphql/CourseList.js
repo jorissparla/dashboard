@@ -5,7 +5,8 @@ import { Link, withRouter } from "react-router";
 import styled from "styled-components";
 import Card from "./Card";
 import SearchBar from "../common/SearchBar";
-
+import { TitleBar } from "../common/TitleBar";
+console.log(TitleBar);
 const StyledContainer = styled.div`
   margin-top: 10px;
   display: flex;
@@ -16,8 +17,16 @@ const StyledContainer = styled.div`
 `;
 
 class CourseList extends Component {
-  state = {};
+  state = { searchText: "" };
 
+  constructor(props) {
+    super(props);
+    this.handleSearchTextChange = this.handleSearchTextChange.bind(this);
+  }
+
+  handleSearchTextChange(val) {
+    this.setState({ searchText: val });
+  }
   render() {
     const { loading, error, supportcard, courses } = this.props.data;
 
@@ -29,19 +38,29 @@ class CourseList extends Component {
     }
     const count = 1; //courses._studentsMeta.count;
     console.log(courses);
+    const filteredCourses = courses.filter(
+      course =>
+        course.title
+          .toUpperCase()
+          .includes(this.state.searchText.toUpperCase()) ||
+        course.team.toUpperCase().includes(this.state.searchText.toUpperCase())
+    );
     return (
       <div>
-        <SearchBar />
+        <TitleBar>Courses</TitleBar>
+        <SearchBar
+          style={{ display: "flex" }}
+          onChange={this.handleSearchTextChange}
+          hintText="Search for title or team...."
+        />
         <StyledContainer>
 
-          {courses.map((course, i) => (
-            <div>
-              <Card
-                course={course}
-                index={i}
-                count={course._studentsMeta.count}
-              />
-            </div>
+          {filteredCourses.map((course, i) => (
+            <Card
+              course={course}
+              index={i}
+              count={course._studentsMeta.count}
+            />
           ))}
         </StyledContainer>
       </div>

@@ -17,7 +17,6 @@ export default ({
   defaultValue = "",
   style
 }) => {
-  console.log(style);
   return (
     <Paper zDepth={3} style={style}>
       <FontIcon style={{ margin: "10px" }}>
