@@ -50,13 +50,18 @@ const Title = styled.div`
 `;
 
 class AddStudentsToCourse extends Component {
-  state = {};
+  state = { searchText: "" };
 
   constructor(props) {
     super(props);
     this.renderStudents = this.renderStudents.bind(this);
+    this.handleSearchChange = this.handleSearchChange.bind(this);
   }
 
+  handleSearchChange(val) {
+    console.log("value", val);
+    this.setState({ searchText: val });
+  }
   renderStudents(students) {
     return students.map(student => (
       <Chip
@@ -89,9 +94,17 @@ class AddStudentsToCourse extends Component {
     const studentsAsString = course.students
       .map(student => student.fullname)
       .join(" ");
-    const filteredAccounts = accounts.filter(
-      account => !studentsAsString.includes(account.fullname)
-    );
+    const filteredAccounts = accounts
+      .filter(account => !studentsAsString.includes(account.fullname))
+      .filter(
+        account =>
+          account.fullname
+            .toUpperCase()
+            .includes(this.state.searchText.toUpperCase()) ||
+          account.team
+            .toUpperCase()
+            .includes(this.state.searchText.toUpperCase())
+      );
     console.log(this.props);
     return (
       <div>
@@ -105,7 +118,10 @@ class AddStudentsToCourse extends Component {
           </Div1>
         </Paper>
         <Paper zDepth={3}>
-          <SearchBar onChange={() => console.log("jaja")} />
+          <SearchBar
+            onChange={this.handleSearchChange}
+            hintText="Search by name"
+          />
         </Paper>
         <List>
           <Divider />

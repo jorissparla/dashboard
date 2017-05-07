@@ -3,36 +3,51 @@ import { List, ListItem } from "material-ui/List";
 import styled from "styled-components";
 import Divider from "material-ui/Divider";
 import RaisedButton from "material-ui/RaisedButton";
-//@ts-check
+import Chip from "material-ui/Chip";
 import Avatar from "material-ui/Avatar";
-import { CardSection } from "../common";
+import Paper from "material-ui/Paper";
 
-const StudentList = ({ students }) => (
-  <div>
-    <CardSection>
-      <RaisedButton label="Add" primary={true} />
-    </CardSection>
-    <List style={{ backgroundColor: "#FFFFFF", marginTop: "10px" }}>
+const Title = styled.div`
+  font-family:Oswald;
+  font-size: 24px;
+  flex:8;
+  width: 100%;
+  background:${props => (props.background ? "lightblue" : "white")}
+`;
 
-      {students.map(student => {
-        console.log("student", student);
-        return (
-          <div key={student.id}>
-            <ListItem
-              primaryText={student.student.fullname}
-              leftAvatar={
-                student.student.picture
-                  ? <Avatar src={student.student.picture.data} />
-                  : <Avatar src="https://randomuser.me/api/portraits/men/42.jpg" />
-              }
-              secondaryText={student.status}
-            />
-            <Divider />
-          </div>
-        );
-      })}
-    </List>
-  </div>
-);
+const Div = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+`;
+
+const StudentList = ({ students }) => {
+  return (
+    <Paper
+      style={{
+        display: "flex",
+        flexWrap: "wrap",
+        flexDirection: "column",
+        marginTop: 10
+      }}
+    >
+      <Title>Registered</Title>
+      <Div>
+        {students.map(({ student }) => {
+          console.log("student", student);
+          return (
+            <Chip style={{ margin: 4 }}>
+              {student.picture
+                ? <Avatar src={student.picture.data} />
+                : <Avatar
+                    src={`https://randomuser.me/api/portraits/men/18.jpg`}
+                  />}
+              {student.fullname}
+            </Chip>
+          );
+        })}{" "}
+      </Div>
+    </Paper>
+  );
+};
 
 export default StudentList;

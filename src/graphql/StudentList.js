@@ -73,7 +73,7 @@ class StudentList extends Component {
             <ListItem
               key={item.id}
               primaryText={item.fullname}
-              secondaryText={`in Team ${item.team}, Location ${item.locationdetail ? item.locationdetail.location : item.location}`}
+              secondaryText={`in Team ${item.team}, Location ${item.locationdetail ? item.locationdetail.location : item.location} has been registered for ${item._courseMeta ? item._courseMeta.count : 0} courses`}
               rightIcon={this.dropdownMenu(item.id)}
               leftAvatar={
                 item.picture

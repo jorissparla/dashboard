@@ -14,10 +14,10 @@ const Div = styled.div`
   display: flex;
 `;
 const Left = styled.div`
-  flex-basis: 20%;
+  flex-basis: 30%;
 `;
 const Right = styled.div`
-  flex-basis : 70%;
+  flex-basis : 65%;
   flex:1;
 `;
 
@@ -60,7 +60,7 @@ class CourseCard extends Component {
 }
 
 const CourseQuery = gql`
-  query course($id: String) {
+  query course($id: ID) {
     course(id: $id ) {
         id
         title

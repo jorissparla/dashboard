@@ -5,6 +5,7 @@ import styled from "styled-components";
 import Card from "./Card";
 import SearchBar from "../common/SearchBar";
 import StudentList from "./StudentList";
+import StudentTable from "./StudentTable";
 import CircularProgress from "material-ui/CircularProgress";
 
 const StyledContainer = styled.div`
@@ -18,6 +19,7 @@ const StyledContainer = styled.div`
 const Div = styled.div`
   display: flex;
   justify-content: center;
+  align-items: center;
 `;
 
 class StudentListContainer extends Component {
@@ -36,7 +38,7 @@ class StudentListContainer extends Component {
     }
     const count = 1; //accounts._studentsMeta.count;
     console.log("rerender");
-    return <StudentList accounts={accounts} />;
+    return <StudentTable accounts={accounts} />;
   }
 }
 
@@ -56,11 +58,15 @@ const accountsQuery = gql`
         locationdetail {
           location
         }
+        _courseMeta {
+            count
+          }
         enrollments {
           status
           course {
             title
           }
+          
         }
     }
   }
