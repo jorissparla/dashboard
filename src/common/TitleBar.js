@@ -2,7 +2,13 @@ import React from "react";
 import styled from "styled-components";
 import RaisedButton from "material-ui/RaisedButton";
 import FlatButton from "material-ui/FlatButton";
-import { blue500, orange800 } from "material-ui/styles/colors";
+import {
+  blue500,
+  orange800,
+  deepPurple500,
+  deepOrange500,
+  grey900
+} from "material-ui/styles/colors";
 
 const TitleBar = styled.div`
   background-Color: #039BE5;
@@ -40,5 +46,28 @@ const CancelRaisedButton = props => (
     {...props}
   />
 );
+const DeleteButton = props => (
+  <FlatButton
+    backgroundColor={grey900}
+    label="Delete"
+    style={{ color: "white", margin: "5px" }}
+    {...props}
+  />
+);
+const RegisterButton = props => (
+  <FlatButton
+    backgroundColor={deepPurple500}
+    label="Register"
+    style={{ color: "white", margin: "5px" }}
+    {...props}
+  />
+);
 
-export { TitleBar, NormalButton, NormalRaisedButton, CancelRaisedButton };
+export {
+  TitleBar,
+  NormalButton,
+  NormalRaisedButton,
+  CancelRaisedButton,
+  DeleteButton,
+  RegisterButton
+};

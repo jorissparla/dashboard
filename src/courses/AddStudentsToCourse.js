@@ -17,6 +17,8 @@ import ContentAdd from "material-ui/svg-icons/content/add";
 import FloatingActionButton from "material-ui/FloatingActionButton";
 import ActionFavorite from "material-ui/svg-icons/action/favorite";
 import ActionFavoriteBorder from "material-ui/svg-icons/action/favorite-border";
+import { TitleBar } from "../common/TitleBar";
+import withAuth from "../utils/withAuth";
 
 const Container = styled.div`
   display: flex;
@@ -26,6 +28,7 @@ const Container = styled.div`
 const Div = styled.div`
   display: flex;
   justify-content: center;
+  margin-top: 10px;
 `;
 const Div1 = styled.div`
   display: flex;
@@ -33,6 +36,15 @@ const Div1 = styled.div`
   flex-wrap: wrap;
   padding-top: 5px;
   padding-bottom: 5px;
+`;
+
+const Left = styled.div`
+  flex-basis: 30%;
+  margin-left: 5px;
+`;
+const Right = styled.div`
+  flex-basis : 65%;
+  flex:1;
 `;
 
 const CheckBoxContainer = styled.div`
@@ -65,11 +77,17 @@ class AddStudentsToCourse extends Component {
   renderStudents(students) {
     return students.map(student => (
       <Chip
-        onRequestDelete={() =>
+        onRequestDelete={() => {
+          console.log(this.props.data, student);
           this.props
-            .removeStudentFromCourse(this.props.data.course.id, student.navid)
-            .then(this.props.data.refetch())}
+            .removeStudentFromCourse({
+              courseid: this.props.data.course.id,
+              navid: student.navid
+            })
+            .then(this.props.data.refetch());
+        }}
         style={{ margin: 4 }}
+        key={student.navid}
       >
         {student.picture
           ? <Avatar src={student.picture.data} />
@@ -109,72 +127,91 @@ class AddStudentsToCourse extends Component {
     return (
       <div>
         <Paper>
-          <Title>Add Students to Course ' {course.title}'</Title>
+          <TitleBar>Add Students to Course ' {course.title}'</TitleBar>
         </Paper>
-        <Paper>
-          <Div1>
 
-            {this.renderStudents(course.students)}
-          </Div1>
-        </Paper>
-        <Paper zDepth={3}>
-          <SearchBar
-            onChange={this.handleSearchChange}
-            hintText="Search by name"
-          />
-        </Paper>
-        <List>
-          <Divider />
-          {filteredAccounts.map((item, index) => {
-            const { id, picture, fullname, location, team, navid } = item;
-            const enabled = false;
-            return (
-              <ListItem
-                key={id}
-                leftAvatar={
-                  <Avatar
-                    src={`https://randomuser.me/api/portraits/men/28.jpg`}
-                  />
-                }
-                primaryText={fullname}
-                secondaryText={`located in ${location}, in team ${team}`}
-                rightIcon={
-                  <FloatingActionButton
-                    mini={true}
-                    backgroundColor={red500}
-                    style={{ marginRight: 20 }}
-                    onClick={() => {
-                      console.log(`clicked ${course.id} ${navid}`);
-                      this.props
-                        .addStudentToCourse(course.id, navid)
-                        .then(this.props.data.refetch());
-                    }}
-                  >
-                    <ContentAdd />
-                  </FloatingActionButton>
-                }
+        <Div>
+          <Right>
+            <Paper zDepth={3}>
+              <SearchBar
+                onChange={this.handleSearchChange}
+                hintText="Search on name or team.."
+                style={{
+                  background: "#FAFAFA",
+                  display: "flex",
+                  borderBottom: "1px solid rgba(0,0,0,0.12)"
+                }}
               />
-            );
-          })}
-        </List>
+            </Paper>
+            <Paper>
+              <List>
+                <Divider />
+                {filteredAccounts.map((item, index) => {
+                  const { id, picture, fullname, location, team, navid } = item;
+                  const enabled = false;
+                  return (
+                    <ListItem
+                      key={id}
+                      leftAvatar={
+                        <Avatar
+                          src={`https://randomuser.me/api/portraits/men/28.jpg`}
+                        />
+                      }
+                      primaryText={fullname}
+                      secondaryText={`located in ${location}, in team ${team}`}
+                      rightIcon={
+                        <FloatingActionButton
+                          mini={true}
+                          backgroundColor={red500}
+                          style={{ marginRight: 20 }}
+                          onClick={() => {
+                            console.log(`clicked ${course.id} ${navid}`);
+                            this.props
+                              .addStudentToCourse({
+                                courseid: course.id,
+                                navid: navid
+                              })
+                              .then(this.props.data.refetch());
+                          }}
+                        >
+                          <ContentAdd />
+                        </FloatingActionButton>
+                      }
+                    />
+                  );
+                })}
+              </List>
+            </Paper>
+          </Right>
+          <Left>
+            <Paper>
+              <Div1>
+
+                {this.renderStudents(course.students)}
+              </Div1>
+            </Paper>
+          </Left>
+        </Div>
       </div>
     );
   }
 }
 
 const addStudentToCourse = gql`
-   mutation addStudentToCourse($courseid:ID, $navid: String){
-      addStudentToCourse(courseid:$courseid, navid: $navid) {
+   mutation addStudentToCourse($input: InputEnrollment){
+      addStudentToCourse(input: $input) {
+        course {
         title
         _studentsMeta {
           count
         }
       }
+      }
 
 }`;
 const removeStudentFromCourse = gql`
-   mutation removeStudentFromCourse($courseid:ID, $navid: String){
-      removeStudentFromCourse(courseid:$courseid, navid: $navid) {
+   mutation removeStudentFromCourse($input: InputEnrollment){
+      removeStudentFromCourse(input: $input) {
         title
         _studentsMeta {
           count
@@ -209,22 +246,22 @@ const selectedCourse = gql`
 `;
 export default graphql(removeStudentFromCourse, {
   props: ({ mutate }) => ({
-    removeStudentFromCourse: (courseid, navid) =>
+    removeStudentFromCourse: input =>
       mutate({
-        variables: { courseid, navid }
+        variables: { input }
       })
   })
 })(
   graphql(addStudentToCourse, {
     props: ({ mutate }) => ({
-      addStudentToCourse: (courseid, navid) =>
+      addStudentToCourse: input =>
         mutate({
-          variables: { courseid, navid }
+          variables: { input }
         })
     })
   })(
     graphql(selectedCourse, {
       options: ownProps => ({ variables: { id: ownProps.params.id } })
-    })(withRouter(AddStudentsToCourse))
+    })(withRouter(withAuth(AddStudentsToCourse)))
   )
 );

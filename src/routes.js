@@ -27,9 +27,9 @@ import KudoListAll from "./kudos/kudolistall";
 import Signin from "./auth/signin";
 import Signout from "./auth/signout";
 import RequireAuth from "./auth/require_auth";
-import Courses from "./courses";
-import CourseAddForm from "./courses/addcourse";
-import CourseEditForm from "./courses/editcourse";
+import Courses from "./courses.old";
+import CourseAddForm from "./courses.old/addcourse";
+import CourseEditForm from "./courses.old/editcourse";
 
 import NewsListContainer from "./news/newslistcontainer";
 import NewsItemContainer from "./news/newsitemcontainer";
@@ -37,11 +37,11 @@ import NewsItemAddContainer from "./news/newsitemaddcontainer";
 
 import SupportCards from "./graphql/SupportCards";
 import SupportCardEdit from "./graphql/SupportCardEdit";
-import CourseList from "./graphql/CourseList";
-import CourseCard from "./graphql/CourseCard";
-import StudentListContainer from "./graphql/StudentListContainer";
-import StudentView from "./graphql/StudentView";
-import AddStudentsToCourse from "./graphql/AddStudentsToCourse";
+import CourseList from "./courses/CourseList";
+import CourseCard from "./courses/CourseCard";
+import StudentListContainer from "./courses/StudentListContainer";
+import StudentView from "./courses/StudentView";
+import AddStudentsToCourse from "./courses/AddStudentsToCourse";
 // validate authentication for private routes
 /*const requireAuth = (nextState, replace) => {
   if (!auth.loggedIn()) {
@@ -79,15 +79,15 @@ export default (
     <Route path="signout" component={Signout} />
     <Route path="historyday" component={HistoryDayContainer} />
     <Route path="historyall" component={HistoryDayAll} />
-    <Route path="/courses" component={RequireAuth(Courses)} />
-    <Route path="/courses/edit/:crs_UIC" component={CourseEditForm} />
-    <Route path="courses/new" component={CourseAddForm} />
+    <Route path="/courseso" component={RequireAuth(Courses)} />
+    <Route path="/courseso/edit/:crs_UIC" component={CourseEditForm} />
+    <Route path="courseso/new" component={CourseAddForm} />
     <Route path="test/edit/:id" component={NewsItemContainer} />
     <Route path="test/new" component={NewsItemAddContainer} />
-    <Route path="test/list" component={CourseList} />
-    <Route path="test/students" component={StudentListContainer} />
-    <Route path="test/students/:id" component={StudentView} />
-    <Route path="test/list/course/:id" component={CourseCard} />
-    <Route path="test/list/students/:id" component={AddStudentsToCourse} />
+    <Route path="/courses" component={CourseList} />
+    <Route path="/students" component={StudentListContainer} />
+    <Route path="/students/:id" component={StudentView} />
+    <Route path="/courses/edit/:id" component={CourseCard} />
+    <Route path="/courses/addstudents/:id" component={AddStudentsToCourse} />
   </Route>
 );

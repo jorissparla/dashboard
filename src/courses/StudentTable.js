@@ -76,7 +76,7 @@ class StudentTables extends Component {
       >
         <MenuItem
           primaryText="View"
-          onClick={() => browserHistory.push(`/test/students/${id}`)}
+          onClick={() => browserHistory.push(`/students/${id}`)}
         />
         <MenuItem primaryText="Send feedback" />
         <MenuItem primaryText="Sign out" />

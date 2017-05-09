@@ -1,183 +1,99 @@
-import React from "react";
+import React, { Component } from "react";
+
+import { Link, withRouter, browserHistory } from "react-router";
+import styled from "styled-components";
+import Card from "./Card";
+import SearchBar from "../common/SearchBar";
 import { List, ListItem } from "material-ui/List";
 import Divider from "material-ui/Divider";
-import Avatar from "material-ui/Avatar";
-import TextField from "material-ui/TextField";
+import RaisedButton from "material-ui/RaisedButton";
 import Paper from "material-ui/Paper";
-import FontIcon from "material-ui/FontIcon";
-import { red500 } from "material-ui/styles/colors";
-import styled from "styled-components";
-import { connect } from "react-redux";
-import {
-  fetchAccounts,
-  toggleEnrollStudent,
-  findStudents,
-  toggleCourseComplete
-} from "../actions";
-import Checkbox from "material-ui/Checkbox";
-import ActionFavorite from "material-ui/svg-icons/action/favorite";
-import ActionFavoriteBorder from "material-ui/svg-icons/action/favorite-border";
+import IconMenu from "material-ui/IconMenu";
+import MenuItem from "material-ui/MenuItem";
+import IconButton from "material-ui/IconButton";
+import MoreVertIcon from "material-ui/svg-icons/navigation/more-vert";
+//@ts-check
+import Avatar from "material-ui/Avatar";
+import { pinkA200, transparent } from "material-ui/styles/colors";
 
-const SearchField = styled(TextField)`
-  margin-left: 20px;
-`;
-
-const Container = styled.div`
+const StyledContainer = styled.div`
+  margin-top: 10px;
   display: flex;
   flex-direction: row;
-`;
-const CheckBoxContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  float: right;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+ 
 `;
 
-class StudentList extends React.Component {
+class StudentList extends Component {
+  state = { searchText: "" };
   constructor(props) {
     super(props);
-    this.handleSearchKeyPressed = this.handleSearchKeyPressed.bind(this);
-    this.handleUpdate = this.handleUpdate.bind(this);
-
-    this.state = { searchTerm: "", enrolledList: [] };
+    this.handleSearchChange = this.handleSearchChange.bind(this);
+    this.dropdownMenu = this.dropdownMenu.bind(this);
   }
 
-  async componentDidMount() {
-    await this.props.fetchAccounts();
-
-    await this.props.findStudents(this.props.course.crs_UIC);
-    const l = this.props.students.map(student => {
-      return {
-        student,
-        checked: this.props.enrolled.some(
-          item => item.acr_navid === student.navid
-        )
-      };
-    });
-    this.setState({ enrolledList: l });
+  handleSearchChange(e) {
+    this.setState({ searchText: e });
   }
 
-  handleSearchKeyPressed(e) {
-    // If (e.key === 'Enter') {
-    this.setState({ searchTerm: e.target.value });
-    // }
-  }
-
-  handleUpdate() {
-    const nr = this.state.enrolledList.reduce(
-      (total, item) => (item.checked ? total + 1 : total),
-      0
+  dropdownMenu(id) {
+    console.log("id", id);
+    return (
+      <IconMenu
+        iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+        anchorOrigin={{ horizontal: "left", vertical: "top" }}
+        targetOrigin={{ horizontal: "left", vertical: "top" }}
+      >
+        <MenuItem
+          primaryText="View"
+          onClick={() => browserHistory.push(`/test/students/${id}`)}
+        />
+        <MenuItem primaryText="Send feedback" />
+        <MenuItem primaryText="Sign out" />
+      </IconMenu>
     );
-    this.props.onCount(nr);
   }
 
   render() {
-    //
-    if (!this.props.students) {
-      return <div>Loading....</div>;
-    }
-    const { searchTerm } = this.state;
-    const { course } = this.props;
-    const studentList = this.props.students.filter(
-      student =>
-        student.fullname.toUpperCase().includes(searchTerm.toUpperCase()) ||
-        student.team.toUpperCase().includes(searchTerm.toUpperCase())
+    const { accounts } = this.props;
+
+    const filteredAccounts = accounts.filter(
+      account =>
+        account.fullname
+          .toUpperCase()
+          .includes(this.state.searchText.toUpperCase()) ||
+        account.team.toUpperCase().includes(this.state.searchText.toUpperCase())
     );
     return (
-      <div>
-        <Paper zDepth={3}>
-          <FontIcon className="material-icons">
-            <SearchField
-              hintText="Search"
-              underlineShow={false}
-              onKeyPress={this.handleSearchKeyPressed}
-            />
-          </FontIcon>
-        </Paper>
+      <Paper>
+        <SearchBar onChange={this.handleSearchChange} />
         <List>
-          <Divider />
-          {this.state.enrolledList.map((item, index) => {
-            const {
-              uic,
-              picture,
-              fullname,
-              location,
-              team,
-              navid
-            } = item.student;
-            const enabled = item.checked;
-            return (
-              <Container key={uic}>
-                <ListItem
-                  leftAvatar={<Avatar src={picture} />}
-                  primaryText={fullname}
-                  secondaryText={`located in ${location}, in team ${team}`}
-                />
-                <CheckBoxContainer>
-                  <Checkbox
-                    checkedIcon={<ActionFavorite color={red500} />}
-                    uncheckedIcon={<ActionFavoriteBorder />}
-                    label="Enrolled"
-                    checked={enabled}
-                    onCheck={() => {
-                      let val = {
-                        acr_navid: navid,
-                        acr_crs_UIC: course.crs_UIC
-                      };
-                      const o = this.state.enrolledList;
-
-                      this.props.toggleEnrollStudent(val);
-                      o[index].checked = o[index].checked ? false : true;
-                      this.setState({ enrolledList: o });
-                      this.handleUpdate();
-                    }}
-                  />
-                  <Checkbox
-                    label="Complete"
-                    checked={enabled}
-                    onCheck={() => {
-                      let val = {
-                        acr_navid: navid,
-                        acr_crs_UIC: course.crs_UIC
-                      };
-                      const o = this.state.enrolledList;
-
-                      this.props.toggleCourseComplete(val);
-                      o[index].checked = o[index].checked ? false : true;
-                      this.setState({ enrolledList: o });
-                      this.handleUpdate();
-                    }}
-                  />
-                </CheckBoxContainer>
-                <Divider />
-              </Container>
-            );
-          })}
+          {filteredAccounts.map((item, i) => (
+            <ListItem
+              key={item.id}
+              primaryText={item.fullname}
+              secondaryText={`in Team ${item.team}, Location ${item.locationdetail ? item.locationdetail.location : item.location} has been registered for ${item._courseMeta ? item._courseMeta.count : 0} courses`}
+              rightIcon={this.dropdownMenu(item.id)}
+              leftAvatar={
+                item.picture
+                  ? <Avatar src={item.picture.data} />
+                  : <Avatar
+                      color={pinkA200}
+                      backgroundColor={transparent}
+                      style={{ left: 8 }}
+                    >
+                      {item.fullname
+                        .slice(0, 1)
+                        .concat(item.lastname.slice(0, 1))}
+                    </Avatar>
+              }
+            />
+          ))}
         </List>
-      </div>
+      </Paper>
     );
   }
 }
 
-const mapStateToProps = state => {
-  console.dir(state);
-  return {
-    enrolled: state.courses.students,
-    students: state.main.accounts
-      .filter(
-        account =>
-          account.region === "EMEA" &&
-          (account.team === "TLS" ||
-            account.team === "LOG" ||
-            account.team === "FIN")
-      )
-      .sort((a, b) => a.fullname > b.fullname)
-  };
-};
-
-export default connect(mapStateToProps, {
-  fetchAccounts,
-  toggleEnrollStudent,
-  findStudents,
-  toggleCourseComplete
-})(StudentList);
+export default StudentList;

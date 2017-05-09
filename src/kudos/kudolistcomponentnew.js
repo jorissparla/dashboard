@@ -5,7 +5,7 @@ import moment from "moment";
 import getMuiTheme from "material-ui/styles/getMuiTheme";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import styled from "styled-components";
-import { Card } from "../courses/card";
+import { Card } from "./card";
 import { deepOrange500 } from "material-ui/styles/colors";
 
 const Outer = styled.div`

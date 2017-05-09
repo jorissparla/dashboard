@@ -5,7 +5,6 @@ import FlatButton from "material-ui/FlatButton";
 import Badge from "material-ui/Badge";
 import { blue500 } from "material-ui/styles/colors";
 import { Link } from "react-router";
-import StudentsCard from "./StudentsCard";
 
 const imgList = [
   "https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/auth.png",
@@ -25,13 +24,12 @@ const StyledContainer = styled(Paper)`
   padding: 10px;
   width:22%;
   min-width:200px;
-  margin: 5px;
-  justify-content: space-between;
+  margin-bottom: 5px;
 `;
 
 const StyledImage = styled.img`
   width: 100%;
-  height: 100px;
+  height: 150px;
    object-fit: cover;
 `;
 const Title = styled.div`
@@ -85,28 +83,27 @@ float:right;
 export default ({ course, index, count }) => {
   const image = imgList[index % 7];
   return (
-    <StyledContainer key={course.id}>
+    <StyledContainer key={course.crs_UIC}>
       <StyledImage src={image} />
-      <StyledHyperLink to={course.link} title={course.link}>
+      <StyledHyperLink to={course.crs_link} title={course.crs_link}>
         <Title>
-          {course.title}
+          {course.crs_title}
 
         </Title>
         <StyledBadge badgeContent={count} primary={true} />
       </StyledHyperLink>
       <StyledBody>
-        {course.description}
+        {course.crs_description}
       </StyledBody>
       <BottomStyle>
-        <TeamSpan>{course.team}</TeamSpan>
-        <StyledLink to={`courses/edit/${course.id}`}>
+        <TeamSpan>{course.crs_team}</TeamSpan>
+        <StyledLink to={`courses/edit/${course.crs_UIC}`}>
           <FlatButton
             backgroundColor={blue500}
-            label="View"
+            label="Modify"
             style={{ color: "white" }}
           />
         </StyledLink>
-
       </BottomStyle>
     </StyledContainer>
   );

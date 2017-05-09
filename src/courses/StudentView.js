@@ -18,6 +18,11 @@ import MapsPlace from "material-ui/svg-icons/maps/place";
 import RaisedButton from "material-ui/RaisedButton";
 import ContentFilter from "material-ui/svg-icons/content/filter-list";
 import FileFileDownload from "material-ui/svg-icons/file/file-download";
+import Chip from "material-ui/Chip";
+import moment from "moment";
+import { MenuBar, MenuBarItem } from "../common/MenuBar";
+import { TitleBar } from "../common/TitleBar";
+import SearchBar from "../common/SearchBar";
 
 const Div = styled.div`
   display: flex;
@@ -52,14 +57,18 @@ const Content = styled.div`
 `;
 
 class StudentView extends Component {
-  state = { counter: 0 };
+  state = { counter: 0, searchText: "" };
 
   constructor(props) {
     super(props);
     this.renderCourses = this.renderCourses.bind(this);
     this.updateEnrollStatus = this.updateEnrollStatus.bind(this);
+    this.handleSearchTextChange = this.handleSearchTextChange.bind(this);
   }
 
+  handleSearchTextChange(val) {
+    this.setState({ searchText: val });
+  }
   showCourseMenu() {
     return (
       <IconMenu
@@ -95,17 +104,24 @@ class StudentView extends Component {
           primaryText="Planned"
           onClick={() => this.updateEnrollStatus(enrol, "Planned")}
         />
-        <MenuItem primaryText="Help" />
-        <MenuItem primaryText="Sign out" />
+        <MenuItem
+          primaryText="View Course"
+          leftIcon={<FileFileDownload />}
+          onClick={() =>
+            (window.location.href = `/courses/edit/${enrol.course.id}`)}
+        />
       </IconMenu>
     );
   }
 
   updateEnrollStatus(enrol, status) {
     const { updateStatus } = this.props;
-    updateStatus(enrol.id, enrol.course.id, enrol.navid, status).then(
-      this.props.data.refetch()
-    );
+    updateStatus({
+      id: enrol.id,
+      courseid: enrol.course.id,
+      navid: enrol.navid,
+      status: status
+    }).then(this.props.data.refetch());
     this.setState({ counter: this.state.counter++ });
   }
   renderCourses(enrollments) {
@@ -124,9 +140,17 @@ class StudentView extends Component {
               </Avatar>
             }
             secondaryText={
-              <p
-              >{`${enrol.course.description}, ${enrol.course.hours} hours`}</p>
+              <div style={{ display: "flex" }}>
+                <div style={{ margin: 4 }}>
+                  {`${enrol.course.description}, ${enrol.course.hours} hours, status: ${enrol.status} `}
+                </div>
+                <Chip style={{ margin: 2 }}>
+                  {`Start  ${moment(enrol.course.startdate).calendar()}`}
+                </Chip>
+
+              </div>
             }
+            secondaryTextLines={2}
             rightToggle={this.showEnrollMenu(enrol)}
           />
         ))}
@@ -136,7 +160,7 @@ class StudentView extends Component {
 
   render() {
     const { loading, error, account } = this.props.data;
-    console.log("rerender");
+    console.log("rerender", account);
     if (loading) {
       return <p>Loading ...</p>;
     }
@@ -145,6 +169,10 @@ class StudentView extends Component {
     }
     return (
       <div>
+        <MenuBar>
+          <MenuBarItem onClick={() => alert("Clicked")}>Courses</MenuBarItem>
+          <MenuBarItem>Students</MenuBarItem>
+        </MenuBar>
         <Paper>
           <Container>
             <ProfilePicture>
@@ -167,12 +195,19 @@ class StudentView extends Component {
           </Container>
         </Paper>
         <Paper style={{ marginTop: 40 }}>
-          <Container>
-            <Title background>
-              Courses {this.showCourseMenu()}
-            </Title>
-
-          </Container>
+          <TitleBar background>
+            {this.showCourseMenu()} Registered
+          </TitleBar>
+          <SearchBar
+            onChange={this.handleSearchTextChange}
+            hintText="Search on title.."
+            style={{
+              background: "#F5F5F5",
+              display: "flex",
+              borderBottom: "1px solid rgba(0,0,0,0.12)"
+            }}
+          />
+          <Container />
           <Content>
             {this.renderCourses(account.enrollments)}
           </Content>
@@ -204,6 +239,8 @@ const queryProfile = gql`
           title
           hours
           description
+          startdate
+
         }
       }
     }
@@ -211,21 +248,23 @@ const queryProfile = gql`
 `;
 
 const updateStatus = gql`
-  mutation updateStatus($id: ID, $courseid: String, $navid: String, $status: String) {
-    setStudentCourseStatus(id: $id, courseid: $courseid, navid: $navid, status: $status) {
-      course {
-        title
+  mutation updateStatus($input: UpdateEnrollment) {
+    setStudentCourseStatus(input: $input) {
+      enrollment {
+        course {
+          title
+        }
+        status
       }
-      status
     }
   }
 `;
 
 export default graphql(updateStatus, {
   props: ({ mutate }) => ({
-    updateStatus: (id, courseid, navid, status) =>
+    updateStatus: input =>
       mutate({
-        variables: { id, courseid, navid, status }
+        variables: { input }
       })
   })
 })(

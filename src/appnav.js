@@ -6,9 +6,19 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import Avatar from "material-ui/Avatar";
 import getMuiTheme from "material-ui/styles/getMuiTheme";
 import ActionHome from "material-ui/svg-icons/action/home";
+import PeopleIcon from "material-ui/svg-icons/social/people";
+import PageIcon from "material-ui/svg-icons/social/pages";
 import MenuIcon from "material-ui/svg-icons/navigation/menu";
+import IconMenu from "material-ui/IconMenu";
 import Drawer from "material-ui/Drawer";
 import MenuItem from "material-ui/MenuItem";
+import {
+  Toolbar,
+  ToolbarGroup,
+  ToolbarSeparator,
+  ToolbarTitle
+} from "material-ui/Toolbar";
+
 import FlatButton from "material-ui/FlatButton";
 import { connect } from "react-redux";
 import { Link } from "react-router";
@@ -33,6 +43,16 @@ const styles = {
   }
 };
 
+const HamburgerMenu = () => {
+  return (
+    <div>
+      <MenuItem primaryText="Courses" leftIcon={<PageIcon />} />
+      <MenuItem primaryText="Students" leftIcon={<PeopleIcon />} />
+      <MenuItem primaryText="Sign out" />
+    </div>
+  );
+};
+
 const Header = React.createClass({
   renderButtons() {
     let logOutLink = <Link to="signout" />;
@@ -48,6 +68,24 @@ const Header = React.createClass({
       return <FlatButton containerElement={logInLink} label="Login" />;
     }
   },
+
+  renderAppBar() {
+    return (
+      <AppBar
+        style={styles}
+        showMenuIconButton={true}
+        title={
+          <span style={styles.title}>
+            Infor Support Dashboard
+          </span>
+        }
+        onLeftIconButtonTouchTap={() => window.alert("Menu")}
+        onTitleTouchTap={handleTouchTap}
+        iconElementRight={this.renderButtons()}
+      />
+    );
+  },
+
   render() {
     let homeLink = <Link to={"/"} />;
     const picture =
@@ -55,26 +93,7 @@ const Header = React.createClass({
       "https://randomuser.me/api/portraits/men/20.jpg";
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
-        <AppBar
-          style={styles}
-          showMenuIconButton={true}
-          title={
-            <span style={styles.title}>
-              Infor Support Dashboard
-            </span>
-          }
-          //children={<AppMenu open={true} />}
-          onLeftIconButtonTouchTap={() => window.alert("Menu")}
-          onTitleTouchTap={handleTouchTap}
-          /*          iconElementLeft={
-            <IconButton containerElement={homeLink}>
-              {this.props.authenticated
-                ? <Avatar src={picture} />
-                : <ActionHome />}
-            </IconButton>
-          }*/
-          iconElementRight={this.renderButtons()}
-        />
+        {this.renderAppBar()}
       </MuiThemeProvider>
     );
   }

@@ -14,8 +14,11 @@ import {
   NormalButton,
   NormalRaisedButton,
   CancelRaisedButton,
+  DeleteButton,
+  RegisterButton,
   TitleBar
 } from "../common/TitleBar";
+import withAuth from "../utils/withAuth";
 
 const buttonStyleCancel = {
   backgroundColor: "black",
@@ -76,7 +79,8 @@ class CourseForm extends Component {
     this.props.onSave(e);
   }
   render() {
-    const { handleSubmit, course, onSave, readOnly = true } = this.props;
+    const { handleSubmit, course, onSave, authenticated } = this.props;
+    const readOnly = !authenticated;
     return (
       <form onSubmit={handleSubmit(this.handleSubmit)}>
 
@@ -229,6 +233,14 @@ class CourseForm extends Component {
               type="reset"
               onClick={() => (window.location.href = "/courses")}
             />
+            {!readOnly && <DeleteButton label="Delete" />}
+            {!readOnly &&
+              <RegisterButton
+                label="Register"
+                onClick={() =>
+                  (window.location.href =
+                    "/courses/addstudents/" + this.props.course.id)}
+              />}
             <Chip style={{ margin: 4 }}>
               {`Last updated  ${moment(course.lastmodified).calendar()}`}
             </Chip>
@@ -242,5 +254,5 @@ class CourseForm extends Component {
 }
 
 export default reduxForm({ form: "courseform", enableReinitialize: true })(
-  CourseForm
+  withAuth(CourseForm)
 );

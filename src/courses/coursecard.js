@@ -1,110 +1,163 @@
-import React from "react";
-import Paper from "material-ui/Paper";
-import styled from "styled-components";
-import FlatButton from "material-ui/FlatButton";
-import Badge from "material-ui/Badge";
+import React, { Component } from "react";
+import { gql, graphql } from "react-apollo";
+import { Tabs, Tab } from "material-ui/Tabs";
 import { blue500 } from "material-ui/styles/colors";
-import { Link } from "react-router";
+import { withRouter } from "react-router";
+import { List, ListItem } from "material-ui/List";
+import styled from "styled-components";
+import Divider from "material-ui/Divider";
+import Avatar from "material-ui/Avatar";
+import CourseForm from "./CourseForm";
+import CourseStudentList from "./CourseStudentList";
 
-const imgList = [
-  "https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/auth.png",
-  "https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/analytics.png",
-  "https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/storage.png",
-  "https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/hosting.png",
-  "https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/database.png",
-  "https://www.gstatic.com/mobilesdk/170215_mobilesdk/discoveryCards/2x/functions.png",
-  "https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/crash.png",
-  "https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/amb.png"
-];
-
-const StyledContainer = styled(Paper)`
+const Div = styled.div`
   display: flex;
-  flex-direction: column;
-  border: 1 px solid blue;
-  padding: 10px;
-  width:22%;
-  min-width:200px;
-  margin-bottom: 5px;
+`;
+const Left = styled.div`
+  flex-basis: 30%;
+`;
+const Right = styled.div`
+  flex-basis : 65%;
+  flex:1;
 `;
 
-const StyledImage = styled.img`
-  width: 100%;
-  height: 150px;
-   object-fit: cover;
-`;
-const Title = styled.div`
-  font-family: Roboto;
-  font-size: 18px;
-  font-weight: 800;
-  padding: 2px;
-  display: flex;
-  align-items: space-between;
-  margin-top: 10px;
-`;
-const StyledBody = styled.p`
-  margin: 5px;
-  margin-bottom: 20px;
-    font-size: 15px;
-`;
-const BottomStyle = styled.div`
-  display:flex;
-  flex-direction: row;
-  width:100%;
-  justify-content: center;
-`;
-
-const TeamSpan = styled.div`
-  width: 20%;
-  color: orange;
-  margin-right: 5px;
-  flex-grow: 1;
-`;
-const StyledLink = styled(Link)`
-  text-decoration: none;
-    :hover {
-    background:#0196F3;
-    color: white;
+const styles = {
+  headline: {
+    fontSize: 24,
+    paddingTop: 16,
+    backgroundColor: "#2196F3",
+    fontWeight: 400
   }
-`;
-const StyledHyperLink = styled(Link)`
-  text-decoration: none;
-  :hover {
-    cursor:pointer;
-  }
-  display: flex;
-  justify-content: space-between;
-`;
-const StyledBadge = styled(Badge)`
-float:right;
-  align-content: center;
-  padding: 2px;
-  margin-top: 15px;
-`;
-export default ({ course, index, count }) => {
-  const image = imgList[index % 7];
-  return (
-    <StyledContainer key={course.crs_UIC}>
-      <StyledImage src={image} />
-      <StyledHyperLink to={course.crs_link} title={course.crs_link}>
-        <Title>
-          {course.crs_title}
-
-        </Title>
-        <StyledBadge badgeContent={count} primary={true} />
-      </StyledHyperLink>
-      <StyledBody>
-        {course.crs_description}
-      </StyledBody>
-      <BottomStyle>
-        <TeamSpan>{course.crs_team}</TeamSpan>
-        <StyledLink to={`courses/edit/${course.crs_UIC}`}>
-          <FlatButton
-            backgroundColor={blue500}
-            label="Modify"
-            style={{ color: "white" }}
-          />
-        </StyledLink>
-      </BottomStyle>
-    </StyledContainer>
-  );
 };
+
+class CourseCard extends Component {
+  state = {};
+
+  constructor(props) {
+    super(props);
+    console.log("THIS", this);
+    this.handleSave = this.handleSave.bind(this);
+  }
+
+  handleSave({
+    id,
+    team,
+    title,
+    description,
+    link,
+    type,
+    hours,
+    startdate,
+    enddate,
+    status,
+    applicable
+  }) {
+    console.log("this.props", this.props);
+    this.props
+      .updateCourse({
+        id,
+        team,
+        title,
+        description,
+        link,
+        type,
+        hours,
+        startdate,
+        enddate,
+        status,
+        applicable
+      })
+      .then(this.props.data.refetch())
+      .then(alert("Updated"))
+      .catch(e => window.alert(JSON.stringify(e, null, 2)));
+  }
+
+  render() {
+    const { loading, error, course } = this.props.data;
+
+    if (loading) {
+      return <p>Loading ...</p>;
+    }
+    if (error) {
+      return <p>{error.message}</p>;
+    }
+    console.log("course", course);
+    return (
+      <div>
+        <Div>
+
+          <Right>
+            <CourseForm
+              initialValues={course}
+              course={course}
+              onSave={this.handleSave}
+              readOnly={false}
+            />
+          </Right>
+          <Left>
+            <CourseStudentList students={course.enrollments} />
+          </Left>
+        </Div>
+
+      </div>
+    );
+  }
+}
+
+const CourseUpdate = gql`
+  mutation  updateCourse($input: InputCourseType ) {
+    updateCourse(input: $input ) {
+      course {
+        id
+        applicable
+        }
+    }
+}
+  
+`;
+
+const CourseQuery = gql`
+  query course($id: ID) {
+    course(id: $id ) {
+        id
+        title
+        description
+        team
+        link
+        status
+        type
+        startdate
+        enddate
+        hours
+        applicable
+        lastmodified
+        enrollments {
+          id
+          status
+          student {
+            id
+            fullname
+            picture {
+              data
+            }
+          }
+        }
+        
+    }
+    }
+`;
+
+export default graphql(CourseUpdate, {
+  props: ({ mutate }) => ({
+    updateCourse: input =>
+      mutate({
+        variables: {
+          input
+        }
+      })
+  })
+})(
+  graphql(CourseQuery, {
+    options: ownProps => ({ variables: { id: ownProps.params.id } })
+  })(withRouter(CourseCard))
+);
