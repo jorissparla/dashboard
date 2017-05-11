@@ -14,7 +14,7 @@ const StyledContainer = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: flex-start;
- 
+  
 `;
 
 class CourseList extends Component {
