@@ -11,6 +11,7 @@ import IconMenu from "material-ui/IconMenu";
 import MenuItem from "material-ui/MenuItem";
 import IconButton from "material-ui/IconButton";
 import MoreVertIcon from "material-ui/svg-icons/navigation/more-vert";
+import DownIcon from "material-ui/svg-icons/navigation/expand-more";
 import DropDownIcon
   from "material-ui/svg-icons/navigation/arrow-drop-down-circle";
 import System from "material-ui/svg-icons/action/done-all";
@@ -23,6 +24,7 @@ import moment from "moment";
 import { MenuBar, MenuBarItem } from "../common/MenuBar";
 import { TitleBar } from "../common/TitleBar";
 import SearchBar from "../common/SearchBar";
+import withAuth from "../utils/withAuth";
 
 const Div = styled.div`
   display: flex;
@@ -88,7 +90,7 @@ class StudentView extends Component {
   showEnrollMenu(enrol) {
     return (
       <IconMenu
-        iconButtonElement={<IconButton><DropDownIcon /></IconButton>}
+        iconButtonElement={<IconButton><DownIcon /></IconButton>}
         anchorOrigin={{ horizontal: "left", vertical: "top" }}
         targetOrigin={{ horizontal: "left", vertical: "top" }}
       >
@@ -125,6 +127,7 @@ class StudentView extends Component {
     this.setState({ counter: this.state.counter++ });
   }
   renderCourses(enrollments) {
+    const authenticated = this.props.authenticated;
     return (
       <List>
         {enrollments.map(enrol => (
@@ -151,7 +154,7 @@ class StudentView extends Component {
               </div>
             }
             secondaryTextLines={2}
-            rightToggle={this.showEnrollMenu(enrol)}
+            rightToggle={authenticated && this.showEnrollMenu(enrol)}
           />
         ))}
       </List>
@@ -159,7 +162,8 @@ class StudentView extends Component {
   }
 
   render() {
-    const { loading, error, account } = this.props.data;
+    const { loading, error, account, authenticated } = this.props.data;
+    const readOnly = !authenticated;
     console.log("rerender", account);
     if (loading) {
       return <p>Loading ...</p>;
@@ -169,10 +173,6 @@ class StudentView extends Component {
     }
     return (
       <div>
-        <MenuBar>
-          <MenuBarItem onClick={() => alert("Clicked")}>Courses</MenuBarItem>
-          <MenuBarItem>Students</MenuBarItem>
-        </MenuBar>
         <Paper>
           <Container>
             <ProfilePicture>
@@ -196,7 +196,7 @@ class StudentView extends Component {
         </Paper>
         <Paper style={{ marginTop: 40 }}>
           <TitleBar background>
-            {this.showCourseMenu()} Registered
+            Registered
           </TitleBar>
           <SearchBar
             onChange={this.handleSearchTextChange}
@@ -270,5 +270,5 @@ export default graphql(updateStatus, {
 })(
   graphql(queryProfile, {
     options: ownProps => ({ variables: { id: ownProps.params.id } })
-  })(withRouter(StudentView))
+  })(withRouter(withAuth(StudentView)))
 );

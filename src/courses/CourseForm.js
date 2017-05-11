@@ -10,6 +10,7 @@ import RaisedButton from "material-ui/RaisedButton";
 import Chip from "material-ui/Chip";
 import moment from "moment";
 import styled from "styled-components";
+import { blue500 } from "material-ui/styles/colors";
 import {
   NormalButton,
   NormalRaisedButton,
@@ -104,6 +105,16 @@ class CourseForm extends Component {
               floatingLabelText="hours"
               style={{ flex: 2, width: 50 }}
             />
+            <Field
+              name="trainer"
+              disabled={readOnly}
+              textFieldStyle={{ width: 50 }}
+              hintText="Trainer"
+              underlineShow={true}
+              component={Input}
+              floatingLabelText="Trainer"
+              style={{ flex: 2, width: 50 }}
+            />
             <SelectStyle>
               <Field
                 name="status"
@@ -120,6 +131,7 @@ class CourseForm extends Component {
                   <MenuItem key={id} value={name} primaryText={name} />
                 ))}
               </Field>
+
             </SelectStyle>
           </CardSection>
           <CardSection>
@@ -129,8 +141,9 @@ class CourseForm extends Component {
               hintText="Description"
               underlineShow={true}
               component={Input}
+              multiline={true}
               rows={2}
-              maxRows={4}
+              rowsMax={4}
               fullWidth={true}
               floatingLabelText="description"
             />
@@ -214,6 +227,7 @@ class CourseForm extends Component {
               component={Input}
               floatingLabelText="Applicable for"
               floatingLabelText="Applicable for"
+              underlineShow={true}
             />
             <Field
               name="link"
@@ -221,10 +235,11 @@ class CourseForm extends Component {
               component={Input}
               floatingLabelText="link"
               floatingLabelText="Link"
+              underlineShow={true}
+              fullWidth={true}
             />
 
           </CardSection>
-          <Divider />
           <CardSection>
             {!readOnly && <NormalRaisedButton label="Submit" type="submit" />}
             <CancelRaisedButton

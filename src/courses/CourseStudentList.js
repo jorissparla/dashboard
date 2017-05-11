@@ -1,5 +1,6 @@
 import React from "react";
 import { List, ListItem } from "material-ui/List";
+import { browserHistory } from "react-router";
 import styled from "styled-components";
 import Divider from "material-ui/Divider";
 import RaisedButton from "material-ui/RaisedButton";
@@ -7,6 +8,7 @@ import Chip from "material-ui/Chip";
 import Avatar from "material-ui/Avatar";
 import Paper from "material-ui/Paper";
 import { TitleBar } from "../common/TitleBar";
+import { blue500 } from "material-ui/styles/colors";
 
 const Title = styled.div`
   font-family:Oswald;
@@ -36,7 +38,15 @@ const StudentList = ({ students }) => {
       <Div>
         {students.map(({ student }) => {
           return (
-            <Chip style={{ margin: 4 }} key={student.id}>
+            <Chip
+              style={{
+                margin: 4,
+                backgroundColor: "#B3E5FC",
+                color: "#FFFFFF"
+              }}
+              key={student.id}
+              onClick={() => browserHistory.push(`/students/${student.id}`)}
+            >
               {student.picture
                 ? <Avatar src={student.picture.data} />
                 : <Avatar

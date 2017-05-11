@@ -50,7 +50,8 @@ class CourseCard extends Component {
     startdate,
     enddate,
     status,
-    applicable
+    applicable,
+    trainer
   }) {
     console.log("this.props", this.props);
     this.props
@@ -65,7 +66,8 @@ class CourseCard extends Component {
         startdate,
         enddate,
         status,
-        applicable
+        applicable,
+        trainer
       })
       .then(this.props.data.refetch())
       .then(alert("Updated"))
@@ -130,6 +132,7 @@ const CourseQuery = gql`
         enddate
         hours
         applicable
+        trainer
         lastmodified
         enrollments {
           id
