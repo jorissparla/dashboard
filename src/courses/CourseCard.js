@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { gql, graphql } from "react-apollo";
 import { Tabs, Tab } from "material-ui/Tabs";
 import { blue500 } from "material-ui/styles/colors";
-import { withRouter } from "react-router";
+import { withRouter, browserHistory } from "react-router";
 import { List, ListItem } from "material-ui/List";
 import styled from "styled-components";
 import Divider from "material-ui/Divider";
@@ -37,6 +37,15 @@ class CourseCard extends Component {
     super(props);
     console.log("THIS", this);
     this.handleSave = this.handleSave.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
+  }
+
+  handleDelete({ id }) {
+    this.props
+      .deleteCourse({ id })
+      .then(this.props.data.refetch())
+      .then(() => (window.location.href = "/courses"))
+      .catch(e => alert(JSON.stringify(e, null, 2)));
   }
 
   handleSave({
@@ -93,6 +102,7 @@ class CourseCard extends Component {
               initialValues={course}
               course={course}
               onSave={this.handleSave}
+              onDelete={this.handleDelete}
               readOnly={false}
             />
           </Right>
@@ -105,6 +115,14 @@ class CourseCard extends Component {
     );
   }
 }
+
+const CourseDelete = gql`
+  mutation deleteCourse($input: InputCourseType) {
+    deleteCourse(input: $input) {
+      text
+      }
+  }
+`;
 
 const CourseUpdate = gql`
   mutation  updateCourse($input: InputCourseType ) {
@@ -150,9 +168,9 @@ const CourseQuery = gql`
     }
 `;
 
-export default graphql(CourseUpdate, {
+export default graphql(CourseDelete, {
   props: ({ mutate }) => ({
-    updateCourse: input =>
+    deleteCourse: input =>
       mutate({
         variables: {
           input
@@ -160,7 +178,18 @@ export default graphql(CourseUpdate, {
       })
   })
 })(
-  graphql(CourseQuery, {
-    options: ownProps => ({ variables: { id: ownProps.params.id } })
-  })(withRouter(CourseCard))
+  graphql(CourseUpdate, {
+    props: ({ mutate }) => ({
+      updateCourse: input =>
+        mutate({
+          variables: {
+            input
+          }
+        })
+    })
+  })(
+    graphql(CourseQuery, {
+      options: ownProps => ({ variables: { id: ownProps.params.id } })
+    })(withRouter(CourseCard))
+  )
 );

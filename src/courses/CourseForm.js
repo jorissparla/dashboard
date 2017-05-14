@@ -74,10 +74,16 @@ class CourseForm extends Component {
   constructor() {
     super();
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
   }
 
   handleSubmit(e) {
     this.props.onSave(e);
+  }
+
+  handleDelete(e) {
+    console.log("handleDelete", e);
+    this.props.onDelete(e);
   }
   render() {
     const { handleSubmit, course, onSave, authenticated } = this.props;
@@ -241,15 +247,21 @@ class CourseForm extends Component {
 
           </CardSection>
           <CardSection>
-            {!readOnly && <NormalRaisedButton label="Submit" type="submit" />}
+            {!readOnly && <NormalRaisedButton label="Save" type="submit" />}
             <CancelRaisedButton
               secondary={true}
               label="Cancel"
               type="reset"
               onClick={() => (window.location.href = "/courses")}
             />
-            {!readOnly && <DeleteButton label="Delete" />}
             {!readOnly &&
+              course &&
+              <DeleteButton
+                label="Delete"
+                onClick={() => this.handleDelete(this.props.course)}
+              />}
+            {!readOnly &&
+              course &&
               <RegisterButton
                 label="Register"
                 onClick={() =>
@@ -257,7 +269,9 @@ class CourseForm extends Component {
                     "/courses/addstudents/" + this.props.course.id)}
               />}
             <Chip style={{ margin: 4 }}>
-              {`Last updated  ${moment(course.lastmodified).calendar()}`}
+              {course
+                ? `Last updated  ${moment(course.lastmodified).calendar()}`
+                : "not Saved yet"}
             </Chip>
           </CardSection>
 

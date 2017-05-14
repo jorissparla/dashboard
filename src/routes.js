@@ -39,6 +39,7 @@ import SupportCards from "./graphql/SupportCards";
 import SupportCardEdit from "./graphql/SupportCardEdit";
 import CourseList from "./courses/CourseList";
 import CourseCard from "./courses/CourseCard";
+import AddCourseCard from "./courses/AddCourseCard";
 import StudentListContainer from "./courses/StudentListContainer";
 import StudentView from "./courses/StudentView";
 import AddStudentsToCourse from "./courses/AddStudentsToCourse";
@@ -60,13 +61,13 @@ export default (
     <Route path="award" component={Award} />
     <Route path="test" component={SupportCards} />
     <Route path="test/view/:id" component={SupportCardEdit} />
-    <Route path="alerts/new" component={AlertItemAddNew} />
-    <Route path="alerts/:id" component={AlertItem} />
+    <Route path="alerts/new" component={RequireAuth(AlertItemAddNew)} />
+    <Route path="alerts/:id" component={RequireAuth(AlertItem)} />
     <Route path="/news" component={RequireAuth(NewsListContainer)} />
     <Route path="chat" component={RequireAuth(ChatList)} />
     <Route path="chat/new" component={RequireAuth(ChatContainer)} />
-    <Route path="/news/add" component={NewsItemAddContainer} />
-    <Route path="/news/edit/:id" component={NewsItemContainer} />
+    <Route path="/news/add" component={RequireAuth(NewsItemAddContainer)} />
+    <Route path="/news/edit/:id" component={RequireAuth(NewsItemContainer)} />
     <Route path="golivelist" component={GoLiveList} />
     <Route path="golivelist1" component={GoLiveList1} />
     <Route path="golivelistside" component={GoLiveListSide} />
@@ -88,6 +89,7 @@ export default (
     <Route path="/students" component={StudentListContainer} />
     <Route path="/students/:id" component={StudentView} />
     <Route path="/courses/edit/:id" component={CourseCard} />
+    <Route path="/courses/create" component={AddCourseCard} />
     <Route path="/courses/addstudents/:id" component={AddStudentsToCourse} />
   </Route>
 );

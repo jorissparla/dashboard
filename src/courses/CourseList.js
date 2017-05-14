@@ -6,6 +6,7 @@ import styled from "styled-components";
 import Card from "./Card";
 import SearchBar from "../common/SearchBar";
 import { TitleBar } from "../common/TitleBar";
+import AddCard from "./AddCard";
 import withAuth from "../utils/withAuth";
 console.log(TitleBar);
 const StyledContainer = styled.div`
@@ -55,7 +56,7 @@ class CourseList extends Component {
           hintText="Search for title or team...."
         />
         <StyledContainer>
-
+          <AddCard />
           {filteredCourses.map((course, i) => (
             <Card
               course={course}

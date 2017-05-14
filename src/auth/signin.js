@@ -6,6 +6,7 @@ import Paper from "material-ui/Paper";
 import { signinUser } from "../actions";
 import { connect } from "react-redux";
 import ErrorDialog from "../errordialog";
+import Dialog from "material-ui/Dialog";
 
 const style = {
   paper: {
@@ -30,9 +31,9 @@ const email = value =>
 
 let Signin = React.createClass({
   doSubmit({ email, password }) {
-    window.alert(
+    /*    window.alert(
       `You submitted Parent:\n\n${JSON.stringify({ email, password }, null, 2)}`
-    );
+    );*/
     this.props.signinUser({ email, password });
   },
 
