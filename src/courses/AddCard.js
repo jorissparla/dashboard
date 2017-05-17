@@ -13,6 +13,7 @@ const StyledContainer = styled(Paper)`
   width:22%;
   min-width:200px;
     margin-bottom: 5px;
+    background-color: ${props => props.background};
 
 `;
 
@@ -45,20 +46,25 @@ const StyledLink = styled(Link)`
   }
 `;
 
-export default () => {
+export default ({
+  link = "courses/create",
+  title = "Add a new Course",
+  color = { blue500 },
+  background = "papayawhip"
+}) => {
   return (
     <StyledContainer>
-      <StyledLink to={"courses/create"}>
+      <StyledLink to={link}>
         <StyledAddIcon>
           <FontIcon
             className="material-icons"
-            color={blue500}
+            color={color}
             style={{ fontSize: "48px" }}
           >
             add
           </FontIcon>
         </StyledAddIcon>
-        <Title>Add a new course</Title>
+        <Title>{title}</Title>
       </StyledLink>
 
     </StyledContainer>

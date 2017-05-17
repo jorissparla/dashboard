@@ -7,6 +7,7 @@ import IconButton from "material-ui/IconButton";
 import ThumbsUp from "material-ui/svg-icons/action/thumb-up";
 import ModeEdit from "material-ui/svg-icons/editor/mode-edit";
 import { blue500 } from "material-ui/styles/colors";
+import { Link } from "react-router";
 
 import Divider from "material-ui/Divider";
 
@@ -28,9 +29,9 @@ const Cat = styled.div`
 `;
 
 const Title = styled.div`
-  font-family: Roboto;
+  font-family: 'Roboto';
   font-size: 18px;
-  font-weight: 800;
+  font-weight: bold;
   padding: 2px;
   flex-grow:0;
   margin: 5px;
@@ -85,32 +86,36 @@ const SmallCard = ({
   likes = 1,
   action = null,
   color = "#FFFFF",
-  canEdit = false
+  canEdit = false,
+  editLink = ""
 }) => {
   return (
     <Paper style={paperStyle(color)} zDepth={3}>
       <Title>{title}</Title>
 
       <StyledBody>
-        {text.slice(0, 100)}
+        {text.slice(0, 250)}
       </StyledBody>
       <Divider />
       <BottomStyle>
         {canEdit &&
-          <IconButton
-            iconStyle={{
-              height: "16px",
-              width: "16px",
-              flexGrow: 0
-            }}
-          >
-            <ModeEdit />{likes}
-          </IconButton>}
+          <Link to={editLink}>
+            <IconButton
+              iconStyle={{
+                height: "16px",
+                width: "16px",
+                flexGrow: 0
+              }}
+            >
+              <ModeEdit />{likes}
+            </IconButton>
+          </Link>}
         <Cat>{category}</Cat>
         <FlatButton
           style={{
             flexGrow: 0,
-            margin: "2px"
+            margin: "2px",
+            color: "black"
           }}
           primary={true}
           onClick={() => window.open(link)}

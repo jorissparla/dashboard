@@ -15,7 +15,7 @@ export default ({
   onChange,
   hintText = "Search..",
   defaultValue = "",
-  style
+  style = { display: "flex" }
 }) => {
   return (
     <Paper zDepth={3} style={style}>

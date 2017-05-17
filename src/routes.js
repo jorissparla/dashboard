@@ -60,7 +60,7 @@ export default (
     <Route path="alerts" component={RequireAuth(AlertsList)} />
     <Route path="award" component={Award} />
     <Route path="test" component={SupportCards} />
-    <Route path="test/view/:id" component={SupportCardEdit} />
+    <Route path="test/:id" component={SupportCardEdit} />
     <Route path="alerts/new" component={RequireAuth(AlertItemAddNew)} />
     <Route path="alerts/:id" component={RequireAuth(AlertItem)} />
     <Route path="/news" component={RequireAuth(NewsListContainer)} />
