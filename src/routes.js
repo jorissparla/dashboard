@@ -35,8 +35,9 @@ import NewsListContainer from "./news/newslistcontainer";
 import NewsItemContainer from "./news/newsitemcontainer";
 import NewsItemAddContainer from "./news/newsitemaddcontainer";
 
-import SupportCards from "./graphql/SupportCards";
-import SupportCardEdit from "./graphql/SupportCardEdit";
+import SupportCards from "./supportcard/SupportCards";
+import SupportCardEdit from "./supportcard/SupportCardEdit";
+import SupportCardAdd from "./supportcard/SupportCardAdd";
 import CourseList from "./courses/CourseList";
 import CourseCard from "./courses/CourseCard";
 import AddCourseCard from "./courses/AddCourseCard";
@@ -59,8 +60,9 @@ export default (
     <Route path="/main/2" component={DashBoardStats} />
     <Route path="alerts" component={RequireAuth(AlertsList)} />
     <Route path="award" component={Award} />
-    <Route path="test" component={SupportCards} />
-    <Route path="test/:id" component={SupportCardEdit} />
+    <Route path="supportcard" component={SupportCards} />
+    <Route path="supportcard/edit/:id" component={SupportCardEdit} />
+    <Route path="supportcard/add" component={SupportCardAdd} />
     <Route path="alerts/new" component={RequireAuth(AlertItemAddNew)} />
     <Route path="alerts/:id" component={RequireAuth(AlertItem)} />
     <Route path="/news" component={RequireAuth(NewsListContainer)} />
