@@ -9,7 +9,12 @@ import styled from "styled-components";
 import FlatButton from "material-ui/FlatButton";
 import { CardSection, Card, Input, MyDatePicker } from "../common";
 import withAuth from "../utils/withAuth";
-import { NormalButton } from "../common/TitleBar";
+import {
+  NormalButton,
+  NormalRaisedButton,
+  CancelRaisedButton,
+  DeleteButton
+} from "../common/TitleBar";
 
 const paperStyle = {
   display: "flex",
@@ -30,8 +35,10 @@ const SupportCardForm = props => {
     initialValues,
     onSave,
     authenticated,
-    handleSubmit
+    handleSubmit,
+    onDelete
   } = props;
+  const readOnly = !authenticated;
   console.log("Props## 🛑 🌮 🐶", props);
   return (
     <Paper zDepth={1} style={paperStyle}>
@@ -45,6 +52,7 @@ const SupportCardForm = props => {
           fullWidth={true}
           component={Input}
           underlineShow={true}
+          disabled={readOnly}
           style={{
             fontFamily: "Kristen ITC Regular",
             fontSize: "24px",
@@ -61,6 +69,7 @@ const SupportCardForm = props => {
             border: "1px solid lightgray"
           }}
           id="description"
+          disabled={readOnly}
           fullWidth={true}
           multiLine={true}
           rows={4}
@@ -71,14 +80,17 @@ const SupportCardForm = props => {
           floatingLabelText="Category"
           name="category"
           id="category"
+          disabled={readOnly}
           fullWidth={true}
           component={Input}
           underlineShow={true}
         />
+
         <Field
           name="link"
           hintText="Enter link to document"
           floatingLabelText="link"
+          disabled={readOnly}
           id="link"
           fullWidth={true}
           component={Input}
@@ -86,7 +98,20 @@ const SupportCardForm = props => {
           style={{ fontSize: 14 }}
         />
         <CardSection>
-          <NormalButton type="submit" primary={true} label="Save " />
+          {!readOnly && <NormalRaisedButton label="Save" type="submit" />}
+          <CancelRaisedButton
+            secondary={true}
+            label="Cancel"
+            type="reset"
+            onClick={() => (window.location.href = "/supportcard")}
+          />
+          {!readOnly &&
+            supportcard &&
+            <DeleteButton
+              label="Delete"
+              onClick={() => onDelete(supportcard)}
+            />}
+
         </CardSection>
       </form>
 

@@ -1,7 +1,7 @@
 import React from "react";
 import AppBar from "material-ui/AppBar";
 import IconButton from "material-ui/IconButton";
-import { blue500 } from "material-ui/styles/colors";
+import { blue500, white } from "material-ui/styles/colors";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import Avatar from "material-ui/Avatar";
 import getMuiTheme from "material-ui/styles/getMuiTheme";
@@ -10,6 +10,7 @@ import NewsIcon from "material-ui/svg-icons/action/event";
 import PeopleIcon from "material-ui/svg-icons/social/people";
 import ChatIcon from "material-ui/svg-icons/communication/chat";
 import PageIcon from "material-ui/svg-icons/social/pages";
+import LinkIcon from "material-ui/svg-icons/content/link";
 import MenuIcon from "material-ui/svg-icons/navigation/menu";
 import IconMenu from "material-ui/IconMenu";
 import Divider from "material-ui/Divider";
@@ -28,7 +29,7 @@ import { Link } from "react-router";
 
 const muiTheme = getMuiTheme({
   palette: {
-    textColor: "white"
+    textColor: "#FFFFFF"
   },
   appBar: {
     height: 50,
@@ -78,6 +79,12 @@ const Header = React.createClass({
           primaryText={<div style={{ color: "black" }}>Students</div>}
           leftIcon={<PeopleIcon />}
           onClick={() => browserHistory.push("/students")}
+        />
+        <Divider />
+        <MenuItem
+          primaryText={<div style={{ color: "black" }}>SupportCards</div>}
+          leftIcon={<LinkIcon />}
+          onClick={() => browserHistory.push("/supportcard")}
         />
         <Divider />
         <MenuItem

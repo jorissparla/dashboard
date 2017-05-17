@@ -56,11 +56,7 @@ export default ({
     <StyledContainer>
       <StyledLink to={link}>
         <StyledAddIcon>
-          <FontIcon
-            className="material-icons"
-            color={color}
-            style={{ fontSize: "48px" }}
-          >
+          <FontIcon className="material-icons" style={{ fontSize: "48px" }}>
             add
           </FontIcon>
         </StyledAddIcon>

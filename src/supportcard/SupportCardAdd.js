@@ -7,6 +7,7 @@ import styled from "styled-components";
 import FlatButton from "material-ui/FlatButton";
 import { CardSection } from "../common";
 import SupportCardForm from "./SupportCardForm";
+import withAuth from "../utils/withAuth";
 
 const paperStyle = {
   display: "flex",
@@ -19,7 +20,7 @@ const paperStyle = {
   backgroundColor: "lightblue"
 };
 
-const SupportCardAdd = ({ addSupportCard }) => {
+const SupportCardAdd = ({ addSupportCard, authenticated }) => {
   const handleAdd = e => {
     console.log("handleAdd", JSON.stringify(e, null, -2));
     const { id, title, description, category, link } = e;
@@ -30,7 +31,11 @@ const SupportCardAdd = ({ addSupportCard }) => {
   };
   return (
     <div>
-      <SupportCardForm onSave={handleAdd} readOnly={false} />
+      <SupportCardForm
+        onSave={handleAdd}
+        readOnly={false}
+        authenticated={authenticated}
+      />
     </div>
   );
 };
@@ -56,4 +61,4 @@ export default graphql(addSupportCard, {
         variables: { input }
       })
   })
-})(SupportCardAdd);
+})(withAuth(SupportCardAdd));

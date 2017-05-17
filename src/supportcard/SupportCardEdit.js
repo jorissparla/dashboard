@@ -16,6 +16,7 @@ import {
 } from "recompose";
 import { CardSection } from "../common";
 import SupportCardForm from "./SupportCardForm";
+import withAuth from "../utils/withAuth";
 
 const withOpen = withState("open", "setOpen", true);
 
@@ -59,10 +60,20 @@ class SupportCardEdit extends React.Component {
 
   constructor(props) {
     super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSave = this.handleSave.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
   }
 
-  handleSubmit(e) {
+  handleDelete(e) {
+    const { id } = e;
+    this.props
+      .deleteSupportCard({ id })
+      .then(this.props.data.refetch())
+      .then(() => (window.location.href = "/supportcard"))
+      .catch(e => alert(JSON.stringify(e, null, 2)));
+  }
+
+  handleSave(e) {
     console.log("doSubmit", JSON.stringify(e, null, -2));
     const { id, title, description, category, link } = e;
 
@@ -83,7 +94,7 @@ class SupportCardEdit extends React.Component {
 
   render() {
     const { loading, error, supportcard, modifySupportCard } = this.props.data;
-    console.log("Pripraprops", this.props);
+    const { authenticated } = this.props;
     if (loading) {
       return <p>Loading ...</p>;
     }
@@ -99,9 +110,10 @@ class SupportCardEdit extends React.Component {
         <SupportCardForm
           initialValues={supportcard}
           supportcard={supportcard}
-          onSave={this.handleSubmit}
+          onSave={this.handleSave}
           onDelete={this.handleDelete}
-          readOnly={false}
+          readOnly={!authenticated}
+          authenticated={authenticated}
         />
       </div>
     );
@@ -120,6 +132,14 @@ const supportcard = gql`
   }
 `;
 
+const deleteSupportCard = gql`
+  mutation deleteSupportCard($input: InputCardType) {
+    deleteSupportCard(input: $input) {
+      id
+      }
+  }
+`;
+
 const modifySupportCard = gql`
   mutation modifySupportCard($input:InputCardType) {
     modifySupportCard(input: $input) {
@@ -134,9 +154,9 @@ const modifySupportCard = gql`
   }
 `;
 
-export default graphql(modifySupportCard, {
+export default graphql(deleteSupportCard, {
   props: ({ mutate }) => ({
-    modifySupportCard: input =>
+    deleteSupportCard: input =>
       mutate({
         variables: {
           input
@@ -144,7 +164,18 @@ export default graphql(modifySupportCard, {
       })
   })
 })(
-  graphql(supportcard, {
-    options: ownProps => ({ variables: { id: ownProps.params.id } })
-  })(withRouter(SupportCardEdit))
+  graphql(modifySupportCard, {
+    props: ({ mutate }) => ({
+      modifySupportCard: input =>
+        mutate({
+          variables: {
+            input
+          }
+        })
+    })
+  })(
+    graphql(supportcard, {
+      options: ownProps => ({ variables: { id: ownProps.params.id } })
+    })(withRouter(withAuth(SupportCardEdit)))
+  )
 );

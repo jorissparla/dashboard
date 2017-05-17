@@ -70,7 +70,12 @@ const SupportCards = enhance(
 
         <SearchBar onChange={setSearchText} />
         <Div>
-          <AddCard link="/" title="Add a New Card" background="papayawhip" />
+          {authenticated &&
+            <AddCard
+              link="/supportcard/add"
+              title="Add a New Card"
+              background="papayawhip"
+            />}
           {filteredCards.map(
             ({ id, title, description, category, link }, i) => (
               <SmallCard
@@ -82,7 +87,7 @@ const SupportCards = enhance(
                 buttonText="Open"
                 link={link}
                 canEdit={authenticated}
-                editLink={`test/${id}`}
+                editLink={`/supportcard/edit/${id}`}
               />
             )
           )}

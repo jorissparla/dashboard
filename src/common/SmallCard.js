@@ -6,6 +6,7 @@ import FontIcon from "material-ui/FontIcon";
 import IconButton from "material-ui/IconButton";
 import ThumbsUp from "material-ui/svg-icons/action/thumb-up";
 import ModeEdit from "material-ui/svg-icons/editor/mode-edit";
+import LinkIcon from "material-ui/svg-icons/content/link";
 import { blue500 } from "material-ui/styles/colors";
 import { Link } from "react-router";
 
@@ -121,6 +122,7 @@ const SmallCard = ({
           onClick={() => window.open(link)}
         >
           {buttonText.toUpperCase()}{" "}
+          <LinkIcon />
         </FlatButton>
       </BottomStyle>
 
