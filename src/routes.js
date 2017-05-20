@@ -26,6 +26,8 @@ import KudoList from "./kudos/kudolist";
 import KudoListAll from "./kudos/kudolistall";
 import Signin from "./auth/signin";
 import Signout from "./auth/signout";
+import Forgot from "./auth/forgot";
+import UpdatePassword from "./auth/resetpassword";
 import RequireAuth from "./auth/require_auth";
 import Courses from "./courses.old";
 import CourseAddForm from "./courses.old/addcourse";
@@ -80,6 +82,8 @@ export default (
     <Route path="kudolistcomponent" component={KudoListComponent} />
     <Route path="signin" component={Signin} />
     <Route path="signout" component={Signout} />
+    <Route path="forgot" component={Forgot} />
+    <Route path="reset/:token" component={UpdatePassword} />
     <Route path="historyday" component={HistoryDayContainer} />
     <Route path="historyall" component={HistoryDayAll} />
     <Route path="/courseso" component={RequireAuth(Courses)} />

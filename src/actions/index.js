@@ -23,6 +23,8 @@ export const DELETE_ALERT = "DELETE_ALERT";
 export const AUTH_USER = "AUTH_USER";
 export const UNAUTH_USER = "UNAUTH_USER";
 export const AUTH_ERROR = "AUTH_ERROR";
+export const AUTH_FORGOT = "AUTH_FORGOT";
+export const AUTH_PASS = "AUTH_PASS";
 export const FETCH_MESSAGE = "FETCH_MESSAGE";
 
 export const FETCH_COURSES = "FETCH_COURSES";
@@ -65,6 +67,17 @@ const signinUser = ({ email, password }) => {
         dispatch(authError("Bad Login Info"));
       });
   };
+};
+
+exports.forgotPassword = async email => {
+  await axios.post(`${ROOT_URL}/forgot`, { email });
+  return { type: AUTH_FORGOT };
+};
+
+exports.UpdatePassword = async ({ password, token }) => {
+  console.log(`${ROOT_URL}/updatemypassword reached`);
+  await axios.post(`${ROOT_URL}/updatemypassword`, { password, token });
+  return { type: AUTH_PASS };
 };
 
 const signoutUser = () => {
