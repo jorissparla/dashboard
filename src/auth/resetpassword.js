@@ -48,7 +48,7 @@ class UpdatePasswordForm extends React.Component {
       console.log(e);
       return;
     });
-    setTimeout(() => browserHistory.push("/"), 1000);
+    setTimeout(() => browserHistory.push("/signin"), 1000);
   }
   renderNoMatch() {
     return (

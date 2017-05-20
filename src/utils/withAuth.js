@@ -13,13 +13,14 @@ export default function(ComposedComponent) {
         <ComposedComponent
           {...this.props}
           authenticated={this.props.authenticated || false}
+          user={this.props.user || {}}
         />
       );
     }
   }
 
   function mapStateToProps(state) {
-    return { authenticated: state.auth.authenticated };
+    return { authenticated: state.auth.authenticated, user: state.auth.user };
   }
 
   return connect(mapStateToProps)(Authentication);

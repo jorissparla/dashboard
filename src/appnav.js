@@ -22,6 +22,7 @@ import {
   ToolbarSeparator,
   ToolbarTitle
 } from "material-ui/Toolbar";
+import withAuth from "./utils/withAuth";
 
 import FlatButton from "material-ui/FlatButton";
 import { connect } from "react-redux";
@@ -56,6 +57,7 @@ const styles = {
 
 const Header = React.createClass({
   hamburgerMenu() {
+    console.log(this.props.user);
     return (
       <IconMenu
         menuStyle={{ color: "black" }}
@@ -124,7 +126,9 @@ const Header = React.createClass({
     const picture =
       localStorage.getItem("picture") ||
       "https://randomuser.me/api/portraits/men/20.jpg";
-    return <Avatar src={picture} />;
+    if (this.props.authenticated) {
+      return <Avatar src={picture} />;
+    } else return <div />;
   },
 
   renderToolBar() {
@@ -167,9 +171,7 @@ const Header = React.createClass({
 
   render() {
     let homeLink = <Link to={"/"} />;
-    const picture =
-      localStorage.getItem("picture") ||
-      "https://randomuser.me/api/portraits/men/20.jpg";
+
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         {this.renderToolBar()}
@@ -184,4 +186,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(Header);
+export default connect(mapStateToProps)(withAuth(Header));

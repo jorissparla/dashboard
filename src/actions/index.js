@@ -48,13 +48,20 @@ const authError = error => {
   };
 };
 
-const signinUser = ({ email, password }) => {
+function to(promise) {
+  return promise
+    .then(data => {
+      return [null, data];
+    })
+    .catch(err => [err]);
+}
+
+const signinUser0 = ({ email, password }) => {
   return dispatch => {
     axios
       .post(`${ROOT_URL}/signin`, { email, password })
       .then(response => {
         dispatch({ type: AUTH_USER });
-        // - Save the JWT token
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("email", email);
         localStorage.setItem("picture", response.data.user.pic);
@@ -69,6 +76,28 @@ const signinUser = ({ email, password }) => {
   };
 };
 
+const signinUser = async ({ email, password }) => {
+  return async dispatch => {
+    let err, response;
+    [err, response] = await to(
+      axios.post(`${ROOT_URL}/signin`, { email, password })
+    );
+    if (err) {
+      dispatch(authError("Bad Login Info"));
+      return;
+    }
+    if (response) {
+      console.log(response);
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("email", email);
+      localStorage.setItem("picture", response.data.user.pic);
+      localStorage.setItem("role", response.data.user.role);
+      dispatch({ type: AUTH_USER, user: response.data.user });
+      browserHistory.push("/");
+    }
+  };
+};
+
 exports.forgotPassword = async email => {
   await axios.post(`${ROOT_URL}/forgot`, { email });
   return { type: AUTH_FORGOT };
@@ -76,7 +105,11 @@ exports.forgotPassword = async email => {
 
 exports.UpdatePassword = async ({ password, token }) => {
   console.log(`${ROOT_URL}/updatemypassword reached`);
-  await axios.post(`${ROOT_URL}/updatemypassword`, { password, token });
+  const { data } = await axios.post(`${ROOT_URL}/updatemypassword`, {
+    password,
+    token
+  });
+
   return { type: AUTH_PASS };
 };
 
