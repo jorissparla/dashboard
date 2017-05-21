@@ -41,10 +41,15 @@ const store = createStoreWithMiddleware(
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
 const token = localStorage.getItem("token");
+const user = {
+  email: localStorage.getItem("email"),
+  picture: localStorage.getItem("picture"),
+  role: localStorage.getItem("role")
+};
 // If we have a token, consider the user to be signed in
 if (token) {
   // we need to update application state
-  store.dispatch({ type: AUTH_USER });
+  store.dispatch({ type: AUTH_USER, user });
 }
 
 ReactDOM.render(

@@ -16,12 +16,12 @@ const Container = styled.div`
   display: flex;
   flex-direction:column;
   justify-content: space-between;
-  width: 22%;
+  width: 18%;
   margin: 5px;
   
 `;
 const Cat = styled.div`
-  width: 20%;
+  width: 15%;
   margin-right: 5px;
   margin-left: 10px;
   margin-top: 10px;
@@ -71,7 +71,7 @@ const paperStyle = color => {
     display: "flex",
     flexDirection: "column",
     justifyContent: "space-between",
-    width: "22%",
+    width: "18%",
     margin: "5px",
     minWidth: "200px",
     backgroundColor: color

@@ -180,10 +180,4 @@ const Header = React.createClass({
   }
 });
 
-const mapStateToProps = state => {
-  return {
-    authenticated: state.auth.authenticated
-  };
-};
-
-export default connect(mapStateToProps)(withAuth(Header));
+export default withAuth(Header);

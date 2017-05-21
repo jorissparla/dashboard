@@ -8,16 +8,27 @@ import { compose, withState, withHandlers } from "recompose";
 import SearchBar from "../common/SearchBar";
 import withAuth from "../utils/withAuth";
 import AddCard from "../courses/AddCard";
+import CategoryTabs from "./CategoryTabs";
 
 const cardColors = [
   "#7fbadb",
   "papayawhip",
   "palevioletred",
-  "#8E24AA",
+  "#B9F6CA",
+  "#FFCC80",
+  "#E1F5FE",
   "#607D8B"
 ];
 
-const enhance = withState("searchText", "setSearchText", "");
+const enhanceSearchBar = withState("searchText", "setSearchText", "");
+
+const enhanceCategories = withState(
+  "selectedCategory",
+  "setSelectedCategory",
+  ""
+);
+
+const enhance = compose(enhanceSearchBar, enhanceCategories);
 
 const Div = styled.div`
   display: flex;
@@ -40,6 +51,7 @@ const SupportCardQuery = gql`
       description
       category
       link
+      created
     } 
   }
 `;
@@ -48,7 +60,10 @@ const SupportCards = enhance(
   ({
     searchText,
     setSearchText,
+    selectedCategory,
+    setSelectedCategory,
     authenticated,
+    user,
     data: { loading, error, supportcards },
     filter = ""
   }) => {
@@ -59,15 +74,22 @@ const SupportCards = enhance(
       return <p>{error.message}</p>;
     }
 
-    const filteredCards = supportcards.filter(
-      card =>
-        card.category.toUpperCase().includes(searchText.toUpperCase()) ||
-        card.title.toUpperCase().includes(searchText.toUpperCase())
-    );
+    const filteredCards = supportcards
+      .filter(
+        card =>
+          card.category.toUpperCase().includes(searchText.toUpperCase()) ||
+          card.title.toUpperCase().includes(searchText.toUpperCase())
+      )
+      .filter(card =>
+        card.category.toUpperCase().includes(selectedCategory.toUpperCase())
+      );
     console.log("filter", filteredCards);
     return (
       <Container>
-
+        <CategoryTabs
+          onChange={setSelectedCategory}
+          onSave={v => console.log(v)}
+        />
         <SearchBar onChange={setSearchText} />
         <Div>
           {authenticated &&

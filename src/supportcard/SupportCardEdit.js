@@ -93,7 +93,13 @@ class SupportCardEdit extends React.Component {
   }
 
   render() {
-    const { loading, error, supportcard, modifySupportCard } = this.props.data;
+    const {
+      loading,
+      error,
+      categories,
+      supportcard,
+      modifySupportCard
+    } = this.props.data;
     const { authenticated } = this.props;
     if (loading) {
       return <p>Loading ...</p>;
@@ -114,6 +120,7 @@ class SupportCardEdit extends React.Component {
           onDelete={this.handleDelete}
           readOnly={!authenticated}
           authenticated={authenticated}
+          categories={categories}
         />
       </div>
     );
@@ -129,7 +136,11 @@ const supportcard = gql`
         category
         link
     }
+    categories {
+      id
+      name
   }
+}
 `;
 
 const deleteSupportCard = gql`

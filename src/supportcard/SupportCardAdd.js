@@ -13,28 +13,40 @@ const paperStyle = {
   display: "flex",
   flexDirection: "column",
   justifyContent: "space-between",
-  width: "22%",
+  width: "15%",
   margin: "15px",
   padding: "10px",
-  minWidth: "200px",
   backgroundColor: "lightblue"
 };
 
-const SupportCardAdd = ({ addSupportCard, authenticated }) => {
+const SupportCardAdd = ({
+  data: { loading, error, categories },
+  addSupportCard,
+  authenticated,
+  user
+}) => {
   const handleAdd = e => {
     console.log("handleAdd", JSON.stringify(e, null, -2));
     const { id, title, description, category, link } = e;
-
-    addSupportCard({ id, title, description, category, link })
-      .then(() => (window.location.href = "/test"))
+    const createdby = user.email || "system";
+    addSupportCard({ id, title, description, category, link, createdby })
+      .then(() => (window.location.href = "/supportcard"))
       .catch(e => window.alert(JSON.stringify(e, null, 2)));
   };
+  if (loading) {
+    return <p>Loading ...</p>;
+  }
+  if (error) {
+    return <p>{error.message}</p>;
+  }
   return (
     <div>
       <SupportCardForm
         onSave={handleAdd}
         readOnly={false}
         authenticated={authenticated}
+        categories={categories}
+        initialValues={{ category: "IXS" }}
       />
     </div>
   );
@@ -49,16 +61,27 @@ const addSupportCard = gql`
         description
         category
         link
+        createdby
       }
     }
   }
 `;
+const CategoryQuery = gql`
+  query CategoryQuery {
+    categories {
+      id
+      name
+    }
+  }
+`;
 
-export default graphql(addSupportCard, {
-  props: ({ mutate }) => ({
-    addSupportCard: input =>
-      mutate({
-        variables: { input }
-      })
-  })
-})(withAuth(SupportCardAdd));
+export default graphql(CategoryQuery)(
+  graphql(addSupportCard, {
+    props: ({ mutate }) => ({
+      addSupportCard: input =>
+        mutate({
+          variables: { input }
+        })
+    })
+  })(withAuth(SupportCardAdd))
+);

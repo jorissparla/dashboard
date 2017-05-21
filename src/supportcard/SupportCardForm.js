@@ -4,6 +4,7 @@ import { Field, reduxForm } from "redux-form";
 import { SelectField } from "redux-form-material-ui";
 import Paper from "material-ui/Paper";
 import TextField from "material-ui/TextField";
+import MenuItem from "material-ui/MenuItem";
 import Avatar from "material-ui/Avatar";
 import styled from "styled-components";
 import FlatButton from "material-ui/FlatButton";
@@ -32,6 +33,7 @@ const doSubmit = e => {
 const SupportCardForm = props => {
   const {
     supportcard,
+    categories,
     initialValues,
     onSave,
     authenticated,
@@ -76,15 +78,19 @@ const SupportCardForm = props => {
           component={Input}
         />
         <Field
-          hintText="Category (Cloud, Procedure, etc)"
-          floatingLabelText="Category"
           name="category"
-          id="category"
+          component={SelectField}
           disabled={readOnly}
-          fullWidth={true}
-          component={Input}
+          hintText="Status"
+          floatingLabelText="Category"
+          style={{ flex: 2, marginTop: "-5px" }}
           underlineShow={true}
-        />
+          underlineStyle={{ borderColor: "#039BE5" }}
+        >
+          {categories.map(({ id, name }) => (
+            <MenuItem key={id} value={name} primaryText={name} />
+          ))}
+        </Field>
 
         <Field
           name="link"
