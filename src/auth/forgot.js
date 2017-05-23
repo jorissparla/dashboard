@@ -5,7 +5,7 @@ import { TextField } from "redux-form-material-ui";
 import Paper from "material-ui/Paper";
 import { forgotPassword } from "../actions";
 import { connect } from "react-redux";
-import { browserHistory } from "react-router";
+import { withRouter } from "react-router-dom";
 
 const style = {
   paper: {
@@ -31,7 +31,7 @@ const email = value =>
 let Forgot = React.createClass({
   doSubmit({ email }) {
     this.props.forgotPassword(email);
-    setTimeout(() => browserHistory.push("/"), 1000);
+    setTimeout(() => this.props.history.push("/"), 500);
   },
 
   render() {
@@ -72,4 +72,4 @@ Forgot = reduxForm({
   defaultValues: {}
 })(Forgot);
 
-export default connect(mapStateToProps, { forgotPassword })(Forgot);
+export default connect(mapStateToProps, { forgotPassword })(withRouter(Forgot));

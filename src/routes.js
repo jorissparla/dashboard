@@ -1,7 +1,5 @@
 import React from "react";
-import { Route, IndexRoute } from "react-router";
-
-import App from "./App";
+import { Route, Link, Switch } from "react-router-dom";
 
 import AlertsList from "./alerts/alertlist";
 import AlertItem from "./alerts/alertitem";
@@ -29,9 +27,6 @@ import Signout from "./auth/signout";
 import Forgot from "./auth/forgot";
 import UpdatePassword from "./auth/resetpassword";
 import RequireAuth from "./auth/require_auth";
-import Courses from "./courses.old";
-import CourseAddForm from "./courses.old/addcourse";
-import CourseEditForm from "./courses.old/editcourse";
 
 import NewsListContainer from "./news/newslistcontainer";
 import NewsItemContainer from "./news/newsitemcontainer";
@@ -46,32 +41,41 @@ import AddCourseCard from "./courses/AddCourseCard";
 import StudentListContainer from "./courses/StudentListContainer";
 import StudentView from "./courses/StudentView";
 import AddStudentsToCourse from "./courses/AddStudentsToCourse";
-// validate authentication for private routes
-/*const requireAuth = (nextState, replace) => {
-  if (!auth.loggedIn()) {
-    replace({ pathname: '/login' })
-  }
-}*/
 
-export default (
-  <Route path="/" component={App}>
-    <IndexRoute component={DashBoardContainer} />
+const NotFound = () => <h2>Not Found!</h2>;
 
+const AppRoutes = () => (
+  <Switch>
+    <Route exact path="/" component={DashBoardContainer} />
     <Route path="/main/1" component={DashBoard} />
     <Route path="/main/0" component={DashBoard0} />
     <Route path="/main/2" component={DashBoardStats} />
-    <Route path="alerts" component={RequireAuth(AlertsList)} />
+    <Route exact path="/alerts" component={RequireAuth(AlertsList)} />
     <Route path="award" component={Award} />
-    <Route path="supportcard" component={SupportCards} />
-    <Route path="supportcard/edit/:id" component={SupportCardEdit} />
-    <Route path="supportcard/add" component={SupportCardAdd} />
-    <Route path="alerts/new" component={RequireAuth(AlertItemAddNew)} />
-    <Route path="alerts/:id" component={RequireAuth(AlertItem)} />
-    <Route path="/news" component={RequireAuth(NewsListContainer)} />
-    <Route path="chat" component={RequireAuth(ChatList)} />
-    <Route path="chat/new" component={RequireAuth(ChatContainer)} />
-    <Route path="/news/add" component={RequireAuth(NewsItemAddContainer)} />
-    <Route path="/news/edit/:id" component={RequireAuth(NewsItemContainer)} />
+    <Route exact path="/supportcard" component={SupportCards} />
+    <Route path="/supportcard/edit/:id" component={SupportCardEdit} />
+    <Route exact path="/supportcard/add" component={SupportCardAdd} />
+    <Route exact path="/alerts/new" component={RequireAuth(AlertItemAddNew)} />
+    <Route path="/alerts/:id" component={RequireAuth(AlertItem)} />
+    <Route exact path="/news" component={RequireAuth(NewsListContainer)} />
+    <Route
+      exact
+      path="/news/edit/:id"
+      component={RequireAuth(NewsItemContainer)}
+    />
+    <Route
+      exact
+      path="/news/add"
+      component={RequireAuth(NewsItemAddContainer)}
+    />
+    <Route exact path="/chat" component={RequireAuth(ChatList)} />
+    <Route exact path="/chat/new" component={RequireAuth(ChatContainer)} />
+    <Route
+      exact
+      path="/news/add"
+      component={RequireAuth(NewsItemAddContainer)}
+    />
+
     <Route path="golivelist" component={GoLiveList} />
     <Route path="golivelist1" component={GoLiveList1} />
     <Route path="golivelistside" component={GoLiveListSide} />
@@ -86,16 +90,16 @@ export default (
     <Route path="reset/:token" component={UpdatePassword} />
     <Route path="historyday" component={HistoryDayContainer} />
     <Route path="historyall" component={HistoryDayAll} />
-    <Route path="/courseso" component={RequireAuth(Courses)} />
-    <Route path="/courseso/edit/:crs_UIC" component={CourseEditForm} />
-    <Route path="courseso/new" component={CourseAddForm} />
     <Route path="test/edit/:id" component={NewsItemContainer} />
     <Route path="test/new" component={NewsItemAddContainer} />
-    <Route path="/courses" component={CourseList} />
-    <Route path="/students" component={StudentListContainer} />
+    <Route exact path="/courses" component={CourseList} />
+    <Route exact path="/students" component={StudentListContainer} />
     <Route path="/students/:id" component={StudentView} />
     <Route path="/courses/edit/:id" component={CourseCard} />
-    <Route path="/courses/create" component={AddCourseCard} />
+    <Route exact path="/courses/create" component={AddCourseCard} />
     <Route path="/courses/addstudents/:id" component={AddStudentsToCourse} />
-  </Route>
+    <Route component={NotFound} />
+  </Switch>
 );
+
+export default AppRoutes;

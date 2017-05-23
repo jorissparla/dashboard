@@ -3,7 +3,7 @@ import Paper from "material-ui/Paper";
 import FontIcon from "material-ui/FontIcon";
 import { blue500 } from "material-ui/styles/colors";
 import styled from "styled-components";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 const StyledContainer = styled(Paper)`
   display: flex;
@@ -54,7 +54,7 @@ export default ({
 }) => {
   return (
     <StyledContainer>
-      <StyledLink to={link}>
+      <StyledLink to={link || "/"}>
         <StyledAddIcon>
           <FontIcon className="material-icons" style={{ fontSize: "48px" }}>
             add

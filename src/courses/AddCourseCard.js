@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { gql, graphql } from "react-apollo";
 import { Tabs, Tab } from "material-ui/Tabs";
 import { blue500 } from "material-ui/styles/colors";
-import { withRouter, browserHistory } from "react-router";
+import { withRouter } from "react-router-dom";
 import { List, ListItem } from "material-ui/List";
 import styled from "styled-components";
 import Divider from "material-ui/Divider";
@@ -71,7 +71,7 @@ class AddCourseCard extends Component {
       })
       .then(v => {
         console.log(v);
-        browserHistory.push("/courses");
+        this.props.history.push("/courses");
       })
       .catch(e => window.alert(JSON.stringify(e, null, 2)));
   }

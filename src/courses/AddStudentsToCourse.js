@@ -261,7 +261,7 @@ export default graphql(removeStudentFromCourse, {
     })
   })(
     graphql(selectedCourse, {
-      options: ownProps => ({ variables: { id: ownProps.params.id } })
+      options: ownProps => ({ variables: { id: ownProps.match.params.id } })
     })(withRouter(withAuth(AddStudentsToCourse)))
   )
 );

@@ -1,25 +1,29 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 import NewsItem from "./newsitem";
 import { fetchNewsItem, updateNews, deleteNews } from "../actions/index";
 
-const doSubmit = values => {
-  console.log("DoSubmit", values);
-  window.alert(JSON.stringify(values, null, 2));
-  updateNews(values);
-  setInterval(() => (window.location.href = "/news"), 3000);
-};
-
-const doDelete = values => {
-  deleteNews(values.id);
-};
 class NewsItemContainer extends Component {
+  doSubmit = values => {
+    console.log("DoSubmit", values);
+    window.alert(JSON.stringify(values, null, 2));
+    updateNews(values);
+    setTimeout(() => this.props.history.push("/news"), 500);
+  };
+
+  doDelete = id => {
+    console.log("doDelete--newsItemcontainer", id);
+    deleteNews(id);
+    setTimeout(() => this.props.history.replace("/news"), 500);
+  };
+
   componentDidMount() {
-    this.props.fetchNewsItem(this.props.params.id);
+    this.props.fetchNewsItem(this.props.match.params.id);
   }
 
   render() {
-    console.log("render container", this.props.params.id, this.props);
+    console.log("render container", this.props.match.params.id, this.props);
 
     if (!this.props.news) {
       return <div>Loading...</div>;
@@ -27,8 +31,8 @@ class NewsItemContainer extends Component {
     return (
       <NewsItem
         initialValues={this.props.news}
-        onSave={doSubmit}
-        onDelete={doDelete}
+        onSave={this.doSubmit}
+        onDelete={this.doDelete}
         title="Edit news item"
       />
     );
@@ -45,4 +49,4 @@ export default connect(mapStateToProps, {
   fetchNewsItem,
   updateNews,
   deleteNews
-})(NewsItemContainer);
+})(withRouter(NewsItemContainer));

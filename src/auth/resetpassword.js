@@ -6,7 +6,7 @@ import Paper from "material-ui/Paper";
 import { UpdatePassword } from "../actions";
 import { connect } from "react-redux";
 import ErrorDialog from "../errordialog";
-import { browserHistory } from "react-router";
+import { withRouter } from "react-router-dom";
 
 const style = {
   paper: {
@@ -48,7 +48,7 @@ class UpdatePasswordForm extends React.Component {
       console.log(e);
       return;
     });
-    setTimeout(() => browserHistory.push("/signin"), 1000);
+    setTimeout(() => this.props.history.push("/signin"), 500);
   }
   renderNoMatch() {
     return (
@@ -108,4 +108,6 @@ UpdatePasswordForm = reduxForm({
   defaultValues: {}
 })(UpdatePasswordForm);
 
-export default connect(mapStateToProps, { UpdatePassword })(UpdatePasswordForm);
+export default connect(mapStateToProps, { UpdatePassword })(
+  withRouter(UpdatePasswordForm)
+);
