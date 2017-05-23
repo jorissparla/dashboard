@@ -8,7 +8,7 @@ import ThumbsUp from "material-ui/svg-icons/action/thumb-up";
 import ModeEdit from "material-ui/svg-icons/editor/mode-edit";
 import LinkIcon from "material-ui/svg-icons/content/link";
 import { blue500 } from "material-ui/styles/colors";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 import Divider from "material-ui/Divider";
 

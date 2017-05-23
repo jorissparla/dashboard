@@ -1,6 +1,6 @@
 import React from "react";
 import { List, ListItem } from "material-ui/List";
-import { browserHistory } from "react-router";
+import { withRouter } from "react-router-dom";
 import styled from "styled-components";
 import Divider from "material-ui/Divider";
 import RaisedButton from "material-ui/RaisedButton";
@@ -23,7 +23,7 @@ const Div = styled.div`
   flex-wrap: wrap;
 `;
 
-const StudentList = ({ students }) => {
+const StudentList = ({ students, history }) => {
   return (
     <Paper
       style={{
@@ -45,7 +45,7 @@ const StudentList = ({ students }) => {
                 color: "#FFFFFF"
               }}
               key={student.id}
-              onClick={() => browserHistory.push(`/students/${student.id}`)}
+              onClick={() => history.push(`/students/${student.id}`)}
             >
               {student.picture
                 ? <Avatar src={student.picture.data} />
@@ -61,4 +61,4 @@ const StudentList = ({ students }) => {
   );
 };
 
-export default StudentList;
+export default withRouter(StudentList);

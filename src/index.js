@@ -6,13 +6,14 @@ import promise from "redux-promise";
 import reduxThunk from "redux-thunk";
 import "./index.css";
 import reducers from "./reducers";
-import { browserHistory, Router } from "react-router";
-import routes from "./routes";
+import { BrowserRouter } from "react-router-dom";
+import AppRoutes from "./routes";
 import getMuiTheme from "material-ui/styles/getMuiTheme";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import injectTapEventPlugin from "react-tap-event-plugin";
 import Raven from "raven-js";
 import { AUTH_USER } from "./actions";
+import App from "./App";
 
 import {
   ApolloClient,
@@ -52,11 +53,55 @@ if (token) {
   store.dispatch({ type: AUTH_USER, user });
 }
 
-ReactDOM.render(
+const Main = () => (
   <ApolloProvider store={store} client={client}>
     <MuiThemeProvider muiTheme={getMuiTheme()}>
-      <Router history={browserHistory} routes={routes} />
+      <BrowserRouter>
+        <App>
+          <AppRoutes />
+        </App>
+      </BrowserRouter>
     </MuiThemeProvider>
-  </ApolloProvider>,
-  document.getElementById("root")
+  </ApolloProvider>
 );
+
+const Header = props => (
+  <div>
+    <ul>
+      <li>Main</li>
+      <li>Twee</li>
+      <li>Dire</li>
+    </ul>
+    <style jsx>{`
+    ul {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      font-family: Roboto;
+    }
+    li {
+      color: lightgray;
+      padding: 2px;
+    }
+    li:hover{
+      color: black;
+      font-weight:900em;
+    }
+  `}</style>
+    {props.children}
+  </div>
+);
+const About = () => (
+  <div>
+    <h2>About</h2>
+    <div className="nice">Tekst</div>
+  </div>
+);
+
+const Main2 = () => (
+  <BrowserRouter>
+    <Header><AppRoutes /></Header>
+  </BrowserRouter>
+);
+
+ReactDOM.render(<Main />, document.getElementById("root"));

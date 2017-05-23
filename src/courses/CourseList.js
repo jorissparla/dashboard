@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { gql, graphql } from "react-apollo";
 import { SmallCard } from "../common/SmallCard";
-import { Link, withRouter } from "react-router";
+import { Link, withRouter } from "react-router-dom";
 import styled from "styled-components";
 import Card from "./Card";
 import SearchBar from "../common/SearchBar";
@@ -59,6 +59,7 @@ class CourseList extends Component {
           <AddCard />
           {filteredCourses.map((course, i) => (
             <Card
+              key={course.id}
               course={course}
               index={i}
               count={course._studentsMeta.count}

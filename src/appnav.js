@@ -15,7 +15,7 @@ import MenuIcon from "material-ui/svg-icons/navigation/menu";
 import IconMenu from "material-ui/IconMenu";
 import Divider from "material-ui/Divider";
 import MenuItem from "material-ui/MenuItem";
-import { browserHistory } from "react-router";
+import { withRouter } from "react-router-dom";
 import {
   Toolbar,
   ToolbarGroup,
@@ -26,7 +26,7 @@ import withAuth from "./utils/withAuth";
 
 import FlatButton from "material-ui/FlatButton";
 import { connect } from "react-redux";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 const muiTheme = getMuiTheme({
   palette: {
@@ -55,9 +55,14 @@ const styles = {
   }
 };
 
-const Header = React.createClass({
+class Header extends React.Component {
+  constructor(props) {
+    super(props);
+    this.hamburgerMenu = this.hamburgerMenu.bind(this);
+  }
+
   hamburgerMenu() {
-    console.log(this.props.user);
+    const { history } = this.props;
     return (
       <IconMenu
         menuStyle={{ color: "black" }}
@@ -68,44 +73,44 @@ const Header = React.createClass({
         <MenuItem
           primaryText={<div style={{ color: "black" }}>Home</div>}
           leftIcon={<ActionHome style={{ root: { color: "black" } }} />}
-          onClick={() => browserHistory.push("/")}
+          onClick={() => history.push("/")}
         />
         <Divider />
         <MenuItem
           primaryText={<div style={{ color: "black" }}>Courses</div>}
           leftIcon={<PageIcon style={{ root: { color: "black" } }} />}
-          onClick={() => browserHistory.push("/courses")}
+          onClick={() => history.push("/courses")}
         />
         <Divider />
         <MenuItem
           primaryText={<div style={{ color: "black" }}>Students</div>}
           leftIcon={<PeopleIcon />}
-          onClick={() => browserHistory.push("/students")}
+          onClick={() => history.push("/students")}
         />
         <Divider />
         <MenuItem
           primaryText={<div style={{ color: "black" }}>SupportCards</div>}
           leftIcon={<LinkIcon />}
-          onClick={() => browserHistory.push("/supportcard")}
+          onClick={() => history.push("/supportcard")}
         />
         <Divider />
         <MenuItem
           primaryText={<div style={{ color: "black" }}>News</div>}
           leftIcon={<NewsIcon />}
-          onClick={() => browserHistory.push("/news")}
+          onClick={() => history.push("/news")}
         />
         <Divider />
         <MenuItem
           primaryText={<div style={{ color: "black" }}>Chat</div>}
           leftIcon={<ChatIcon />}
-          onClick={() => browserHistory.push("/chat")}
+          onClick={() => history.push("/chat")}
         />
         <Divider />
         <MenuItem primaryText="Sign out" />
 
       </IconMenu>
     );
-  },
+  }
 
   renderButtons() {
     let logOutLink = <Link to="signout" />;
@@ -120,7 +125,7 @@ const Header = React.createClass({
     } else {
       return <FlatButton containerElement={logInLink} label="Login" />;
     }
-  },
+  }
 
   renderPicture() {
     const picture =
@@ -129,7 +134,7 @@ const Header = React.createClass({
     if (this.props.authenticated) {
       return <Avatar src={picture} />;
     } else return <div />;
-  },
+  }
 
   renderToolBar() {
     return (
@@ -150,7 +155,7 @@ const Header = React.createClass({
         </ToolbarGroup>
       </Toolbar>
     );
-  },
+  }
 
   renderAppBar() {
     return (
@@ -167,7 +172,7 @@ const Header = React.createClass({
         iconElementRight={this.renderButtons()}
       />
     );
-  },
+  }
 
   render() {
     let homeLink = <Link to={"/"} />;
@@ -178,6 +183,6 @@ const Header = React.createClass({
       </MuiThemeProvider>
     );
   }
-});
+}
 
-export default withAuth(Header);
+export default withRouter(withAuth(Header));

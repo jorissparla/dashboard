@@ -1,6 +1,6 @@
 import { gql, graphql } from "react-apollo";
 import React from "react";
-import { withRouter, browserHistory } from "react-router";
+import { withRouter } from "react-router-dom";
 import Paper from "material-ui/Paper";
 import TextField from "material-ui/TextField";
 import Avatar from "material-ui/Avatar";
@@ -88,7 +88,7 @@ class SupportCardEdit extends React.Component {
       // .then(this.props.data.refetch())
       .then(alert("Updated"))
       .then(this.props.data.refetch())
-      .then(() => browserHistory.push("/test"))
+      .then(() => this.props.history.push("/supportcard"))
       .catch(e => window.alert(JSON.stringify(e, null, 2)));
   }
 
@@ -186,7 +186,7 @@ export default graphql(deleteSupportCard, {
     })
   })(
     graphql(supportcard, {
-      options: ownProps => ({ variables: { id: ownProps.params.id } })
+      options: ownProps => ({ variables: { id: ownProps.match.params.id } })
     })(withRouter(withAuth(SupportCardEdit)))
   )
 );

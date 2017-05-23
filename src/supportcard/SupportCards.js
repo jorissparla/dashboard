@@ -2,7 +2,7 @@ import React from "react";
 import { gql, graphql } from "react-apollo";
 import { SmallCard } from "../common/SmallCard";
 import Dialog from "material-ui/Dialog";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { compose, withState, withHandlers } from "recompose";
 import SearchBar from "../common/SearchBar";

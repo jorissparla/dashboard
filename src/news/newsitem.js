@@ -1,6 +1,6 @@
 import React from "react";
 import { Field, reduxForm } from "redux-form";
-import { browserHistory } from "react-router";
+import { withRouter } from "react-router-dom";
 import { CardSection, Input } from "../common";
 import Divider from "material-ui/Divider";
 import Paper from "material-ui/Paper";
@@ -58,7 +58,7 @@ const NewsItem = ({
             />}
           <RaisedButton
             label="Cancel"
-            onClick={() => browserHistory.push("/news")}
+            onClick={() => this.props.history.push("/news")}
           />
         </CardSection>
         <Divider />
@@ -105,4 +105,4 @@ const NewsItem = ({
   );
 };
 
-export default reduxForm({ form: "_newsitem" })(NewsItem);
+export default reduxForm({ form: "_newsitem" })(withRouter(NewsItem));

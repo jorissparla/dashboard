@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { fetchChat } from "../actions/index";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import { List, ListItem } from "material-ui/List";
 import Divider from "material-ui/Divider";
 import Subheader from "material-ui/Subheader";

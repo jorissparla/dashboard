@@ -1,5 +1,5 @@
 import axios from "axios";
-import { browserHistory } from "react-router";
+//import { withRouter } from "react-router-dom";
 
 export const FETCH_SUMMARY = "FETCH_SUMMARY";
 export const FETCH_CHAT = "FETCH_CHAT";
@@ -66,7 +66,7 @@ const signinUser0 = ({ email, password }) => {
         localStorage.setItem("email", email);
         localStorage.setItem("picture", response.data.user.pic);
         // - redirect to the route '/feature'
-        browserHistory.push("/");
+        // browserHistory.push("/");
       })
       .catch(() => {
         // If request is bad...
@@ -93,7 +93,8 @@ const signinUser = async ({ email, password }) => {
       localStorage.setItem("picture", response.data.user.pic);
       localStorage.setItem("role", response.data.user.role);
       dispatch({ type: AUTH_USER, user: response.data.user });
-      browserHistory.push("/");
+      return;
+      //browserHistory.push("/");
     }
   };
 };

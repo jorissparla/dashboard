@@ -269,6 +269,6 @@ export default graphql(updateStatus, {
   })
 })(
   graphql(queryProfile, {
-    options: ownProps => ({ variables: { id: ownProps.params.id } })
+    options: ownProps => ({ variables: { id: ownProps.match.params.id } })
   })(withRouter(withAuth(StudentView)))
 );

@@ -4,7 +4,7 @@ import styled from "styled-components";
 import FlatButton from "material-ui/FlatButton";
 import Badge from "material-ui/Badge";
 import { blue500 } from "material-ui/styles/colors";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 import StudentsCard from "./StudentsCard";
 
 const imgList = [
@@ -68,14 +68,14 @@ const StyledLink = styled(Link)`
     color: white;
   }
 `;
-const StyledHyperLink = styled(Link)`
+/*const Link = styled(Link)`
   text-decoration: none;
   :hover {
     cursor:pointer;
   }
   display: flex;
   justify-content: space-between;
-`;
+`;*/
 const StyledBadge = styled(Badge)`
 float:right;
   align-content: center;
@@ -87,25 +87,25 @@ export default ({ course, index, count }) => {
   return (
     <StyledContainer key={course.id}>
       <StyledImage src={image} />
-      <StyledHyperLink to={course.link} title={course.link}>
+      <StyledLink to={course.link || "/"}>
         <Title>
           {course.title}
 
         </Title>
         <StyledBadge badgeContent={count} primary={true} />
-      </StyledHyperLink>
+      </StyledLink>
       <StyledBody>
         {course.description}
       </StyledBody>
       <BottomStyle>
         <TeamSpan>{course.team}</TeamSpan>
-        <StyledLink to={`courses/edit/${course.id}`}>
+        <Link to={`courses/edit/${course.id || "/"}`}>
           <FlatButton
             backgroundColor={blue500}
             label="View"
             style={{ color: "white" }}
           />
-        </StyledLink>
+        </Link>
 
       </BottomStyle>
     </StyledContainer>

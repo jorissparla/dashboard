@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { browserHistory } from "react-router";
+import { withRouter } from "react-router-dom";
 import { createAlert } from "../actions/index";
 import AlertItemForm from "./alertitemForm";
 import RaisedButton from "material-ui/RaisedButton";
@@ -17,12 +17,6 @@ const styles = {
     labelColor: "white",
     margin: "20px"
   }
-};
-
-const doSubmit = values => {
-  alert("doSubmit");
-  createAlert(values);
-  browserHistory.push("/alerts");
 };
 
 const AlertFormButtons = () => {
@@ -46,26 +40,18 @@ const AlertFormButtons = () => {
 };
 
 class AlertItemAddNew extends Component {
+  doSubmit = values => {
+    alert("doSubmit");
+    createAlert(values);
+    setTimeout(() => this.props.history.push("/alerts"), 500);
+  };
+
   render() {
     return (
       <Card>
+
         <CardSection>
-          Text
-        </CardSection>
-        <CardSection>
-          Text
-        </CardSection>
-        <CardSection>
-          Text
-        </CardSection>
-        <CardSection>
-          Text
-        </CardSection>
-        <CardSection>
-          Text
-        </CardSection>
-        <CardSection>
-          <AlertItemForm onSave={doSubmit} buttons={AlertFormButtons()} />
+          <AlertItemForm onSave={this.doSubmit} buttons={AlertFormButtons()} />
         </CardSection>
 
       </Card>
@@ -73,4 +59,4 @@ class AlertItemAddNew extends Component {
   }
 }
 
-export default connect(null, { createAlert })(AlertItemAddNew);
+export default connect(null, { createAlert })(withRouter(AlertItemAddNew));

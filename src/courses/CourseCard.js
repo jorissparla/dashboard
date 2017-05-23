@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { gql, graphql } from "react-apollo";
 import { Tabs, Tab } from "material-ui/Tabs";
 import { blue500 } from "material-ui/styles/colors";
-import { withRouter, browserHistory } from "react-router";
+import { withRouter } from "react-router-dom";
 import { List, ListItem } from "material-ui/List";
 import styled from "styled-components";
 import Divider from "material-ui/Divider";
@@ -189,7 +189,7 @@ export default graphql(CourseDelete, {
     })
   })(
     graphql(CourseQuery, {
-      options: ownProps => ({ variables: { id: ownProps.params.id } })
+      options: ownProps => ({ variables: { id: ownProps.match.params.id } })
     })(withRouter(CourseCard))
   )
 );

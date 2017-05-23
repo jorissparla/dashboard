@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { Link, withRouter, browserHistory } from "react-router";
+import { Link, withRouter } from "react-router-dom";
 import styled from "styled-components";
 import Card from "./Card";
 import SearchBar from "../common/SearchBar";
@@ -76,7 +76,7 @@ class StudentTables extends Component {
       >
         <MenuItem
           primaryText="View"
-          onClick={() => browserHistory.push(`/students/${id}`)}
+          onClick={() => this.props.history.push(`/students/${id}`)}
         />
         <MenuItem primaryText="Send feedback" />
         <MenuItem primaryText="Sign out" />
@@ -155,4 +155,4 @@ class StudentTables extends Component {
   }
 }
 
-export default StudentTables;
+export default withRouter(StudentTables);
