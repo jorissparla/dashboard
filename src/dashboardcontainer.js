@@ -43,14 +43,15 @@ class DashBoardContainer extends Component {
       case 6:
         return <DashBoard />;
       case 2:
-        return <KudoListAll />;
+        return <DashBoardStats data={["Tools"]} />;
       case 3:
         return <GoLives />;
       case 4:
         return <HistoryDayAll />;
       case 0:
+        return <DashBoardStats data={["Logistics"]} />;
       case 1:
-        return <DashBoardStats />;
+        return <DashBoardStats data={["Finance"]} />;
       default:
         return <div>Invalid Dashboard</div>;
     }

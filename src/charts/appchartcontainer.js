@@ -1,9 +1,9 @@
-import React from 'react'
-import {connect} from 'react-redux'
-import {fetchSummary} from '../actions/index'
-import SummaryChart from './summarychart'
+import React from "react";
+import { connect } from "react-redux";
+import { fetchSummary } from "../actions/index";
+import SummaryChart from "./summarychart";
 
-const { func, string, number, object, arrayOf } = React.PropTypes
+const { func, string, number, object, arrayOf } = React.PropTypes;
 
 const AppChartContainer = React.createClass({
   propTypes: {
@@ -15,59 +15,65 @@ const AppChartContainer = React.createClass({
     type: string,
     summary: arrayOf(object)
   },
-  myTimer () {
-    const data = (!this.props.data) ? ['Logistics'] : this.props.data
+  myTimer() {
+    const data = !this.props.data ? ["Logistics"] : this.props.data;
     this.setState({
       index: this.state.index + 1,
       nrTeams: data.length
-    })
-    const {nrTeams, index} = this.state
+    });
+    const { nrTeams, index } = this.state;
     if (index > nrTeams - 1) {
       this.setState({
         index: 0
-      })
+      });
     }
   },
 
-  componentWillMount () {
-    this.setState({ index: 0 })
+  componentWillMount() {
+    this.setState({ index: 0 });
   },
 
-  componentDidMount () {
-    this.props.fetchSummary()
+  componentDidMount() {
+    this.props.fetchSummary();
 
-    this.timerhandle = setInterval(this.myTimer, this.props.refreshRate || 15000)
+    if (this.props.refreshRate !== 0)
+      this.timerhandle = setInterval(
+        this.myTimer,
+        this.props.refreshRate || 15000
+      );
   },
 
-  componentWillUnmount () {
-    clearInterval(this.timerhandle)
+  componentWillUnmount() {
+    if (this.props.refreshRate !== 0) clearInterval(this.timerhandle);
   },
 
-  render () {
-    const data = (!this.props.data) ? ['Logistics'] : this.props.data
-    const value = (!this.props.value) ? 'supportBacklog' : this.props.value
-    const title = (!this.props.title) ? value : this.props.title
-    const type = (!this.props.type) ? 'line' : this.props.type
-    const team = data[this.state.index || 0]
-    const summary = this.props.summary // .reverse()
-    const color = this.props.color
+  render() {
+    const data = !this.props.data ? ["Logistics"] : this.props.data;
+    const value = !this.props.value ? "supportBacklog" : this.props.value;
+    const title = !this.props.title ? value : this.props.title;
+    const type = !this.props.type ? "line" : this.props.type;
+    const team = data[this.state.index || 0];
+    const summary = this.props.summary; // .reverse()
+    const color = this.props.color;
     // console.dir('Summary', summary)
     return (
       <div>
-        <SummaryChart data={summary}
+        <SummaryChart
+          data={summary}
           title={title}
           type={type}
-          xvalue='weekNr'
+          xvalue="weekNr"
           value={value}
           color={color}
-          team={team} />
+          team={team}
+        />
       </div>
-    )
+    );
   }
-})
+});
 
-const mapStateToProps = (state) => {
-  return {summary: state.summary.summary}
-}
+const mapStateToProps = state => {
+  return { summary: state.summary.summary };
+};
 
-export default connect(mapStateToProps, {fetchSummary})(AppChartContainer)
+export default connect(mapStateToProps, { fetchSummary })(AppChartContainer);
