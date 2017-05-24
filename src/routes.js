@@ -76,20 +76,20 @@ const AppRoutes = () => (
       component={RequireAuth(NewsItemAddContainer)}
     />
 
-    <Route path="golivelist" component={GoLiveList} />
-    <Route path="golivelist1" component={GoLiveList1} />
-    <Route path="golivelistside" component={GoLiveListSide} />
-    <Route path="golives" component={GoLives} />
-    <Route path="kudos" component={KudoList} />
-    <Route path="kudos1" component={KudoList1} />
-    <Route path="kudosall" component={KudoListAll} />
-    <Route path="kudolistcomponent" component={KudoListComponent} />
+    <Route path="/golivelist" component={GoLiveList} />
+    <Route path="/golivelist1" component={GoLiveList1} />
+    <Route path="/golivelistside" component={GoLiveListSide} />
+    <Route path="/golives" component={GoLives} />
+    <Route path="/kudos" component={KudoList} />
+    <Route path="/kudos1" component={KudoList1} />
+    <Route path="/kudosall" component={KudoListAll} />
+    <Route path="/kudolistcomponent" component={KudoListComponent} />
     <Route path="signin" component={Signin} />
     <Route path="signout" component={Signout} />
     <Route path="forgot" component={Forgot} />
     <Route path="reset/:token" component={UpdatePassword} />
-    <Route path="historyday" component={HistoryDayContainer} />
-    <Route path="historyall" component={HistoryDayAll} />
+    <Route path="/historyday" component={HistoryDayContainer} />
+    <Route path="/historyall" component={HistoryDayAll} />
     <Route path="test/edit/:id" component={NewsItemContainer} />
     <Route path="test/new" component={NewsItemAddContainer} />
     <Route exact path="/courses" component={CourseList} />
