@@ -7,6 +7,7 @@ import { signinUser } from "../actions";
 import { connect } from "react-redux";
 import ErrorDialog from "../errordialog";
 import Dialog from "material-ui/Dialog";
+import { withRouter } from "react-router-dom";
 
 const style = {
   paper: {
@@ -25,9 +26,9 @@ const style = {
 };
 const required = value => (value == null ? "Required" : undefined);
 const email = value =>
-  (value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)
+  value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)
     ? "Invalid email"
-    : undefined);
+    : undefined;
 
 let Signin = React.createClass({
   doSubmit({ email, password }) {
@@ -35,6 +36,7 @@ let Signin = React.createClass({
       `You submitted Parent:\n\n${JSON.stringify({ email, password }, null, 2)}`
     );*/
     this.props.signinUser({ email, password });
+    this.props.history.push("/");
   },
 
   renderAlert() {
@@ -97,4 +99,4 @@ Signin = reduxForm({
   defaultValues: {}
 })(Signin);
 
-export default connect(mapStateToProps, { signinUser })(Signin);
+export default connect(mapStateToProps, { signinUser })(withRouter(Signin));
