@@ -84,10 +84,10 @@ const AppRoutes = () => (
     <Route path="/kudos1" component={KudoList1} />
     <Route path="/kudosall" component={KudoListAll} />
     <Route path="/kudolistcomponent" component={KudoListComponent} />
-    <Route path="signin" component={Signin} />
-    <Route path="signout" component={Signout} />
-    <Route path="forgot" component={Forgot} />
-    <Route path="reset/:token" component={UpdatePassword} />
+    <Route path="/signin" component={Signin} />
+    <Route path="/signout" component={Signout} />
+    <Route path="/forgot" component={Forgot} />
+    <Route path="/reset/:token" component={UpdatePassword} />
     <Route path="/historyday" component={HistoryDayContainer} />
     <Route path="/historyall" component={HistoryDayAll} />
     <Route path="test/edit/:id" component={NewsItemContainer} />
