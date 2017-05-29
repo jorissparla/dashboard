@@ -69,7 +69,7 @@ class SupportCardEdit extends React.Component {
     this.props
       .deleteSupportCard({ id })
       .then(this.props.data.refetch())
-      .then(() => (window.location.href = "/supportcard"))
+      .then(() => this.props.history.push("/supportcard"))
       .catch(e => alert(JSON.stringify(e, null, 2)));
   }
 
@@ -100,7 +100,7 @@ class SupportCardEdit extends React.Component {
       supportcard,
       modifySupportCard
     } = this.props.data;
-    const { authenticated } = this.props;
+    const { authenticated, history } = this.props;
     if (loading) {
       return <p>Loading ...</p>;
     }

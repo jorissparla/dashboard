@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Field, reduxForm } from "redux-form";
+import { withRouter } from "react-router-dom";
 import { SelectField } from "redux-form-material-ui";
 import { CardSection, Card, Input, MyDatePicker } from "../common";
 import Paper from "material-ui/Paper";
@@ -86,7 +87,7 @@ class CourseForm extends Component {
     this.props.onDelete(e);
   }
   render() {
-    const { handleSubmit, course, onSave, authenticated } = this.props;
+    const { handleSubmit, course, onSave, authenticated, history } = this.props;
     const readOnly = !authenticated;
     return (
       <form onSubmit={handleSubmit(this.handleSubmit)}>
@@ -252,7 +253,7 @@ class CourseForm extends Component {
               secondary={true}
               label="Cancel"
               type="reset"
-              onClick={() => (window.location.href = "/courses")}
+              onClick={() => setInterval(history.push("/courses"), 500)}
             />
             {!readOnly &&
               course &&
@@ -265,8 +266,7 @@ class CourseForm extends Component {
               <RegisterButton
                 label="Register"
                 onClick={() =>
-                  (window.location.href =
-                    "/courses/addstudents/" + this.props.course.id)}
+                  history.push(`/courses/addstudents/${this.props.course.id}`)}
               />}
             <Chip style={{ margin: 4 }}>
               {course
@@ -283,5 +283,5 @@ class CourseForm extends Component {
 }
 
 export default reduxForm({ form: "courseform", enableReinitialize: true })(
-  withAuth(CourseForm)
+  withAuth(withRouter(CourseForm))
 );

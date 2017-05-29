@@ -44,7 +44,7 @@ class CourseCard extends Component {
     this.props
       .deleteCourse({ id })
       .then(this.props.data.refetch())
-      .then(() => (window.location.href = "/courses"))
+      .then(() => setTimeout(this.props.history.push("/courses"), 500))
       .catch(e => alert(JSON.stringify(e, null, 2)));
   }
 

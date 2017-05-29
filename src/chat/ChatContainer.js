@@ -1,13 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 import { fetchRanges, createChat } from "../actions";
 import { Card, OkCancelDialog } from "../common";
 import ChatAdd from "./ChatAdd";
 import Snackbar from "material-ui/Snackbar";
-
-const doCancel = () => {
-  window.location.href = "/chat";
-};
 
 class ChatContainer extends Component {
   state = {
@@ -21,6 +18,9 @@ class ChatContainer extends Component {
     this.props.fetchRanges();
   }
 
+  doCancel = () => {
+    this.props.history.push("/chat");
+  };
   doSubmit(values) {
     const { weeknr, team, nrchats, responseintime, fromDate } = values;
     const mappedValues = { weeknr, team, nrchats, responseintime, fromDate };
@@ -71,7 +71,7 @@ class ChatContainer extends Component {
         <ChatAdd
           ranges={ranges}
           onSave={this.doSubmit.bind(this)}
-          onCancel={doCancel}
+          onCancel={this.doCancel}
         />
         <Snackbar
           open={this.state.showMessage}
@@ -90,5 +90,5 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps, { fetchRanges, createChat })(
-  ChatContainer
+  withRouter(ChatContainer)
 );

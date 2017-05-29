@@ -30,7 +30,8 @@ const NewsItem = ({
   onDelete,
   onCancel,
   handleSubmit,
-  title
+  title,
+  history
 }) => {
   console.log(this);
 
@@ -56,10 +57,7 @@ const NewsItem = ({
               label="Delete"
               onClick={handleDelete}
             />}
-          <RaisedButton
-            label="Cancel"
-            onClick={() => this.props.history.push("/news")}
-          />
+          <RaisedButton label="Cancel" onClick={() => history.push("/news")} />
         </CardSection>
         <Divider />
         <Field
@@ -69,6 +67,12 @@ const NewsItem = ({
           component={Input}
           floatingLabelText="title"
           fullWidth={true}
+          style={{
+            fontFamily: "Kristen ITC Regular",
+            fontSize: "24px",
+            color: "#039BE5",
+            fontWeight: 800
+          }}
         />
 
         <Field
@@ -82,6 +86,10 @@ const NewsItem = ({
           rows={4}
           rowsMax={4}
           fullWidth={true}
+          style={{
+            background: "lightyellow",
+            border: "1px solid lightgray"
+          }}
         />
         <div style={{ display: "flex", alignContent: "center" }}>
           <Left>

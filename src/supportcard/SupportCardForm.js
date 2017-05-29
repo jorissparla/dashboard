@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 import { Field, reduxForm } from "redux-form";
 import { SelectField } from "redux-form-material-ui";
 import Paper from "material-ui/Paper";
@@ -38,7 +39,8 @@ const SupportCardForm = props => {
     onSave,
     authenticated,
     handleSubmit,
-    onDelete
+    onDelete,
+    history
   } = props;
   const readOnly = !authenticated;
   console.log("Props## 🛑 🌮 🐶", props);
@@ -109,7 +111,7 @@ const SupportCardForm = props => {
             secondary={true}
             label="Cancel"
             type="reset"
-            onClick={() => (window.location.href = "/supportcard")}
+            onClick={() => setTimeout(history.push("/supportcard"), 500)}
           />
           {!readOnly &&
             supportcard &&
@@ -125,5 +127,5 @@ const SupportCardForm = props => {
   );
 };
 export default reduxForm({ form: "CardForm", enableReinitialize: true })(
-  SupportCardForm
+  withRouter(SupportCardForm)
 );

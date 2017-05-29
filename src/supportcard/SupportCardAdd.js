@@ -1,5 +1,6 @@
 import { gql, graphql } from "react-apollo";
 import React from "react";
+import { withRouter } from "react-router-dom";
 import Paper from "material-ui/Paper";
 import TextField from "material-ui/TextField";
 import Avatar from "material-ui/Avatar";
@@ -23,14 +24,15 @@ const SupportCardAdd = ({
   data: { loading, error, categories },
   addSupportCard,
   authenticated,
-  user
+  user,
+  history
 }) => {
   const handleAdd = e => {
     console.log("handleAdd", JSON.stringify(e, null, -2));
     const { id, title, description, category, link } = e;
     const createdby = user.email || "system";
     addSupportCard({ id, title, description, category, link, createdby })
-      .then(() => (window.location.href = "/supportcard"))
+      .then(() => history.push("/supportcard"))
       .catch(e => window.alert(JSON.stringify(e, null, 2)));
   };
   if (loading) {
@@ -83,5 +85,5 @@ export default graphql(CategoryQuery)(
           variables: { input }
         })
     })
-  })(withAuth(SupportCardAdd))
+  })(withAuth(withRouter(SupportCardAdd)))
 );

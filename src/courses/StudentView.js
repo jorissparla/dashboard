@@ -110,7 +110,7 @@ class StudentView extends Component {
           primaryText="View Course"
           leftIcon={<FileFileDownload />}
           onClick={() =>
-            (window.location.href = `/courses/edit/${enrol.course.id}`)}
+            this.props.history.push(`/courses/edit/${enrol.course.id}`)}
         />
       </IconMenu>
     );
