@@ -7,7 +7,7 @@ import styled from "styled-components";
 import { compose, withState, withHandlers } from "recompose";
 import SearchBar from "../common/SearchBar";
 import withAuth from "../utils/withAuth";
-import AddCard from "../courses/AddCard";
+import AddCard from "./AddCard";
 import CategoryTabs from "./CategoryTabs";
 
 const cardColors = [
