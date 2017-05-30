@@ -42,6 +42,7 @@ const Inner = styled.div`
   flex-direction: column;
   margin-left: 5px;
   justify-content: space-between;
+  height: 150px;
 `;
 
 const BottomStyle = styled.div`
@@ -57,6 +58,8 @@ const StyledBody = styled.p`
   margin-bottom: 20px;
     font-size: 15px;
     flex-grow: 1;
+    font-size: 12px;
+    font-family: Helvetica;
 `;
 const Footer = styled.div`
   margin: 5px;
@@ -66,7 +69,7 @@ const Outer = styled.div`
   display: flex;
   flex-wrap:wrap;
 `;
-const paperStyle = color => {
+const paperStyle = (color, textcolor = "#000") => {
   return {
     display: "flex",
     flexDirection: "column",
@@ -74,7 +77,8 @@ const paperStyle = color => {
     width: "18%",
     margin: "5px",
     minWidth: "200px",
-    backgroundColor: color
+    backgroundColor: color,
+    color: textcolor
   };
 };
 
@@ -87,15 +91,16 @@ const SmallCard = ({
   likes = 1,
   action = null,
   color = "#FFFFF",
+  textcolor = "#000",
   canEdit = false,
   editLink = ""
 }) => {
   return (
-    <Paper style={paperStyle(color)} zDepth={3}>
+    <Paper style={paperStyle(color, textcolor)} zDepth={3}>
       <Title>{title}</Title>
 
       <StyledBody>
-        {text.slice(0, 250)}
+        {text.slice(0, 200).concat("...")}
       </StyledBody>
       <Divider />
       <BottomStyle>

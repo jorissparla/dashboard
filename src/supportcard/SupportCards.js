@@ -11,13 +11,17 @@ import AddCard from "../courses/AddCard";
 import CategoryTabs from "./CategoryTabs";
 
 const cardColors = [
-  "#7fbadb",
-  "papayawhip",
-  "palevioletred",
-  "#B9F6CA",
-  "#FFCC80",
-  "#E1F5FE",
-  "#607D8B"
+  { back: "#FFCCBC", front: "#000" },
+  { back: "#7fbadb", front: "#000" },
+  { back: "papayawhip", front: "#000" },
+  { back: "palevioletred", front: "#000" },
+  { back: "#B9F6CA", front: "#000" },
+  { back: "#EDE7F6", front: "#000" },
+  { back: "#80D8FF", front: "#000" },
+  { back: "#FFEB3B", front: "#000" },
+  { back: "#FFCC80", front: "#000" },
+  { back: "#E1F5FE", front: "#000" },
+  { back: "#607D8B", front: "#000" }
 ];
 
 const enhanceSearchBar = withState("searchText", "setSearchText", "");
@@ -101,7 +105,8 @@ const SupportCards = enhance(
           {filteredCards.map(
             ({ id, title, description, category, link }, i) => (
               <SmallCard
-                color={cardColors[i % (cardColors.length - 1)]}
+                color={cardColors[i % (cardColors.length - 1)].back}
+                textcolor={cardColors[i % (cardColors.length - 1)].front}
                 key={id}
                 title={title}
                 text={description}
