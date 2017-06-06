@@ -264,7 +264,7 @@ class CourseForm extends Component {
             {!readOnly &&
               course &&
               <RegisterButton
-                label="Register"
+                label="Edit Registration"
                 onClick={() =>
                   history.push(`/courses/addstudents/${this.props.course.id}`)}
               />}

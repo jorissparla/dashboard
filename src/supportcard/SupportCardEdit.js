@@ -68,13 +68,12 @@ class SupportCardEdit extends React.Component {
     const { id } = e;
     this.props
       .deleteSupportCard({ id })
-      .then(this.props.data.refetch())
-      .then(() => this.props.history.push("/supportcard"))
+      // .then(this.props.data.refetch())
+      .then(() => setTimeout(this.props.history.push("/supportcard"), 500))
       .catch(e => alert(JSON.stringify(e, null, 2)));
   }
 
   handleSave(e) {
-    console.log("doSubmit", JSON.stringify(e, null, -2));
     const { id, title, description, category, link } = e;
 
     this.props
@@ -109,7 +108,7 @@ class SupportCardEdit extends React.Component {
     }
 
     const { id, title, description, category, link } = supportcard;
-
+    console.log("this.props", this.props);
     return (
       <div>
 

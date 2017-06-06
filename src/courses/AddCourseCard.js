@@ -71,7 +71,7 @@ class AddCourseCard extends Component {
       })
       .then(v => {
         console.log(v);
-        this.props.history.push("/courses");
+        window.location.href = "/courses";
       })
       .catch(e => window.alert(JSON.stringify(e, null, 2)));
   }

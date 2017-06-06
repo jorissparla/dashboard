@@ -15,6 +15,7 @@ import CircularProgress from "material-ui/CircularProgress";
 import Checkbox from "material-ui/Checkbox";
 import ContentAdd from "material-ui/svg-icons/content/add";
 import FloatingActionButton from "material-ui/FloatingActionButton";
+import RaisedButton from "material-ui/RaisedButton";
 import ActionFavorite from "material-ui/svg-icons/action/favorite";
 import ActionFavoriteBorder from "material-ui/svg-icons/action/favorite-border";
 import { TitleBar } from "../common/TitleBar";
@@ -127,7 +128,17 @@ class AddStudentsToCourse extends Component {
     return (
       <div>
         <Paper>
-          <TitleBar>Add Students to Course ' {course.title}'</TitleBar>
+          <TitleBar>
+            Add Students to Course '
+            {" "}
+            {course.title}
+            '
+            <RaisedButton
+              label="back to course"
+              onClick={() =>
+                (window.location.href = `/courses/edit/${course.id}`)}
+            />
+          </TitleBar>
         </Paper>
 
         <Div>

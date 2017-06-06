@@ -128,10 +128,12 @@ class StudentView extends Component {
   }
   renderCourses(enrollments) {
     const authenticated = this.props.authenticated;
+    if (!enrollments) return <div>Loading...</div>;
     return (
       <List>
-        {enrollments.map(enrol => (
+        {enrollments.map((enrol, i) => (
           <ListItem
+            key={i}
             primaryText={enrol.course.title}
             leftAvatar={
               <Avatar
