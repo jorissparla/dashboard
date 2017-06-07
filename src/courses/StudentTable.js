@@ -78,8 +78,8 @@ class StudentTables extends Component {
           primaryText="View"
           onClick={() => this.props.history.push(`/students/${id}`)}
         />
-        <MenuItem primaryText="Send feedback" />
-        <MenuItem primaryText="Sign out" />
+        <MenuItem disabled={true} primaryText="Send feedback" />
+        <MenuItem disabled={true} primaryText="Sign out" />
       </IconMenu>
     );
   }

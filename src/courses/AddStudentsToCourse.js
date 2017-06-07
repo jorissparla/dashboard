@@ -18,6 +18,7 @@ import FloatingActionButton from "material-ui/FloatingActionButton";
 import RaisedButton from "material-ui/RaisedButton";
 import ActionFavorite from "material-ui/svg-icons/action/favorite";
 import ActionFavoriteBorder from "material-ui/svg-icons/action/favorite-border";
+import { pinkA200, transparent } from "material-ui/styles/colors";
 import { TitleBar } from "../common/TitleBar";
 import withAuth from "../utils/withAuth";
 
@@ -92,7 +93,16 @@ class AddStudentsToCourse extends Component {
       >
         {student.picture
           ? <Avatar src={student.picture.data} />
-          : <Avatar src={`https://randomuser.me/api/portraits/men/18.jpg`} />}
+          : <Avatar
+              color={pinkA200}
+              backgroundColor={transparent}
+              style={{ left: 8 }}
+            >
+              {student.fullname
+                .slice(0, 1)
+                .concat(student.lastname.slice(0, 1))}
+            </Avatar>}
+
         {student.fullname}
       </Chip>
     ));
@@ -158,15 +168,32 @@ class AddStudentsToCourse extends Component {
               <List>
                 <Divider />
                 {filteredAccounts.map((item, index) => {
-                  const { id, picture, fullname, location, team, navid } = item;
+                  const {
+                    id,
+                    picture,
+                    fullname,
+                    firstname,
+                    lastname,
+                    location,
+                    team,
+                    navid
+                  } = item;
                   const enabled = false;
                   return (
                     <ListItem
                       key={id}
                       leftAvatar={
-                        <Avatar
-                          src={`https://randomuser.me/api/portraits/men/28.jpg`}
-                        />
+                        picture
+                          ? <Avatar src={picture.data} />
+                          : <Avatar
+                              color={pinkA200}
+                              backgroundColor={transparent}
+                              style={{ left: 8 }}
+                            >
+                              {fullname
+                                .slice(0, 1)
+                                .concat(lastname.slice(0, 1))}
+                            </Avatar>
                       }
                       primaryText={fullname}
                       secondaryText={`located in ${location}, in team ${team}`}
@@ -240,6 +267,7 @@ const selectedCourse = gql`
           id
           navid
           fullname
+          lastname
           team
           picture {
             data
@@ -250,8 +278,13 @@ const selectedCourse = gql`
       id
       navid
       fullname
-      team,
+      firstname
+      lastname
+      team
       location
+       picture {
+            data
+          }
     }
   }
 `;
