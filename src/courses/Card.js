@@ -61,7 +61,7 @@ const TeamSpan = styled.div`
   margin-right: 5px;
   flex-grow: 1;
 `;
-const StyledLink = styled(Link)`
+const StyledLink = styled.a`
   text-decoration: none;
     :hover {
     background:#0196F3;
@@ -87,13 +87,14 @@ export default ({ course, index, count }) => {
   return (
     <StyledContainer key={course.id}>
       <StyledImage src={image} />
-      <StyledLink to={course.link || "/"}>
+      <StyledLink href={course.link || "/"}>
         <Title>
           {course.title}
 
         </Title>
-        <StyledBadge badgeContent={count} primary={true} />
       </StyledLink>
+      <StyledBadge badgeContent={count} primary={true} />
+
       <StyledBody>
         {course.description}
       </StyledBody>

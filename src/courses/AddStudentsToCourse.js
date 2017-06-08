@@ -144,6 +144,7 @@ class AddStudentsToCourse extends Component {
             {course.title}
             '
             <RaisedButton
+              style={{ marginLeft: 20 }}
               label="back to course"
               onClick={() =>
                 (window.location.href = `/courses/edit/${course.id}`)}

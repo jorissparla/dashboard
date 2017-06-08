@@ -15,7 +15,7 @@ class NewsListContainer extends Component {
 
   onOpen(id) {
     console.log("ID!", id);
-    this.props.history.push(`/news/edit/${id}`);
+    this.props.history.replace(`/news/edit/${id}`);
   }
 
   onNew() {

@@ -33,13 +33,13 @@ const NewsItem = ({
   title,
   history
 }) => {
-  console.log(this);
+  //console.log("IV", newsitem);
 
   const handleDelete = e => {
     e.preventDefault();
     onDelete(newsitem.id);
   };
-
+  ``;
   return (
     <form onSubmit={handleSubmit(onSave)}>
       <Paper>
@@ -113,4 +113,6 @@ const NewsItem = ({
   );
 };
 
-export default reduxForm({ form: "_newsitem" })(withRouter(NewsItem));
+export default reduxForm({ form: "_newsitem", enableReinitialize: true })(
+  withRouter(NewsItem)
+);

@@ -18,8 +18,8 @@ class NewsItemContainer extends Component {
     setTimeout(() => this.props.history.replace("/news"), 500);
   };
 
-  componentDidMount() {
-    this.props.fetchNewsItem(this.props.match.params.id);
+  async componentDidMount() {
+    await this.props.fetchNewsItem(this.props.match.params.id);
   }
 
   render() {
