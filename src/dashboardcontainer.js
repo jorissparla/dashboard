@@ -6,6 +6,7 @@ import KudoListAll from "./kudos/kudolistall";
 import GoLives from "./golives/golives";
 import HistoryDayContainer from "./charts/historydaycontainer";
 import HistoryDayAll from "./charts/historydayallcontainer";
+import NewsListContainer from "./news/newslistcontainer";
 //import Award from './awards/award'
 
 class DashBoardContainer extends Component {
@@ -17,7 +18,7 @@ class DashBoardContainer extends Component {
   }
 
   myTimer() {
-    const newIndex = this.state.index === 6 ? 0 : this.state.index + 1;
+    const newIndex = this.state.index >= 7 ? 0 : this.state.index + 1;
     this.setState({
       index: newIndex
     });
@@ -39,6 +40,8 @@ class DashBoardContainer extends Component {
 
   renderDashBoard(index) {
     switch (index) {
+      case 7:
+        return <NewsListContainer />;
       case 5:
       case 6:
         return <DashBoard />;

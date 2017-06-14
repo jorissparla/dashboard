@@ -7,6 +7,7 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import styled from "styled-components";
 import { Card } from "./card";
 import { deepOrange500 } from "material-ui/styles/colors";
+import UserAvatar from "react-user-avatar";
 
 const Outer = styled.div`
   display: flex;
@@ -21,9 +22,9 @@ const muiTheme = getMuiTheme({
 
 const mapGender = g => {
   if (g === "M") {
-    return "men";
+    return "male";
   } else {
-    return "women";
+    return "female";
   }
 };
 
@@ -64,9 +65,8 @@ class KudoListComponent extends Component {
       ({ ownerrep_name, customer_name, gender, survey_date, pic }, index) => {
         const nr = indexList[index % nrKudos];
         const mgender = mapGender(gender);
-        const img = pic
-          ? `${pic}`
-          : `https://randomuser.me/api/portraits/${mgender}/${nr}.jpg`;
+        const img = pic ? `${pic}` : `http://nlbavwtls22/images/${mgender}.png`;
+
         return (
           <Card
             image={img}

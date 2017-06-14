@@ -57,7 +57,7 @@ const AppRoutes = () => (
     <Route exact path="/supportcard/add" component={SupportCardAdd} />
     <Route exact path="/alerts/new" component={RequireAuth(AlertItemAddNew)} />
     <Route path="/alerts/:id" component={RequireAuth(AlertItem)} />
-    <Route exact path="/news" component={RequireAuth(NewsListContainer)} />
+    <Route exact path="/news" component={NewsListContainer} />
     <Route
       exact
       path="/news/edit/:id"
