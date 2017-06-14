@@ -12,6 +12,7 @@ import { deepOrange500 } from "material-ui/styles/colors";
 import Paper from "material-ui/Paper";
 import styled from "styled-components";
 import moment from "moment";
+import UserAvatar from "react-user-avatar";
 //import Paper from 'material-ui/Paper'
 
 const H5Styled = styled.div`
@@ -133,7 +134,18 @@ class KudoListComponent0 extends Component {
             subtitle={subTitle(ownerrep_name)}
             actionIcon={DateView(survey_date)}
           >
-            <img src={img} alt="" />
+            {pic
+              ? <img src={pic} alt="" />
+              : <UserAvatar
+                  size="98"
+                  style={{
+                    fontSize: 48,
+                    display: "flex",
+                    justifyContent: "center",
+                    color: "white"
+                  }}
+                  name={ownerrep_name}
+                />}
           </GridTile>
         );
       }
