@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { withRouter } from "react-router";
 
 export default function(ComposedComponent) {
   class Authentication extends Component {
@@ -9,13 +10,13 @@ export default function(ComposedComponent) {
 
     componentWillMount() {
       if (!this.props.authenticated) {
-        this.context.router.push("/");
+        this.props.history.push("/");
       }
     }
 
     componentWillUpdate(nextProps) {
       if (!nextProps.authenticated) {
-        this.context.router.push("/");
+        this.props.history.push("/");
       }
     }
 
@@ -28,5 +29,5 @@ export default function(ComposedComponent) {
     return { authenticated: state.auth.authenticated, user: state.auth.user };
   }
 
-  return connect(mapStateToProps)(Authentication);
+  return connect(mapStateToProps)(withRouter(Authentication));
 }
