@@ -29,6 +29,7 @@ class NewsListContainer extends Component {
 
   render() {
     const { news, history, authenticated } = this.props;
+    console.log(authenticated);
     return (
       <div>
         <Paper style={{ padding: "10px" }}>
@@ -43,7 +44,11 @@ class NewsListContainer extends Component {
               <ContentAdd />
             </FloatingActionButton>}
         </Paper>
-        <NewsList news={news} onEdit={this.onOpen} />
+        <NewsList
+          news={news}
+          onEdit={this.onOpen}
+          authenticated={authenticated}
+        />
       </div>
     );
   }

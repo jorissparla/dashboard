@@ -18,7 +18,7 @@ const DateField = styled.div`
 `;
 
 class NewsList extends Component {
-  renderNews(news) {
+  renderNews = (news, authenticated) => {
     return news.map(newsitem => {
       const { title, body, img, expire_date, id } = newsitem;
       return (
@@ -32,7 +32,11 @@ class NewsList extends Component {
             }
             primaryText={title}
             rightIcon={
-              <ModeEdit color={blue500} onClick={() => this.props.onEdit(id)} />
+              authenticated &&
+                <ModeEdit
+                  color={blue500}
+                  onClick={() => this.props.onEdit(id)}
+                />
             }
             secondaryText={
               <p>
@@ -46,12 +50,12 @@ class NewsList extends Component {
         </Paper>
       );
     });
-  }
+  };
 
   render() {
     return (
       <List>
-        {this.renderNews(this.props.news)}
+        {this.renderNews(this.props.news, this.props.authenticated)}
       </List>
     );
   }
