@@ -132,7 +132,10 @@ const supportcard = gql`
         id
         title
         description
-        category
+        category {
+          name
+          
+        }
         link
     }
     categories {

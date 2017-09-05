@@ -30,8 +30,18 @@ const SupportCardAdd = ({
   const handleAdd = e => {
     console.log("handleAdd", JSON.stringify(e, null, -2));
     const { id, title, description, category, link } = e;
+    const categoryname = category;
     const createdby = user.email || "system";
-    addSupportCard({ id, title, description, category, link, createdby })
+    console.log(
+      "logging",
+      id,
+      title,
+      description,
+      categoryname,
+      link,
+      createdby
+    );
+    addSupportCard({ id, title, description, categoryname, link, createdby })
       .then(() => history.push("/supportcard"))
       .catch(e => window.alert(JSON.stringify(e, null, 2)));
   };
@@ -61,7 +71,9 @@ const addSupportCard = gql`
         id
         title
         description
-        category
+        category {
+          name
+        }
         link
         createdby
       }

@@ -53,75 +53,99 @@ const SupportCardQuery = gql`
       id
       title
       description
-      category
+      category {
+        name
+        color
+        backgroundcolor
+      }
       link
       created
     } 
   }
 `;
 
-const SupportCards = enhance(
-  ({
-    searchText,
-    setSearchText,
-    selectedCategory,
-    setSelectedCategory,
-    authenticated,
-    user,
-    data: { loading, error, supportcards },
-    filter = ""
-  }) => {
-    if (loading) {
-      return <p>Loading ...</p>;
-    }
-    if (error) {
-      return <p>{error.message}</p>;
-    }
+let SupportCards = ({
+  searchText,
+  setSearchText,
+  selectedCategory,
+  setSelectedCategory,
+  authenticated,
+  user,
+  data: { loading, error, supportcards },
+  filter = ""
+}) => {
+  if (loading) {
+    return <p>Loading ...</p>;
+  }
+  if (error) {
+    return <p>{error.message}</p>;
+  }
 
-    const filteredCards = supportcards
-      .filter(
-        card =>
-          card.category.toUpperCase().includes(searchText.toUpperCase()) ||
-          card.title.toUpperCase().includes(searchText.toUpperCase())
-      )
-      .filter(card =>
-        card.category.toUpperCase().includes(selectedCategory.toUpperCase())
+  const filteredCards = supportcards
+    .filter(card => {
+      const { category: { name }, title } = card;
+      return (
+        name.toUpperCase().includes(searchText.toUpperCase()) ||
+        title.toUpperCase().includes(searchText.toUpperCase())
       );
-    console.log("filter", filteredCards);
-    return (
-      <Container>
-        <CategoryTabs
-          onChange={setSelectedCategory}
-          onSave={v => console.log(v)}
-        />
-        <SearchBar onChange={setSearchText} />
-        <Div>
-          {authenticated &&
-            <AddCard
-              link="/supportcard/add"
-              title="Add a New Card"
-              background="papayawhip"
-            />}
-          {filteredCards.map(
-            ({ id, title, description, category, link }, i) => (
+    })
+    .filter(card => {
+      const { category: { name }, title } = card;
+      return name.toUpperCase().includes(selectedCategory.toUpperCase());
+    });
+  console.log("filter", filteredCards);
+  return (
+    <Container>
+      <CategoryTabs
+        onChange={setSelectedCategory}
+        onSave={v => console.log(v)}
+      />
+      <SearchBar onChange={setSearchText} />
+      <Div>
+        {authenticated &&
+          <AddCard
+            link="/supportcard/add"
+            title="Add a New Card"
+            background="papayawhip"
+          />}
+        {filteredCards.map(
+          (
+            {
+              id,
+              title,
+              description,
+              category: { name, color, backgroundcolor },
+              link
+            },
+            i
+          ) => {
+            console.log("id, name", id, name);
+            return (
               <SmallCard
-                color={cardColors[i % (cardColors.length - 1)].back}
-                textcolor={cardColors[i % (cardColors.length - 1)].front}
+                color={
+                  backgroundcolor ||
+                    cardColors[i % (cardColors.length - 1)].back
+                }
+                textcolor={
+                  color || cardColors[i % (cardColors.length - 1)].front
+                }
                 key={id}
                 title={title}
                 text={description}
-                category={category}
+                category={name}
                 buttonText="Open"
                 link={link}
                 canEdit={authenticated}
                 editLink={`/supportcard/edit/${id}`}
               />
-            )
-          )}
-        </Div>
-      </Container>
-    );
-  }
-);
+            );
+          }
+        )}
+      </Div>
+    </Container>
+  );
+};
+
+SupportCards = enhance(SupportCards);
 
 export default graphql(SupportCardQuery)(withAuth(SupportCards));
