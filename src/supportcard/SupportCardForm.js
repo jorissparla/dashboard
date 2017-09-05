@@ -76,7 +76,7 @@ const SupportCardForm = props => {
           disabled={readOnly}
           fullWidth={true}
           multiLine={true}
-          rows={4}
+          rows={16}
           component={Input}
         />
         <Field
@@ -104,6 +104,8 @@ const SupportCardForm = props => {
           component={Input}
           underlineShow={true}
           style={{ fontSize: 14 }}
+          onClick={() =>
+            readOnly ? window.open(initialValues.link) : console.log("link")}
         />
         <CardSection>
           {!readOnly && <NormalRaisedButton label="Save" type="submit" />}
@@ -118,6 +120,12 @@ const SupportCardForm = props => {
             <DeleteButton
               label="Delete"
               onClick={() => onDelete(supportcard)}
+            />}
+          {readOnly &&
+            supportcard &&
+            <DeleteButton
+              label="View Link"
+              onClick={() => window.open(initialValues.link)}
             />}
 
         </CardSection>

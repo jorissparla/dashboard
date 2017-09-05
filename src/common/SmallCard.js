@@ -5,6 +5,8 @@ import FlatButton from "material-ui/FlatButton";
 import FontIcon from "material-ui/FontIcon";
 import IconButton from "material-ui/IconButton";
 import ThumbsUp from "material-ui/svg-icons/action/thumb-up";
+import ViewIcon from "material-ui/svg-icons/action/pageview";
+import NoteAdd from "material-ui/svg-icons/action/pageview";
 import ModeEdit from "material-ui/svg-icons/editor/mode-edit";
 import LinkIcon from "material-ui/svg-icons/content/link";
 import { blue500 } from "material-ui/styles/colors";
@@ -69,6 +71,7 @@ const Outer = styled.div`
   display: flex;
   flex-wrap:wrap;
 `;
+
 const paperStyle = (color, textcolor = "#000") => {
   return {
     display: "flex",
@@ -95,6 +98,7 @@ const SmallCard = ({
   canEdit = false,
   editLink = ""
 }) => {
+  console.log(title, canEdit);
   return (
     <Paper style={paperStyle(color, textcolor)} zDepth={3}>
       <Title>{title}</Title>
@@ -104,18 +108,18 @@ const SmallCard = ({
       </StyledBody>
       <Divider />
       <BottomStyle>
-        {canEdit &&
-          <Link to={editLink}>
-            <IconButton
-              iconStyle={{
-                height: "16px",
-                width: "16px",
-                flexGrow: 0
-              }}
-            >
-              <ModeEdit />{likes}
-            </IconButton>
-          </Link>}
+        <Link to={editLink}>
+          <IconButton
+            iconStyle={{
+              height: "16px",
+              width: "16px",
+              flexGrow: 0
+            }}
+          >
+            {canEdit === true ? <ModeEdit /> : <ViewIcon />}
+            {likes}
+          </IconButton>
+        </Link>
         <Cat>{category}</Cat>
         <FlatButton
           style={{
