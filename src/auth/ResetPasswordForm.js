@@ -52,7 +52,7 @@ const ResetPassword = ({ data: { account, loading } }) => {
   return (
     <div>
       Loading data{account.fullname}
-      <UpdatePassword id={account.id} />
+      <UpdatePassword id={account.id} email={account.email} />
     </div>
   );
 };
