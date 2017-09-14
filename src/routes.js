@@ -27,6 +27,7 @@ import Signout from "./auth/signout";
 import Forgot from "./auth/forgot";
 import UpdatePassword from "./auth/resetpassword";
 import RequireAuth from "./auth/require_auth";
+import ResetPasswordForm from "./auth/ResetPasswordForm";
 
 import NewsListContainer from "./news/newslistcontainer";
 import NewsItemContainer from "./news/newsitemcontainer";
@@ -86,6 +87,7 @@ const AppRoutes = () => (
     <Route path="/kudolistcomponent" component={KudoListComponent} />
     <Route path="/signin" component={Signin} />
     <Route path="/signout" component={Signout} />
+    <Route path="/confirmation/:token" component={ResetPasswordForm} />
     <Route path="/forgot" component={Forgot} />
     <Route path="/reset/:token" component={UpdatePassword} />
     <Route path="/historyday" component={HistoryDayContainer} />

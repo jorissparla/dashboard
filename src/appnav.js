@@ -113,8 +113,8 @@ class Header extends React.Component {
   }
 
   renderButtons() {
-    let logOutLink = <Link to="signout" />;
-    let logInLink = <Link to="signin" />;
+    let logOutLink = <Link to="/signout" />;
+    let logInLink = <Link to="/signin" />;
 
     if (this.props.authenticated) {
       return (
