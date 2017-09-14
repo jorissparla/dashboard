@@ -28,6 +28,7 @@ import Forgot from "./auth/forgot";
 import UpdatePassword from "./auth/resetpassword";
 import RequireAuth from "./auth/require_auth";
 import ResetPasswordForm from "./auth/ResetPasswordForm";
+import RequestResetPassword from "./auth/RequestResetPassword";
 
 import NewsListContainer from "./news/newslistcontainer";
 import NewsItemContainer from "./news/newsitemcontainer";
@@ -88,7 +89,7 @@ const AppRoutes = () => (
     <Route path="/signin" component={Signin} />
     <Route path="/signout" component={Signout} />
     <Route path="/confirmation/:token" component={ResetPasswordForm} />
-    <Route path="/forgot" component={Forgot} />
+    <Route path="/forgot" component={RequestResetPassword} />
     <Route path="/reset/:token" component={UpdatePassword} />
     <Route path="/historyday" component={HistoryDayContainer} />
     <Route path="/historyall" component={HistoryDayAll} />

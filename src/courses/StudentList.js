@@ -1,12 +1,8 @@
 import React, { Component } from "react";
 
-import { Link, withRouter } from "react-router-dom";
-import styled from "styled-components";
-import Card from "./Card";
+import { withRouter } from "react-router-dom";
 import SearchBar from "../common/SearchBar";
 import { List, ListItem } from "material-ui/List";
-import Divider from "material-ui/Divider";
-import RaisedButton from "material-ui/RaisedButton";
 import Paper from "material-ui/Paper";
 import IconMenu from "material-ui/IconMenu";
 import MenuItem from "material-ui/MenuItem";
@@ -15,15 +11,6 @@ import MoreVertIcon from "material-ui/svg-icons/navigation/more-vert";
 //@ts-check
 import Avatar from "material-ui/Avatar";
 import { pinkA200, transparent } from "material-ui/styles/colors";
-
-const StyledContainer = styled.div`
-  margin-top: 10px;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: flex-start;
- 
-`;
 
 class StudentList extends Component {
   state = { searchText: "" };

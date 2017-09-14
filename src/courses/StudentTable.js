@@ -1,19 +1,11 @@
 import React, { Component } from "react";
 
-import { Link, withRouter } from "react-router-dom";
-import styled from "styled-components";
-import Card from "./Card";
+import { withRouter } from "react-router-dom";
 import SearchBar from "../common/SearchBar";
-import { List, ListItem } from "material-ui/List";
-import Divider from "material-ui/Divider";
-import RaisedButton from "material-ui/RaisedButton";
 import Paper from "material-ui/Paper";
 import IconMenu from "material-ui/IconMenu";
 import MenuItem from "material-ui/MenuItem";
-import SortIcon from "material-ui/svg-icons/action/swap-vert";
 import IconButton from "material-ui/IconButton";
-import ChevronLeft from "material-ui/svg-icons/navigation/chevron-left";
-import ChevronRight from "material-ui/svg-icons/navigation/chevron-right";
 import MoreVertIcon from "material-ui/svg-icons/navigation/more-vert";
 import ArrowDownWard from "material-ui/svg-icons/navigation/arrow-downward";
 //@ts-check
@@ -27,15 +19,6 @@ import {
   TableRow,
   TableRowColumn
 } from "material-ui/Table";
-
-const StyledContainer = styled.div`
-  margin-top: 10px;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: flex-start;
- 
-`;
 
 const headerStyle = {
   fontSize: 48,

@@ -2,14 +2,7 @@ import React from "react";
 import Paper from "material-ui/Paper";
 import TextField from "material-ui/TextField";
 import FontIcon from "material-ui/FontIcon";
-import IconButton from "material-ui/IconButton";
 import ActionSearch from "material-ui/svg-icons/action/search";
-import styled from "styled-components";
-
-const Div = styled.div`
-  display: flex;
-
-`;
 
 export default ({
   onChange,

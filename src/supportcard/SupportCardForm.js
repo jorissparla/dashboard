@@ -1,18 +1,11 @@
 import React from "react";
-import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { Field, reduxForm } from "redux-form";
 import { SelectField } from "redux-form-material-ui";
 import Paper from "material-ui/Paper";
-import TextField from "material-ui/TextField";
 import MenuItem from "material-ui/MenuItem";
-import Avatar from "material-ui/Avatar";
-import styled from "styled-components";
-import FlatButton from "material-ui/FlatButton";
-import { CardSection, Card, Input, MyDatePicker } from "../common";
-import withAuth from "../utils/withAuth";
+import { CardSection, Input } from "../common";
 import {
-  NormalButton,
   NormalRaisedButton,
   CancelRaisedButton,
   DeleteButton
@@ -25,10 +18,6 @@ const paperStyle = {
   margin: "15px",
   padding: "10px",
   minWidth: "200px"
-};
-
-const doSubmit = e => {
-  console.log("doSubmit", JSON.stringify(e, null, -2));
 };
 
 const SupportCardForm = props => {

@@ -1,37 +1,22 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import { Field, reduxForm } from "redux-form";
 import { withRouter } from "react-router-dom";
 import { SelectField } from "redux-form-material-ui";
 import { CardSection, Card, Input, MyDatePicker } from "../common";
-import Paper from "material-ui/Paper";
-import Divider from "material-ui/Divider";
 import MenuItem from "material-ui/MenuItem";
-import RaisedButton from "material-ui/RaisedButton";
 import Chip from "material-ui/Chip";
 import moment from "moment";
 import styled from "styled-components";
-import { blue500 } from "material-ui/styles/colors";
 import {
-  NormalButton,
   NormalRaisedButton,
   CancelRaisedButton,
   DeleteButton,
-  RegisterButton,
-  TitleBar
+  RegisterButton
 } from "../common/TitleBar";
 import withAuth from "../utils/withAuth";
 
-const buttonStyleCancel = {
-  backgroundColor: "black",
-  labelColor: "white"
-};
-
 const StyledField = styled(Field)`
   margin-right: 5px;
-`;
-const StyledButton = styled(RaisedButton)`
-  margin: 5px;
 `;
 
 const SelectStyle = styled.div`
@@ -87,7 +72,7 @@ class CourseForm extends Component {
     this.props.onDelete(e);
   }
   render() {
-    const { handleSubmit, course, onSave, authenticated, history } = this.props;
+    const { handleSubmit, course, authenticated, history } = this.props;
     const readOnly = !authenticated;
     return (
       <form onSubmit={handleSubmit(this.handleSubmit)}>
@@ -130,7 +115,6 @@ class CourseForm extends Component {
                 hintText="Status"
                 floatingLabelText="Status"
                 style={{ flex: 2, marginTop: "-5px" }}
-                floatingLabelText="Status"
                 underlineShow={true}
                 underlineStyle={{ borderColor: "#039BE5" }}
               >
@@ -164,7 +148,6 @@ class CourseForm extends Component {
                 hintText="Select a team"
                 floatingLabelText="team"
                 style={{ flex: 2 }}
-                floatingLabelText="team"
               >
                 {teams.map(team => (
                   <MenuItem
@@ -183,7 +166,6 @@ class CourseForm extends Component {
                 hintText="Select a type"
                 floatingLabelText="type"
                 style={{ flex: 2 }}
-                floatingLabelText="type"
               >
                 {coursetypes.map(type => (
                   <MenuItem
@@ -233,7 +215,6 @@ class CourseForm extends Component {
               disabled={readOnly}
               component={Input}
               floatingLabelText="Applicable for"
-              floatingLabelText="Applicable for"
               underlineShow={true}
             />
             <Field
@@ -241,7 +222,6 @@ class CourseForm extends Component {
               disabled={readOnly}
               component={Input}
               floatingLabelText="link"
-              floatingLabelText="Link"
               underlineShow={true}
               fullWidth={true}
             />

@@ -5,7 +5,6 @@ import FlatButton from "material-ui/FlatButton";
 import Badge from "material-ui/Badge";
 import { blue500 } from "material-ui/styles/colors";
 import { Link } from "react-router-dom";
-import StudentsCard from "./StudentsCard";
 
 const imgList = [
   "https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/auth.png",
@@ -68,14 +67,7 @@ const StyledLink = styled.a`
     color: white;
   }
 `;
-/*const Link = styled(Link)`
-  text-decoration: none;
-  :hover {
-    cursor:pointer;
-  }
-  display: flex;
-  justify-content: space-between;
-`;*/
+
 const StyledBadge = styled(Badge)`
 float:right;
   align-content: center;

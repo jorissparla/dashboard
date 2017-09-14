@@ -24,7 +24,6 @@ const MyDatePicker = ({
       }}
       value={input.value !== "" ? new Date(input.value) : null}
       {...custom}
-      value={input.value}
       selected={input.value}
       hintText={label}
       style={styles.inputStyle}

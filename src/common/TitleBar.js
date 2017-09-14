@@ -1,12 +1,10 @@
 import React from "react";
 import styled from "styled-components";
-import RaisedButton from "material-ui/RaisedButton";
 import FlatButton from "material-ui/FlatButton";
 import {
   blue500,
   orange800,
   deepPurple500,
-  deepOrange500,
   grey900
 } from "material-ui/styles/colors";
 

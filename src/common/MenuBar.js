@@ -1,10 +1,6 @@
-import React from "react";
 import styled from "styled-components";
-import RaisedButton from "material-ui/RaisedButton";
-import FlatButton from "material-ui/FlatButton";
-import { blue500, orange800 } from "material-ui/styles/colors";
 
-const MenuBar = styled.div`
+export const MenuBar = styled.div`
   background-Color: #039BE5;
   color: white;
   font-size: 20px;
@@ -16,12 +12,8 @@ const MenuBar = styled.div`
   padding-bottom: 20px;
 `;
 
-const MenuBarItem = styled.div`
+export const MenuBarItem = styled.div`
   width: 30%;
   padding: 5px;
       text-transform: uppercase;
 `;
-
-//const TitleBar = val => <TitleBarStyle>{val}</TitleBarStyle>;
-
-export { MenuBar, MenuBarItem };

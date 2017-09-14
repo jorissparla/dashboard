@@ -2,26 +2,14 @@ import React from "react";
 import Paper from "material-ui/Paper";
 import styled from "styled-components";
 import FlatButton from "material-ui/FlatButton";
-import FontIcon from "material-ui/FontIcon";
 import IconButton from "material-ui/IconButton";
-import ThumbsUp from "material-ui/svg-icons/action/thumb-up";
 import ViewIcon from "material-ui/svg-icons/action/pageview";
-import NoteAdd from "material-ui/svg-icons/action/pageview";
 import ModeEdit from "material-ui/svg-icons/editor/mode-edit";
 import LinkIcon from "material-ui/svg-icons/content/link";
-import { blue500 } from "material-ui/styles/colors";
 import { Link } from "react-router-dom";
 
 import Divider from "material-ui/Divider";
 
-const Container = styled.div`
-  display: flex;
-  flex-direction:column;
-  justify-content: space-between;
-  width: 18%;
-  margin: 5px;
-  
-`;
 const Cat = styled.div`
   width: 15%;
   margin-right: 5px;
@@ -39,13 +27,6 @@ const Title = styled.div`
   flex-grow:0;
   margin: 5px;
 `;
-const Inner = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-left: 5px;
-  justify-content: space-between;
-  height: 150px;
-`;
 
 const BottomStyle = styled.div`
   display:flex;
@@ -62,9 +43,6 @@ const StyledBody = styled.p`
     flex-grow: 1;
     font-size: 12px;
     font-family: Helvetica;
-`;
-const Footer = styled.div`
-  margin: 5px;
 `;
 
 const Outer = styled.div`
