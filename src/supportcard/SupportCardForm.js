@@ -69,7 +69,7 @@ const SupportCardForm = props => {
           component={Input}
         />
         <Field
-          name="category"
+          name="categoryname"
           component={SelectField}
           disabled={readOnly}
           hintText="Status"

@@ -74,14 +74,14 @@ class SupportCardEdit extends React.Component {
   }
 
   handleSave(e) {
-    const { id, title, description, category, link } = e;
+    const { id, title, description, categoryname, link } = e;
 
     this.props
       .modifySupportCard({
         id,
         title,
         description,
-        category,
+        categoryname,
         link
       })
       // .then(this.props.data.refetch())
@@ -132,6 +132,7 @@ const supportcard = gql`
         id
         title
         description
+        categoryname
         category {
           name
           
@@ -160,7 +161,7 @@ const modifySupportCard = gql`
         id
         title
         description
-        category
+        categoryname
         link
         }
     }
