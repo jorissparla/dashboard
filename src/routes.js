@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Link, Switch } from "react-router-dom";
-
+import { connect } from "react-redux";
 import AlertsList from "./alerts/alertlist";
 import AlertItem from "./alerts/alertitem";
 import ChatList from "./chat/ChatList";
@@ -26,7 +26,7 @@ import Signin from "./auth/signin";
 import Signout from "./auth/signout";
 import Forgot from "./auth/forgot";
 import UpdatePassword from "./auth/resetpassword";
-import RequireAuth from "./auth/require_auth";
+import RequireAuth, { AuthRoute } from "./auth/require_auth";
 import ResetPasswordForm from "./auth/ResetPasswordForm";
 import RequestResetPassword from "./auth/RequestResetPassword";
 
@@ -35,6 +35,7 @@ import NewsItemContainer from "./news/newsitemcontainer";
 import NewsItemAddContainer from "./news/newsitemaddcontainer";
 
 import SupportCards from "./supportcard/SupportCards";
+import RequestForm from "./supportcard/Request";
 import SupportCardEdit from "./supportcard/SupportCardEdit";
 import SupportCardAdd from "./supportcard/SupportCardAdd";
 import CourseList from "./courses/CourseList";
@@ -46,7 +47,7 @@ import AddStudentsToCourse from "./courses/AddStudentsToCourse";
 
 const NotFound = () => <h2>Not Found!</h2>;
 
-const AppRoutes = () => (
+const AppRoutes = ({ user }) => (
   <Switch>
     <Route exact path="/" component={DashBoardContainer} />
     <Route path="/main/1" component={DashBoard} />
@@ -54,9 +55,16 @@ const AppRoutes = () => (
     <Route path="/main/2" component={DashBoardStats} />
     <Route exact path="/alerts" component={RequireAuth(AlertsList)} />
     <Route path="award" component={Award} />
-    <Route exact path="/supportcard" component={SupportCards} />
+    <Route
+      auth="admin"
+      user={user}
+      exact
+      path="/supportcard"
+      component={SupportCards}
+    />
     <Route path="/supportcard/edit/:id" component={SupportCardEdit} />
     <Route exact path="/supportcard/add" component={SupportCardAdd} />
+    <Route exact path="/supportcard/request" component={RequestForm} />
     <Route exact path="/alerts/new" component={RequireAuth(AlertItemAddNew)} />
     <Route path="/alerts/:id" component={RequireAuth(AlertItem)} />
     <Route exact path="/news" component={NewsListContainer} />
@@ -104,5 +112,10 @@ const AppRoutes = () => (
     <Route component={NotFound} />
   </Switch>
 );
+
+const mapStateToProps = state => ({
+  authenticated: state.auth.authenticated,
+  user: state.auth.user
+});
 
 export default AppRoutes;

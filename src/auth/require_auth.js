@@ -1,6 +1,27 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { withRouter } from "react-router";
+import { withRouter, Redirect } from "react-router";
+import { Route } from "react-router-dom";
+
+export const AuthRoute = ({ component: Component, auth, user, ...rest }) => {
+  console.log(user);
+  return (
+    <Route
+      {...rest}
+      render={props => {
+        if (!user) {
+          return <Redirect to={{ pathname: "/" }} />;
+        }
+
+        if (auth.toUpperCase() === user.role.toUpperCase()) {
+          return <Component {...props} />;
+        } else {
+          return <Redirect to={{ pathname: "/" }} />;
+        }
+      }}
+    />
+  );
+};
 
 export default function(ComposedComponent) {
   class Authentication extends Component {
