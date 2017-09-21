@@ -43,6 +43,7 @@ import AddCourseCard from "./courses/AddCourseCard";
 import StudentListContainer from "./courses/StudentListContainer";
 import StudentView from "./courses/StudentView";
 import AddStudentsToCourse from "./courses/AddStudentsToCourse";
+import NewsItem from "./news/newspage";
 
 const NotFound = () => <h2>Not Found!</h2>;
 
@@ -51,6 +52,7 @@ class AppRoutes extends React.Component {
     const { user } = this.props;
     return (
       <Switch>
+        <Route exact path="/test" component={NewsItem} />
         <Route exact path="/" component={DashBoardContainer} />
         <Route
           allowed={["Admin"]}

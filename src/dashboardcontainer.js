@@ -5,6 +5,8 @@ import { StyleLoader } from "./common";
 import GoLives from "./golives/golives";
 import HistoryDayAll from "./charts/historydayallcontainer";
 import NewsListContainer from "./news/newslistcontainer";
+import NewsPage from "./news/newspage";
+import SupportCards from "./supportcard/SupportCards";
 //import Award from './awards/award'
 
 class DashBoardContainer extends Component {
@@ -12,11 +14,11 @@ class DashBoardContainer extends Component {
     this.setState({
       index: 0
     });
-    setInterval(this.myTimer.bind(this), this.props.refreshInterval || 60000);
+    setInterval(this.myTimer.bind(this), this.props.refreshInterval || 10000);
   }
 
   myTimer() {
-    const newIndex = this.state.index >= 7 ? 0 : this.state.index + 1;
+    const newIndex = this.state.index >= 8 ? 0 : this.state.index + 1;
     this.setState({
       index: newIndex
     });
@@ -38,8 +40,10 @@ class DashBoardContainer extends Component {
 
   renderDashBoard(index) {
     switch (index) {
+      case 8:
+        return <SupportCards />;
       case 7:
-        return <NewsListContainer />;
+        return <NewsPage />;
       case 5:
       case 6:
         return <DashBoard />;
