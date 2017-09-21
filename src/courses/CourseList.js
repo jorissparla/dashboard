@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { gql, graphql } from "react-apollo";
-import { SmallCard } from "../common/SmallCard";
-import { Link, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import styled from "styled-components";
 import Card from "./Card";
 import SearchBar from "../common/SearchBar";
@@ -30,16 +29,13 @@ class CourseList extends Component {
     this.setState({ searchText: val });
   }
   render() {
-    const { loading, error, supportcard, courses } = this.props.data;
-    console.log("Courselist", this.props);
+    const { loading, error, courses } = this.props.data;
     if (loading) {
       return <p>Loading ...</p>;
     }
     if (error) {
       return <p>{error.message}</p>;
     }
-    const count = 1; //courses._studentsMeta.count;
-    console.log(courses);
     const filteredCourses = courses.filter(
       course =>
         course.title

@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
 import promise from "redux-promise";
 import reduxThunk from "redux-thunk";
@@ -17,8 +16,6 @@ import App from "./App";
 
 import {
   ApolloClient,
-  gql,
-  graphql,
   ApolloProvider,
   createNetworkInterface
 } from "react-apollo";
@@ -63,45 +60,6 @@ const Main = () => (
       </BrowserRouter>
     </MuiThemeProvider>
   </ApolloProvider>
-);
-
-const Header = props => (
-  <div>
-    <ul>
-      <li>Main</li>
-      <li>Twee</li>
-      <li>Dire</li>
-    </ul>
-    <style jsx>{`
-    ul {
-      list-style: none;
-      display: flex;
-      flex-wrap: wrap;
-      font-family: Roboto;
-    }
-    li {
-      color: lightgray;
-      padding: 2px;
-    }
-    li:hover{
-      color: black;
-      font-weight:900em;
-    }
-  `}</style>
-    {props.children}
-  </div>
-);
-const About = () => (
-  <div>
-    <h2>About</h2>
-    <div className="nice">Tekst</div>
-  </div>
-);
-
-const Main2 = () => (
-  <BrowserRouter>
-    <Header><AppRoutes /></Header>
-  </BrowserRouter>
 );
 
 ReactDOM.render(<Main />, document.getElementById("root"));

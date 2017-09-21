@@ -28,7 +28,7 @@ class NewsListContainer extends Component {
   }
 
   render() {
-    const { news, history, authenticated } = this.props;
+    const { news, authenticated } = this.props;
     console.log(authenticated);
     return (
       <div>

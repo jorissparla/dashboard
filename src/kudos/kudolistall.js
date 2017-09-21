@@ -5,7 +5,6 @@ import { fetchKudos } from "../actions/index";
 import moment from "moment";
 import { GridList, GridTile } from "material-ui/GridList";
 //import IconButton from 'material-ui/IconButton';
-import Subheader from "material-ui/Subheader";
 import getMuiTheme from "material-ui/styles/getMuiTheme";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import { deepOrange500 } from "material-ui/styles/colors";

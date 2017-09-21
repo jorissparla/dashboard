@@ -6,7 +6,6 @@ import Paper from "material-ui/Paper";
 import { signinUser } from "../actions";
 import { connect } from "react-redux";
 import ErrorDialog from "../errordialog";
-import Dialog from "material-ui/Dialog";
 import { withRouter } from "react-router-dom";
 
 const style = {
@@ -30,16 +29,16 @@ const email = value =>
     ? "Invalid email"
     : undefined;
 
-let Signin = React.createClass({
-  doSubmit({ email, password }) {
+class Signin extends React.Component {
+  doSubmit = ({ email, password }) => {
     /*    window.alert(
       `You submitted Parent:\n\n${JSON.stringify({ email, password }, null, 2)}`
     );*/
     this.props.signinUser({ email, password });
     this.props.history.push("/");
-  },
+  };
 
-  renderAlert() {
+  renderAlert = () => {
     if (this.props.errorMessage) {
       return (
         <div className="alert alert-danger">
@@ -48,7 +47,7 @@ let Signin = React.createClass({
         </div>
       );
     }
-  },
+  };
   render() {
     const { handleSubmit } = this.props;
     return (
@@ -88,7 +87,7 @@ let Signin = React.createClass({
       </Paper>
     );
   }
-});
+}
 
 function mapStateToProps(state) {
   return { errorMessage: state.auth.error };

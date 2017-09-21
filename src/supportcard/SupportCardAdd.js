@@ -1,24 +1,8 @@
 import { gql, graphql } from "react-apollo";
 import React from "react";
 import { withRouter } from "react-router-dom";
-import Paper from "material-ui/Paper";
-import TextField from "material-ui/TextField";
-import Avatar from "material-ui/Avatar";
-import styled from "styled-components";
-import FlatButton from "material-ui/FlatButton";
-import { CardSection } from "../common";
 import SupportCardForm from "./SupportCardForm";
 import withAuth from "../utils/withAuth";
-
-const paperStyle = {
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "space-between",
-  width: "15%",
-  margin: "15px",
-  padding: "10px",
-  backgroundColor: "lightblue"
-};
 
 const SupportCardAdd = ({
   data: { loading, error, categories },

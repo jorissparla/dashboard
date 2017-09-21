@@ -5,13 +5,7 @@ import CourseReducer from "./reducer_courses";
 import AccountReducer from "./reducer_accounts";
 import { reducer as formReducer } from "redux-form";
 
-import {
-  ApolloClient,
-  gql,
-  graphql,
-  ApolloProvider,
-  createNetworkInterface
-} from "react-apollo";
+import { ApolloClient, createNetworkInterface } from "react-apollo";
 
 const networkInterface = createNetworkInterface({
   uri: "https://nlbavwtls22:55555/graphql"

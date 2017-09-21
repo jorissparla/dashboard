@@ -5,31 +5,18 @@ import styled from "styled-components";
 import Avatar from "material-ui/Avatar";
 import Paper from "material-ui/Paper";
 import { List, ListItem } from "material-ui/List";
-import Divider from "material-ui/Divider";
-import { pinkA200, transparent } from "material-ui/styles/colors";
+import { pinkA200 } from "material-ui/styles/colors";
 import IconMenu from "material-ui/IconMenu";
 import MenuItem from "material-ui/MenuItem";
 import IconButton from "material-ui/IconButton";
 import MoreVertIcon from "material-ui/svg-icons/navigation/more-vert";
 import DownIcon from "material-ui/svg-icons/navigation/expand-more";
-import DropDownIcon
-  from "material-ui/svg-icons/navigation/arrow-drop-down-circle";
-import System from "material-ui/svg-icons/action/done-all";
-import MapsPlace from "material-ui/svg-icons/maps/place";
-import RaisedButton from "material-ui/RaisedButton";
-import ContentFilter from "material-ui/svg-icons/content/filter-list";
 import FileFileDownload from "material-ui/svg-icons/file/file-download";
 import Chip from "material-ui/Chip";
 import moment from "moment";
-import { MenuBar, MenuBarItem } from "../common/MenuBar";
 import { TitleBar } from "../common/TitleBar";
 import SearchBar from "../common/SearchBar";
 import withAuth from "../utils/withAuth";
-
-const Div = styled.div`
-  display: flex;
-  flex-direction: row;
-`;
 
 const Container = styled.div`
   display: flex;
@@ -164,9 +151,7 @@ class StudentView extends Component {
   }
 
   render() {
-    const { loading, error, account, authenticated } = this.props.data;
-    const readOnly = !authenticated;
-    console.log("rerender", account);
+    const { loading, error, account } = this.props.data;
     if (loading) {
       return <p>Loading ...</p>;
     }

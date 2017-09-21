@@ -1,9 +1,7 @@
 import React from "react";
-import { gql, graphql } from "react-apollo";
 import RaisedButton from "material-ui/RaisedButton";
 import { TextField } from "redux-form-material-ui";
 import Paper from "material-ui/Paper";
-import { UpdatePassword } from "../actions";
 import ErrorDialog from "../errordialog";
 import { withRouter } from "react-router-dom";
 
@@ -22,11 +20,6 @@ const style = {
     alignSelf: "flex-start"
   }
 };
-const required = value => (value == null ? "Required" : undefined);
-const email = value =>
-  value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)
-    ? "Invalid email"
-    : undefined;
 
 class UpdatePasswordForm extends React.Component {
   state = { nomatch: false, password: "", confirmpassword: "" };
@@ -36,7 +29,6 @@ class UpdatePasswordForm extends React.Component {
     const { password, confirmpassword } = this.state;
     this.setState({ nomatch: password !== confirmpassword });
     if (this.state.nomatch) return;
-    const { id } = this.props;
 
     setTimeout(() => this.props.history.push("/signin"), 500);
   };

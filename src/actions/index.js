@@ -56,26 +56,6 @@ function to(promise) {
     .catch(err => [err]);
 }
 
-const signinUser0 = ({ email, password }) => {
-  return dispatch => {
-    axios
-      .post(`${ROOT_URL}/signin`, { email, password })
-      .then(response => {
-        dispatch({ type: AUTH_USER });
-        localStorage.setItem("token", response.data.token);
-        localStorage.setItem("email", email);
-        localStorage.setItem("picture", response.data.user.pic);
-        // - redirect to the route '/feature'
-        // browserHistory.push("/");
-      })
-      .catch(() => {
-        // If request is bad...
-        // - Show an error to the user
-        dispatch(authError("Bad Login Info"));
-      });
-  };
-};
-
 const signinUser = async ({ email, password }) => {
   return async dispatch => {
     let err, response;
@@ -105,8 +85,7 @@ exports.forgotPassword = async email => {
 };
 
 exports.UpdatePassword = async ({ password, token }) => {
-  console.log(`${ROOT_URL}/updatemypassword reached`);
-  const { data } = await axios.post(`${ROOT_URL}/updatemypassword`, {
+  await axios.post(`${ROOT_URL}/updatemypassword`, {
     password,
     token
   });

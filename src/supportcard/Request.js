@@ -1,14 +1,11 @@
 import React, { Component } from "react";
 import { gql, graphql } from "react-apollo";
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
+import { withRouter } from "react-router-dom";
+import TextField from "material-ui/TextField";
 export const niceblue = "#40a5ed";
 export const babyblue = "#ecf6fd";
 export const twitterblue = "#1da1f2";
-
-const H1 = styled.h1`
-  font-weight: 200;
-  font-family: Roboto;
-`;
 
 const FlexRow = styled.div`
   display: flex;
@@ -20,42 +17,27 @@ const FlexCol = styled.div`
   flex-direction: column;
 `;
 
-const Input = styled.input`
-  position: relative;
-  display: inline-block;
-  padding: 4px 7px;
-  margin: 4px;
-  width: 200px;
-  height: 28px;
-  font-size: 15px;
-  line-height: 1.5;
-  color: rgba(0, 0, 0, 0.65);
-  background-color: #fff;
-  background-image: none;
-  border: 1px solid #d9d9d9;
+const Error = styled.div`
+  display: flex;
+  align-items: flex-start;
+  height: 40px;
+  padding: 0 16px;
+  font-weight: 500;
   border-radius: 4px;
-  -webkit-transition: all 0.3s;
-  transition: all 0.3s;
+  border: 1px solid red;
+  text-decoration: none;
+  background-color: red;
+  opacity: 0.7;
+  color: white;
+  font-family: Roboto;
+  font-size: 15px;
+  
+  transition: all 0.45s;
+  text-align: center;
+  line-height: 36px;
+  margin-left: 8px;
 `;
 
-const TextArea = styled.textarea`
-  font-family: Roboto;
-  position: relative;
-  display: inline-block;
-  padding: 4px 7px;
-  margin: 4px;
-  font-size: 15px;
-  line-height: 1.5;
-  color: rgba(0, 0, 0, 0.65);
-  background-color: #fff;
-  background-image: none;
-  border: 1px solid #d9d9d9;
-  border-radius: 4px;
-  -webkit-transition: all 0.3s;
-  transition: all 0.3s;
-  text-decoration: none;
-  resize: none;
-`;
 export const Button = styled.button`
   display: inline-block;
   height: 40px;
@@ -79,13 +61,30 @@ export const Button = styled.button`
 }
 `;
 
+const StyledTextField = styled(TextField)`
+  margin: 20px;
+`;
 class Request extends Component {
-  state = { name: "", email: "", text: "", page: "SupportCard" };
-  _onSubmit = async e => {
-    e.preventDefault();
-    console.log("Submit", this.state);
-    await this.props.createRequest({ variables: this.state });
+  state = { name: "", email: "", text: "", page: "SupportCard", error: "" };
+
+  isNotEmpty = value => (value ? true : false);
+  isValidEmail = email => /\S+@\S+\.\S+/.test(email);
+
+  checkErrors = ({ email, name, text }) => {
+    let error = "";
+    if (!this.isValidEmail(email)) {
+      error += " Invalid email address ";
+    }
+    if (!this.isNotEmpty(name)) {
+      error += " - Name cannot be empty ";
+    }
+    if (!this.isNotEmpty(text)) {
+      error += " - Text  cannot be empty ";
+    }
+    this.setState({ error });
+    return error === "";
   };
+
   onChangeName = ({ target: { value } }) => {
     this.setState({ name: value });
   };
@@ -100,27 +99,43 @@ class Request extends Component {
     return (
       <form action="">
         <FlexCol>
-          <H1>{this.state.page} Request</H1>
+          {/*<H1>{this.state.page} Request</H1> */}
           <FlexRow>
-            <Input
+            <StyledTextField
               placeholder="Enter Name"
               name="name"
               onChange={this.onChangeName}
             />
-            <Input placeholder="Enter email" onChange={this.onChangeEmail} />
+            <StyledTextField
+              placeholder="Enter email"
+              onChange={this.onChangeEmail}
+            />
 
           </FlexRow>
-          <TextArea
+          <StyledTextField
             placeholder="Enter Text"
-            rows={10}
-            cols={50}
+            multiLine={true}
+            rows={2}
+            fullWidth={true}
             onChange={this.onChangeText}
           />
           <Button type="submit" onClick={this._onSubmit}>Enter Request</Button>
+          {this.state.error && <Error>{this.state.error}</Error>}
         </FlexCol>
       </form>
     );
   }
+
+  _onSubmit = async e => {
+    e.preventDefault();
+    if (!this.checkErrors(this.state)) {
+      return;
+    } else {
+      console.log("Submit", this.state);
+      await this.props.createRequest({ variables: this.state });
+      setTimeout(() => this.props.onSubmit(), 2000);
+    }
+  };
 }
 
 const createRequestMutation = gql`
@@ -132,5 +147,5 @@ mutation createRequest($name: String, $email: String, $text:String) {
 `;
 
 export default graphql(createRequestMutation, { name: "createRequest" })(
-  Request
+  withRouter(Request)
 );

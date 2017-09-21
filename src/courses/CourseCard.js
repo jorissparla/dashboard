@@ -1,12 +1,7 @@
 import React, { Component } from "react";
 import { gql, graphql } from "react-apollo";
-import { Tabs, Tab } from "material-ui/Tabs";
-import { blue500 } from "material-ui/styles/colors";
 import { withRouter } from "react-router-dom";
-import { List, ListItem } from "material-ui/List";
 import styled from "styled-components";
-import Divider from "material-ui/Divider";
-import Avatar from "material-ui/Avatar";
 import CourseForm from "./CourseForm";
 import CourseStudentList from "./CourseStudentList";
 
@@ -20,15 +15,6 @@ const Right = styled.div`
   flex-basis : 65%;
   flex:1;
 `;
-
-const styles = {
-  headline: {
-    fontSize: 24,
-    paddingTop: 16,
-    backgroundColor: "#2196F3",
-    fontWeight: 400
-  }
-};
 
 class CourseCard extends Component {
   state = {};
