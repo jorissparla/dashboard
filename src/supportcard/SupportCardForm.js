@@ -32,7 +32,6 @@ const SupportCardForm = props => {
     history
   } = props;
   const readOnly = !authenticated;
-  console.log("Props## 🛑 🌮 🐶", props);
   return (
     <Paper zDepth={1} style={paperStyle}>
 

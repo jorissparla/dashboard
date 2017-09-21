@@ -76,7 +76,6 @@ const SmallCard = ({
   canEdit = false,
   editLink = ""
 }) => {
-  console.log(title, canEdit);
   return (
     <Paper style={paperStyle(color, textcolor)} zDepth={3}>
       <Title>{title}</Title>

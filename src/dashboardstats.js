@@ -2,7 +2,7 @@ import React from "react";
 
 import "./App.css";
 //import AppChartCombi from './charts/appchartcombi'
-import AlertWidget from "./alerts/alertwidget";
+//import AlertWidget from "./alerts/alertwidget";
 import AppChartContainer from "./charts/appchartcontainer";
 import ChatChartContainer from "./charts/chatchartcontainer";
 import HistoryChartContainer from "./charts/historycontainer";
@@ -12,9 +12,9 @@ const DashBoardStats = ({ data }) => {
   return (
     <div className="row">
       <StyleLoaderM />
-      <div className="col s2">
+      {/*<div className="col s2">
         <AlertWidget />
-      </div>
+      </div> */}
       <div className="col s10">
         <div className="row">
           <AppChartContainer
@@ -60,6 +60,5 @@ const DashBoardStats = ({ data }) => {
     </div>
   );
 };
-// <AppChartPie data={[1,2,3]} title='Input' type='pie' value='supportBacklog'
-// color='#ffb300'' team='Logistics'/>
+
 export default DashBoardStats;

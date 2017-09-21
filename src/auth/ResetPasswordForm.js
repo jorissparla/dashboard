@@ -8,7 +8,6 @@ class ResetPasswordForm extends Component {
   state = { id: null };
 
   checkisValid = token => {
-    console.log(emailsecret);
     try {
       const res = jwt.verify(token, emailsecret);
 
@@ -22,13 +21,11 @@ class ResetPasswordForm extends Component {
     const token = this.props.match.params.token;
     const result = this.checkisValid(token);
     if (result[0]) {
-      console.log("SETSTATE", JSON.stringify(result[1]));
       this.setState({ id: result[1].user });
     }
   }
 
   render() {
-    console.log("THIS>STATE>ID", this.state.id);
     if (!this.state.id) {
       return <div>Invalid User</div>;
     }

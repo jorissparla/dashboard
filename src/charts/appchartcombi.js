@@ -84,7 +84,6 @@ class AppChartCombi extends Component {
 
   render() {
     const { title, type, value, team, color } = this.props;
-    // console.log('Render()', this.props, this.state);
     this.renderSummary(value, team, title, color, type);
     return (
       <div className="col s3">

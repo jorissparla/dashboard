@@ -50,7 +50,6 @@ class StudentTables extends Component {
   }
 
   dropdownMenu(id) {
-    console.log("id", id);
     return (
       <IconMenu
         iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}

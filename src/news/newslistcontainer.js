@@ -16,7 +16,6 @@ class NewsListContainer extends Component {
   }
 
   onOpen(id) {
-    console.log("ID!", id);
     this.props.history.replace(`/news/edit/${id}`);
   }
 
@@ -29,7 +28,6 @@ class NewsListContainer extends Component {
 
   render() {
     const { news, authenticated } = this.props;
-    console.log(authenticated);
     return (
       <div>
         <Paper style={{ padding: "10px" }}>

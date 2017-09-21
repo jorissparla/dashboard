@@ -20,7 +20,6 @@ import { Toolbar, ToolbarGroup, ToolbarTitle } from "material-ui/Toolbar";
 import withAuth from "./utils/withAuth";
 
 import FlatButton from "material-ui/FlatButton";
-import { Link } from "react-router-dom";
 
 const muiTheme = getMuiTheme({
   palette: {
@@ -67,37 +66,55 @@ class Header extends React.Component {
         <MenuItem
           primaryText={<div style={{ color: "black" }}>Home</div>}
           leftIcon={<ActionHome style={{ root: { color: "black" } }} />}
-          onClick={() => history.push("/")}
+          onClick={() => {
+            history.push("/");
+            location.href = location.href;
+          }}
         />
         <Divider />
         <MenuItem
           primaryText={<div style={{ color: "black" }}>Courses</div>}
           leftIcon={<PageIcon style={{ root: { color: "black" } }} />}
-          onClick={() => history.push("/courses")}
+          onClick={() => {
+            history.push("/courses");
+            location.href = location.href;
+          }}
         />
         <Divider />
         <MenuItem
           primaryText={<div style={{ color: "black" }}>Students</div>}
           leftIcon={<PeopleIcon />}
-          onClick={() => history.push("/students")}
+          onClick={() => {
+            history.push("/students");
+            location.href = location.href;
+          }}
         />
         <Divider />
         <MenuItem
           primaryText={<div style={{ color: "black" }}>SupportCards</div>}
           leftIcon={<LinkIcon />}
-          onClick={() => history.push("/supportcard")}
+          onClick={() => {
+            history.push("/supportcard");
+            location.href = location.href;
+          }}
         />
         <Divider />
         <MenuItem
           primaryText={<div style={{ color: "black" }}>News</div>}
           leftIcon={<NewsIcon />}
-          onClick={() => history.push("/news")}
+          onClick={() => {
+            history.push("/news");
+            location.href = location.href;
+          }}
         />
         <Divider />
         <MenuItem
           primaryText={<div style={{ color: "black" }}>Chat</div>}
           leftIcon={<ChatIcon />}
-          onClick={() => history.push("/chat")}
+          onClick={() => {
+            history.push("/chat");
+            location.href = location.href;
+          }}
         />
         <Divider />
         <MenuItem primaryText="Sign out" />
@@ -105,19 +122,25 @@ class Header extends React.Component {
       </IconMenu>
     );
   }
-
+  logOutLink = () => {
+    const { history } = this.props;
+    history.push("/signout");
+    location.href = location.href;
+  };
+  logInLink = () => {
+    const { history } = this.props;
+    history.push("/signin");
+    location.href = location.href;
+  };
   renderButtons() {
-    let logOutLink = <Link to="/signout" />;
-    let logInLink = <Link to="/signin" />;
-
     if (this.props.authenticated) {
       return (
-        <FlatButton containerElement={logOutLink} label="Logout">
+        <FlatButton onClick={() => this.logOutLink()} label="Logout">
           {/*  <Avatar src="https://randomuser.me/api/portraits/men/20.jpg" /> */}
         </FlatButton>
       );
     } else {
-      return <FlatButton containerElement={logInLink} label="Login" />;
+      return <FlatButton onClick={() => this.logInLink()} label="Login" />;
     }
   }
 

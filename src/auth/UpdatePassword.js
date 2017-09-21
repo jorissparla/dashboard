@@ -49,7 +49,6 @@ class UpdatePasswordForm extends React.Component {
 
   render() {
     const { id } = this.props;
-    console.log("UpdatePassword", id);
     return (
       <Paper style={style.paper} zDepth={2}>
         <form type="submit">

@@ -20,7 +20,6 @@ class AddCourseCard extends Component {
 
   constructor(props) {
     super(props);
-    console.log("THIS", this);
     this.handleSave = this.handleSave.bind(this);
   }
 
@@ -38,7 +37,6 @@ class AddCourseCard extends Component {
     applicable,
     trainer
   }) {
-    console.log("this.props", this.props);
     this.props
       .addCourse({
         id,
@@ -55,7 +53,6 @@ class AddCourseCard extends Component {
         trainer
       })
       .then(v => {
-        console.log(v);
         window.location.href = "/courses";
       })
       .catch(e => window.alert(JSON.stringify(e, null, 2)));

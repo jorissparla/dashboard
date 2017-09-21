@@ -4,7 +4,7 @@ import DashBoardStats from "./dashboardstats";
 import { StyleLoader } from "./common";
 import GoLives from "./golives/golives";
 import HistoryDayAll from "./charts/historydayallcontainer";
-import NewsListContainer from "./news/newslistcontainer";
+//import NewsListContainer from "./news/newslistcontainer";
 import NewsPage from "./news/newspage";
 import SupportCards from "./supportcard/SupportCards";
 //import Award from './awards/award'
@@ -14,7 +14,7 @@ class DashBoardContainer extends Component {
     this.setState({
       index: 0
     });
-    setInterval(this.myTimer.bind(this), this.props.refreshInterval || 10000);
+    setInterval(this.myTimer.bind(this), this.props.refreshInterval || 60000);
   }
 
   myTimer() {

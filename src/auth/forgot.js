@@ -28,11 +28,11 @@ const email = value =>
     ? "Invalid email"
     : undefined;
 
-let Forgot = React.createClass({
-  doSubmit({ email }) {
+class Forgot extends React.Component {
+  doSubmit = ({ email }) => {
     this.props.forgotPassword(email);
     setTimeout(() => this.props.history.push("/"), 500);
-  },
+  };
 
   render() {
     const { handleSubmit } = this.props;
@@ -61,7 +61,7 @@ let Forgot = React.createClass({
       </Paper>
     );
   }
-});
+}
 
 function mapStateToProps(state) {
   return { errorMessage: state.auth.error };

@@ -13,7 +13,7 @@ const Row = styled.div`
   overflow: hidden;
 `;
 
-const Title = styled.h1`
+const Title = styled.h2`
 font-family: Roboto;
 font-weight: 200;
 `;
@@ -69,7 +69,6 @@ const NewsItem = ({ news }) => {
 };
 
 const NewsPage = props => {
-  console.log(props);
   if (props.data.loading) {
     return <div>Loading...</div>;
   }
@@ -77,7 +76,6 @@ const NewsPage = props => {
     return <div>E</div>;
   }
   const { data: { news } } = props;
-  console.log(news);
   return (
     <div>
       <Title>What's New?</Title>

@@ -12,19 +12,10 @@ const SupportCardAdd = ({
   history
 }) => {
   const handleAdd = e => {
-    console.log("handleAdd", JSON.stringify(e, null, -2));
     const { id, title, description, category, link } = e;
     const categoryname = category;
     const createdby = user.email || "system";
-    console.log(
-      "logging",
-      id,
-      title,
-      description,
-      categoryname,
-      link,
-      createdby
-    );
+
     addSupportCard({ id, title, description, categoryname, link, createdby })
       .then(() => history.push("/supportcard"))
       .catch(e => window.alert(JSON.stringify(e, null, 2)));

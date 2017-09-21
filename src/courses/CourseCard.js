@@ -21,7 +21,6 @@ class CourseCard extends Component {
 
   constructor(props) {
     super(props);
-    console.log("THIS", this);
     this.handleSave = this.handleSave.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
   }
@@ -48,7 +47,6 @@ class CourseCard extends Component {
     applicable,
     trainer
   }) {
-    console.log("this.props", this.props);
     this.props
       .updateCourse({
         id,
@@ -78,7 +76,6 @@ class CourseCard extends Component {
     if (error) {
       return <p>{error.message}</p>;
     }
-    console.log("course", course);
     return (
       <div>
         <Div>

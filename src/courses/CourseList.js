@@ -7,7 +7,6 @@ import SearchBar from "../common/SearchBar";
 import { TitleBar } from "../common/TitleBar";
 import AddCard from "./AddCard";
 import withAuth from "../utils/withAuth";
-console.log(TitleBar);
 const StyledContainer = styled.div`
   margin-top: 10px;
   display: flex;

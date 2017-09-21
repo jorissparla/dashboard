@@ -132,7 +132,6 @@ class SupportCards extends React.Component {
               },
               i
             ) => {
-              console.log("id, name", id, name);
               return (
                 <SmallCard
                   color={

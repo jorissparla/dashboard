@@ -95,7 +95,6 @@ class Request extends Component {
     this.setState({ text: value });
   };
   render() {
-    console.log(this.props);
     return (
       <form action="">
         <FlexCol>
@@ -131,7 +130,6 @@ class Request extends Component {
     if (!this.checkErrors(this.state)) {
       return;
     } else {
-      console.log("Submit", this.state);
       await this.props.createRequest({ variables: this.state });
       setTimeout(() => this.props.onSubmit(), 2000);
     }

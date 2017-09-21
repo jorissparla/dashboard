@@ -68,7 +68,6 @@ class CourseForm extends Component {
   }
 
   handleDelete(e) {
-    console.log("handleDelete", e);
     this.props.onDelete(e);
   }
   render() {

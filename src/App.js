@@ -2,11 +2,7 @@ import React from "react";
 
 import "./App.css";
 import Header from "./appnav";
-const { object } = React.PropTypes;
-const App = React.createClass({
-  propTypes: {
-    children: object
-  },
+class App extends React.Component {
   render() {
     return (
       <div className="App">
@@ -15,6 +11,6 @@ const App = React.createClass({
       </div>
     );
   }
-});
+}
 
 export default App;

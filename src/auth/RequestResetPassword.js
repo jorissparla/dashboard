@@ -64,7 +64,6 @@ class RequestResetPassword extends Component {
   }
 
   _doSubmit = async () => {
-    console.log(this.props);
     try {
       await this.props.requestReset({
         variables: { email: this.state.email }

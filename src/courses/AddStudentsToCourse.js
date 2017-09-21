@@ -49,14 +49,12 @@ class AddStudentsToCourse extends Component {
   }
 
   handleSearchChange(val) {
-    console.log("value", val);
     this.setState({ searchText: val });
   }
   renderStudents(students) {
     return students.map(student => (
       <Chip
         onRequestDelete={() => {
-          console.log(this.props.data, student);
           this.props
             .removeStudentFromCourse({
               courseid: this.props.data.course.id,
@@ -110,7 +108,6 @@ class AddStudentsToCourse extends Component {
             .toUpperCase()
             .includes(this.state.searchText.toUpperCase())
       );
-    console.log(this.props);
     return (
       <div>
         <Paper>

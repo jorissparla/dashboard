@@ -3,19 +3,8 @@ import { connect } from "react-redux";
 import { fetchSummary } from "../actions/index";
 import SummaryChart from "./summarychart";
 
-const { func, string, number, object, arrayOf } = React.PropTypes;
-
-const AppChartContainer = React.createClass({
-  propTypes: {
-    fetchSummary: func,
-    data: arrayOf(object),
-    refreshRate: number,
-    value: string,
-    title: string,
-    type: string,
-    summary: arrayOf(object)
-  },
-  myTimer() {
+class AppChartContainer extends React.Component {
+  myTimer = () => {
     const data = !this.props.data ? ["Logistics"] : this.props.data;
     this.setState({
       index: this.state.index + 1,
@@ -27,11 +16,11 @@ const AppChartContainer = React.createClass({
         index: 0
       });
     }
-  },
+  };
 
   componentWillMount() {
     this.setState({ index: 0 });
-  },
+  }
 
   componentDidMount() {
     this.props.fetchSummary();
@@ -41,11 +30,11 @@ const AppChartContainer = React.createClass({
         this.myTimer,
         this.props.refreshRate || 15000
       );
-  },
+  }
 
   componentWillUnmount() {
     if (this.props.refreshRate !== 0) clearInterval(this.timerhandle);
-  },
+  }
 
   render() {
     const data = !this.props.data ? ["Logistics"] : this.props.data;
@@ -70,7 +59,7 @@ const AppChartContainer = React.createClass({
       </div>
     );
   }
-});
+}
 
 const mapStateToProps = state => {
   return { summary: state.summary.summary };

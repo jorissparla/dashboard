@@ -13,7 +13,6 @@ const Left = styled.div` width:10%; margin: 10px`;
 const Right = styled.div` width:80%`;
 
 const inputImageField = field => {
-  console.log(field);
   return (
     <div style={{ display: "flex", alignContent: "center" }}>
       <Left>
@@ -33,8 +32,6 @@ const NewsItem = ({
   title,
   history
 }) => {
-  //console.log("IV", newsitem);
-
   const handleDelete = e => {
     e.preventDefault();
     onDelete(newsitem.id);

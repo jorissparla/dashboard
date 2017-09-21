@@ -6,14 +6,12 @@ import { fetchNewsItem, updateNews, deleteNews } from "../actions/index";
 
 class NewsItemContainer extends Component {
   doSubmit = values => {
-    console.log("DoSubmit", values);
     window.alert(JSON.stringify(values, null, 2));
     updateNews(values);
     setTimeout(() => this.props.history.push("/news"), 500);
   };
 
   doDelete = id => {
-    console.log("doDelete--newsItemcontainer", id);
     deleteNews(id);
     setTimeout(() => this.props.history.replace("/news"), 500);
   };
@@ -23,8 +21,6 @@ class NewsItemContainer extends Component {
   }
 
   render() {
-    console.log("render container", this.props.match.params.id, this.props);
-
     if (!this.props.news) {
       return <div>Loading...</div>;
     }

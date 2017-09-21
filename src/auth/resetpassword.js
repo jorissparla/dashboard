@@ -36,12 +36,10 @@ class UpdatePasswordForm extends React.Component {
 
   doSubmit({ password, confirmpassword }) {
     //window.alert(`You submitted Parent:\n\n${JSON.stringify(v, null, 2)}`);
-    console.log(this.props);
     this.setState({ nomatch: password !== confirmpassword });
     if (this.state.nomatch) return;
     const { token } = this.props.params;
     this.props.UpdatePassword({ token, password }).catch(e => {
-      console.log(e);
       return;
     });
     setTimeout(() => this.props.history.push("/signin"), 500);

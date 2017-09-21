@@ -14,43 +14,27 @@ const aTypes = [
   { type: "Warning", value: "Warning" }
 ];
 
-const { string, func, object, arrayOf, shape } = React.PropTypes;
-
-let AlertItem = React.createClass({
-  propTypes: {
-    fetchAlertItem: func,
-    deleteAlert: func,
-    handleSubmit: func,
-    params: object,
-    alerts: arrayOf(
-      shape({
-        title: string,
-        body: string,
-        alerttype: string,
-        username: string
-      })
-    )
-  },
+class AlertItem extends React.Component {
   componentWillMount() {
     this.props.fetchAlertItem(this.props.match.params.id);
-  },
-  onDeleteClick(e) {
+  }
+  onDeleteClick = e => {
     e.preventDefault();
     this.props.deleteAlert(this.props.match.params.id).then(() => {
       this.props.history.push("/alerts");
     });
-  },
-  async submitIt(values) {
+  };
+  _onSubmit = async values => {
     await updateAlerts(values);
     this.props.history.push = "/alerts";
-  },
+  };
   render() {
     if (!this.props.alerts[0]) {
       return <div>Loading</div>;
     }
     const { handleSubmit } = this.props;
     return (
-      <form onSubmit={handleSubmit(this.submitIt)}>
+      <form onSubmit={handleSubmit(this._onSubmit)}>
         <Card>
           <CardSection>
             <Field
@@ -92,7 +76,7 @@ let AlertItem = React.createClass({
       </form>
     );
   }
-});
+}
 
 const mapStateToProps = state => {
   return { alerts: state.alerts.alerts, initialValues: state.alerts.alerts[0] };
