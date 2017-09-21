@@ -39,7 +39,6 @@ const NewsItem = ({
     e.preventDefault();
     onDelete(newsitem.id);
   };
-  ``;
   return (
     <form onSubmit={handleSubmit(onSave)}>
       <Paper>
@@ -81,7 +80,6 @@ const NewsItem = ({
           underlineShow={true}
           component={Input}
           floatingLabelText="text"
-          fullWidth={true}
           multiLine={true}
           rows={4}
           rowsMax={4}

@@ -3,8 +3,7 @@ import { connect } from "react-redux";
 import { withRouter, Redirect } from "react-router";
 import { Route } from "react-router-dom";
 
-export const AuthRoute = ({ component: Component, auth, user, ...rest }) => {
-  console.log(user);
+export const AuthRoute = ({ component: Component, allowed, user, ...rest }) => {
   return (
     <Route
       {...rest}
@@ -13,9 +12,11 @@ export const AuthRoute = ({ component: Component, auth, user, ...rest }) => {
           return <Redirect to={{ pathname: "/" }} />;
         }
 
-        if (auth.toUpperCase() === user.role.toUpperCase()) {
+        if (allowed.indexOf(user.role) >= 0) {
+          console.log("user ", user.role);
           return <Component {...props} />;
         } else {
+          console.log("not allowed user ", user.role);
           return <Redirect to={{ pathname: "/" }} />;
         }
       }}

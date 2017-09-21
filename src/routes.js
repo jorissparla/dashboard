@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Link, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 import AlertsList from "./alerts/alertlist";
 import AlertItem from "./alerts/alertitem";
@@ -24,7 +24,6 @@ import KudoList from "./kudos/kudolist";
 import KudoListAll from "./kudos/kudolistall";
 import Signin from "./auth/signin";
 import Signout from "./auth/signout";
-import Forgot from "./auth/forgot";
 import UpdatePassword from "./auth/resetpassword";
 import RequireAuth, { AuthRoute } from "./auth/require_auth";
 import ResetPasswordForm from "./auth/ResetPasswordForm";
@@ -47,75 +46,130 @@ import AddStudentsToCourse from "./courses/AddStudentsToCourse";
 
 const NotFound = () => <h2>Not Found!</h2>;
 
-const AppRoutes = ({ user }) => (
-  <Switch>
-    <Route exact path="/" component={DashBoardContainer} />
-    <Route path="/main/1" component={DashBoard} />
-    <Route path="/main/0" component={DashBoard0} />
-    <Route path="/main/2" component={DashBoardStats} />
-    <Route exact path="/alerts" component={RequireAuth(AlertsList)} />
-    <Route path="award" component={Award} />
-    <Route
-      auth="admin"
-      user={user}
-      exact
-      path="/supportcard"
-      component={SupportCards}
-    />
-    <Route path="/supportcard/edit/:id" component={SupportCardEdit} />
-    <Route exact path="/supportcard/add" component={SupportCardAdd} />
-    <Route exact path="/supportcard/request" component={RequestForm} />
-    <Route exact path="/alerts/new" component={RequireAuth(AlertItemAddNew)} />
-    <Route path="/alerts/:id" component={RequireAuth(AlertItem)} />
-    <Route exact path="/news" component={NewsListContainer} />
-    <Route
-      exact
-      path="/news/edit/:id"
-      component={RequireAuth(NewsItemContainer)}
-    />
-    <Route
-      exact
-      path="/news/add"
-      component={RequireAuth(NewsItemAddContainer)}
-    />
-    <Route exact path="/chat" component={RequireAuth(ChatList)} />
-    <Route exact path="/chat/new" component={RequireAuth(ChatContainer)} />
-    <Route
-      exact
-      path="/news/add"
-      component={RequireAuth(NewsItemAddContainer)}
-    />
+class AppRoutes extends React.Component {
+  render() {
+    const { user } = this.props;
+    return (
+      <Switch>
+        <Route exact path="/" component={DashBoardContainer} />
+        <Route
+          allowed={["Admin"]}
+          user={user}
+          path="/main/1"
+          component={DashBoard}
+        />
+        <Route path="/main/0" component={DashBoard0} />
+        <Route path="/main/2" component={DashBoardStats} />
+        <Route exact path="/alerts" component={RequireAuth(AlertsList)} />
+        <Route path="award" component={Award} />
+        <Route
+          auth="admin"
+          user={user}
+          exact
+          path="/supportcard"
+          component={SupportCards}
+        />
+        <AuthRoute
+          allowed={["Admin"]}
+          user={user}
+          path="/supportcard/edit/:id"
+          component={SupportCardEdit}
+        />
+        <AuthRoute
+          allowed={["Admin"]}
+          user={user}
+          exact
+          path="/supportcard/add"
+          component={SupportCardAdd}
+        />
+        <AuthRoute
+          allowed={["Admin", "PO", "SU", "Guest"]}
+          user={user}
+          exact
+          path="/supportcard/request"
+          component={RequestForm}
+        />
+        <AuthRoute
+          allowed={["Admin", "PO", "SU"]}
+          user={user}
+          exact
+          path="/alerts/new"
+          component={RequireAuth(AlertItemAddNew)}
+        />
+        <Route path="/alerts/:id" component={RequireAuth(AlertItem)} />
+        <Route exact path="/news" component={NewsListContainer} />
+        <AuthRoute
+          allowed={["Admin", "PO", "SU"]}
+          user={user}
+          exact
+          path="/news/edit/:id"
+          component={RequireAuth(NewsItemContainer)}
+        />
+        <AuthRoute
+          allowed={["Admin", "PO", "SU"]}
+          user={user}
+          exact
+          path="/news/add"
+          component={RequireAuth(NewsItemAddContainer)}
+        />
+        <Route exact path="/chat" component={RequireAuth(ChatList)} />
+        <Route exact path="/chat/new" component={RequireAuth(ChatContainer)} />
+        <AuthRoute
+          allowed={["Admin", "PO", "SU"]}
+          user={user}
+          exact
+          path="/news/add"
+          component={RequireAuth(NewsItemAddContainer)}
+        />
 
-    <Route path="/golivelist" component={GoLiveList} />
-    <Route path="/golivelist1" component={GoLiveList1} />
-    <Route path="/golivelistside" component={GoLiveListSide} />
-    <Route path="/golives" component={GoLives} />
-    <Route path="/kudos" component={KudoList} />
-    <Route path="/kudos1" component={KudoList1} />
-    <Route path="/kudosall" component={KudoListAll} />
-    <Route path="/kudolistcomponent" component={KudoListComponent} />
-    <Route path="/signin" component={Signin} />
-    <Route path="/signout" component={Signout} />
-    <Route path="/confirmation/:token" component={ResetPasswordForm} />
-    <Route path="/forgot" component={RequestResetPassword} />
-    <Route path="/reset/:token" component={UpdatePassword} />
-    <Route path="/historyday" component={HistoryDayContainer} />
-    <Route path="/historyall" component={HistoryDayAll} />
-    <Route path="test/edit/:id" component={NewsItemContainer} />
-    <Route path="test/new" component={NewsItemAddContainer} />
-    <Route exact path="/courses" component={CourseList} />
-    <Route exact path="/students" component={StudentListContainer} />
-    <Route path="/students/:id" component={StudentView} />
-    <Route path="/courses/edit/:id" component={CourseCard} />
-    <Route exact path="/courses/create" component={AddCourseCard} />
-    <Route path="/courses/addstudents/:id" component={AddStudentsToCourse} />
-    <Route component={NotFound} />
-  </Switch>
-);
+        <Route path="/golivelist" component={GoLiveList} />
+        <Route path="/golivelist1" component={GoLiveList1} />
+        <Route path="/golivelistside" component={GoLiveListSide} />
+        <Route path="/golives" component={GoLives} />
+        <Route path="/kudos" component={KudoList} />
+        <Route path="/kudos1" component={KudoList1} />
+        <Route path="/kudosall" component={KudoListAll} />
+        <Route path="/kudolistcomponent" component={KudoListComponent} />
+        <Route path="/signin" component={Signin} />
+        <Route path="/signout" component={Signout} />
+        <Route path="/confirmation/:token" component={ResetPasswordForm} />
+        <Route path="/forgot" component={RequestResetPassword} />
+        <Route path="/reset/:token" component={UpdatePassword} />
+        <Route path="/historyday" component={HistoryDayContainer} />
+        <Route path="/historyall" component={HistoryDayAll} />
+        <Route path="test/edit/:id" component={NewsItemContainer} />
+        <Route path="test/new" component={NewsItemAddContainer} />
+        <Route exact path="/courses" component={CourseList} />
+        <Route exact path="/students" component={StudentListContainer} />
+        <Route path="/students/:id" component={StudentView} />
+        <AuthRoute
+          allowed={["Admin", "PO"]}
+          user={user}
+          path="/courses/edit/:id"
+          component={CourseCard}
+        />
+        <AuthRoute
+          allowed={["Admin", "PO"]}
+          user={user}
+          exact
+          path="/courses/create"
+          component={AddCourseCard}
+        />
+        <AuthRoute
+          allowed={["Admin", "PO"]}
+          user={user}
+          path="/courses/addstudents/:id"
+          component={AddStudentsToCourse}
+        />
+        <Route component={NotFound} />
+      </Switch>
+    );
+  }
+}
 
 const mapStateToProps = state => ({
   authenticated: state.auth.authenticated,
   user: state.auth.user
 });
 
-export default AppRoutes;
+export default connect(mapStateToProps)(AppRoutes);

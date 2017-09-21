@@ -70,7 +70,6 @@ class ChatAdd extends React.Component {
   }
   render() {
     const { handleSubmit, ranges, onSave, onCancel } = this.props;
-    const team = this.state.team || "No";
     if (!ranges) {
       return <CardSection>Loading...</CardSection>;
     }

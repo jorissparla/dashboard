@@ -1,23 +1,10 @@
 import React, { Component } from "react";
 import { gql, graphql } from "react-apollo";
-import { Link, withRouter } from "react-router";
+import { withRouter } from "react-router";
 import styled from "styled-components";
-import Card from "./Card";
-import SearchBar from "../common/SearchBar";
-import StudentList from "./StudentList";
 import StudentTable from "./StudentTable";
 import CircularProgress from "material-ui/CircularProgress";
-import Drawer from "material-ui/Drawer";
-import MenuItem from "material-ui/MenuItem";
 
-const StyledContainer = styled.div`
-  margin-top: 10px;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: flex-start;
- 
-`;
 const Div = styled.div`
   display: flex;
   justify-content: center;

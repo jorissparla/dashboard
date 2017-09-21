@@ -7,7 +7,6 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import styled from "styled-components";
 import { Card } from "./card";
 import { deepOrange500 } from "material-ui/styles/colors";
-import UserAvatar from "react-user-avatar";
 
 const Outer = styled.div`
   display: flex;
@@ -27,9 +26,6 @@ const mapGender = g => {
     return "female";
   }
 };
-
-//const nrKudos = 4
-const indexList = [23, 34, 56, 24, 52, 19];
 
 const H3Styled = styled.h4`
   font-family: Oswald;
@@ -63,7 +59,6 @@ class KudoListComponent extends Component {
 
     return kl.map(
       ({ ownerrep_name, customer_name, gender, survey_date, pic }, index) => {
-        const nr = indexList[index % nrKudos];
         const mgender = mapGender(gender);
         const img = pic ? `${pic}` : `http://nlbavwtls22/images/${mgender}.png`;
 

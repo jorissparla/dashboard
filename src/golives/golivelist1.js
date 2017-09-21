@@ -6,15 +6,12 @@ import moment from "moment";
 import Spinner from "../utils/spinner";
 import { List, ListItem } from "material-ui/List";
 import Divider from "material-ui/Divider";
-import Subheader from "material-ui/Subheader";
 import Avatar from "material-ui/Avatar";
 import styled from "styled-components";
 
 const getDay = date =>
   moment(date).format("MMM").toUpperCase().substr(0, 3) +
   moment(date).format("DD");
-const rotate = (ar, index) =>
-  ar.slice(index, ar.length).concat(ar.slice(0, index));
 
 const GoLiveListStyle = styled.div`
   width: 100%;
@@ -85,7 +82,7 @@ class GoLiveList1 extends Component {
   }
 
   render() {
-    const { golives, nrItems = 4 } = this.props;
+    const { golives } = this.props;
     if (!golives || golives === null) {
       return (
         <div>

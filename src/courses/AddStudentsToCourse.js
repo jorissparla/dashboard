@@ -4,28 +4,18 @@ import { List, ListItem } from "material-ui/List";
 import Divider from "material-ui/Divider";
 import Avatar from "material-ui/Avatar";
 import Chip from "material-ui/Chip";
-import TextField from "material-ui/TextField";
 import Paper from "material-ui/Paper";
-import FontIcon from "material-ui/FontIcon";
 import { red500 } from "material-ui/styles/colors";
 import { withRouter } from "react-router";
 import styled from "styled-components";
 import SearchBar from "../common/SearchBar";
 import CircularProgress from "material-ui/CircularProgress";
-import Checkbox from "material-ui/Checkbox";
 import ContentAdd from "material-ui/svg-icons/content/add";
 import FloatingActionButton from "material-ui/FloatingActionButton";
 import RaisedButton from "material-ui/RaisedButton";
-import ActionFavorite from "material-ui/svg-icons/action/favorite";
-import ActionFavoriteBorder from "material-ui/svg-icons/action/favorite-border";
 import { pinkA200, transparent } from "material-ui/styles/colors";
 import { TitleBar } from "../common/TitleBar";
 import withAuth from "../utils/withAuth";
-
-const Container = styled.div`
-  display: flex;
-  justify-content: space-between
-`;
 
 const Div = styled.div`
   display: flex;
@@ -47,20 +37,6 @@ const Left = styled.div`
 const Right = styled.div`
   flex-basis : 65%;
   flex:1;
-`;
-
-const CheckBoxContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  float: right;
-`;
-
-const Title = styled.div`
-  font-family:Oswald;
-  font-size: 24px;
-  flex:1;
-  background:${props => (props.background ? "lightblue" : "white")}
 `;
 
 class AddStudentsToCourse extends Component {
@@ -173,13 +149,11 @@ class AddStudentsToCourse extends Component {
                     id,
                     picture,
                     fullname,
-                    firstname,
                     lastname,
                     location,
                     team,
                     navid
                   } = item;
-                  const enabled = false;
                   return (
                     <ListItem
                       key={id}

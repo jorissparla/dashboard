@@ -1,7 +1,7 @@
 import React from "react";
 import AppBar from "material-ui/AppBar";
 import IconButton from "material-ui/IconButton";
-import { blue500, white } from "material-ui/styles/colors";
+import { blue500 } from "material-ui/styles/colors";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import Avatar from "material-ui/Avatar";
 import getMuiTheme from "material-ui/styles/getMuiTheme";
@@ -16,16 +16,10 @@ import IconMenu from "material-ui/IconMenu";
 import Divider from "material-ui/Divider";
 import MenuItem from "material-ui/MenuItem";
 import { withRouter } from "react-router-dom";
-import {
-  Toolbar,
-  ToolbarGroup,
-  ToolbarSeparator,
-  ToolbarTitle
-} from "material-ui/Toolbar";
+import { Toolbar, ToolbarGroup, ToolbarTitle } from "material-ui/Toolbar";
 import withAuth from "./utils/withAuth";
 
 import FlatButton from "material-ui/FlatButton";
-import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
 const muiTheme = getMuiTheme({
@@ -175,8 +169,6 @@ class Header extends React.Component {
   }
 
   render() {
-    let homeLink = <Link to={"/"} />;
-
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         {this.renderToolBar()}
