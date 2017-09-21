@@ -36,6 +36,7 @@ const PrimaryText = styled.h2`
 
 const SecondaryText = styled.div`
   padding-bottom: 10px;
+  white-space: pre-line;
 `;
 
 const TextSection = styled.div`

@@ -7,6 +7,9 @@ import { blue500 } from "material-ui/styles/colors";
 import Paper from "material-ui/Paper";
 import styled from "styled-components";
 
+const P = styled.p`
+  white-space: pre-line;
+`;
 const Left = styled.div`
   display: flex;
   flex-direction: column;
@@ -39,11 +42,11 @@ class NewsList extends Component {
                 />
             }
             secondaryText={
-              <p>
+              <P>
                 {body}
-              </p>
+              </P>
             }
-            secondaryTextLines={2}
+            secondaryTextLines={4}
           />
           <Divider inset={true} />
 

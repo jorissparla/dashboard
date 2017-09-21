@@ -67,6 +67,7 @@ const signinUser = async ({ email, password }) => {
       return;
     }
     if (response) {
+      localStorage.setItem("id", response.data.uic);
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("email", email);
       localStorage.setItem("picture", response.data.user.pic);
