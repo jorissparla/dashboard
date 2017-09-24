@@ -45,7 +45,7 @@ import StudentView from "./courses/StudentView";
 import AddStudentsToCourse from "./courses/AddStudentsToCourse";
 //import NewsItem from "./news/newspage";
 //import SummaryChartContainer from "./charts/SummaryChartContainer";
-import ChatGraphContainer from "./charts/ChatGraphContainer";
+//import ChatGraphContainer from "./charts/ChatGraphContainer";
 import DashBoardStatsNew from "./DashBoardStatsNew";
 
 const NotFound = () => <h2>Not Found!</h2>;

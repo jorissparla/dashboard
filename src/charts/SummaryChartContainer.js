@@ -8,9 +8,9 @@ class SummaryChartContainer extends React.Component {
   render() {
     const { data: { loading, error, summaries } } = this.props;
     if (loading) return <div>Loading...</div>;
+    if (error) return <div>Error</div>;
     console.log(this.props.team, summaries);
 
-    const data = !this.props.team ? ["Logistics"] : this.props.team;
     const value = !this.props.value ? "supportBacklog" : this.props.value;
     const title = !this.props.title ? value : this.props.title;
     const type = !this.props.type ? "column" : this.props.type;

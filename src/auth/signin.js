@@ -13,10 +13,6 @@ const Form = styled.form`
   flex-direction: column;
 `;
 
-const Error = styled.div`
-  padding: 10px;
-
-`;
 const style = {
   paper: {
     width: "30%",
@@ -87,7 +83,7 @@ class Signin extends React.Component {
 
     if (!this.validate()) {
       this.setState({ emailError: "", passwordError: "" });
-      const result = await this.props.signinUser({ email, password });
+      await this.props.signinUser({ email, password });
       this.props.history.push("/");
     } else {
       this.setState({ error: "invalid email or password" });
