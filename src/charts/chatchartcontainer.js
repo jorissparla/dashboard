@@ -35,10 +35,9 @@ class ChatChartContainer extends React.Component {
   }
 
   render() {
-    console.info("ChatChartContainer");
     const data = !this.props.data ? ["Logistics"] : this.props.data;
     const value = !this.props.value ? "percentage" : this.props.value;
-    const title = !this.props.title ? value : this.props.title;
+    const title = !this.props.title ? "value" : this.props.title;
     const type = !this.props.type ? "column" : this.props.type;
     const team = data[this.state.index || 0];
     const chat = this.props.chat || []; //.reverse().slice(0, 6).reverse() // .reverse()

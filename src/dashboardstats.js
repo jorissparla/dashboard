@@ -15,7 +15,7 @@ const DashBoardStats = ({ data }) => {
       {/*<div className="col s2">
         <AlertWidget />
       </div> */}
-      <div className="col s10">
+      <div className="col s12">
         <div className="row">
           <AppChartContainer
             data={data || ["Tools", "Logistics", "Finance"]}

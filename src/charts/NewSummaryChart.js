@@ -12,22 +12,12 @@ const arColors = [
   "#4527a0"
 ];
 
-Math.easeOutBounce = function(pos) {
-  if (pos < 1 / 2.75) {
-    return 7.5625 * pos * pos;
-  }
-  if (pos < 2 / 2.75) {
-    return 7.5625 * (pos -= 1.5 / 2.75) * pos + 0.75;
-  }
-  if (pos < 2.5 / 2.75) {
-    return 7.5625 * (pos -= 2.25 / 2.75) * pos + 0.9375;
-  }
-  return 7.5625 * (pos -= 2.625 / 2.75) * pos + 0.984375;
-};
-
 const config = {
   chart: {
-    type: "column"
+    type: "column",
+    style: {
+      fontFamily: "Arial"
+    }
   },
   options3d: {
     enabled: true,
@@ -47,11 +37,7 @@ const config = {
       depth: 25
     },
     series: {
-      pointWidth: 50, // width of the column bars irrespective of the chart size
-      animation: {
-        duration: 3000,
-        easing: "easeOutBounce"
-      }
+      pointWidth: 50 // width of the column bars irrespective of the chart size
     }
   },
   series: [
@@ -83,20 +69,15 @@ const renderSummary = (
   }
 
   const mySummary = (summary || []).slice(); // .sort((a,b)=> a.weekNr > b.weekNr)
-  const filteredSummary = mySummary
-    .filter(item => item.team === team)
-    .reverse()
-    .slice(0, 6)
-    .reverse()
-    .reduce(
-      ({ xvalues, data }, item, index) => {
-        xvalues.push(item[xvalue]);
-        data.push({ y: item[val], color: arColors[index % 7] });
-        return { xvalues, data };
-      },
-      { xvalues: [], data: [] }
-    );
-  console.log(filteredSummary);
+  const filteredSummary = mySummary.reverse().reduce((
+    { xvalues, data },
+    item,
+    index
+  ) => {
+    xvalues.push(item[xvalue]);
+    data.push({ y: item[val], color: arColors[index % 7] });
+    return { xvalues, data };
+  }, { xvalues: [], data: [] });
   config.xAxis.categories = filteredSummary.xvalues;
   config.series[0] = {
     data: filteredSummary.data,

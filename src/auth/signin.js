@@ -1,5 +1,4 @@
 import React from "react";
-import { Field, reduxForm } from "redux-form";
 import RaisedButton from "material-ui/RaisedButton";
 import { TextField } from "redux-form-material-ui";
 import Paper from "material-ui/Paper";
@@ -7,11 +6,22 @@ import { signinUser } from "../actions";
 import { connect } from "react-redux";
 import ErrorDialog from "../errordialog";
 import { withRouter } from "react-router-dom";
+import styled from "styled-components";
 
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Error = styled.div`
+  padding: 10px;
+
+`;
 const style = {
   paper: {
     width: "30%",
     paddingLeft: "20px",
+    minWidth: "300px",
 
     marginTop: "40px",
     textAlign: "left",
@@ -23,67 +33,108 @@ const style = {
     alignSelf: "flex-start"
   }
 };
-const required = value => (value == null ? "Required" : undefined);
-const email = value =>
+const isRequired = value => (value ? true : false);
+const isValidemail = value =>
   value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)
-    ? "Invalid email"
-    : undefined;
+    ? false
+    : true;
 
 class Signin extends React.Component {
-  doSubmit = ({ email, password }) => {
-    /*    window.alert(
-      `You submitted Parent:\n\n${JSON.stringify({ email, password }, null, 2)}`
-    );*/
-    this.props.signinUser({ email, password });
-    this.props.history.push("/");
+  state = {
+    email: "",
+    password: "",
+    error: "",
+    emailError: "",
+    passwordError: ""
+  };
+
+  onChange = ({ target: { name, value } }) => {
+    this.setState({
+      [name]: value
+    });
+  };
+
+  validate = () => {
+    const errors = { emailError: "", passwordError: "" };
+    const { email, password } = this.state;
+    let isError = false;
+
+    if (!isValidemail(email)) {
+      isError = true;
+      errors.emailError = "Invalid email address";
+    }
+
+    if (!isRequired(password)) {
+      isError = true;
+      errors.passwordError = "Password cannot be empty";
+    }
+    this.setState({
+      ...this.state,
+      ...errors
+    });
+    console.log(this.state);
+    return isError;
+  };
+
+  onChangeEmail = ({ target: { value } }) => this.setState({ email: value });
+  onChangePassword = ({ target: { value } }) =>
+    this.setState({ password: value });
+
+  doSubmit = async e => {
+    e.preventDefault();
+    this.setState({ error: "" });
+    const { email, password } = this.state;
+
+    if (!this.validate()) {
+      this.setState({ emailError: "", passwordError: "" });
+      const result = await this.props.signinUser({ email, password });
+      this.props.history.push("/");
+    } else {
+      this.setState({ error: "invalid email or password" });
+    }
+    //location.href = location.href;
   };
 
   renderAlert = () => {
-    if (this.props.errorMessage) {
+    const { errorMessage } = this.props;
+
+    const error = this.state.error || errorMessage;
+    if (error) {
       return (
         <div className="alert alert-danger">
-          <ErrorDialog message={this.props.errorMessage} />
-          <strong>Oops!</strong> {this.props.errorMessage}
+          <ErrorDialog message={error} />
         </div>
       );
     }
   };
   render() {
-    const { handleSubmit } = this.props;
     return (
       <Paper style={style.paper} zDepth={2}>
-        <form onSubmit={handleSubmit(this.doSubmit)}>
-          <div>
-            <Field
-              name="email"
-              component={TextField}
-              floatingLabelText="Email"
-              validate={[required, email]}
-              ref="email"
-              withRef
-            />
-          </div>
-          <div>
-            <Field
-              name="password"
-              component={TextField}
-              type="password"
-              floatingLabelText="Password"
-              validate={required}
-              ref="password"
-              withRef
-            />
-          </div>
-          <div>
-            {this.renderAlert()}
-            <RaisedButton
-              label="Login"
-              primary={true}
-              style={style.button}
-              type="submit"
-            />
-          </div>
-        </form>
+        <Form>
+          <TextField
+            name="email"
+            floatingLabelText="Email"
+            value={this.state.email}
+            onChange={this.onChange}
+            errorText={this.state.emailError}
+          />
+          <TextField
+            name="password"
+            type="password"
+            floatingLabelText="Password"
+            value={this.state.password}
+            onChange={this.onChangePassword}
+            errorText={this.state.passwordError}
+          />
+          {this.renderAlert()}
+          <RaisedButton
+            label="Login"
+            primary={true}
+            style={style.button}
+            type="submit"
+            onClick={this.doSubmit}
+          />
+        </Form>
       </Paper>
     );
   }
@@ -93,9 +144,9 @@ function mapStateToProps(state) {
   return { errorMessage: state.auth.error };
 }
 
-Signin = reduxForm({
+/* Signin = reduxForm({
   form: "sigin",
   defaultValues: {}
 })(Signin);
-
+ */
 export default connect(mapStateToProps, { signinUser })(withRouter(Signin));

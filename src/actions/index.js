@@ -64,7 +64,7 @@ const signinUser = async ({ email, password }) => {
     );
     if (err) {
       dispatch(authError("Bad Login Info"));
-      return;
+      return { error: "Bad Login Info" };
     }
     if (response) {
       localStorage.setItem("id", response.data.uic);
@@ -73,7 +73,7 @@ const signinUser = async ({ email, password }) => {
       localStorage.setItem("picture", response.data.user.pic);
       localStorage.setItem("role", response.data.user.role);
       dispatch({ type: AUTH_USER, user: response.data.user });
-      return;
+      return { error: "" };
       //browserHistory.push("/");
     }
   };

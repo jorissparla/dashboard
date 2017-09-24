@@ -49,7 +49,6 @@ class NewsList extends Component {
             secondaryTextLines={4}
           />
           <Divider inset={true} />
-
         </Paper>
       );
     });
