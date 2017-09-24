@@ -23,7 +23,7 @@ class DashBoardStats extends React.Component {
     this.setState({ index: newIndex });
   };
   componentWillMount() {
-    this.timerhandle = setInterval(this.myTimer, 5000);
+    this.timerhandle = setInterval(this.myTimer, 45000);
   }
   render() {
     const { data } = this.props;
