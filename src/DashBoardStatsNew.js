@@ -5,7 +5,7 @@ import "./App.css";
 //import AlertWidget from "./alerts/alertwidget";
 import SummaryChartContainer from "./charts/SummaryChartContainer";
 import ChatGraphContainer from "./charts/ChatGraphContainer";
-import HistoryChartContainer from "./charts/historycontainer";
+import HistoryChartContainer from "./charts/HistoryChartContainer";
 import { StyleLoaderM } from "./common";
 
 class DashBoardStats extends React.Component {
@@ -46,6 +46,8 @@ class DashBoardStats extends React.Component {
               refreshRate={0}
             />
             <HistoryChartContainer
+              team={this.teams[this.state.index]}
+              value="backlog"
               data={data}
               color="#ffb74d"
               refreshRate={0}

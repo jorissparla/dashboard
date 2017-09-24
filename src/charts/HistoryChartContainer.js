@@ -1,19 +1,17 @@
-import React from "react";
+import React, { Component } from "react";
 import { gql, graphql } from "react-apollo";
 import SummaryChart from "./NewSummaryChart";
 
-class ChatGraphContainer extends React.Component {
-  componentWillMount() {}
-
+class HistoryChartContainer extends Component {
   render() {
-    const { data: { loading, error, chats } } = this.props;
+    const { data: { loading, error, history } } = this.props;
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error</div>;
-    const value = !this.props.value ? "percentage" : this.props.value;
+    const value = !this.props.value ? "backlog" : this.props.value;
     const title = !this.props.title ? "Chats" : this.props.title;
     const type = !this.props.type ? "column" : this.props.type;
     const team = this.props.team;
-    const summary = chats; // .reverse()
+    const summary = history; // .reverse()
     const color = this.props.color;
     return (
       <div>
@@ -31,16 +29,18 @@ class ChatGraphContainer extends React.Component {
   }
 }
 
-const querySummaries = gql`
-  query chats ($team: String) {
-    chats(team: $team, recent: 6) {
+const queryHistory = gql`
+  query history ($team: String) {
+    history(team: $team) {
+      Row
+      backlog
+      hour
       id
-      weeknr
-      percentage
+      team
     }
   }
 `;
 
-export default graphql(querySummaries, {
+export default graphql(queryHistory, {
   options: props => ({ variables: { team: props.team || "Logistics" } })
-})(ChatGraphContainer);
+})(HistoryChartContainer);
