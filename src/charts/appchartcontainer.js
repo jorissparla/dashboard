@@ -26,10 +26,7 @@ class AppChartContainer extends React.Component {
     this.props.fetchSummary();
 
     if (this.props.refreshRate !== 0)
-      this.timerhandle = setInterval(
-        this.myTimer,
-        this.props.refreshRate || 15000
-      );
+      this.timerhandle = setInterval(this.myTimer, this.props.refreshRate || 15000);
   }
 
   componentWillUnmount() {
@@ -44,7 +41,6 @@ class AppChartContainer extends React.Component {
     const team = data[this.state.index || 0];
     const summary = this.props.summary; // .reverse()
     const color = this.props.color;
-    // console.dir('Summary', summary)
     return (
       <div>
         <SummaryChart

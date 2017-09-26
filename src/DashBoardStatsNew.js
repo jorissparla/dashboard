@@ -19,7 +19,6 @@ class DashBoardStats extends React.Component {
     } else {
       newIndex = this.state.index + 1;
     }
-    console.log(newIndex);
     this.setState({ index: newIndex });
   };
   componentWillMount() {

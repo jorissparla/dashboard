@@ -10,15 +10,10 @@ import AppRoutes from "./routes";
 import getMuiTheme from "material-ui/styles/getMuiTheme";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import injectTapEventPlugin from "react-tap-event-plugin";
-import Raven from "raven-js";
 import { AUTH_USER } from "./actions";
 import App from "./App";
 
-import {
-  ApolloClient,
-  ApolloProvider,
-  createNetworkInterface
-} from "react-apollo";
+import { ApolloClient, ApolloProvider, createNetworkInterface } from "react-apollo";
 
 const networkInterface = createNetworkInterface({
   uri: "https://nlbavwtls22.infor.com:55555/graphql"
@@ -26,14 +21,9 @@ const networkInterface = createNetworkInterface({
 const client = new ApolloClient({
   networkInterface
 });
-Raven.config(
-  "https://dc36f9e386c04e4b979cbda7dd297c6e@sentry.io/163871"
-).install();
 
 injectTapEventPlugin();
-const createStoreWithMiddleware = applyMiddleware(promise, reduxThunk)(
-  createStore
-);
+const createStoreWithMiddleware = applyMiddleware(promise, reduxThunk)(createStore);
 const store = createStoreWithMiddleware(
   reducers,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()

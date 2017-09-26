@@ -10,35 +10,43 @@ import SupportCards from "./supportcard/SupportCards";
 //import Award from './awards/award'
 
 class DashBoardContainer extends Component {
+  state = { index: 0, sel: null };
   componentDidMount() {
-    this.setState({
-      index: 0
-    });
+    const sel = parseInt(this.props.match.params.id, 2);
+    console.log("Sel", sel);
+    if (sel) {
+      this.setState({ index: 0, sel: sel });
+    }
+
     setInterval(this.myTimer.bind(this), this.props.refreshInterval || 60000);
   }
 
   myTimer() {
     const newIndex = this.state.index >= 8 ? 0 : this.state.index + 1;
-    this.setState({
-      index: newIndex
-    });
+    this.setState({ index: newIndex });
   }
 
   render() {
     if (!this.state) {
       return <div>Loading...</div>;
     }
+    const index = this.state.sel ? this.state.sel : this.state.index;
+    if (!(index >= 0)) {
+      return <div>Loading...</div>;
+    }
+
     return (
       <div>
         <div>
           <StyleLoader stylesheetPath="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css" />
         </div>
-        {this.renderDashBoard(this.state.index)}
+        {this.renderDashBoard(index)}
       </div>
     );
   }
 
   renderDashBoard(index) {
+    console.log(index);
     switch (index) {
       case 8:
         return <SupportCards />;

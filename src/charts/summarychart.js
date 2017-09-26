@@ -2,15 +2,7 @@ import React from "react";
 import ReactHighCharts from "react-highcharts";
 import "highcharts/highcharts-3d";
 
-const arColors = [
-  "#c62828",
-  "#90caf9",
-  "#01579b",
-  "#ffa726",
-  "#4db6ac",
-  "#fbc02d",
-  "#4527a0"
-];
+const arColors = ["#c62828", "#90caf9", "#01579b", "#ffa726", "#4db6ac", "#fbc02d", "#4527a0"];
 
 Math.easeOutBounce = function(pos) {
   if (pos < 1 / 2.75) {
@@ -68,16 +60,7 @@ const config = {
   }
 };
 
-const renderSummary = (
-  config,
-  val,
-  team,
-  title,
-  color,
-  type,
-  summary,
-  xvalue
-) => {
+const renderSummary = (config, val, team, title, color, type, summary, xvalue) => {
   if (color) {
     config.plotOptions.area.color = color;
   }
@@ -96,7 +79,6 @@ const renderSummary = (
       },
       { xvalues: [], data: [] }
     );
-  console.log(filteredSummary);
   config.xAxis.categories = filteredSummary.xvalues;
   config.series[0] = {
     data: filteredSummary.data,
@@ -109,25 +91,8 @@ const renderSummary = (
   return config;
 };
 
-const summaryChart = ({
-  value,
-  team,
-  title,
-  color,
-  type,
-  data,
-  xvalue = "weekNr"
-}) => {
-  const newConfig = renderSummary(
-    config,
-    value,
-    team,
-    title,
-    color,
-    type,
-    data,
-    xvalue
-  );
+const summaryChart = ({ value, team, title, color, type, data, xvalue = "weekNr" }) => {
+  const newConfig = renderSummary(config, value, team, title, color, type, data, xvalue);
   return (
     <div className="col s4">
       <div className="card">

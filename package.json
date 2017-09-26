@@ -33,7 +33,6 @@
     "material-ui": "^0.17.4",
     "moment": "^2.18.1",
     "prop-types": "^15.5.8",
-    "raven-js": "^3.14.2",
     "react": "^15.4.1",
     "react-addons-css-transition-group": "^15.4.1",
     "react-apollo": "^1.1.2",
