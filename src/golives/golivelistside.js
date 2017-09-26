@@ -9,8 +9,7 @@ import Divider from "material-ui/Divider";
 import styled from "styled-components";
 
 const getDay = date =>
-  moment(date).format("MMM").toUpperCase().substr(0, 3) +
-  moment(date).format("DD");
+  moment(date).format("MMM").toUpperCase().substr(0, 3) + moment(date).format("DD");
 
 const GoLiveListStyle = styled.div`
   margin-right: 10px;
@@ -41,7 +40,6 @@ const GoLiveCustomerStyle = styled.div`
 const H5Styled = styled.h3`
   font-family: Oswald;
 `;
-console.dir(H5Styled);
 class GoLiveListSide extends Component {
   componentDidMount() {
     this.props.fetchGoLives();
