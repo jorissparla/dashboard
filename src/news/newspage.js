@@ -14,8 +14,8 @@ const Row = styled.div`
 `;
 
 const Title = styled.h2`
-font-family: Roboto;
-font-weight: 200;
+  font-family: Roboto;
+  font-weight: 200;
 `;
 
 const InfoSection = styled.div`
@@ -30,9 +30,7 @@ const DateSection = styled.div`
   display: flex;
 `;
 
-const PrimaryText = styled.h2`
-  font-weight: 300;
-`;
+const PrimaryText = styled.h2`font-weight: 300;`;
 
 const SecondaryText = styled.div`
   padding-bottom: 10px;
@@ -43,7 +41,6 @@ const TextSection = styled.div`
   display: flex;
   font-family: Roboto;
   flex-direction: column;
-  
 `;
 
 const Avatar = styled.img`
@@ -77,6 +74,9 @@ const NewsPage = props => {
     return <div>E</div>;
   }
   const { data: { news } } = props;
+  if (!news) {
+    return <div>No news</div>;
+  }
   return (
     <div>
       <Title>What's New?</Title>
@@ -87,15 +87,15 @@ const NewsPage = props => {
 };
 
 const NewsItemsQuery = gql`
-query news {
-  news {
-    id
-    title
-    body
-    create_date
-    img
+  query news {
+    news {
+      id
+      title
+      body
+      create_date
+      img
+    }
   }
-}
 `;
 
 export default graphql(NewsItemsQuery, { name: "data" })(NewsPage);
