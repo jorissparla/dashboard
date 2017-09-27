@@ -6,7 +6,7 @@ import Paper from "material-ui/Paper";
 import { UpdatePassword } from "../actions";
 import { connect } from "react-redux";
 import ErrorDialog from "../errordialog";
-import { withRouter } from "react-router-dom";
+import { withRouter } from "react-router";
 
 const style = {
   paper: {

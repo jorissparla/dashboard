@@ -1,5 +1,5 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter } from "react-router";
 import styled from "styled-components";
 import Chip from "material-ui/Chip";
 import Avatar from "material-ui/Avatar";
@@ -35,11 +35,11 @@ const StudentList = ({ students, history }) => {
               key={student.id}
               onClick={() => history.push(`/students/${student.id}`)}
             >
-              {student.picture
-                ? <Avatar src={student.picture.data} />
-                : <Avatar
-                    src={`https://randomuser.me/api/portraits/men/18.jpg`}
-                  />}
+              {student.picture ? (
+                <Avatar src={student.picture.data} />
+              ) : (
+                <Avatar src={`https://randomuser.me/api/portraits/men/18.jpg`} />
+              )}
               {student.fullname}
             </Chip>
           );

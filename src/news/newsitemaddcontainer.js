@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
+import { withRouter } from "react-router";
 import NewsItem from "./newsitem";
 import { createNews } from "../actions/index";
 
@@ -11,13 +11,7 @@ class NewsItemAddContainer extends Component {
     //browserHistory.push("/news");
   };
   render() {
-    return (
-      <NewsItem
-        initialValues={{}}
-        onSave={this.doSubmit}
-        title="New news item"
-      />
-    );
+    return <NewsItem initialValues={{}} onSave={this.doSubmit} title="New news item" />;
   }
 }
 

@@ -5,7 +5,7 @@ import { TextField } from "redux-form-material-ui";
 import Paper from "material-ui/Paper";
 import { forgotPassword } from "../actions";
 import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
+import { withRouter } from "react-router";
 
 const style = {
   paper: {

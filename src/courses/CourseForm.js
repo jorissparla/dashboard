@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Field, reduxForm } from "redux-form";
-import { withRouter } from "react-router-dom";
+import { withRouter } from "react-router";
 import { SelectField } from "redux-form-material-ui";
 import { CardSection, Card, Input, MyDatePicker } from "../common";
 import MenuItem from "material-ui/MenuItem";
@@ -15,9 +15,7 @@ import {
 } from "../common/TitleBar";
 import withAuth from "../utils/withAuth";
 
-const StyledField = styled(Field)`
-  margin-right: 5px;
-`;
+const StyledField = styled(Field)`margin-right: 5px;`;
 
 const SelectStyle = styled.div`
   margin: 5px;
@@ -75,7 +73,6 @@ class CourseForm extends Component {
     const readOnly = !authenticated;
     return (
       <form onSubmit={handleSubmit(this.handleSubmit)}>
-
         <Card>
           <CardSection>
             <Field
@@ -121,7 +118,6 @@ class CourseForm extends Component {
                   <MenuItem key={id} value={name} primaryText={name} />
                 ))}
               </Field>
-
             </SelectStyle>
           </CardSection>
           <CardSection>
@@ -149,11 +145,7 @@ class CourseForm extends Component {
                 style={{ flex: 2 }}
               >
                 {teams.map(team => (
-                  <MenuItem
-                    key={team.id}
-                    value={team.name}
-                    primaryText={team.name}
-                  />
+                  <MenuItem key={team.id} value={team.name} primaryText={team.name} />
                 ))}
               </Field>
             </SelectStyle>
@@ -167,11 +159,7 @@ class CourseForm extends Component {
                 style={{ flex: 2 }}
               >
                 {coursetypes.map(type => (
-                  <MenuItem
-                    key={type.id}
-                    value={type.name}
-                    primaryText={type.name}
-                  />
+                  <MenuItem key={type.id} value={type.name} primaryText={type.name} />
                 ))}
               </Field>
             </SelectStyle>
@@ -184,9 +172,7 @@ class CourseForm extends Component {
                 component={MyDatePicker}
                 floatingLabelText="start date"
                 format={(value, name) => {
-                  return value === ""
-                    ? null
-                    : typeof value === "string" ? new Date(value) : value;
+                  return value === "" ? null : typeof value === "string" ? new Date(value) : value;
                 }}
                 autoOk={true}
               />
@@ -200,9 +186,7 @@ class CourseForm extends Component {
                 component={MyDatePicker}
                 floatingLabelText="end date"
                 format={(value, name) => {
-                  return value === ""
-                    ? null
-                    : typeof value === "string" ? new Date(value) : value;
+                  return value === "" ? null : typeof value === "string" ? new Date(value) : value;
                 }}
                 autoOk={true}
               />
@@ -224,7 +208,6 @@ class CourseForm extends Component {
               underlineShow={true}
               fullWidth={true}
             />
-
           </CardSection>
           <CardSection>
             {!readOnly && <NormalRaisedButton label="Save" type="submit" />}
@@ -235,27 +218,21 @@ class CourseForm extends Component {
               onClick={() => setInterval(history.push("/courses"), 500)}
             />
             {!readOnly &&
-              course &&
-              <DeleteButton
-                label="Delete"
-                onClick={() => this.handleDelete(this.props.course)}
-              />}
+              course && (
+                <DeleteButton label="Delete" onClick={() => this.handleDelete(this.props.course)} />
+              )}
             {!readOnly &&
-              course &&
-              <RegisterButton
-                label="Edit Registration"
-                onClick={() =>
-                  history.push(`/courses/addstudents/${this.props.course.id}`)}
-              />}
+              course && (
+                <RegisterButton
+                  label="Edit Registration"
+                  onClick={() => history.push(`/courses/addstudents/${this.props.course.id}`)}
+                />
+              )}
             <Chip style={{ margin: 4 }}>
-              {course
-                ? `Last updated  ${moment(course.lastmodified).calendar()}`
-                : "not Saved yet"}
+              {course ? `Last updated  ${moment(course.lastmodified).calendar()}` : "not Saved yet"}
             </Chip>
           </CardSection>
-
         </Card>
-
       </form>
     );
   }

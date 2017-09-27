@@ -1,5 +1,6 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
+import { withRouter } from "react-router";
 import { connect } from "react-redux";
 import AlertsList from "./alerts/alertlist";
 import AlertItem from "./alerts/alertitem";
@@ -167,4 +168,4 @@ const mapStateToProps = state => ({
   user: state.auth.user
 });
 
-export default connect(mapStateToProps)(AppRoutes);
+export default withRouter(connect(mapStateToProps)(AppRoutes));

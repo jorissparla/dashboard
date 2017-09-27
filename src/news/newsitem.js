@@ -1,6 +1,6 @@
 import React from "react";
 import { Field, reduxForm } from "redux-form";
-import { withRouter } from "react-router-dom";
+import { withRouter } from "react-router";
 import { CardSection, Input } from "../common";
 import Divider from "material-ui/Divider";
 import Paper from "material-ui/Paper";
@@ -9,8 +9,11 @@ import RaisedButton from "material-ui/RaisedButton";
 import { fullWhite } from "material-ui/styles/colors";
 import styled from "styled-components";
 
-const Left = styled.div` width:10%; margin: 10px`;
-const Right = styled.div` width:80%`;
+const Left = styled.div`
+  width: 10%;
+  margin: 10px;
+`;
+const Right = styled.div`width: 80%;`;
 
 const inputImageField = field => {
   return (
@@ -18,7 +21,6 @@ const inputImageField = field => {
       <Left>
         <Avatar src={field.input.value} />
       </Left>
-
     </div>
   );
 };
@@ -39,20 +41,19 @@ const NewsItem = ({
   return (
     <form onSubmit={handleSubmit(onSave)}>
       <Paper>
-        <CardSection style={{ fontSize: "36px", fontFamily: "Oswald" }}>
-          {title}
-        </CardSection>
+        <CardSection style={{ fontSize: "36px", fontFamily: "Oswald" }}>{title}</CardSection>
       </Paper>
       <Paper>
         <CardSection>
           <RaisedButton primary={true} label="Save" type="submit" />
-          {onDelete &&
+          {onDelete && (
             <RaisedButton
               backgroundColor={"#212121"}
               labelColor={fullWhite}
               label="Delete"
               onClick={handleDelete}
-            />}
+            />
+          )}
           <RaisedButton label="Cancel" onClick={() => history.push("/news")} />
         </CardSection>
         <Divider />
@@ -103,11 +104,8 @@ const NewsItem = ({
           </Right>
         </div>
       </Paper>
-
     </form>
   );
 };
 
-export default reduxForm({ form: "_newsitem", enableReinitialize: true })(
-  withRouter(NewsItem)
-);
+export default reduxForm({ form: "_newsitem", enableReinitialize: true })(withRouter(NewsItem));

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { withRouter } from "react-router-dom";
+import { withRouter } from "react-router";
 import SearchBar from "../common/SearchBar";
 import Paper from "material-ui/Paper";
 import IconMenu from "material-ui/IconMenu";
@@ -52,14 +52,15 @@ class StudentTables extends Component {
   dropdownMenu(id) {
     return (
       <IconMenu
-        iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+        iconButtonElement={
+          <IconButton>
+            <MoreVertIcon />
+          </IconButton>
+        }
         anchorOrigin={{ horizontal: "left", vertical: "top" }}
         targetOrigin={{ horizontal: "left", vertical: "top" }}
       >
-        <MenuItem
-          primaryText="View"
-          onClick={() => this.props.history.push(`/students/${id}`)}
-        />
+        <MenuItem primaryText="View" onClick={() => this.props.history.push(`/students/${id}`)} />
         <MenuItem disabled={true} primaryText="Send feedback" />
         <MenuItem disabled={true} primaryText="Sign out" />
       </IconMenu>
@@ -71,9 +72,7 @@ class StudentTables extends Component {
 
     const filteredAccounts = accounts.filter(
       account =>
-        account.fullname
-          .toUpperCase()
-          .includes(this.state.searchText.toUpperCase()) ||
+        account.fullname.toUpperCase().includes(this.state.searchText.toUpperCase()) ||
         account.team.toUpperCase().includes(this.state.searchText.toUpperCase())
     );
 
@@ -89,44 +88,35 @@ class StudentTables extends Component {
           }}
         />
         <Table headerStyle={headerStyle}>
-          <TableHeader
-            style={headerStyle}
-            adjustForCheckbox={false}
-            displaySelectAll={false}
-          >
+          <TableHeader style={headerStyle} adjustForCheckbox={false} displaySelectAll={false}>
             <TableRow>
               <TableHeaderColumn style={{ fontSize: 16, fontFamily: "Roboto" }}>
                 ID
               </TableHeaderColumn>
               {TableHeaderColumn1("name")}}
               {TableColumnHeaders("Team, Location, Courses")}
-              <TableHeaderColumn>Courses<ArrowDownWard /></TableHeaderColumn>
+              <TableHeaderColumn>
+                Courses<ArrowDownWard />
+              </TableHeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody displayRowCheckbox={false}>
             {filteredAccounts.map((item, i) => (
               <TableRow key={item.id}>
                 <TableRowColumn>
-                  {item.picture
-                    ? <Avatar src={item.picture.data} />
-                    : <Avatar
-                        color={pinkA200}
-                        backgroundColor={transparent}
-                        style={{ left: 8 }}
-                      >
-                        {item.fullname
-                          .slice(0, 1)
-                          .concat(item.lastname.slice(0, 1))}
-                      </Avatar>}
+                  {item.picture ? (
+                    <Avatar src={item.picture.data} />
+                  ) : (
+                    <Avatar color={pinkA200} backgroundColor={transparent} style={{ left: 8 }}>
+                      {item.fullname.slice(0, 1).concat(item.lastname.slice(0, 1))}
+                    </Avatar>
+                  )}
                 </TableRowColumn>
                 <TableRowColumn>{item.fullname}</TableRowColumn>
                 <TableRowColumn>{item.team}</TableRowColumn>
                 <TableRowColumn>{item.location}</TableRowColumn>
-                <TableRowColumn>
-                  {item._courseMeta ? item._courseMeta.count : 0}
-                </TableRowColumn>
+                <TableRowColumn>{item._courseMeta ? item._courseMeta.count : 0}</TableRowColumn>
                 <TableRowColumn> {this.dropdownMenu(item.id)}</TableRowColumn>
-
                 /&gt;
               </TableRow>
             ))}

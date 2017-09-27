@@ -15,7 +15,7 @@ import MenuIcon from "material-ui/svg-icons/navigation/menu";
 import IconMenu from "material-ui/IconMenu";
 import Divider from "material-ui/Divider";
 import MenuItem from "material-ui/MenuItem";
-import { withRouter } from "react-router-dom";
+import { withRouter } from "react-router";
 import { Toolbar, ToolbarGroup, ToolbarTitle } from "material-ui/Toolbar";
 import withAuth from "./utils/withAuth";
 
@@ -79,7 +79,8 @@ class Header extends React.Component {
           primaryText={<div style={{ color: "black" }}>Courses</div>}
           leftIcon={<PageIcon style={{ root: { color: "black" } }} />}
           onClick={() => {
-            history.push("/courses");
+            this.props.history.push("/courses");
+            //window.location.href = location.href;
           }}
         />
         <Divider />
@@ -126,6 +127,7 @@ class Header extends React.Component {
   logInLink = () => {
     const { history } = this.props;
     history.push("/signin");
+    //window.location.href = location.href;
   };
   renderButtons() {
     if (this.props.authenticated) {
@@ -178,7 +180,14 @@ class Header extends React.Component {
   }
 
   render() {
-    return <MuiThemeProvider muiTheme={muiTheme}>{this.renderToolBar()}</MuiThemeProvider>;
+    return (
+      <MuiThemeProvider muiTheme={muiTheme}>
+        <div>
+          {this.renderToolBar()}
+          {this.props.children}
+        </div>
+      </MuiThemeProvider>
+    );
   }
 }
 

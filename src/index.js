@@ -11,7 +11,7 @@ import getMuiTheme from "material-ui/styles/getMuiTheme";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import injectTapEventPlugin from "react-tap-event-plugin";
 import { AUTH_USER } from "./actions";
-import App from "./App";
+import App from "./appnav";
 
 import { ApolloClient, ApolloProvider, createNetworkInterface } from "react-apollo";
 

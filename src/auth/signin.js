@@ -5,12 +5,28 @@ import Paper from "material-ui/Paper";
 import { signinUser } from "../actions";
 import { connect } from "react-redux";
 import ErrorDialog from "../errordialog";
-import { withRouter } from "react-router-dom";
+import { withRouter } from "react-router";
 import styled from "styled-components";
+import { Button, Input } from "../styles";
 
 const Form = styled.form`
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: rgb(255, 255, 255);
+  background-color: rgb(255, 255, 255);
+  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Roboto;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 10px, rgba(0, 0, 0, 0.23) 0px 3px 10px;
+  border-radius: 2px;
+  width: 30%;
+  padding: 20px;
+  min-width: 300px;
+  margin-top: 40px;
+  margin-left: 20px;
+  text-align: left;
 `;
 
 const style = {
@@ -31,9 +47,7 @@ const style = {
 };
 const isRequired = value => (value ? true : false);
 const isValidemail = value =>
-  value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value)
-    ? false
-    : true;
+  value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? false : true;
 
 class Signin extends React.Component {
   state = {
@@ -73,18 +87,22 @@ class Signin extends React.Component {
   };
 
   onChangeEmail = ({ target: { value } }) => this.setState({ email: value });
-  onChangePassword = ({ target: { value } }) =>
-    this.setState({ password: value });
+  onChangePassword = ({ target: { value } }) => this.setState({ password: value });
 
-  doSubmit = async e => {
+  _onSubmit = async e => {
     e.preventDefault();
     this.setState({ error: "" });
     const { email, password } = this.state;
 
     if (!this.validate()) {
       this.setState({ emailError: "", passwordError: "" });
-      await this.props.signinUser({ email, password });
-      this.props.history.push("/");
+      const result = await this.props.signinUser({ email, password });
+      console.log(result);
+      if (!result.error) {
+        this.props.history.push("/");
+      } else {
+        this.setState({ error: "invalid email or password" });
+      }
     } else {
       this.setState({ error: "invalid email or password" });
     }
@@ -105,33 +123,34 @@ class Signin extends React.Component {
   };
   render() {
     return (
-      <Paper style={style.paper} zDepth={2}>
-        <Form>
-          <TextField
-            name="email"
-            floatingLabelText="Email"
-            value={this.state.email}
-            onChange={this.onChange}
-            errorText={this.state.emailError}
-          />
-          <TextField
-            name="password"
-            type="password"
-            floatingLabelText="Password"
-            value={this.state.password}
-            onChange={this.onChangePassword}
-            errorText={this.state.passwordError}
-          />
-          {this.renderAlert()}
-          <RaisedButton
-            label="Login"
-            primary={true}
-            style={style.button}
-            type="submit"
-            onClick={this.doSubmit}
-          />
-        </Form>
-      </Paper>
+      <Form>
+        <Input
+          name="email"
+          floatingLabelText="Email"
+          value={this.state.email}
+          onChange={this.onChangeEmail}
+          errorText={this.state.emailError}
+        />
+        <Input
+          name="password"
+          type="password"
+          floatingLabelText="Password"
+          value={this.state.password}
+          onChange={this.onChangePassword}
+          errorText={this.state.passwordError}
+        />
+        {this.renderAlert()}
+        <Button
+          label="Login"
+          primary={true}
+          width="300px"
+          style={style.button}
+          type="submit"
+          onClick={this._onSubmit}
+        >
+          Login
+        </Button>
+      </Form>
     );
   }
 }

@@ -1,7 +1,10 @@
 import styled, { keyframes } from "styled-components";
 
-export const Typography = styled.div`font-family: Helvetica Neue, Roboto;`;
-
+export const Typography = styled.div`font-family: Roboto;`;
+export const BasicFlex = Typography.extend`
+  display: flex;
+  padding: 5px;
+`;
 export const BG = styled.div`background: #e6ecf0;`;
 
 export const niceblue = "#40a5ed";
@@ -11,11 +14,12 @@ export const Input = styled.input`
   position: relative;
   display: inline-block;
   padding: 4px 7px;
-  margin: 4px;
+  margin: 8px;
   width: 200px;
   height: 28px;
-  font-size: 15px;
+  font-size: 1em;
   line-height: 1.5;
+  font-family: "Segoe UI", Roboto;
   color: rgba(0, 0, 0, 0.65);
   background-color: #fff;
   background-image: none;
@@ -26,25 +30,45 @@ export const Input = styled.input`
 `;
 export const Button = styled.a`
   display: inline-block;
+  min-width: 150px;
   height: 40px;
-  padding: 0 16px;
+  padding: 4px 7px;
   font-weight: 500;
   border-radius: 4px;
   border: 1px solid ${niceblue};
   text-decoration: none;
   color: #0ae;
-  font-family: Roboto;
-  font-size: 15px;
+  font-family: "Segoe UI", Roboto;
+  font-size: 1em;
   background: transparent;
   -webkit-transition: all 0.45s;
   transition: all 0.45s;
   text-align: center;
   line-height: 36px;
-  margin-left: 8px;
   :hover {
     background: #40a5ed;
     color: white;
   }
+`;
+
+export const Papier = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: rgb(255, 255, 255);
+  background-color: rgb(255, 255, 255);
+  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+  box-sizing: border-box;
+  font-family: Roboto, sans-serif;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 10px, rgba(0, 0, 0, 0.23) 0px 3px 10px;
+  border-radius: 2px;
+  width: 30%;
+  padding: 20px;
+  min-width: 300px;
+  margin-top: 40px;
+  margin-left: 20px;
+  text-align: left;
 `;
 export const Avatar = styled.img`
   border-radius: 50%;
@@ -54,10 +78,6 @@ export const Avatar = styled.img`
   justify-content: center;
   margin-left: 10px;
   overflow: hidden;
-`;
-export const BasicFlex = Typography.extend`
-  display: flex;
-  padding: 5px;
 `;
 
 export const UserName = BasicFlex.extend`font-size: 16px;`;
@@ -113,7 +133,7 @@ export const Pop2 = BasicFlex.extend`
     position: absolute;
     right: 5px;
     top: -5px;
-    content: '';
+    content: "";
     display: block;
     border-bottom: solid 5px hsla(0, 0%, 0%, 0.85);
     border-left: solid 5px transparent;

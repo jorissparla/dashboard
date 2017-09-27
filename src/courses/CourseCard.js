@@ -1,19 +1,15 @@
 import React, { Component } from "react";
 import { gql, graphql } from "react-apollo";
-import { withRouter } from "react-router-dom";
+import { withRouter } from "react-router";
 import styled from "styled-components";
 import CourseForm from "./CourseForm";
 import CourseStudentList from "./CourseStudentList";
 
-const Div = styled.div`
-  display: flex;
-`;
-const Left = styled.div`
-  flex-basis: 30%;
-`;
+const Div = styled.div`display: flex;`;
+const Left = styled.div`flex-basis: 30%;`;
 const Right = styled.div`
-  flex-basis : 65%;
-  flex:1;
+  flex-basis: 65%;
+  flex: 1;
 `;
 
 class CourseCard extends Component {
@@ -79,7 +75,6 @@ class CourseCard extends Component {
     return (
       <div>
         <Div>
-
           <Right>
             <CourseForm
               initialValues={course}
@@ -93,7 +88,6 @@ class CourseCard extends Component {
             <CourseStudentList students={course.enrollments} />
           </Left>
         </Div>
-
       </div>
     );
   }
@@ -103,52 +97,50 @@ const CourseDelete = gql`
   mutation deleteCourse($input: InputCourseType) {
     deleteCourse(input: $input) {
       text
-      }
+    }
   }
 `;
 
 const CourseUpdate = gql`
-  mutation  updateCourse($input: InputCourseType ) {
-    updateCourse(input: $input ) {
+  mutation updateCourse($input: InputCourseType) {
+    updateCourse(input: $input) {
       course {
         id
         applicable
-        }
+      }
     }
-}
-  
+  }
 `;
 
 const CourseQuery = gql`
   query course($id: ID) {
-    course(id: $id ) {
+    course(id: $id) {
+      id
+      title
+      description
+      team
+      link
+      status
+      type
+      startdate
+      enddate
+      hours
+      applicable
+      trainer
+      lastmodified
+      enrollments {
         id
-        title
-        description
-        team
-        link
         status
-        type
-        startdate
-        enddate
-        hours
-        applicable
-        trainer
-        lastmodified
-        enrollments {
+        student {
           id
-          status
-          student {
-            id
-            fullname
-            picture {
-              data
-            }
+          fullname
+          picture {
+            data
           }
         }
-        
+      }
     }
-    }
+  }
 `;
 
 export default graphql(CourseDelete, {

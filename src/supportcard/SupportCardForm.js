@@ -1,15 +1,11 @@
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter } from "react-router";
 import { Field, reduxForm } from "redux-form";
 import { SelectField } from "redux-form-material-ui";
 import Paper from "material-ui/Paper";
 import MenuItem from "material-ui/MenuItem";
 import { CardSection, Input } from "../common";
-import {
-  NormalRaisedButton,
-  CancelRaisedButton,
-  DeleteButton
-} from "../common/TitleBar";
+import { NormalRaisedButton, CancelRaisedButton, DeleteButton } from "../common/TitleBar";
 
 const paperStyle = {
   display: "flex",
@@ -34,7 +30,6 @@ const SupportCardForm = props => {
   const readOnly = !authenticated;
   return (
     <Paper zDepth={1} style={paperStyle}>
-
       <form onSubmit={handleSubmit(onSave)}>
         <Field
           hintText="Enter Card Title"
@@ -77,9 +72,7 @@ const SupportCardForm = props => {
           underlineShow={true}
           underlineStyle={{ borderColor: "#039BE5" }}
         >
-          {categories.map(({ id, name }) => (
-            <MenuItem key={id} value={name} primaryText={name} />
-          ))}
+          {categories.map(({ id, name }) => <MenuItem key={id} value={name} primaryText={name} />)}
         </Field>
 
         <Field
@@ -92,8 +85,7 @@ const SupportCardForm = props => {
           component={Input}
           underlineShow={true}
           style={{ fontSize: 14 }}
-          onClick={() =>
-            readOnly ? window.open(initialValues.link) : console.log("link")}
+          onClick={() => (readOnly ? window.open(initialValues.link) : console.log("link"))}
         />
         <CardSection>
           {!readOnly && <NormalRaisedButton label="Save" type="submit" />}
@@ -104,21 +96,13 @@ const SupportCardForm = props => {
             onClick={() => setTimeout(history.push("/supportcard"), 500)}
           />
           {!readOnly &&
-            supportcard &&
-            <DeleteButton
-              label="Delete"
-              onClick={() => onDelete(supportcard)}
-            />}
+            supportcard && <DeleteButton label="Delete" onClick={() => onDelete(supportcard)} />}
           {readOnly &&
-            supportcard &&
-            <DeleteButton
-              label="View Link"
-              onClick={() => window.open(initialValues.link)}
-            />}
-
+            supportcard && (
+              <DeleteButton label="View Link" onClick={() => window.open(initialValues.link)} />
+            )}
         </CardSection>
       </form>
-
     </Paper>
   );
 };

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { withRouter } from "react-router-dom";
+import { withRouter } from "react-router";
 import { fetchRanges, createChat } from "../actions";
 import { Card, OkCancelDialog } from "../common";
 import ChatAdd from "./ChatAdd";

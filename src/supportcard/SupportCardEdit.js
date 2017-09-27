@@ -1,6 +1,6 @@
 import { gql, graphql } from "react-apollo";
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter } from "react-router";
 import SupportCardForm from "./SupportCardForm";
 import withAuth from "../utils/withAuth";
 
@@ -50,7 +50,6 @@ class SupportCardEdit extends React.Component {
 
     return (
       <div>
-
         <SupportCardForm
           initialValues={supportcard}
           supportcard={supportcard}
@@ -67,34 +66,33 @@ class SupportCardEdit extends React.Component {
 
 const supportcard = gql`
   query supportcard($id: String) {
-    supportcard(id: $id ) {
-        id
-        title
-        description
-        categoryname
-        category {
-          name
-          
-        }
-        link
+    supportcard(id: $id) {
+      id
+      title
+      description
+      categoryname
+      category {
+        name
+      }
+      link
     }
     categories {
       id
       name
+    }
   }
-}
 `;
 
 const deleteSupportCard = gql`
   mutation deleteSupportCard($input: InputCardType) {
     deleteSupportCard(input: $input) {
       id
-      }
+    }
   }
 `;
 
 const modifySupportCard = gql`
-  mutation modifySupportCard($input:InputCardType) {
+  mutation modifySupportCard($input: InputCardType) {
     modifySupportCard(input: $input) {
       supportcard {
         id
@@ -102,7 +100,7 @@ const modifySupportCard = gql`
         description
         categoryname
         link
-        }
+      }
     }
   }
 `;

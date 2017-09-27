@@ -1,18 +1,14 @@
 import React, { Component } from "react";
 import { gql, graphql } from "react-apollo";
-import { withRouter } from "react-router-dom";
+import { withRouter } from "react-router";
 import styled from "styled-components";
 import CourseForm from "./CourseForm";
 
-const Div = styled.div`
-  display: flex;
-`;
-const Left = styled.div`
-  flex-basis: 30%;
-`;
+const Div = styled.div`display: flex;`;
+const Left = styled.div`flex-basis: 30%;`;
 const Right = styled.div`
-  flex-basis : 65%;
-  flex:1;
+  flex-basis: 65%;
+  flex: 1;
 `;
 
 class AddCourseCard extends Component {
@@ -62,28 +58,25 @@ class AddCourseCard extends Component {
     return (
       <div>
         <Div>
-
           <Right>
             <CourseForm onSave={this.handleSave} readOnly={false} />
           </Right>
           <Left />
         </Div>
-
       </div>
     );
   }
 }
 
 const AddCourse = gql`
-  mutation  addCourse($input: InputCourseType ) {
-    addCourse(input: $input ) {
+  mutation addCourse($input: InputCourseType) {
+    addCourse(input: $input) {
       course {
         id
         applicable
-        }
+      }
     }
-}
-  
+  }
 `;
 
 export default graphql(AddCourse, {

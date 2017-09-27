@@ -3,7 +3,7 @@ import RaisedButton from "material-ui/RaisedButton";
 import { TextField } from "redux-form-material-ui";
 import Paper from "material-ui/Paper";
 import ErrorDialog from "../errordialog";
-import { withRouter } from "react-router-dom";
+import { withRouter } from "react-router";
 
 const style = {
   paper: {

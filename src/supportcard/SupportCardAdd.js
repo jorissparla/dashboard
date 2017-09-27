@@ -1,6 +1,6 @@
 import { gql, graphql } from "react-apollo";
 import React from "react";
-import { withRouter } from "react-router-dom";
+import { withRouter } from "react-router";
 import SupportCardForm from "./SupportCardForm";
 import withAuth from "../utils/withAuth";
 
@@ -40,7 +40,7 @@ const SupportCardAdd = ({
 };
 
 const addSupportCard = gql`
-  mutation addSupportCard($input:InputCardType) {
+  mutation addSupportCard($input: InputCardType) {
     addSupportCard(input: $input) {
       supportcard {
         id

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { gql, graphql } from "react-apollo";
 import styled from "styled-components";
-import { withRouter } from "react-router-dom";
+import { withRouter } from "react-router";
 import TextField from "material-ui/TextField";
 export const niceblue = "#40a5ed";
 export const babyblue = "#ecf6fd";
@@ -31,7 +31,7 @@ const Error = styled.div`
   color: white;
   font-family: Roboto;
   font-size: 15px;
-  
+
   transition: all 0.45s;
   text-align: center;
   line-height: 36px;
@@ -55,15 +55,13 @@ export const Button = styled.button`
   text-align: center;
   line-height: 36px;
   margin-left: 8px;
-  &:hover{
+  &:hover {
     background: #40a5ed;
     color: white;
-}
+  }
 `;
 
-const StyledTextField = styled(TextField)`
-  margin: 20px;
-`;
+const StyledTextField = styled(TextField)`margin: 20px;`;
 class Request extends Component {
   state = { name: "", email: "", text: "", page: "SupportCard", error: "" };
 
@@ -100,16 +98,8 @@ class Request extends Component {
         <FlexCol>
           {/*<H1>{this.state.page} Request</H1> */}
           <FlexRow>
-            <StyledTextField
-              placeholder="Enter Name"
-              name="name"
-              onChange={this.onChangeName}
-            />
-            <StyledTextField
-              placeholder="Enter email"
-              onChange={this.onChangeEmail}
-            />
-
+            <StyledTextField placeholder="Enter Name" name="name" onChange={this.onChangeName} />
+            <StyledTextField placeholder="Enter email" onChange={this.onChangeEmail} />
           </FlexRow>
           <StyledTextField
             placeholder="Enter Text"
@@ -118,7 +108,9 @@ class Request extends Component {
             fullWidth={true}
             onChange={this.onChangeText}
           />
-          <Button type="submit" onClick={this._onSubmit}>Enter Request</Button>
+          <Button type="submit" onClick={this._onSubmit}>
+            Enter Request
+          </Button>
           {this.state.error && <Error>{this.state.error}</Error>}
         </FlexCol>
       </form>
@@ -137,13 +129,11 @@ class Request extends Component {
 }
 
 const createRequestMutation = gql`
-mutation createRequest($name: String, $email: String, $text:String) {
-  createRequest(input: {name: $name, email: $email, text: $text}) {
-    id
+  mutation createRequest($name: String, $email: String, $text: String) {
+    createRequest(input: { name: $name, email: $email, text: $text }) {
+      id
+    }
   }
-}
 `;
 
-export default graphql(createRequestMutation, { name: "createRequest" })(
-  withRouter(Request)
-);
+export default graphql(createRequestMutation, { name: "createRequest" })(withRouter(Request));

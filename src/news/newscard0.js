@@ -4,7 +4,7 @@ import styled from "styled-components";
 const StyledImage = styled.img`
   width: 100%;
   height: 150px;
-   object-fit: cover;
+  object-fit: cover;
 `;
 const Title = styled.div`
   font-family: Roboto;
@@ -15,7 +15,7 @@ const Title = styled.div`
 const StyledBody = styled.p`
   margin: 20px;
   margin-bottom: 20px;
-    font-size: 15px;
+  font-size: 15px;
 `;
 const NewsCard0 = props => {
   const newsItem = props.data;
@@ -25,26 +25,10 @@ const NewsCard0 = props => {
   return (
     <div>
       <StyledImage src={newsItem.img} alt="" />
-      <Title>
-        {newsItem.title}
-      </Title>
-      <StyledBody>
-        {newsItem.body}.
-      </StyledBody>
+      <Title>{newsItem.title}</Title>
+      <StyledBody>{newsItem.body}.</StyledBody>
     </div>
   );
-};
-
-const { string, shape } = React.PropTypes;
-
-NewsCard0.propType = {
-  data: shape({
-    body: string,
-    image: string,
-    link: string,
-    link_text: string,
-    expire_date: string
-  })
 };
 
 export default NewsCard0;

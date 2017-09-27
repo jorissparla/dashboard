@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { gql, graphql } from "react-apollo";
-import { withRouter } from "react-router-dom";
+import { withRouter } from "react-router";
 import styled from "styled-components";
 import Card from "./Card";
 import SearchBar from "../common/SearchBar";
@@ -13,7 +13,6 @@ const StyledContainer = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: flex-start;
-  
 `;
 
 class CourseList extends Component {
@@ -21,12 +20,12 @@ class CourseList extends Component {
 
   constructor(props) {
     super(props);
-    this.handleSearchTextChange = this.handleSearchTextChange.bind(this);
+    console.log(props);
   }
 
-  handleSearchTextChange(val) {
+  handleSearchTextChange = val => {
     this.setState({ searchText: val });
-  }
+  };
   render() {
     const { loading, error, courses } = this.props.data;
     if (loading) {
@@ -37,9 +36,7 @@ class CourseList extends Component {
     }
     const filteredCourses = courses.filter(
       course =>
-        course.title
-          .toUpperCase()
-          .includes(this.state.searchText.toUpperCase()) ||
+        course.title.toUpperCase().includes(this.state.searchText.toUpperCase()) ||
         course.team.toUpperCase().includes(this.state.searchText.toUpperCase())
     );
     return (
@@ -53,12 +50,7 @@ class CourseList extends Component {
         <StyledContainer>
           <AddCard />
           {filteredCourses.map((course, i) => (
-            <Card
-              key={course.id}
-              course={course}
-              index={i}
-              count={course._studentsMeta.count}
-            />
+            <Card key={course.id} course={course} index={i} count={course._studentsMeta.count} />
           ))}
         </StyledContainer>
       </div>
@@ -69,20 +61,19 @@ class CourseList extends Component {
 const courseQuery = gql`
   query courseQuery {
     courses {
-        id
-        team
-        title
-        description
-        link
-        _studentsMeta {
-          count
-        }
-        students {
-          fullname
-
-        }
+      id
+      team
+      title
+      description
+      link
+      _studentsMeta {
+        count
+      }
+      students {
+        fullname
+      }
     }
   }
 `;
 
-export default graphql(courseQuery)(withRouter(withAuth(CourseList)));
+export default graphql(courseQuery)(withAuth(withRouter(CourseList)));

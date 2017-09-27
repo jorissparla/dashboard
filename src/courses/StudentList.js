@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 
-import { withRouter } from "react-router-dom";
+import { withRouter } from "react-router";
 import SearchBar from "../common/SearchBar";
 import { List, ListItem } from "material-ui/List";
 import Paper from "material-ui/Paper";
@@ -27,7 +27,11 @@ class StudentList extends Component {
   dropdownMenu(id) {
     return (
       <IconMenu
-        iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+        iconButtonElement={
+          <IconButton>
+            <MoreVertIcon />
+          </IconButton>
+        }
         anchorOrigin={{ horizontal: "left", vertical: "top" }}
         targetOrigin={{ horizontal: "left", vertical: "top" }}
       >
@@ -46,9 +50,7 @@ class StudentList extends Component {
 
     const filteredAccounts = accounts.filter(
       account =>
-        account.fullname
-          .toUpperCase()
-          .includes(this.state.searchText.toUpperCase()) ||
+        account.fullname.toUpperCase().includes(this.state.searchText.toUpperCase()) ||
         account.team.toUpperCase().includes(this.state.searchText.toUpperCase())
     );
     return (
@@ -59,20 +61,20 @@ class StudentList extends Component {
             <ListItem
               key={item.id}
               primaryText={item.fullname}
-              secondaryText={`in Team ${item.team}, Location ${item.locationdetail ? item.locationdetail.location : item.location} has been registered for ${item._courseMeta ? item._courseMeta.count : 0} courses`}
+              secondaryText={`in Team ${item.team}, Location ${item.locationdetail
+                ? item.locationdetail.location
+                : item.location} has been registered for ${item._courseMeta
+                ? item._courseMeta.count
+                : 0} courses`}
               rightIcon={this.dropdownMenu(item.id)}
               leftAvatar={
-                item.picture
-                  ? <Avatar src={item.picture.data} />
-                  : <Avatar
-                      color={pinkA200}
-                      backgroundColor={transparent}
-                      style={{ left: 8 }}
-                    >
-                      {item.fullname
-                        .slice(0, 1)
-                        .concat(item.lastname.slice(0, 1))}
-                    </Avatar>
+                item.picture ? (
+                  <Avatar src={item.picture.data} />
+                ) : (
+                  <Avatar color={pinkA200} backgroundColor={transparent} style={{ left: 8 }}>
+                    {item.fullname.slice(0, 1).concat(item.lastname.slice(0, 1))}
+                  </Avatar>
+                )
               }
             />
           ))}
