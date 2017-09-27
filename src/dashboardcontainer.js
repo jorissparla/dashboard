@@ -71,10 +71,4 @@ class DashBoardContainer extends Component {
   }
 }
 
-const { number } = React.PropTypes;
-
-DashBoardContainer.propTypes = {
-  refreshInterval: number
-};
-
 export default DashBoardContainer;

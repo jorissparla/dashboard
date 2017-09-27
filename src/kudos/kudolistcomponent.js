@@ -12,9 +12,7 @@ import { deepOrange500 } from "material-ui/styles/colors";
 import styled from "styled-components";
 //import Paper from 'material-ui/Paper'
 
-const H5Styled = styled.h5`
-  font-family: Oswald;
-`;
+const H5Styled = styled.h5`font-family: Oswald;`;
 
 const muiTheme = getMuiTheme({
   palette: {
@@ -68,7 +66,11 @@ const mapGender = g => {
 //const nrKudos = 4
 const indexList = [23, 34, 56, 24, 52, 19];
 
-const subTitle = name => <span>by <b>{name}</b></span>;
+const subTitle = name => (
+  <span>
+    by <b>{name}</b>
+  </span>
+);
 
 //const getDay = date => moment(date).format('ddd, DD MMM')
 const DateBox = ({ day, month, year }) => {
@@ -110,37 +112,29 @@ class KudoListComponent extends Component {
     const nrKudos = this.props.kudos.length;
     let kl = kudos.slice(0, nrKudos);
 
-    return kl.map(
-      ({ ownerrep_name, customer_name, gender, survey_date, pic }, index) => {
-        const nr = indexList[index % nrKudos];
-        const mgender = mapGender(gender);
-        const img = pic
-          ? `${pic}`
-          : `https://randomuser.me/api/portraits/${mgender}/${nr}.jpg`;
-        return (
-          <GridTile
-            style={styles.gridItem}
-            key={index}
-            title={customer_name}
-            subtitle={subTitle(ownerrep_name)}
-            actionIcon={DateView(survey_date)}
-          >
-            <img src={img} alt="" />
-          </GridTile>
-        );
-      }
-    );
+    return kl.map(({ ownerrep_name, customer_name, gender, survey_date, pic }, index) => {
+      const nr = indexList[index % nrKudos];
+      const mgender = mapGender(gender);
+      const img = pic ? `${pic}` : `https://randomuser.me/api/portraits/${mgender}/${nr}.jpg`;
+      return (
+        <GridTile
+          style={styles.gridItem}
+          key={index}
+          title={customer_name}
+          subtitle={subTitle(ownerrep_name)}
+          actionIcon={DateView(survey_date)}
+        >
+          <img src={img} alt="" />
+        </GridTile>
+      );
+    });
   }
 
   render() {
     const kudos = this.props.kudos;
 
     if (!kudos) {
-      return (
-        <div>
-          Loading
-        </div>
-      );
+      return <div>Loading</div>;
     }
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
@@ -159,20 +153,6 @@ class KudoListComponent extends Component {
     );
   }
 }
-
-const { string, func, shape, number, arrayOf } = React.PropTypes;
-
-KudoListComponent.propTypes = {
-  fetchKudos: func,
-  refreshRate: number,
-  kudos: arrayOf(
-    shape({
-      name: string,
-      date: string,
-      customer: string
-    })
-  )
-};
 
 const mapStateToProps = state => {
   return { kudos: state.summary.kudos };

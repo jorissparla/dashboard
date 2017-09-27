@@ -18,7 +18,6 @@ import UserAvatar from "react-user-avatar";
 const H5Styled = styled.div`
   font-family: Oswald;
   font-size: 24px;
-
 `;
 
 const PaperStyled = styled(Paper)`
@@ -77,7 +76,11 @@ const mapGender = g => {
 //const nrKudos = 4
 const indexList = [23, 34, 56, 24, 52, 19];
 
-const subTitle = name => <span>by <b>{name}</b></span>;
+const subTitle = name => (
+  <span>
+    by <b>{name}</b>
+  </span>
+);
 
 //const getDay = date => moment(date).format('ddd, DD MMM')
 const DateBox = ({ day, month, year }) => {
@@ -119,48 +122,42 @@ class KudoListComponent0 extends Component {
     const nrKudos = this.props.kudos.length;
     let kl = kudos.slice(0, nrKudos);
 
-    return kl.map(
-      ({ ownerrep_name, customer_name, gender, survey_date, pic }, index) => {
-        const nr = indexList[index % nrKudos];
-        const mgender = mapGender(gender);
-        const img = pic
-          ? `${pic}`
-          : `https://randomuser.me/api/portraits/${mgender}/${nr}.jpg`;
-        return (
-          <GridTile
-            style={styles.gridItem}
-            key={index}
-            title={customer_name}
-            subtitle={subTitle(ownerrep_name)}
-            actionIcon={DateView(survey_date)}
-          >
-            {pic
-              ? <img src={pic} alt="" />
-              : <UserAvatar
-                  size="98"
-                  style={{
-                    fontSize: 48,
-                    display: "flex",
-                    justifyContent: "center",
-                    color: "white"
-                  }}
-                  name={ownerrep_name}
-                />}
-          </GridTile>
-        );
-      }
-    );
+    return kl.map(({ ownerrep_name, customer_name, gender, survey_date, pic }, index) => {
+      const nr = indexList[index % nrKudos];
+      const mgender = mapGender(gender);
+      const img = pic ? `${pic}` : `https://randomuser.me/api/portraits/${mgender}/${nr}.jpg`;
+      return (
+        <GridTile
+          style={styles.gridItem}
+          key={index}
+          title={customer_name}
+          subtitle={subTitle(ownerrep_name)}
+          actionIcon={DateView(survey_date)}
+        >
+          {pic ? (
+            <img src={pic} alt="" />
+          ) : (
+            <UserAvatar
+              size="98"
+              style={{
+                fontSize: 48,
+                display: "flex",
+                justifyContent: "center",
+                color: "white"
+              }}
+              name={ownerrep_name}
+            />
+          )}
+        </GridTile>
+      );
+    });
   }
 
   render() {
     const kudos = this.props.kudos;
 
     if (!kudos) {
-      return (
-        <div>
-          Loading
-        </div>
-      );
+      return <div>Loading</div>;
     }
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
@@ -182,20 +179,6 @@ class KudoListComponent0 extends Component {
     );
   }
 }
-
-const { string, func, shape, number, arrayOf } = React.PropTypes;
-
-KudoListComponent0.propTypes = {
-  fetchKudos: func,
-  refreshRate: number,
-  kudos: arrayOf(
-    shape({
-      name: string,
-      date: string,
-      customer: string
-    })
-  )
-};
 
 const mapStateToProps = state => {
   return {

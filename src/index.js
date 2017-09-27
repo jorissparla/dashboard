@@ -16,7 +16,7 @@ import App from "./App";
 import { ApolloClient, ApolloProvider, createNetworkInterface } from "react-apollo";
 
 const networkInterface = createNetworkInterface({
-  uri: "https://nlbavwtls22.infor.com:55555/graphql"
+  uri: "http://nlbavwtls22.infor.com:55555/graphql"
 });
 const client = new ApolloClient({
   networkInterface

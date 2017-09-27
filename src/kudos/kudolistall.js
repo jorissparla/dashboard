@@ -64,7 +64,11 @@ const mapGender = g => {
 //const nrKudos = 4
 const indexList = [23, 34, 56, 24, 52, 19, 94, 8, 12, 49, 51];
 
-const subTitle = name => <span>by <b>{name}</b></span>;
+const subTitle = name => (
+  <span>
+    by <b>{name}</b>
+  </span>
+);
 
 //const getDay = date => moment(date).format('ddd, DD MMM')
 const DateBox = ({ day, month, year }) => {
@@ -131,37 +135,29 @@ class KudoListAll extends Component {
     if (index <= kudos.length - nrKudos) {
       kl = kudos.slice(index, index + nrKudos);
     }
-    return kl.map(
-      ({ ownerrep_name, customer_name, gender, survey_date, pic }, index) => {
-        const nr = indexList[index % nrKudos];
-        const mgender = mapGender(gender);
-        const img = pic
-          ? `${pic}`
-          : `https://randomuser.me/api/portraits/${mgender}/${nr}.jpg`;
-        return (
-          <GridTile
-            style={styles.gridItem}
-            key={index}
-            title={customer_name}
-            subtitle={subTitle(ownerrep_name)}
-            actionIcon={DateView(survey_date)}
-          >
-            <img src={img} alt="" />
-          </GridTile>
-        );
-      }
-    );
+    return kl.map(({ ownerrep_name, customer_name, gender, survey_date, pic }, index) => {
+      const nr = indexList[index % nrKudos];
+      const mgender = mapGender(gender);
+      const img = pic ? `${pic}` : `https://randomuser.me/api/portraits/${mgender}/${nr}.jpg`;
+      return (
+        <GridTile
+          style={styles.gridItem}
+          key={index}
+          title={customer_name}
+          subtitle={subTitle(ownerrep_name)}
+          actionIcon={DateView(survey_date)}
+        >
+          <img src={img} alt="" />
+        </GridTile>
+      );
+    });
   }
 
   render() {
     const kudos = this.props.kudos;
 
     if (!kudos) {
-      return (
-        <div>
-          Loading
-        </div>
-      );
+      return <div>Loading</div>;
     }
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
@@ -173,7 +169,6 @@ class KudoListAll extends Component {
           <div style={styles.root}>
             Kudos
             <GridList cellHeight={180} style={styles.gridList} cols={5}>
-
               {this.renderItems(kudos)}
             </GridList>
           </div>
@@ -182,20 +177,6 @@ class KudoListAll extends Component {
     );
   }
 }
-
-const { string, func, shape, number, arrayOf } = React.PropTypes;
-
-KudoListAll.propTypes = {
-  fetchKudos: func,
-  refreshRate: number,
-  kudos: arrayOf(
-    shape({
-      name: string,
-      date: string,
-      customer: string
-    })
-  )
-};
 
 const mapStateToProps = state => {
   return { kudos: state.summary.kudos };

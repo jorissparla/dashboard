@@ -27,8 +27,7 @@ const KudoItem = props => {
   const imgC = props.pic
     ? `${props.pic}`
     : "https://randomuser.me/api/portraits/" + gender + "/" + nr + ".jpg";
-  const classC =
-    "card-panel col s2 roundedCorner aname  " + color + " lighten-2";
+  const classC = "card-panel col s2 roundedCorner aname  " + color + " lighten-2";
   const { day, month, year } = dateToDMY(props.date);
   return (
     <div className={classC} key={props.name}>
@@ -41,21 +40,9 @@ const KudoItem = props => {
         <DateBox day={day} month={month} year={year} />
         {/* <span className='numberBox'>{props.date}</span> */}
       </div>
-      <div className="card-content white-text kudoname">
-        {props.name}
-      </div>
+      <div className="card-content white-text kudoname">{props.name}</div>
     </div>
   );
-};
-
-const { string, number } = React.PropTypes;
-
-KudoItem.propTypes = {
-  color: string,
-  name: string,
-  customer: string,
-  nr: number,
-  date: string
 };
 
 export default KudoItem;

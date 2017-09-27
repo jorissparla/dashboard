@@ -10,7 +10,7 @@ import { deepOrange500 } from "material-ui/styles/colors";
 
 const Outer = styled.div`
   display: flex;
-  flex-wrap:wrap;
+  flex-wrap: wrap;
 `;
 
 const muiTheme = getMuiTheme({
@@ -34,11 +34,7 @@ const H3Styled = styled.h4`
 `;
 
 const dateToDMYString = date => {
-  return (
-    moment(date).format("DD") +
-    moment(date).format("MMM") +
-    moment(date).format("YYYY")
-  );
+  return moment(date).format("DD") + moment(date).format("MMM") + moment(date).format("YYYY");
 };
 
 class KudoListComponent extends Component {
@@ -57,60 +53,38 @@ class KudoListComponent extends Component {
     const nrKudos = this.props.kudos.length;
     let kl = kudos.slice(0, nrKudos);
 
-    return kl.map(
-      ({ ownerrep_name, customer_name, gender, survey_date, pic }, index) => {
-        const mgender = mapGender(gender);
-        const img = pic ? `${pic}` : `http://nlbavwtls22/images/${mgender}.png`;
+    return kl.map(({ ownerrep_name, customer_name, gender, survey_date, pic }, index) => {
+      const mgender = mapGender(gender);
+      const img = pic ? `${pic}` : `http://nlbavwtls22/images/${mgender}.png`;
 
-        return (
-          <Card
-            image={img}
-            key={index}
-            text={customer_name}
-            title={ownerrep_name}
-            buttonText={dateToDMYString(survey_date)}
-          />
-        );
-      }
-    );
+      return (
+        <Card
+          image={img}
+          key={index}
+          text={customer_name}
+          title={ownerrep_name}
+          buttonText={dateToDMYString(survey_date)}
+        />
+      );
+    });
   }
 
   render() {
     const kudos = this.props.kudos;
 
     if (!kudos) {
-      return (
-        <div>
-          Loading
-        </div>
-      );
+      return <div>Loading</div>;
     }
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div>
           <H3Styled>{`Kudos💚 (${kudos.length})`}</H3Styled>
-          <Outer>
-            {this.renderItems(kudos)}
-          </Outer>
+          <Outer>{this.renderItems(kudos)}</Outer>
         </div>
       </MuiThemeProvider>
     );
   }
 }
-
-const { string, func, shape, number, arrayOf } = React.PropTypes;
-
-KudoListComponent.propTypes = {
-  fetchKudos: func,
-  refreshRate: number,
-  kudos: arrayOf(
-    shape({
-      name: string,
-      date: string,
-      customer: string
-    })
-  )
-};
 
 const mapStateToProps = state => {
   return { kudos: state.summary.kudos };
