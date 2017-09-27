@@ -25,7 +25,7 @@ const styles = {
   }
 };
 
-const Button = ({ children, onPress }) => {
+export const Button = ({ children, onPress }) => {
   const { buttonStyle, textStyle } = styles;
   return (
     <div style={buttonStyle} onClick={onPress}>
@@ -33,5 +33,3 @@ const Button = ({ children, onPress }) => {
     </div>
   );
 };
-
-exports.Button = Button;

@@ -6,6 +6,7 @@ import AccountReducer from "./reducer_accounts";
 import { reducer as formReducer } from "redux-form";
 
 import { ApolloClient, createNetworkInterface } from "react-apollo";
+import authReducer from "./auth_reducer";
 
 const networkInterface = createNetworkInterface({
   uri: "https://nlbavwtls22:55555/graphql"
@@ -13,8 +14,6 @@ const networkInterface = createNetworkInterface({
 const client = new ApolloClient({
   networkInterface
 });
-
-import authReducer from "./auth_reducer";
 
 const rootReducer = combineReducers({
   summary: SummaryReducer,

@@ -14,9 +14,7 @@ class AlertList extends Component {
         <li className="collection-item App-align" key={item.id}>
           <div className="row">
             <h5>{item.title}</h5>
-            <div className="col s7 ">
-              {item.body}
-            </div>
+            <div className="col s7 ">{item.body}</div>
             <div className="right">
               <Link
                 to={"/alerts/" + item.id}

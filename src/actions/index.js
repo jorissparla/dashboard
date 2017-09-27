@@ -16,6 +16,7 @@ export const UPDATE_NEWS = "UPDATE_NEWS";
 export const DELETE_NEWS = "DELETE_NEWS";
 export const FETCH_KUDOS = "FETCH_KUDOS";
 export const FETCH_ALERTS = "FETCH_ALERTS";
+export const SHOW_ALERTS = "SHOW_ALERTS";
 export const CREATE_ALERTS = "CREATE_ALERTS";
 export const UPDATE_ALERTS = "UPDATE_ALERTS";
 export const DELETE_ALERT = "DELETE_ALERT";
@@ -38,10 +39,10 @@ export const FETCH_ACCOUNTS = "FETCH_ACCOUNTS";
 export const FIND_STUDENTS = "FIND_STUDENTS";
 export const ENROLL_STUDENT = "ENROLL_STUDENT";
 
-const ROOT_URL = "http://nlbavwtls22:3001/api";
-//const ROOT_URL = "http://localhost:3001/api";
+export const ROOT_URL = "http://nlbavwtls22:3001/api";
+//export const ROOT_URL = "http://localhost:3001/api";
 
-const authError = error => {
+export const authError = error => {
   return {
     type: AUTH_ERROR,
     payload: error
@@ -56,12 +57,10 @@ function to(promise) {
     .catch(err => [err]);
 }
 
-const signinUser = async ({ email, password }) => {
+export const signinUser = async ({ email, password }) => {
   return async dispatch => {
     let err, response;
-    [err, response] = await to(
-      axios.post(`${ROOT_URL}/signin`, { email, password })
-    );
+    [err, response] = await to(axios.post(`${ROOT_URL}/signin`, { email, password }));
     if (err) {
       dispatch(authError("Bad Login Info"));
       return { error: "Bad Login Info" };
@@ -79,12 +78,12 @@ const signinUser = async ({ email, password }) => {
   };
 };
 
-exports.forgotPassword = async email => {
+export const forgotPassword = async email => {
   await axios.post(`${ROOT_URL}/forgot`, { email });
   return { type: AUTH_FORGOT };
 };
 
-exports.UpdatePassword = async ({ password, token }) => {
+export const UpdatePassword = async ({ password, token }) => {
   await axios.post(`${ROOT_URL}/updatemypassword`, {
     password,
     token
@@ -93,7 +92,7 @@ exports.UpdatePassword = async ({ password, token }) => {
   return { type: AUTH_PASS };
 };
 
-const signoutUser = () => {
+export const signoutUser = () => {
   localStorage.removeItem("token");
   localStorage.setItem("email", "");
   localStorage.setItem("picture", "");
@@ -101,7 +100,7 @@ const signoutUser = () => {
   return { type: UNAUTH_USER };
 };
 
-const fetchAccounts = () => {
+export const fetchAccounts = () => {
   const request = axios.get(ROOT_URL + "/accounts");
   return {
     type: FETCH_ACCOUNTS,
@@ -109,7 +108,7 @@ const fetchAccounts = () => {
   };
 };
 
-const fetchSummary = () => {
+export const fetchSummary = () => {
   const request = axios.get(ROOT_URL + "/summary");
   return {
     type: FETCH_SUMMARY,
@@ -117,7 +116,7 @@ const fetchSummary = () => {
   };
 };
 
-const fetchChat = () => {
+export const fetchChat = () => {
   const request = axios.get(ROOT_URL + "/chat");
   return {
     type: FETCH_CHAT,
@@ -125,7 +124,7 @@ const fetchChat = () => {
   };
 };
 
-const createChat = chatData => {
+export const createChat = chatData => {
   const request = axios.put(ROOT_URL + "/chat", chatData);
   return {
     type: CREATE_CHAT,
@@ -133,7 +132,7 @@ const createChat = chatData => {
   };
 };
 
-const fetchRanges = () => {
+export const fetchRanges = () => {
   const request = axios.get(ROOT_URL + "/ranges");
   return {
     type: FETCH_RANGES,
@@ -141,7 +140,7 @@ const fetchRanges = () => {
   };
 };
 
-const fetchGoLives = () => {
+export const fetchGoLives = () => {
   const request = axios.get(ROOT_URL + "/golives");
   return {
     type: FETCH_GOLIVES,
@@ -149,7 +148,7 @@ const fetchGoLives = () => {
   };
 };
 
-const fetchHistory = () => {
+export const fetchHistory = () => {
   const request = axios.get(ROOT_URL + "/history");
   return {
     type: FETCH_HISTORY,
@@ -157,14 +156,14 @@ const fetchHistory = () => {
   };
 };
 
-const fetchHistoryDay = () => {
+export const fetchHistoryDay = () => {
   const request = axios.get(ROOT_URL + "/historyday");
   return {
     type: FETCH_HISTORY_DAY,
     payload: request
   };
 };
-const fetchNews = () => {
+export const fetchNews = () => {
   const request = axios.get(ROOT_URL + "/news");
   return {
     type: FETCH_NEWS,
@@ -172,7 +171,7 @@ const fetchNews = () => {
   };
 };
 
-const fetchNewsItem = id => {
+export const fetchNewsItem = id => {
   const request = axios.get(ROOT_URL + "/news/" + id);
   return {
     type: FETCH_NEWS_ITEM,
@@ -180,7 +179,7 @@ const fetchNewsItem = id => {
   };
 };
 
-const createNews = props => {
+export const createNews = props => {
   const request = axios.put(ROOT_URL + "/news", props);
   return {
     type: CREATE_NEWS,
@@ -188,7 +187,7 @@ const createNews = props => {
   };
 };
 
-const updateNews = props => {
+export const updateNews = props => {
   const request = axios.post(ROOT_URL + "/news/update", props);
   return {
     type: UPDATE_NEWS,
@@ -196,7 +195,7 @@ const updateNews = props => {
   };
 };
 
-const fetchKudos = () => {
+export const fetchKudos = () => {
   const request = axios.get(ROOT_URL + "/kudos");
   return {
     type: FETCH_KUDOS,
@@ -204,7 +203,7 @@ const fetchKudos = () => {
   };
 };
 
-const fetchAlerts = () => {
+export const fetchAlerts = () => {
   const request = axios.get(ROOT_URL + "/alerts");
   return {
     type: FETCH_ALERTS,
@@ -212,7 +211,7 @@ const fetchAlerts = () => {
   };
 };
 
-const fetchAlertItem = id => {
+export const fetchAlertItem = id => {
   const request = axios.get(ROOT_URL + "/alerts/" + id);
   return {
     type: FETCH_ALERTS,
@@ -220,7 +219,7 @@ const fetchAlertItem = id => {
   };
 };
 
-const createAlert = props => {
+export const createAlert = props => {
   const request = axios.put(ROOT_URL + "/alerts", props);
   return {
     type: CREATE_ALERTS,
@@ -228,7 +227,7 @@ const createAlert = props => {
   };
 };
 
-const updateAlerts = props => {
+export const updateAlerts = props => {
   const request = axios.post(ROOT_URL + "/alerts/update", props);
   return {
     type: UPDATE_ALERTS,
@@ -236,14 +235,14 @@ const updateAlerts = props => {
   };
 };
 
-const deleteAlert = id => {
+export const deleteAlert = id => {
   const request = axios.delete(ROOT_URL + "/alerts/" + id);
   return {
     type: DELETE_ALERT,
     payload: request
   };
 };
-const deleteNews = id => {
+export const deleteNews = id => {
   const request = axios.delete(ROOT_URL + "/news/" + id);
   return {
     type: DELETE_NEWS,
@@ -251,7 +250,7 @@ const deleteNews = id => {
   };
 };
 
-const fetchCourses = () => {
+export const fetchCourses = () => {
   const request = axios.get(ROOT_URL + "/courses/");
   return {
     type: FETCH_COURSES,
@@ -259,7 +258,7 @@ const fetchCourses = () => {
   };
 };
 
-const createCourse = props => {
+export const createCourse = props => {
   const request = axios.put(ROOT_URL + "/courses/", props);
   return {
     type: CREATE_COURSE,
@@ -267,7 +266,7 @@ const createCourse = props => {
   };
 };
 
-const updateCourse = props => {
+export const updateCourse = props => {
   const request = axios.post(ROOT_URL + "/courses/", props);
   return {
     type: UPDATE_COURSE,
@@ -275,7 +274,7 @@ const updateCourse = props => {
   };
 };
 
-const fetchCourse = id => {
+export const fetchCourse = id => {
   const request = axios.get(ROOT_URL + "/courses/" + id);
   return {
     type: FETCH_COURSE,
@@ -283,7 +282,7 @@ const fetchCourse = id => {
   };
 };
 
-const findStudents = id => {
+export const findStudents = id => {
   const request = axios.get(ROOT_URL + "/findStudents/" + id);
   return {
     type: FIND_STUDENTS,
@@ -291,7 +290,7 @@ const findStudents = id => {
   };
 };
 
-const findAllEnrolledCourses = () => {
+export const findAllEnrolledCourses = () => {
   const request = axios.get(ROOT_URL + "/listenrolledcourses");
   return {
     type: FIND_ENROLLEDCOURSES,
@@ -299,7 +298,7 @@ const findAllEnrolledCourses = () => {
   };
 };
 
-const toggleEnrollStudent = props => {
+export const toggleEnrollStudent = props => {
   const request = axios.put(ROOT_URL + "/enrolledcoursetoggle/", props);
   return {
     type: ENROLL_STUDENT,
@@ -307,41 +306,10 @@ const toggleEnrollStudent = props => {
   };
 };
 
-const toggleCourseComplete = props => {
+export const toggleCourseComplete = props => {
   const request = axios.put(ROOT_URL + "/enrolledcoursecomplete/", props);
   return {
     type: COURSE_COMPLETE,
     payload: request
   };
 };
-
-exports.fetchSummary = fetchSummary;
-exports.signinUser = signinUser;
-exports.signoutUser = signoutUser;
-exports.authError = authError;
-exports.fetchChat = fetchChat;
-exports.createChat = createChat;
-exports.fetchRanges = fetchRanges;
-exports.fetchGoLives = fetchGoLives;
-exports.fetchHistory = fetchHistory;
-exports.fetchHistoryDay = fetchHistoryDay;
-exports.fetchKudos = fetchKudos;
-exports.fetchNews = fetchNews;
-exports.fetchNewsItem = fetchNewsItem;
-exports.createNews = createNews;
-exports.updateNews = updateNews;
-exports.fetchAlerts = fetchAlerts;
-exports.fetchAlertItem = fetchAlertItem;
-exports.createAlert = createAlert;
-exports.updateAlerts = updateAlerts;
-exports.deleteAlert = deleteAlert;
-exports.deleteNews = deleteNews;
-exports.fetchCourses = fetchCourses;
-exports.createCourse = createCourse;
-exports.fetchCourse = fetchCourse;
-exports.updateCourse = updateCourse;
-exports.fetchAccounts = fetchAccounts;
-exports.findStudents = findStudents;
-exports.findAllEnrolledCourses = findAllEnrolledCourses;
-exports.toggleEnrollStudent = toggleEnrollStudent;
-exports.toggleCourseComplete = toggleCourseComplete;

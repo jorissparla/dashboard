@@ -25,7 +25,7 @@ const styles = {
   }
 };
 
-const Card = props => {
+export const Card = props => {
   const cardStyle = { ...styles.containerStyle, ...props.style };
   return (
     <Paper zDepth={1} style={cardStyle}>
@@ -33,5 +33,3 @@ const Card = props => {
     </Paper>
   );
 };
-
-export { Card };

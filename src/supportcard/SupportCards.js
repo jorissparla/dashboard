@@ -6,14 +6,14 @@ import styled from "styled-components";
 import FlatButton from "material-ui/FlatButton";
 import RequestForm from "./Request";
 
-const customContentStyle = {
-  height: "100%"
-};
-
 import SearchBar from "../common/SearchBar";
 import withAuth from "../utils/withAuth";
 import AddCard from "./AddCard";
 import CategoryTabs from "./CategoryTabs";
+
+const customContentStyle = {
+  height: "100%"
+};
 
 const cardColors = [
   { back: "#FFCCBC", front: "#000" },
@@ -31,7 +31,7 @@ const cardColors = [
 
 const Div = styled.div`
   display: flex;
-    justify-content: flex-start;
+  justify-content: flex-start;
   flex-wrap: wrap;
 `;
 const Container = styled.div`
@@ -39,12 +39,11 @@ const Container = styled.div`
   flex-direction: column;
   margin-bottom: 5px;
   margin-top: 10px;
-
 `;
 
 const SupportCardQuery = gql`
   query SupportCardQuery {
-      supportcards {
+    supportcards {
       id
       title
       description
@@ -55,7 +54,7 @@ const SupportCardQuery = gql`
       }
       link
       created
-    } 
+    }
   }
 `;
 
@@ -68,10 +67,7 @@ class SupportCards extends React.Component {
   handleClose = () => this.setState({ showRequest: false });
 
   render() {
-    const {
-      authenticated,
-      data: { loading, error, supportcards }
-    } = this.props;
+    const { authenticated, data: { loading, error, supportcards } } = this.props;
     const actions = [
       <FlatButton label="Cancel" primary={true} onClick={this.handleClose} />,
       <FlatButton label="Submit" primary={true} onClick={this.handleClose} />
@@ -108,39 +104,19 @@ class SupportCards extends React.Component {
         >
           <RequestForm onSubmit={() => this.setState({ showRequest: false })} />
         </Dialog>
-        <CategoryTabs
-          onChange={this.setSelectedCategory}
-          onSave={v => console.log(v)}
-        />
+        <CategoryTabs onChange={this.setSelectedCategory} onSave={v => console.log(v)} />
         <SearchBar onChange={this.setSearchText} />
 
         <Div>
-          {authenticated &&
-            <AddCard
-              link="/supportcard/add"
-              title="Add a New Card"
-              background="papayawhip"
-            />}
+          {authenticated && (
+            <AddCard link="/supportcard/add" title="Add a New Card" background="papayawhip" />
+          )}
           {filteredCards.map(
-            (
-              {
-                id,
-                title,
-                description,
-                category: { name, color, backgroundcolor },
-                link
-              },
-              i
-            ) => {
+            ({ id, title, description, category: { name, color, backgroundcolor }, link }, i) => {
               return (
                 <SmallCard
-                  color={
-                    backgroundcolor ||
-                      cardColors[i % (cardColors.length - 1)].back
-                  }
-                  textcolor={
-                    color || cardColors[i % (cardColors.length - 1)].front
-                  }
+                  color={backgroundcolor || cardColors[i % (cardColors.length - 1)].back}
+                  textcolor={color || cardColors[i % (cardColors.length - 1)].front}
                   key={id}
                   title={title}
                   text={description}

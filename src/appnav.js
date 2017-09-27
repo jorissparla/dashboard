@@ -59,7 +59,11 @@ class Header extends React.Component {
     return (
       <IconMenu
         menuStyle={{ color: "black" }}
-        iconButtonElement={<IconButton><MenuIcon /></IconButton>}
+        iconButtonElement={
+          <IconButton>
+            <MenuIcon />
+          </IconButton>
+        }
         anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
         targetOrigin={{ horizontal: "left", vertical: "top" }}
       >
@@ -68,7 +72,6 @@ class Header extends React.Component {
           leftIcon={<ActionHome style={{ root: { color: "black" } }} />}
           onClick={() => {
             history.push("/");
-            location.href = location.href;
           }}
         />
         <Divider />
@@ -77,7 +80,6 @@ class Header extends React.Component {
           leftIcon={<PageIcon style={{ root: { color: "black" } }} />}
           onClick={() => {
             history.push("/courses");
-            location.href = location.href;
           }}
         />
         <Divider />
@@ -86,7 +88,6 @@ class Header extends React.Component {
           leftIcon={<PeopleIcon />}
           onClick={() => {
             history.push("/students");
-            location.href = location.href;
           }}
         />
         <Divider />
@@ -95,7 +96,6 @@ class Header extends React.Component {
           leftIcon={<LinkIcon />}
           onClick={() => {
             history.push("/supportcard");
-            location.href = location.href;
           }}
         />
         <Divider />
@@ -104,7 +104,6 @@ class Header extends React.Component {
           leftIcon={<NewsIcon />}
           onClick={() => {
             history.push("/news");
-            location.href = location.href;
           }}
         />
         <Divider />
@@ -113,24 +112,20 @@ class Header extends React.Component {
           leftIcon={<ChatIcon />}
           onClick={() => {
             history.push("/chat");
-            location.href = location.href;
           }}
         />
         <Divider />
         <MenuItem primaryText="Sign out" />
-
       </IconMenu>
     );
   }
   logOutLink = () => {
     const { history } = this.props;
     history.push("/signout");
-    location.href = location.href;
   };
   logInLink = () => {
     const { history } = this.props;
     history.push("/signin");
-    location.href = location.href;
   };
   renderButtons() {
     if (this.props.authenticated) {
@@ -146,8 +141,7 @@ class Header extends React.Component {
 
   renderPicture() {
     const picture =
-      localStorage.getItem("picture") ||
-      "https://randomuser.me/api/portraits/men/20.jpg";
+      localStorage.getItem("picture") || "https://randomuser.me/api/portraits/men/20.jpg";
     if (this.props.authenticated) {
       return <Avatar src={picture} />;
     } else return <div />;
@@ -157,19 +151,15 @@ class Header extends React.Component {
     return (
       <Toolbar style={styles}>
         <ToolbarGroup firstChild={true}>
-          {this.hamburgerMenu()}{this.renderPicture()}
+          {this.hamburgerMenu()}
+          {this.renderPicture()}
         </ToolbarGroup>
 
         <ToolbarGroup>
-          <ToolbarTitle
-            text="Infor Support Dashboard"
-            style={{ color: "white" }}
-          />
+          <ToolbarTitle text="Infor Support Dashboard" style={{ color: "white" }} />
         </ToolbarGroup>
 
-        <ToolbarGroup>
-          {this.renderButtons()}
-        </ToolbarGroup>
+        <ToolbarGroup>{this.renderButtons()}</ToolbarGroup>
       </Toolbar>
     );
   }
@@ -179,11 +169,7 @@ class Header extends React.Component {
       <AppBar
         style={styles}
         showMenuIconButton={true}
-        title={
-          <span style={styles.title}>
-            Infor Support Dashboard
-          </span>
-        }
+        title={<span style={styles.title}>Infor Support Dashboard</span>}
         onLeftIconButtonTouchTap={() => window.alert("Menu")}
         onTitleTouchTap={handleTouchTap}
         iconElementRight={this.renderButtons()}
@@ -192,11 +178,7 @@ class Header extends React.Component {
   }
 
   render() {
-    return (
-      <MuiThemeProvider muiTheme={muiTheme}>
-        {this.renderToolBar()}
-      </MuiThemeProvider>
-    );
+    return <MuiThemeProvider muiTheme={muiTheme}>{this.renderToolBar()}</MuiThemeProvider>;
   }
 }
 

@@ -22,14 +22,7 @@ const styles = {
   }
 };
 
-const Input = ({
-  label,
-  value,
-  onChangeText,
-  secureTextEntry,
-  style,
-  ...rest
-}) => {
+const Input = ({ label, value, onChangeText, secureTextEntry, style, name, ...rest }) => {
   const { inputStyle } = styles;
   const mergedStyle = { ...inputStyle, ...style };
   return (
