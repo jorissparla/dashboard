@@ -48,7 +48,9 @@ class DashBoardStats extends React.Component {
               team={this.teams[this.state.index]}
               value="backlog"
               data={data}
+              title="Backlog"
               color="#ffb74d"
+              type="area"
               refreshRate={0}
             />
             <SummaryChartContainer
@@ -78,7 +80,6 @@ class DashBoardStats extends React.Component {
             />
           </div>
         </div>
-
       </div>
     );
   }

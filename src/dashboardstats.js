@@ -8,19 +8,19 @@ import ChatChartContainer from "./charts/chatchartcontainer";
 import HistoryChartContainer from "./charts/historycontainer";
 import { StyleLoaderM } from "./common";
 
-const DashBoardStats = ({ data }) => {
+const DashBoardStats = props => {
+  const { data, region } = props;
   return (
     <div className="row">
       <StyleLoaderM />
-      {/*<div className="col s2">
-        <AlertWidget />
-      </div> */}
       <div className="col s12">
         <div className="row">
           <AppChartContainer
             data={data || ["Tools", "Logistics", "Finance"]}
             title="Support Backlog"
+            roepie={region}
             refreshRate={0}
+            region={region}
           />
           <AppChartContainer
             data={data || ["Tools", "Logistics", "Finance"]}
@@ -28,8 +28,9 @@ const DashBoardStats = ({ data }) => {
             title="Survey"
             type="column"
             refreshRate={0}
+            region={region}
           />
-          <HistoryChartContainer data={data} color="#ffb74d" refreshRate={0} />
+          <HistoryChartContainer data={data} color="#ffb74d" refreshRate={0} region={region} />
           <AppChartContainer
             data={data || ["Tools", "Logistics", "Finance"]}
             value="opened"
@@ -37,6 +38,7 @@ const DashBoardStats = ({ data }) => {
             color="#b39ddb"
             type="area"
             refreshRate={0}
+            region={region}
           />
           <AppChartContainer
             data={data || ["Tools", "Logistics", "Finance"]}
@@ -45,6 +47,7 @@ const DashBoardStats = ({ data }) => {
             color="#ffc600"
             type="area"
             refreshRate={0}
+            region={region}
           />
           <ChatChartContainer
             data={data || ["Tools", "Logistics", "Finance"]}
@@ -53,10 +56,10 @@ const DashBoardStats = ({ data }) => {
             value="percentage"
             color="#9575cd"
             refreshRate={0}
+            region={region}
           />
         </div>
       </div>
-
     </div>
   );
 };

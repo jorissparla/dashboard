@@ -15,14 +15,7 @@ const MyAvatar = ({ input, name, avatarName, ...custom }) => {
       style={{ fontFamily: "Oswald", fontSize: "18px" }}
       name={input.value || avatarName}
       {...custom}
-      colors={[
-        "#BA68C8",
-        "#81D4FA",
-        "#FF7043",
-        "#8BC34A",
-        "#FFFF00",
-        "#E57373"
-      ]}
+      colors={["#BA68C8", "#81D4FA", "#FF7043", "#8BC34A", "#FFFF00", "#E57373"]}
     />
   );
 };
@@ -49,6 +42,13 @@ const teams = [
   { key: "Finance", description: "Finance" },
   { key: "Logistics", description: "Logistics" },
   { key: "Tools", description: "Tools" }
+];
+
+const regions = [
+  { key: "EMEA", description: "EMEA" },
+  { key: "NA", description: "NA" },
+  { key: "APJ", description: "APJ" },
+  { key: "LA", description: "LA" }
 ];
 
 class ChatAdd extends React.Component {
@@ -79,7 +79,6 @@ class ChatAdd extends React.Component {
           Add Chat Result
         </CardSection>
         <form onSubmit={handleSubmit(onSave)}>
-
           <CardSection
             style={{
               flexDirection: "row",
@@ -87,18 +86,19 @@ class ChatAdd extends React.Component {
               alignItems: "center"
             }}
           >
+            <Field name="team" component={SelectField} hintText="Select a team" style={{ flex: 2 }}>
+              {teams.map(team => (
+                <MenuItem key={team.key} value={team.key} primaryText={team.description} />
+              ))}
+            </Field>
             <Field
-              name="team"
+              name="region"
               component={SelectField}
-              hintText="Select a team"
+              hintText="Select a region"
               style={{ flex: 2 }}
             >
-              {teams.map(team => (
-                <MenuItem
-                  key={team.key}
-                  value={team.key}
-                  primaryText={team.description}
-                />
+              {regions.map(region => (
+                <MenuItem key={region.key} value={region.key} primaryText={region.description} />
               ))}
             </Field>
             <Field
@@ -110,25 +110,12 @@ class ChatAdd extends React.Component {
             />
           </CardSection>
           <CardSection>
-            <Field
-              name="weeknr"
-              component={SelectField}
-              hintText="Select a week"
-            >
+            <Field name="weeknr" component={SelectField} hintText="Select a week">
               {ranges.map(range => (
-                <MenuItem
-                  key={range.Name}
-                  value={range.Name}
-                  primaryText={range.Name}
-                />
+                <MenuItem key={range.Name} value={range.Name} primaryText={range.Name} />
               ))}
             </Field>
-            <Field
-              name="fromDate"
-              component={Input}
-              disabled={true}
-              type="text"
-            />
+            <Field name="fromDate" component={Input} disabled={true} type="text" />
           </CardSection>
 
           <CardSection id="inputboxes">
@@ -160,12 +147,7 @@ class ChatAdd extends React.Component {
           </CardSection>
           <Divider />
           <CardSection>
-            <RaisedButton
-              primary={true}
-              style={buttonStyle}
-              label="Submit"
-              type="submit"
-            />
+            <RaisedButton primary={true} style={buttonStyle} label="Submit" type="submit" />
             <RaisedButton
               secondary={true}
               style={buttonStyle2}
@@ -191,19 +173,15 @@ const selector = formValueSelector("chatadd");
 ChatAddForm = connect(state => {
   const weeknr = selector(state, "weeknr");
   const team = selector(state, "team");
+  const region = selector(state, "region");
   const nrchats = selector(state, "nrchats") || 0;
-  const responseintime = Math.min(
-    nrchats,
-    selector(state, "responseintime") || 0
-  );
+  const responseintime = Math.min(nrchats, selector(state, "responseintime") || 0);
   let percentage = 0;
   if (nrchats !== 0) {
     percentage = (100 * responseintime / nrchats).toFixed(1);
   }
   if (!state.summary.ranges) return {};
-  const selectedRange = state.summary.ranges.find(
-    range => range.Name === weeknr
-  );
+  const selectedRange = state.summary.ranges.find(range => range.Name === weeknr);
   if (!weeknr) return {};
   return {
     initialValues: {
@@ -211,6 +189,7 @@ ChatAddForm = connect(state => {
       weeknr,
       nrchats,
       av: team,
+      region,
       responseintime,
       percentage: `${percentage} %`,
 

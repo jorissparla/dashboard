@@ -107,8 +107,8 @@ export const fetchAccounts = () => {
   };
 };
 
-export const fetchSummary = () => {
-  const request = axios.get(ROOT_URL + "/summary");
+export const fetchSummary = (region = "EMEA") => {
+  const request = axios.get(`${ROOT_URL}/summary/${region}`);
   return {
     type: FETCH_SUMMARY,
     payload: request

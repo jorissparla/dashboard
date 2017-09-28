@@ -23,7 +23,7 @@ class AppChartContainer extends React.Component {
   }
 
   componentDidMount() {
-    this.props.fetchSummary();
+    this.props.fetchSummary(this.props.region || "EMEA");
 
     if (this.props.refreshRate !== 0)
       this.timerhandle = setInterval(this.myTimer, this.props.refreshRate || 15000);
@@ -34,6 +34,7 @@ class AppChartContainer extends React.Component {
   }
 
   render() {
+    console.log("appchartcontainer-Render()", this.props.region);
     const data = !this.props.data ? ["Logistics"] : this.props.data;
     const value = !this.props.value ? "supportBacklog" : this.props.value;
     const title = !this.props.title ? value : this.props.title;

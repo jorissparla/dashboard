@@ -11,9 +11,15 @@ import SupportCards from "./supportcard/SupportCards";
 
 class DashBoardContainer extends Component {
   state = { index: 0, sel: null };
+
+  componentWillMount() {
+    console.log("DashboardContainer", this.props.match.params.region);
+    const region = this.props.match.params.region || "EMEA";
+    this.setState({ region: region });
+  }
   componentDidMount() {
     const sel = parseInt(this.props.match.params.id, 2);
-    console.log("Sel", sel);
+
     if (sel) {
       this.setState({ index: 0, sel: sel });
     }
@@ -46,25 +52,26 @@ class DashBoardContainer extends Component {
   }
 
   renderDashBoard(index) {
-    console.log(index);
+    const { region } = this.state;
+    console.log(index, region);
     switch (index) {
       case 8:
-        return <SupportCards />;
+        return <SupportCards region={region} />;
       case 7:
-        return <NewsPage />;
+        return <NewsPage region={region} />;
       case 5:
       case 6:
-        return <DashBoard />;
+        return <DashBoard region={region} />;
       case 2:
-        return <DashBoardStats data={["Tools"]} />;
+        return <DashBoardStats data={["Tools"]} region={region} />;
       case 3:
-        return <GoLives />;
+        return <GoLives region={region} />;
       case 4:
-        return <HistoryDayAll />;
+        return <HistoryDayAll region={region} />;
       case 0:
-        return <DashBoardStats data={["Logistics"]} />;
+        return <DashBoardStats data={["Logistics"]} region={region} />;
       case 1:
-        return <DashBoardStats data={["Finance"]} />;
+        return <DashBoardStats data={["Finance"]} region={region} />;
       default:
         return <div>Invalid Dashboard</div>;
     }

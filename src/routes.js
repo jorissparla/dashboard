@@ -58,6 +58,7 @@ class AppRoutes extends React.Component {
       <Switch>
         <Route exact path="/test" component={DashBoardStatsNew} />
         <Route exact path="/" component={DashBoardContainer} />
+        <Route exact path="/region/:region" component={DashBoardContainer} />
         <Route exact path="/q/:id" component={DashBoardContainer} />
         <Route allowed={["Admin"]} user={user} path="/main/1" component={DashBoard} />
         <Route path="/main/0" component={DashBoard0} />
