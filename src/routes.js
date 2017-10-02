@@ -56,7 +56,7 @@ class AppRoutes extends React.Component {
     const { user } = this.props;
     return (
       <Switch>
-        <Route exact path="/test" component={DashBoardStatsNew} />
+        <Route exact path="/test" component={DashBoard} />
         <Route exact path="/" component={DashBoardContainer} />
         <Route exact path="/region/:region" component={DashBoardContainer} />
         <Route exact path="/q/:id" component={DashBoardContainer} />

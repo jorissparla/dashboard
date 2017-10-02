@@ -6,10 +6,10 @@ class SummaryChartContainer extends React.Component {
   componentWillMount() {}
 
   render() {
-    const { data: { loading, error, summaries } } = this.props;
+    const { data: { loading, error, summaries }, region = "EMEA" } = this.props;
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error</div>;
-    console.log(this.props.team, summaries);
+    console.log("SummaryChartContainer", region);
 
     const value = !this.props.value ? "supportBacklog" : this.props.value;
     const title = !this.props.title ? value : this.props.title;
@@ -18,23 +18,21 @@ class SummaryChartContainer extends React.Component {
     const summary = summaries; // .reverse()
     const color = this.props.color;
     return (
-      <div>
-        <SummaryChart
-          data={summary}
-          title={title}
-          type={type}
-          xvalue="weekNr"
-          value={value}
-          color={color}
-          team={team}
-        />
-      </div>
+      <SummaryChart
+        data={summary}
+        title={title}
+        type={type}
+        xvalue="weekNr"
+        value={value}
+        color={color}
+        team={team}
+      />
     );
   }
 }
 
 const querySummaries = gql`
-  query summaries ($team: String) {
+  query summaries($team: String) {
     summaries(team: $team, recent: 6) {
       weekNr
       supportBacklog
@@ -48,5 +46,7 @@ const querySummaries = gql`
 `;
 
 export default graphql(querySummaries, {
-  options: props => ({ variables: { team: props.team || "Logistics" } })
+  options: props => ({
+    variables: { team: props.team || "Logistics", region: props.region || "EMEA" }
+  })
 })(SummaryChartContainer);

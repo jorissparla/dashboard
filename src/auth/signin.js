@@ -1,10 +1,10 @@
 import React from "react";
-import RaisedButton from "material-ui/RaisedButton";
-import { TextField } from "redux-form-material-ui";
-import Paper from "material-ui/Paper";
+//import RaisedButton from "material-ui/RaisedButton";
+//import { TextField } from "redux-form-material-ui";
+//import Paper from "material-ui/Paper";
 import { signinUser } from "../actions";
 import { connect } from "react-redux";
-import ErrorDialog from "../errordialog";
+//import ErrorDialog from "../errordialog";
 import { withRouter } from "react-router";
 import styled from "styled-components";
 import { Button, Input } from "../styles";
@@ -13,7 +13,7 @@ const Form = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   color: rgb(255, 255, 255);
   background-color: rgb(255, 255, 255);
   transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
@@ -27,6 +27,15 @@ const Form = styled.form`
   margin-top: 40px;
   margin-left: 20px;
   text-align: left;
+`;
+
+const Error = styled.div`
+  display: flex;
+  color: red;
+  border: solid 1px red;
+  border-radius: 5px;
+  padding: 20px;
+  margin-left: 20px;
 `;
 
 const style = {
@@ -65,24 +74,31 @@ class Signin extends React.Component {
   };
 
   validate = () => {
-    const errors = { emailError: "", passwordError: "" };
-    const { email, password } = this.state;
     let isError = false;
+    const errors = {
+      emailError: "",
+      passwordError: "",
+      submitError: ""
+    };
+    const { email, password } = this.state;
 
     if (!isValidemail(email)) {
       isError = true;
       errors.emailError = "Invalid email address";
+      this.setState({
+        ...this.state,
+        ...errors
+      });
     }
 
     if (!isRequired(password)) {
       isError = true;
       errors.passwordError = "Password cannot be empty";
+      this.setState({
+        ...this.state,
+        ...errors
+      });
     }
-    this.setState({
-      ...this.state,
-      ...errors
-    });
-    console.log(this.state);
     return isError;
   };
 
@@ -91,34 +107,37 @@ class Signin extends React.Component {
 
   _onSubmit = async e => {
     e.preventDefault();
-    this.setState({ error: "" });
+    const errors = {
+      emailError: "",
+      passwordError: "",
+      submitError: ""
+    };
     const { email, password } = this.state;
-
-    if (!this.validate()) {
-      this.setState({ emailError: "", passwordError: "" });
+    const err = this.validate();
+    if (!err) {
       const result = await this.props.signinUser({ email, password });
-      console.log(result);
       if (!result.error) {
         this.props.history.push("/");
       } else {
-        this.setState({ error: "invalid email or password" });
+        errors.submitError = "invalid email or password";
+        this.setState({
+          ...this.state,
+          ...errors
+        });
       }
-    } else {
-      this.setState({ error: "invalid email or password" });
     }
-    //location.href = location.href;
   };
 
   renderAlert = () => {
-    const { errorMessage } = this.props;
+    //const { errorMessage } = this.props;
 
-    const error = this.state.error || errorMessage;
-    if (error) {
-      return (
-        <div className="alert alert-danger">
-          <ErrorDialog message={error} />
-        </div>
-      );
+    const error = [this.state.emailError, this.state.passwordError, this.state.submitError].join(
+      " "
+    );
+
+    //|| errorMessage;
+    if (this.state.emailError || this.state.passwordError || this.state.submitError) {
+      return <Error>{error}</Error>;
     }
   };
   render() {
@@ -159,9 +178,4 @@ function mapStateToProps(state) {
   return { errorMessage: state.auth.error };
 }
 
-/* Signin = reduxForm({
-  form: "sigin",
-  defaultValues: {}
-})(Signin);
- */
 export default connect(mapStateToProps, { signinUser })(withRouter(Signin));

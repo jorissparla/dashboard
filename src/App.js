@@ -1,6 +1,6 @@
 import React from "react";
 import { withRouter } from "react-router";
-import "./App.css";
+//import "./App.css";
 import Header from "./appnav";
 class App extends React.Component {
   render() {

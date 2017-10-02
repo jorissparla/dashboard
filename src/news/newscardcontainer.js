@@ -1,23 +1,16 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import { fetchNews } from "../actions/index";
+import { graphql, gql } from "react-apollo";
 import NewsCard from "./newscard";
 import Spinner from "../utils/spinner";
 
 class NewsCardContainer extends Component {
-  myTimer() {
-    this.setState({
-      index: this.state.index + 1,
-      nrNewsItems: this.props.news.length
-    });
-
+  myTimer = () => {
     const { nrNewsItems, index } = this.state;
-    if (index > nrNewsItems - 1) {
-      this.setState({
-        index: 0
-      });
-    }
-  }
+    this.setState({
+      index: index === nrNewsItems - 1 ? 0 : index + 1,
+      nrNewsItems: this.props.news.news.length
+    });
+  };
 
   componentWillMount() {
     this.setState({
@@ -26,27 +19,38 @@ class NewsCardContainer extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchNews();
     this.setState({ index: 0 });
-    setInterval(this.myTimer.bind(this), this.props.refreshRate || 15000);
+    setInterval(this.myTimer, this.props.refreshRate || 15000);
   }
 
   render() {
-    let newsItem = this.props.news[this.state.index];
-    if (!newsItem) {
+    const { news: { loading, error, news } } = this.props;
+    if (loading) {
       return (
         <div>
           <Spinner />
         </div>
       );
     }
-    newsItem = this.props.news[this.state.index];
+    if (error) {
+      return <div>Error</div>;
+    }
+    let newsItem = news[this.state.index];
     return <NewsCard data={newsItem} />;
   }
 }
 
-const mapStateToProps = state => {
-  return { news: state.summary.news };
-};
+const newsQuery = gql`
+  query news {
+    news {
+      id
+      title
+      img
+      body
+      link
+      link_text
+    }
+  }
+`;
 
-export default connect(mapStateToProps, { fetchNews })(NewsCardContainer);
+export default graphql(newsQuery, { name: "news" })(NewsCardContainer);

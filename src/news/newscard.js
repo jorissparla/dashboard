@@ -1,22 +1,22 @@
 import React from "react";
 
 const NewsCard = props => {
-  const newsItem = props.data;
-  if (!newsItem) {
+  const { data: { img, title, id, body, link, link_text } } = props;
+  if (!props.data) {
     return <div>Loading</div>;
   }
   return (
-    <div className="col s3">
+    <div key={id} className="col s3">
       <div className="card">
         <div className="card-image">
-          <img src={newsItem.img} alt="" />
-          <span className="card-title">{newsItem.title}</span>
+          <img src={img} alt="" />
+          <span className="card-title">{title}</span>
         </div>
         <div className="card-content">
-          <p>{newsItem.body}.</p>
+          <p>{body}.</p>
         </div>
         <div className="card-action">
-          <a href={newsItem.link}>{newsItem.link_text}</a>
+          <a href={link}>{link_text}</a>
         </div>
       </div>
     </div>

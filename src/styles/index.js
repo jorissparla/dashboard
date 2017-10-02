@@ -1,4 +1,4 @@
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 
 export const Typography = styled.div`font-family: Roboto;`;
 export const BasicFlex = Typography.extend`

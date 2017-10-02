@@ -22,12 +22,10 @@ import withAuth from "./utils/withAuth";
 import FlatButton from "material-ui/FlatButton";
 
 const muiTheme = getMuiTheme({
-  palette: {
-    textColor: "#FFFFFF"
-  },
   appBar: {
     height: 50,
-    color: blue500
+    color: blue500,
+    textColor: "white"
   },
   toolbar: {
     height: 50,
@@ -58,10 +56,10 @@ class Header extends React.Component {
     const { history } = this.props;
     return (
       <IconMenu
-        menuStyle={{ color: "black" }}
+        menuStyle={{ color: "white" }}
         iconButtonElement={
           <IconButton>
-            <MenuIcon />
+            <MenuIcon color="white" />
           </IconButton>
         }
         anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
@@ -132,12 +130,14 @@ class Header extends React.Component {
   renderButtons() {
     if (this.props.authenticated) {
       return (
-        <FlatButton onClick={() => this.logOutLink()} label="Logout">
+        <FlatButton onClick={() => this.logOutLink()} label="Logout" style={{ color: "white" }}>
           {/*  <Avatar src="https://randomuser.me/api/portraits/men/20.jpg" /> */}
         </FlatButton>
       );
     } else {
-      return <FlatButton onClick={() => this.logInLink()} label="Login" />;
+      return (
+        <FlatButton onClick={() => this.logInLink()} label="Login" style={{ color: "white" }} />
+      );
     }
   }
 

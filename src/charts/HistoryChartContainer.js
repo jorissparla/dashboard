@@ -4,7 +4,7 @@ import SummaryChart from "./NewSummaryChart";
 
 class HistoryChartContainer extends Component {
   render() {
-    const { data: { loading, error, history } } = this.props;
+    const { data: { loading, error, history }, region = "EMEAs" } = this.props;
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error</div>;
     const value = !this.props.value ? "backlog" : this.props.value;
@@ -23,6 +23,7 @@ class HistoryChartContainer extends Component {
           value={value}
           color={color}
           team={team}
+          region={region}
         />
       </div>
     );
@@ -30,7 +31,7 @@ class HistoryChartContainer extends Component {
 }
 
 const queryHistory = gql`
-  query history ($team: String) {
+  query history($team: String) {
     history(team: $team) {
       Row
       backlog

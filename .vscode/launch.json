@@ -7,10 +7,7 @@
       "request": "launch",
       "url": "http://localhost:3000",
       "webRoot": "${workspaceRoot}/src",
-      "userDataDir": "${workspaceRoot}/.chrome",
-      "sourceMapPathOverrides": {
-        "webpack:///src/*": "${webRoot}/*"
-      }
+      "userDataDir": "${workspaceRoot}/.chrome"
     }
   ]
 }
