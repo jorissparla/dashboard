@@ -1,59 +1,11 @@
 import React from "react";
-//import RaisedButton from "material-ui/RaisedButton";
-//import { TextField } from "redux-form-material-ui";
-//import Paper from "material-ui/Paper";
 import { signinUser } from "../actions";
 import { connect } from "react-redux";
 //import ErrorDialog from "../errordialog";
 import { withRouter } from "react-router";
 import styled from "styled-components";
-import { Button, Input } from "../styles";
+import { Button, Input, Form, Error } from "../styles";
 
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  color: rgb(255, 255, 255);
-  background-color: rgb(255, 255, 255);
-  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
-  box-sizing: border-box;
-  font-family: "Segoe UI", Roboto;
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 10px, rgba(0, 0, 0, 0.23) 0px 3px 10px;
-  border-radius: 2px;
-  width: 30%;
-  padding: 20px;
-  min-width: 300px;
-  margin-top: 40px;
-  margin-left: 20px;
-  text-align: left;
-`;
-
-const Error = styled.div`
-  display: flex;
-  color: red;
-  border: solid 1px red;
-  border-radius: 5px;
-  padding: 20px;
-  margin-left: 20px;
-`;
-
-const style = {
-  paper: {
-    width: "30%",
-    paddingLeft: "20px",
-    minWidth: "300px",
-
-    marginTop: "40px",
-    textAlign: "left",
-    display: "flex"
-  },
-  button: {
-    margin: "20px",
-    justifyContent: "flex-start",
-    alignSelf: "flex-start"
-  }
-};
 const isRequired = value => (value ? true : false);
 const isValidemail = value =>
   value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? false : true;
@@ -145,7 +97,7 @@ class Signin extends React.Component {
       <Form>
         <Input
           name="email"
-          floatingLabelText="Email"
+          placeholder="Email"
           value={this.state.email}
           onChange={this.onChangeEmail}
           errorText={this.state.emailError}
@@ -153,20 +105,13 @@ class Signin extends React.Component {
         <Input
           name="password"
           type="password"
-          floatingLabelText="Password"
+          placeholder="Password"
           value={this.state.password}
           onChange={this.onChangePassword}
           errorText={this.state.passwordError}
         />
         {this.renderAlert()}
-        <Button
-          label="Login"
-          primary={true}
-          width="300px"
-          style={style.button}
-          type="submit"
-          onClick={this._onSubmit}
-        >
+        <Button label="Login" primary={true} width="300px" type="submit" onClick={this._onSubmit}>
           Login
         </Button>
       </Form>

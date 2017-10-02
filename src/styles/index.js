@@ -15,7 +15,7 @@ export const Input = styled.input`
   display: inline-block;
   padding: 4px 7px;
   margin: 8px;
-  width: 200px;
+  width: ${props => (props.width ? props.width : "200px")};
   height: 28px;
   font-size: 1em;
   line-height: 1.5;
@@ -30,14 +30,16 @@ export const Input = styled.input`
 `;
 export const Button = styled.a`
   display: inline-block;
-  min-width: 150px;
+  min-width: 200px;
+  width: ${props => (props.width ? props.width : "150px")}
   height: 40px;
   padding: 4px 7px;
+  cursor: pointer;
   font-weight: 500;
   border-radius: 4px;
-  border: 1px solid ${niceblue};
+  border: 1px solid ${props => (props.color ? props.color : niceblue)};
   text-decoration: none;
-  color: #0ae;
+  color: ${props => (props.color ? props.color : niceblue)};
   font-family: "Segoe UI", Roboto;
   font-size: 1em;
   background: transparent;
@@ -45,12 +47,18 @@ export const Button = styled.a`
   transition: all 0.45s;
   text-align: center;
   line-height: 36px;
+  margin: 8px;
+
   :hover {
-    background: #40a5ed;
+    background: ${props => (props.color ? props.color : niceblue)};
     color: white;
   }
 `;
 
+export const Row = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
 export const Papier = styled.div`
   display: flex;
   flex-direction: column;
@@ -166,6 +174,35 @@ export const NotificationMsg = Typography.extend`
 export const NotificationText = Typography.extend`
   font-size: 12px;
   color: rgba(0, 0, 0, 0.65);
+`;
+
+export const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  color: rgb(255, 255, 255);
+  background-color: rgb(255, 255, 255);
+  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Roboto;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 10px, rgba(0, 0, 0, 0.23) 0px 3px 10px;
+  border-radius: 2px;
+  width: ${props => (props.width ? props.width : "30%")};
+  padding: 20px;
+  min-width: 300px;
+  margin-top: 40px;
+  margin-left: 20px;
+  text-align: left;
+`;
+
+export const Error = styled.div`
+  display: flex;
+  color: red;
+  border: solid 1px red;
+  border-radius: 5px;
+  padding: 20px;
+  margin-left: 20px;
 `;
 /*
 export const Notification = ({ title, text, onClose, show }) => {

@@ -4,22 +4,7 @@ import { TextField } from "redux-form-material-ui";
 import Paper from "material-ui/Paper";
 import ErrorDialog from "../errordialog";
 import { withRouter } from "react-router";
-
-const style = {
-  paper: {
-    width: "30%",
-    paddingLeft: "20px",
-
-    marginTop: "40px",
-    textAlign: "left",
-    display: "flex"
-  },
-  button: {
-    margin: "20px",
-    justifyContent: "flex-start",
-    alignSelf: "flex-start"
-  }
-};
+import { Button, Input, Form, Error } from "../styles";
 
 class UpdatePasswordForm extends React.Component {
   state = { nomatch: false, password: "", confirmpassword: "" };
@@ -28,15 +13,13 @@ class UpdatePasswordForm extends React.Component {
     e.preventDefault();
     const { password, confirmpassword } = this.state;
     this.setState({ nomatch: password !== confirmpassword });
-    if (this.state.nomatch) return;
-
-    setTimeout(() => this.props.history.push("/signin"), 500);
+    if (password === confirmpassword) {
+      setTimeout(() => this.props.history.push("/signin"), 500);
+    }
   };
   renderNoMatch = () => {
     return (
-      <ErrorDialog
-        message={`Passwords do not match or Other Error ${this.props.errorMessage}`}
-      />
+      <ErrorDialog message={`Passwords do not match or Other Error ${this.props.errorMessage}`} />
     );
   };
 
@@ -49,37 +32,26 @@ class UpdatePasswordForm extends React.Component {
 
   render() {
     return (
-      <Paper style={style.paper} zDepth={2}>
-        <form type="submit">
-          <div>
-            <TextField
-              name="password"
-              value={this.state.password}
-              onChange={this.onChangePassword}
-              type="password"
-              floatingLabelText="Password"
-            />
-          </div>
-          <div>
-            <TextField
-              name="confirmpassword"
-              value={this.state.confirmpassword}
-              onChange={this.onChangeConfirmPassword}
-              type="password"
-              floatingLabelText=" Validate Password"
-            />
-          </div>
-          {this.state.nomatch && this.renderNoMatch()}
-          <div>
-            <RaisedButton
-              label="Update"
-              primary={true}
-              style={style.button}
-              onClick={this.doSubmit}
-            />
-          </div>
-        </form>
-      </Paper>
+      <Form width="400px">
+        <Input
+          name="password"
+          value={this.state.password}
+          onChange={this.onChangePassword}
+          type="password"
+          placeholder="Password"
+        />
+        <Input
+          name="confirmpassword"
+          value={this.state.confirmpassword}
+          onChange={this.onChangeConfirmPassword}
+          type="password"
+          placeholder=" Validate Password"
+        />
+        {this.state.nomatch && this.renderNoMatch()}
+        <Button width="300px" onClick={this.doSubmit}>
+          Update
+        </Button>
+      </Form>
     );
   }
 }

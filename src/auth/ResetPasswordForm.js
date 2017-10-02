@@ -29,26 +29,29 @@ class ResetPasswordForm extends Component {
     if (!this.state.id) {
       return <div>Invalid User</div>;
     }
-    return <div><WrappedPW token={this.state.id} /></div>;
+    return (
+      <div>
+        <WrappedPW token={this.state.id} />
+      </div>
+    );
   }
 }
 
 const userquery = gql`
   query account($id: ID) {
-    account (id:$id) {
+    account(id: $id) {
       id
       fullname
       email
     }
   }
-
 `;
 
 const ResetPassword = ({ data: { account, loading } }) => {
   if (loading) return <div>Loading</div>;
   return (
     <div>
-      Loading data{account.fullname}
+      Password Reset for {account.fullname}
       <UpdatePassword id={account.id} email={account.email} />
     </div>
   );

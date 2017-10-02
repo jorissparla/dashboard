@@ -1,36 +1,7 @@
 import React, { Component } from "react";
 import { gql, graphql } from "react-apollo";
-import RaisedButton from "material-ui/RaisedButton";
-import TextField from "material-ui/TextField";
-import Paper from "material-ui/Paper";
-
-const style = {
-  paper: {
-    padding: "0 20px 0 20px",
-    display: "flex",
-    flexDirection: "column",
-    marginRight: "100px",
-    marginTop: "40px",
-    textAlign: "left",
-    flexWrap: "wrap",
-    width: "50%"
-  },
-  button: {
-    margin: "20px",
-    justifyContent: "flex-start",
-    alignSelf: "flex-start"
-  },
-  form: {
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "flex-start"
-  },
-  input: {
-    width: "100%",
-    minWidth: "300px",
-    marginBottom: "10px"
-  }
-};
+import { withRouter } from "react-router";
+import { Button, Input, Form, Error, Row } from "../styles";
 
 class RequestResetPassword extends Component {
   state = { email: "", errors: "" };
@@ -39,30 +10,30 @@ class RequestResetPassword extends Component {
     this.setState({ email: value });
   };
   render() {
+    const { errors } = this.state;
     return (
-      <Paper style={style.paper} zDepth={2}>
-        <form type="submit" style={style.form}>
-          <TextField
-            name="email"
-            value={this.state.email}
-            onChange={this.onChangeEmail}
-            type="email"
-            floatingLabelText="email address"
-            fullWidth={true}
-            inputStyle={style.input}
-          />
-          <RaisedButton
-            label="Update"
-            primary={true}
-            style={style.button}
-            onClick={this._doSubmit}
-          />
-        </form>
-        <div>{this.state.errors}</div>
-      </Paper>
+      <Form>
+        <Input
+          name="email"
+          value={this.state.email}
+          onChange={this.onChangeEmail}
+          type="email"
+          width="300px"
+          placeholder="email address"
+        />
+        <Row>
+          <Button onClick={this._doSubmit}>Send verification email </Button>
+          <Button color="black" onClick={this._doCancel}>
+            Cancel
+          </Button>
+        </Row>
+        {errors & <Error>{this.state.errors}</Error>}
+      </Form>
     );
   }
-
+  _doCancel = async () => {
+    this.props.history.push("/");
+  };
   _doSubmit = async () => {
     try {
       await this.props.requestReset({
@@ -83,6 +54,4 @@ const requestreset = gql`
     }
   }
 `;
-export default graphql(requestreset, { name: "requestReset" })(
-  RequestResetPassword
-);
+export default graphql(requestreset, { name: "requestReset" })(withRouter(RequestResetPassword));
