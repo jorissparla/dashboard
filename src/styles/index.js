@@ -68,7 +68,7 @@ export const PrimaryButton = styled.a`
   background: ${props => (props.color ? props.color : niceblue)};
   color: white;
   font-family: "Segoe UI", Roboto;
-  font-size: 1em;
+  font-size: 1.1em;
   -webkit-transition: all 0.45s;
   transition: all 0.45s;
   text-align: center;

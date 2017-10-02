@@ -1,16 +1,16 @@
 import React, { Component } from "react";
 import { gql, graphql } from "react-apollo";
 import { withRouter } from "react-router";
-import { Button, Input, Form, Error, Row } from "../styles";
+import { Button, Input, Form, Error, Message, Row } from "../styles";
 
 class RequestResetPassword extends Component {
-  state = { email: "", errors: "" };
+  state = { email: "", errors: "", message: "" };
 
   onChangeEmail = ({ target: { value } }) => {
-    this.setState({ email: value });
+    this.setState({ email: value, errors: "", message: "" });
   };
   render() {
-    const { errors } = this.state;
+    const { errors, message } = this.state;
     return (
       <Form>
         <Input
@@ -19,15 +19,17 @@ class RequestResetPassword extends Component {
           onChange={this.onChangeEmail}
           type="email"
           width="80%"
+          readonly={message !== ""}
           placeholder="email address"
         />
         <Row>
-          <Button onClick={this._doSubmit}>Send verification email </Button>
+          {!message && <Button onClick={this._doSubmit}>Send verification email </Button>}
           <Button color="black" onClick={this._doCancel}>
             Cancel
           </Button>
         </Row>
-        {errors & <Error>{this.state.errors}</Error>}
+        {message && <Message color="black">{message}</Message>}
+        {errors && <Message>{errors}</Message>}
       </Form>
     );
   }
@@ -36,12 +38,14 @@ class RequestResetPassword extends Component {
   };
   _doSubmit = async () => {
     try {
-      await this.props.requestReset({
+      const result = await this.props.requestReset({
         variables: { email: this.state.email }
       });
-      this.setState({ errors: "" });
+      console.log(result);
+      this.setState({ errors: "", message: "A password update Link was sent per email" });
     } catch (e) {
-      this.setState({ errors: JSON.stringify(e, null, 2) });
+      console.log(e);
+      this.setState({ ...this.state, errors: "Invalid email address" });
     }
   };
 }

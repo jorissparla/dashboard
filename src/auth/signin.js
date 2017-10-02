@@ -3,6 +3,7 @@ import { signinUser } from "../actions";
 import { connect } from "react-redux";
 //import ErrorDialog from "../errordialog";
 import { withRouter } from "react-router";
+import { Link } from "react-router-dom";
 //import styled from "styled-components";
 import { Button, Input, Form, Error } from "../styles";
 
@@ -114,6 +115,7 @@ class Signin extends React.Component {
         <Button label="Login" primary={true} width="300px" type="submit" onClick={this._onSubmit}>
           Login
         </Button>
+        <Link to="/forgot">Forgot Password?</Link>
       </Form>
     );
   }
