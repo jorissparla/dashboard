@@ -30,7 +30,7 @@ export const Input = styled.input`
 `;
 export const Button = styled.a`
   display: inline-block;
-  min-width: 200px;
+  min-width: 150px;
   width: ${props => (props.width ? props.width : "150px")}
   height: 40px;
   padding: 4px 7px;
@@ -54,10 +54,34 @@ export const Button = styled.a`
     color: white;
   }
 `;
+export const PrimaryButton = styled.a`
+  display: inline-block;
+  min-width: 150px;
+  width: ${props => (props.width ? props.width : "150px")}
+  height: 40px;
+  padding: 4px 7px;
+  cursor: pointer;
+  font-weight: 500;
+  border-radius: 4px;
+  border: 1px solid ${props => (props.color ? props.color : niceblue)};
+  text-decoration: none;
+  background: ${props => (props.color ? props.color : niceblue)};
+  color: white;
+  font-family: "Segoe UI", Roboto;
+  font-size: 1em;
+  -webkit-transition: all 0.45s;
+  transition: all 0.45s;
+  text-align: center;
+  line-height: 36px;
+  margin: 8px;
+
+
+`;
 
 export const Row = styled.div`
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
 `;
 export const Papier = styled.div`
   display: flex;
@@ -188,21 +212,27 @@ export const Form = styled.form`
   font-family: "Segoe UI", Roboto;
   box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 10px, rgba(0, 0, 0, 0.23) 0px 3px 10px;
   border-radius: 2px;
-  width: ${props => (props.width ? props.width : "30%")};
+  width: ${props => (props.width ? props.width : "50%")};
   padding: 20px;
   min-width: 300px;
   margin-top: 40px;
-  margin-left: 20px;
+  margin-left: auto;
+  margin-right: auto;
   text-align: left;
 `;
 
 export const Error = styled.div`
   display: flex;
-  color: red;
-  border: solid 1px red;
+  color: ${props => (props.color ? props.color : "red")};
+  border: solid 1px ${props => (props.color ? props.color : "red")};
   border-radius: 5px;
   padding: 20px;
-  margin-left: 20px;
+`;
+export const Message = styled.div`
+  display: flex;
+  color: ${props => (props.color ? props.color : "red")};
+  border-radius: 5px;
+  padding: 20px;
 `;
 /*
 export const Notification = ({ title, text, onClose, show }) => {

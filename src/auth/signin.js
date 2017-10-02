@@ -3,7 +3,7 @@ import { signinUser } from "../actions";
 import { connect } from "react-redux";
 //import ErrorDialog from "../errordialog";
 import { withRouter } from "react-router";
-import styled from "styled-components";
+//import styled from "styled-components";
 import { Button, Input, Form, Error } from "../styles";
 
 const isRequired = value => (value ? true : false);

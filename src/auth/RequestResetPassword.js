@@ -18,7 +18,7 @@ class RequestResetPassword extends Component {
           value={this.state.email}
           onChange={this.onChangeEmail}
           type="email"
-          width="300px"
+          width="80%"
           placeholder="email address"
         />
         <Row>
