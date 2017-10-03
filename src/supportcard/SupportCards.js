@@ -11,6 +11,10 @@ import withAuth from "../utils/withAuth";
 import AddCard from "./AddCard";
 import CategoryTabs from "./CategoryTabs";
 
+String.prototype.doesInclude = function(val) {
+  return this.substring(val) != -1;
+};
+
 const customContentStyle = {
   height: "100%"
 };
@@ -83,13 +87,13 @@ class SupportCards extends React.Component {
       .filter(card => {
         const { category: { name }, title } = card;
         return (
-          name.toUpperCase().includes(searchText.toUpperCase()) ||
-          title.toUpperCase().includes(searchText.toUpperCase())
+          name.toUpperCase().doesInclude(searchText.toUpperCase()) ||
+          title.toUpperCase().doesInclude(searchText.toUpperCase())
         );
       })
       .filter(card => {
         const { category: { name } } = card;
-        return name.toUpperCase().includes(selectedCategory.toUpperCase());
+        return name.toUpperCase().doesInclude(selectedCategory.toUpperCase());
       });
     return (
       <Container onDoubleClick={() => this.setState({ showRequest: true })}>
