@@ -54,6 +54,21 @@ export const Button = styled.a`
     color: white;
   }
 `;
+
+export const HR = styled.hr`
+  margin: -1px 0px 0px;
+  height: 1px;
+  border: none;
+  color: black;
+  background-color: rgb(224, 224, 224);
+  display: block;
+  unicode-bidi: isolate;
+  -webkit-margin-before: 0.5em;
+  -webkit-margin-after: 0.5em;
+  -webkit-margin-start: auto;
+  -webkit-margin-end: auto;
+  overflow: hidden;
+`;
 export const PrimaryButton = styled.a`
   display: inline-block;
   min-width: 150px;
@@ -83,13 +98,31 @@ export const Row = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
 `;
+
 export const Papier = styled.div`
+  color: black;
+  background-color: rgb(127, 186, 219);
+  transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
+  box-sizing: border-box;
+  font-family: Roboto, sans-serif;
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 30px, rgba(0, 0, 0, 0.23) 0px 6px 10px;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 18%;
+  margin: 5px;
+  min-width: 200px;
+}
+`;
+
+export const Papier1 = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   color: rgb(255, 255, 255);
-  background-color: rgb(255, 255, 255);
+  background-color: ${props => (props.color ? props.color : "white")});
   transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
   box-sizing: border-box;
   font-family: Roboto, sans-serif;

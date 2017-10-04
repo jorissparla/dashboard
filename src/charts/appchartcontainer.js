@@ -34,7 +34,6 @@ class AppChartContainer extends React.Component {
   }
 
   render() {
-    console.log("appchartcontainer-Render()", this.props.region);
     const data = !this.props.data ? ["Logistics"] : this.props.data;
     const value = !this.props.value ? "supportBacklog" : this.props.value;
     const title = !this.props.title ? value : this.props.title;

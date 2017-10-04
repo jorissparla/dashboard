@@ -11,9 +11,19 @@ import withAuth from "../utils/withAuth";
 import AddCard from "./AddCard";
 import CategoryTabs from "./CategoryTabs";
 
-String.prototype.doesInclude = function(val) {
-  return this.substring(val) != -1;
-};
+if (!String.prototype.includes) {
+  String.prototype.includes = function(search, start) {
+    if (typeof start !== "number") {
+      start = 0;
+    }
+
+    if (start + search.length > this.length) {
+      return false;
+    } else {
+      return this.indexOf(search, start) !== -1;
+    }
+  };
+}
 
 const customContentStyle = {
   height: "100%"
@@ -51,13 +61,14 @@ const SupportCardQuery = gql`
       id
       title
       description
+      link
+      created
+      updatedAt
       category {
         name
         color
         backgroundcolor
       }
-      link
-      created
     }
   }
 `;
@@ -77,6 +88,7 @@ class SupportCards extends React.Component {
       <FlatButton label="Submit" primary={true} onClick={this.handleClose} />
     ];
     const { searchText, selectedCategory } = this.state;
+    console.log(searchText);
     if (loading) {
       return <p>Loading ...</p>;
     }
@@ -87,13 +99,13 @@ class SupportCards extends React.Component {
       .filter(card => {
         const { category: { name }, title } = card;
         return (
-          name.toUpperCase().doesInclude(searchText.toUpperCase()) ||
-          title.toUpperCase().doesInclude(searchText.toUpperCase())
+          name.toUpperCase().includes(searchText.toUpperCase()) ||
+          title.toUpperCase().includes(searchText.toUpperCase())
         );
       })
       .filter(card => {
         const { category: { name } } = card;
-        return name.toUpperCase().doesInclude(selectedCategory.toUpperCase());
+        return name.toUpperCase().includes(selectedCategory.toUpperCase());
       });
     return (
       <Container onDoubleClick={() => this.setState({ showRequest: true })}>
@@ -125,7 +137,7 @@ class SupportCards extends React.Component {
                   title={title}
                   text={description}
                   category={name}
-                  buttonText="Open"
+                  buttonText="🔎"
                   link={link}
                   canEdit={authenticated}
                   editLink={`/supportcard/edit/${id}`}

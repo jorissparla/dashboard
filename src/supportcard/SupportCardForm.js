@@ -1,11 +1,19 @@
 import React from "react";
 import { withRouter } from "react-router";
 import { Field, reduxForm } from "redux-form";
+import Chip from "material-ui/Chip";
 import { SelectField } from "redux-form-material-ui";
 import Paper from "material-ui/Paper";
 import MenuItem from "material-ui/MenuItem";
 import { CardSection, Input } from "../common";
 import { NormalRaisedButton, CancelRaisedButton, DeleteButton } from "../common/TitleBar";
+
+const owners = [
+  { id: "Ricardo Exposito", name: "Ricardo Exposito" },
+  { id: "Massimo Favaro", name: "Massimo Favaro" },
+  { id: "Maribel Aguilella", name: "Maribel Aguilella" },
+  { id: "Joris Sparla", name: "Joris Sparla" }
+];
 
 const paperStyle = {
   display: "flex",
@@ -25,9 +33,11 @@ const SupportCardForm = props => {
     authenticated,
     handleSubmit,
     onDelete,
-    history
+    history,
+    user
   } = props;
   const readOnly = !authenticated;
+  const { updatedAt } = supportcard;
   return (
     <Paper zDepth={1} style={paperStyle}>
       <form onSubmit={handleSubmit(onSave)}>
@@ -59,7 +69,7 @@ const SupportCardForm = props => {
           disabled={readOnly}
           fullWidth={true}
           multiLine={true}
-          rows={16}
+          rows={10}
           component={Input}
         />
         <Field
@@ -73,6 +83,18 @@ const SupportCardForm = props => {
           underlineStyle={{ borderColor: "#039BE5" }}
         >
           {categories.map(({ id, name }) => <MenuItem key={id} value={name} primaryText={name} />)}
+        </Field>
+        <Field
+          name="owner"
+          component={SelectField}
+          disabled={readOnly}
+          hintText="Owner"
+          floatingLabelText="Owner"
+          style={{ flex: 2, marginTop: "-5px", marginLeft: "10px" }}
+          underlineShow={true}
+          underlineStyle={{ borderColor: "#039BE5" }}
+        >
+          {owners.map(({ id, name }) => <MenuItem key={id} value={name} primaryText={name} />)}
         </Field>
 
         <Field
@@ -101,6 +123,7 @@ const SupportCardForm = props => {
             supportcard && (
               <DeleteButton label="View Link" onClick={() => window.open(initialValues.link)} />
             )}
+          <Chip style={{ margin: 4 }}>{`Last updated at ${updatedAt}`}</Chip>
         </CardSection>
       </form>
     </Paper>

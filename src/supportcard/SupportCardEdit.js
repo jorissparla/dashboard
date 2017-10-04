@@ -21,7 +21,7 @@ class SupportCardEdit extends React.Component {
   }
 
   handleSave(e) {
-    const { id, title, description, categoryname, link } = e;
+    const { id, title, description, categoryname, link, owner = "none", createdAt, updatedAt } = e;
 
     this.props
       .modifySupportCard({
@@ -29,7 +29,8 @@ class SupportCardEdit extends React.Component {
         title,
         description,
         categoryname,
-        link
+        link,
+        owner
       })
       // .then(this.props.data.refetch())
       .then(alert("Updated"))
@@ -39,8 +40,9 @@ class SupportCardEdit extends React.Component {
   }
 
   render() {
-    const { loading, error, categories, supportcard } = this.props.data;
+    const { loading, error, categories, supportcard, me } = this.props.data;
     const { authenticated } = this.props;
+    console.log("me", me);
     if (loading) {
       return <p>Loading ...</p>;
     }
@@ -75,10 +77,16 @@ const supportcard = gql`
         name
       }
       link
+      owner
+      created
+      updatedAt
     }
     categories {
       id
       name
+    }
+    me {
+      fullname
     }
   }
 `;

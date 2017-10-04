@@ -7,50 +7,77 @@ import ViewIcon from "material-ui/svg-icons/action/pageview";
 import ModeEdit from "material-ui/svg-icons/editor/mode-edit";
 import LinkIcon from "material-ui/svg-icons/content/link";
 import { Link } from "react-router-dom";
-
+import { Button, Papier, HR } from "../styles/index.js";
 import Divider from "material-ui/Divider";
 
-const Cat = styled.div`
-  width: 15%;
-  margin-right: 5px;
-  margin-left: 10px;
-  margin-top: 10px;
-  flex-grow: 1;
-   font-weight: 800;
+const OtherButton = styled.a`
+  display: flex;
+  justify-content: flex-end;
+  text-decoration: none;
+  cursor: pointer;
 `;
 
+const Text = styled.div`
+  text-decoration: none;
+  padding-left: 3px;
+  cursor: pointer;
+  font-weight: 900;
+  color: ${props => (props.textcolor ? props.textcolor : "black")};
+`;
+const Cat = styled.div`font-weight: 800;`;
+
 const Title = styled.div`
-  font-family: 'Roboto';
+  font-family: "Roboto";
   font-size: 18px;
   font-weight: bold;
   padding: 2px;
-  flex-grow:0;
+  flex-grow: 0;
   margin: 5px;
 `;
 
 const BottomStyle = styled.div`
-  display:flex;
+  display: flex;
   flex-direction: row;
-  width:100%;
+  width: 100%;
   flex-grow: 0;
-  justify-content: center;
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
 `;
 
 const StyledBody = styled.p`
   margin: 5px;
   margin-bottom: 20px;
-    font-size: 15px;
-    flex-grow: 1;
-    font-size: 12px;
-    font-family: Helvetica;
+  font-size: 15px;
+  flex-grow: 1;
+  font-size: 12px;
+  font-family: Helvetica;
 `;
 
 const Outer = styled.div`
   display: flex;
-  flex-wrap:wrap;
+  flex-wrap: wrap;
 `;
 
-const paperStyle = (color, textcolor = "#000") => {
+const StyledLink = styled(Link)`
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  :hover {
+    border: 2px solid lightgrey;
+    border-radius: 5px;
+  }
+`;
+
+const StyledPapier = Papier.extend`
+  display: flex;
+  justify-content: space-between;
+  width: 18%;
+  min-width: 200px;
+  color: ${props => (props.textcolor ? props.textcolor : "black")};
+  background-color: ${props => (props.color ? props.color : "lightblue")};
+`;
+/* const paperStyle = (color, textcolor = "#000") => {
   return {
     display: "flex",
     flexDirection: "column",
@@ -62,14 +89,13 @@ const paperStyle = (color, textcolor = "#000") => {
     color: textcolor
   };
 };
-
+ */
 const SmallCard = ({
   title = "Procedure",
   text = "Papier Und KartonFabrik",
   buttonText = "Modify",
   category = "Cloud",
   link = "http://www.google.com",
-  likes = 1,
   action = null,
   color = "#FFFFF",
   textcolor = "#000",
@@ -77,15 +103,14 @@ const SmallCard = ({
   editLink = ""
 }) => {
   return (
-    <Paper style={paperStyle(color, textcolor)} zDepth={3}>
+    <StyledPapier color={color}>
       <Title>{title}</Title>
-
-      <StyledBody>
-        {text.slice(0, 200).concat("...")}
-      </StyledBody>
+      <HR />
+      <StyledBody>{text.slice(0, 200).concat("...")}</StyledBody>
       <Divider />
       <BottomStyle>
-        <Link to={editLink}>
+        <StyledLink to={editLink}>
+          {canEdit === true ? <Text>Open</Text> : <Text>View</Text>}
           <IconButton
             iconStyle={{
               height: "16px",
@@ -94,25 +119,19 @@ const SmallCard = ({
             }}
           >
             {canEdit === true ? <ModeEdit /> : <ViewIcon />}
-            {likes}
           </IconButton>
-        </Link>
+        </StyledLink>
         <Cat>{category}</Cat>
-        <FlatButton
-          style={{
-            flexGrow: 0,
-            margin: "2px",
-            color: "black"
-          }}
+        <OtherButton
           primary={true}
-          onClick={() => window.open(link)}
+          href={link}
+          target="_blank_"
+          //onClick={() => window.open(link)}
         >
-          {buttonText.toUpperCase()}{" "}
-          <LinkIcon />
-        </FlatButton>
+          {buttonText.toUpperCase()}
+        </OtherButton>
       </BottomStyle>
-
-    </Paper>
+    </StyledPapier>
   );
 };
 
