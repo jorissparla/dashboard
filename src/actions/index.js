@@ -65,9 +65,11 @@ export const signinUser = async ({ email, password }) => {
       return { error: "Bad Login Info" };
     }
     if (response) {
+      console.log("response.data.user", response.data.user);
       localStorage.setItem("id", response.data.uic);
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("email", email);
+      localStorage.setItem("name", response.data.user.fullname);
       localStorage.setItem("picture", response.data.user.pic);
       localStorage.setItem("role", response.data.user.role);
       dispatch({ type: AUTH_USER, user: response.data.user });
@@ -93,6 +95,8 @@ export const UpdatePassword = async ({ password, token }) => {
 
 export const signoutUser = () => {
   localStorage.removeItem("token");
+  localStorage.removeItem("name");
+  localStorage.removeItem("id");
   localStorage.setItem("email", "");
   localStorage.setItem("picture", "");
 

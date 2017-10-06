@@ -12,6 +12,7 @@ class HistoryChartContainer extends Component {
     const type = !this.props.type ? "column" : this.props.type;
     const team = this.props.team;
     const summary = history; // .reverse()
+    console.log("summary", summary);
     const color = this.props.color;
     return (
       <div>
@@ -19,7 +20,7 @@ class HistoryChartContainer extends Component {
           data={summary}
           title={title}
           type={type}
-          xvalue="weeknr"
+          xvalue="hour"
           value={value}
           color={color}
           team={team}

@@ -4,26 +4,24 @@ import { SmallCard } from "../common/SmallCard";
 import Dialog from "material-ui/Dialog";
 import styled from "styled-components";
 import FlatButton from "material-ui/FlatButton";
-import RequestForm from "./Request";
+import NewRequestForm from "./Request";
 
 import SearchBar from "../common/SearchBar";
 import withAuth from "../utils/withAuth";
 import AddCard from "./AddCard";
 import CategoryTabs from "./CategoryTabs";
 
-if (!String.prototype.includes) {
-  String.prototype.includes = function(search, start) {
-    if (typeof start !== "number") {
-      start = 0;
-    }
+String.prototype.includes2 = function(search, start) {
+  if (typeof start !== "number") {
+    start = 0;
+  }
 
-    if (start + search.length > this.length) {
-      return false;
-    } else {
-      return this.indexOf(search, start) !== -1;
-    }
-  };
-}
+  if (start + search.length > this.length) {
+    return false;
+  } else {
+    return this.indexOf(search, start) !== -1;
+  }
+};
 
 const customContentStyle = {
   height: "100%"
@@ -88,7 +86,6 @@ class SupportCards extends React.Component {
       <FlatButton label="Submit" primary={true} onClick={this.handleClose} />
     ];
     const { searchText, selectedCategory } = this.state;
-    console.log(searchText);
     if (loading) {
       return <p>Loading ...</p>;
     }
@@ -99,13 +96,13 @@ class SupportCards extends React.Component {
       .filter(card => {
         const { category: { name }, title } = card;
         return (
-          name.toUpperCase().includes(searchText.toUpperCase()) ||
-          title.toUpperCase().includes(searchText.toUpperCase())
+          name.toUpperCase().includes2(searchText.toUpperCase()) ||
+          title.toUpperCase().includes2(searchText.toUpperCase())
         );
       })
       .filter(card => {
         const { category: { name } } = card;
-        return name.toUpperCase().includes(selectedCategory.toUpperCase());
+        return name.toUpperCase().includes2(selectedCategory.toUpperCase());
       });
     return (
       <Container onDoubleClick={() => this.setState({ showRequest: true })}>
@@ -118,7 +115,10 @@ class SupportCards extends React.Component {
           onRequestClose={() => this.setState({ showRequest: false })}
           autoScrollBodyContent={false}
         >
-          <RequestForm onSubmit={() => this.setState({ showRequest: false })} />
+          <NewRequestForm
+            user={this.props.user}
+            onSubmit={() => this.setState({ showRequest: false })}
+          />
         </Dialog>
         <CategoryTabs onChange={this.setSelectedCategory} onSave={v => console.log(v)} />
         <SearchBar onChange={this.setSearchText} />

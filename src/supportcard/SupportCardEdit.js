@@ -21,7 +21,7 @@ class SupportCardEdit extends React.Component {
   }
 
   handleSave(e) {
-    const { id, title, description, categoryname, link, owner = "none", createdAt, updatedAt } = e;
+    const { id, title, description, categoryname, link, owner = "none" } = e;
 
     this.props
       .modifySupportCard({

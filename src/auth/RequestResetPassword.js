@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { gql, graphql } from "react-apollo";
 import { withRouter } from "react-router";
-import { Button, Input, Form, Error, Message, Row } from "../styles";
+import { Button, Input, Form, Message, Row } from "../styles";
 
 class RequestResetPassword extends Component {
   state = { email: "", errors: "", message: "" };

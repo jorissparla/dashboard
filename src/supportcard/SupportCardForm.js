@@ -33,8 +33,7 @@ const SupportCardForm = props => {
     authenticated,
     handleSubmit,
     onDelete,
-    history,
-    user
+    history
   } = props;
   const readOnly = !authenticated;
   const { updatedAt } = supportcard;

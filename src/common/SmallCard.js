@@ -1,13 +1,10 @@
 import React from "react";
-import Paper from "material-ui/Paper";
 import styled from "styled-components";
-import FlatButton from "material-ui/FlatButton";
 import IconButton from "material-ui/IconButton";
 import ViewIcon from "material-ui/svg-icons/action/pageview";
 import ModeEdit from "material-ui/svg-icons/editor/mode-edit";
-import LinkIcon from "material-ui/svg-icons/content/link";
 import { Link } from "react-router-dom";
-import { Button, Papier, HR } from "../styles/index.js";
+import { Papier, HR } from "../styles/index.js";
 import Divider from "material-ui/Divider";
 
 const OtherButton = styled.a`
@@ -52,6 +49,7 @@ const StyledBody = styled.p`
   flex-grow: 1;
   font-size: 12px;
   font-family: Helvetica;
+  overflow: hidden;
 `;
 
 const Outer = styled.div`

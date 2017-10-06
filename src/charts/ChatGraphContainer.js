@@ -9,12 +9,14 @@ class ChatGraphContainer extends React.Component {
     const { data: { loading, error, chats } } = this.props;
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error</div>;
+    //#region initiatialize values
     const value = !this.props.value ? "percentage" : this.props.value;
     const title = !this.props.title ? "Chats" : this.props.title;
     const type = !this.props.type ? "column" : this.props.type;
     const team = this.props.team;
     const summary = chats; // .reverse()
     const color = this.props.color;
+    //#endregion
     return (
       <div>
         <SummaryChart
@@ -32,7 +34,7 @@ class ChatGraphContainer extends React.Component {
 }
 
 const querySummaries = gql`
-  query chats ($team: String) {
+  query chats($team: String) {
     chats(team: $team, recent: 6) {
       id
       weeknr

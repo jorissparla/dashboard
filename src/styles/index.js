@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 
 export const Typography = styled.div`font-family: Roboto;`;
 export const BasicFlex = Typography.extend`
@@ -16,18 +16,30 @@ export const Input = styled.input`
   padding: 4px 7px;
   margin: 8px;
   width: ${props => (props.width ? props.width : "200px")};
-  height: 28px;
+  min-height: 28px;
   font-size: 1em;
   line-height: 1.5;
   font-family: "Segoe UI", Roboto;
-  color: rgba(0, 0, 0, 0.65);
-  background-color: #fff;
+  color: ${props => (props.color ? props.color : "rgba(0, 0, 0, 0.65)")};
+  background-color: ${props => (props.background ? props.background : "#fff")};
   background-image: none;
   border: 1px solid #d9d9d9;
   border-radius: 4px;
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
 `;
+export const FlexRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+`;
+export const FlexCol = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+export const TextArea = Input.withComponent("textarea");
+export const ViewText = Input.withComponent("div");
+
 export const Button = styled.a`
   display: inline-block;
   min-width: 150px;
@@ -267,15 +279,33 @@ export const Message = styled.div`
   border-radius: 5px;
   padding: 20px;
 `;
-/*
-export const Notification = ({ title, text, onClose, show }) => {
-  if (!show) return <div />;
-  return (
-    <Pop>
-      <Sym onClick={() => setTimeout(onClose, 1000)}>×</Sym>
-      <NotificationMsg>{title}</NotificationMsg>
-      <NotificationText>{text}</NotificationText>
-    </Pop>
-  );
-};
-*/
+
+const rotate360 = keyframes`
+from {
+  transform: rotate(0deg);
+}
+to {
+  transform: rotate(360deg);
+}
+`;
+
+export const Loading = styled.div`
+  animation-duration: 0.75s;
+  animation-iteration-count: infinite;
+  animation-name: ${rotate360};
+  animation-timing-function: linear;
+  height: 30px;
+  width: 30px;
+  border: 8px solid #ffffff;
+  border-right-color: blue;
+  border-radius: 50%;
+  display: inline-block;
+  position: absolute;
+  top: 10%;
+  right: 0;
+  bottom: 0;
+  left: 0%;
+  color: blue;
+  margin-left: auto;
+  margin-right: auto;
+`;

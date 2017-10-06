@@ -3,6 +3,7 @@ import { gql, graphql } from "react-apollo";
 import styled from "styled-components";
 import { withRouter } from "react-router";
 import TextField from "material-ui/TextField";
+import { ViewText } from "../styles";
 export const niceblue = "#40a5ed";
 export const babyblue = "#ecf6fd";
 export const twitterblue = "#1da1f2";
@@ -63,7 +64,7 @@ export const Button = styled.button`
 
 const StyledTextField = styled(TextField)`margin: 20px;`;
 class Request extends Component {
-  state = { name: "", email: "", text: "", page: "SupportCard", error: "" };
+  state = { name: "", email: "a", text: "", page: "SupportCard", error: "" };
 
   isNotEmpty = value => (value ? true : false);
   isValidEmail = email => /\S+@\S+\.\S+/.test(email);
@@ -83,6 +84,16 @@ class Request extends Component {
     return error === "";
   };
 
+  componentWillMount() {
+    if (this.props.user) {
+      console.log("request", this.props);
+      this.setState({
+        ...this.state,
+        email: this.props.user.email,
+        name: this.props.user.fullname
+      });
+    }
+  }
   onChangeName = ({ target: { value } }) => {
     this.setState({ name: value });
   };
@@ -98,11 +109,26 @@ class Request extends Component {
         <FlexCol>
           {/*<H1>{this.state.page} Request</H1> */}
           <FlexRow>
-            <StyledTextField placeholder="Enter Name" name="name" onChange={this.onChangeName} />
-            <StyledTextField placeholder="Enter email" onChange={this.onChangeEmail} />
+            <ViewText
+              placeholder="Enter Name"
+              name="name"
+              onChange={this.onChangeName}
+              value={this.state.name}
+            >
+              {this.state.name}
+            </ViewText>
+            <ViewText
+              placeholder="Enter email"
+              name="email"
+              onChange={this.onChangeEmail}
+              value={this.state.email}
+            >
+              {this.state.email}
+            </ViewText>
           </FlexRow>
           <StyledTextField
             placeholder="Enter Text"
+            name="Request"
             multiLine={true}
             rows={2}
             fullWidth={true}

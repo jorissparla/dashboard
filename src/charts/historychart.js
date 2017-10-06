@@ -1,9 +1,9 @@
-import React from 'react'
-import ReactHighCharts from 'react-highcharts'
+import React from "react";
+import ReactHighCharts from "react-highcharts";
 
 const config = {
   chart: {
-    type: 'column'
+    type: "column"
   },
 
   options3d: {
@@ -14,82 +14,85 @@ const config = {
     viewDistance: 25
   },
   xAxis: {
-    categories: [
-
-    ]
+    categories: []
   },
 
   yAxis: {
-    categories: [
-
-    ]
+    categories: []
   },
   plotOptions: {
     area: {
-      color: '#b39ddb'
+      color: "#b39ddb"
     },
     series: {
-      pointWidth: 50// width of the column bars irrespective of the chart size
+      pointWidth: 50 // width of the column bars irrespective of the chart size
     },
     column: {
       depth: 25
     }
-	    },
+  },
   series: [
     {
-      name: 'Tools',
-      type: 'column',
-      color: '#ffb300',
-      data: [
-
-      ],
-      dataLabels: { enabled: true}
+      name: "Tools",
+      type: "column",
+      color: "#ffb300",
+      data: [],
+      dataLabels: { enabled: true }
     }
   ],
   title: {
-    text: 'Hallo'
+    text: "Hallo"
   }
-}
+};
 
 var arColors = [];
-  arColors['LN']='#ffa726';
-  arColors['Tools']='#90caf9';
-  arColors['Logistics']='#c62828';
-  arColors['Finance']='#01579b';
+arColors["LN"] = "#ffa726";
+arColors["Tools"] = "#90caf9";
+arColors["Logistics"] = "#c62828";
+arColors["Finance"] = "#01579b";
 
 const renderSummary = (config, xval, val, title, color, type, summary) => {
-  xval = (!xval) ? 'weekNr' : xval
-  const range = summary.map(item => item[val])
-  color = arColors[val]
+  xval = !xval ? "weekNr" : xval;
+  const range = summary.map(item => item[val]);
+  color = arColors[val];
   if (color) {
-    config.plotOptions.area.color = color
+    config.plotOptions.area.color = color;
   }
   const filteredSummary = summary // .sort((a,b)=> a.row > b.row)
-            .reduce(({xvalues, data}, item) => {
-              xvalues.push(item[xval])
-              data.push(item[val])
-              return {xvalues, data}
-            }, { xvalues: [], data: [] })
-  config.xAxis.categories = filteredSummary.xvalues
+    .reduce(
+      ({ xvalues, data }, item) => {
+        xvalues.push(item[xval]);
+        data.push(item[val]);
+        return { xvalues, data };
+      },
+      { xvalues: [], data: [] }
+    );
+  config.xAxis.categories = filteredSummary.xvalues;
   if (range.length > 0) {
-    config.yAxis = {}
-    config.yAxis.floor = Math.floor(Math.min(...range) / 10 - 1) * 10
-    config.yAxis.ceiling = Math.floor(Math.max(...range) / 10 + 1) * 10
+    config.yAxis = {};
+    config.yAxis.floor = Math.floor(Math.min(...range) / 10 - 1) * 10;
+    config.yAxis.ceiling = Math.floor(Math.max(...range) / 10 + 1) * 10;
   }
 
-  config.series[0] = {data: filteredSummary.data, name: xval, color: color, type: type, dataLabels: { enabled: true}}
-  config.title.text = title
-  return config
-}
+  config.series[0] = {
+    data: filteredSummary.data,
+    name: xval,
+    color: color,
+    type: type,
+    dataLabels: { enabled: true }
+  };
+  config.title.text = title;
+  return config;
+};
 
-const historyChart = ({xvalue, value, title, color, type, data}) => {
-  const newConfig = renderSummary(config, xvalue, value, title, color, type, data)
+const historyChart = ({ xvalue, value, title, color, type, data }) => {
+  const newConfig = renderSummary(config, xvalue, value, title, color, type, data);
   return (
-    <div className='col s4'>
-      <div className='card'>
-              <ReactHighCharts config={newConfig} />
-            </div>
+    <div className="col s4">
+      <div className="card">
+        <ReactHighCharts config={newConfig} />
+      </div>
     </div>
-  )
-}
-export default historyChart
+  );
+};
+export default historyChart;

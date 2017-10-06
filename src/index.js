@@ -32,7 +32,8 @@ const token = localStorage.getItem("token");
 const user = {
   email: localStorage.getItem("email"),
   picture: localStorage.getItem("picture"),
-  role: localStorage.getItem("role")
+  role: localStorage.getItem("role"),
+  fullname: localStorage.getItem("name")
 };
 // If we have a token, consider the user to be signed in
 if (token) {
