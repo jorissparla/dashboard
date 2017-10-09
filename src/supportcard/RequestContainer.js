@@ -27,14 +27,10 @@ class RequestContainer extends Component {
     this.setState({ showRequest: true, selectedItem: e });
   };
   render() {
-    const { data: { loading, error, requests } } = this.props;
-    console.log(this.props);
+    const { data: { loading, error, requests, accounts } } = this.props;
     const actions = [
-      <Button label="Cancel" primary={true} onClick={this.handleClose}>
+      <Button label="Cancel" primary={true} bordercolor="transparent" onClick={this.handleClose}>
         Cancel
-      </Button>,
-      <Button label="Submit" primary={true} onClick={this.handleClose}>
-        Submit
       </Button>
     ];
 
@@ -57,7 +53,7 @@ class RequestContainer extends Component {
           actions={actions}
           onRequestClose={() => this.setState({ showRequest: false })}
         >
-          <RequestForm {...this.state.selectedItem} />
+          <RequestForm {...this.state.selectedItem} accounts={accounts} />
         </Dialog>
       </div>
     );
@@ -72,6 +68,13 @@ const queryRequests = gql`
       text
       createdAt
       updatedAt
+    }
+    accounts(roles: ["Admin"]) {
+      id
+      fullname
+      picture {
+        data
+      }
     }
   }
 `;

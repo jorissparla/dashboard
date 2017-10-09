@@ -129,6 +129,9 @@ class SupportCards extends React.Component {
           )}
           {filteredCards.map(
             ({ id, title, description, category: { name, color, backgroundcolor }, link }, i) => {
+              const vieweditLink = authenticated
+                ? `/supportcard/edit/${id}`
+                : `/supportcard/view/${id}`;
               return (
                 <SmallCard
                   color={backgroundcolor || cardColors[i % (cardColors.length - 1)].back}
@@ -140,7 +143,7 @@ class SupportCards extends React.Component {
                   buttonText="🔎"
                   link={link}
                   canEdit={authenticated}
-                  editLink={`/supportcard/edit/${id}`}
+                  editLink={`${vieweditLink}`}
                 />
               );
             }

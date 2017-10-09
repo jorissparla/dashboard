@@ -43,13 +43,14 @@ export const ViewText = Input.withComponent("div");
 export const Button = styled.a`
   display: inline-block;
   min-width: 150px;
-  width: ${props => (props.width ? props.width : "150px")}
+  width: ${props => (props.width ? props.width : "150px")};
   height: 40px;
   padding: 4px 7px;
   cursor: pointer;
   font-weight: 500;
   border-radius: 4px;
-  border: 1px solid ${props => (props.color ? props.color : niceblue)};
+  border: 1px solid
+    ${props => (props.bordercolor ? props.bordercolor : props.color ? props.color : niceblue)};
   text-decoration: none;
   color: ${props => (props.color ? props.color : niceblue)};
   font-family: "Segoe UI", Roboto;

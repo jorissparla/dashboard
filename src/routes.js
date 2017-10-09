@@ -69,11 +69,12 @@ class AppRoutes extends React.Component {
         <Route path="award" component={Award} />
         <Route auth="admin" user={user} exact path="/supportcard" component={SupportCards} />
         <AuthRoute
-          allowed={["Admin"]}
+          allowed={["Admin", "PO"]}
           user={user}
           path="/supportcard/edit/:id"
           component={SupportCardEdit}
         />
+        <Route user={user} path="/supportcard/view/:id" component={SupportCardEdit} />
         <AuthRoute
           allowed={["Admin"]}
           user={user}
