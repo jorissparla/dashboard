@@ -80,7 +80,8 @@ class SupportCards extends React.Component {
   handleClose = () => this.setState({ showRequest: false });
 
   render() {
-    const { authenticated, data: { loading, error, supportcards } } = this.props;
+    const { authenticated, isEditor, data: { loading, error, supportcards } } = this.props;
+    console.log(this.props);
     const actions = [
       <FlatButton label="Cancel" primary={true} onClick={this.handleClose} />,
       <FlatButton label="Submit" primary={true} onClick={this.handleClose} />
@@ -124,8 +125,14 @@ class SupportCards extends React.Component {
         <SearchBar onChange={this.setSearchText} />
 
         <Div>
-          {authenticated && (
+          {authenticated && isEditor ? (
             <AddCard link="/supportcard/add" title="Add a New Card" background="papayawhip" />
+          ) : (
+            <AddCard
+              link="supportcard/request"
+              title="Request a new Support Card"
+              background="papayawhip"
+            />
           )}
           {filteredCards.map(
             ({ id, title, description, category: { name, color, backgroundcolor }, link }, i) => {

@@ -51,11 +51,12 @@ export default ({
   link = "courses/create",
   title = "Add a new Course",
   color = { blue500 },
-  background = "papayawhip"
+  background = "papayawhip",
+  onClick
 }) => {
   return (
     <StyledContainer>
-      <StyledLink to={link || "/"}>
+      <StyledLink onClick={onClick} to={link || "/"}>
         <StyledAddIcon>
           <FloatingActionButton style={{ marginRight: 20 }}>
             <ContentAdd />

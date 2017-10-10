@@ -26,7 +26,7 @@ import KudoListAll from "./kudos/kudolistall";
 import Signin from "./auth/signin";
 import Signout from "./auth/signout";
 import UpdatePassword from "./auth/resetpassword";
-import RequireAuth, { AuthRoute } from "./auth/require_auth";
+import RequireAuth, { AuthRoute, EnhancedRoute } from "./auth/require_auth";
 import ResetPasswordForm from "./auth/ResetPasswordForm";
 import RequestResetPassword from "./auth/RequestResetPassword";
 
@@ -67,7 +67,14 @@ class AppRoutes extends React.Component {
         <Route path="/main/2" component={DashBoardStats} />
         <Route exact path="/alerts" component={RequireAuth(AlertsList)} />
         <Route path="award" component={Award} />
-        <Route auth="admin" user={user} exact path="/supportcard" component={SupportCards} />
+        <EnhancedRoute
+          auth="admin"
+          editors={["Admin", "PO"]}
+          user={user}
+          exact
+          path="/supportcard"
+          component={SupportCards}
+        />
         <AuthRoute
           allowed={["Admin", "PO"]}
           user={user}

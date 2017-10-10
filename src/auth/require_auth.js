@@ -13,11 +13,24 @@ export const AuthRoute = ({ component: Component, allowed, user, ...rest }) => {
         }
         if (allowed.indexOf(user.role || []) >= 0) {
           console.log("user ", user.role);
-          return <Component {...props} />;
+          return <Component {...props} user={user} />;
         } else {
           console.log("not allowed user ", user.role);
           return <Redirect to={{ pathname: "/" }} />;
         }
+      }}
+    />
+  );
+};
+export const EnhancedRoute = ({ component: Component, editors, user, ...rest }) => {
+  console.log("EnhancedRoute", user, editors, rest);
+  let isEditor = editors.indexOf(user.role) !== -1;
+  return (
+    <Route
+      {...rest}
+      render={props => {
+        console.log(editors);
+        return <Component {...props} user={user} isEditor={isEditor} />;
       }}
     />
   );

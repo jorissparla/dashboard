@@ -3,10 +3,12 @@ import { gql, graphql } from "react-apollo";
 import styled from "styled-components";
 import { withRouter } from "react-router";
 import TextField from "material-ui/TextField";
-import { ViewText } from "../styles";
+import { ViewText, Form, H1, Button } from "../styles";
 export const niceblue = "#40a5ed";
 export const babyblue = "#ecf6fd";
 export const twitterblue = "#1da1f2";
+
+const H3 = styled.h3`color: black;`;
 
 const FlexRow = styled.div`
   display: flex;
@@ -39,32 +41,16 @@ const Error = styled.div`
   margin-left: 8px;
 `;
 
-export const Button = styled.button`
-  display: inline-block;
-  height: 40px;
-  padding: 0 16px;
-  font-weight: 500;
-  max-width: 200px;
-  border-radius: 4px;
-  border: 1px solid ${niceblue};
-  text-decoration: none;
-  color: #0ae;
-  font-family: Roboto;
-  font-size: 15px;
-  background: transparent;
-  transition: all 0.45s;
-  text-align: center;
-  line-height: 36px;
-  margin-left: 8px;
-  &:hover {
-    background: #40a5ed;
-    color: white;
-  }
-`;
-
 const StyledTextField = styled(TextField)`margin: 20px;`;
 class Request extends Component {
-  state = { name: "", email: "a", text: "", page: "SupportCard", error: "" };
+  state = {
+    name: this.props.user.name,
+    email: this.props.user.email,
+    text: "",
+    page: "SupportCard",
+    error: "",
+    buttonText: "Enter Request"
+  };
 
   isNotEmpty = value => (value ? true : false);
   isValidEmail = email => /\S+@\S+\.\S+/.test(email);
@@ -105,7 +91,8 @@ class Request extends Component {
   };
   render() {
     return (
-      <form action="">
+      <Form action="">
+        <H3>New Supportcard Request</H3>
         <FlexCol>
           {/*<H1>{this.state.page} Request</H1> */}
           <FlexRow>
@@ -135,11 +122,11 @@ class Request extends Component {
             onChange={this.onChangeText}
           />
           <Button type="submit" onClick={this._onSubmit}>
-            Enter Request
+            {this.state.buttonText}
           </Button>
           {this.state.error && <Error>{this.state.error}</Error>}
         </FlexCol>
-      </form>
+      </Form>
     );
   }
 
@@ -148,8 +135,11 @@ class Request extends Component {
     if (!this.checkErrors(this.state)) {
       return;
     } else {
+      this.setState({ buttonText: "submitting.." });
       await this.props.createRequest({ variables: this.state });
-      setTimeout(() => this.props.onSubmit(), 2000);
+      setTimeout(() => {
+        this.props.onSubmit ? this.props.onSubmit() : this.props.history.push("/supportcard");
+      }, 2000);
     }
   };
 }
