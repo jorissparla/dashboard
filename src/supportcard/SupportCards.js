@@ -81,7 +81,7 @@ class SupportCards extends React.Component {
 
   render() {
     const { authenticated, isEditor, data: { loading, error, supportcards } } = this.props;
-    console.log(this.props);
+    console.log("SupportCards", this.props);
     const actions = [
       <FlatButton label="Cancel" primary={true} onClick={this.handleClose} />,
       <FlatButton label="Submit" primary={true} onClick={this.handleClose} />
@@ -136,9 +136,8 @@ class SupportCards extends React.Component {
           )}
           {filteredCards.map(
             ({ id, title, description, category: { name, color, backgroundcolor }, link }, i) => {
-              const vieweditLink = authenticated
-                ? `/supportcard/edit/${id}`
-                : `/supportcard/view/${id}`;
+              const vieweditLink =
+                authenticated && isEditor ? `/supportcard/edit/${id}` : `/supportcard/view/${id}`;
               return (
                 <SmallCard
                   color={backgroundcolor || cardColors[i % (cardColors.length - 1)].back}
@@ -149,7 +148,7 @@ class SupportCards extends React.Component {
                   category={name}
                   buttonText="🔎"
                   link={link}
-                  canEdit={authenticated}
+                  canEdit={authenticated && isEditor}
                   editLink={`${vieweditLink}`}
                 />
               );

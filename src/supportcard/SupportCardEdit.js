@@ -41,7 +41,7 @@ class SupportCardEdit extends React.Component {
 
   render() {
     const { loading, error, categories, supportcard, me } = this.props.data;
-    const { authenticated } = this.props;
+    const { authenticated, isEditor } = this.props;
     console.log("me", me);
     if (loading) {
       return <p>Loading ...</p>;
@@ -57,8 +57,8 @@ class SupportCardEdit extends React.Component {
           supportcard={supportcard}
           onSave={this.handleSave}
           onDelete={this.handleDelete}
-          readOnly={!authenticated}
-          authenticated={authenticated}
+          readOnly={!(authenticated && isEditor)}
+          authenticated={authenticated && isEditor}
           categories={categories}
         />
       </div>

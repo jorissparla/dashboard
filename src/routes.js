@@ -55,6 +55,10 @@ const NotFound = () => <h2>Not Found!</h2>;
 class AppRoutes extends React.Component {
   render() {
     const { user } = this.props;
+    if (!user) {
+      console.log("loading");
+      // return <div>Loading</div>;
+    }
     return (
       <Switch>
         <Route exact path="/test" component={DashBoardStatsNew} />
@@ -81,9 +85,15 @@ class AppRoutes extends React.Component {
           path="/supportcard/edit/:id"
           component={SupportCardEdit}
         />
-        <Route user={user} path="/supportcard/view/:id" component={SupportCardEdit} />
-        <AuthRoute
+        <EnhancedRoute
+          editors={["Admin", "PO"]}
+          user={user}
+          path="/supportcard/view/:id"
+          component={SupportCardEdit}
+        />
+        <EnhancedRoute
           allowed={["Admin"]}
+          editors={["Admin", "PO"]}
           user={user}
           exact
           path="/supportcard/add"

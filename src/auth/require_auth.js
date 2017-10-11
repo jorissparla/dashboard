@@ -24,7 +24,10 @@ export const AuthRoute = ({ component: Component, allowed, user, ...rest }) => {
 };
 export const EnhancedRoute = ({ component: Component, editors, user, ...rest }) => {
   console.log("EnhancedRoute", user, editors, rest);
-  let isEditor = editors.indexOf(user.role) !== -1;
+  let isEditor = false;
+  if (user) {
+    isEditor = editors.indexOf(user.role) !== -1;
+  }
   return (
     <Route
       {...rest}
