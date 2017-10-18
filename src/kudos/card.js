@@ -7,16 +7,15 @@ const Container = styled.div`
   margin: 10px;
   display: flex;
   flex-direction: column;
-  min-width: 200px;
+  min-width: 150px;
   min-height: 150px;
-  width: 20%;
-  
+  width: ${props => (props.width ? props.width : "20%")};
 `;
 
 const StyledImage = styled.img`
   width: 100%;
   height: 150px;
-   object-fit: cover;
+  object-fit: cover;
 `;
 
 const Title = styled.div`
@@ -24,6 +23,7 @@ const Title = styled.div`
   font-size: 18px;
   font-weight: 800;
   padding: 2px;
+  height: 50px;
 `;
 const Inner = styled.div`
   display: flex;
@@ -34,47 +34,40 @@ const Inner = styled.div`
 const StyledBody = styled.p`
   margin: 5px;
   margin-bottom: 20px;
-    font-size: 15px;
+  font-size: 15px;
+  height: 40px;
+  overflow: hidden;
 `;
-const Footer = styled.div`
-  margin: 5px;
-`;
+const Footer = styled.div`margin: 5px;`;
 
 const Outer = styled.div`
   display: flex;
-  flex-wrap:wrap;
+  flex-wrap: wrap;
 `;
-const imageURL =
-  "http://nlbavwtls22/ixs/_mugshots/infor_gmaggio_20170209161047.jpg";
-const URL2 =
-  "http://nlbavwtls22/ixs/_mugshots/infor_imohnen_20170209102233.JPG";
-const URL3 =
-  "https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/auth.png";
+const imageURL = "http://nlbavwtls22/ixs/_mugshots/infor_gmaggio_20170209161047.jpg";
+const URL2 = "http://nlbavwtls22/ixs/_mugshots/infor_imohnen_20170209102233.JPG";
+const URL3 = "https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/auth.png";
 
 const Card = ({
   image = imageURL,
   title = "Inke Mohnen",
   text = "Papier Und KartonFabrik",
   buttonText = "18 April 2017",
-  action = null
+  action = null,
+  width = "20%"
 }) => {
   return (
-    <Container>
+    <Container width={width}>
       <Paper zDepth={1}>
         <StyledImage src={image} />
         <Inner>
           <Title>{title}</Title>
-          <StyledBody>
-            {text}
-          </StyledBody>
+          <StyledBody>{text}</StyledBody>
         </Inner>
         <Footer>
-          <FlatButton style={{ color: "rgb(3,155,229)" }}>
-            {buttonText.toUpperCase()}{" "}
-          </FlatButton>
+          <FlatButton style={{ color: "rgb(3,155,229)" }}>{buttonText.toUpperCase()} </FlatButton>
         </Footer>
       </Paper>
-
     </Container>
   );
 };

@@ -3,7 +3,7 @@ import { gql, graphql } from "react-apollo";
 import styled from "styled-components";
 import { withRouter } from "react-router";
 import TextField from "material-ui/TextField";
-import { ViewText, Form, H1, Button } from "../styles";
+import { ViewText, Form, Button } from "../styles";
 export const niceblue = "#40a5ed";
 export const babyblue = "#ecf6fd";
 export const twitterblue = "#1da1f2";

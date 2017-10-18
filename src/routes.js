@@ -23,6 +23,7 @@ import KudoList1 from "./kudos/kudolist1";
 import KudoListComponent from "./kudos/kudolistcomponent";
 import KudoList from "./kudos/kudolist";
 import KudoListAll from "./kudos/kudolistall";
+import KudoListComponentNew from "./kudos/kudolistcomponentnew";
 import Signin from "./auth/signin";
 import Signout from "./auth/signout";
 import UpdatePassword from "./auth/resetpassword";
@@ -143,8 +144,7 @@ class AppRoutes extends React.Component {
         <Route path="/golivelist1" component={GoLiveList1} />
         <Route path="/golivelistside" component={GoLiveListSide} />
         <Route path="/golives" component={GoLives} />
-        <Route path="/kudos" component={KudoList} />
-        <Route path="/kudos1" component={KudoList1} />
+        <Route path="/kudos" component={KudoListComponentNew} />
         <Route path="/kudosall" component={KudoListAll} />
         <Route path="/kudolistcomponent" component={KudoListComponent} />
         <Route path="/signin" component={Signin} />

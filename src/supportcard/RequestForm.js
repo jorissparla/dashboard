@@ -1,7 +1,5 @@
 import React from "react";
-import { TextArea, Input, ViewText, Button, FlexCol, FlexRow, Avatar } from "../styles";
-import SelectField from "material-ui/SelectField";
-import MenuItem from "material-ui/MenuItem";
+import { TextArea, ViewText, Button, FlexCol, FlexRow } from "../styles";
 import AutoComplete from "material-ui/AutoComplete";
 
 class RequestForm extends React.Component {
@@ -18,7 +16,7 @@ class RequestForm extends React.Component {
     this.setState({ owner: v });
   };
   render() {
-    const { name = "", text = "", createdAt = "", accounts } = this.props;
+    const { name = "", createdAt = "", accounts } = this.props;
     const datasource = accounts.map(item => item.fullname);
     return (
       <form>
@@ -53,7 +51,10 @@ class RequestForm extends React.Component {
             />
           </FlexRow>
           <Button label="Update" primary={true} onClick={this.props.handleClose} width="100px">
-            Submit 💪
+            Submit{" "}
+            <span role="img" aria-label="Snowman">
+              💪
+            </span>
           </Button>
         </FlexCol>
       </form>

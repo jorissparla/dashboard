@@ -12,7 +12,6 @@ export const AuthRoute = ({ component: Component, allowed, user, ...rest }) => {
           return <Redirect to={{ pathname: "/" }} />;
         }
         if (allowed.indexOf(user.role || []) >= 0) {
-          console.log("user ", user.role);
           return <Component {...props} user={user} />;
         } else {
           console.log("not allowed user ", user.role);
@@ -23,7 +22,6 @@ export const AuthRoute = ({ component: Component, allowed, user, ...rest }) => {
   );
 };
 export const EnhancedRoute = ({ component: Component, editors, user, ...rest }) => {
-  console.log("EnhancedRoute", user, editors, rest);
   let isEditor = false;
   if (user) {
     isEditor = editors.indexOf(user.role) !== -1;
@@ -32,7 +30,6 @@ export const EnhancedRoute = ({ component: Component, editors, user, ...rest }) 
     <Route
       {...rest}
       render={props => {
-        console.log(editors);
         return <Component {...props} user={user} isEditor={isEditor} />;
       }}
     />

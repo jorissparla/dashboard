@@ -33,17 +33,12 @@ const styles = {
 };
 
 const getDay = date =>
-  moment(date).format("MMM").toUpperCase().substr(0, 3) +
-  moment(date).format("DD");
+  moment(date)
+    .format("MMM")
+    .toUpperCase()
+    .substr(0, 3) + moment(date).format("DD");
 
-const colorAr = [
-  "#BA68C8",
-  "#81D4FA",
-  "#FF7043",
-  "#8BC34A",
-  "#FFFF00",
-  "#E57373"
-];
+const colorAr = ["#BA68C8", "#81D4FA", "#FF7043", "#8BC34A", "#FFFF00", "#E57373"];
 
 function getColor(index, colorAr) {
   return colorAr[index % colorAr.length];
@@ -58,8 +53,7 @@ class GoLiveList extends React.Component {
     const { avatarStyle, dateStyle } = styles;
     return golives.map((item, index) => {
       return (
-        <div key={item.customername}>
-
+        <div key={index}>
           <ListItem
             leftAvatar={
               <div style={avatarStyle}>
@@ -68,28 +62,15 @@ class GoLiveList extends React.Component {
                   style={{ fontFamily: "Oswald", fontSize: "18px" }}
                   name={item.customername}
                   color={getColor(index, colorAr)}
-                  colors={[
-                    "#BA68C8",
-                    "#81D4FA",
-                    "#FF7043",
-                    "#8BC34A",
-                    "#FFFF00",
-                    "#E57373"
-                  ]}
+                  colors={["#BA68C8", "#81D4FA", "#FF7043", "#8BC34A", "#FFFF00", "#E57373"]}
                 />
                 <div style={dateStyle}>{getDay(item.date)}</div>
               </div>
             }
             primaryText={item.customername}
-            secondaryText={
-              <p>
-                {item.comments}
-              </p>
-            }
+            secondaryText={<p>{item.comments}</p>}
             secondaryTextLines={2}
-            rightAvatar={
-              <div style={{ fontWeight: "bold" }}>{item.version}</div>
-            }
+            rightAvatar={<div style={{ fontWeight: "bold" }}>{item.version}</div>}
           />
           <Divider inset={true} />
         </div>

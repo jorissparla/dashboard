@@ -64,6 +64,7 @@ class KudoListComponent extends Component {
           text={customer_name}
           title={ownerrep_name}
           buttonText={dateToDMYString(survey_date)}
+          width="10%"
         />
       );
     });

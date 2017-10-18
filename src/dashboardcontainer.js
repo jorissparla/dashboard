@@ -7,6 +7,7 @@ import HistoryDayAll from "./charts/historydayallcontainer";
 //import NewsListContainer from "./news/newslistcontainer";
 import NewsPage from "./news/newspage";
 import SupportCards from "./supportcard/SupportCards";
+import KudoList from "./kudos/kudolistcomponentnew";
 //import Award from './awards/award'
 
 class DashBoardContainer extends Component {
@@ -19,7 +20,6 @@ class DashBoardContainer extends Component {
   }
   componentDidMount() {
     const sel = parseInt(this.props.match.params.id, 2);
-
     if (sel) {
       this.setState({ index: 0, sel: sel });
     }
@@ -60,6 +60,7 @@ class DashBoardContainer extends Component {
       case 7:
         return <NewsPage region={region} />;
       case 5:
+        return <KudoList />;
       case 6:
         return <DashBoard region={region} />;
       case 2:

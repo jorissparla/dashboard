@@ -81,7 +81,6 @@ class SupportCards extends React.Component {
 
   render() {
     const { authenticated, isEditor, data: { loading, error, supportcards } } = this.props;
-    console.log("SupportCards", this.props);
     const actions = [
       <FlatButton label="Cancel" primary={true} onClick={this.handleClose} />,
       <FlatButton label="Submit" primary={true} onClick={this.handleClose} />
@@ -146,7 +145,7 @@ class SupportCards extends React.Component {
                   title={title}
                   text={description}
                   category={name}
-                  buttonText="🔎"
+                  buttonText="📂"
                   link={link}
                   canEdit={authenticated && isEditor}
                   editLink={`${vieweditLink}`}
