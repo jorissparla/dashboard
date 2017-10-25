@@ -11,6 +11,7 @@ import PeopleIcon from "material-ui/svg-icons/social/people";
 import ChatIcon from "material-ui/svg-icons/communication/chat";
 import PageIcon from "material-ui/svg-icons/social/pages";
 import LinkIcon from "material-ui/svg-icons/content/link";
+import GoLiveIcon from "material-ui/svg-icons/action/flight-takeoff";
 import MenuIcon from "material-ui/svg-icons/navigation/menu";
 import IconMenu from "material-ui/IconMenu";
 import Divider from "material-ui/Divider";
@@ -82,6 +83,13 @@ class Header extends React.Component {
           }}
         />
         <Divider />
+        <MenuItem
+          primaryText={<div style={{ color: "black" }}>Golives</div>}
+          leftIcon={<GoLiveIcon />}
+          onClick={() => {
+            history.push("/golives");
+          }}
+        />
         <MenuItem
           primaryText={<div style={{ color: "black" }}>Students</div>}
           leftIcon={<PeopleIcon />}
