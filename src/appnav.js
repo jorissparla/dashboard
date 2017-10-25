@@ -54,7 +54,13 @@ class Header extends React.Component {
   }
 
   hamburgerMenu() {
-    const { history } = this.props;
+    const { history, authenticated, user } = this.props;
+
+    let validRole = false;
+    if (user) {
+      validRole = user.role !== "Guest";
+    }
+    //console.log("AUTH", authenticated, validRole, user.role !== "Guest");
     return (
       <IconMenu
         menuStyle={{ color: "white" }}
@@ -74,15 +80,7 @@ class Header extends React.Component {
           }}
         />
         <Divider />
-        <MenuItem
-          primaryText={<div style={{ color: "black" }}>Courses</div>}
-          leftIcon={<PageIcon style={{ root: { color: "black" } }} />}
-          onClick={() => {
-            this.props.history.push("/courses");
-            //window.location.href = location.href;
-          }}
-        />
-        <Divider />
+
         <MenuItem
           primaryText={<div style={{ color: "black" }}>Golives</div>}
           leftIcon={<GoLiveIcon />}
@@ -90,13 +88,7 @@ class Header extends React.Component {
             history.push("/golives");
           }}
         />
-        <MenuItem
-          primaryText={<div style={{ color: "black" }}>Students</div>}
-          leftIcon={<PeopleIcon />}
-          onClick={() => {
-            history.push("/students");
-          }}
-        />
+
         <Divider />
         <MenuItem
           primaryText={<div style={{ color: "black" }}>SupportCards</div>}
@@ -122,6 +114,27 @@ class Header extends React.Component {
           }}
         />
         <Divider />
+        {authenticated &&
+          validRole && (
+            <MenuItem
+              primaryText={<div style={{ color: "black" }}>Courses</div>}
+              leftIcon={<PageIcon style={{ root: { color: "black" } }} />}
+              onClick={() => {
+                this.props.history.push("/courses");
+                //window.location.href = location.href;
+              }}
+            />
+          )}
+        {authenticated &&
+          validRole && (
+            <MenuItem
+              primaryText={<div style={{ color: "black" }}>Students</div>}
+              leftIcon={<PeopleIcon />}
+              onClick={() => {
+                history.push("/students");
+              }}
+            />
+          )}
         <MenuItem primaryText="Sign out" />
       </IconMenu>
     );
