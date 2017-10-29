@@ -11,6 +11,7 @@ import PeopleIcon from "material-ui/svg-icons/social/people";
 import ChatIcon from "material-ui/svg-icons/communication/chat";
 import PageIcon from "material-ui/svg-icons/social/pages";
 import LinkIcon from "material-ui/svg-icons/content/link";
+import RequestListIcon from "material-ui/svg-icons/av/playlist-add";
 import GoLiveIcon from "material-ui/svg-icons/action/flight-takeoff";
 import MenuIcon from "material-ui/svg-icons/navigation/menu";
 import IconMenu from "material-ui/IconMenu";
@@ -97,6 +98,17 @@ class Header extends React.Component {
             history.push("/supportcard");
           }}
         />
+        {authenticated && (
+          <MenuItem
+            primaryText={
+              <div style={{ color: "black" }}>Requests SupportCards</div>
+            }
+            leftIcon={<RequestListIcon />}
+            onClick={() => {
+              history.push("/requestlist");
+            }}
+          />
+        )}
         <Divider />
         <MenuItem
           primaryText={<div style={{ color: "black" }}>News</div>}
@@ -106,13 +118,15 @@ class Header extends React.Component {
           }}
         />
         <Divider />
-        <MenuItem
-          primaryText={<div style={{ color: "black" }}>Chat</div>}
-          leftIcon={<ChatIcon />}
-          onClick={() => {
-            history.push("/chat");
-          }}
-        />
+        {authenticated && (
+          <MenuItem
+            primaryText={<div style={{ color: "black" }}>Chat</div>}
+            leftIcon={<ChatIcon />}
+            onClick={() => {
+              history.push("/chat");
+            }}
+          />
+        )}
         <Divider />
         {authenticated &&
           validRole && (
@@ -151,20 +165,29 @@ class Header extends React.Component {
   renderButtons() {
     if (this.props.authenticated) {
       return (
-        <FlatButton onClick={() => this.logOutLink()} label="Logout" style={{ color: "white" }}>
+        <FlatButton
+          onClick={() => this.logOutLink()}
+          label="Logout"
+          style={{ color: "white" }}
+        >
           {/*  <Avatar src="https://randomuser.me/api/portraits/men/20.jpg" /> */}
         </FlatButton>
       );
     } else {
       return (
-        <FlatButton onClick={() => this.logInLink()} label="Login" style={{ color: "white" }} />
+        <FlatButton
+          onClick={() => this.logInLink()}
+          label="Login"
+          style={{ color: "white" }}
+        />
       );
     }
   }
 
   renderPicture() {
     const picture =
-      localStorage.getItem("picture") || "https://randomuser.me/api/portraits/men/20.jpg";
+      localStorage.getItem("picture") ||
+      "https://randomuser.me/api/portraits/men/20.jpg";
     if (this.props.authenticated) {
       return <Avatar src={picture} />;
     } else return <div />;
@@ -179,7 +202,10 @@ class Header extends React.Component {
         </ToolbarGroup>
 
         <ToolbarGroup>
-          <ToolbarTitle text="Infor Support Dashboard" style={{ color: "white" }} />
+          <ToolbarTitle
+            text="Infor Support Dashboard"
+            style={{ color: "white" }}
+          />
         </ToolbarGroup>
 
         <ToolbarGroup>{this.renderButtons()}</ToolbarGroup>
@@ -201,6 +227,7 @@ class Header extends React.Component {
   }
 
   render() {
+    console.log("Header", this.props);
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div>

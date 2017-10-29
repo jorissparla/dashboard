@@ -7,6 +7,17 @@ export const BasicFlex = Typography.extend`
 `;
 export const BG = styled.div`background: #e6ecf0;`;
 
+export const CheckBox = styled.input.attrs({
+  type: "checkbox",
+  margin: "10px"
+})`
+  visibility: hidden;
+  background: #c5c5c5;
+  :hover {
+    background: "#1da1f2";
+  }
+`;
+
 export const niceblue = "#40a5ed";
 export const babyblue = "#ecf6fd";
 export const twitterblue = "#1da1f2";
@@ -27,6 +38,7 @@ export const Input = styled.input`
   border-radius: 4px;
   -webkit-transition: all 0.3s;
   transition: all 0.3s;
+  resize: none;
 `;
 export const FlexRow = styled.div`
   display: flex;
@@ -50,7 +62,10 @@ export const Button = styled.a`
   font-weight: 500;
   border-radius: 4px;
   border: 1px solid
-    ${props => (props.bordercolor ? props.bordercolor : props.color ? props.color : niceblue)};
+    ${props =>
+      props.bordercolor
+        ? props.bordercolor
+        : props.color ? props.color : niceblue};
   text-decoration: none;
   color: ${props => (props.color ? props.color : niceblue)};
   font-family: "Segoe UI", Roboto;

@@ -1,0 +1,84 @@
+import React, { Component } from "react";
+import { gql, graphql, compose } from "react-apollo";
+import { withRouter } from "react-router-dom";
+import moment from "moment";
+import RequestForm from "./RequestForm";
+
+class RequestEdit extends Component {
+  state = {};
+
+  handleSave = async values => {
+    console.log("handleSave", values);
+    const { accounts, ...other } = values;
+    const input = {
+      id: other.id,
+      assigned: other.assigned,
+      text: other.text,
+      complete: other.complete,
+      updatedAt: moment().format("YYYY-MM-DD")
+    };
+    console.log(input);
+    const result = await this.props.updateRequest({ variables: { input } });
+    this.props.history.push("/requestlist");
+    console.log("result", result);
+  };
+
+  render() {
+    if (this.props.request.loading) {
+      return <div>Loading...</div>;
+    }
+    if (this.props.request.error) {
+      return <div>Error...</div>;
+    }
+
+    const { request, accounts } = this.props.request;
+
+    return (
+      <RequestForm
+        request={request}
+        accounts={accounts}
+        onSave={this.handleSave}
+        onCancel={() => {
+          console.log("cancel");
+          this.props.history.push("/requestlist");
+        }}
+      />
+    );
+  }
+}
+
+const queryRequest = gql`
+  query getRequest($id: ID!) {
+    request(id: $id) {
+      id
+      name
+      text
+      assigned
+      complete
+      createdAt
+      updatedAt
+    }
+    accounts(roles: ["PO", "Admin"]) {
+      id
+      fullname
+      picture {
+        data
+      }
+    }
+  }
+`;
+const updateRequest = gql`
+  mutation updateRequest($input: InputRequestType) {
+    updateRequest(input: $input) {
+      id
+    }
+  }
+`;
+
+export default compose(
+  graphql(queryRequest, {
+    name: "request",
+    options: ownProps => ({ variables: { id: ownProps.match.params.id } })
+  }),
+  graphql(updateRequest, { name: "updateRequest" })
+)(withRouter(RequestEdit));

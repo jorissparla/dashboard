@@ -19,9 +19,9 @@ import GoLiveList1 from "./golives/golivelist1";
 import GoLiveListSide from "./golives/golivelistside";
 import GoLives from "./golives/golives";
 import Award from "./awards/award";
-import KudoList1 from "./kudos/kudolist1";
+//import KudoList1 from "./kudos/kudolist1";
 import KudoListComponent from "./kudos/kudolistcomponent";
-import KudoList from "./kudos/kudolist";
+//import KudoList from "./kudos/kudolist";
 import KudoListAll from "./kudos/kudolistall";
 import KudoListComponentNew from "./kudos/kudolistcomponentnew";
 import Signin from "./auth/signin";
@@ -36,7 +36,7 @@ import NewsItemContainer from "./news/newsitemcontainer";
 import NewsItemAddContainer from "./news/newsitemaddcontainer";
 
 import SupportCards from "./supportcard/SupportCards";
-import RequestForm from "./supportcard/Request";
+import RequestEditAdd from "./supportcard/Request";
 import SupportCardEdit from "./supportcard/SupportCardEdit";
 import SupportCardAdd from "./supportcard/SupportCardAdd";
 import CourseList from "./courses/CourseList";
@@ -50,6 +50,7 @@ import AddStudentsToCourse from "./courses/AddStudentsToCourse";
 //import ChatGraphContainer from "./charts/ChatGraphContainer";
 import DashBoardStatsNew from "./DashBoardStatsNew";
 import RequestList from "./supportcard/RequestContainer";
+import RequestEdit from "./supportcard/RequestEdit";
 
 const NotFound = () => <h2>Not Found!</h2>;
 
@@ -63,11 +64,28 @@ class AppRoutes extends React.Component {
     return (
       <Switch>
         <Route exact path="/test" component={DashBoardStatsNew} />
-        <Route exact path="/requestlist" component={RequestList} />
+        <EnhancedRoute
+          editors={["Admin", "PO"]}
+          user={user}
+          exact
+          path="/requestlist"
+          component={RequireAuth(RequestList)}
+        />
+        <EnhancedRoute
+          editors={["Admin", "PO"]}
+          user={user}
+          path="/supportcard/request/:id"
+          component={RequireAuth(RequestEdit)}
+        />
         <Route exact path="/" component={DashBoardContainer} />
         <Route exact path="/region/:region" component={DashBoardContainer} />
         <Route exact path="/q/:id" component={DashBoardContainer} />
-        <Route allowed={["Admin"]} user={user} path="/main/1" component={DashBoard} />
+        <Route
+          allowed={["Admin"]}
+          user={user}
+          path="/main/1"
+          component={DashBoard}
+        />
         <Route path="/main/0" component={DashBoard0} />
         <Route path="/main/2" component={DashBoardStats} />
         <Route exact path="/alerts" component={RequireAuth(AlertsList)} />
@@ -84,7 +102,7 @@ class AppRoutes extends React.Component {
           allowed={["Admin", "PO"]}
           user={user}
           path="/supportcard/edit/:id"
-          component={SupportCardEdit}
+          component={RequireAuth(SupportCardEdit)}
         />
         <EnhancedRoute
           editors={["Admin", "PO"]}
@@ -105,7 +123,7 @@ class AppRoutes extends React.Component {
           user={user}
           exact
           path="/supportcard/request"
-          component={RequestForm}
+          component={RequestEditAdd}
         />
         <AuthRoute
           allowed={["Admin", "PO", "SU"]}

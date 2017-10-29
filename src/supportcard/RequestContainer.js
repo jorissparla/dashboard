@@ -1,38 +1,40 @@
 import React, { Component } from "react";
 import { gql, graphql } from "react-apollo";
 import { List, ListItem } from "material-ui/List";
+import { withRouter } from "react-router-dom";
+import Avatar from "material-ui/Avatar";
 import Divider from "material-ui/Divider";
-import Dialog from "material-ui/Dialog";
-import { Loading, Button } from "../styles";
-import RequestForm from "./RequestForm";
+import NewIcon from "material-ui/svg-icons/av/new-releases";
+import moment from "moment";
+import { Loading } from "../styles";
+
+const defaultPicture = "http://nlbavwtls22/images/male.png";
 
 const RequestItem = ({ item, handleClick }) => {
-  const { id, name, text, createdAt } = item;
+  const { id, name, text, createdAt, account } = item;
+  const picture = account
+    ? account.picture ? account.picture.data : defaultPicture
+    : defaultPicture;
+
+  //const isNew = moment().add(-7, "days") > createdAt;
+  const isNew = Date.parse(createdAt) > moment().add(-7, "days");
   return (
     <ListItem
       key={id}
+      leftAvatar={<Avatar src={picture} />}
+      rightAvatar={isNew ? <NewIcon color={"#3db5e8"} /> : <div />}
       primaryText={text}
-      secondaryText={`requested by ${name} at ${createdAt}`}
+      secondaryText={`requested by ${name} , ${moment(
+        Date.parse(createdAt)
+      ).fromNow()}`}
       onClick={() => handleClick(item)}
     />
   );
 };
 
 class RequestContainer extends Component {
-  state = { showRequest: false, selectedItem: {} };
-
-  handleClose = () => this.setState({ showRequest: false, selectedItem: {} });
-  handleOpen = e => {
-    console.log(e);
-    this.setState({ showRequest: true, selectedItem: e });
-  };
   render() {
-    const { data: { loading, error, requests, accounts } } = this.props;
-    const actions = [
-      <Button label="Cancel" primary={true} bordercolor="transparent" onClick={this.handleClose}>
-        Cancel
-      </Button>
-    ];
+    const { data: { loading, error, requests } } = this.props;
 
     //
     if (loading) {
@@ -41,20 +43,17 @@ class RequestContainer extends Component {
     if (error) return <h2>{error}</h2>;
     return (
       <div>
+        <h2>Requests</h2>
         <List style={{ backgroundColor: "white" }}>
           {requests.map(item => [
-            <RequestItem item={item} handleClick={this.handleOpen} />,
+            <RequestItem
+              item={item}
+              handleClick={() =>
+                this.props.history.push(`/supportcard/request/${item.id}`)}
+            />,
             <Divider />
           ])}
         </List>
-        <Dialog
-          modal={true}
-          open={this.state.showRequest}
-          actions={actions}
-          onRequestClose={() => this.setState({ showRequest: false })}
-        >
-          <RequestForm {...this.state.selectedItem} accounts={accounts} />
-        </Dialog>
       </div>
     );
   }
@@ -68,15 +67,15 @@ const queryRequests = gql`
       text
       createdAt
       updatedAt
-    }
-    accounts(roles: ["Admin"]) {
-      id
-      fullname
-      picture {
-        data
+      account {
+        picture {
+          data
+        }
       }
     }
   }
 `;
 
-export default graphql(queryRequests, { name: "data" })(RequestContainer);
+export default graphql(queryRequests, { name: "data" })(
+  withRouter(RequestContainer)
+);
