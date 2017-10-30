@@ -6,7 +6,9 @@ import Subheader from "material-ui/Subheader";
 import UserAvatar from "react-user-avatar";
 import { fetchGoLives } from "../actions";
 import moment from "moment";
+import styled from "styled-components";
 
+const P = styled.p`white-space: pre-line;`;
 const styles = {
   listStyle: {
     backgroundColor: "white",
@@ -75,7 +77,7 @@ class GoLiveList extends React.Component {
               </div>
             }
             primaryText={item.customername}
-            secondaryText={<p>{item.comments}</p>}
+            secondaryText={<P>{item.comments}</P>}
             secondaryTextLines={2}
             rightAvatar={<div style={{ fontWeight: "bold" }}>{item.version}</div>}
           />
