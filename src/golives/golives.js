@@ -44,6 +44,13 @@ function getColor(index, colorAr) {
   return colorAr[index % colorAr.length];
 }
 
+function shortCustomerName(name) {
+  return name
+    .split(" ")
+    .slice(0, 2)
+    .join(" ");
+}
+
 class GoLiveList extends React.Component {
   componentDidMount() {
     this.props.fetchGoLives();
@@ -60,7 +67,7 @@ class GoLiveList extends React.Component {
                 <UserAvatar
                   size="48"
                   style={{ fontFamily: "Oswald", fontSize: "18px" }}
-                  name={item.customername}
+                  name={shortCustomerName(item.customername)}
                   color={getColor(index, colorAr)}
                   colors={["#BA68C8", "#81D4FA", "#FF7043", "#8BC34A", "#FFFF00", "#E57373"]}
                 />
