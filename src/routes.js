@@ -80,12 +80,7 @@ class AppRoutes extends React.Component {
         <Route exact path="/" component={DashBoardContainer} />
         <Route exact path="/region/:region" component={DashBoardContainer} />
         <Route exact path="/q/:id" component={DashBoardContainer} />
-        <Route
-          allowed={["Admin"]}
-          user={user}
-          path="/main/1"
-          component={DashBoard}
-        />
+        <Route allowed={["Admin"]} user={user} path="/main/1" component={DashBoard} />
         <Route path="/main/0" component={DashBoard0} />
         <Route path="/main/2" component={DashBoardStats} />
         <Route exact path="/alerts" component={RequireAuth(AlertsList)} />
@@ -98,7 +93,8 @@ class AppRoutes extends React.Component {
           path="/supportcard"
           component={SupportCards}
         />
-        <AuthRoute
+        <EnhancedRoute
+          editors={["Admin", "PO"]}
           allowed={["Admin", "PO"]}
           user={user}
           path="/supportcard/edit/:id"

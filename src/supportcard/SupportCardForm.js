@@ -5,12 +5,9 @@ import Chip from "material-ui/Chip";
 import { SelectField } from "redux-form-material-ui";
 import Paper from "material-ui/Paper";
 import MenuItem from "material-ui/MenuItem";
+import moment from "moment";
 import { CardSection, Input } from "../common";
-import {
-  NormalRaisedButton,
-  CancelRaisedButton,
-  DeleteButton
-} from "../common/TitleBar";
+import { NormalRaisedButton, CancelRaisedButton, DeleteButton } from "../common/TitleBar";
 
 const owners = [
   { id: "Ricardo Exposito", name: "Ricardo Exposito" },
@@ -40,7 +37,7 @@ const SupportCardForm = props => {
     history
   } = props;
   const readOnly = !authenticated;
-  const { updatedAt } = supportcard;
+  const updatedAt = supportcard ? supportcard.updatedAt : moment().format("YYYY-MM-DD");
   return (
     <Paper zDepth={1} style={paperStyle}>
       <form onSubmit={handleSubmit(onSave)}>
@@ -85,9 +82,7 @@ const SupportCardForm = props => {
           underlineShow={true}
           underlineStyle={{ borderColor: "#039BE5" }}
         >
-          {categories.map(({ id, name }) => (
-            <MenuItem key={id} value={name} primaryText={name} />
-          ))}
+          {categories.map(({ id, name }) => <MenuItem key={id} value={name} primaryText={name} />)}
         </Field>
         <Field
           name="owner"
@@ -99,9 +94,7 @@ const SupportCardForm = props => {
           underlineShow={true}
           underlineStyle={{ borderColor: "#039BE5" }}
         >
-          {owners.map(({ id, name }) => (
-            <MenuItem key={id} value={name} primaryText={name} />
-          ))}
+          {owners.map(({ id, name }) => <MenuItem key={id} value={name} primaryText={name} />)}
         </Field>
 
         <Field
@@ -114,8 +107,7 @@ const SupportCardForm = props => {
           component={Input}
           underlineShow={true}
           style={{ fontSize: 14 }}
-          onClick={() =>
-            readOnly ? window.open(initialValues.link) : console.log("link")}
+          onClick={() => (readOnly ? window.open(initialValues.link) : console.log("link"))}
         />
         <CardSection>
           {!readOnly && <NormalRaisedButton label="Save" type="submit" />}
@@ -126,18 +118,10 @@ const SupportCardForm = props => {
             onClick={() => setTimeout(history.push("/supportcard"), 500)}
           />
           {!readOnly &&
-            supportcard && (
-              <DeleteButton
-                label="Delete"
-                onClick={() => onDelete(supportcard)}
-              />
-            )}
+            supportcard && <DeleteButton label="Delete" onClick={() => onDelete(supportcard)} />}
           {readOnly &&
             supportcard && (
-              <DeleteButton
-                label="View Link"
-                onClick={() => window.open(initialValues.link)}
-              />
+              <DeleteButton label="View Link" onClick={() => window.open(initialValues.link)} />
             )}
           <Chip style={{ margin: 4 }}>{`Last updated at ${updatedAt}`}</Chip>
         </CardSection>
