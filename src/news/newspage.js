@@ -11,6 +11,8 @@ const Row = styled.div`
   min-height: 100px;
   border-bottom: solid 1px lightgrey;
   overflow: hidden;
+  margin-left: 10px;
+  margin-right: 10px;
 `;
 
 const Title = styled.h3`
@@ -22,7 +24,8 @@ const Title = styled.h3`
 const InfoSection = styled.div`
   display: flex;
   flex-direction: column;
-  width: 25%;
+  width: 200px;
+  margin: 10px;
 `;
 
 const DateSection = styled.div`
@@ -33,8 +36,10 @@ const DateSection = styled.div`
 `;
 
 const PrimaryText = styled.h3`
+  display: flex;
   font-weight: 300;
   font-family: Raleway;
+  color: #0276ae;
 `;
 
 const SecondaryText = styled.div`
@@ -50,6 +55,7 @@ const TextSection = styled.div`
   font-family: Roboto;
   flex-direction: column;
   justify-content: flex-start;
+  align-items: flex-start;
 `;
 
 const Avatar = styled.img`
