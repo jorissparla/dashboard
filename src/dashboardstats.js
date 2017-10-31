@@ -11,7 +11,7 @@ import { StyleLoaderM } from "./common";
 const DashBoardStats = props => {
   let { data = [], region } = props;
   console.log("DashBoardStats", props);
-  const team = props.match.params.team;
+  const team = props.match ? props.match.params.team || "" : "";
   if (team) {
     data.push(team);
   }
