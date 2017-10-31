@@ -5,7 +5,7 @@
   "devDependencies": {
     "babel-polyfill": "^6.26.0",
     "prettier": "^1.7.0",
-    "react-scripts": "1.0.13",
+    "react-scripts": "1.0.15",
     "webpack-bundle-analyzer": "^2.8.2"
   },
   "dependencies": {

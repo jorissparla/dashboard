@@ -18,6 +18,22 @@ export const CheckBox = styled.input.attrs({
   }
 `;
 
+export const Divider = styled.hr`
+  margin: -1px 0px 0px 72px;
+  height: 1px;
+  border: none;
+  background-color: rgb(224, 224, 224);
+  display: block;
+  unicode-bidi: isolate;
+  -webkit-margin-before: 0.5em;
+  -webkit-margin-after: 0.5em;
+  -webkit-margin-start: auto;
+  -webkit-margin-end: auto;
+  overflow: hidden;
+  border-style: inset;
+  border-width: 1px;
+`;
+
 export const niceblue = "#40a5ed";
 export const babyblue = "#ecf6fd";
 export const twitterblue = "#1da1f2";
@@ -62,10 +78,7 @@ export const Button = styled.a`
   font-weight: 500;
   border-radius: 4px;
   border: 1px solid
-    ${props =>
-      props.bordercolor
-        ? props.bordercolor
-        : props.color ? props.color : niceblue};
+    ${props => (props.bordercolor ? props.bordercolor : props.color ? props.color : niceblue)};
   text-decoration: none;
   color: ${props => (props.color ? props.color : niceblue)};
   font-family: "Segoe UI", Roboto;

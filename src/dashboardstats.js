@@ -9,7 +9,12 @@ import HistoryChartContainer from "./charts/historycontainer";
 import { StyleLoaderM } from "./common";
 
 const DashBoardStats = props => {
-  const { data, region } = props;
+  let { data = [], region } = props;
+  console.log("DashBoardStats", props);
+  const team = props.match.params.team;
+  if (team) {
+    data.push(team);
+  }
   return (
     <div className="row">
       <StyleLoaderM />
