@@ -13,9 +13,10 @@ const Row = styled.div`
   overflow: hidden;
 `;
 
-const Title = styled.h2`
-  font-family: Roboto;
+const Title = styled.h3`
+  font-family: Raleway;
   font-weight: 200;
+  padding-left: 20px;
 `;
 
 const InfoSection = styled.div`
@@ -25,14 +26,21 @@ const InfoSection = styled.div`
 `;
 
 const DateSection = styled.div`
-  justify-content: center;
+  padding-left: 10px;
+  justify-content: flex-start;
   font-family: Roboto;
   display: flex;
 `;
 
-const PrimaryText = styled.h2`font-weight: 300;`;
+const PrimaryText = styled.h3`
+  font-weight: 300;
+  font-family: Raleway;
+`;
 
 const SecondaryText = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  font-size: 14px;
   padding-bottom: 10px;
   white-space: pre-line;
 `;
@@ -41,6 +49,7 @@ const TextSection = styled.div`
   display: flex;
   font-family: Roboto;
   flex-direction: column;
+  justify-content: flex-start;
 `;
 
 const Avatar = styled.img`
