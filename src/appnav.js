@@ -80,8 +80,25 @@ class Header extends React.Component {
             history.push("/");
           }}
         />
+        <MenuItem
+          primaryText={<div style={{ color: "black", marginLeft: 10 }}>Logistics</div>}
+          onClick={() => {
+            history.push("/team/Logistics");
+          }}
+        />
+        <MenuItem
+          primaryText={<div style={{ color: "black", marginLeft: 10 }}>Finance</div>}
+          onClick={() => {
+            history.push("/team/Finance");
+          }}
+        />
+        <MenuItem
+          primaryText={<div style={{ color: "black", marginLeft: 10 }}>Tools</div>}
+          onClick={() => {
+            history.push("/team/Tools");
+          }}
+        />
         <Divider />
-
         <MenuItem
           primaryText={<div style={{ color: "black" }}>Golives</div>}
           leftIcon={<GoLiveIcon />}
@@ -89,7 +106,6 @@ class Header extends React.Component {
             history.push("/golives");
           }}
         />
-
         <Divider />
         <MenuItem
           primaryText={<div style={{ color: "black" }}>SupportCards</div>}
@@ -100,9 +116,7 @@ class Header extends React.Component {
         />
         {authenticated && (
           <MenuItem
-            primaryText={
-              <div style={{ color: "black" }}>Requests SupportCards</div>
-            }
+            primaryText={<div style={{ color: "black" }}>Requests SupportCards</div>}
             leftIcon={<RequestListIcon />}
             onClick={() => {
               history.push("/requestlist");
@@ -165,29 +179,20 @@ class Header extends React.Component {
   renderButtons() {
     if (this.props.authenticated) {
       return (
-        <FlatButton
-          onClick={() => this.logOutLink()}
-          label="Logout"
-          style={{ color: "white" }}
-        >
+        <FlatButton onClick={() => this.logOutLink()} label="Logout" style={{ color: "white" }}>
           {/*  <Avatar src="https://randomuser.me/api/portraits/men/20.jpg" /> */}
         </FlatButton>
       );
     } else {
       return (
-        <FlatButton
-          onClick={() => this.logInLink()}
-          label="Login"
-          style={{ color: "white" }}
-        />
+        <FlatButton onClick={() => this.logInLink()} label="Login" style={{ color: "white" }} />
       );
     }
   }
 
   renderPicture() {
     const picture =
-      localStorage.getItem("picture") ||
-      "https://randomuser.me/api/portraits/men/20.jpg";
+      localStorage.getItem("picture") || "https://randomuser.me/api/portraits/men/20.jpg";
     if (this.props.authenticated) {
       return <Avatar src={picture} />;
     } else return <div />;
@@ -202,10 +207,7 @@ class Header extends React.Component {
         </ToolbarGroup>
 
         <ToolbarGroup>
-          <ToolbarTitle
-            text="Infor Support Dashboard"
-            style={{ color: "white" }}
-          />
+          <ToolbarTitle text="Infor Support Dashboard" style={{ color: "white" }} />
         </ToolbarGroup>
 
         <ToolbarGroup>{this.renderButtons()}</ToolbarGroup>

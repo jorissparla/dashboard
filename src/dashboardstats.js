@@ -12,6 +12,9 @@ const DashBoardStats = props => {
   let { data = [], region } = props;
   console.log("DashBoardStats", props);
   const team = props.match ? props.match.params.team || "" : "";
+  if (!region) {
+    region = props.match ? props.match.params.region || "EMEA" : "EMEA";
+  }
   if (team) {
     data.push(team);
   }
