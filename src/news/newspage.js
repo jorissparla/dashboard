@@ -11,28 +11,41 @@ const Row = styled.div`
   min-height: 100px;
   border-bottom: solid 1px lightgrey;
   overflow: hidden;
+  margin-left: 10px;
+  margin-right: 10px;
 `;
 
-const Title = styled.h2`
-  font-family: Roboto;
+const Title = styled.h3`
+  font-family: Raleway;
   font-weight: 200;
+  padding-left: 20px;
 `;
 
 const InfoSection = styled.div`
   display: flex;
   flex-direction: column;
-  width: 25%;
+  width: 200px;
+  margin: 10px;
 `;
 
 const DateSection = styled.div`
-  justify-content: center;
+  padding-left: 10px;
+  justify-content: flex-start;
   font-family: Roboto;
   display: flex;
 `;
 
-const PrimaryText = styled.h2`font-weight: 300;`;
+const PrimaryText = styled.h3`
+  display: flex;
+  font-weight: 300;
+  font-family: Raleway;
+  color: #0276ae;
+`;
 
 const SecondaryText = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  font-size: 14px;
   padding-bottom: 10px;
   white-space: pre-line;
 `;
@@ -41,6 +54,8 @@ const TextSection = styled.div`
   display: flex;
   font-family: Roboto;
   flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
 `;
 
 const Avatar = styled.img`
