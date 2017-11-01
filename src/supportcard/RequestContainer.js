@@ -19,7 +19,9 @@ const defaultPicture = "http://nlbavwtls22/images/male.png";
 
 const RequestItem = ({ item, handleClick }) => {
   const { id, name, text, createdAt, account, complete, assigned } = item;
-  const picture = account ? (account.picture ? account.picture.data : defaultPicture) : defaultPicture;
+  const picture = account
+    ? account.picture ? account.picture.data : defaultPicture
+    : defaultPicture;
   const completeStatus = complete === 1 ? "Completed" : "";
   const assignedTo = assigned ? ` Assigned to ${assigned} ` : "";
   //const isNew = moment().add(-7, "days") > createdAt;
@@ -44,7 +46,11 @@ class RequestContainer extends Component {
   renderRequests = requests => (
     <List style={{ backgroundColor: "white" }}>
       {requests.map((item, index) => [
-        <RequestItem item={item} handleClick={() => this.props.history.push(`/supportcard/request/${item.id}`)} />,
+        <RequestItem
+          item={item}
+          key={item.id}
+          handleClick={() => this.props.history.push(`/supportcard/request/${item.id}`)}
+        />,
         <HasDivider expression={index !== requests.length - 1} />
       ])}
     </List>

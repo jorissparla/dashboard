@@ -31,8 +31,8 @@ class NewsListContainer extends Component {
     return (
       <div>
         <Paper style={{ padding: "10px" }}>
-          <h3>News</h3>
-          {authenticated &&
+          <h4>News</h4>
+          {authenticated && (
             <FloatingActionButton
               mini={true}
               secondary={true}
@@ -40,13 +40,10 @@ class NewsListContainer extends Component {
               onClick={() => this.onNew()}
             >
               <ContentAdd />
-            </FloatingActionButton>}
+            </FloatingActionButton>
+          )}
         </Paper>
-        <NewsList
-          news={news}
-          onEdit={this.onOpen}
-          authenticated={authenticated}
-        />
+        <NewsList news={news} onEdit={this.onOpen} authenticated={authenticated} />
       </div>
     );
   }
@@ -55,6 +52,4 @@ const mapStateToProps = state => {
   return { news: state.summary.news };
 };
 
-export default connect(mapStateToProps, { fetchNews })(
-  withRouter(withAuth(NewsListContainer))
-);
+export default connect(mapStateToProps, { fetchNews })(withRouter(withAuth(NewsListContainer)));

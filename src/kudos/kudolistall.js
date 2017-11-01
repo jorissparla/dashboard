@@ -9,7 +9,7 @@ import getMuiTheme from "material-ui/styles/getMuiTheme";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import { deepOrange500 } from "material-ui/styles/colors";
 //import Paper from 'material-ui/Paper'
-import ReactCSSTransitionGroup from "react-addons-css-transition-group";
+//import ReactCSSTransitionGroup from "react-addons-css-transition-group";
 
 const muiTheme = getMuiTheme({
   palette: {
@@ -161,18 +161,12 @@ class KudoListAll extends Component {
     }
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
-        <ReactCSSTransitionGroup
-          transitionName="fade"
-          transitionEnterTimeout={500}
-          transitionLeaveTimeout={300}
-        >
-          <div style={styles.root}>
-            Kudos
-            <GridList cellHeight={180} style={styles.gridList} cols={5}>
-              {this.renderItems(kudos)}
-            </GridList>
-          </div>
-        </ReactCSSTransitionGroup>
+        <div style={styles.root}>
+          Kudos
+          <GridList cellHeight={180} style={styles.gridList} cols={5}>
+            {this.renderItems(kudos)}
+          </GridList>
+        </div>
       </MuiThemeProvider>
     );
   }
