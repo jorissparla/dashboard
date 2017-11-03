@@ -16,6 +16,7 @@ import HistoryDayContainer from "./charts/historydaycontainer";
 import HistoryDayAll from "./charts/historydayallcontainer";
 import GoLiveList from "./golives/golivelist";
 import GoLiveList1 from "./golives/golivelist1";
+import GoLiveListNew from "./golives/goLiveListNew";
 import GoLiveListSide from "./golives/golivelistside";
 import GoLives from "./golives/golives";
 import Award from "./awards/award";
@@ -63,7 +64,7 @@ class AppRoutes extends React.Component {
     }
     return (
       <Switch>
-        <Route exact path="/test" component={NewsPage} />
+        <Route exact path="/test" component={GoLiveListNew} />
         <EnhancedRoute
           editors={["Admin", "PO"]}
           user={user}
@@ -101,7 +102,12 @@ class AppRoutes extends React.Component {
           path="/supportcard/edit/:id"
           component={RequireAuth(SupportCardEdit)}
         />
-        <EnhancedRoute editors={["Admin", "PO"]} user={user} path="/supportcard/view/:id" component={SupportCardEdit} />
+        <EnhancedRoute
+          editors={["Admin", "PO"]}
+          user={user}
+          path="/supportcard/view/:id"
+          component={SupportCardEdit}
+        />
         <EnhancedRoute
           allowed={["Admin"]}
           editors={["Admin", "PO"]}
@@ -169,8 +175,19 @@ class AppRoutes extends React.Component {
         <Route exact path="/courses" component={CourseList} />
         <Route exact path="/students" component={StudentListContainer} />
         <Route path="/students/:id" component={StudentView} />
-        <AuthRoute allowed={["Admin", "PO"]} user={user} path="/courses/edit/:id" component={CourseCard} />
-        <AuthRoute allowed={["Admin", "PO"]} user={user} exact path="/courses/create" component={AddCourseCard} />
+        <AuthRoute
+          allowed={["Admin", "PO"]}
+          user={user}
+          path="/courses/edit/:id"
+          component={CourseCard}
+        />
+        <AuthRoute
+          allowed={["Admin", "PO"]}
+          user={user}
+          exact
+          path="/courses/create"
+          component={AddCourseCard}
+        />
         <AuthRoute
           allowed={["Admin", "PO"]}
           user={user}
