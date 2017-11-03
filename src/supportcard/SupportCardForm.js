@@ -25,6 +25,10 @@ const paperStyle = {
   minWidth: "200px"
 };
 
+const upLoadFile = e => {
+  console.log(e);
+};
+
 const SupportCardForm = props => {
   const {
     supportcard,

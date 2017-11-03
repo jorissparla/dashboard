@@ -1,11 +1,15 @@
 import styled, { keyframes } from "styled-components";
 
-export const Typography = styled.div`font-family: Roboto;`;
+export const Typography = styled.div`
+  font-family: Roboto;
+`;
 export const BasicFlex = Typography.extend`
   display: flex;
   padding: 5px;
 `;
-export const BG = styled.div`background: #e6ecf0;`;
+export const BG = styled.div`
+  background: #e6ecf0;
+`;
 
 export const CheckBox = styled.input.attrs({
   type: "checkbox",
@@ -15,6 +19,75 @@ export const CheckBox = styled.input.attrs({
   background: #c5c5c5;
   :hover {
     background: "#1da1f2";
+  }
+`;
+
+export const FileInput = styled.input.attrs({
+  type: "file"
+})`
+  color: black;
+  width: 500px;
+  position: relative;
+  display: inline-block;
+  padding: 4px 7px;
+  min-height: 28px;
+  font-size: 1em;
+  line-height: 1.5;
+  font-family: "Segoe UI", Roboto;
+  color: rgba(0, 0, 0, 0.65);
+  background-color: #fff;
+  background-image: none;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  -webkit-transition: all 0.3s;
+  transition: all 0.3s;
+  resize: none;
+
+  ::-webkit-file-upload-button {
+    visibility: hidden;
+  }
+  :before {
+    content: "Select File";
+    color: rgb(255, 255, 255);
+    background-color: rgb(3, 155, 229);
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+    transition-duration: 0.5s;
+    transition-property: background-color, fill, color;
+    padding-left: 16px;
+    padding-right: 16px;
+    -webkit-border-radius: 2px;
+    border-radius: 2px;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+    min-height: 36px;
+    min-width: 88px;
+    line-height: 36px;
+    vertical-align: middle;
+    align-items: center;
+    text-align: center;
+    border-radius: 2px;
+    box-sizing: border-box;
+    outline: none;
+    border: 0;
+    padding: 0 6px;
+    margin: 6px 8px;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    text-transform: uppercase;
+    font-weight: 500;
+    font-size: 14px;
+    font-style: inherit;
+    font-variant: inherit;
+    font-family: inherit;
+    text-decoration: none;
+    overflow: hidden;
+    :active {
+      outline: 0;
+      ::before {
+        background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+      }
+    }
   }
 `;
 
@@ -186,7 +259,9 @@ export const Avatar = styled.img`
   overflow: hidden;
 `;
 
-export const UserName = BasicFlex.extend`font-size: 16px;`;
+export const UserName = BasicFlex.extend`
+  font-size: 16px;
+`;
 
 export const AlertBox = Typography.extend`
   padding: 16px 16px 16px 60px;
