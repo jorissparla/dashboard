@@ -14,6 +14,7 @@ import ContentAdd from "material-ui/svg-icons/content/add";
 import FloatingActionButton from "material-ui/FloatingActionButton";
 import RaisedButton from "material-ui/RaisedButton";
 import { pinkA200, transparent } from "material-ui/styles/colors";
+import _ from "lodash";
 import { TitleBar } from "../common/TitleBar";
 import withAuth from "../utils/withAuth";
 
@@ -35,8 +36,8 @@ const Left = styled.div`
   margin-left: 5px;
 `;
 const Right = styled.div`
-  flex-basis : 65%;
-  flex:1;
+  flex-basis: 65%;
+  flex: 1;
 `;
 
 class AddStudentsToCourse extends Component {
@@ -65,17 +66,13 @@ class AddStudentsToCourse extends Component {
         style={{ margin: 4 }}
         key={student.navid}
       >
-        {student.picture
-          ? <Avatar src={student.picture.data} />
-          : <Avatar
-              color={pinkA200}
-              backgroundColor={transparent}
-              style={{ left: 8 }}
-            >
-              {student.fullname
-                .slice(0, 1)
-                .concat(student.lastname.slice(0, 1))}
-            </Avatar>}
+        {student.picture ? (
+          <Avatar src={student.picture.data} />
+        ) : (
+          <Avatar color={pinkA200} backgroundColor={transparent} style={{ left: 8 }}>
+            {student.fullname.slice(0, 1).concat(student.lastname.slice(0, 1))}
+          </Avatar>
+        )}
 
         {student.fullname}
       </Chip>
@@ -94,33 +91,27 @@ class AddStudentsToCourse extends Component {
     if (error) {
       return <p>{error.message}</p>;
     }
-    const studentsAsString = course.students
-      .map(student => student.fullname)
-      .join(" ");
-    const filteredAccounts = accounts
-      .filter(account => !studentsAsString.includes(account.fullname))
+    const studentsAsString = course.students.map(student => student.fullname).join(" ");
+    const filteredAccounts0 = _.chain(accounts)
+      // .filter(account => !studentsAsString.includes(account.fullname))
       .filter(
         account =>
-          account.fullname
-            .toUpperCase()
-            .includes(this.state.searchText.toUpperCase()) ||
-          account.team
-            .toUpperCase()
-            .includes(this.state.searchText.toUpperCase())
-      );
+          account.fullname.toUpperCase().includes(this.state.searchText.toUpperCase()) ||
+          account.team.toUpperCase().includes(this.state.searchText.toUpperCase())
+      )
+      .value();
+    const filteredAccounts = _.uniqBy(filteredAccounts0, item => item.navid);
+    console.log(`filteredAccounts (${filteredAccounts.length})`, filteredAccounts);
     return (
       <div>
         <Paper>
           <TitleBar>
-            Add Students to Course '
-            {" "}
-            {course.title}
+            Add Students to Course ' {course.title}
             '
             <RaisedButton
               style={{ marginLeft: 20 }}
               label="back to course"
-              onClick={() =>
-                (window.location.href = `/courses/edit/${course.id}`)}
+              onClick={() => (window.location.href = `/courses/edit/${course.id}`)}
             />
           </TitleBar>
         </Paper>
@@ -142,30 +133,22 @@ class AddStudentsToCourse extends Component {
               <List>
                 <Divider />
                 {filteredAccounts.map((item, index) => {
-                  const {
-                    id,
-                    picture,
-                    fullname,
-                    lastname,
-                    location,
-                    team,
-                    navid
-                  } = item;
+                  const { id, picture, fullname, lastname, location, team, navid } = item;
                   return (
                     <ListItem
-                      key={id}
+                      key={`${id}.${index}`}
                       leftAvatar={
-                        picture
-                          ? <Avatar src={picture.data} />
-                          : <Avatar
-                              color={pinkA200}
-                              backgroundColor={transparent}
-                              style={{ left: 8 }}
-                            >
-                              {fullname
-                                .slice(0, 1)
-                                .concat(lastname.slice(0, 1))}
-                            </Avatar>
+                        picture ? (
+                          <Avatar src={picture.data} />
+                        ) : (
+                          <Avatar
+                            color={pinkA200}
+                            backgroundColor={transparent}
+                            style={{ left: 8 }}
+                          >
+                            {fullname.slice(0, 1).concat(lastname.slice(0, 1))}
+                          </Avatar>
+                        )
                       }
                       primaryText={fullname}
                       secondaryText={`located in ${location}, in team ${team}`}
@@ -195,10 +178,7 @@ class AddStudentsToCourse extends Component {
           </Right>
           <Left>
             <Paper>
-              <Div1>
-
-                {this.renderStudents(course.students)}
-              </Div1>
+              <Div1>{this.renderStudents(course.students)}</Div1>
             </Paper>
           </Left>
         </Div>
@@ -208,45 +188,44 @@ class AddStudentsToCourse extends Component {
 }
 
 const addStudentToCourse = gql`
-   mutation addStudentToCourse($input: InputEnrollment){
-      addStudentToCourse(input: $input) {
-        course {
+  mutation addStudentToCourse($input: InputEnrollment) {
+    addStudentToCourse(input: $input) {
+      course {
         title
         _studentsMeta {
           count
         }
       }
-      }
-
-}`;
-const removeStudentFromCourse = gql`
-   mutation removeStudentFromCourse($input: InputEnrollment){
-      removeStudentFromCourse(input: $input) {
-        title
-        _studentsMeta {
-          count
-        }
-      }
+    }
   }
-
+`;
+const removeStudentFromCourse = gql`
+  mutation removeStudentFromCourse($input: InputEnrollment) {
+    removeStudentFromCourse(input: $input) {
+      title
+      _studentsMeta {
+        count
+      }
+    }
+  }
 `;
 const selectedCourse = gql`
   query selectedCourse($id: ID) {
     course(id: $id) {
       id
       title
-        students {
-          id
-          navid
-          fullname
-          lastname
-          team
-          picture {
-            data
-          }
+      students {
+        id
+        navid
+        fullname
+        lastname
+        team
+        picture {
+          data
         }
+      }
     }
-    accounts (region: "EMEA"){
+    accounts(region: "EMEA") {
       id
       navid
       fullname
@@ -254,9 +233,9 @@ const selectedCourse = gql`
       lastname
       team
       location
-       picture {
-            data
-          }
+      picture {
+        data
+      }
     }
   }
 `;
