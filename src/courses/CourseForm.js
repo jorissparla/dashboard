@@ -15,7 +15,9 @@ import {
 } from "../common/TitleBar";
 import withAuth from "../utils/withAuth";
 
-const StyledField = styled(Field)`margin-right: 5px;`;
+const StyledField = styled(Field)`
+  margin-right: 5px;
+`;
 
 const SelectStyle = styled.div`
   margin: 5px;
@@ -171,10 +173,6 @@ class CourseForm extends Component {
                 hintText="startdate"
                 component={MyDatePicker}
                 floatingLabelText="start date"
-                format={(value, name) => {
-                  return value === "" ? null : typeof value === "string" ? new Date(value) : value;
-                }}
-                autoOk={true}
               />
             </SelectStyle>
             <SelectStyle>
@@ -185,9 +183,6 @@ class CourseForm extends Component {
                 hintText="enddate"
                 component={MyDatePicker}
                 floatingLabelText="end date"
-                format={(value, name) => {
-                  return value === "" ? null : typeof value === "string" ? new Date(value) : value;
-                }}
                 autoOk={true}
               />
             </SelectStyle>

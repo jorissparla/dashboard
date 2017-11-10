@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import DashBoard from "./dashboard";
 import DashBoardStats from "./dashboardstats";
 import { StyleLoader } from "./common";
-import GoLives from "./golives/golives";
+import GoLives from "./golives/goLiveListNew";
 import HistoryDayAll from "./charts/historydayallcontainer";
 //import NewsListContainer from "./news/newslistcontainer";
 import NewsPage from "./news/newspage";
