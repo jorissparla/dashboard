@@ -12,8 +12,10 @@ import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import injectTapEventPlugin from "react-tap-event-plugin";
 import { AUTH_USER } from "./actions";
 import App from "./appnav";
+import "./index.css";
 
 import { ApolloClient, ApolloProvider, createNetworkInterface } from "react-apollo";
+import registerServiceWorker from "./registerServiceWorker";
 
 const networkInterface = createNetworkInterface({
   uri: "http://nlbavwtls22.infor.com:55555/graphql"
@@ -28,6 +30,7 @@ const store = createStoreWithMiddleware(
   reducers,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );
+
 const token = localStorage.getItem("token");
 const user = {
   email: localStorage.getItem("email"),

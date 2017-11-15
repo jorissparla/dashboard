@@ -32,6 +32,7 @@ const Input = ({ label, value, onChangeText, secureTextEntry, style, name, ...re
       autoCorrect={false}
       //onChangeText={ onChangeText}
       inputStyle={mergedStyle}
+      style={style}
       name={name}
       underlineShow={false}
       // underlineStyle={{ borderColor: "#039BE5" }}

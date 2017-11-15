@@ -65,9 +65,10 @@ const SupportCardForm = props => {
           hintText="Enter a description"
           name="description"
           floatingLabelText="Description"
-          style={{
+          textareaStyle={{
             background: "lightyellow",
-            border: "1px solid lightgray"
+            border: "1px solid lightgray",
+            color: "#0099e7"
           }}
           id="description"
           disabled={readOnly}
