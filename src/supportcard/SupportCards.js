@@ -5,7 +5,8 @@ import Dialog from "material-ui/Dialog";
 import styled from "styled-components";
 import FlatButton from "material-ui/FlatButton";
 import NewRequestForm from "./Request";
-
+import differenceInCalendarDays from "date-fns/difference_in_calendar_days";
+import moment from "moment";
 import SearchBar from "../common/SearchBar";
 import withAuth from "../utils/withAuth";
 import AddCard from "./AddCard";
@@ -134,15 +135,29 @@ class SupportCards extends React.Component {
             />
           )}
           {filteredCards.map(
-            ({ id, title, description, category: { name, color, backgroundcolor }, link }, i) => {
+            (
+              {
+                id,
+                title,
+                description,
+                updatedAt,
+                category: { name, color, backgroundcolor },
+                link
+              },
+              i
+            ) => {
               const vieweditLink =
                 authenticated && isEditor ? `/supportcard/edit/${id}` : `/supportcard/view/${id}`;
+              // const isNew = differenceInCalendarDays(Date.parse(updatedAt), Date.now()) < 7;
+              const isNew = Date.parse(updatedAt) > moment().add(-7, "days");
+              console.log(differenceInCalendarDays(Date.now(), updatedAt));
               return (
                 <SmallCard
                   color={backgroundcolor || cardColors[i % (cardColors.length - 1)].back}
                   textcolor={color || cardColors[i % (cardColors.length - 1)].front}
                   key={id}
                   title={title}
+                  isNew={isNew}
                   text={description}
                   category={name}
                   buttonText="📂"

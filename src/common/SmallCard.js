@@ -2,7 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import IconButton from "material-ui/IconButton";
 import ViewIcon from "material-ui/svg-icons/action/pageview";
+import Avatar from "material-ui/Avatar";
 import ModeEdit from "material-ui/svg-icons/editor/mode-edit";
+import NewIcon from "material-ui/svg-icons/av/new-releases";
 import { Link } from "react-router-dom";
 import { Papier, HR } from "../styles/index.js";
 import Divider from "material-ui/Divider";
@@ -21,8 +23,13 @@ const Text = styled.div`
   font-weight: 900;
   color: ${props => (props.textcolor ? props.textcolor : "black")};
 `;
-const Cat = styled.div`font-weight: 800;`;
-
+const Cat = styled.div`
+  font-weight: 800;
+`;
+const TitleWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+`;
 const Title = styled.div`
   font-family: "Roboto";
   font-size: 18px;
@@ -30,6 +37,11 @@ const Title = styled.div`
   padding: 2px;
   flex-grow: 0;
   margin: 5px;
+  width: 80%;
+`;
+
+const TitleIcon = styled.div`
+  width: 20%;
 `;
 
 const BottomStyle = styled.div`
@@ -98,11 +110,15 @@ const SmallCard = ({
   color = "#FFFFF",
   textcolor = "#000",
   canEdit = false,
-  editLink = ""
+  editLink = "",
+  isNew = false
 }) => {
   return (
     <StyledPapier color={color}>
-      <Title>{title}</Title>
+      <TitleWrapper>
+        <Title>{title}</Title>
+        {isNew && <NewIcon color={"#3db5e8"} />}
+      </TitleWrapper>
       <HR />
       <StyledBody>{text.slice(0, 200).concat("...")}</StyledBody>
       <Divider />
