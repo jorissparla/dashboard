@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Field, reduxForm } from "redux-form";
 import { withRouter } from "react-router";
-import { SelectField } from "redux-form-material-ui";
+import { SelectField, TextField } from "redux-form-material-ui";
 import { CardSection, Card, Input, MyDatePicker } from "../common";
 import MenuItem from "material-ui/MenuItem";
 import Chip from "material-ui/Chip";
@@ -23,6 +23,17 @@ const SelectStyle = styled.div`
   margin: 5px;
   width: 20%;
 `;
+
+const styles = {
+  textfieldstyle: {
+    margin: 20,
+    flexGrow: 3
+  },
+  hoursfieldstyle: {
+    margin: 20,
+    width: 50
+  }
+};
 
 const teams = [
   { id: 1, name: "Logistics" },
@@ -64,6 +75,7 @@ class CourseForm extends Component {
   }
 
   handleSubmit(e) {
+    //e.preventDefault();
     this.props.onSave(e);
   }
 
@@ -76,7 +88,7 @@ class CourseForm extends Component {
     return (
       <form onSubmit={handleSubmit(this.handleSubmit)}>
         <Card>
-          <CardSection>
+          <CardSection style={{ display: "flex", justifyContent: "space-between" }}>
             <Field
               name="title"
               disabled={readOnly}
@@ -84,17 +96,19 @@ class CourseForm extends Component {
               underlineShow={true}
               component={Input}
               floatingLabelText="title"
+              style={styles.textfieldstyle}
             />
             <Field
               name="hours"
               disabled={readOnly}
-              textFieldStyle={{ width: 50 }}
               hintText="Number of Hours"
               underlineShow={true}
               component={Input}
               floatingLabelText="hours"
-              style={{ flex: 2, width: 50 }}
+              style={styles.hoursfieldstyle}
             />
+          </CardSection>
+          <CardSection>
             <Field
               name="trainer"
               disabled={readOnly}
@@ -103,7 +117,7 @@ class CourseForm extends Component {
               underlineShow={true}
               component={Input}
               floatingLabelText="Trainer"
-              style={{ flex: 2, width: 50 }}
+              style={styles.textfieldstyle}
             />
             <SelectStyle>
               <Field
@@ -123,14 +137,14 @@ class CourseForm extends Component {
             </SelectStyle>
           </CardSection>
           <CardSection>
-            <StyledField
+            <Field
               name="description"
               disabled={readOnly}
               hintText="Description"
               underlineShow={true}
               component={Input}
-              multiline={true}
-              rows={2}
+              multiLine={true}
+              rows={3}
               rowsMax={4}
               fullWidth={true}
               floatingLabelText="description"

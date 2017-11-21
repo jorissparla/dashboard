@@ -66,8 +66,8 @@ class AddStudentsToCourse extends Component {
         style={{ margin: 4 }}
         key={student.navid}
       >
-        {student.picture ? (
-          <Avatar src={student.picture.data} />
+        {student.image ? (
+          <Avatar src={student.image} />
         ) : (
           <Avatar color={pinkA200} backgroundColor={transparent} style={{ left: 8 }}>
             {student.fullname.slice(0, 1).concat(student.lastname.slice(0, 1))}
@@ -133,13 +133,13 @@ class AddStudentsToCourse extends Component {
               <List>
                 <Divider />
                 {filteredAccounts.map((item, index) => {
-                  const { id, picture, fullname, lastname, location, team, navid } = item;
+                  const { id, fullname, lastname, location, team, navid, image } = item;
                   return (
                     <ListItem
                       key={`${id}.${index}`}
                       leftAvatar={
-                        picture ? (
-                          <Avatar src={picture.data} />
+                        image ? (
+                          <Avatar src={image} />
                         ) : (
                           <Avatar
                             color={pinkA200}
@@ -220,9 +220,7 @@ const selectedCourse = gql`
         fullname
         lastname
         team
-        picture {
-          data
-        }
+        image
       }
     }
     accounts(region: "EMEA") {
@@ -233,9 +231,7 @@ const selectedCourse = gql`
       lastname
       team
       location
-      picture {
-        data
-      }
+      image
     }
   }
 `;

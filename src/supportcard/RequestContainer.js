@@ -19,9 +19,7 @@ const defaultPicture = "http://nlbavwtls22/images/male.png";
 
 const RequestItem = ({ item, handleClick }) => {
   const { id, name, text, createdAt, account, complete, assigned } = item;
-  const picture = account
-    ? account.picture ? account.picture.data : defaultPicture
-    : defaultPicture;
+  const picture = account ? (account.image ? account.image : defaultPicture) : defaultPicture;
   const completeStatus = complete === 1 ? "Completed" : "";
   const assignedTo = assigned ? ` Assigned to ${assigned} ` : "";
   //const isNew = moment().add(-7, "days") > createdAt;

@@ -42,6 +42,8 @@ const Title = styled.div`
 
 const TitleIcon = styled.div`
   width: 20%;
+  align-items: center;
+  display: flex;
 `;
 
 const BottomStyle = styled.div`
@@ -117,7 +119,11 @@ const SmallCard = ({
     <StyledPapier color={color}>
       <TitleWrapper>
         <Title>{title}</Title>
-        {isNew && <NewIcon color={"#3db5e8"} />}
+        {isNew && (
+          <TitleIcon>
+            <NewIcon color={"black"} />
+          </TitleIcon>
+        )}
       </TitleWrapper>
       <HR />
       <StyledBody>{text.slice(0, 200).concat("...")}</StyledBody>

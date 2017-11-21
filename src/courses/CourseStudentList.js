@@ -35,8 +35,8 @@ const StudentList = ({ students, history }) => {
               key={student.id}
               onClick={() => history.push(`/students/${student.id}`)}
             >
-              {student.picture ? (
-                <Avatar src={student.picture.data} />
+              {student.image ? (
+                <Avatar src={student.image} />
               ) : (
                 <Avatar src={`https://randomuser.me/api/portraits/men/18.jpg`} />
               )}

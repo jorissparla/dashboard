@@ -20,7 +20,7 @@ import withAuth from "../utils/withAuth";
 
 const Container = styled.div`
   display: flex;
-  justify-content: space-between
+  justify-content: space-between;
 `;
 
 const ProfilePicture = styled.div`
@@ -33,17 +33,14 @@ const Details = styled.div`
   flex: 1;
   flex-direction: column;
   margin: 20px;
-
 `;
 const Title = styled.div`
-  font-family:Oswald;
+  font-family: Oswald;
   font-size: 24px;
-  flex:1;
-  background:${props => (props.background ? "#FAFAFA" : "white")}
+  flex: 1;
+  background: ${props => (props.background ? "#FAFAFA" : "white")};
 `;
-const Content = styled.div`
-
-`;
+const Content = styled.div``;
 
 class StudentView extends Component {
   state = { counter: 0, searchText: "" };
@@ -61,7 +58,11 @@ class StudentView extends Component {
   showCourseMenu() {
     return (
       <IconMenu
-        iconButtonElement={<IconButton><MoreVertIcon /></IconButton>}
+        iconButtonElement={
+          <IconButton>
+            <MoreVertIcon />
+          </IconButton>
+        }
         anchorOrigin={{ horizontal: "left", vertical: "top" }}
         targetOrigin={{ horizontal: "left", vertical: "top" }}
       >
@@ -77,7 +78,11 @@ class StudentView extends Component {
   showEnrollMenu(enrol) {
     return (
       <IconMenu
-        iconButtonElement={<IconButton><DownIcon /></IconButton>}
+        iconButtonElement={
+          <IconButton>
+            <DownIcon />
+          </IconButton>
+        }
         anchorOrigin={{ horizontal: "left", vertical: "top" }}
         targetOrigin={{ horizontal: "left", vertical: "top" }}
       >
@@ -89,15 +94,11 @@ class StudentView extends Component {
           primaryText="Completed"
           onClick={() => this.updateEnrollStatus(enrol, "Completed")}
         />
-        <MenuItem
-          primaryText="Planned"
-          onClick={() => this.updateEnrollStatus(enrol, "Planned")}
-        />
+        <MenuItem primaryText="Planned" onClick={() => this.updateEnrollStatus(enrol, "Planned")} />
         <MenuItem
           primaryText="View Course"
           leftIcon={<FileFileDownload />}
-          onClick={() =>
-            this.props.history.push(`/courses/edit/${enrol.course.id}`)}
+          onClick={() => this.props.history.push(`/courses/edit/${enrol.course.id}`)}
         />
       </IconMenu>
     );
@@ -123,23 +124,19 @@ class StudentView extends Component {
             key={i}
             primaryText={enrol.course.title}
             leftAvatar={
-              <Avatar
-                color={pinkA200}
-                backgroundColor={"#FFFFFF"}
-                style={{ left: 8 }}
-              >
+              <Avatar color={pinkA200} backgroundColor={"#FFFFFF"} style={{ left: 8 }}>
                 {enrol.status.slice(0, 3).toUpperCase()}
               </Avatar>
             }
             secondaryText={
               <div style={{ display: "flex" }}>
                 <div style={{ margin: 4 }}>
-                  {`${enrol.course.description}, ${enrol.course.hours} hours, status: ${enrol.status} `}
+                  {`${enrol.course.description}, ${enrol.course
+                    .hours} hours, status: ${enrol.status} `}
                 </div>
                 <Chip style={{ margin: 2 }}>
                   {`Start  ${moment(enrol.course.startdate).calendar()}`}
                 </Chip>
-
               </div>
             }
             secondaryTextLines={2}
@@ -163,28 +160,24 @@ class StudentView extends Component {
         <Paper>
           <Container>
             <ProfilePicture>
-              {account.picture
-                ? <Avatar src={account.picture.data} size={80} />
-                : <Avatar
-                    src="https://randomuser.me/api/portraits/men/48.jpg"
-                    size={80}
-                  />}
+              {account.image ? (
+                <Avatar src={account.image} size={80} />
+              ) : (
+                <Avatar src="https://randomuser.me/api/portraits/men/48.jpg" size={80} />
+              )}
             </ProfilePicture>
             <Details>
-              <Title>
-                {account.fullname}
-              </Title>
+              <Title>{account.fullname}</Title>
               <Content>
-                {`in Team ${account.team}, Location ${account.locationdetail ? account.locationdetail.location : account.location}`}
+                {`in Team ${account.team}, Location ${account.locationdetail
+                  ? account.locationdetail.location
+                  : account.location}`}
               </Content>
             </Details>
-
           </Container>
         </Paper>
         <Paper style={{ marginTop: 40 }}>
-          <TitleBar background>
-            Registered
-          </TitleBar>
+          <TitleBar background>Registered</TitleBar>
           <SearchBar
             onChange={this.handleSearchTextChange}
             hintText="Search on title.."
@@ -195,9 +188,7 @@ class StudentView extends Component {
             }}
           />
           <Container />
-          <Content>
-            {this.renderCourses(account.enrollments)}
-          </Content>
+          <Content>{this.renderCourses(account.enrollments)}</Content>
         </Paper>
       </div>
     );
@@ -206,17 +197,15 @@ class StudentView extends Component {
 
 const queryProfile = gql`
   query queryProfile($id: ID) {
-    account(id: $id ) {
+    account(id: $id) {
       navid
       login
       fullname
       team
       location
+      image
       locationdetail {
         location
-      }
-      picture {
-        data
       }
       enrollments {
         id
@@ -227,7 +216,6 @@ const queryProfile = gql`
           hours
           description
           startdate
-
         }
       }
     }

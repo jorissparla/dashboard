@@ -15,6 +15,7 @@ import App from "./appnav";
 import "./index.css";
 
 import { ApolloClient, ApolloProvider, createNetworkInterface } from "react-apollo";
+
 import registerServiceWorker from "./registerServiceWorker";
 
 const networkInterface = createNetworkInterface({
@@ -57,3 +58,5 @@ const Main = () => (
 );
 
 ReactDOM.render(<Main />, document.getElementById("root"));
+
+registerServiceWorker();

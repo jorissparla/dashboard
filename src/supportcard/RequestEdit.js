@@ -61,9 +61,7 @@ const queryRequest = gql`
     accounts(roles: ["PO", "Admin"]) {
       id
       fullname
-      picture {
-        data
-      }
+      image
     }
   }
 `;

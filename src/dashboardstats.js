@@ -29,6 +29,7 @@ const DashBoardStats = props => {
             roepie={region}
             refreshRate={0}
             region={region}
+            type="spline"
           />
           <AppChartContainer
             data={data || ["Tools", "Logistics", "Finance"]}

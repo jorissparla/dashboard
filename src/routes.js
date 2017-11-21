@@ -156,10 +156,10 @@ class AppRoutes extends React.Component {
           component={RequireAuth(NewsItemAddContainer)}
         />
 
-        <Route path="/golivelist" component={GoLiveList} />
+        <Route path="/golivelist" component={GoLiveListNew} />
         <Route path="/golivelist1" component={GoLiveList1} />
         <Route path="/golivelistside" component={GoLiveListSide} />
-        <Route path="/golives" component={GoLives} />
+        <Route path="/golives" component={GoLiveListNew} />
         <Route path="/kudos" component={KudoListComponentNew} />
         <Route path="/kudosall" component={KudoListAll} />
         <Route path="/kudolistcomponent" component={KudoListComponent} />

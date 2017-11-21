@@ -19,6 +19,7 @@ import Divider from "material-ui/Divider";
 import MenuItem from "material-ui/MenuItem";
 import { withRouter } from "react-router";
 import { Toolbar, ToolbarGroup, ToolbarTitle } from "material-ui/Toolbar";
+import { Drawer } from "material-ui";
 import withAuth from "./utils/withAuth";
 
 import FlatButton from "material-ui/FlatButton";
@@ -240,5 +241,4 @@ class Header extends React.Component {
     );
   }
 }
-
 export default withRouter(withAuth(Header));

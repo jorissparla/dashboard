@@ -104,8 +104,8 @@ class StudentTables extends Component {
             {filteredAccounts.map((item, i) => (
               <TableRow key={item.id}>
                 <TableRowColumn>
-                  {item.picture ? (
-                    <Avatar src={item.picture.data} />
+                  {item.image ? (
+                    <Avatar src={item.image} />
                   ) : (
                     <Avatar color={pinkA200} backgroundColor={transparent} style={{ left: 8 }}>
                       {item.fullname.slice(0, 1).concat(item.lastname.slice(0, 1))}

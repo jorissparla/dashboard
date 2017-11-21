@@ -31,33 +31,29 @@ class StudentListContainer extends Component {
 
 const accountsQuery = gql`
   query accountsQuery {
-    accounts (region: "EMEA") {
+    accounts(region: "EMEA") {
       id
-        firstname
-        lastname
-        fullname
-        team
-        region
-        picture {
-          data
-        }
+      firstname
+      lastname
+      fullname
+      team
+      region
+      image
+      location
+      locationdetail {
         location
-        locationdetail {
-          location
+      }
+      _courseMeta {
+        count
+      }
+      enrollments {
+        status
+        course {
+          title
         }
-        _courseMeta {
-            count
-          }
-        enrollments {
-          status
-          course {
-            title
-          }
-          
-        }
+      }
     }
   }
-  
 `;
 
 export default graphql(accountsQuery)(withRouter(StudentListContainer));
