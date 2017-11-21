@@ -26,12 +26,15 @@ const SelectStyle = styled.div`
 
 const styles = {
   textfieldstyle: {
-    margin: 20,
+    marginRight: 20,
     flexGrow: 3
   },
   hoursfieldstyle: {
-    margin: 20,
+    marginRight: 20,
     width: 50
+  },
+  descriptionstyle: {
+    whitespace: "pre-line"
   }
 };
 
@@ -148,6 +151,7 @@ class CourseForm extends Component {
               rowsMax={4}
               fullWidth={true}
               floatingLabelText="description"
+              style={styles.descriptionstyle}
             />
           </CardSection>
           <CardSection>
@@ -208,6 +212,7 @@ class CourseForm extends Component {
               component={Input}
               floatingLabelText="Applicable for"
               underlineShow={true}
+              style={styles.textfieldstyle}
             />
             <Field
               name="link"
@@ -216,6 +221,7 @@ class CourseForm extends Component {
               floatingLabelText="link"
               underlineShow={true}
               fullWidth={true}
+              style={styles.textfieldstyle}
             />
           </CardSection>
           <CardSection>
