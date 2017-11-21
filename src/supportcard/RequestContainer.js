@@ -86,9 +86,7 @@ const queryRequests = gql`
       assigned
       complete
       account {
-        picture {
-          data
-        }
+        image
       }
     }
   }
