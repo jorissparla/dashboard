@@ -22,30 +22,44 @@ import {
   TableRowColumn
 } from "material-ui/Table";
 import _ from "lodash";
+import styled from "styled-components";
 
-const headerStyle = {
-  fontSize: 48,
-  background: "#FAFAFA",
-  fontWeight: 800,
-  textAlign: "left",
-  color: "#000000"
+const styles = {
+  headerStyle: {
+    fontSize: 48,
+    background: "#FAFAFA",
+    fontWeight: 800,
+    textAlign: "left",
+    color: "#000000"
+  },
+  rowstyle: {
+    fontSize: 16,
+    fontFamily: "Roboto"
+  },
+  avatarstyle: {
+    width: 50
+  }
 };
 
-const TableHeaderColumn1 = ({ column, title, handleSortChange }) => (
+const SortedIcon = styled(SortIcon)`
+  color: red;
+  :hover {
+    cursor: pointer;
+  }
+`;
+
+const TableHeaderColumn1 = ({ column, title, handleSortChange, sorted }) => (
   <TableHeaderColumn
     style={{ fontSize: 16, fontFamily: "Roboto", justifyContent: "center" }}
     key={title}
   >
     <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center" }}>
-      <SortIcon onClick={() => handleSortChange(column)} />
+      <SortedIcon onClick={() => handleSortChange(column)} color={pinkA200} />
       {title}
     </div>
   </TableHeaderColumn>
 );
 
-const TableColumnHeaders = values => {
-  return values.split(",").map((val, index) => TableHeaderColumn1(val, index));
-};
 class StudentTables extends Component {
   state = { searchText: "", sorting: { name: "fullname", direction: "asc" } };
   constructor(props) {
@@ -92,6 +106,7 @@ class StudentTables extends Component {
 
   render() {
     const { accounts } = this.props;
+    const { headerStyle, rowstyle, avatarstyle } = styles;
     console.log(this.state.sorting);
 
     const filteredAccounts1 = accounts.filter(
@@ -123,9 +138,7 @@ class StudentTables extends Component {
         <Table headerStyle={headerStyle} onCellClick={(i, j) => console.log(i, j)}>
           <TableHeader style={headerStyle} adjustForCheckbox={false} displaySelectAll={false}>
             <TableRow>
-              <TableHeaderColumn style={{ fontSize: 16, fontFamily: "Roboto" }}>
-                ID
-              </TableHeaderColumn>
+              <TableHeaderColumn style={avatarstyle} />
               <TableHeaderColumn1
                 column="fullname"
                 title="name"
@@ -150,7 +163,7 @@ class StudentTables extends Component {
           <TableBody displayRowCheckbox={false}>
             {filteredAccounts.map((item, i) => (
               <TableRow key={item.id}>
-                <TableRowColumn>
+                <TableRowColumn style={avatarstyle}>
                   {item.image ? (
                     <Avatar src={item.image} />
                   ) : (
@@ -159,7 +172,7 @@ class StudentTables extends Component {
                     </Avatar>
                   )}
                 </TableRowColumn>
-                <TableRowColumn>{item.fullname}</TableRowColumn>
+                <TableRowColumn style={rowstyle}>{item.fullname}</TableRowColumn>
                 <TableRowColumn>{item.team}</TableRowColumn>
                 <TableRowColumn>{item.locationdetail.location}</TableRowColumn>
                 <TableRowColumn>{item._courseMeta ? item._courseMeta.count : 0}</TableRowColumn>

@@ -38,7 +38,7 @@ const Span = styled.div`
   font-weight: bold;
   font-size: 16px;
   color: black;
-  width: 50%;
+  width: 52%;
 `;
 
 const Mid = styled.div`
@@ -47,7 +47,7 @@ const Mid = styled.div`
   font-size: 16px;
   color: black;
   border-radius: 2px;
-  width: 10%;
+  width: 5%;
 `;
 
 const Right = styled.div`
@@ -56,7 +56,7 @@ const Right = styled.div`
   font-weight: bold;
   font-size: 16px;
   color: black;
-  width: 30%;
+  width: 33%;
   justify-content: flex-end;
 `;
 const dayPart = d => format(Date.parse(d), "DD");
