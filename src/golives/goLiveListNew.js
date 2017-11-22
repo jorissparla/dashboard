@@ -24,7 +24,6 @@ const Title = styled.h3`
 `;
 
 const big = styled.div`
-  display: flex;
   font-size: 16px;
   text-transform: uppercase;
 `;
@@ -35,8 +34,30 @@ const Div = styled.div`
 
 const Span = styled.div`
   display: flex;
+  flex-grow: 1;
   font-weight: bold;
+  font-size: 16px;
   color: black;
+  width: 50%;
+`;
+
+const Mid = styled.div`
+  flex-grow: 1;
+  font-weight: bold;
+  font-size: 16px;
+  color: black;
+  border-radius: 2px;
+  width: 10%;
+`;
+
+const Right = styled.div`
+  display: flex;
+  flex-grow: 1;
+  font-weight: bold;
+  font-size: 16px;
+  color: black;
+  width: 30%;
+  justify-content: flex-end;
 `;
 const dayPart = d => format(Date.parse(d), "DD");
 const monthPart = d => format(Date.parse(d), "MMMM");
@@ -59,8 +80,9 @@ const GoLiveItem = ({ item, bg = "#ec407a" }) => {
       }
       primaryText={
         <Div>
-          <big>{customername.toUpperCase()}</big>
-          <Span>{version}</Span>
+          <Span>{`${customername.toUpperCase()}`}</Span>
+          <Mid>{`${region}`}</Mid>
+          <Right>{version}</Right>
         </Div>
       }
       secondaryText={<p>{comments}</p>}
