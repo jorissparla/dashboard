@@ -10,6 +10,7 @@ import IconButton from "material-ui/IconButton";
 import MoreVertIcon from "material-ui/svg-icons/navigation/more-vert";
 import ArrowDownWard from "material-ui/svg-icons/navigation/arrow-downward";
 import ArrowUpWard from "material-ui/svg-icons/navigation/arrow-upward";
+import { Link } from "react-router-dom";
 //@ts-check
 import Avatar from "material-ui/Avatar";
 import { pinkA200, transparent } from "material-ui/styles/colors";
@@ -48,17 +49,32 @@ const SortedIcon = styled(SortIcon)`
   }
 `;
 
-const TableHeaderColumn1 = ({ column, title, handleSortChange, sorted }) => (
+const TableHeaderColumn1 = ({ column, title, handleSortChange, sorted, link }) => (
   <TableHeaderColumn
-    style={{ fontSize: 16, fontFamily: "Roboto", justifyContent: "center" }}
+    style={{
+      fontSize: 16,
+      fontFamily: "Roboto",
+      justifyContent: "center",
+      textTransform: "uppercase"
+    }}
     key={title}
   >
     <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center" }}>
       <SortedIcon onClick={() => handleSortChange(column)} color={pinkA200} />
-      {title}
+      {title.toUpperCase()}
     </div>
   </TableHeaderColumn>
 );
+
+const LinkColumn = ({ link, value, style }) => {
+  if (link) {
+    return (
+      <TableRowColumn style={style}>
+        <Link to={link}>{value.toUpperCase()}</Link>
+      </TableRowColumn>
+    );
+  } else return <TableRowColumn> {value}</TableRowColumn>;
+};
 
 class StudentTables extends Component {
   state = { searchText: "", sorting: { name: "fullname", direction: "asc" } };
@@ -121,9 +137,19 @@ class StudentTables extends Component {
           account.fullname.toUpperCase().includes(this.state.searchText.toUpperCase()) ||
           account.team.toUpperCase().includes(this.state.searchText.toUpperCase())
       )
+      .map(account => {
+        const hoursObj = account.courses.reduce(
+          ({ hours, count }, course) => {
+            return { hours: hours + course.hours, count: count + 1 };
+          },
+          { hours: 0, count: 0 }
+        );
+
+        return _.extend({}, account, hoursObj);
+      })
       .orderBy([this.state.sorting.name], [this.state.sorting.direction])
       .value();
-
+    //console.log(filteredAccounts);
     return (
       <Paper style={{ margin: 20 }}>
         <SearchBar
@@ -154,7 +180,13 @@ class StudentTables extends Component {
                 title="Location"
                 handleSortChange={this.handleSortChange}
               />
+
               <TableHeaderColumn># Courses</TableHeaderColumn>
+              <TableHeaderColumn1
+                column="hours"
+                title="#Hours"
+                handleSortChange={this.handleSortChange}
+              />
               <TableHeaderColumn>
                 Courses<ArrowDownWard />
               </TableHeaderColumn>
@@ -172,10 +204,11 @@ class StudentTables extends Component {
                     </Avatar>
                   )}
                 </TableRowColumn>
-                <TableRowColumn style={rowstyle}>{item.fullname}</TableRowColumn>
+                <LinkColumn link={`/students/${item.id}`} style={rowstyle} value={item.fullname} />
                 <TableRowColumn>{item.team}</TableRowColumn>
                 <TableRowColumn>{item.locationdetail.location}</TableRowColumn>
-                <TableRowColumn>{item._courseMeta ? item._courseMeta.count : 0}</TableRowColumn>
+                <TableRowColumn>{item.count}</TableRowColumn>
+                <TableRowColumn>{item.hours ? item.hours : 0}</TableRowColumn>
                 <TableRowColumn> {this.dropdownMenu(item.id)}</TableRowColumn>
                 /&gt;
               </TableRow>

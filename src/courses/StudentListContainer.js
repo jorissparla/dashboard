@@ -43,14 +43,12 @@ const accountsQuery = gql`
       locationdetail {
         location
       }
-      _courseMeta {
-        count
-      }
-      enrollments {
-        status
-        course {
-          title
-        }
+      courses {
+        trainer
+        title
+        hours
+        startdate
+        enddate
       }
     }
   }

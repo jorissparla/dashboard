@@ -12,6 +12,7 @@ const Div = styled.div`
 `;
 
 const StudentList = ({ students, history }) => {
+  console.log("students", students);
   return (
     <Paper
       style={{
@@ -24,7 +25,7 @@ const StudentList = ({ students, history }) => {
     >
       <TitleBar>Registered</TitleBar>
       <Div>
-        {students.map(({ student }) => {
+        {students.map(({ student }, index) => {
           return (
             <Chip
               style={{
@@ -32,7 +33,7 @@ const StudentList = ({ students, history }) => {
                 backgroundColor: "#B3E5FC",
                 color: "#FFFFFF"
               }}
-              key={student.id}
+              key={student.id ? student.id : index}
               onClick={() => history.push(`/students/${student.id}`)}
             >
               {student.image ? (

@@ -66,6 +66,10 @@ const coursetypes = [
   {
     id: 4,
     name: "Self Study"
+  },
+  {
+    id: 5,
+    name: "Knowledge Transfer"
   }
 ];
 

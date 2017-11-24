@@ -112,7 +112,7 @@ class StudentView extends Component {
       navid: enrol.navid,
       status: status
     }).then(this.props.data.refetch());
-    this.setState({ counter: this.state.counter++ });
+    this.setState({ counter: this.state.counter + 1 });
   }
   renderCourses(enrollments) {
     const authenticated = this.props.authenticated;

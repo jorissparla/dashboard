@@ -59,6 +59,7 @@ const Right = styled.div`
   width: 33%;
   justify-content: flex-end;
 `;
+
 const dayPart = d => format(Date.parse(d), "DD");
 const monthPart = d => format(Date.parse(d), "MMMM");
 
