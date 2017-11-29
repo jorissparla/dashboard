@@ -107,6 +107,12 @@ export const Divider = styled.hr`
   border-width: 1px;
 `;
 
+export const Title = styled.h3`
+  font-weight: 200;
+  font-family: Raleway;
+  padding-left: 30px;
+`;
+
 export const niceblue = "#40a5ed";
 export const babyblue = "#ecf6fd";
 export const twitterblue = "#1da1f2";

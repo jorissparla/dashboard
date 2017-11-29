@@ -50,6 +50,29 @@ const status = [
   { id: 3, name: "Expired" }
 ];
 
+const coursetypes = [
+  {
+    id: 1,
+    name: "Webex / Recording"
+  },
+  {
+    id: 2,
+    name: "Class Room Training"
+  },
+  {
+    id: 3,
+    name: "On Line Training"
+  },
+  {
+    id: 4,
+    name: "Self Study"
+  },
+  {
+    id: 5,
+    name: "Knowledge Transfer"
+  }
+];
+
 class CourseForm extends Component {
   state = {};
   constructor() {
@@ -67,8 +90,7 @@ class CourseForm extends Component {
     this.props.onDelete(e);
   }
   render() {
-    const { handleSubmit, course, authenticated, history, coursetypes } = this.props;
-    console.log("coursetypes", coursetypes);
+    const { handleSubmit, course, authenticated, history } = this.props;
     const readOnly = !authenticated;
     return (
       <form onSubmit={handleSubmit(this.handleSubmit)}>
@@ -97,11 +119,12 @@ class CourseForm extends Component {
             <Field
               name="trainer"
               disabled={readOnly}
+              textFieldStyle={{ width: 50 }}
               hintText="Trainer"
               underlineShow={true}
               component={Input}
-              style={{ width: 300, marginRight: 20 }}
               floatingLabelText="Trainer"
+              style={styles.textfieldstyle}
             />
             <SelectStyle>
               <Field
@@ -110,7 +133,7 @@ class CourseForm extends Component {
                 disabled={readOnly}
                 hintText="Status"
                 floatingLabelText="Status"
-                style={{ flex: 2 }}
+                style={{ flex: 2, marginTop: "-5px" }}
                 underlineShow={true}
                 underlineStyle={{ borderColor: "#039BE5" }}
               >
@@ -119,6 +142,23 @@ class CourseForm extends Component {
                 ))}
               </Field>
             </SelectStyle>
+          </CardSection>
+          <CardSection>
+            <Field
+              name="description"
+              disabled={readOnly}
+              hintText="Description"
+              underlineShow={true}
+              component={Input}
+              multiLine={true}
+              rows={3}
+              rowsMax={4}
+              fullWidth={true}
+              floatingLabelText="description"
+              style={styles.descriptionstyle}
+            />
+          </CardSection>
+          <CardSection>
             <SelectStyle>
               <Field
                 name="team"
@@ -147,47 +187,28 @@ class CourseForm extends Component {
                 ))}
               </Field>
             </SelectStyle>
+            <SelectStyle>
+              <Field
+                textFieldStyle={{ width: 150 }}
+                name="startdate"
+                disabled={readOnly}
+                hintText="startdate"
+                component={MyDatePicker}
+                floatingLabelText="start date"
+              />
+            </SelectStyle>
+            <SelectStyle>
+              <Field
+                textFieldStyle={{ width: 150 }}
+                name="enddate"
+                disabled={readOnly}
+                hintText="enddate"
+                component={MyDatePicker}
+                floatingLabelText="end date"
+                autoOk={true}
+              />
+            </SelectStyle>
           </CardSection>
-          <CardSection>
-            <Field
-              name="description"
-              disabled={readOnly}
-              hintText="Description"
-              underlineShow={true}
-              component={Input}
-              multiLine={true}
-              rows={3}
-              rowsMax={4}
-              fullWidth={true}
-              floatingLabelText="description"
-              style={styles.descriptionstyle}
-            />
-          </CardSection>
-          {0 === 1 && (
-            <CardSection>
-              <SelectStyle>
-                <Field
-                  textFieldStyle={{ width: 150 }}
-                  name="startdate"
-                  disabled={readOnly}
-                  hintText="startdate"
-                  component={MyDatePicker}
-                  floatingLabelText="start date"
-                />
-              </SelectStyle>
-              <SelectStyle>
-                <Field
-                  textFieldStyle={{ width: 150 }}
-                  name="enddate"
-                  disabled={readOnly}
-                  hintText="enddate"
-                  component={MyDatePicker}
-                  floatingLabelText="end date"
-                  autoOk={true}
-                />
-              </SelectStyle>
-            </CardSection>
-          )}
           <CardSection>
             <Field
               name="applicable"

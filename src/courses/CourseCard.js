@@ -4,6 +4,8 @@ import { withRouter } from "react-router";
 import styled from "styled-components";
 import CourseForm from "./CourseForm";
 import CourseStudentList from "./CourseStudentList";
+import PlannedCourses from "./PlannedCourses";
+import YesNoDialog from "../common/YesNoDialog";
 
 const Div = styled.div`
   display: flex;
@@ -17,7 +19,7 @@ const Right = styled.div`
 `;
 
 class CourseCard extends Component {
-  state = {};
+  state = { planned: { students: [] }, toconfirm: false, id: null, confirmed: false };
 
   constructor(props) {
     super(props);
@@ -25,10 +27,22 @@ class CourseCard extends Component {
     this.handleDelete = this.handleDelete.bind(this);
   }
 
-  handleDelete({ id }) {
+  showConfirmDialog = ({ id }) => {
+    this.setState({ toconfirm: true, id });
+  };
+
+  confirmedDelete = () => {
+    this.setState({ toconfirm: false });
+    this.handleDelete(this.state.id);
+  };
+
+  cancelDelete = () => this.setState({ toconfirm: false, id: null });
+
+  handleDelete(id) {
     this.props
       .deleteCourse({ id })
       .then(this.props.data.refetch())
+      .then(this.setState({ id: null }))
       .then(() => setTimeout((window.location.href = "/courses"), 500))
       .catch(e => alert(JSON.stringify(e, null, 2)));
   }
@@ -67,8 +81,10 @@ class CourseCard extends Component {
       .catch(e => window.alert(JSON.stringify(e, null, 2)));
   }
 
+  handlePlannedSelect = e => {};
+
   render() {
-    const { loading, error, course } = this.props.data;
+    const { loading, error, course, coursetypes } = this.props.data;
 
     if (loading) {
       return <p>Loading ...</p>;
@@ -76,22 +92,34 @@ class CourseCard extends Component {
     if (error) {
       return <p>{error.message}</p>;
     }
+    console.log(this.state);
     return (
       <div>
         <Div>
           <Right>
             <CourseForm
               initialValues={course}
+              coursetypes={coursetypes}
               course={course}
               onSave={this.handleSave}
-              onDelete={this.handleDelete}
+              onDelete={this.showConfirmDialog}
               readOnly={false}
             />
           </Right>
-          <Left>
-            <CourseStudentList students={course.enrollments} />
-          </Left>
+          <YesNoDialog
+            open={this.state.toconfirm}
+            handleYes={this.confirmedDelete}
+            handleNo={this.cancelDelete}
+            question="Delete?"
+          />
         </Div>
+        <Left>
+          <PlannedCourses
+            planned={course.plannedcourses}
+            rowSelected={e => this.setState({ planned: e })}
+          />
+          <CourseStudentList students={this.state.planned.students} />
+        </Left>
       </div>
     );
   }
@@ -129,6 +157,17 @@ const CourseQuery = gql`
       startdate
       enddate
       hours
+      plannedcourses {
+        id
+        startdate
+        enddate
+        status
+        students {
+          id
+          fullname
+          image
+        }
+      }
       applicable
       trainer
       lastmodified
@@ -141,6 +180,9 @@ const CourseQuery = gql`
           image
         }
       }
+    }
+    coursetypes {
+      name
     }
   }
 `;
