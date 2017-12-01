@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Field, reduxForm } from "redux-form";
 import { withRouter } from "react-router";
-import { SelectField, TextField } from "redux-form-material-ui";
+import { SelectField } from "redux-form-material-ui";
 import { CardSection, Card, Input, MyDatePicker } from "../common";
 import MenuItem from "material-ui/MenuItem";
 import Chip from "material-ui/Chip";
@@ -14,10 +14,6 @@ import {
   RegisterButton
 } from "../common/TitleBar";
 import withAuth from "../utils/withAuth";
-
-const StyledField = styled(Field)`
-  margin-right: 5px;
-`;
 
 const SelectStyle = styled.div`
   margin: 5px;
@@ -156,7 +152,7 @@ class CourseForm extends Component {
               underlineShow={true}
               component={Input}
               multiLine={true}
-              rows={3}
+              rows={2}
               rowsMax={4}
               fullWidth={true}
               floatingLabelText="description"

@@ -16,7 +16,7 @@ class YesNoDialog extends React.Component {
       <RaisedButton label="Yes" primary={true} style={styles.buttonStyle} onClick={handleYes} />
     ];
     return (
-      <Dialog open={this.props.open} actions={actions}>
+      <Dialog open={open} actions={actions}>
         {question}
       </Dialog>
     );

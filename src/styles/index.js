@@ -113,6 +113,18 @@ export const Title = styled.h3`
   padding-left: 30px;
 `;
 
+export const HeaderRow = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+export const HeaderLeft = styled.div`
+  display: flex;
+  flex-grow: 5;
+`;
+
+export const HeaderRight = styled.div``;
+
 export const niceblue = "#40a5ed";
 export const babyblue = "#ecf6fd";
 export const twitterblue = "#1da1f2";

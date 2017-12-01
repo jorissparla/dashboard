@@ -2,7 +2,6 @@ import React from "react";
 import AppBar from "material-ui/AppBar";
 import IconButton from "material-ui/IconButton";
 import { blue500 } from "material-ui/styles/colors";
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import Avatar from "material-ui/Avatar";
 import getMuiTheme from "material-ui/styles/getMuiTheme";
 import ActionHome from "material-ui/svg-icons/action/home";
@@ -19,25 +18,9 @@ import Divider from "material-ui/Divider";
 import MenuItem from "material-ui/MenuItem";
 import { withRouter } from "react-router";
 import { Toolbar, ToolbarGroup, ToolbarTitle } from "material-ui/Toolbar";
-import { Drawer } from "material-ui";
 import withAuth from "./utils/withAuth";
 
 import FlatButton from "material-ui/FlatButton";
-
-const muiTheme = getMuiTheme({
-  appBar: {
-    height: 50,
-    color: blue500,
-    textColor: "white"
-  },
-  toolbar: {
-    height: 50,
-    backgroundColor: blue500
-  },
-  menuitemStyle: {
-    textColor: "black"
-  }
-});
 
 function handleTouchTap() {
   alert("onTouchTap triggered on the title component");
@@ -230,14 +213,11 @@ class Header extends React.Component {
   }
 
   render() {
-    console.log("Header", this.props);
     return (
-      <MuiThemeProvider muiTheme={muiTheme}>
-        <div>
-          {this.renderToolBar()}
-          {this.props.children}
-        </div>
-      </MuiThemeProvider>
+      <div>
+        {this.renderToolBar()}
+        {this.props.children}
+      </div>
     );
   }
 }

@@ -53,6 +53,7 @@ import NewsPage from "./news/newspage";
 import DashBoardStatsNew from "./DashBoardStatsNew";
 import RequestList from "./supportcard/RequestContainer";
 import RequestEdit from "./supportcard/RequestEdit";
+import ImageConverter from "./utils/ConvertImages";
 
 const NotFound = () => <h2>Not Found!</h2>;
 
@@ -65,7 +66,7 @@ class AppRoutes extends React.Component {
     }
     return (
       <Switch>
-        <Route exact path="/test" component={GoLiveListNew} />
+        <Route exact path="/test" component={ImageConverter} />
         <EnhancedRoute
           editors={["Admin", "PO"]}
           user={user}

@@ -9,12 +9,8 @@ import {
   TableRowColumn
 } from "material-ui/Table";
 import RaisedButton from "material-ui/RaisedButton";
-import Dialog from "material-ui/Dialog";
 import DatePicker from "material-ui/DatePicker";
-import SelectField from "material-ui/SelectField";
-import MenuItem from "material-ui/MenuItem";
 import { gql, graphql } from "react-apollo";
-import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
 import _ from "lodash";
 import AddCourseDialog from "./AddCourseDialog";
@@ -36,13 +32,6 @@ const HeaderLeft = styled.div`
 `;
 
 const HeaderRight = styled.div``;
-
-const DateSelect = styled(DatePicker)`
-  color: blue;
-  :hover {
-    color: orange;
-  }
-`;
 
 const styles = {
   headerStyle: {

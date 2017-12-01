@@ -80,7 +80,7 @@ class AddStudentsToCourse extends Component {
   }
 
   render() {
-    const { data: { loading, error, accounts, course } } = this.props;
+    const { data: { loading, error, accounts, plannedcourses } } = this.props;
     if (loading) {
       return (
         <Div>
@@ -91,7 +91,8 @@ class AddStudentsToCourse extends Component {
     if (error) {
       return <p>{error.message}</p>;
     }
-    const studentsAsString = course.students.map(student => student.fullname).join(" ");
+    console.log("PROPS", this.props);
+    const plannedcourse = plannedcourses[0];
     const filteredAccounts0 = _.chain(accounts)
       // .filter(account => !studentsAsString.includes(account.fullname))
       .filter(
@@ -102,16 +103,17 @@ class AddStudentsToCourse extends Component {
       .value();
     const filteredAccounts = _.uniqBy(filteredAccounts0, item => item.navid);
     console.log(`filteredAccounts (${filteredAccounts.length})`, filteredAccounts);
+    //const { id, course, students } = plannedcourse;
     return (
       <div>
         <Paper>
           <TitleBar>
-            Add Students to Course ' {course.title}
+            Add Students to Course ' {plannedcourse.course.title}
             '
             <RaisedButton
               style={{ marginLeft: 20 }}
               label="back to course"
-              onClick={() => (window.location.href = `/courses/edit/${course.id}`)}
+              onClick={() => (window.location.href = `/courses/edit/${plannedcourse.course.id}`)}
             />
           </TitleBar>
         </Paper>
@@ -158,10 +160,11 @@ class AddStudentsToCourse extends Component {
                           backgroundColor={red500}
                           style={{ marginRight: 20 }}
                           onClick={() => {
-                            console.log(`clicked ${course.id} ${navid}`);
+                            console.log(`clicked ${plannedcourse.id} ${navid}`);
                             this.props
                               .addStudentToCourse({
-                                courseid: course.id,
+                                plannedcourseid: plannedcourse.id,
+                                courseid: plannedcourse.course.id,
                                 navid: navid
                               })
                               .then(this.props.data.refetch());
@@ -178,7 +181,7 @@ class AddStudentsToCourse extends Component {
           </Right>
           <Left>
             <Paper>
-              <Div1>{this.renderStudents(course.students)}</Div1>
+              <Div1>{this.renderStudents(plannedcourse.students)}</Div1>
             </Paper>
           </Left>
         </Div>
@@ -190,10 +193,12 @@ class AddStudentsToCourse extends Component {
 const addStudentToCourse = gql`
   mutation addStudentToCourse($input: InputEnrollment) {
     addStudentToCourse(input: $input) {
-      course {
-        title
-        _studentsMeta {
-          count
+      plannedcourse {
+        course {
+          title
+          _studentsMeta {
+            count
+          }
         }
       }
     }
@@ -211,9 +216,11 @@ const removeStudentFromCourse = gql`
 `;
 const selectedCourse = gql`
   query selectedCourse($id: ID) {
-    course(id: $id) {
+    plannedcourses(id: $id) {
       id
-      title
+      course {
+        title
+      }
       students {
         id
         navid

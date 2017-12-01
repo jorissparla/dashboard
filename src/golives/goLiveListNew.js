@@ -1,12 +1,7 @@
 import React from "react";
 import { gql, graphql } from "react-apollo";
 import { List, ListItem } from "material-ui/List";
-import { withRouter } from "react-router-dom";
 import Avatar from "material-ui/Avatar";
-import Divider from "material-ui/Divider";
-import NewIcon from "material-ui/svg-icons/av/new-releases";
-import moment from "moment";
-import { Loading } from "../styles";
 import styled from "styled-components";
 import _ from "lodash";
 import { format } from "date-fns";
@@ -23,10 +18,6 @@ const Title = styled.h3`
   align-items: center;
 `;
 
-const big = styled.div`
-  font-size: 16px;
-  text-transform: uppercase;
-`;
 const Div = styled.div`
   display: flex;
   justify-content: space-between;
@@ -64,13 +55,9 @@ const dayPart = d => format(Date.parse(d), "DD");
 const monthPart = d => format(Date.parse(d), "MMMM");
 
 const GoLiveItem = ({ item, bg = "#ec407a" }) => {
-  const { id, day, customername, country, region, version, comments } = item;
+  const { id, day, customername, region, version, comments } = item;
   console.log(item);
-  const initials = customername
-    .split("")
-    .slice(0, 2)
-    .join()
-    .toUpperCase();
+
   return (
     <ListItem
       key={id}

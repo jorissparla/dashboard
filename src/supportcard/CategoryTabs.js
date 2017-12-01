@@ -28,11 +28,7 @@ const IconMapper = label => {
   }
 };
 
-const CategoryTabs = ({
-  data: { loading, error, categories },
-  onChange,
-  onSave
-}) => {
+const CategoryTabs = ({ data: { loading, error, categories }, onChange, onSave }) => {
   if (loading) {
     return <p>Loading ...</p>;
   }
@@ -40,17 +36,13 @@ const CategoryTabs = ({
     return <p>{error.message}</p>;
   }
   return (
-    <Tabs
+    /*     <Tabs
       style={style}
       contentContainerStyle={style}
       tabItemContainerStyle={style}
-    >
-      <Tab
-        key="2ddgdfgdgt534"
-        label="All"
-        icon={<AllPin />}
-        onActive={() => onChange("")}
-      />
+    > */
+    <Tabs>
+      <Tab key="2ddgdfgdgt534" label="All" icon={<AllPin />} onActive={() => onChange("")} />
       {categories.map(({ id, name }) => (
         <Tab
           key={id}
