@@ -216,7 +216,7 @@ const removeStudentFromCourse = gql`
 `;
 const selectedCourse = gql`
   query selectedCourse($id: ID) {
-    plannedcourses(id: $id) {
+    courses(id: $id) {
       id
       course {
         title

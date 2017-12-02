@@ -21,13 +21,26 @@ const styles = {
     fontSize: 18,
     width: 200
   },
+  headerStyleSmall: {
+    fontSize: 18,
+    width: 90
+  },
   rowStyle: {
     fontSize: 18,
     width: 200
   },
+  rowStyleSmall: {
+    fontSize: 18,
+    width: 90
+  },
   button: {
     margin: 12,
     background: "#2196f3"
+  },
+  button2: {
+    margin: 12,
+    backgroundColor: "black",
+    primaryColor1: "black"
   },
 
   iconStyle: {
@@ -44,12 +57,16 @@ const fmtDate = val => {
   return format(val, "ddd, DD MMM YYYY");
 };
 
-const HeaderColumn = ({ children }) => {
-  return <TableHeaderColumn style={styles.headerStyle}>{children}</TableHeaderColumn>;
+const HeaderColumn = ({ children, small }) => {
+  if (small) {
+    return <TableHeaderColumn style={styles.headerStyleSmall}>{children}</TableHeaderColumn>;
+  } else return <TableHeaderColumn style={styles.headerStyle}>{children}</TableHeaderColumn>;
 };
 
-const RowColumn = ({ children }) => {
-  return <TableRowColumn style={styles.rowStyle}>{children}</TableRowColumn>;
+const RowColumn = ({ children, small }) => {
+  if (small) {
+    return <TableRowColumn style={styles.rowStyleSmall}>{children}</TableRowColumn>;
+  } else return <TableRowColumn style={styles.rowStyle}>{children}</TableRowColumn>;
 };
 
 class PlannedCoursesTable extends React.Component {
@@ -136,11 +153,10 @@ class PlannedCoursesTable extends React.Component {
             <TableRow>
               <HeaderColumn>STARTDATE</HeaderColumn>
               <HeaderColumn>ENDDATE</HeaderColumn>
-              <HeaderColumn style={{ width: 90 }} s>
-                STATUS
-              </HeaderColumn>
-              <HeaderColumn />
-              <HeaderColumn />
+              <HeaderColumn small={true}>STATUS</HeaderColumn>
+              <HeaderColumn small={true}>HOURS</HeaderColumn>
+              <HeaderColumn small={true}>STUDENTS</HeaderColumn>
+              <HeaderColumn small={true}> </HeaderColumn>
             </TableRow>
           </TableHeader>
           <TableBody displayRowCheckbox={true} showRowHover={true}>
@@ -148,8 +164,10 @@ class PlannedCoursesTable extends React.Component {
               <TableRow key={index} selectable={true} selected={this.state.selected === index}>
                 <RowColumn>{fmtDate(plan.startdate)}</RowColumn>
                 <RowColumn>{fmtDate(plan.enddate)}</RowColumn>
-                <RowColumn>{plan.status}</RowColumn>
-                <RowColumn>
+                <RowColumn small={true}>{plan.status}</RowColumn>
+                <RowColumn small={true}>{plan.hours}</RowColumn>
+                <RowColumn small={true}>{plan.studentcount}</RowColumn>
+                <RowColumn small={true}>
                   <EditIcon
                     style={styles.iconStyle}
                     hoverColor={grey400}
@@ -161,9 +179,12 @@ class PlannedCoursesTable extends React.Component {
                         selectedenddate: plan.enddate
                       })}
                   />
-                  <TrashIcon style={styles.iconStyle2} hoverColor={purple400} />
+                  <TrashIcon
+                    style={styles.iconStyle2}
+                    hoverColor={purple400}
+                    onClick={() => this.props.onDelete(plan.id)}
+                  />
                 </RowColumn>
-                <RowColumn />
               </TableRow>
             ))}
           </TableBody>

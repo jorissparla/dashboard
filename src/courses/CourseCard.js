@@ -7,6 +7,7 @@ import CourseForm from "./CourseForm";
 import CourseStudentList from "./CourseStudentList";
 import PlannedCourses from "./PlannedCourses";
 import YesNoDialog from "../common/YesNoDialog";
+import { Title } from "../styles";
 import _ from "lodash";
 
 const Div = styled.div`
@@ -30,22 +31,34 @@ const styles = {
 class CourseCard extends Component {
   state = {
     planned: { students: [] },
-    toconfirm: false,
+    toConfirmDeleteCourse: false,
+    toConfirmDeletePlanned: false,
     id: null,
+    planid: null,
     confirmed: false,
     activeTab: "course"
   };
 
   showConfirmDialog = ({ id }) => {
-    this.setState({ toconfirm: true, id });
+    this.setState({ toConfirmDeleteCourse: true, id });
+  };
+  showConfirmDeletePlannedDialog = id => {
+    console.log("hier", id);
+    this.setState({ toConfirmDeletePlanned: true, planid: id });
   };
 
-  confirmedDelete = () => {
-    this.setState({ toconfirm: false });
+  confirmedDeleteCourse = () => {
+    this.setState({ toConfirmDeleteCourse: false });
     this.handleDelete(this.state.id);
   };
+  confirmedDeletePlanned = () => {
+    this.setState({ toConfirmDeletePlanned: false });
+    console.log("deleting", this.state.planid);
+    this.handleDeletePlanned(this.state.planid);
+  };
 
-  cancelDelete = () => this.setState({ toconfirm: false, id: null });
+  cancelDelete = () =>
+    this.setState({ toConfirmDeletePlanned: false, toConfirmDeleteCourse: false, id: null });
 
   handleDelete = id => {
     this.props
@@ -53,6 +66,14 @@ class CourseCard extends Component {
       .then(this.props.data.refetch())
       .then(this.setState({ id: null }))
       .then(() => setTimeout((window.location.href = "/courses"), 500))
+      .catch(e => alert(JSON.stringify(e, null, 2)));
+  };
+
+  handleDeletePlanned = id => {
+    this.props
+      .deletePlannedCourse({ variables: { input: { id } } })
+      .then(this.props.data.refetch())
+      .then(this.setState({ planid: null }))
       .catch(e => alert(JSON.stringify(e, null, 2)));
   };
 
@@ -137,10 +158,10 @@ class CourseCard extends Component {
               />
             </Right>
             <YesNoDialog
-              open={this.state.toconfirm}
-              handleYes={this.confirmedDelete}
+              open={this.state.toConfirmDeleteCourse}
+              handleYes={this.confirmedDeleteCourse}
               handleNo={this.cancelDelete}
-              question="Delete?"
+              question="Delete This Course?"
             />
           </Div>
         </Tab>
@@ -159,9 +180,20 @@ class CourseCard extends Component {
               onRowSelected={e => this.setState({ planned: e })}
               onUpdate={v => this.handleUpdatePlanned(v)}
               onAddNew={v => this.handleAddPlanned(v)}
+              onDelete={id => this.showConfirmDeletePlannedDialog(id)}
+            />
+            <YesNoDialog
+              open={this.state.toConfirmDeletePlanned}
+              handleYes={this.confirmedDeletePlanned}
+              handleNo={this.cancelDelete}
+              question="Delete Scheduled Course?"
             />
             <CourseStudentList students={studentlist} />
           </Left>
+        </Tab>
+        <Tab label="Admin" value="admin">
+          {" "}
+          <Title>No Information Yet</Title>
         </Tab>
       </Tabs>
     );
@@ -206,6 +238,14 @@ const PlannedCourseAdd = gql`
   }
 `;
 
+const PlannedCourseDelete = gql`
+  mutation deletePlannedCourse($input: InputPlannedCourseType) {
+    deletePlannedCourse(input: $input) {
+      text
+    }
+  }
+`;
+
 const CourseQuery = gql`
   query course($id: ID) {
     course(id: $id) {
@@ -224,11 +264,13 @@ const CourseQuery = gql`
         startdate
         enddate
         status
+        hours
         students {
           id
           fullname
           image
         }
+        studentcount
       }
       applicable
       trainer
@@ -259,6 +301,7 @@ export default compose(
   graphql(CourseUpdate, { name: "updateCourse" }),
   graphql(PlannedCourseUpdate, { name: "updatePlannedCourse" }),
   graphql(PlannedCourseAdd, { name: "addPlannedCourse" }),
+  graphql(PlannedCourseDelete, { name: "deletePlannedCourse" }),
   graphql(CourseQuery, {
     options: ownProps => ({ variables: { id: ownProps.match.params.id } })
   })
