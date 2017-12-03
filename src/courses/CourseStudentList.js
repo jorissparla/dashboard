@@ -23,8 +23,7 @@ const Div = styled.div`
   padding: 10px;
 `;
 
-const StudentList = ({ students, history }) => {
-  console.log("students", students);
+const StudentList = ({ students, history, id }) => {
   if (!students) {
     return <div>No Students registered</div>;
   }
@@ -33,15 +32,7 @@ const StudentList = ({ students, history }) => {
       <HeaderLeft>
         <Title>Registered for Selected Course</Title>
       </HeaderLeft>
-      <HeaderRight>
-        <RaisedButton
-          label="Edit Registration"
-          backgroundColor="#000"
-          labelColor="#fff"
-          style={styles.button}
-          onClick={() => console.log("click")}
-        />
-      </HeaderRight>
+      <HeaderRight />
     </HeaderRow>,
     <Div>
       {students.map((student, index) => {

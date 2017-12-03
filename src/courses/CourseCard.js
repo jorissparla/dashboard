@@ -65,7 +65,7 @@ class CourseCard extends Component {
       .deleteCourse({ variables: { input: { id } } })
       .then(this.props.data.refetch())
       .then(this.setState({ id: null }))
-      .then(() => setTimeout((window.location.href = "/courses"), 500))
+      //.then(() => setTimeout((window.location.href = "/courses"), 500))
       .catch(e => alert(JSON.stringify(e, null, 2)));
   };
 
@@ -181,6 +181,7 @@ class CourseCard extends Component {
               onUpdate={v => this.handleUpdatePlanned(v)}
               onAddNew={v => this.handleAddPlanned(v)}
               onDelete={id => this.showConfirmDeletePlannedDialog(id)}
+              onRegister={e => this.props.history.push(`/courses/addstudents/${e.id}`)}
             />
             <YesNoDialog
               open={this.state.toConfirmDeletePlanned}

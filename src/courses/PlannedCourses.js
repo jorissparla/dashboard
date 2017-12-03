@@ -79,11 +79,15 @@ class PlannedCoursesTable extends React.Component {
     value: "",
     minDate: null,
     defaultDate: Date.now(),
-    selected: null
+    selected: null,
+    disableregister: true
+  };
+
+  editRegisterClick = e => {
+    this.props.onRegister(this.props.planned[this.state.selected]);
   };
   render() {
     const { planned, onRowSelected, course, courses, hours, selected } = this.props;
-    console.log("PlannedCourse", course);
     const courseid = course.id;
     return (
       <div>
@@ -94,6 +98,16 @@ class PlannedCoursesTable extends React.Component {
             </Title>
           </HeaderLeft>
           <HeaderRight>
+            <RaisedButton
+              label="Edit Registration"
+              backgroundColor="#000"
+              disabled={this.state.disableregister}
+              labelColor="#fff"
+              style={styles.button}
+              onClick={e => {
+                this.editRegisterClick();
+              }}
+            />
             <RaisedButton
               label="New"
               primary={true}
@@ -142,9 +156,11 @@ class PlannedCoursesTable extends React.Component {
             this.setState({ selected: row });
             if (onRowSelected) {
               if (row >= 0) {
+                this.setState({ disableregister: false });
                 onRowSelected(planned[row]);
               } else {
                 onRowSelected(null);
+                this.setState({ disableregister: true });
               }
             }
           }}
@@ -159,7 +175,7 @@ class PlannedCoursesTable extends React.Component {
               <HeaderColumn small={true}> </HeaderColumn>
             </TableRow>
           </TableHeader>
-          <TableBody displayRowCheckbox={true} showRowHover={true}>
+          <TableBody displayRowCheckbox={true} showRowHover={true} deselectOnClickaway={false}>
             {planned.map((plan, index) => (
               <TableRow key={index} selectable={true} selected={this.state.selected === index}>
                 <RowColumn>{fmtDate(plan.startdate)}</RowColumn>

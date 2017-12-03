@@ -215,13 +215,6 @@ class CourseForm extends Component {
               course && (
                 <DeleteButton label="Delete" onClick={() => this.handleDelete(this.props.course)} />
               )}
-            {!readOnly &&
-              course && (
-                <RegisterButton
-                  label="Edit Registration"
-                  onClick={() => history.push(`/courses/addstudents/${this.props.course.id}`)}
-                />
-              )}
             <Chip style={{ margin: 4 }}>
               {course ? `Last updated  ${moment(course.lastmodified).calendar()}` : "not Saved yet"}
             </Chip>

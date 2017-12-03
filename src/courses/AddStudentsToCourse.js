@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { gql, graphql } from "react-apollo";
+import { gql, graphql, compose } from "react-apollo";
 import { List, ListItem } from "material-ui/List";
 import Divider from "material-ui/Divider";
 import Avatar from "material-ui/Avatar";
@@ -43,23 +43,26 @@ const Right = styled.div`
 class AddStudentsToCourse extends Component {
   state = { searchText: "" };
 
-  constructor(props) {
-    super(props);
-    this.renderStudents = this.renderStudents.bind(this);
-    this.handleSearchChange = this.handleSearchChange.bind(this);
-  }
-
-  handleSearchChange(val) {
+  handleSearchChange = val => {
     this.setState({ searchText: val });
-  }
-  renderStudents(students) {
+  };
+  renderStudents = students => {
     return students.map(student => (
       <Chip
         onRequestDelete={() => {
+          console.log("RequestDelete", this.props.data);
+          const { plannedcourses } = this.props.data;
+          const thiscourse = plannedcourses[0];
+          const input = {
+            plannedcourseid: thiscourse.id,
+            courseid: thiscourse.course.id,
+            navid: student.navid
+          };
           this.props
             .removeStudentFromCourse({
-              courseid: this.props.data.course.id,
-              navid: student.navid
+              variables: {
+                input
+              }
             })
             .then(this.props.data.refetch());
         }}
@@ -77,7 +80,7 @@ class AddStudentsToCourse extends Component {
         {student.fullname}
       </Chip>
     ));
-  }
+  };
 
   render() {
     const { data: { loading, error, accounts, plannedcourses } } = this.props;
@@ -163,9 +166,13 @@ class AddStudentsToCourse extends Component {
                             console.log(`clicked ${plannedcourse.id} ${navid}`);
                             this.props
                               .addStudentToCourse({
-                                plannedcourseid: plannedcourse.id,
-                                courseid: plannedcourse.course.id,
-                                navid: navid
+                                variables: {
+                                  input: {
+                                    plannedcourseid: plannedcourse.id,
+                                    courseid: plannedcourse.course.id,
+                                    navid: navid
+                                  }
+                                }
                               })
                               .then(this.props.data.refetch());
                           }}
@@ -216,9 +223,10 @@ const removeStudentFromCourse = gql`
 `;
 const selectedCourse = gql`
   query selectedCourse($id: ID) {
-    courses(id: $id) {
+    plannedcourses(id: $id) {
       id
       course {
+        id
         title
       }
       students {
@@ -242,24 +250,10 @@ const selectedCourse = gql`
     }
   }
 `;
-export default graphql(removeStudentFromCourse, {
-  props: ({ mutate }) => ({
-    removeStudentFromCourse: input =>
-      mutate({
-        variables: { input }
-      })
+export default compose(
+  graphql(removeStudentFromCourse, { name: "removeStudentFromCourse" }),
+  graphql(addStudentToCourse, { name: "addStudentToCourse" }),
+  graphql(selectedCourse, {
+    options: ownProps => ({ variables: { id: ownProps.match.params.id } })
   })
-})(
-  graphql(addStudentToCourse, {
-    props: ({ mutate }) => ({
-      addStudentToCourse: input =>
-        mutate({
-          variables: { input }
-        })
-    })
-  })(
-    graphql(selectedCourse, {
-      options: ownProps => ({ variables: { id: ownProps.match.params.id } })
-    })(withRouter(withAuth(AddStudentsToCourse)))
-  )
-);
+)(withRouter(withAuth(AddStudentsToCourse)));

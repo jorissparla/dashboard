@@ -66,7 +66,7 @@ class AppRoutes extends React.Component {
     }
     return (
       <Switch>
-        <Route exact path="/test" component={ImageConverter} />
+        <Route exact path="/test" component={CourseView} />
         <EnhancedRoute
           editors={["Admin", "PO"]}
           user={user}
