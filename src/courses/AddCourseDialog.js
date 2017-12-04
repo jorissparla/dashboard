@@ -3,6 +3,7 @@ import RaisedButton from "material-ui/RaisedButton";
 import Dialog from "material-ui/Dialog";
 import DatePicker from "material-ui/DatePicker";
 import SelectField from "material-ui/SelectField";
+import TextField from "material-ui/TextField";
 import MenuItem from "material-ui/MenuItem";
 import styled from "styled-components";
 
@@ -45,6 +46,9 @@ class AddCourseDialog extends React.Component {
     this.setState({ selectedcourse });
   };
 
+  handleChangeHours = (e, hours) => {
+    this.setState({ hours });
+  };
   validate = () => {
     console.log("Validating", this.state);
     this.setState({ error: { startdate: "", enddate: "" } });
@@ -105,6 +109,15 @@ class AddCourseDialog extends React.Component {
             name="enddate"
             value={this.state.enddate}
             onChange={(e, enddate) => this.setState({ enddate })}
+          />
+          <TextField
+            hintText="hours"
+            errorText=""
+            floatingLabelText="hours"
+            value={this.state.hours}
+            onChange={this.handleChangeHours}
+            multiLine={false}
+            rows={1}
           />
         </div>
         <RaisedButton

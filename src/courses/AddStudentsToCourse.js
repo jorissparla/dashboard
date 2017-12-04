@@ -101,6 +101,7 @@ class AddStudentsToCourse extends Component {
       .filter(
         account =>
           account.fullname.toUpperCase().includes(this.state.searchText.toUpperCase()) ||
+          account.location.toUpperCase().includes(this.state.searchText.toUpperCase()) ||
           account.team.toUpperCase().includes(this.state.searchText.toUpperCase())
       )
       .value();

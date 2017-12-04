@@ -8,15 +8,19 @@ import {
   TableRow,
   TableRowColumn
 } from "material-ui/Table";
+import { Tabs, Tab } from "material-ui/Tabs";
 import RaisedButton from "material-ui/RaisedButton";
 import DatePicker from "material-ui/DatePicker";
 import { gql, graphql } from "react-apollo";
 import { Link } from "react-router-dom";
+import addDays from "date-fns/add_days";
 import _ from "lodash";
 import AddCourseDialog from "./AddCourseDialog";
+import StudentListContainer from "./StudentListContainer";
 
 const Title = styled.h3`
   font-weight: 200;
+  display: flex;
   font-family: Raleway;
   padding-left: 30px;
 `;
@@ -40,6 +44,10 @@ const styles = {
   button: {
     margin: 12,
     background: "#2196f3"
+  },
+  tabStyle: {
+    backgroundColor: "#2196f3",
+    fontSize: "1rem"
   }
 };
 
@@ -49,20 +57,24 @@ const HeaderColumn = ({ style, children }) => {
 };
 class CourseView extends React.Component {
   state = {
-    startdate: new Date(),
+    startdate: addDays(new Date(), -7),
+    studentfilterstartdate: addDays(new Date(), -180),
     open: false,
     course: 1,
     value: "",
     minDate: null,
-    defaultDate: Date.now()
+    defaultDate: new Date(),
+    activeTab: "scheduled"
   };
 
   componentDidCatch(error) {
     //alert(JSON.stringify(error));
   }
   handleStartDateChange = (e, value) => {
-    console.log(value);
     this.setState({ startdate: value });
+  };
+  handleStudentFilterStartDateChange = (e, value) => {
+    this.setState({ studentfilterstartdate: value });
   };
 
   handleChange = (event, index, course) => {
@@ -124,39 +136,82 @@ class CourseView extends React.Component {
         )
       : courses;
 
-    return [
-      <HeaderRow>
-        <HeaderLeft>
-          {" "}
-          <Title>
-            Scheduled Courses Starting<DatePicker
-              hintText="Enter StartDate Course"
-              value={this.state.startdate}
-              onChange={this.handleStartDateChange}
-            />
-          </Title>
-        </HeaderLeft>
-        <HeaderRight>
-          <RaisedButton
-            label="New"
-            primary={true}
-            style={styles.button}
-            onClick={this.toggleDialog}
-          />
-        </HeaderRight>
-      </HeaderRow>,
-      <div>{this.renderCourses(filteredCourses)}</div>,
-      <div>
-        {open === true && (
-          <AddCourseDialog
-            open={open}
-            courses={courses}
-            onSave={e => console.log("onSave", JSON.stringify(e))}
-            onCancel={() => this.setState({ open: false })}
-          />
-        )}
-      </div>
-    ];
+    return (
+      <Tabs
+        inkBarStyle={styles.tabStyle}
+        value={this.state.activeTab}
+        onChange={value => this.setState({ activeTab: value })}
+      >
+        <Tab label="Scheduled Course" value="scheduled">
+          <HeaderRow>
+            <HeaderLeft>
+              {" "}
+              <Title>
+                Scheduled Courses Starting<DatePicker
+                  hintText="Enter StartDate Course"
+                  value={this.state.startdate}
+                  onChange={(e, value) => this.handleStartDateChange(e, value)}
+                />
+              </Title>
+            </HeaderLeft>
+            <HeaderRight>
+              <RaisedButton
+                label="New"
+                primary={true}
+                style={styles.button}
+                onClick={this.toggleDialog}
+              />
+            </HeaderRight>
+          </HeaderRow>
+          <div>{this.renderCourses(filteredCourses)}</div>,
+          <div>
+            {open === true && (
+              <AddCourseDialog
+                open={open}
+                courses={courses}
+                onSave={e => console.log("onSave", JSON.stringify(e))}
+                onCancel={() => this.setState({ open: false })}
+              />
+            )}
+          </div>
+        </Tab>
+        <Tab label="By Student" value="student">
+          <HeaderRow>
+            <HeaderLeft>
+              {" "}
+              <Title>
+                In Period from
+                <DatePicker
+                  hintText="Enter StartDate Courses"
+                  value={this.state.studentfilterstartdate}
+                  name="studentfilterstartdate"
+                  onChange={this.handleStudentFilterStartDateChange}
+                />
+                to
+                <DatePicker
+                  hintText="Enter End Date Courses"
+                  value={this.state.studentfilterstartdate}
+                  name="studentfilterenddate"
+                  onChange={this.handleStudentFilterStartDateChange}
+                />
+              </Title>
+            </HeaderLeft>
+            <HeaderRight>
+              <RaisedButton
+                label="New"
+                primary={true}
+                style={styles.button}
+                onClick={this.toggleDialog}
+              />
+            </HeaderRight>
+          </HeaderRow>
+          <StudentListContainer />
+        </Tab>
+        <Tab label="By Trainer" value="trainer">
+          To be implemented
+        </Tab>
+      </Tabs>
+    );
   }
 }
 const courseQuery = gql`

@@ -138,7 +138,7 @@ class StudentTables extends Component {
           account.team.toUpperCase().includes(this.state.searchText.toUpperCase())
       )
       .map(account => {
-        const hoursObj = account.courses.reduce(
+        const hoursObj = account.plannedcourses.reduce(
           ({ hours, count }, course) => {
             return { hours: hours + course.hours, count: count + 1 };
           },
