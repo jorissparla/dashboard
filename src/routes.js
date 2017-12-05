@@ -41,6 +41,7 @@ import RequestEditAdd from "./supportcard/Request";
 import SupportCardEdit from "./supportcard/SupportCardEdit";
 import SupportCardAdd from "./supportcard/SupportCardAdd";
 import CourseList from "./courses/CourseList";
+import CourseView from "./courses/CourseView";
 import CourseCard from "./courses/CourseCard";
 import AddCourseCard from "./courses/AddCourseCard";
 import StudentListContainer from "./courses/StudentListContainer";
@@ -52,6 +53,7 @@ import NewsPage from "./news/newspage";
 import DashBoardStatsNew from "./DashBoardStatsNew";
 import RequestList from "./supportcard/RequestContainer";
 import RequestEdit from "./supportcard/RequestEdit";
+import ImageConverter from "./utils/ConvertImages";
 
 const NotFound = () => <h2>Not Found!</h2>;
 
@@ -64,7 +66,13 @@ class AppRoutes extends React.Component {
     }
     return (
       <Switch>
-        <Route exact path="/test" component={GoLiveListNew} />
+        <Route exact path="/test" component={CourseView} />
+        <AuthRoute
+          allowed={["Admin", "PO", "SU"]}
+          exact
+          path="/coursedashboard"
+          component={CourseView}
+        />
         <EnhancedRoute
           editors={["Admin", "PO"]}
           user={user}
@@ -173,6 +181,7 @@ class AppRoutes extends React.Component {
         <Route path="test/edit/:id" component={NewsItemContainer} />
         <Route path="test/new" component={NewsItemAddContainer} />
         <Route exact path="/courses" component={CourseList} />
+        <Route exact path="/courseview" component={CourseView} />
         <Route exact path="/students" component={StudentListContainer} />
         <Route path="/students/:id" component={StudentView} />
         <AuthRoute

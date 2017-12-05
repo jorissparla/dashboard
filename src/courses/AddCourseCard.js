@@ -4,8 +4,12 @@ import { withRouter } from "react-router";
 import styled from "styled-components";
 import CourseForm from "./CourseForm";
 
-const Div = styled.div`display: flex;`;
-const Left = styled.div`flex-basis: 30%;`;
+const Div = styled.div`
+  display: flex;
+`;
+const Left = styled.div`
+  flex-basis: 30%;
+`;
 const Right = styled.div`
   flex-basis: 65%;
   flex: 1;
@@ -55,11 +59,15 @@ class AddCourseCard extends Component {
   }
 
   render() {
+    const { data: { coursetypes, loading } } = this.props;
+    if (loading) {
+      return <div>Loading...</div>;
+    }
     return (
       <div>
         <Div>
           <Right>
-            <CourseForm onSave={this.handleSave} readOnly={false} />
+            <CourseForm coursetypes={coursetypes} onSave={this.handleSave} readOnly={false} />
           </Right>
           <Left />
         </Div>
@@ -67,6 +75,14 @@ class AddCourseCard extends Component {
     );
   }
 }
+
+const queryCourseTypes = gql`
+  query coursetypes {
+    coursetypes {
+      name
+    }
+  }
+`;
 
 const AddCourse = gql`
   mutation addCourse($input: InputCourseType) {
@@ -88,4 +104,4 @@ export default graphql(AddCourse, {
         }
       })
   })
-})(withRouter(AddCourseCard));
+})(graphql(queryCourseTypes)(withRouter(AddCourseCard)));

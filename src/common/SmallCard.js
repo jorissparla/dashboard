@@ -2,7 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import IconButton from "material-ui/IconButton";
 import ViewIcon from "material-ui/svg-icons/action/pageview";
-import Avatar from "material-ui/Avatar";
 import ModeEdit from "material-ui/svg-icons/editor/mode-edit";
 import NewIcon from "material-ui/svg-icons/av/new-releases";
 import { Link } from "react-router-dom";

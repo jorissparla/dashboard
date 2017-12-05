@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { gql, graphql } from "react-apollo";
+import { gql, graphql, compose } from "react-apollo";
 import { List, ListItem } from "material-ui/List";
 import Divider from "material-ui/Divider";
 import Avatar from "material-ui/Avatar";
@@ -43,44 +43,52 @@ const Right = styled.div`
 class AddStudentsToCourse extends Component {
   state = { searchText: "" };
 
-  constructor(props) {
-    super(props);
-    this.renderStudents = this.renderStudents.bind(this);
-    this.handleSearchChange = this.handleSearchChange.bind(this);
-  }
-
-  handleSearchChange(val) {
+  handleSearchChange = val => {
     this.setState({ searchText: val });
-  }
-  renderStudents(students) {
-    return students.map(student => (
-      <Chip
-        onRequestDelete={() => {
-          this.props
-            .removeStudentFromCourse({
-              courseid: this.props.data.course.id,
-              navid: student.navid
-            })
-            .then(this.props.data.refetch());
-        }}
-        style={{ margin: 4 }}
-        key={student.navid}
-      >
-        {student.image ? (
-          <Avatar src={student.image} />
-        ) : (
-          <Avatar color={pinkA200} backgroundColor={transparent} style={{ left: 8 }}>
-            {student.fullname.slice(0, 1).concat(student.lastname.slice(0, 1))}
-          </Avatar>
-        )}
+  };
+  renderStudents = students => {
+    return students.map(
+      student =>
+        student ? (
+          <Chip
+            onRequestDelete={() => {
+              console.log("RequestDelete", this.props.data);
+              const { plannedcourses } = this.props.data;
+              const thiscourse = plannedcourses[0];
+              const input = {
+                plannedcourseid: thiscourse.id,
+                courseid: thiscourse.course.id,
+                navid: student.navid
+              };
+              this.props
+                .removeStudentFromCourse({
+                  variables: {
+                    input
+                  }
+                })
+                .then(this.props.data.refetch());
+            }}
+            style={{ margin: 4 }}
+            key={student.navid}
+          >
+            {student.image ? (
+              <Avatar src={student.image} />
+            ) : (
+              <Avatar color={pinkA200} backgroundColor={transparent} style={{ left: 8 }}>
+                {student.fullname.slice(0, 1).concat(student.lastname.slice(0, 1))}
+              </Avatar>
+            )}
 
-        {student.fullname}
-      </Chip>
-    ));
-  }
+            {student.fullname}
+          </Chip>
+        ) : (
+          <div />
+        )
+    );
+  };
 
   render() {
-    const { data: { loading, error, accounts, course } } = this.props;
+    const { data: { loading, error, accounts, plannedcourses } } = this.props;
     if (loading) {
       return (
         <Div>
@@ -91,27 +99,32 @@ class AddStudentsToCourse extends Component {
     if (error) {
       return <p>{error.message}</p>;
     }
-    const studentsAsString = course.students.map(student => student.fullname).join(" ");
+    console.log("PROPS", this.props);
+    const plannedcourse = plannedcourses[0];
     const filteredAccounts0 = _.chain(accounts)
       // .filter(account => !studentsAsString.includes(account.fullname))
       .filter(
         account =>
           account.fullname.toUpperCase().includes(this.state.searchText.toUpperCase()) ||
+          account.locationdetail.location
+            .toUpperCase()
+            .includes(this.state.searchText.toUpperCase()) ||
           account.team.toUpperCase().includes(this.state.searchText.toUpperCase())
       )
       .value();
     const filteredAccounts = _.uniqBy(filteredAccounts0, item => item.navid);
     console.log(`filteredAccounts (${filteredAccounts.length})`, filteredAccounts);
+    //const { id, course, students } = plannedcourse;
     return (
       <div>
         <Paper>
           <TitleBar>
-            Add Students to Course ' {course.title}
+            Add Students to Course ' {plannedcourse.course.title}
             '
             <RaisedButton
               style={{ marginLeft: 20 }}
               label="back to course"
-              onClick={() => (window.location.href = `/courses/edit/${course.id}`)}
+              onClick={() => (window.location.href = `/courses/edit/${plannedcourse.course.id}`)}
             />
           </TitleBar>
         </Paper>
@@ -121,7 +134,7 @@ class AddStudentsToCourse extends Component {
             <Paper zDepth={3}>
               <SearchBar
                 onChange={this.handleSearchChange}
-                hintText="Search on name or team.."
+                hintText="Search on name or team or location.."
                 style={{
                   background: "#FAFAFA",
                   display: "flex",
@@ -133,7 +146,16 @@ class AddStudentsToCourse extends Component {
               <List>
                 <Divider />
                 {filteredAccounts.map((item, index) => {
-                  const { id, fullname, lastname, location, team, navid, image } = item;
+                  const {
+                    id,
+                    fullname,
+                    lastname,
+                    location,
+                    locationdetail,
+                    team,
+                    navid,
+                    image
+                  } = item;
                   return (
                     <ListItem
                       key={`${id}.${index}`}
@@ -151,18 +173,23 @@ class AddStudentsToCourse extends Component {
                         )
                       }
                       primaryText={fullname}
-                      secondaryText={`located in ${location}, in team ${team}`}
+                      secondaryText={`located in ${locationdetail.location}(${location}), in team ${team}`}
                       rightIcon={
                         <FloatingActionButton
                           mini={true}
                           backgroundColor={red500}
                           style={{ marginRight: 20 }}
                           onClick={() => {
-                            console.log(`clicked ${course.id} ${navid}`);
+                            console.log(`clicked ${plannedcourse.id} ${navid}`);
                             this.props
                               .addStudentToCourse({
-                                courseid: course.id,
-                                navid: navid
+                                variables: {
+                                  input: {
+                                    plannedcourseid: plannedcourse.id,
+                                    courseid: plannedcourse.course.id,
+                                    navid: navid
+                                  }
+                                }
                               })
                               .then(this.props.data.refetch());
                           }}
@@ -178,7 +205,7 @@ class AddStudentsToCourse extends Component {
           </Right>
           <Left>
             <Paper>
-              <Div1>{this.renderStudents(course.students)}</Div1>
+              <Div1>{this.renderStudents(plannedcourse.students)}</Div1>
             </Paper>
           </Left>
         </Div>
@@ -190,10 +217,12 @@ class AddStudentsToCourse extends Component {
 const addStudentToCourse = gql`
   mutation addStudentToCourse($input: InputEnrollment) {
     addStudentToCourse(input: $input) {
-      course {
-        title
-        _studentsMeta {
-          count
+      plannedcourse {
+        course {
+          title
+          _studentsMeta {
+            count
+          }
         }
       }
     }
@@ -211,9 +240,12 @@ const removeStudentFromCourse = gql`
 `;
 const selectedCourse = gql`
   query selectedCourse($id: ID) {
-    course(id: $id) {
+    plannedcourses(id: $id) {
       id
-      title
+      course {
+        id
+        title
+      }
       students {
         id
         navid
@@ -231,28 +263,18 @@ const selectedCourse = gql`
       lastname
       team
       location
+      locationdetail {
+        name
+        location
+      }
       image
     }
   }
 `;
-export default graphql(removeStudentFromCourse, {
-  props: ({ mutate }) => ({
-    removeStudentFromCourse: input =>
-      mutate({
-        variables: { input }
-      })
+export default compose(
+  graphql(removeStudentFromCourse, { name: "removeStudentFromCourse" }),
+  graphql(addStudentToCourse, { name: "addStudentToCourse" }),
+  graphql(selectedCourse, {
+    options: ownProps => ({ variables: { id: ownProps.match.params.id } })
   })
-})(
-  graphql(addStudentToCourse, {
-    props: ({ mutate }) => ({
-      addStudentToCourse: input =>
-        mutate({
-          variables: { input }
-        })
-    })
-  })(
-    graphql(selectedCourse, {
-      options: ownProps => ({ variables: { id: ownProps.match.params.id } })
-    })(withRouter(withAuth(AddStudentsToCourse)))
-  )
-);
+)(withRouter(withAuth(AddStudentsToCourse)));

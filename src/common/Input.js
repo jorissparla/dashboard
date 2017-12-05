@@ -29,7 +29,6 @@ const Input = ({ label, value, onChangeText, secureTextEntry, style, name, ...re
     <TextField
       hintText={label}
       floatingLabelText={label}
-      autoCorrect={false}
       //onChangeText={ onChangeText}
       inputStyle={mergedStyle}
       style={style}

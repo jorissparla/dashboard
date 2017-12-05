@@ -14,17 +14,12 @@ import { pinkA200, transparent } from "material-ui/styles/colors";
 
 class StudentList extends Component {
   state = { searchText: "" };
-  constructor(props) {
-    super(props);
-    this.handleSearchChange = this.handleSearchChange.bind(this);
-    this.dropdownMenu = this.dropdownMenu.bind(this);
-  }
 
-  handleSearchChange(e) {
+  handleSearchChange = e => {
     this.setState({ searchText: e });
-  }
+  };
 
-  dropdownMenu(id) {
+  dropdownMenu = id => {
     return (
       <IconMenu
         iconButtonElement={
@@ -39,11 +34,9 @@ class StudentList extends Component {
           primaryText="View"
           onClick={() => this.props.history.push(`/test/students/${id}`)}
         />
-        <MenuItem primaryText="Send feedback" />
-        <MenuItem primaryText="Sign out" />
       </IconMenu>
     );
-  }
+  };
 
   render() {
     const { accounts } = this.props;
@@ -59,7 +52,7 @@ class StudentList extends Component {
         <List>
           {filteredAccounts.map((item, i) => (
             <ListItem
-              key={item.id}
+              key={`${item.id}-${i}`}
               primaryText={item.fullname}
               secondaryText={`in Team ${item.team}, Location ${item.locationdetail
                 ? item.locationdetail.location

@@ -10,6 +10,7 @@ import AppRoutes from "./routes";
 import getMuiTheme from "material-ui/styles/getMuiTheme";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import injectTapEventPlugin from "react-tap-event-plugin";
+import { blue500 } from "material-ui/styles/colors";
 import { AUTH_USER } from "./actions";
 import App from "./appnav";
 import "./index.css";
@@ -45,9 +46,33 @@ if (token) {
   store.dispatch({ type: AUTH_USER, user });
 }
 
+const muiTheme = getMuiTheme({
+  palette: {
+    primary1Color: blue500
+  },
+  appBar: {
+    height: 50,
+    color: blue500,
+    textColor: "white"
+  },
+  toolbar: {
+    height: 50,
+    backgroundColor: blue500
+  },
+  menuitemStyle: {
+    textColor: "black"
+  },
+  tabs: {
+    backgroundColor: "white",
+    textColor: blue500,
+    selectedTextColor: "black"
+  }
+});
+console.log("MUITHEME", muiTheme);
+
 const Main = () => (
   <ApolloProvider store={store} client={client}>
-    <MuiThemeProvider muiTheme={getMuiTheme()}>
+    <MuiThemeProvider muiTheme={muiTheme}>
       <BrowserRouter>
         <App>
           <AppRoutes />

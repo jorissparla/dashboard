@@ -43,9 +43,11 @@ const accountsQuery = gql`
       locationdetail {
         location
       }
-      courses {
-        trainer
-        title
+      plannedcourses {
+        course {
+          trainer
+          title
+        }
         hours
         startdate
         enddate

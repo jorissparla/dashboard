@@ -1,7 +1,7 @@
 import React from "react";
 import DatePicker from "material-ui/DatePicker";
 
-export default ({ input, label, meta: { touched, error }, ...custom }) => {
+export default ({ input, label, ...custom }) => {
   return (
     <DatePicker
       onChange={(e, val) => {

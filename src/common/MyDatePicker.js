@@ -11,12 +11,7 @@ const styles = {
   }
 };
 
-const MyDatePicker = ({
-  input,
-  label,
-  meta: { touched, error },
-  ...custom
-}) => {
+const MyDatePicker = ({ input, label, ...custom }) => {
   return (
     <DatePicker
       onChange={(e, val) => {
