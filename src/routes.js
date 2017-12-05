@@ -67,6 +67,12 @@ class AppRoutes extends React.Component {
     return (
       <Switch>
         <Route exact path="/test" component={CourseView} />
+        <AuthRoute
+          allowed={["Admin", "PO", "SU"]}
+          exact
+          path="/coursedashboard"
+          component={CourseView}
+        />
         <EnhancedRoute
           editors={["Admin", "PO"]}
           user={user}

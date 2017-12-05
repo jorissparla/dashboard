@@ -142,9 +142,9 @@ class PlannedCoursesTable extends React.Component {
             startdate={new Date(this.state.selectedstartdate)}
             enddate={new Date(this.state.selectedenddate)}
             onSave={e => {
-              console.log("onSave", JSON.stringify(e));
-              this.setState({ openedit: false });
+              console.log("onSave", e);
               this.props.onUpdate(e);
+              this.setState({ openedit: false });
             }}
             onCancel={() => this.setState({ openedit: false })}
           />

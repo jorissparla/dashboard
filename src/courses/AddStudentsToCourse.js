@@ -47,39 +47,44 @@ class AddStudentsToCourse extends Component {
     this.setState({ searchText: val });
   };
   renderStudents = students => {
-    return students.map(student => (
-      <Chip
-        onRequestDelete={() => {
-          console.log("RequestDelete", this.props.data);
-          const { plannedcourses } = this.props.data;
-          const thiscourse = plannedcourses[0];
-          const input = {
-            plannedcourseid: thiscourse.id,
-            courseid: thiscourse.course.id,
-            navid: student.navid
-          };
-          this.props
-            .removeStudentFromCourse({
-              variables: {
-                input
-              }
-            })
-            .then(this.props.data.refetch());
-        }}
-        style={{ margin: 4 }}
-        key={student.navid}
-      >
-        {student.image ? (
-          <Avatar src={student.image} />
-        ) : (
-          <Avatar color={pinkA200} backgroundColor={transparent} style={{ left: 8 }}>
-            {student.fullname.slice(0, 1).concat(student.lastname.slice(0, 1))}
-          </Avatar>
-        )}
+    return students.map(
+      student =>
+        student ? (
+          <Chip
+            onRequestDelete={() => {
+              console.log("RequestDelete", this.props.data);
+              const { plannedcourses } = this.props.data;
+              const thiscourse = plannedcourses[0];
+              const input = {
+                plannedcourseid: thiscourse.id,
+                courseid: thiscourse.course.id,
+                navid: student.navid
+              };
+              this.props
+                .removeStudentFromCourse({
+                  variables: {
+                    input
+                  }
+                })
+                .then(this.props.data.refetch());
+            }}
+            style={{ margin: 4 }}
+            key={student.navid}
+          >
+            {student.image ? (
+              <Avatar src={student.image} />
+            ) : (
+              <Avatar color={pinkA200} backgroundColor={transparent} style={{ left: 8 }}>
+                {student.fullname.slice(0, 1).concat(student.lastname.slice(0, 1))}
+              </Avatar>
+            )}
 
-        {student.fullname}
-      </Chip>
-    ));
+            {student.fullname}
+          </Chip>
+        ) : (
+          <div />
+        )
+    );
   };
 
   render() {
@@ -101,7 +106,9 @@ class AddStudentsToCourse extends Component {
       .filter(
         account =>
           account.fullname.toUpperCase().includes(this.state.searchText.toUpperCase()) ||
-          account.location.toUpperCase().includes(this.state.searchText.toUpperCase()) ||
+          account.locationdetail.location
+            .toUpperCase()
+            .includes(this.state.searchText.toUpperCase()) ||
           account.team.toUpperCase().includes(this.state.searchText.toUpperCase())
       )
       .value();
@@ -127,7 +134,7 @@ class AddStudentsToCourse extends Component {
             <Paper zDepth={3}>
               <SearchBar
                 onChange={this.handleSearchChange}
-                hintText="Search on name or team.."
+                hintText="Search on name or team or location.."
                 style={{
                   background: "#FAFAFA",
                   display: "flex",
@@ -139,7 +146,16 @@ class AddStudentsToCourse extends Component {
               <List>
                 <Divider />
                 {filteredAccounts.map((item, index) => {
-                  const { id, fullname, lastname, location, team, navid, image } = item;
+                  const {
+                    id,
+                    fullname,
+                    lastname,
+                    location,
+                    locationdetail,
+                    team,
+                    navid,
+                    image
+                  } = item;
                   return (
                     <ListItem
                       key={`${id}.${index}`}
@@ -157,7 +173,7 @@ class AddStudentsToCourse extends Component {
                         )
                       }
                       primaryText={fullname}
-                      secondaryText={`located in ${location}, in team ${team}`}
+                      secondaryText={`located in ${locationdetail.location}(${location}), in team ${team}`}
                       rightIcon={
                         <FloatingActionButton
                           mini={true}
@@ -247,6 +263,10 @@ const selectedCourse = gql`
       lastname
       team
       location
+      locationdetail {
+        name
+        location
+      }
       image
     }
   }

@@ -78,11 +78,6 @@ const LinkColumn = ({ link, value, style }) => {
 
 class StudentTables extends Component {
   state = { searchText: "", sorting: { name: "fullname", direction: "asc" } };
-  constructor(props) {
-    super(props);
-    this.handleSearchChange = this.handleSearchChange.bind(this);
-    this.dropdownMenu = this.dropdownMenu.bind(this);
-  }
 
   handleSortChange = column => {
     let sorting = { ...this.state.sorting };
@@ -98,11 +93,11 @@ class StudentTables extends Component {
     });
   };
 
-  handleSearchChange(e) {
+  handleSearchChange = e => {
     this.setState({ searchText: e });
-  }
+  };
 
-  dropdownMenu(id) {
+  dropdownMenu = id => {
     return (
       <IconMenu
         iconButtonElement={
@@ -118,7 +113,7 @@ class StudentTables extends Component {
         <MenuItem disabled={true} primaryText="Sign out" />
       </IconMenu>
     );
-  }
+  };
 
   render() {
     const { accounts } = this.props;
@@ -135,7 +130,10 @@ class StudentTables extends Component {
       .filter(
         account =>
           account.fullname.toUpperCase().includes(this.state.searchText.toUpperCase()) ||
-          account.team.toUpperCase().includes(this.state.searchText.toUpperCase())
+          account.team.toUpperCase().includes(this.state.searchText.toUpperCase()) ||
+          account.locationdetail.location
+            .toUpperCase()
+            .includes(this.state.searchText.toUpperCase())
       )
       .map(account => {
         const hoursObj = account.plannedcourses.reduce(
@@ -154,7 +152,7 @@ class StudentTables extends Component {
       <Paper style={{ margin: 20 }}>
         <SearchBar
           onChange={this.handleSearchChange}
-          hintText="Search on name or team.."
+          hintText="Search on name or team or location.."
           style={{
             background: "#FAFAFA",
             display: "flex",

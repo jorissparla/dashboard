@@ -20,7 +20,14 @@ import StudentListContainer from "./StudentListContainer";
 
 const Title = styled.h3`
   font-weight: 200;
+  font-family: Raleway;
+  padding-left: 30px;
+`;
+const Title2 = styled.h3`
+  font-weight: 200;
   display: flex;
+  justify-content: center;
+  align-items: center;
   font-family: Raleway;
   padding-left: 30px;
 `;
@@ -48,6 +55,10 @@ const styles = {
   tabStyle: {
     backgroundColor: "#2196f3",
     fontSize: "1rem"
+  },
+  datePicker: {
+    marginLeft: 12,
+    width: 150
   }
 };
 
@@ -129,7 +140,7 @@ class CourseView extends React.Component {
     }
     const filterDate = this.state.startdate;
     const { open } = this.state;
-    console.log(this.state.date);
+    console.log(this.state.studentfilterstartdate);
     const filteredCourses = filterDate
       ? courses.filter(
           course => Date.parse(course.plannedcourses[0].startdate) > Date.parse(filterDate)
@@ -175,17 +186,18 @@ class CourseView extends React.Component {
             )}
           </div>
         </Tab>
-        <Tab label="By Student" value="student">
+        <Tab label="Training By Student" value="student">
           <HeaderRow>
             <HeaderLeft>
               {" "}
-              <Title>
+              <Title2>
                 In Period from
                 <DatePicker
                   hintText="Enter StartDate Courses"
                   value={this.state.studentfilterstartdate}
                   name="studentfilterstartdate"
                   onChange={this.handleStudentFilterStartDateChange}
+                  style={styles.datePicker}
                 />
                 to
                 <DatePicker
@@ -193,17 +205,11 @@ class CourseView extends React.Component {
                   value={this.state.studentfilterstartdate}
                   name="studentfilterenddate"
                   onChange={this.handleStudentFilterStartDateChange}
+                  style={styles.datePicker}
                 />
-              </Title>
+              </Title2>
             </HeaderLeft>
-            <HeaderRight>
-              <RaisedButton
-                label="New"
-                primary={true}
-                style={styles.button}
-                onClick={this.toggleDialog}
-              />
-            </HeaderRight>
+            <HeaderRight />
           </HeaderRow>
           <StudentListContainer />
         </Tab>

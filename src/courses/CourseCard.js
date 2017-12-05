@@ -9,6 +9,7 @@ import PlannedCourses from "./PlannedCourses";
 import YesNoDialog from "../common/YesNoDialog";
 import { Title } from "../styles";
 import _ from "lodash";
+import addHours from "date-fns/add_hours";
 
 const Div = styled.div`
   display: flex;
@@ -78,7 +79,13 @@ class CourseCard extends Component {
   };
 
   handleUpdatePlanned = async ({ id, startdate, enddate, status, hours }) => {
-    const input = { id, startdate: new Date(startdate), enddate: new Date(enddate), status, hours };
+    const input = {
+      id,
+      startdate: addHours(startdate, 13),
+      enddate: new Date(addHours(enddate, 13)),
+      status,
+      hours
+    };
     console.log("handleUpdatePlanned", JSON.stringify(input));
     await this.props.updatePlannedCourse({ variables: { input } });
     await this.props.data.refetch();
