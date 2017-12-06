@@ -118,7 +118,7 @@ class AppRoutes extends React.Component {
           component={RequireAuth(SupportCardEdit)}
         />
         <EnhancedRoute
-          editors={["Admin", "PO"]}
+          editors={["None"]}
           user={user}
           path="/supportcard/view/:id"
           component={SupportCardEdit}

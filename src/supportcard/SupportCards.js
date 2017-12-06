@@ -62,11 +62,11 @@ class SupportCards extends React.Component {
 
   handleClose = () => this.setState({ showRequest: false });
 
-  createAudit = e => {
+  createAudit = (e, type = "SupporCard", link) => {
     const splitAr = e.split("/");
     const page = splitAr.slice(0, 3).join("/");
     const linkid = splitAr.slice(3, 4)[0];
-    const input = { page, linkid, username: this.props.user.fullname };
+    const input = { page, linkid, username: this.props.user.fullname, type };
     this.props.createAudit({ variables: { input } }).then(res => console.log("RES::", res));
   };
 
@@ -139,7 +139,9 @@ class SupportCards extends React.Component {
             ) => {
               const vieweditLink =
                 authenticated && isEditor ? `/supportcard/edit/${id}` : `/supportcard/view/${id}`;
+              const viewLink = `/supportcard/view/${id}`;
               // const isNew = differenceInCalendarDays(Date.parse(updatedAt), Date.now()) < 7;
+
               const isNew = Date.parse(updatedAt) > moment().add(-7, "days");
               return (
                 <SmallCard
@@ -154,7 +156,12 @@ class SupportCards extends React.Component {
                   link={link}
                   canEdit={authenticated && isEditor}
                   editLink={`${vieweditLink}`}
-                  onAudit={v => this.createAudit(v)}
+                  viewLink={viewLink}
+                  onAudit={v => this.createAudit(v, "SupportCard", null)}
+                  onFollowLink={(v, link) => {
+                    this.createAudit(v, "SupportCardLink", link);
+                    return link;
+                  }}
                 />
               );
             }

@@ -4,6 +4,7 @@ import IconButton from "material-ui/IconButton";
 import ViewIcon from "material-ui/svg-icons/action/pageview";
 import ModeEdit from "material-ui/svg-icons/editor/mode-edit";
 import NewIcon from "material-ui/svg-icons/av/new-releases";
+import FolderIcon from "material-ui/svg-icons/file/folder-open";
 import { Link } from "react-router-dom";
 import { Papier, HR } from "../styles/index.js";
 import Divider from "material-ui/Divider";
@@ -88,19 +89,7 @@ const StyledPapier = Papier.extend`
   color: ${props => (props.textcolor ? props.textcolor : "black")};
   background-color: ${props => (props.color ? props.color : "lightblue")};
 `;
-/* const paperStyle = (color, textcolor = "#000") => {
-  return {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-    width: "18%",
-    margin: "5px",
-    minWidth: "200px",
-    backgroundColor: color,
-    color: textcolor
-  };
-};
- */
+
 const SmallCard = ({
   title = "Procedure",
   text = "Papier Und KartonFabrik",
@@ -112,8 +101,13 @@ const SmallCard = ({
   textcolor = "#000",
   canEdit = false,
   editLink = "",
+  viewLink = "",
   isNew = false,
-  onAudit = () => console.log("onaudit")
+  onAudit = () => console.log("onaudit"),
+  onFollowLink = link => {
+    console.log("onFollowLink");
+    return link;
+  }
 }) => {
   return (
     <StyledPapier color={color}>
@@ -141,12 +135,25 @@ const SmallCard = ({
             {canEdit === true ? <ModeEdit /> : <ViewIcon />}
           </IconButton>
         </StyledLink>
+        {canEdit && (
+          <StyledLink to={viewLink} onClick={e => onAudit(viewLink, "SupportCard")}>
+            <IconButton
+              iconStyle={{
+                height: "16px",
+                width: "16px",
+                flexGrow: 0
+              }}
+            >
+              <ViewIcon />
+            </IconButton>
+          </StyledLink>
+        )}
         <Cat>{category}</Cat>
+
         <OtherButton
           primary={true}
-          href={link}
           target="_blank_"
-          //onClick={() => window.open(link)}
+          onClick={() => window.open(onFollowLink(viewLink, link))}
         >
           {buttonText.toUpperCase()}
         </OtherButton>
