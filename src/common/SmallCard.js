@@ -112,7 +112,8 @@ const SmallCard = ({
   textcolor = "#000",
   canEdit = false,
   editLink = "",
-  isNew = false
+  isNew = false,
+  onAudit = () => console.log("onaudit")
 }) => {
   return (
     <StyledPapier color={color}>
@@ -128,7 +129,7 @@ const SmallCard = ({
       <StyledBody>{text.slice(0, 200).concat("...")}</StyledBody>
       <Divider />
       <BottomStyle>
-        <StyledLink to={editLink}>
+        <StyledLink to={editLink} onClick={e => onAudit(editLink)}>
           {canEdit === true ? <Text>Open</Text> : <Text>View</Text>}
           <IconButton
             iconStyle={{

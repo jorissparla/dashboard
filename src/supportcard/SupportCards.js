@@ -1,5 +1,5 @@
 import React from "react";
-import { gql, graphql } from "react-apollo";
+import { gql, graphql, compose } from "react-apollo";
 import { SmallCard } from "../common/SmallCard";
 import Dialog from "material-ui/Dialog";
 import styled from "styled-components";
@@ -54,24 +54,6 @@ const Container = styled.div`
   margin-top: 10px;
 `;
 
-const SupportCardQuery = gql`
-  query SupportCardQuery {
-    supportcards {
-      id
-      title
-      description
-      link
-      created
-      updatedAt
-      category {
-        name
-        color
-        backgroundcolor
-      }
-    }
-  }
-`;
-
 class SupportCards extends React.Component {
   state = { searchText: "", selectedCategory: "", showRequest: false };
 
@@ -80,8 +62,17 @@ class SupportCards extends React.Component {
 
   handleClose = () => this.setState({ showRequest: false });
 
+  createAudit = e => {
+    const splitAr = e.split("/");
+    const page = splitAr.slice(0, 3).join("/");
+    const linkid = splitAr.slice(3, 4)[0];
+    const input = { page, linkid, username: this.props.user.fullname };
+    this.props.createAudit({ variables: { input } }).then(res => console.log("RES::", res));
+  };
+
   render() {
-    const { authenticated, isEditor, data: { loading, error, supportcards } } = this.props;
+    const { authenticated, isEditor, user, data: { loading, error, supportcards } } = this.props;
+    //  console.log("me", this.props.me);
     const actions = [
       <FlatButton label="Cancel" primary={true} onClick={this.handleClose} />,
       <FlatButton label="Submit" primary={true} onClick={this.handleClose} />
@@ -150,7 +141,6 @@ class SupportCards extends React.Component {
                 authenticated && isEditor ? `/supportcard/edit/${id}` : `/supportcard/view/${id}`;
               // const isNew = differenceInCalendarDays(Date.parse(updatedAt), Date.now()) < 7;
               const isNew = Date.parse(updatedAt) > moment().add(-7, "days");
-              console.log(differenceInCalendarDays(Date.now(), updatedAt));
               return (
                 <SmallCard
                   color={backgroundcolor || cardColors[i % (cardColors.length - 1)].back}
@@ -164,6 +154,7 @@ class SupportCards extends React.Component {
                   link={link}
                   canEdit={authenticated && isEditor}
                   editLink={`${vieweditLink}`}
+                  onAudit={v => this.createAudit(v)}
                 />
               );
             }
@@ -174,4 +165,32 @@ class SupportCards extends React.Component {
   }
 }
 
-export default graphql(SupportCardQuery)(withAuth(SupportCards));
+const SupportCardQuery = gql`
+  query SupportCardQuery {
+    supportcards {
+      id
+      title
+      description
+      link
+      created
+      updatedAt
+      category {
+        name
+        color
+        backgroundcolor
+      }
+    }
+  }
+`;
+
+const createAudit = gql`
+  mutation createAudit($input: InputAuditType) {
+    createAudit(input: $input) {
+      id
+    }
+  }
+`;
+
+export default compose(graphql(SupportCardQuery), graphql(createAudit, { name: "createAudit" }))(
+  withAuth(SupportCards)
+);

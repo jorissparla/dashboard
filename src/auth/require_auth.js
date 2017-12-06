@@ -21,6 +21,7 @@ export const AuthRoute = ({ component: Component, allowed, user, ...rest }) => {
     />
   );
 };
+
 export const EnhancedRoute = ({ component: Component, editors, user, ...rest }) => {
   let isEditor = false;
   if (user) {
