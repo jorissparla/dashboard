@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { gql, graphql } from "react-apollo";
+import gql from "graphql-tag";
+import { graphql } from "react-apollo";
 import { withRouter } from "react-router";
 import styled from "styled-components";
 import StudentTable from "./StudentTable";

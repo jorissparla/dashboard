@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { gql, graphql } from "react-apollo";
+import gql from "graphql-tag";
+import { graphql } from "react-apollo";
 import styled from "styled-components";
 import { withRouter } from "react-router";
 import TextField from "material-ui/TextField";
@@ -8,7 +9,9 @@ export const niceblue = "#40a5ed";
 export const babyblue = "#ecf6fd";
 export const twitterblue = "#1da1f2";
 
-const H3 = styled.h3`color: black;`;
+const H3 = styled.h3`
+  color: black;
+`;
 
 const FlexRow = styled.div`
   display: flex;
@@ -41,7 +44,9 @@ const Error = styled.div`
   margin-left: 8px;
 `;
 
-const StyledTextField = styled(TextField)`margin: 20px;`;
+const StyledTextField = styled(TextField)`
+  margin: 20px;
+`;
 class Request extends Component {
   state = {
     name: this.props.user.name,

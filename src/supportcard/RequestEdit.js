@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { gql, graphql, compose } from "react-apollo";
+import gql from "graphql-tag";
+import { graphql, compose } from "react-apollo";
 import { withRouter } from "react-router-dom";
 import moment from "moment";
 import RequestForm from "./RequestForm";

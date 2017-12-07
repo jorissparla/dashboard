@@ -1,4 +1,5 @@
-import { gql, graphql } from "react-apollo";
+import gql from "graphql-tag";
+import { graphql } from "react-apollo";
 import React from "react";
 import { Tabs, Tab } from "material-ui/Tabs";
 import CloudPin from "material-ui/svg-icons/file/cloud";
@@ -7,10 +8,6 @@ import ReprodPin from "material-ui/svg-icons/action/build";
 import SatPin from "material-ui/svg-icons/action/thumb-up";
 import AllPin from "material-ui/svg-icons/communication/clear-all";
 import "material-ui/styles/colors";
-
-const style = {
-  backgroundColor: "dodgerblue"
-};
 
 const IconMapper = label => {
   switch (label) {

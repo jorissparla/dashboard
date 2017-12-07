@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { graphql, gql } from "react-apollo";
+import gql from "graphql-tag";
+import { graphql } from "react-apollo";
 import NewsCard from "./newscard";
 import Spinner from "../utils/spinner";
 

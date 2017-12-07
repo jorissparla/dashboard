@@ -1,5 +1,6 @@
 import React from "react";
-import { gql, graphql, compose } from "react-apollo";
+import gql from "graphql-tag";
+import { graphql, compose } from "react-apollo";
 import { SmallCard } from "../common/SmallCard";
 import Dialog from "material-ui/Dialog";
 import styled from "styled-components";

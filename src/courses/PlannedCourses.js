@@ -12,7 +12,6 @@ import TrashIcon from "material-ui/svg-icons/action/delete";
 import RaisedButton from "material-ui/RaisedButton";
 import { blue500, red500, grey400, purple400 } from "material-ui/styles/colors";
 import { format } from "date-fns";
-import styled from "styled-components";
 import AddCourseDialog from "./AddCourseDialog";
 import { Title, HeaderRow, HeaderLeft, HeaderRight } from "../styles";
 
@@ -87,8 +86,7 @@ class PlannedCoursesTable extends React.Component {
     this.props.onRegister(this.props.planned[this.state.selected]);
   };
   render() {
-    const { planned, onRowSelected, course, courses, hours, selected } = this.props;
-    const courseid = course.id;
+    const { planned, onRowSelected, course, courses, hours } = this.props;
     return (
       <div>
         <HeaderRow>

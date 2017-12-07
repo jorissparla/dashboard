@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router";
-import { gql, graphql } from "react-apollo";
+import gql from "graphql-tag";
+import { graphql } from "react-apollo";
 import styled from "styled-components";
 import Avatar from "material-ui/Avatar";
 import Paper from "material-ui/Paper";

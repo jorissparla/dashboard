@@ -1,4 +1,5 @@
-import { gql, graphql } from "react-apollo";
+import gql from "graphql-tag";
+import { graphql } from "react-apollo";
 import React from "react";
 import { withRouter } from "react-router";
 import SupportCardForm from "./SupportCardForm";

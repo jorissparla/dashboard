@@ -1,19 +1,8 @@
 import React from "react";
 import { withRouter } from "react-router";
 import styled from "styled-components";
-import Chip from "material-ui/Chip";
-import Avatar from "material-ui/Avatar";
-import RaisedButton from "material-ui/RaisedButton";
 import { Title, HeaderRow, HeaderLeft, HeaderRight } from "../styles";
 import StudentChip from "./StudentChip";
-
-const styles = {
-  button: {
-    margin: 20,
-    background: "#2196f3",
-    backgroundColor: "black"
-  }
-};
 
 const Div = styled.div`
   display: flex;
@@ -48,7 +37,7 @@ const StudentList = ({ students, history, id }) => {
               handleClick={() => history.push(`/students/${id}`)}
             />
           );
-        }
+        } else return <div />;
       })}
     </Div>
   ];

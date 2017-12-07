@@ -9,7 +9,6 @@ import SortIcon from "material-ui/svg-icons/action/swap-vert";
 import IconButton from "material-ui/IconButton";
 import MoreVertIcon from "material-ui/svg-icons/navigation/more-vert";
 import ArrowDownWard from "material-ui/svg-icons/navigation/arrow-downward";
-import ArrowUpWard from "material-ui/svg-icons/navigation/arrow-upward";
 import { Link } from "react-router-dom";
 //@ts-check
 import Avatar from "material-ui/Avatar";
@@ -119,12 +118,6 @@ class StudentTables extends Component {
     const { accounts } = this.props;
     const { headerStyle, rowstyle, avatarstyle } = styles;
     console.log(this.state.sorting);
-
-    const filteredAccounts1 = accounts.filter(
-      account =>
-        account.fullname.toUpperCase().includes(this.state.searchText.toUpperCase()) ||
-        account.team.toUpperCase().includes(this.state.searchText.toUpperCase())
-    );
 
     const filteredAccounts = _.chain(accounts)
       .filter(

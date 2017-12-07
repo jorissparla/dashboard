@@ -1,6 +1,7 @@
 import React from "react";
 import { withRouter } from "react-router";
-import { gql, graphql } from "react-apollo";
+import gql from "graphql-tag";
+import { graphql } from "react-apollo";
 import { Button, Input, Form, Row, Message, Error } from "../styles";
 
 class UpdatePasswordForm extends React.Component {

@@ -11,7 +11,8 @@ import {
 import { Tabs, Tab } from "material-ui/Tabs";
 import RaisedButton from "material-ui/RaisedButton";
 import DatePicker from "material-ui/DatePicker";
-import { gql, graphql } from "react-apollo";
+import gql from "graphql-tag";
+import { graphql } from "react-apollo";
 import { Link } from "react-router-dom";
 import addDays from "date-fns/add_days";
 import _ from "lodash";

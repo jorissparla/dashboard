@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { createStore, applyMiddleware } from "redux";
+import { Provider } from "react-redux";
 import promise from "redux-promise";
 import reduxThunk from "redux-thunk";
 import "./index.css";
@@ -15,15 +16,14 @@ import { AUTH_USER } from "./actions";
 import App from "./appnav";
 import "./index.css";
 
-import { ApolloClient, ApolloProvider, createNetworkInterface } from "react-apollo";
-
+import { ApolloClient, InMemoryCache } from "apollo-client-preset";
+import { ApolloProvider } from "react-apollo";
+import { createHttpLink } from "apollo-link-http";
 import registerServiceWorker from "./registerServiceWorker";
 
-const networkInterface = createNetworkInterface({
-  uri: "http://nlbavwtls22.infor.com:55555/graphql"
-});
 const client = new ApolloClient({
-  networkInterface
+  link: createHttpLink({ uri: "http://nlbavwtls22.infor.com:55555/graphql" }),
+  cache: new InMemoryCache()
 });
 
 injectTapEventPlugin();
@@ -71,14 +71,16 @@ const muiTheme = getMuiTheme({
 console.log("MUITHEME", muiTheme);
 
 const Main = () => (
-  <ApolloProvider store={store} client={client}>
-    <MuiThemeProvider muiTheme={muiTheme}>
-      <BrowserRouter>
-        <App>
-          <AppRoutes />
-        </App>
-      </BrowserRouter>
-    </MuiThemeProvider>
+  <ApolloProvider client={client}>
+    <Provider store={store}>
+      <MuiThemeProvider muiTheme={muiTheme}>
+        <BrowserRouter>
+          <App>
+            <AppRoutes />
+          </App>
+        </BrowserRouter>
+      </MuiThemeProvider>
+    </Provider>
   </ApolloProvider>
 );
 

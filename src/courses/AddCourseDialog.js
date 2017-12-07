@@ -74,8 +74,7 @@ class AddCourseDialog extends React.Component {
   };
 
   render() {
-    const { open, onSave, onCancel, courses } = this.props;
-    console.log("Render", this.state);
+    const { open, onCancel, courses } = this.props;
     return (
       <Dialog open={open} style={{ width: "80%" }}>
         <Title>Course Scheduling</Title>

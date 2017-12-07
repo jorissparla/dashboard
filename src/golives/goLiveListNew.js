@@ -1,5 +1,6 @@
 import React from "react";
-import { gql, graphql } from "react-apollo";
+import gql from "graphql-tag";
+import { graphql } from "react-apollo";
 import { List, ListItem } from "material-ui/List";
 import Avatar from "material-ui/Avatar";
 import styled from "styled-components";

@@ -153,7 +153,8 @@ const SmallCard = ({
         <OtherButton
           primary={true}
           target="_blank_"
-          onClick={() => window.open(onFollowLink(viewLink, link))}
+          href={link}
+          onClick={() => onFollowLink(viewLink, link)}
         >
           {buttonText.toUpperCase()}
         </OtherButton>

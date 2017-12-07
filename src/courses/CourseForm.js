@@ -7,12 +7,7 @@ import MenuItem from "material-ui/MenuItem";
 import Chip from "material-ui/Chip";
 import moment from "moment";
 import styled from "styled-components";
-import {
-  NormalRaisedButton,
-  CancelRaisedButton,
-  DeleteButton,
-  RegisterButton
-} from "../common/TitleBar";
+import { NormalRaisedButton, CancelRaisedButton, DeleteButton } from "../common/TitleBar";
 import withAuth from "../utils/withAuth";
 
 const SelectStyle = styled.div`
