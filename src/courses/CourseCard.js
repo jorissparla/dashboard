@@ -4,6 +4,7 @@ import { graphql, compose } from "react-apollo";
 import { withRouter } from "react-router";
 import styled from "styled-components";
 import { Tabs, Tab } from "material-ui/Tabs";
+import Snackbar from "material-ui/Snackbar";
 import CourseForm from "./CourseForm";
 import CourseStudentList from "./CourseStudentList";
 import PlannedCourses from "./PlannedCourses";
@@ -38,9 +39,18 @@ class CourseCard extends Component {
     id: null,
     planid: null,
     confirmed: false,
-    activeTab: "course"
+    activeTab: "course",
+    showMessage: false,
+    message: "Done"
   };
 
+  handleMessage = message => {
+    this.setState({ showMessage: true, message });
+  };
+
+  autoCloseMessage = () => {
+    this.setState({ showMessage: false, message: "" });
+  };
   showConfirmDialog = ({ id }) => {
     this.setState({ toConfirmDeleteCourse: true, id });
   };
@@ -68,7 +78,7 @@ class CourseCard extends Component {
       .then(this.props.data.refetch())
       .then(this.setState({ id: null }))
       //.then(() => setTimeout((window.location.href = "/courses"), 500))
-      .catch(e => alert(JSON.stringify(e, null, 2)));
+      .catch(e => this.handleMessage(JSON.stringify(e, null, 2)));
   };
 
   handleDeletePlanned = id => {
@@ -76,7 +86,7 @@ class CourseCard extends Component {
       .deletePlannedCourse({ variables: { input: { id } } })
       .then(this.props.data.refetch())
       .then(this.setState({ planid: null }))
-      .catch(e => alert(JSON.stringify(e, null, 2)));
+      .catch(e => this.handleMessage(JSON.stringify(e, null, 2)));
   };
 
   handleUpdatePlanned = async ({ id, startdate, enddate, status, hours }) => {
@@ -87,7 +97,6 @@ class CourseCard extends Component {
       status,
       hours
     };
-    console.log("handleUpdatePlanned", JSON.stringify(input));
     await this.props.updatePlannedCourse({ variables: { input } });
     await this.props.data.refetch();
   };
@@ -100,7 +109,6 @@ class CourseCard extends Component {
       hours,
       courseid
     };
-    console.log("handleAddPlanned", JSON.stringify(input));
     await this.props.addPlannedCourse({ variables: { input } });
     await this.props.data.refetch();
   };
@@ -127,8 +135,8 @@ class CourseCard extends Component {
         }
       })
       .then(this.props.data.refetch())
-      .then(alert("Updated"))
-      .catch(e => window.alert(JSON.stringify(e, null, 2)));
+      .then(this.handleMessage("Updated"))
+      .catch(e => this.handleMessage(JSON.stringify(e, null, 2)));
   };
 
   handlePlannedSelect = (e, i) => {
@@ -153,6 +161,12 @@ class CourseCard extends Component {
         value={this.state.activeTab}
         onChange={value => this.setState({ activeTab: value })}
       >
+        <Snackbar
+          open={this.state.showMessage}
+          message={this.state.message}
+          autoHideDuration={4000}
+          onRequestClose={this.autoCloseMessage}
+        />
         <Tab label="Course Details" value="course" key={1}>
           <Div>
             <Right>

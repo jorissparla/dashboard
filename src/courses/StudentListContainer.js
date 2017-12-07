@@ -32,7 +32,7 @@ class StudentListContainer extends Component {
 
 const accountsQuery = gql`
   query accountsQuery {
-    accounts(region: "EMEA") {
+    accounts {
       id
       firstname
       lastname

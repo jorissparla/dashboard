@@ -148,7 +148,7 @@ class CourseForm extends Component {
               component={Input}
               multiLine={true}
               rows={2}
-              rowsMax={4}
+              rowsMax={5}
               fullWidth={true}
               floatingLabelText="description"
               style={styles.descriptionstyle}
