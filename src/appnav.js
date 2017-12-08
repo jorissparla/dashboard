@@ -13,9 +13,10 @@ import GoLiveIcon from "material-ui/svg-icons/action/flight-takeoff";
 import MenuIcon from "material-ui/svg-icons/navigation/menu";
 import IconMenu from "material-ui/IconMenu";
 import Divider from "material-ui/Divider";
+import Drawer from "material-ui/Drawer";
 import MenuItem from "material-ui/MenuItem";
 import { withRouter } from "react-router";
-import { Toolbar, ToolbarGroup, ToolbarTitle } from "material-ui/Toolbar";
+import { Toolbar, ToolbarGroup, ToolbarTitle, ToolbarSeparator } from "material-ui/Toolbar";
 import withAuth from "./utils/withAuth";
 
 import FlatButton from "material-ui/FlatButton";
@@ -31,10 +32,23 @@ const styles = {
 };
 
 class Header extends React.Component {
+  state = {
+    showdrawer: false
+  };
   constructor(props) {
     super(props);
     this.hamburgerMenu = this.hamburgerMenu.bind(this);
   }
+
+  toggleMenu = () => {
+    this.setState({ showdrawer: !this.state.showdrawer });
+  };
+
+  hamburgerIcon = () => (
+    <IconButton>
+      <MenuIcon color="white" onClick={() => this.toggleMenu()} />
+    </IconButton>
+  );
 
   hamburgerMenu() {
     const { history, authenticated, user } = this.props;
@@ -45,16 +59,7 @@ class Header extends React.Component {
     }
     //console.log("AUTH", authenticated, validRole, user.role !== "Guest");
     return (
-      <IconMenu
-        menuStyle={{ color: "white" }}
-        iconButtonElement={
-          <IconButton>
-            <MenuIcon color="white" />
-          </IconButton>
-        }
-        anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
-        targetOrigin={{ horizontal: "left", vertical: "top" }}
-      >
+      <div onClick={() => this.toggleMenu()}>
         <MenuItem
           primaryText={<div style={{ color: "black" }}>Home</div>}
           leftIcon={<ActionHome style={{ root: { color: "black" } }} />}
@@ -153,7 +158,7 @@ class Header extends React.Component {
             />
           )}
         <MenuItem primaryText="Sign out" />
-      </IconMenu>
+      </div>
     );
   }
   logOutLink = () => {
@@ -191,7 +196,7 @@ class Header extends React.Component {
     return (
       <Toolbar style={styles}>
         <ToolbarGroup firstChild={true}>
-          {this.hamburgerMenu()}
+          {this.hamburgerIcon()}
           {this.renderPicture()}
         </ToolbarGroup>
 
@@ -217,13 +222,24 @@ class Header extends React.Component {
     );
   }
 
+  getLeft = () => {
+    if (this.state.showdrawer) return 250;
+    return 0;
+  };
+
+  getStyle = () => {
+    if (this.state.showdrawer)
+      return { left: "250px", width: "calc(100% - 270px)", position: "absolute" };
+    return { width: "100%" };
+  };
   render() {
-    return (
-      <div>
+    return [
+      <Drawer open={this.state.showdrawer}> {this.hamburgerMenu()}</Drawer>,
+      <div style={this.getStyle()}>
         {this.renderToolBar()}
         {this.props.children}
       </div>
-    );
+    ];
   }
 }
 export default withRouter(withAuth(Header));
