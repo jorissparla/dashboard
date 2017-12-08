@@ -26,14 +26,26 @@ const styles = {
 class AddCourseDialog extends React.Component {
   state = {
     selectedcourse: null,
+    trainer: null,
     error: { startdate: "", enddate: "" }
   };
   componentDidMount() {
-    const { selectedcourse, startdate, enddate, status, courseid, hours, id } = this.props;
+    const {
+      selectedcourse,
+      startdate,
+      enddate,
+      status,
+      courseid,
+      trainer,
+      hours,
+      id,
+      trainers
+    } = this.props;
     this.setState({
       startdate,
       enddate,
       selectedcourse,
+      trainer: trainer,
       id,
       courseid,
       hours,
@@ -44,6 +56,12 @@ class AddCourseDialog extends React.Component {
   handleChange = (event, index, selectedcourse) => {
     console.log(" course ", selectedcourse, event);
     this.setState({ selectedcourse });
+  };
+  handleChangeTrainer = (event, index, trainer) => {
+    this.setState({ trainer });
+  };
+  handleChangeStatus = (event, index, status) => {
+    this.setState({ status });
   };
 
   handleChangeHours = (e, hours) => {
@@ -74,8 +92,8 @@ class AddCourseDialog extends React.Component {
   };
 
   render() {
-    const { open, onSave, onCancel, courses } = this.props;
-    console.log("Render", this.state);
+    const { open, onCancel, courses, trainers, statuses } = this.props;
+    console.log(this.props);
     return (
       <Dialog open={open} style={{ width: "80%" }}>
         <Title>Course Scheduling</Title>
@@ -83,12 +101,27 @@ class AddCourseDialog extends React.Component {
           <SelectField
             fullWidth={true}
             hintText="Select Course"
+            name="course"
             floatingLabelText="Course"
             value={this.state.selectedcourse}
             onChange={this.handleChange}
           >
             {courses.map(course => (
               <MenuItem key={course.id} value={course.id} primaryText={course.title} />
+            ))}
+          </SelectField>
+        </div>
+        <div>
+          <SelectField
+            fullWidth={true}
+            hintText="Select Trainer"
+            name="trainer"
+            floatingLabelText="Trainer"
+            value={this.state.trainer}
+            onChange={this.handleChangeTrainer}
+          >
+            {trainers.map(trainer => (
+              <MenuItem key={trainer.id} value={trainer.fullname} primaryText={trainer.fullname} />
             ))}
           </SelectField>
         </div>
@@ -119,6 +152,18 @@ class AddCourseDialog extends React.Component {
             multiLine={false}
             rows={1}
           />
+          <SelectField
+            fullWidth={true}
+            hintText="Status"
+            name="status"
+            floatingLabelText="Status"
+            value={this.state.status}
+            onChange={this.handleChangeStatus}
+          >
+            {statuses.map(({ id, value }) => (
+              <MenuItem key={id} value={value} primaryText={value} />
+            ))}
+          </SelectField>
         </div>
         <RaisedButton
           style={styles.button}

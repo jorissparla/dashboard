@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import gql from "graphql";
+import { graphql } from "react-apollo";
 import { withRouter } from "react-router";
 import { fetchRanges, createChat } from "../actions";
 import { Card, OkCancelDialog } from "../common";
@@ -68,18 +70,13 @@ class ChatContainer extends Component {
 
     return (
       <Card>
-        <ChatAdd
-          ranges={ranges}
-          onSave={this.doSubmit.bind(this)}
-          onCancel={this.doCancel}
-        />
+        <ChatAdd ranges={ranges} onSave={this.doSubmit.bind(this)} onCancel={this.doCancel} />
         <Snackbar
           open={this.state.showMessage}
           message={this.state.err}
           autoHideDuration={4000}
           onRequestClose={this.handleRequestClose}
         />
-
       </Card>
     );
   }
@@ -89,6 +86,4 @@ const mapStateToProps = state => {
   return { ranges: state.summary.ranges };
 };
 
-export default connect(mapStateToProps, { fetchRanges, createChat })(
-  withRouter(ChatContainer)
-);
+export default connect(mapStateToProps, { fetchRanges, createChat })(withRouter(ChatContainer));

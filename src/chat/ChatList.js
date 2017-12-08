@@ -1,13 +1,32 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import { fetchChat } from "../actions/index";
-import { Link } from "react-router-dom";
+//import { connect } from "react-redux";
+import gql from "graphql-tag";
+import { graphql } from "react-apollo";
+//import { fetchChat } from "../actions/index";
+import { Link, history } from "react-router-dom";
 import { List, ListItem } from "material-ui/List";
+import RaisedButton from "material-ui/RaisedButton";
+import Avatar from "material-ui/Avatar";
 import Divider from "material-ui/Divider";
 import Subheader from "material-ui/Subheader";
 import FloatingActionButton from "material-ui/FloatingActionButton";
 import ContentAdd from "material-ui/svg-icons/content/add";
+import _ from "lodash";
 import UserAvatar from "react-user-avatar";
+import styled from "styled-components";
+import { HeaderRow, HeaderLeft, HeaderRight } from "../styles";
+
+const Title = styled.h3`
+  display: flex;
+  align-content: center;
+  font-weight: 200;
+  font-family: Raleway;
+  padding-left: 30px;
+  background-color: lightgrey;
+  height: 50px;
+  align-items: center;
+  width: 100%;
+`;
 
 const styles = {
   listStyle: {
@@ -38,80 +57,36 @@ const styles = {
     fontSize: 10,
     width: "50px",
     justifyContent: "center"
+  },
+  button: {
+    margin: 12,
+    background: "#2196f3"
   }
 };
 
-const colorAr = [
-  "#BA68C8",
-  "#81D4FA",
-  "#FF7043",
-  "#8BC34A",
-  "#FFFF00",
-  "#E57373"
-];
+const colorAr = ["#BA68C8", "#81D4FA", "#FF7043", "#8BC34A", "#FFFF00", "#E57373"];
 
 function getColor(index, colorAr) {
   return colorAr[index % colorAr.length];
 }
 
 class ChatList extends Component {
-  componentDidMount() {
-    this.props.fetchChat();
-  }
-
   renderChat(chat) {
     const { iconStyle, avatarStyle } = styles;
-    return chat.map((item, index) => {
+
+    return chat.map(({ id, team, nrchats, responseintime, percentage, version }, index) => {
       return (
-        <div key={item.id} style={{ flexDirection: "row" }}>
+        <div key={id} style={{ flexDirection: "row" }}>
           <ListItem
             leftAvatar={
-              <div style={avatarStyle}>
-                <UserAvatar
-                  size="48"
-                  style={{ fontFamily: "Oswald", fontSize: "18px" }}
-                  name={item.weeknr.substr(4, 2)}
-                  color={getColor(index, colorAr)}
-                  colors={[
-                    "#BA68C8",
-                    "#81D4FA",
-                    "#FF7043",
-                    "#8BC34A",
-                    "#FFFF00",
-                    "#E57373"
-                  ]}
-                />
-                <div> {item.team}</div>
-              </div>
+              <Avatar backgroundColor={getColor(index, colorAr)} color="white">
+                {team.slice(0, 2).toUpperCase()}
+              </Avatar>
             }
-            primaryText={`Number of chats: ${item.nrchats}`}
-            secondaryText={
-              <p>
-                {` Responded in time: ${item.responseintime} ( ${item.percentage} %)`}
-              </p>
-            }
+            primaryText={`Number of chats in ${team}: ${nrchats}`}
+            secondaryText={<p>{` Responded in time: ${responseintime} ( ${percentage} %)`}</p>}
             secondaryTextLines={2}
-            rightAvatar={
-              <div style={{ fontWeight: "bold" }}>{item.version}</div>
-            }
-            rightIcon={
-              <Link style={iconStyle} to={"/chat/" + item.id}>
-                <UserAvatar
-                  size="48"
-                  style={{ fontFamily: "Oswald", fontSize: "18px" }}
-                  name={item.team.slice(0, 2).toUpperCase()}
-                  color={getColor(index, colorAr)}
-                  colors={[
-                    "#BA68C8",
-                    "#81D4FA",
-                    "#FF7043",
-                    "#8BC34A",
-                    "#FFFF00",
-                    "#E57373"
-                  ]}
-                />
-              </Link>
-            }
+            rightAvatar={<div style={{ fontWeight: "bold" }}>{version}</div>}
           />
           <Divider inset={true} />
         </div>
@@ -120,34 +95,58 @@ class ChatList extends Component {
   }
 
   render() {
-    const { chat } = this.props;
+    const { data: { chats, loading } } = this.props;
     const { listStyle, subheaderStyle } = styles;
-    if (!chat) {
+    if (loading) {
       return <div>Loading</div>;
     }
-    return (
-      <List style={listStyle}>
-        <Subheader style={subheaderStyle}>
-          <div style={{ flexGrow: 2 }}>
-            Chat
+
+    const chatsByWeek = _.chain(chats)
+      .orderBy(["fromdate", "desc"])
+      .groupBy(o => o.weeknr)
+      .map(o => o)
+      .value();
+
+    return [
+      <HeaderRow>
+        <HeaderLeft>
+          <Title>Chat</Title>
+        </HeaderLeft>
+        <HeaderRight>
+          <Link to={"/chat/new"}>
+            <RaisedButton
+              label="New"
+              primary={true}
+              style={styles.button}
+              onClick={this.toggleDialog}
+            />
+          </Link>
+        </HeaderRight>
+      </HeaderRow>,
+
+      <List style={{ backgroundColor: "white" }}>
+        {chatsByWeek.map(item => (
+          <div>
+            <Title>{item[0].weeknr}</Title>
+            {this.renderChat(item)}
           </div>
-          <div style={{ flexGrow: 1 }}>
-            <Link to={"/chat/new"}>
-              <FloatingActionButton>
-                <ContentAdd />
-              </FloatingActionButton>
-            </Link>
-          </div>
-        </Subheader>
-        <Divider inset={true} />
-        {this.renderChat(chat.reverse())}
+        ))}
       </List>
-    );
+    ];
   }
 }
 
-const mapStateToProps = state => {
-  return { chat: state.summary.chat };
-};
+const chatQuery = gql`
+  query chats {
+    chats {
+      id
+      weeknr
+      team
+      percentage
+      responseintime
+      nrchats
+    }
+  }
+`;
 
-export default connect(mapStateToProps, { fetchChat })(ChatList);
+export default graphql(chatQuery)(ChatList);

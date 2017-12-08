@@ -7,12 +7,7 @@ import MenuItem from "material-ui/MenuItem";
 import Chip from "material-ui/Chip";
 import moment from "moment";
 import styled from "styled-components";
-import {
-  NormalRaisedButton,
-  CancelRaisedButton,
-  DeleteButton,
-  RegisterButton
-} from "../common/TitleBar";
+import { NormalRaisedButton, CancelRaisedButton, DeleteButton } from "../common/TitleBar";
 import withAuth from "../utils/withAuth";
 
 const SelectStyle = styled.div`
@@ -27,7 +22,7 @@ const styles = {
   },
   hoursfieldstyle: {
     marginRight: 20,
-    width: 50
+    width: 100
   },
   descriptionstyle: {
     whitespace: "pre-line"
@@ -39,11 +34,6 @@ const teams = [
   { id: 2, name: "Finance" },
   { id: 3, name: "Tools" },
   { id: 4, name: "General" }
-];
-const status = [
-  { id: 1, name: "In Development" },
-  { id: 2, name: "Released" },
-  { id: 3, name: "Expired" }
 ];
 
 class CourseForm extends Component {
@@ -63,8 +53,15 @@ class CourseForm extends Component {
     this.props.onDelete(e);
   }
   render() {
-    const { handleSubmit, course, authenticated, history, coursetypes } = this.props;
-    console.log("coursetypes", coursetypes);
+    const {
+      handleSubmit,
+      course,
+      authenticated,
+      history,
+      coursetypes,
+      trainers,
+      statuses
+    } = this.props;
     const readOnly = !authenticated;
     return (
       <form onSubmit={handleSubmit(this.handleSubmit)}>
@@ -85,20 +82,27 @@ class CourseForm extends Component {
               hintText="Number of Hours"
               underlineShow={true}
               component={Input}
-              floatingLabelText="hours"
+              floatingLabelText="Est. hours"
               style={styles.hoursfieldstyle}
             />
           </CardSection>
           <CardSection>
-            <Field
-              name="trainer"
-              disabled={readOnly}
-              hintText="Trainer"
-              underlineShow={true}
-              component={Input}
-              style={{ width: 300, marginRight: 20 }}
-              floatingLabelText="Trainer"
-            />
+            <SelectStyle>
+              <Field
+                name="trainer"
+                component={SelectField}
+                disabled={readOnly}
+                hintText="Trainer"
+                floatingLabelText="Trainer"
+                style={{ flex: 2 }}
+                underlineShow={true}
+                underlineStyle={{ borderColor: "#039BE5" }}
+              >
+                {trainers.map(({ id, fullname }) => (
+                  <MenuItem key={id} value={fullname} primaryText={fullname} />
+                ))}
+              </Field>
+            </SelectStyle>
             <SelectStyle>
               <Field
                 name="status"
@@ -110,8 +114,8 @@ class CourseForm extends Component {
                 underlineShow={true}
                 underlineStyle={{ borderColor: "#039BE5" }}
               >
-                {status.map(({ id, name }) => (
-                  <MenuItem key={id} value={name} primaryText={name} />
+                {statuses.map(({ id, value }) => (
+                  <MenuItem key={id} value={value} primaryText={value} />
                 ))}
               </Field>
             </SelectStyle>
@@ -138,8 +142,8 @@ class CourseForm extends Component {
                 floatingLabelText="type"
                 style={{ flex: 2 }}
               >
-                {coursetypes.map(type => (
-                  <MenuItem key={type.id} value={type.name} primaryText={type.name} />
+                {coursetypes.map(({ id, name }, index) => (
+                  <MenuItem key={`${index}_${id}`} value={name} primaryText={name} />
                 ))}
               </Field>
             </SelectStyle>
@@ -153,7 +157,7 @@ class CourseForm extends Component {
               component={Input}
               multiLine={true}
               rows={2}
-              rowsMax={4}
+              rowsMax={5}
               fullWidth={true}
               floatingLabelText="description"
               style={styles.descriptionstyle}
@@ -189,7 +193,7 @@ class CourseForm extends Component {
               name="applicable"
               disabled={readOnly}
               component={Input}
-              floatingLabelText="Applicable for"
+              floatingLabelText="Applicable for version"
               underlineShow={true}
               style={styles.textfieldstyle}
             />
@@ -197,7 +201,7 @@ class CourseForm extends Component {
               name="link"
               disabled={readOnly}
               component={Input}
-              floatingLabelText="link"
+              floatingLabelText="link to recording, folder, etc"
               underlineShow={true}
               fullWidth={true}
               style={styles.textfieldstyle}
@@ -207,7 +211,7 @@ class CourseForm extends Component {
             {!readOnly && <NormalRaisedButton label="Save" type="submit" />}
             <CancelRaisedButton
               secondary={true}
-              label="Cancel"
+              label="Back to Courses"
               type="reset"
               onClick={() => setInterval(history.push("/courses"), 500)}
             />

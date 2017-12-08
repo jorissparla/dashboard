@@ -1,5 +1,6 @@
 import React from "react";
-import { gql, graphql } from "react-apollo";
+import gql from "graphql-tag";
+import { graphql } from "react-apollo";
 import { List, ListItem } from "material-ui/List";
 import Avatar from "material-ui/Avatar";
 import styled from "styled-components";
@@ -55,7 +56,7 @@ const dayPart = d => format(Date.parse(d), "DD");
 const monthPart = d => format(Date.parse(d), "MMMM");
 
 const GoLiveItem = ({ item, bg = "#ec407a" }) => {
-  const { id, day, customername, region, version, comments } = item;
+  const { id, day, customername, customerid, region, version, comments } = item;
   console.log(item);
 
   return (
@@ -75,6 +76,10 @@ const GoLiveItem = ({ item, bg = "#ec407a" }) => {
       }
       secondaryText={<p>{comments}</p>}
       secondaryTextLines={2}
+      onClick={() =>
+        window.open(
+          `http://navigator.infor.com/n/incident_list.asp?ListType=CUSTOMERID&Value=${customerid}`
+        )}
     />
   );
 };
@@ -111,6 +116,7 @@ const queryGoLives = gql`
     golives {
       id
       customername
+      customerid
       country
       region
       version

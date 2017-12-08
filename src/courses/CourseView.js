@@ -11,9 +11,11 @@ import {
 import { Tabs, Tab } from "material-ui/Tabs";
 import RaisedButton from "material-ui/RaisedButton";
 import DatePicker from "material-ui/DatePicker";
-import { gql, graphql } from "react-apollo";
+import gql from "graphql-tag";
+import { graphql } from "react-apollo";
 import { Link } from "react-router-dom";
 import addDays from "date-fns/add_days";
+import format from "date-fns/format";
 import _ from "lodash";
 import AddCourseDialog from "./AddCourseDialog";
 import StudentListContainer from "./StudentListContainer";
@@ -122,7 +124,9 @@ class CourseView extends React.Component {
                 <Link to={`/courses/edit/${course.id}`}>{course.id}</Link>
               </TableRowColumn>
               <TableRowColumn style={{ width: 20 }}>{course.students.length}</TableRowColumn>
-              <TableRowColumn>{course.plannedcourses[0].startdate}</TableRowColumn>
+              <TableRowColumn>
+                {format(course.plannedcourses[0].startdate, "ddd, DD-MMM-YYYY")}
+              </TableRowColumn>
             </TableRow>
           ))}
         </TableBody>
@@ -131,7 +135,7 @@ class CourseView extends React.Component {
   };
 
   render() {
-    const { loading, error, courses } = this.props.data;
+    const { loading, error, courses, accounts } = this.props.data;
     if (loading) {
       return <p>Loading ...</p>;
     }
@@ -179,6 +183,7 @@ class CourseView extends React.Component {
             {open === true && (
               <AddCourseDialog
                 open={open}
+                trainers={accounts}
                 courses={courses}
                 onSave={e => console.log("onSave", JSON.stringify(e))}
                 onCancel={() => this.setState({ open: false })}
@@ -239,6 +244,10 @@ const courseQuery = gql`
       students {
         fullname
       }
+    }
+    accounts(region: "EMEA") {
+      id
+      fullname
     }
   }
 `;

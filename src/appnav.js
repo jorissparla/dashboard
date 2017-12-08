@@ -1,9 +1,7 @@
 import React from "react";
 import AppBar from "material-ui/AppBar";
 import IconButton from "material-ui/IconButton";
-import { blue500 } from "material-ui/styles/colors";
 import Avatar from "material-ui/Avatar";
-import getMuiTheme from "material-ui/styles/getMuiTheme";
 import ActionHome from "material-ui/svg-icons/action/home";
 import NewsIcon from "material-ui/svg-icons/action/event";
 import PeopleIcon from "material-ui/svg-icons/social/people";
