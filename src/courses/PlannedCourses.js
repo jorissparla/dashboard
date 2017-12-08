@@ -41,6 +41,10 @@ const styles = {
     backgroundColor: "black",
     primaryColor1: "black"
   },
+  buttonback: {
+    margin: 12,
+    backgroundColor: "orange"
+  },
 
   iconStyle: {
     width: 24,
@@ -86,7 +90,19 @@ class PlannedCoursesTable extends React.Component {
     this.props.onRegister(this.props.planned[this.state.selected]);
   };
   render() {
-    const { planned, onRowSelected, course, courses, hours } = this.props;
+    const {
+      history,
+      planned,
+      onRowSelected,
+      onCancel,
+      course,
+      courses,
+      hours,
+      trainer,
+      accounts,
+      statuses
+    } = this.props;
+    console.log("TRAINER", trainer);
     return (
       <div>
         <HeaderRow>
@@ -96,6 +112,12 @@ class PlannedCoursesTable extends React.Component {
             </Title>
           </HeaderLeft>
           <HeaderRight>
+            <RaisedButton
+              secondary={true}
+              label="Back to Courses"
+              style={styles.buttonback}
+              onClick={() => onCancel()}
+            />
             <RaisedButton
               label="Edit Registration"
               backgroundColor="#000"
@@ -116,10 +138,14 @@ class PlannedCoursesTable extends React.Component {
         </HeaderRow>
         {this.state.opennew === true && (
           <AddCourseDialog
+            trainers={accounts}
             open={this.state.opennew}
             courses={courses}
             selectedcourse={course.id}
             courseid={course.id}
+            trainer={course.trainer}
+            statuses={statuses}
+            status={course.status}
             hours={hours}
             onSave={e => {
               console.log("onSave", JSON.stringify(e));
@@ -131,11 +157,15 @@ class PlannedCoursesTable extends React.Component {
         )}
         {this.state.openedit === true && (
           <AddCourseDialog
+            trainers={accounts}
             open={this.state.openedit}
             courses={courses}
             selectedcourse={course.id}
+            trainer={course.trainer}
             courseid={course.id}
             hours={hours}
+            status={course.status}
+            statuses={statuses}
             id={this.state.id}
             startdate={new Date(this.state.selectedstartdate)}
             enddate={new Date(this.state.selectedenddate)}
@@ -167,6 +197,7 @@ class PlannedCoursesTable extends React.Component {
             <TableRow>
               <HeaderColumn>STARTDATE</HeaderColumn>
               <HeaderColumn>ENDDATE</HeaderColumn>
+              <HeaderColumn small={true}>TRAINER</HeaderColumn>
               <HeaderColumn small={true}>STATUS</HeaderColumn>
               <HeaderColumn small={true}>HOURS</HeaderColumn>
               <HeaderColumn small={true}>STUDENTS</HeaderColumn>
@@ -178,6 +209,7 @@ class PlannedCoursesTable extends React.Component {
               <TableRow key={index} selectable={true} selected={this.state.selected === index}>
                 <RowColumn>{fmtDate(plan.startdate)}</RowColumn>
                 <RowColumn>{fmtDate(plan.enddate)}</RowColumn>
+                <RowColumn small={true}>{plan.trainer}</RowColumn>
                 <RowColumn small={true}>{plan.status}</RowColumn>
                 <RowColumn small={true}>{plan.hours}</RowColumn>
                 <RowColumn small={true}>{plan.studentcount}</RowColumn>
@@ -189,6 +221,8 @@ class PlannedCoursesTable extends React.Component {
                       this.setState({
                         openedit: true,
                         id: plan.id,
+                        trainer: plan.trainer,
+                        status: plan.status,
                         selectedstartdate: plan.startdate,
                         selectedenddate: plan.enddate
                       })}

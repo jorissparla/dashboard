@@ -75,6 +75,7 @@ class CourseCard extends Component {
   handleDelete = id => {
     this.props
       .deleteCourse({ variables: { input: { id } } })
+      .then(this.props.history.push("/courses"))
       .then(this.props.data.refetch())
       .then(this.setState({ id: null }))
       //.then(() => setTimeout((window.location.href = "/courses"), 500))
@@ -84,27 +85,30 @@ class CourseCard extends Component {
   handleDeletePlanned = id => {
     this.props
       .deletePlannedCourse({ variables: { input: { id } } })
-      .then(this.props.data.refetch())
+      // .then(this.props.data.refetch())
       .then(this.setState({ planid: null }))
+      .then(this.props.history.push("/courses"))
       .catch(e => this.handleMessage(JSON.stringify(e, null, 2)));
   };
 
-  handleUpdatePlanned = async ({ id, startdate, enddate, status, hours }) => {
+  handleUpdatePlanned = async ({ id, startdate, enddate, status, trainer, hours }) => {
     const input = {
       id,
       startdate: addHours(startdate, 13),
       enddate: new Date(addHours(enddate, 13)),
+      trainer,
       status,
       hours
     };
     await this.props.updatePlannedCourse({ variables: { input } });
     await this.props.data.refetch();
   };
-  handleAddPlanned = async ({ id, startdate, enddate, status, hours, courseid }) => {
+  handleAddPlanned = async ({ id, startdate, enddate, status, hours, trainer, courseid }) => {
     const input = {
       id,
       startdate: new Date(startdate),
       enddate: new Date(enddate),
+      trainer,
       status,
       hours,
       courseid
@@ -144,9 +148,8 @@ class CourseCard extends Component {
   };
 
   render() {
-    const { loading, error, course, coursetypes, courses } = this.props.data;
+    const { loading, error, course, coursetypes, courses, accounts, statuses } = this.props.data;
     const { tabStyle } = styles;
-
     if (loading) {
       return <p>Loading ...</p>;
     }
@@ -154,26 +157,29 @@ class CourseCard extends Component {
       return <p>{error.message}</p>;
     }
     const { planned } = this.state;
+    const trainer = planned ? planned.trainer : "";
     const studentlist = planned ? planned.students : [];
-    return (
+    return [
+      <Snackbar
+        open={this.state.showMessage}
+        message={this.state.message}
+        autoHideDuration={4000}
+        onRequestClose={this.autoCloseMessage}
+      />,
       <Tabs
         inkBarStyle={tabStyle}
         value={this.state.activeTab}
         onChange={value => this.setState({ activeTab: value })}
       >
-        <Snackbar
-          open={this.state.showMessage}
-          message={this.state.message}
-          autoHideDuration={4000}
-          onRequestClose={this.autoCloseMessage}
-        />
         <Tab label="Course Details" value="course" key={1}>
           <Div>
             <Right>
               <CourseForm
                 initialValues={course}
                 coursetypes={coursetypes}
+                statuses={statuses.filter(s => s.type === "Course")}
                 course={course}
+                trainers={accounts}
                 onSave={this.handleSave}
                 onDelete={this.showConfirmDialog}
                 readOnly={false}
@@ -195,10 +201,14 @@ class CourseCard extends Component {
         >
           <Left>
             <PlannedCourses
+              accounts={accounts}
               course={course}
               courses={courses}
-              planned={course.plannedcourses}
-              hours={course.hours}
+              trainer={trainer}
+              statuses={statuses.filter(s => s.type === "Planned")}
+              planned={course ? course.plannedcourses : []}
+              hours={course ? course.hours : ""}
+              onCancel={() => this.props.history.push("/courses")}
               onRowSelected={e => this.setState({ planned: e })}
               onUpdate={v => this.handleUpdatePlanned(v)}
               onAddNew={v => this.handleAddPlanned(v)}
@@ -219,7 +229,7 @@ class CourseCard extends Component {
           <Title>No Information Yet</Title>
         </Tab>
       </Tabs>
-    );
+    ];
   }
 }
 
@@ -287,6 +297,7 @@ const CourseQuery = gql`
         startdate
         enddate
         status
+        trainer
         hours
         students {
           id
@@ -315,6 +326,15 @@ const CourseQuery = gql`
       id
       title
       hours
+    }
+    statuses {
+      id
+      type
+      value
+    }
+    accounts(region: "EMEA") {
+      id
+      fullname
     }
   }
 `;

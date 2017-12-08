@@ -19,12 +19,7 @@ const Right = styled.div`
 class AddCourseCard extends Component {
   state = {};
 
-  constructor(props) {
-    super(props);
-    this.handleSave = this.handleSave.bind(this);
-  }
-
-  handleSave({
+  handleSave = ({
     id,
     team,
     title,
@@ -37,38 +32,49 @@ class AddCourseCard extends Component {
     status,
     applicable,
     trainer
-  }) {
+  }) => {
+    const input = {
+      id,
+      team,
+      title,
+      description,
+      link,
+      type,
+      hours,
+      startdate,
+      enddate,
+      status,
+      applicable,
+      trainer
+    };
     this.props
       .addCourse({
-        id,
-        team,
-        title,
-        description,
-        link,
-        type,
-        hours,
-        startdate,
-        enddate,
-        status,
-        applicable,
-        trainer
+        variables: { input }
       })
-      .then(v => {
-        window.location.href = "/courses";
+      .then(({ data: { addCourse: { id } } }) => {
+        console.log("ONSAVE", JSON.stringify(id));
+        this.props.history.push(`/courses/${id.toUpperCase()}`);
       })
       .catch(e => window.alert(JSON.stringify(e, null, 2)));
-  }
+  };
 
   render() {
-    const { data: { coursetypes, loading } } = this.props;
+    const { data: { coursetypes, loading, statuses, accounts } } = this.props;
     if (loading) {
       return <div>Loading...</div>;
     }
+    console.log;
     return (
       <div>
         <Div>
           <Right>
-            <CourseForm coursetypes={coursetypes} onSave={this.handleSave} readOnly={false} />
+            <CourseForm
+              coursetypes={coursetypes}
+              statuses={statuses.filter(s => s.type === "Course")}
+              trainers={accounts}
+              onSave={this.handleSave}
+              readOnly={false}
+            />
           </Right>
           <Left />
         </Div>
@@ -82,27 +88,26 @@ const queryCourseTypes = gql`
     coursetypes {
       name
     }
+    statuses {
+      id
+      type
+      value
+    }
+    accounts(region: "EMEA") {
+      id
+      fullname
+    }
   }
 `;
 
 const AddCourse = gql`
   mutation addCourse($input: InputCourseType) {
     addCourse(input: $input) {
-      course {
-        id
-        applicable
-      }
+      id
     }
   }
 `;
 
-export default graphql(AddCourse, {
-  props: ({ mutate }) => ({
-    addCourse: input =>
-      mutate({
-        variables: {
-          input
-        }
-      })
-  })
-})(graphql(queryCourseTypes)(withRouter(AddCourseCard)));
+export default graphql(AddCourse, { name: "addCourse" })(
+  graphql(queryCourseTypes)(withRouter(AddCourseCard))
+);
