@@ -91,11 +91,9 @@ class CourseView extends React.Component {
   };
 
   handleChange = (event, index, course) => {
-    console.log(" course ", course, event);
     this.setState({ course });
   };
   toggleDialog = () => {
-    console.log(this.state);
     this.setState({ open: !this.state.open });
   };
 
@@ -109,7 +107,7 @@ class CourseView extends React.Component {
             <HeaderColumn style={{ width: 90 }}>STATUS</HeaderColumn>
             <HeaderColumn>ID</HeaderColumn>
             <HeaderColumn style={{ width: 20 }}>👤</HeaderColumn>
-            <HeaderColumn>NEXT COURSE DATE</HeaderColumn>
+            <HeaderColumn>COURSE DATE</HeaderColumn>
           </TableRow>
         </TableHeader>
         <TableBody showRowHover={true} displayRowCheckbox={false}>
@@ -145,7 +143,12 @@ class CourseView extends React.Component {
     const filterDate = this.state.startdate;
     const { open } = this.state;
     console.log(this.state.studentfilterstartdate);
-    const filteredCourses = filterDate
+
+    const filteredCourses = _.chain(courses)
+      .filter(course => Date.parse(course.plannedcourses[0].startdate) > Date.parse(filterDate))
+      .orderBy(["course.plannedcourses[0].startdate"])
+      .value();
+    const filteredCourses1 = filterDate
       ? courses.filter(
           course => Date.parse(course.plannedcourses[0].startdate) > Date.parse(filterDate)
         )
@@ -162,7 +165,7 @@ class CourseView extends React.Component {
             <HeaderLeft>
               {" "}
               <Title>
-                Scheduled Courses Starting<DatePicker
+                Scheduled Training Starting<DatePicker
                   hintText="Enter StartDate Course"
                   value={this.state.startdate}
                   onChange={(e, value) => this.handleStartDateChange(e, value)}
