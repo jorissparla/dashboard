@@ -30,17 +30,7 @@ class AddCourseDialog extends React.Component {
     error: { startdate: "", enddate: "" }
   };
   componentDidMount() {
-    const {
-      selectedcourse,
-      startdate,
-      enddate,
-      status,
-      courseid,
-      trainer,
-      hours,
-      id,
-      trainers
-    } = this.props;
+    const { selectedcourse, startdate, enddate, status, courseid, trainer, hours, id } = this.props;
     this.setState({
       startdate,
       enddate,

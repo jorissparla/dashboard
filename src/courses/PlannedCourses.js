@@ -102,7 +102,6 @@ class PlannedCoursesTable extends React.Component {
       accounts,
       statuses
     } = this.props;
-    console.log("TRAINER", trainer);
     return (
       <div>
         <HeaderRow>
@@ -225,7 +224,8 @@ class PlannedCoursesTable extends React.Component {
                         status: plan.status,
                         selectedstartdate: plan.startdate,
                         selectedenddate: plan.enddate
-                      })}
+                      })
+                    }
                   />
                   <TrashIcon
                     style={styles.iconStyle2}

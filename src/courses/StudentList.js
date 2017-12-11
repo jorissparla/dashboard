@@ -50,27 +50,28 @@ class StudentList extends Component {
       <Paper>
         <SearchBar onChange={this.handleSearchChange} />
         <List>
-          {filteredAccounts.map((item, i) => (
-            <ListItem
-              key={`${item.id}-${i}`}
-              primaryText={item.fullname}
-              secondaryText={`in Team ${item.team}, Location ${item.locationdetail
-                ? item.locationdetail.location
-                : item.location} has been registered for ${item._courseMeta
-                ? item._courseMeta.count
-                : 0} courses`}
-              rightIcon={this.dropdownMenu(item.id)}
-              leftAvatar={
-                item.image ? (
-                  <Avatar src={item.image} />
-                ) : (
-                  <Avatar color={pinkA200} backgroundColor={transparent} style={{ left: 8 }}>
-                    {item.fullname.slice(0, 1).concat(item.lastname.slice(0, 1))}
-                  </Avatar>
-                )
-              }
-            />
-          ))}
+          {filteredAccounts.map((item, i) => {
+            console.log(`${item.id}-${i}`);
+            return (
+              <ListItem
+                key={`${item.id}-${i}`}
+                primaryText={item.fullname}
+                secondaryText={`in Team ${item.team}, Location ${
+                  item.locationdetail ? item.locationdetail.location : item.location
+                } has been registered for ${item._courseMeta ? item._courseMeta.count : 0} courses`}
+                rightIcon={this.dropdownMenu(item.id)}
+                leftAvatar={
+                  item.image ? (
+                    <Avatar src={item.image} />
+                  ) : (
+                    <Avatar color={pinkA200} backgroundColor={transparent} style={{ left: 8 }}>
+                      {item.fullname.slice(0, 1).concat(item.lastname.slice(0, 1))}
+                    </Avatar>
+                  )
+                }
+              />
+            );
+          })}
         </List>
       </Paper>
     );

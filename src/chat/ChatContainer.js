@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import gql from "graphql";
-import { graphql } from "react-apollo";
+//import gql from "graphql";
+//import { graphql } from "react-apollo";
 import { withRouter } from "react-router";
 import { fetchRanges, createChat } from "../actions";
 import { Card, OkCancelDialog } from "../common";

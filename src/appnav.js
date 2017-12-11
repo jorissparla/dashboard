@@ -11,12 +11,12 @@ import LinkIcon from "material-ui/svg-icons/content/link";
 import RequestListIcon from "material-ui/svg-icons/av/playlist-add";
 import GoLiveIcon from "material-ui/svg-icons/action/flight-takeoff";
 import MenuIcon from "material-ui/svg-icons/navigation/menu";
-import IconMenu from "material-ui/IconMenu";
+//import IconMenu from "material-ui/IconMenu";
 import Divider from "material-ui/Divider";
 import Drawer from "material-ui/Drawer";
 import MenuItem from "material-ui/MenuItem";
 import { withRouter } from "react-router";
-import { Toolbar, ToolbarGroup, ToolbarTitle, ToolbarSeparator } from "material-ui/Toolbar";
+import { Toolbar, ToolbarGroup, ToolbarTitle } from "material-ui/Toolbar";
 import withAuth from "./utils/withAuth";
 
 import FlatButton from "material-ui/FlatButton";
@@ -234,8 +234,11 @@ class Header extends React.Component {
   };
   render() {
     return [
-      <Drawer open={this.state.showdrawer}> {this.hamburgerMenu()}</Drawer>,
-      <div style={this.getStyle()}>
+      <Drawer open={this.state.showdrawer} key="drawer">
+        {" "}
+        {this.hamburgerMenu()}
+      </Drawer>,
+      <div style={this.getStyle()} key="rest">
         {this.renderToolBar()}
         {this.props.children}
       </div>

@@ -148,11 +148,6 @@ class CourseView extends React.Component {
       .filter(course => Date.parse(course.plannedcourses[0].startdate) > Date.parse(filterDate))
       .orderBy(["course.plannedcourses[0].startdate"])
       .value();
-    const filteredCourses1 = filterDate
-      ? courses.filter(
-          course => Date.parse(course.plannedcourses[0].startdate) > Date.parse(filterDate)
-        )
-      : courses;
 
     return (
       <Tabs

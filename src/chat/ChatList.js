@@ -3,16 +3,12 @@ import React, { Component } from "react";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
 //import { fetchChat } from "../actions/index";
-import { Link, history } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { List, ListItem } from "material-ui/List";
 import RaisedButton from "material-ui/RaisedButton";
 import Avatar from "material-ui/Avatar";
 import Divider from "material-ui/Divider";
-import Subheader from "material-ui/Subheader";
-import FloatingActionButton from "material-ui/FloatingActionButton";
-import ContentAdd from "material-ui/svg-icons/content/add";
 import _ from "lodash";
-import UserAvatar from "react-user-avatar";
 import styled from "styled-components";
 import { HeaderRow, HeaderLeft, HeaderRight } from "../styles";
 
@@ -46,18 +42,6 @@ const styles = {
     flexDirection: "row",
     display: "flex"
   },
-  iconStyle: {
-    marginRight: 20,
-    alignSelf: "flex-start",
-    padding: 20,
-    flexDirection: "row"
-  },
-  avatarStyle: {
-    flexDirection: "column",
-    fontSize: 10,
-    width: "50px",
-    justifyContent: "center"
-  },
   button: {
     margin: 12,
     background: "#2196f3"
@@ -72,8 +56,6 @@ function getColor(index, colorAr) {
 
 class ChatList extends Component {
   renderChat(chat) {
-    const { iconStyle, avatarStyle } = styles;
-
     return chat.map(({ id, team, nrchats, responseintime, percentage, version }, index) => {
       return (
         <div key={id} style={{ flexDirection: "row" }}>
@@ -96,7 +78,6 @@ class ChatList extends Component {
 
   render() {
     const { data: { chats, loading } } = this.props;
-    const { listStyle, subheaderStyle } = styles;
     if (loading) {
       return <div>Loading</div>;
     }
