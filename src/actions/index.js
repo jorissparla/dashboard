@@ -38,7 +38,13 @@ export const FETCH_ACCOUNTS = "FETCH_ACCOUNTS";
 export const FIND_STUDENTS = "FIND_STUDENTS";
 export const ENROLL_STUDENT = "ENROLL_STUDENT";
 
-export const ROOT_URL = "http://nlbavwtls22:3001/api";
+const {
+  REACT_APP_PORT1_REST = 3001,
+  REACT_APP_PORT_GRAPHQL = 55555,
+  REACT_APP_SERVER = "nlbavwixs"
+} = process.env;
+
+export const ROOT_URL = `http://${REACT_APP_SERVER}:${REACT_APP_PORT1_REST}/api`;
 //export const ROOT_URL = "http://localhost:3001/api";
 
 export const authError = error => {

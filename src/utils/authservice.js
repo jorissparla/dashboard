@@ -3,9 +3,10 @@ import { withRouter } from "react-router";
 class AuthService {
   constructor(clientId, domain) {
     // Configure Auth0
+    const { REACT_APP_SERVER = "nlbavwixs", REACT_APP_PORT = 3000 } = process.env;
     this.lock = new Auth0Lock(clientId, domain, {
       auth: {
-        redirectUrl: "http://nlbavwtls22:3000/login",
+        redirectUrl: `http://${REACT_APP_SERVER}:${REACT_APP_PORT}/login`,
         responseType: "token"
       }
     });

@@ -52,10 +52,10 @@ class KudoListComponent extends Component {
   renderItems(kudos) {
     const nrKudos = this.props.kudos.length;
     let kl = kudos.slice(0, nrKudos);
-
+    const { REACT_APP_SERVER = "nlbavwixs" } = process.env;
     return kl.map(({ ownerrep_name, customer_name, gender, survey_date, pic }, index) => {
       const mgender = mapGender(gender);
-      const img = pic ? `${pic}` : `http://nlbavwtls22/images/${mgender}.png`;
+      const img = pic ? `${pic}` : `http://${REACT_APP_SERVER}/images/${mgender}.png`;
 
       return (
         <Card

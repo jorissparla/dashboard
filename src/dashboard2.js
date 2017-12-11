@@ -4,7 +4,7 @@ import "./App.css";
 import AppChartCombi from "./charts/appchartcombi";
 import KudoList from "./kudos/kudolist1";
 //import AlertWidget from './alerts/alertwidget'
-import NewsCardContainer from "./news/NewsCardContainer";
+import NewsCardContainer from "./news/NewsContainer";
 import AppChartContainer from "./charts/appchartcontainer";
 import HistoryChartContainer from "./charts/historycontainer";
 import GoLiveList from "./golives/golivelist";

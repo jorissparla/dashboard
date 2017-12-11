@@ -38,14 +38,18 @@ const StyledBody = styled.p`
   height: 40px;
   overflow: hidden;
 `;
-const Footer = styled.div`margin: 5px;`;
+const Footer = styled.div`
+  margin: 5px;
+`;
 
 const Outer = styled.div`
   display: flex;
   flex-wrap: wrap;
 `;
-const imageURL = "http://nlbavwtls22/ixs/_mugshots/infor_gmaggio_20170209161047.jpg";
-const URL2 = "http://nlbavwtls22/ixs/_mugshots/infor_imohnen_20170209102233.JPG";
+const { REACT_APP_SERVER = "nlbavwixs" } = process.env;
+
+const imageURL = `http://${REACT_APP_SERVER}/ixs/_mugshots/infor_gmaggio_20170209161047.jpg`;
+const URL2 = `http://${REACT_APP_SERVER}/ixs/_mugshots/infor_imohnen_20170209102233.JPG`;
 const URL3 = "https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/auth.png";
 
 const Card = ({

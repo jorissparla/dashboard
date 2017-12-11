@@ -15,8 +15,8 @@ const Title = styled.h3`
   font-family: Raleway;
   padding-left: 30px;
 `;
-
-const defaultPicture = "http://nlbavwtls22/images/male.png";
+const { REACT_APP_SERVER = "nlbavwixs" } = process.env;
+const defaultPicture = `http://${REACT_APP_SERVER}/images/male.png`;
 
 const RequestItem = ({ item, handleClick }) => {
   const { id, name, text, createdAt, account, complete, assigned } = item;
