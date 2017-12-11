@@ -20,21 +20,19 @@ class AddCourseCard extends Component {
   state = {};
 
   handleSave = ({
-    id,
-    team,
-    title,
-    description,
-    link,
-    type,
-    hours,
-    startdate,
-    enddate,
-    status,
-    applicable,
-    trainer
+    team = "Logistics",
+    title = "",
+    description = "",
+    link = "",
+    type = "",
+    hours = 8,
+    startdate = new Date(),
+    enddate = new Date(),
+    status = "",
+    applicable = "",
+    trainer = ""
   }) => {
     const input = {
-      id,
       team,
       title,
       description,
@@ -47,13 +45,14 @@ class AddCourseCard extends Component {
       applicable,
       trainer
     };
+    console.log(JSON.stringify(input));
     this.props
       .addCourse({
         variables: { input }
       })
       .then(({ data: { addCourse: { id } } }) => {
         console.log("ONSAVE", JSON.stringify(id));
-        this.props.history.push(`/courses/${id.toUpperCase()}`);
+        this.props.history.push(`/courses/edit/${id.toUpperCase()}`);
       })
       .catch(e => window.alert(JSON.stringify(e, null, 2)));
   };

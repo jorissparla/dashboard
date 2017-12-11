@@ -163,7 +163,7 @@ class CourseForm extends Component {
               style={styles.descriptionstyle}
             />
           </CardSection>
-          {0 === 1 && (
+          {1 === 1 && (
             <CardSection>
               <SelectStyle>
                 <Field
