@@ -13,14 +13,7 @@ import { Link } from "react-router-dom";
 //@ts-check
 import Avatar from "material-ui/Avatar";
 import { pinkA200, transparent } from "material-ui/styles/colors";
-import {
-  Table,
-  TableBody,
-  TableHeader,
-  TableHeaderColumn,
-  TableRow,
-  TableRowColumn
-} from "material-ui/Table";
+import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from "material-ui/Table";
 import _ from "lodash";
 import styled from "styled-components";
 
@@ -120,13 +113,12 @@ class StudentTables extends Component {
     console.log(this.state.sorting);
 
     const filteredAccounts = _.chain(accounts)
+      .filter(account => account.locationdetail && account.team)
       .filter(
         account =>
           account.fullname.toUpperCase().includes(this.state.searchText.toUpperCase()) ||
           account.team.toUpperCase().includes(this.state.searchText.toUpperCase()) ||
-          account.locationdetail.location
-            .toUpperCase()
-            .includes(this.state.searchText.toUpperCase())
+          account.locationdetail.location.toUpperCase().includes(this.state.searchText.toUpperCase())
       )
       .map(account => {
         const hoursObj = account.plannedcourses.reduce(
@@ -156,28 +148,12 @@ class StudentTables extends Component {
           <TableHeader style={headerStyle} adjustForCheckbox={false} displaySelectAll={false}>
             <TableRow>
               <TableHeaderColumn style={avatarstyle} />
-              <TableHeaderColumn1
-                column="fullname"
-                title="name"
-                handleSortChange={this.handleSortChange}
-              />
-              <TableHeaderColumn1
-                column="team"
-                title="Team"
-                handleSortChange={this.handleSortChange}
-              />
-              <TableHeaderColumn1
-                column="location"
-                title="Location"
-                handleSortChange={this.handleSortChange}
-              />
+              <TableHeaderColumn1 column="fullname" title="name" handleSortChange={this.handleSortChange} />
+              <TableHeaderColumn1 column="team" title="Team" handleSortChange={this.handleSortChange} />
+              <TableHeaderColumn1 column="location" title="Location" handleSortChange={this.handleSortChange} />
 
               <TableHeaderColumn># Courses</TableHeaderColumn>
-              <TableHeaderColumn1
-                column="hours"
-                title="#Hours"
-                handleSortChange={this.handleSortChange}
-              />
+              <TableHeaderColumn1 column="hours" title="#Hours" handleSortChange={this.handleSortChange} />
               <TableHeaderColumn>
                 Courses<ArrowDownWard />
               </TableHeaderColumn>
@@ -197,7 +173,7 @@ class StudentTables extends Component {
                 </TableRowColumn>
                 <LinkColumn link={`/students/${item.id}`} style={rowstyle} value={item.fullname} />
                 <TableRowColumn>{item.team}</TableRowColumn>
-                <TableRowColumn>{item.locationdetail.location}</TableRowColumn>
+                <TableRowColumn>{item.locationdetail ? item.locationdetail.location : item.location}</TableRowColumn>
                 <TableRowColumn>{item.count}</TableRowColumn>
                 <TableRowColumn>{item.hours ? item.hours : 0}</TableRowColumn>
                 <TableRowColumn> {this.dropdownMenu(item.id)}</TableRowColumn>

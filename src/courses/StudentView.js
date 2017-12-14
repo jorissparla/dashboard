@@ -6,6 +6,7 @@ import styled from "styled-components";
 import Avatar from "material-ui/Avatar";
 import Paper from "material-ui/Paper";
 import { List, ListItem } from "material-ui/List";
+import Divider from "material-ui/Divider";
 import { pinkA200 } from "material-ui/styles/colors";
 import IconMenu from "material-ui/IconMenu";
 import MenuItem from "material-ui/MenuItem";
@@ -15,9 +16,11 @@ import DownIcon from "material-ui/svg-icons/navigation/expand-more";
 import FileFileDownload from "material-ui/svg-icons/file/file-download";
 import Chip from "material-ui/Chip";
 import moment from "moment";
+import format from "date-fns/format";
 import { TitleBar } from "../common/TitleBar";
 import SearchBar from "../common/SearchBar";
 import withAuth from "../utils/withAuth";
+import { Title, HeaderRow, HeaderLeft, HeaderRight } from "../styles";
 
 const Container = styled.div`
   display: flex;
@@ -33,14 +36,8 @@ const Details = styled.div`
   display: flex;
   flex: 1;
   flex-direction: column;
-  margin: 20px;
 `;
-const Title = styled.div`
-  font-family: Oswald;
-  font-size: 24px;
-  flex: 1;
-  background: ${props => (props.background ? "#FAFAFA" : "white")};
-`;
+
 const Content = styled.div``;
 
 class StudentView extends Component {
@@ -76,7 +73,7 @@ class StudentView extends Component {
     );
   }
 
-  showEnrollMenu(enrol) {
+  showEnrollMenu(enrol, navid) {
     return (
       <IconMenu
         iconButtonElement={
@@ -87,15 +84,9 @@ class StudentView extends Component {
         anchorOrigin={{ horizontal: "left", vertical: "top" }}
         targetOrigin={{ horizontal: "left", vertical: "top" }}
       >
-        <MenuItem
-          primaryText="in Progress"
-          onClick={() => this.updateEnrollStatus(enrol, "In Progress")}
-        />
-        <MenuItem
-          primaryText="Completed"
-          onClick={() => this.updateEnrollStatus(enrol, "Completed")}
-        />
-        <MenuItem primaryText="Planned" onClick={() => this.updateEnrollStatus(enrol, "Planned")} />
+        <MenuItem primaryText="in Progress" onClick={() => this.updateEnrollStatus(enrol, navid, "In Progress")} />
+        <MenuItem primaryText="Completed" onClick={() => this.updateEnrollStatus(enrol, navid, "Completed")} />
+        <MenuItem primaryText="Planned" onClick={() => this.updateEnrollStatus(enrol, navid, "Planned")} />
         <MenuItem
           primaryText="View Course"
           leftIcon={<FileFileDownload />}
@@ -105,91 +96,102 @@ class StudentView extends Component {
     );
   }
 
-  updateEnrollStatus(enrol, status) {
-    const { updateStatus } = this.props;
-    updateStatus({
+  updateEnrollStatus(enrol, navid, status) {
+    const { updatestatus } = this.props;
+    const input = {
       id: enrol.id,
-      courseid: enrol.course.id,
-      navid: enrol.navid,
       status: status
-    }).then(this.props.data.refetch());
+    };
+    console.log("status", enrol);
+    updatestatus({ variables: { input } }).then(this.props.data.refetch());
     this.setState({ counter: this.state.counter + 1 });
   }
-  renderCourses(enrollments) {
+
+  renderCourses(enrollments, navid) {
     const authenticated = this.props.authenticated;
     if (!enrollments) return <div>Loading...</div>;
+
     return (
       <List>
-        {enrollments.map((enrol, i) => (
-          <ListItem
-            key={i}
-            primaryText={enrol.course.title}
-            leftAvatar={
-              <Avatar color={pinkA200} backgroundColor={"#FFFFFF"} style={{ left: 8 }}>
-                {enrol.status.slice(0, 3).toUpperCase()}
-              </Avatar>
-            }
-            secondaryText={
-              <div style={{ display: "flex" }}>
-                <div style={{ margin: 4 }}>
-                  {`${enrol.course.description}, ${enrol.course
-                    .hours} hours, status: ${enrol.status} `}
+        {enrollments.map((enrol, i) => {
+          console.log("entroll", enrol);
+          return [
+            <ListItem
+              key={enrol.id}
+              primaryText={enrol.course.title}
+              leftAvatar={
+                <Avatar color={pinkA200} backgroundColor={"#FFFFFF"} style={{ left: 8 }}>
+                  {enrol.status.slice(0, 3).toUpperCase()}
+                </Avatar>
+              }
+              secondaryText={
+                <div style={{ display: "flex" }}>
+                  <div style={{ margin: 4 }}>
+                    {`${enrol.course.description}, ${enrol.plannedcourse.hours} hours, status: ${enrol.status} `}
+                  </div>
+                  <Chip style={{ margin: 2 }}>{`Start  ${format(
+                    enrol.plannedcourse.startdate,
+                    "ddd, DD-MMM-YYYY"
+                  )}`}</Chip>
                 </div>
-                <Chip style={{ margin: 2 }}>
-                  {`Start  ${moment(enrol.course.startdate).calendar()}`}
-                </Chip>
-              </div>
-            }
-            secondaryTextLines={2}
-            rightToggle={authenticated && this.showEnrollMenu(enrol)}
-          />
-        ))}
+              }
+              secondaryTextLines={2}
+              rightToggle={authenticated && this.showEnrollMenu(enrol, navid)}
+            />,
+            <Divider key={i} />
+          ];
+        })}
       </List>
     );
   }
 
   render() {
     const { loading, error, account } = this.props.data;
+    console.log(this.props);
     if (loading) {
       return <p>Loading ...</p>;
     }
     if (error) {
       return <p>{error.message}</p>;
     }
+    console.log(account.enrollments);
     return (
       <div>
-        <Paper>
-          <Container>
-            <ProfilePicture>
-              {account.image ? (
-                <Avatar src={account.image} size={80} />
-              ) : (
-                <Avatar src="https://randomuser.me/api/portraits/men/48.jpg" size={80} />
-              )}
-            </ProfilePicture>
-            <Details>
-              <Title>{account.fullname}</Title>
-              <Content>
-                {`in Team ${account.team}, Location ${account.locationdetail
-                  ? account.locationdetail.location
-                  : account.location}`}
-              </Content>
-            </Details>
-          </Container>
-        </Paper>
-        <Paper style={{ marginTop: 40 }}>
-          <TitleBar background>Registered</TitleBar>
+        <Container>
+          <ProfilePicture>
+            {account.image ? (
+              <Avatar src={account.image} size={80} />
+            ) : (
+              <Avatar src="https://randomuser.me/api/portraits/men/48.jpg" size={80} />
+            )}
+          </ProfilePicture>
+
+          <Details>
+            <Title>{account.fullname}</Title>
+            <Content>
+              {`in Team ${account.team}, Location ${account.locationdetail
+                ? account.locationdetail.location
+                : account.location}`}
+            </Content>
+          </Details>
+        </Container>
+        <Paper style={{ marginTop: 10 }}>
           <SearchBar
             onChange={this.handleSearchTextChange}
             hintText="Search on title.."
             style={{
               background: "#F5F5F5",
-              display: "flex",
-              borderBottom: "1px solid rgba(0,0,0,0.12)"
+              display: "flex"
             }}
           />
+          <HeaderRow>
+            <HeaderLeft>
+              <Title>Registered</Title>
+            </HeaderLeft>
+          </HeaderRow>
+
           <Container />
-          <Content>{this.renderCourses(account.enrollments)}</Content>
+          <Content>{this.renderCourses(account.enrollments, account.navid)}</Content>
         </Paper>
       </div>
     );
@@ -212,11 +214,13 @@ const queryProfile = gql`
         id
         status
         course {
-          id
           title
-          hours
           description
+        }
+        plannedcourse {
           startdate
+          hours
+          trainer
         }
       }
     }
@@ -236,14 +240,7 @@ const updateStatus = gql`
   }
 `;
 
-export default graphql(updateStatus, {
-  props: ({ mutate }) => ({
-    updateStatus: input =>
-      mutate({
-        variables: { input }
-      })
-  })
-})(
+export default graphql(updateStatus, { name: "updatestatus" })(
   graphql(queryProfile, {
     options: ownProps => ({ variables: { id: ownProps.match.params.id } })
   })(withRouter(withAuth(StudentView)))

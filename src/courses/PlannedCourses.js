@@ -1,14 +1,8 @@
 import React from "react";
-import {
-  Table,
-  TableBody,
-  TableHeader,
-  TableHeaderColumn,
-  TableRow,
-  TableRowColumn
-} from "material-ui/Table";
+import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from "material-ui/Table";
 import EditIcon from "material-ui/svg-icons/image/edit";
 import TrashIcon from "material-ui/svg-icons/action/delete";
+import PeopleIcon from "material-ui/svg-icons/social/people";
 import RaisedButton from "material-ui/RaisedButton";
 import { blue500, red500, grey400, purple400 } from "material-ui/styles/colors";
 import { format } from "date-fns";
@@ -46,11 +40,16 @@ const styles = {
     backgroundColor: "orange"
   },
 
+  iconStyle0: {
+    width: 24,
+    color: "black"
+  },
   iconStyle: {
     width: 24,
     color: blue500
   },
   iconStyle2: {
+    marginLeft: 5,
     width: 24,
     color: red500
   }
@@ -84,6 +83,12 @@ class PlannedCoursesTable extends React.Component {
     defaultDate: Date.now(),
     selected: null,
     disableregister: true
+  };
+
+  visibleStyle = (style, index) => {
+    if (this.state.selected === index) {
+      return style;
+    } else return { display: "none" };
   };
 
   editRegisterClick = e => {
@@ -205,16 +210,33 @@ class PlannedCoursesTable extends React.Component {
           </TableHeader>
           <TableBody displayRowCheckbox={true} showRowHover={true} deselectOnClickaway={false}>
             {planned.map((plan, index) => (
-              <TableRow key={index} selectable={true} selected={this.state.selected === index}>
+              <TableRow
+                key={index}
+                selectable={true}
+                selected={this.state.selected === index}
+                onClick={() => this.setState({ selected: index })}
+              >
                 <RowColumn>{fmtDate(plan.startdate)}</RowColumn>
                 <RowColumn>{fmtDate(plan.enddate)}</RowColumn>
                 <RowColumn small={true}>{plan.trainer}</RowColumn>
                 <RowColumn small={true}>{plan.status}</RowColumn>
                 <RowColumn small={true}>{plan.hours}</RowColumn>
-                <RowColumn small={true}>{plan.studentcount}</RowColumn>
+                <RowColumn small={true}>
+                  {plan.studentcount}{" "}
+                  {
+                    <PeopleIcon
+                      style={this.visibleStyle(styles.iconStyle2, index)}
+                      hoverColor={purple400}
+                      title="Edit registration"
+                      onClick={e => {
+                        this.editRegisterClick();
+                      }}
+                    />
+                  }
+                </RowColumn>
                 <RowColumn small={true}>
                   <EditIcon
-                    style={styles.iconStyle}
+                    style={this.visibleStyle(styles.iconStyle0, index)}
                     hoverColor={grey400}
                     onClick={() =>
                       this.setState({
@@ -224,11 +246,10 @@ class PlannedCoursesTable extends React.Component {
                         status: plan.status,
                         selectedstartdate: plan.startdate,
                         selectedenddate: plan.enddate
-                      })
-                    }
+                      })}
                   />
                   <TrashIcon
-                    style={styles.iconStyle2}
+                    style={this.visibleStyle(styles.iconStyle, index)}
                     hoverColor={purple400}
                     onClick={() => this.props.onDelete(plan.id)}
                   />
