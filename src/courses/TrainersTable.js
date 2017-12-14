@@ -108,23 +108,12 @@ class StudentTables extends Component {
   };
 
   render() {
-    const { accounts, startdate, enddate } = this.props;
+    const { plannedcourses, startdate, enddate } = this.props;
     const { headerStyle, rowstyle, avatarstyle } = styles;
-    console.log("PROPS", this.props);
 
-    const filteredAccounts = _.chain(accounts)
-      .filter(account => account.locationdetail && account.team)
-      .filter(
-        account =>
-          account.fullname.toUpperCase().includes(this.state.searchText.toUpperCase()) ||
-          account.team.toUpperCase().includes(this.state.searchText.toUpperCase()) ||
-          account.locationdetail.location.toUpperCase().includes(this.state.searchText.toUpperCase())
-      )
+    const filteredCourses = _.chain(plannedcourses)
       .map(account => {
         const hoursObj = account.plannedcourses
-          .map(pc => {
-            return pc;
-          })
           .filter(pc => Date.parse(pc.startdate) > Date.parse(startdate))
           .reduce(
             ({ hours, count }, course) => {
@@ -139,24 +128,11 @@ class StudentTables extends Component {
       .value();
     //console.log(filteredAccounts);
     return (
-      <Paper style={{ margin: 20 }}>
-        <SearchBar
-          onChange={this.handleSearchChange}
-          hintText="Search on name or team or location.."
-          style={{
-            background: "#FAFAFA",
-            display: "flex",
-            borderBottom: "1px solid rgba(0,0,0,0.12)"
-          }}
-        />
         <Table headerStyle={headerStyle} onCellClick={(i, j) => console.log(i, j)}>
           <TableHeader style={headerStyle} adjustForCheckbox={false} displaySelectAll={false}>
             <TableRow>
               <TableHeaderColumn style={avatarstyle} />
-              <TableHeaderColumn1 column="fullname" title="name" handleSortChange={this.handleSortChange} />
-              <TableHeaderColumn1 column="team" title="Team" handleSortChange={this.handleSortChange} />
-              <TableHeaderColumn1 column="location" title="Location" handleSortChange={this.handleSortChange} />
-
+              <TableHeaderColumn1 column="trainer" title="trainer" handleSortChange={this.handleSortChange} />
               <TableHeaderColumn># Courses</TableHeaderColumn>
               <TableHeaderColumn1 column="hours" title="#Hours" handleSortChange={this.handleSortChange} />
               <TableHeaderColumn>

@@ -1,13 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import {
-  Table,
-  TableBody,
-  TableHeader,
-  TableHeaderColumn,
-  TableRow,
-  TableRowColumn
-} from "material-ui/Table";
+import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from "material-ui/Table";
 import { Tabs, Tab } from "material-ui/Tabs";
 import RaisedButton from "material-ui/RaisedButton";
 import DatePicker from "material-ui/DatePicker";
@@ -72,6 +65,7 @@ class CourseView extends React.Component {
   state = {
     startdate: addDays(new Date(), -7),
     studentfilterstartdate: addDays(new Date(), -180),
+    studentfilterenddate: new Date(),
     open: false,
     course: 1,
     value: "",
@@ -88,6 +82,9 @@ class CourseView extends React.Component {
   };
   handleStudentFilterStartDateChange = (e, value) => {
     this.setState({ studentfilterstartdate: value });
+  };
+  handleStudentFilterEndDateChange = (e, value) => {
+    this.setState({ studentfilterenddate: value });
   };
 
   handleChange = (event, index, course) => {
@@ -115,16 +112,12 @@ class CourseView extends React.Component {
             <TableRow key={course.id}>
               <TableRowColumn>{course.title}</TableRowColumn>
               <TableRowColumn style={{ width: 300 }}>{course.description}</TableRowColumn>
-              <TableRowColumn style={{ width: 90 }}>
-                {course.plannedcourses[0].status}
-              </TableRowColumn>
+              <TableRowColumn style={{ width: 90 }}>{course.plannedcourses[0].status}</TableRowColumn>
               <TableRowColumn>
                 <Link to={`/courses/edit/${course.id}`}>{course.id}</Link>
               </TableRowColumn>
               <TableRowColumn style={{ width: 20 }}>{course.students.length}</TableRowColumn>
-              <TableRowColumn>
-                {format(course.plannedcourses[0].startdate, "ddd, DD-MMM-YYYY")}
-              </TableRowColumn>
+              <TableRowColumn>{format(course.plannedcourses[0].startdate, "ddd, DD-MMM-YYYY")}</TableRowColumn>
             </TableRow>
           ))}
         </TableBody>
@@ -168,12 +161,7 @@ class CourseView extends React.Component {
               </Title>
             </HeaderLeft>
             <HeaderRight>
-              <RaisedButton
-                label="New"
-                primary={true}
-                style={styles.button}
-                onClick={this.toggleDialog}
-              />
+              <RaisedButton label="New" primary={true} style={styles.button} onClick={this.toggleDialog} />
             </HeaderRight>
           </HeaderRow>
           <div>{this.renderCourses(filteredCourses)}</div>,
@@ -205,16 +193,19 @@ class CourseView extends React.Component {
                 to
                 <DatePicker
                   hintText="Enter End Date Courses"
-                  value={this.state.studentfilterstartdate}
+                  value={this.state.studentfilterenddate}
                   name="studentfilterenddate"
-                  onChange={this.handleStudentFilterStartDateChange}
+                  onChange={this.handleStudentFilterEndDateChange}
                   style={styles.datePicker}
                 />
               </Title2>
             </HeaderLeft>
             <HeaderRight />
           </HeaderRow>
-          <StudentListContainer />
+          <StudentListContainer
+            startdate={this.state.studentfilterstartdate}
+            enddate={this.state.studentfilterenddate}
+          />
         </Tab>
         <Tab label="By Trainer" value="trainer">
           To be implemented

@@ -15,8 +15,8 @@ import MoreVertIcon from "material-ui/svg-icons/navigation/more-vert";
 import DownIcon from "material-ui/svg-icons/navigation/expand-more";
 import FileFileDownload from "material-ui/svg-icons/file/file-download";
 import Chip from "material-ui/Chip";
-import moment from "moment";
 import format from "date-fns/format";
+import _ from "lodash";
 import { TitleBar } from "../common/TitleBar";
 import SearchBar from "../common/SearchBar";
 import withAuth from "../utils/withAuth";
@@ -154,7 +154,12 @@ class StudentView extends Component {
     if (error) {
       return <p>{error.message}</p>;
     }
-    console.log(account.enrollments);
+    let _ = window._;
+    const sortedEnrollments = _.chain(account.enrollments)
+      .map(o => _.merge({ startdate: Date.parse(o.plannedcourse.startdate) }, o))
+      .orderBy(["startdate"], ["desc"])
+      .value();
+    console.log(sortedEnrollments);
     return (
       <div>
         <Container>
@@ -191,7 +196,7 @@ class StudentView extends Component {
           </HeaderRow>
 
           <Container />
-          <Content>{this.renderCourses(account.enrollments, account.navid)}</Content>
+          <Content>{this.renderCourses(sortedEnrollments, account.navid)}</Content>
         </Paper>
       </div>
     );

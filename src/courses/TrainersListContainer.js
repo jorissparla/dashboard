@@ -12,7 +12,7 @@ const Div = styled.div`
   align-items: center;
 `;
 
-class StudentListContainer extends Component {
+class TrainersListContainer extends Component {
   render() {
     const { loading, error, accounts } = this.props.data;
 
@@ -30,26 +30,16 @@ class StudentListContainer extends Component {
   }
 }
 
-const accountsQuery = gql`
-  query accountsQuery {
-    accounts(region: "EMEA") {
-      id
-      firstname
-      lastname
-      fullname
-      team
-      region
-      image
-      location
-      locationdetail {
-        location
-      }
+const trainersQuery = gql`
+  query trainersQuery {
+    {
       plannedcourses {
+        id
+        trainer
+        hours
         course {
-          trainer
           title
         }
-        hours
         startdate
         enddate
       }
@@ -57,4 +47,4 @@ const accountsQuery = gql`
   }
 `;
 
-export default graphql(accountsQuery)(withRouter(StudentListContainer));
+export default graphql(trainersQuery)(withRouter(TrainersListContainer));
