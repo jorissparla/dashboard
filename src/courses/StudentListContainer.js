@@ -26,13 +26,19 @@ class StudentListContainer extends Component {
     if (error) {
       return <p>{error.message}</p>;
     }
-    return <StudentTable accounts={accounts} startdate={this.props.startdate} enddate={this.props.enddate} />;
+    return (
+      <StudentTable
+        accounts={accounts}
+        startdate={this.props.startdate}
+        enddate={this.props.enddate}
+      />
+    );
   }
 }
 
 const accountsQuery = gql`
   query accountsQuery {
-    accounts(region: "EMEA") {
+    accounts(region: "EMEA", teams: ["LOG", "FIN", "TLS"]) {
       id
       firstname
       lastname
