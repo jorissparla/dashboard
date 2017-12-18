@@ -332,7 +332,7 @@ const CourseQuery = gql`
       type
       value
     }
-    accounts(region: "EMEA") {
+    supportfolks {
       id
       fullname
     }

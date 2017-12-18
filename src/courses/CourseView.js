@@ -234,7 +234,7 @@ const courseQuery = gql`
         fullname
       }
     }
-    accounts(region: "EMEA") {
+    supportfolks {
       id
       fullname
     }

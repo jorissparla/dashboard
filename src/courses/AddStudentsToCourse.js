@@ -108,7 +108,9 @@ class AddStudentsToCourse extends Component {
       .filter(
         account =>
           account.fullname.toUpperCase().includes(this.state.searchText.toUpperCase()) ||
-          account.locationdetail.location.toUpperCase().includes(this.state.searchText.toUpperCase()) ||
+          account.locationdetail.location
+            .toUpperCase()
+            .includes(this.state.searchText.toUpperCase()) ||
           account.team.toUpperCase().includes(this.state.searchText.toUpperCase())
       )
       .value();
@@ -146,7 +148,16 @@ class AddStudentsToCourse extends Component {
               <List>
                 <Divider />
                 {filteredAccounts.map((item, index) => {
-                  const { id, fullname, lastname, location, locationdetail, team, navid, image } = item;
+                  const {
+                    id,
+                    fullname,
+                    lastname,
+                    location,
+                    locationdetail,
+                    team,
+                    navid,
+                    image
+                  } = item;
                   return (
                     <ListItem
                       key={`${id}.${index}`}
@@ -154,13 +165,19 @@ class AddStudentsToCourse extends Component {
                         image ? (
                           <Avatar src={image} />
                         ) : (
-                          <Avatar color={pinkA200} backgroundColor={transparent} style={{ left: 8 }}>
+                          <Avatar
+                            color={pinkA200}
+                            backgroundColor={transparent}
+                            style={{ left: 8 }}
+                          >
                             {fullname.slice(0, 1).concat(lastname.slice(0, 1))}
                           </Avatar>
                         )
                       }
                       primaryText={fullname}
-                      secondaryText={`located in ${locationdetail.location}(${location}), in team ${team}`}
+                      secondaryText={`located in ${
+                        locationdetail.location
+                      }(${location}), in team ${team}`}
                       rightIcon={
                         <FloatingActionButton
                           mini={true}
@@ -242,7 +259,7 @@ const selectedCourse = gql`
         image
       }
     }
-    accounts(region: "EMEA") {
+    supportfolks {
       id
       navid
       fullname
