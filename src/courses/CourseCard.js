@@ -148,7 +148,15 @@ class CourseCard extends Component {
   };
 
   render() {
-    const { loading, error, course, coursetypes, courses, accounts, statuses } = this.props.data;
+    const {
+      loading,
+      error,
+      course,
+      coursetypes,
+      courses,
+      supportfolks,
+      statuses
+    } = this.props.data;
     const { tabStyle } = styles;
     if (loading) {
       return <p>Loading ...</p>;
@@ -179,7 +187,7 @@ class CourseCard extends Component {
                 coursetypes={coursetypes}
                 statuses={statuses.filter(s => s.type === "Course")}
                 course={course}
-                trainers={accounts}
+                trainers={supportfolks}
                 onSave={this.handleSave}
                 onDelete={this.showConfirmDialog}
                 readOnly={false}
@@ -201,7 +209,7 @@ class CourseCard extends Component {
         >
           <Left>
             <PlannedCourses
-              accounts={accounts}
+              accounts={supportfolks}
               course={course}
               courses={courses}
               trainer={trainer}

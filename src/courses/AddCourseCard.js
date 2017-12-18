@@ -58,7 +58,7 @@ class AddCourseCard extends Component {
   };
 
   render() {
-    const { data: { coursetypes, loading, statuses, accounts } } = this.props;
+    const { data: { coursetypes, loading, statuses, supportfolks } } = this.props;
     if (loading) {
       return <div>Loading...</div>;
     }
@@ -70,7 +70,7 @@ class AddCourseCard extends Component {
             <CourseForm
               coursetypes={coursetypes}
               statuses={statuses.filter(s => s.type === "Course")}
-              trainers={accounts}
+              trainers={supportfolks}
               onSave={this.handleSave}
               readOnly={false}
             />

@@ -89,7 +89,7 @@ class AddStudentsToCourse extends Component {
   };
 
   render() {
-    const { data: { loading, error, accounts, plannedcourses } } = this.props;
+    const { data: { loading, error, supportfolks, plannedcourses } } = this.props;
     if (loading) {
       return (
         <Div>
@@ -102,7 +102,7 @@ class AddStudentsToCourse extends Component {
     }
     console.log("PROPS", this.props);
     const plannedcourse = plannedcourses[0];
-    const filteredAccounts0 = _.chain(accounts)
+    const filteredAccounts0 = _.chain(supportfolks)
       .filter(account => account.locationdetail && account.team)
       // .filter(account => !studentsAsString.includes(account.fullname))
       .filter(

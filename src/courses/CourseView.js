@@ -1,6 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from "material-ui/Table";
+import {
+  Table,
+  TableBody,
+  TableHeader,
+  TableHeaderColumn,
+  TableRow,
+  TableRowColumn
+} from "material-ui/Table";
 import { Tabs, Tab } from "material-ui/Tabs";
 import RaisedButton from "material-ui/RaisedButton";
 import DatePicker from "material-ui/DatePicker";
@@ -112,12 +119,16 @@ class CourseView extends React.Component {
             <TableRow key={course.id}>
               <TableRowColumn>{course.title}</TableRowColumn>
               <TableRowColumn style={{ width: 300 }}>{course.description}</TableRowColumn>
-              <TableRowColumn style={{ width: 90 }}>{course.plannedcourses[0].status}</TableRowColumn>
+              <TableRowColumn style={{ width: 90 }}>
+                {course.plannedcourses[0].status}
+              </TableRowColumn>
               <TableRowColumn>
                 <Link to={`/courses/edit/${course.id}`}>{course.id}</Link>
               </TableRowColumn>
               <TableRowColumn style={{ width: 20 }}>{course.students.length}</TableRowColumn>
-              <TableRowColumn>{format(course.plannedcourses[0].startdate, "ddd, DD-MMM-YYYY")}</TableRowColumn>
+              <TableRowColumn>
+                {format(course.plannedcourses[0].startdate, "ddd, DD-MMM-YYYY")}
+              </TableRowColumn>
             </TableRow>
           ))}
         </TableBody>
@@ -126,7 +137,7 @@ class CourseView extends React.Component {
   };
 
   render() {
-    const { loading, error, courses, accounts } = this.props.data;
+    const { loading, error, courses, supportfolks } = this.props.data;
     if (loading) {
       return <p>Loading ...</p>;
     }
@@ -161,7 +172,12 @@ class CourseView extends React.Component {
               </Title>
             </HeaderLeft>
             <HeaderRight>
-              <RaisedButton label="New" primary={true} style={styles.button} onClick={this.toggleDialog} />
+              <RaisedButton
+                label="New"
+                primary={true}
+                style={styles.button}
+                onClick={this.toggleDialog}
+              />
             </HeaderRight>
           </HeaderRow>
           <div>{this.renderCourses(filteredCourses)}</div>,
@@ -169,7 +185,7 @@ class CourseView extends React.Component {
             {open === true && (
               <AddCourseDialog
                 open={open}
-                trainers={accounts}
+                trainers={supportfolks}
                 courses={courses}
                 onSave={e => console.log("onSave", JSON.stringify(e))}
                 onCancel={() => this.setState({ open: false })}
