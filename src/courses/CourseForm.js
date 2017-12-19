@@ -63,6 +63,7 @@ class CourseForm extends Component {
       statuses
     } = this.props;
     const readOnly = !authenticated;
+
     return (
       <form onSubmit={handleSubmit(this.handleSubmit)}>
         <Card>

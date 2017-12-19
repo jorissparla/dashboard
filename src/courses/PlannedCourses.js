@@ -1,5 +1,12 @@
 import React from "react";
-import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from "material-ui/Table";
+import {
+  Table,
+  TableBody,
+  TableHeader,
+  TableHeaderColumn,
+  TableRow,
+  TableRowColumn
+} from "material-ui/Table";
 import EditIcon from "material-ui/svg-icons/image/edit";
 import TrashIcon from "material-ui/svg-icons/action/delete";
 import PeopleIcon from "material-ui/svg-icons/social/people";
@@ -8,7 +15,7 @@ import { blue500, red500, grey400, purple400 } from "material-ui/styles/colors";
 import { format } from "date-fns";
 import AddCourseDialog from "./AddCourseDialog";
 import { Title, HeaderRow, HeaderLeft, HeaderRight } from "../styles";
-
+import withAuth from "../utils/withAuth";
 const styles = {
   headerStyle: {
     fontSize: 18,
@@ -105,8 +112,10 @@ class PlannedCoursesTable extends React.Component {
       hours,
       trainer,
       accounts,
+      authenticated,
       statuses
     } = this.props;
+
     return (
       <div>
         <HeaderRow>
@@ -134,6 +143,7 @@ class PlannedCoursesTable extends React.Component {
             />
             <RaisedButton
               label="New"
+              enabled={authenticated}
               primary={true}
               style={styles.button}
               onClick={() => this.setState({ opennew: true })}
@@ -182,6 +192,7 @@ class PlannedCoursesTable extends React.Component {
           />
         )}
         <Table
+          enabled={this.props.authenticated}
           selectable={true}
           multiSelectable={false}
           onRowSelection={([row]) => {
@@ -246,7 +257,8 @@ class PlannedCoursesTable extends React.Component {
                         status: plan.status,
                         selectedstartdate: plan.startdate,
                         selectedenddate: plan.enddate
-                      })}
+                      })
+                    }
                   />
                   <TrashIcon
                     style={this.visibleStyle(styles.iconStyle, index)}
@@ -263,4 +275,4 @@ class PlannedCoursesTable extends React.Component {
   }
 }
 
-export default PlannedCoursesTable;
+export default withAuth(PlannedCoursesTable);

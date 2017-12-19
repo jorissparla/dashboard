@@ -19,6 +19,7 @@ import format from "date-fns/format";
 import _ from "lodash";
 import AddCourseDialog from "./AddCourseDialog";
 import StudentListContainer from "./StudentListContainer";
+import TrainerView from "./TrainerView";
 
 const Title = styled.h3`
   font-weight: 200;
@@ -146,7 +147,9 @@ class CourseView extends React.Component {
     }
     const filterDate = this.state.startdate;
     const { open } = this.state;
-    console.log(this.state.studentfilterstartdate);
+    const { role } = this.props.user;
+    const enabled = role === "Admin" || role === "PO";
+    console.log("====================>", enabled);
 
     const filteredCourses = _.chain(courses)
       .filter(course => Date.parse(course.plannedcourses[0].startdate) > Date.parse(filterDate))
@@ -173,6 +176,7 @@ class CourseView extends React.Component {
             </HeaderLeft>
             <HeaderRight>
               <RaisedButton
+                disabled={!enabled}
                 label="New"
                 primary={true}
                 style={styles.button}
@@ -224,7 +228,34 @@ class CourseView extends React.Component {
           />
         </Tab>
         <Tab label="By Trainer" value="trainer">
-          To be implemented
+          <HeaderRow>
+            <HeaderLeft>
+              {" "}
+              <Title2>
+                In Period from
+                <DatePicker
+                  hintText="Enter StartDate Courses"
+                  value={this.state.studentfilterstartdate}
+                  name="studentfilterstartdate"
+                  onChange={this.handleStudentFilterStartDateChange}
+                  style={styles.datePicker}
+                />
+                to
+                <DatePicker
+                  hintText="Enter End Date Courses"
+                  value={this.state.studentfilterenddate}
+                  name="studentfilterenddate"
+                  onChange={this.handleStudentFilterEndDateChange}
+                  style={styles.datePicker}
+                />
+              </Title2>
+            </HeaderLeft>
+            <HeaderRight />
+          </HeaderRow>
+          <TrainerView
+            from={this.state.studentfilterstartdate}
+            to={this.state.studentfilterenddate}
+          />
         </Tab>
       </Tabs>
     );
