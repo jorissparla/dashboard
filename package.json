@@ -50,6 +50,8 @@
     "eject": "react-scripts eject",
     "lint": "eslint src/**/*.js server.js",
     "testenv": "SET NODE_ENV=test",
-    "prodenv": "SET NODE_ENV=production"
+    "prodenv": "SET NODE_ENV=production",
+    "beta":
+      "npm run build && cpx \"build\\**\\*\" \\\\nlbavwtls22\\wwwroot\\nodeapps\\dashboard.beta"
   }
 }

@@ -53,6 +53,7 @@ import DashBoardStatsNew from "./DashBoardStatsNew";
 import RequestList from "./supportcard/RequestContainer";
 import RequestEdit from "./supportcard/RequestEdit";
 import ImageConverter from "./utils/ConvertImages";
+import CustomerCommentsPage from "./customers/pages/CustomerCommentsMain";
 
 const NotFound = () => <h2>Not Found!</h2>;
 
@@ -65,12 +66,13 @@ class AppRoutes extends React.Component {
     }
     return (
       <Switch>
+        <Route exact path="/image_convert" component={ImageConverter} />
         <AuthRoute
           allowed={["Admin", "PO", "SU", "Guest"]}
           user={user}
           exact
           path="/test"
-          component={CourseView}
+          component={CustomerCommentsPage}
         />
         <AuthRoute
           allowed={["Admin", "PO", "SU", "Guest"]}
