@@ -29,10 +29,10 @@ const mapGender = g => {
   }
 };
 
-const H3Styled = styled.h4`
-  font-family: Oswald;
-  margin: 5px;
-  padding-left: 10px;
+const H3Styled = styled.h3`
+  font-weight: 200;
+  font-family: Raleway;
+  padding-left: 30px;
 `;
 
 const dateToDMYString = date => {
@@ -77,7 +77,7 @@ class KudoListComponent extends Component {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div>
-          <H3Styled>{`Kudos💚 (${kudos.length})`}</H3Styled>
+          <H3Styled>{`KUDOS (${kudos.length})`}</H3Styled>
           <Outer>{this.renderItems(kudos)}</Outer>
         </div>
       </MuiThemeProvider>

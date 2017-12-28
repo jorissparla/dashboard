@@ -8,6 +8,7 @@ import FlatButton from "material-ui/FlatButton";
 import NewRequestForm from "./Request";
 import differenceInCalendarDays from "date-fns/difference_in_calendar_days";
 import moment from "moment";
+import _ from "lodash";
 import SearchBar from "../common/SearchBar";
 import withAuth from "../utils/withAuth";
 import AddCard from "./AddCard";
@@ -89,13 +90,13 @@ class SupportCards extends React.Component {
       .filter(card => {
         const { category: { name }, title } = card;
         return (
-          name.toUpperCase().includes2(searchText.toUpperCase()) ||
-          title.toUpperCase().includes2(searchText.toUpperCase())
+          _.includes(name.toUpperCase(), searchText.toUpperCase()) ||
+          _.includes(title.toUpperCase(), searchText.toUpperCase())
         );
       })
       .filter(card => {
         const { category: { name } } = card;
-        return name.toUpperCase().includes2(selectedCategory.toUpperCase());
+        return _.includes(name.toUpperCase(), selectedCategory.toUpperCase());
       });
     return (
       <Container onDoubleClick={() => this.setState({ showRequest: true })}>

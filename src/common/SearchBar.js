@@ -8,10 +8,11 @@ export default ({
   onChange,
   hintText = "Search..",
   defaultValue = "",
-  style = { display: "flex" }
+  style = { display: "flex", marginBottom: 5 },
+  shade = true
 }) => {
   return (
-    <Paper zDepth={3} style={style}>
+    <Paper zDepth={shade ? 2 : 0} style={style}>
       <FontIcon style={{ margin: "10px" }}>
         <ActionSearch />
       </FontIcon>

@@ -19,7 +19,7 @@ const StyledImage = styled.img`
 `;
 
 const StyledInitials = styled.div`
-  width: 100%;
+  width: 90%;
   height: 150px;
   object-fit: cover;
   line-height: 50px;
@@ -29,6 +29,13 @@ const StyledInitials = styled.div`
   font-weight: bold;
   text-align: center;
   padding-top: 10px;
+  padding: 5px;
+  border-radius: 50%;
+  justify-content: center;
+  border: 10px solid lightgray;
+  margin: 5px;
+  align-items: center;
+  display: flex;
 `;
 
 const Title = styled.div`
