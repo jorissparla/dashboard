@@ -11,6 +11,7 @@ import {
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
 import _ from "lodash";
+import { format } from "date-fns";
 
 const styles = {
   headerStyle: {
@@ -38,10 +39,11 @@ const HeaderColumn = ({ style, children }) => {
 class TrainerView extends React.Component {
   render() {
     const { data: { loading, trainers } } = this.props;
+    console.log("TrainerView", this.props);
     if (loading) {
       return <div>Loading...</div>;
     }
-    return <div>{this.renderTrainers(trainers)}</div>;
+    return <div>{this.renderTrainers(trainers || [])}</div>;
   }
   renderTrainers = trainers => {
     return (
@@ -80,6 +82,9 @@ const trainerQuery = gql`
 `;
 export default graphql(trainerQuery, {
   options: props => ({
-    variables: { from: props.from, to: props.to }
+    variables: {
+      from: format("YYYY-MM-DD", Date.parse(props.from)),
+      to: format("YYYY-MM-DD", Date.parse(props.to))
+    }
   })
 })(TrainerView);

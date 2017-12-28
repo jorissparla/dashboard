@@ -19,9 +19,7 @@ import GoLiveListNew from "./golives/goLiveListNew";
 import GoLiveListSide from "./golives/golivelistside";
 import GoLives from "./golives/golives";
 import Award from "./awards/award";
-//import KudoList1 from "./kudos/kudolist1";
 import KudoListComponent from "./kudos/kudolistcomponent";
-//import KudoList from "./kudos/kudolist";
 import KudoListAll from "./kudos/kudolistall";
 import KudoListComponentNew from "./kudos/kudolistcomponentnew";
 import Signin from "./auth/signin";
@@ -53,6 +51,7 @@ import DashBoardStatsNew from "./DashBoardStatsNew";
 import RequestList from "./supportcard/RequestContainer";
 import RequestEdit from "./supportcard/RequestEdit";
 import ImageConverter from "./utils/ConvertImages";
+import CustomerCommentsPage from "./customers/pages/CustomerCommentsMain";
 
 const NotFound = () => <h2>Not Found!</h2>;
 
@@ -65,12 +64,13 @@ class AppRoutes extends React.Component {
     }
     return (
       <Switch>
+        <Route exact path="/image_convert" component={ImageConverter} />
         <AuthRoute
           allowed={["Admin", "PO", "SU", "Guest"]}
           user={user}
           exact
           path="/test"
-          component={CourseView}
+          component={CustomerCommentsPage}
         />
         <AuthRoute
           allowed={["Admin", "PO", "SU", "Guest"]}

@@ -11,9 +11,9 @@ class ImageConvert extends React.Component {
       let base64Image = image.split(";base64,").pop();
       console.log(lastname);
       axios
-        .post("http://localhost:3333", { navid, lastname, image: base64Image })
+        .post("http://localhost:3333/upload", { navid, lastname, image: base64Image })
         .then(res => console.log(res))
-        .catch(e => console.log(e));
+        .catch(e => console.log("Error:", e));
     }
   };
 
