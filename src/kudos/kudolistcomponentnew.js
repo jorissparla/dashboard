@@ -1,7 +1,9 @@
 import React, { Component } from "react";
+import gql from "graphql-tag";
+import { graphql } from "react-apollo";
 import { connect } from "react-redux";
 import { fetchKudos } from "../actions/index";
-import moment from "moment";
+import { format } from "date-fns";
 import getMuiTheme from "material-ui/styles/getMuiTheme";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import styled from "styled-components";
@@ -34,32 +36,26 @@ const H3Styled = styled.h4`
 `;
 
 const dateToDMYString = date => {
-  return moment(date).format("DD") + moment(date).format("MMM") + moment(date).format("YYYY");
+  return format(date, "DDMMMYYYY");
 };
 
 class KudoListComponent extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      tijd: 0
-    };
-  }
-
-  componentDidMount() {
-    this.props.fetchKudos();
-  }
-
   renderItems(kudos) {
-    const nrKudos = this.props.kudos.length;
-    let kl = kudos.slice(0, nrKudos);
     const { REACT_APP_SERVER = "nlbavwixs" } = process.env;
-    return kl.map(({ ownerrep_name, customer_name, gender, survey_date, pic }, index) => {
-      const mgender = mapGender(gender);
+    return kudos.map(({ ownerrep_name, customer_name, account, survey_date, pic }, index) => {
+      const mgender = mapGender(account.gender);
       const img = pic ? `${pic}` : `http://${REACT_APP_SERVER}/images/${mgender}.png`;
-
+      const initials = pic
+        ? ""
+        : ownerrep_name
+            .split(" ")
+            .map(name => name[0])
+            .join("")
+            .toUpperCase();
       return (
         <Card
           image={img}
+          initials={initials}
           key={index}
           text={customer_name}
           title={ownerrep_name}
@@ -71,9 +67,11 @@ class KudoListComponent extends Component {
   }
 
   render() {
-    const kudos = this.props.kudos;
+    //const kudos = this.props.kudos;
+    const { data: { loading, kudos } } = this.props;
+    console.log("KudoListComponentNew", this.props);
 
-    if (!kudos) {
+    if (loading) {
       return <div>Loading</div>;
     }
     return (
@@ -91,4 +89,18 @@ const mapStateToProps = state => {
   return { kudos: state.summary.kudos };
 };
 
-export default connect(mapStateToProps, { fetchKudos })(KudoListComponent);
+const kudosQuery = gql`
+  query kudosQuery {
+    kudos(region: "EMEA") {
+      pic
+      customer_name
+      survey_date
+      account {
+        gender
+      }
+      ownerrep_name
+    }
+  }
+`;
+
+export default graphql(kudosQuery)(KudoListComponent);

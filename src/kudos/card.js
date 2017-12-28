@@ -18,6 +18,19 @@ const StyledImage = styled.img`
   object-fit: cover;
 `;
 
+const StyledInitials = styled.div`
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  line-height: 50px;
+  color: darkgrey;
+  font-size: 50px;
+  font-family: Roboto;
+  font-weight: bold;
+  text-align: center;
+  padding-top: 10px;
+`;
+
 const Title = styled.div`
   font-family: Roboto;
   font-size: 18px;
@@ -58,12 +71,13 @@ const Card = ({
   text = "Papier Und KartonFabrik",
   buttonText = "18 April 2017",
   action = null,
-  width = "20%"
+  width = "20%",
+  initials = "JS"
 }) => {
   return (
     <Container width={width}>
       <Paper zDepth={1}>
-        <StyledImage src={image} />
+        {initials ? <StyledInitials>{initials}</StyledInitials> : <StyledImage src={image} />}
         <Inner>
           <Title>{title}</Title>
           <StyledBody>{text}</StyledBody>
