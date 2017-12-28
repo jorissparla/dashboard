@@ -10,19 +10,7 @@ import Avatar from "material-ui/Avatar";
 import Divider from "material-ui/Divider";
 import _ from "lodash";
 import styled from "styled-components";
-import { HeaderRow, HeaderLeft, HeaderRight } from "../styles";
-
-const Title = styled.h3`
-  display: flex;
-  align-content: center;
-  font-weight: 200;
-  font-family: Raleway;
-  padding-left: 30px;
-  background-color: lightgrey;
-  height: 50px;
-  align-items: center;
-  width: 100%;
-`;
+import { HeaderRow, HeaderLeft, HeaderRight, WideTitle, colorAr, getColor } from "../styles";
 
 const styles = {
   listStyle: {
@@ -47,12 +35,6 @@ const styles = {
     background: "#2196f3"
   }
 };
-
-const colorAr = ["#BA68C8", "#81D4FA", "#FF7043", "#8BC34A", "#FFFF00", "#E57373"];
-
-function getColor(index, colorAr) {
-  return colorAr[index % colorAr.length];
-}
 
 class ChatList extends Component {
   renderChat(chat) {
@@ -91,7 +73,7 @@ class ChatList extends Component {
     return [
       <HeaderRow>
         <HeaderLeft>
-          <Title>Chat</Title>
+          <WideTitle>Chat</WideTitle>
         </HeaderLeft>
         <HeaderRight>
           <Link to={"/chat/new"}>
@@ -108,7 +90,7 @@ class ChatList extends Component {
       <List style={{ backgroundColor: "white" }}>
         {chatsByWeek.map(item => (
           <div>
-            <Title>{item[0].weeknr}</Title>
+            <WideTitle>{item[0].weeknr}</WideTitle>
             {this.renderChat(item)}
           </div>
         ))}

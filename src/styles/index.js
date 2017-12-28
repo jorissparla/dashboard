@@ -90,6 +90,22 @@ export const FileInput = styled.input.attrs({
     }
   }
 `;
+export const colorAr = ["#BA68C8", "#81D4FA", "#FF7043", "#8BC34A", "#FFFF00", "#E57373"];
+export function getColor(index, colorAr) {
+  return colorAr[index % colorAr.length];
+}
+export const WideTitle = styled.h3`
+  display: flex;
+  align-content: center;
+  font-weight: 200;
+  font-family: Raleway;
+  padding-left: 30px;
+  background-color: lightgrey;
+  height: 50px;
+  align-items: center;
+  width: 90%;
+  padding-right: 30px;
+`;
 
 export const Divider = styled.hr`
   margin: -1px 0px 0px 72px;

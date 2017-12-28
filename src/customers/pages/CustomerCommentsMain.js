@@ -4,6 +4,7 @@ import { graphql } from "react-apollo";
 import styled from "styled-components";
 import CustomerList from "../CustomerList";
 import SearchBar from "../../common/SearchBar";
+import DetailswithNotes from "../CustomerDetailsWithNotes";
 import _ from "lodash";
 
 const CustomerBoxWithSearchField = styled.div`
@@ -31,6 +32,11 @@ const followersQuery = gql`
         fullname
         image
       }
+      notes {
+        id
+        date
+        note
+      }
     }
   }
 `;
@@ -49,7 +55,7 @@ const Img = styled.img`
 
 const AccountPicture = ({ image }) => <Img src={image} />;
 
-const AccountList = styled.div`
+const Widget = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -84,15 +90,35 @@ const AccountComponent = ({ image, fullname }) => (
   </AccountBox>
 );
 
+const Container = styled.div`
+  display: flex;
+`;
+
+const StyledDetails = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  margin: 10px;
+  background: white;
+  border-radius: 2px;
+  border: 1px solid lightgray;
+`;
 class MainPage extends React.Component {
-  state = { searchText: "" };
-  handleClick = name => {};
+  state = { searchText: "", id: "1" };
+  handleSelect = id => {
+    console.log("handleSelect,", id);
+    this.setState({ id: id });
+  };
   handlesetSearchText = val => {
     this.setState({ searchText: val });
   };
+
+  getCustomerDetails = id => {
+    return this.props.data.customers.filter(customer => customer.id === id)[0];
+  };
   render() {
     const { data: { loading, accounts, customers } } = this.props;
-
+    console.log("RERENDER", this.state);
     if (loading) {
       return <div>Loading</div>;
     }
@@ -104,19 +130,24 @@ class MainPage extends React.Component {
     //console.log(accounts);
     return (
       <div>
-        <AccountList>
+        <Widget>
           {accounts.map(({ image, fullname }) => (
             <AccountComponent image={image} fullname={fullname.split(" ")[0]} />
           ))}
-        </AccountList>
-        <CustomerBoxWithSearchField>
-          <SearchBar
-            onChange={this.handlesetSearchText}
-            shade={false}
-            hintText="Search on customer name or contact"
-          />
-          <CustomerList customers={filteredCustomers} />
-        </CustomerBoxWithSearchField>
+        </Widget>
+        <Container>
+          <CustomerBoxWithSearchField>
+            <SearchBar
+              onChange={this.handlesetSearchText}
+              shade={false}
+              hintText="Search on customer name or contact"
+            />
+            <CustomerList customers={filteredCustomers} onSelect={this.handleSelect} />
+          </CustomerBoxWithSearchField>
+          <StyledDetails>
+            <DetailswithNotes id={this.state.id} details={this.getCustomerDetails(this.state.id)} />
+          </StyledDetails>
+        </Container>
       </div>
     );
   }
