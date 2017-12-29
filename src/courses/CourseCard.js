@@ -307,6 +307,7 @@ const CourseQuery = gql`
         status
         trainer
         hours
+        team
         students {
           id
           fullname

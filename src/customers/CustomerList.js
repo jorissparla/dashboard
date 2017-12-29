@@ -15,7 +15,6 @@ class CustomerList extends Component {
   state = {};
 
   handleSelect = id => {
-    console.log("hier");
     this.props.onSelect ? this.props.onSelect(id) : console.log("id selected", id);
   };
 
@@ -34,7 +33,6 @@ class CustomerList extends Component {
   };
   render() {
     const { customers } = this.props;
-    console.log(customers);
     return <List>{customers.map(customer => this.renderCustomer(customer))}</List>;
   }
 }

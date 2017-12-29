@@ -1,12 +1,13 @@
 import React from "react";
 import gql from "graphql-tag";
-import { graphql } from "react-apollo";
+import { graphql, compose } from "react-apollo";
 import styled from "styled-components";
 import _ from "lodash";
 import CustomerList from "../CustomerList";
 import SearchBar from "../../common/SearchBar";
 import DetailswithNotes from "../CustomerDetailsWithNotes";
 import AddNote from "../AddNote";
+import CustomerInfo from "../CustomerInfo";
 
 const CustomerBoxWithSearchField = styled.div`
   display: flex;
@@ -17,29 +18,6 @@ const CustomerBoxWithSearchField = styled.div`
   border-radius: 2px;
   border: 1px solid lightgray;
   margin: 10px;
-`;
-
-const followersQuery = gql`
-  query followers {
-    accounts(roles: ["CSM", "Admin", "PO"], teams: ["CSM", "LNMT"]) {
-      fullname
-      image
-    }
-    customers {
-      name
-      id
-      number
-      followed {
-        fullname
-        image
-      }
-      notes {
-        id
-        date
-        note
-      }
-    }
-  }
 `;
 
 const Img = styled.img`
@@ -114,11 +92,20 @@ class MainPage extends React.Component {
   handlesetSearchText = val => {
     this.setState({ searchText: val });
   };
-  handleAdd = (v) => {
-    console.log('ADD',v)
-  }
+  handleAdd = input => {
+    console.log("ADD", input);
+    this.props.createNote({ variables: { input } }).then(this.props.data.refetch());
+  };
+
+  handleDeleteNote = input => {
+    this.props.deleteNote({ variables: { input } }).then(this.props.data.refetch());
+  };
   getCustomerDetails = id => {
     return this.props.data.customers.filter(customer => customer.id === id)[0];
+  };
+
+  handleCustomerInfoUpdate = o => {
+    console.log("handleCustomerInfoUpdate");
   };
   render() {
     const { data: { loading, accounts, customers } } = this.props;
@@ -130,11 +117,13 @@ class MainPage extends React.Component {
         _.includes(customer.name, this.state.searchText) ||
         _.includes(customer.followed.fullname, this.state.searchText)
     );
+    const details = this.getCustomerDetails(this.state.id);
+    const detailsDisabled = this.state.id === "0";
     return (
       <div>
         <Widget>
-          {accounts.map(({ image, fullname }) => (
-            <AccountComponent image={image} fullname={fullname.split(" ")[0]} />
+          {accounts.map(({ id, image, fullname }) => (
+            <AccountComponent key={id} image={image} fullname={fullname.split(" ")[0]} />
           ))}
         </Widget>
         <Container>
@@ -147,12 +136,31 @@ class MainPage extends React.Component {
             <CustomerList customers={filteredCustomers} onSelect={this.handleSelect} />
           </CustomerBoxWithSearchField>
           <StyledDetails>
-            <AddNote 
-              enabled={this.state.id !== "0"} 
-              details = {this.getCustomerDetails(this.state.id)}
-              onAdd = { this.handleAdd}
-            />
-            <DetailswithNotes id={this.state.id} details={this.getCustomerDetails(this.state.id)} />
+            {detailsDisabled ? (
+              <div>Select a customer</div>
+            ) : (
+              [
+                <CustomerInfo
+                  details={details}
+                  onUpdate={this.handleCustomerInfoUpdate}
+                  persons={accounts}
+                  followed={details.followed}
+                  key="csinfo"
+                />,
+                <AddNote
+                  enabled={this.state.id !== "0"}
+                  details={details}
+                  onAdd={this.handleAdd}
+                  key="addnote"
+                />,
+                <DetailswithNotes
+                  id={this.state.id}
+                  details={details}
+                  onDeleteNote={this.handleDeleteNote}
+                  key="detnotes"
+                />
+              ]
+            )}
           </StyledDetails>
         </Container>
       </div>
@@ -160,4 +168,50 @@ class MainPage extends React.Component {
   }
 }
 
-export default graphql(followersQuery)(MainPage);
+const followersQuery = gql`
+  query followers {
+    accounts(roles: ["CSM", "Admin", "PO"], teams: ["CSM", "LNMT"]) {
+      id
+      fullname
+      navid
+      image
+    }
+    customers {
+      name
+      id
+      number
+      active
+      followed {
+        id
+        navid
+        fullname
+        image
+      }
+      notes {
+        id
+        date
+        note
+      }
+    }
+  }
+`;
+const addNoteMutation = gql`
+  mutation createCustomerNote($input: CustomerNoteInput) {
+    createCustomerNote(input: $input) {
+      id
+    }
+  }
+`;
+const deleteNoteMutation = gql`
+  mutation deleteCustomerNote($input: CustomerNoteInput) {
+    deleteCustomerNote(input: $input) {
+      result
+    }
+  }
+`;
+
+export default compose(
+  graphql(followersQuery),
+  graphql(addNoteMutation, { name: "createNote" }),
+  graphql(deleteNoteMutation, { name: "deleteNote" })
+)(MainPage);

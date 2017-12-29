@@ -31,6 +31,7 @@ class StudentList extends Component {
         targetOrigin={{ horizontal: "left", vertical: "top" }}
       >
         <MenuItem
+          key={id}
           primaryText="View"
           onClick={() => this.props.history.push(`/test/students/${id}`)}
         />

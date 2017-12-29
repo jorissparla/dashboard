@@ -18,13 +18,17 @@ class DashBoardContainer extends Component {
     const region = this.props.match.params.region || "EMEA";
     this.setState({ region: region });
   }
+
+  componentWillUnmount() {
+    clearInterval(this.timerID);
+  }
   componentDidMount() {
     const sel = parseInt(this.props.match.params.id, 2);
     if (sel) {
       this.setState({ index: 0, sel: sel });
     }
 
-    setInterval(this.myTimer.bind(this), this.props.refreshInterval || 60000);
+    this.timerID = setInterval(this.myTimer.bind(this), this.props.refreshInterval || 60000);
   }
 
   myTimer() {

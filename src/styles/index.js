@@ -90,7 +90,18 @@ export const FileInput = styled.input.attrs({
     }
   }
 `;
-export const colorAr = ["#BA68C8", "#81D4FA", "#FF7043", "#8BC34A", "#FFFF00", "#E57373"];
+export const colorAr = [
+  "#BA68C8",
+  "#81D4FA",
+  "#FF7043",
+  "#8BC34A",
+  "#011100",
+  "#E57373",
+  "#EF6C00",
+  "#455A64",
+  "#40a5ed",
+  "#6D4C41"
+];
 export function getColor(index, colorAr) {
   return colorAr[index % colorAr.length];
 }

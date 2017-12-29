@@ -9,18 +9,21 @@ import { WideTitle, colorAr, getColor } from "../styles";
 
 class CustomerDetailsWithNotes extends Component {
   state = {};
-
+  handleDelete = id => {
+    console.log("Deleting ID", id);
+    this.props.onDeleteNote({ id });
+  };
   renderNote = ({ id, note, date, day }, index) => {
     return [
       <ListItem
         leftAvatar={
-          <Avatar backgroundColor={getColor(index, colorAr)} color="white">
+          <Avatar backgroundColor={getColor(day, colorAr)} color="white">
             {day.toString().toUpperCase()}
           </Avatar>
         }
         primaryText={note || "No update"}
         key={id}
-        rightIcon={<ClearIcon />}
+        rightIcon={<ClearIcon onClick={() => this.handleDelete(id)} />}
       />,
       <Divider key={`${id}d`} />
     ];
@@ -50,7 +53,7 @@ class CustomerDetailsWithNotes extends Component {
 
   render() {
     if (!this.props.details) {
-      return <div>Loading..</div>;
+      return <div>Select a customer</div>;
     }
 
     const notes =

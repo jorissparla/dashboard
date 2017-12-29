@@ -12,7 +12,7 @@ const Container = styled.div`
 
 const Img = styled.div`
   color: white;
-  background-color: rgb(186, 104, 200);
+  background-color: #d50000;
   user-select: none;
   display: inline-flex;
   align-items: center;
@@ -42,34 +42,34 @@ const Icon = styled.div`
   right: 4px;
 `;
 class AddNote extends Component {
-  state = { note: ''};
+  state = { note: "", dateValue: new Date() };
   handleClick = () => {
-    window.alert(this.state.note)
-    this.props.onAdd(this.state.note)
-    this.setState({note: ''})
+    const { onAdd, details: { id, number } } = this.props;
+    onAdd({
+      customerId: id,
+      note: this.state.note,
+      date: format(this.state.dateValue, "YYYY-MM-DD")
+    });
+    this.setState({ note: "" });
   };
 
   handleChange = (e, val) => {
-    this.setState({note: val})
-  }
+    this.setState({ note: val });
+  };
 
   render() {
-    const defaultDate = new Date();
     const { enabled } = this.props;
-    const styles = {
-      iconStyleOn : {
-      visibility: 'inherit'
-    }, 
-    iconStyleOff: {
-      visibility: 'hidden'
-    }
-  }
-    
+
     return (
       <Container>
-        <Img>{format(defaultDate, "DD")}</Img>
-        <TextField hintText="Please add your update note for the customer.." fullWidth={true} onChange={this.handleChange} value={this.state.note}/>
-        <Icon onClick={this.handleClick} style={this.props.enabled? styles.iconStyleOn: styles.iconStyleOff}>
+        <Img>{format(this.state.dateValue, "DD")}</Img>
+        <TextField
+          hintText="Please add your update note for the customer.."
+          fullWidth={true}
+          onChange={this.handleChange}
+          value={this.state.note}
+        />
+        <Icon onClick={this.handleClick}>
           <AddIcon />
         </Icon>
       </Container>

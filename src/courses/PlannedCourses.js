@@ -143,7 +143,7 @@ class PlannedCoursesTable extends React.Component {
             />
             <RaisedButton
               label="New"
-              enabled={authenticated}
+              enabled={authenticated.toString()}
               primary={true}
               style={styles.button}
               onClick={() => this.setState({ opennew: true })}
@@ -160,6 +160,7 @@ class PlannedCoursesTable extends React.Component {
             trainer={course.trainer}
             statuses={statuses}
             status={course.status}
+            team={course.team}
             hours={hours}
             onSave={e => {
               console.log("onSave", JSON.stringify(e));
