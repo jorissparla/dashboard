@@ -2,10 +2,11 @@ import React from "react";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
 import styled from "styled-components";
+import _ from "lodash";
 import CustomerList from "../CustomerList";
 import SearchBar from "../../common/SearchBar";
 import DetailswithNotes from "../CustomerDetailsWithNotes";
-import _ from "lodash";
+import AddNote from "../AddNote";
 
 const CustomerBoxWithSearchField = styled.div`
   display: flex;
@@ -85,7 +86,7 @@ const AccountTitle = styled.div`
 
 const AccountComponent = ({ image, fullname }) => (
   <AccountBox>
-    <AccountPicture image={image} />
+    <AccountPicture image={image} onClick={() => alert("clicked")} />
     <AccountTitle>{fullname}</AccountTitle>
   </AccountBox>
 );
@@ -101,10 +102,11 @@ const StyledDetails = styled.div`
   margin: 10px;
   background: white;
   border-radius: 2px;
+  width: 100%;
   border: 1px solid lightgray;
 `;
 class MainPage extends React.Component {
-  state = { searchText: "", id: "1" };
+  state = { searchText: "", id: "0" };
   handleSelect = id => {
     console.log("handleSelect,", id);
     this.setState({ id: id });
@@ -112,13 +114,14 @@ class MainPage extends React.Component {
   handlesetSearchText = val => {
     this.setState({ searchText: val });
   };
-
+  handleAdd = (v) => {
+    console.log('ADD',v)
+  }
   getCustomerDetails = id => {
     return this.props.data.customers.filter(customer => customer.id === id)[0];
   };
   render() {
     const { data: { loading, accounts, customers } } = this.props;
-    console.log("RERENDER", this.state);
     if (loading) {
       return <div>Loading</div>;
     }
@@ -127,7 +130,6 @@ class MainPage extends React.Component {
         _.includes(customer.name, this.state.searchText) ||
         _.includes(customer.followed.fullname, this.state.searchText)
     );
-    //console.log(accounts);
     return (
       <div>
         <Widget>
@@ -145,6 +147,11 @@ class MainPage extends React.Component {
             <CustomerList customers={filteredCustomers} onSelect={this.handleSelect} />
           </CustomerBoxWithSearchField>
           <StyledDetails>
+            <AddNote 
+              enabled={this.state.id !== "0"} 
+              details = {this.getCustomerDetails(this.state.id)}
+              onAdd = { this.handleAdd}
+            />
             <DetailswithNotes id={this.state.id} details={this.getCustomerDetails(this.state.id)} />
           </StyledDetails>
         </Container>

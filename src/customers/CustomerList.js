@@ -29,7 +29,7 @@ class CustomerList extends Component {
         leftAvatar={<Avatar src={followed.image} />}
         onClick={() => this.handleSelect(id)}
       />,
-      <Divider />
+      <Divider key={`${id}d`} />
     ];
   };
   render() {

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Avatar from "material-ui/Avatar";
 import { List, ListItem } from "material-ui/List";
 import Divider from "material-ui/Divider";
+import ClearIcon from "material-ui/svg-icons/content/clear";
 import _ from "lodash";
 import { format } from "date-fns";
 import { WideTitle, colorAr, getColor } from "../styles";
@@ -19,8 +20,9 @@ class CustomerDetailsWithNotes extends Component {
         }
         primaryText={note || "No update"}
         key={id}
+        rightIcon={<ClearIcon />}
       />,
-      <Divider />
+      <Divider key={`${id}d`} />
     ];
   };
 
@@ -34,10 +36,6 @@ class CustomerDetailsWithNotes extends Component {
             .orderBy(["newdate"], ["desc"])
 
             .value()
-            .map(o => {
-              console.log(o.day);
-              return o;
-            })
             .map((note, index) => this.renderNote(note, index))}
         </List>
       </div>
@@ -63,11 +61,7 @@ class CustomerDetailsWithNotes extends Component {
           newdate: Date.parse(note.date)
         })
       ) || [];
-    console.log("Months", this.getMonths(notes));
     const months = this.getMonths(notes);
-    console.log("DETAILS", notes);
-
-    console.log(this.props.details, "notes", notes);
     return months.map(({ month }) => this.renderMonth(month, notes));
   }
 }
