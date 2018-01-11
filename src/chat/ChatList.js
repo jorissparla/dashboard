@@ -88,8 +88,8 @@ class ChatList extends Component {
       </HeaderRow>,
 
       <List style={{ backgroundColor: "white" }}>
-        {chatsByWeek.map(item => (
-          <div>
+        {chatsByWeek.map((item, index) => (
+          <div key={index}>
             <WideTitle>{item[0].weeknr}</WideTitle>
             {this.renderChat(item)}
           </div>

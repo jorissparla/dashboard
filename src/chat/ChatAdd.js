@@ -1,29 +1,18 @@
 import React from "react";
-import { connect } from "react-redux";
-import { Field, reduxForm, formValueSelector } from "redux-form";
 import { CardSection, Input } from "../common";
-import { SelectField } from "redux-form-material-ui";
+import SelectField from "material-ui/SelectField";
+import TextField from "material-ui/TextField";
 import MenuItem from "material-ui/MenuItem";
 import RaisedButton from "material-ui/RaisedButton";
 import Divider from "material-ui/Divider";
 import UserAvatar from "react-user-avatar";
 
-const MyAvatar = ({ input, name, avatarName, ...custom }) => {
-  return (
-    <UserAvatar
-      size="48"
-      style={{ fontFamily: "Oswald", fontSize: "18px" }}
-      name={input.value || avatarName}
-      {...custom}
-      colors={["#BA68C8", "#81D4FA", "#FF7043", "#8BC34A", "#FFFF00", "#E57373"]}
-    />
-  );
-};
-
 const styles = {
-  inputStyle: {
+  TextFieldStyle: {
     flex: 1,
-    padding: "20px"
+    width: 200,
+    padding: 2,
+    marginRight: 30
   }
 };
 
@@ -57,28 +46,52 @@ class ChatAdd extends React.Component {
     this.state = { dataSource: [] };
   }
 
-  componentDidMount() {}
+  handleSubmit = e => {
+    console.log(this.props.entry.report());
+    this.props.onSave();
+  };
 
   doSubmit(values) {
     window.alert(`You submitted Parent:\n\n${JSON.stringify(values, null, 2)}`);
   }
 
-  handleUpdateInput(value) {
-    this.setState({
-      dataSource: [value, value + value, value + value + value]
-    });
+  handleChangeTeam = (e, i, v) => {
+    this.props.entry.team = v;
+  };
+  handleChangeRegion = (e, i, v) => {
+    this.props.entry.region = v;
+  };
+  handleChangeWeek = (e, i, v) => {
+    this.props.entry.weeknr = v;
+  };
+
+  handleChange = ({ target: { name, value } }) => {
+    this.props.entry[name] = value;
+  };
+
+  componentDidMount() {
+    if (this.props.ranges) {
+      this.props.entry.weeknr = this.props.ranges[2].Name;
+    }
   }
   render() {
-    const { handleSubmit, ranges, onSave, onCancel } = this.props;
+    const { ranges, onSave, onCancel } = this.props;
+    console.log(
+      "Observe",
+      ranges,
+
+      this.props.entry.report()
+    );
     if (!ranges) {
       return <CardSection>Loading...</CardSection>;
     }
+
     return (
       <div>
         <CardSection style={{ fontSize: "36px", fontFamily: "Oswald" }}>
           Add Chat Result
         </CardSection>
-        <form onSubmit={handleSubmit(onSave)}>
+        <form>
           <CardSection
             style={{
               flexDirection: "row",
@@ -86,68 +99,83 @@ class ChatAdd extends React.Component {
               alignItems: "center"
             }}
           >
-            <Field name="team" component={SelectField} hintText="Select a team" style={{ flex: 2 }}>
+            <SelectField
+              id="team"
+              name="team"
+              hintText="Select a team"
+              multiple={false}
+              onChange={this.handleChangeTeam}
+              style={{ flex: 2 }}
+              value={this.props.entry.team}
+            >
               {teams.map(team => (
                 <MenuItem key={team.key} value={team.key} primaryText={team.description} />
               ))}
-            </Field>
-            <Field
+            </SelectField>
+            <SelectField
+              id="region"
               name="region"
-              component={SelectField}
               hintText="Select a region"
               style={{ flex: 2 }}
+              onChange={this.handleChangeRegion}
+              value={this.props.entry.region}
             >
               {regions.map(region => (
                 <MenuItem key={region.key} value={region.key} primaryText={region.description} />
               ))}
-            </Field>
-            <Field
-              name="av"
-              component={MyAvatar}
-              defaultValue="Ok"
-              avatarName="OK"
-              style={{ flex: 1, alignItems: "center" }}
-            />
+            </SelectField>
           </CardSection>
           <CardSection>
-            <Field name="weeknr" component={SelectField} hintText="Select a week">
+            <SelectField
+              name="weeknr"
+              id="weeknr"
+              hintText="Select a week"
+              onChange={this.handleChangeWeek}
+              value={this.props.entry.weeknr}
+            >
               {ranges.map(range => (
                 <MenuItem key={range.Name} value={range.Name} primaryText={range.Name} />
               ))}
-            </Field>
-            <Field name="fromDate" component={Input} disabled={true} type="text" />
+            </SelectField>
+            <Input name="fromDate" disabled={true} type="text" />
           </CardSection>
 
           <CardSection id="inputboxes">
-            <Field
-              style={styles.inputStyle}
+            <TextField
+              inputStyle={styles.TextFieldStyle}
+              style={styles.TextFieldStyle}
               name="nrchats"
               floatingLabelText="Number of chats"
-              component={Input}
-              type="text"
+              type="number"
               width={2}
-              fullWidth={false}
+              onChange={this.handleChange}
+              value={this.props.entry.nrchats}
             />
-            <Field
-              style={styles.inputStyle}
+            <TextField
+              inputStyle={styles.TextFieldStyle}
+              style={styles.TextFieldStyle}
               name="responseintime"
               floatingLabelText="Responded in time"
-              component={Input}
-              type="text"
-              fullWidth={false}
+              type="number"
+              onChange={this.handleChange}
+              value={this.props.entry.responseintime}
             />
-            <Field
-              style={styles.inputStyle}
+            <TextField
+              inputStyle={styles.TextFieldStyle}
+              style={styles.TextFieldStyle}
               name="percentage"
               floatingLabelText="Responded in time"
-              component={Input}
               type="text"
-              fullWidth={false}
+              value={this.props.entry.percentage()}
             />
           </CardSection>
-          <Divider />
           <CardSection>
-            <RaisedButton primary={true} style={buttonStyle} label="Submit" type="submit" />
+            <RaisedButton
+              primary={true}
+              style={buttonStyle}
+              label="Submit"
+              onClick={this.handleSubmit}
+            />
             <RaisedButton
               secondary={true}
               style={buttonStyle2}
@@ -162,40 +190,4 @@ class ChatAdd extends React.Component {
   }
 }
 
-let ChatAddForm = reduxForm({
-  form: "chatadd",
-  enableReinitialize: true,
-  keepDirtyOnReinitialize: true
-})(ChatAdd);
-
-const selector = formValueSelector("chatadd");
-
-ChatAddForm = connect(state => {
-  const weeknr = selector(state, "weeknr");
-  const team = selector(state, "team");
-  const region = selector(state, "region");
-  const nrchats = selector(state, "nrchats") || 0;
-  const responseintime = Math.min(nrchats, selector(state, "responseintime") || 0);
-  let percentage = 0;
-  if (nrchats !== 0) {
-    percentage = (100 * responseintime / nrchats).toFixed(1);
-  }
-  if (!state.summary.ranges) return {};
-  const selectedRange = state.summary.ranges.find(range => range.Name === weeknr);
-  if (!weeknr) return {};
-  return {
-    initialValues: {
-      team,
-      weeknr,
-      nrchats,
-      av: team,
-      region,
-      responseintime,
-      percentage: `${percentage} %`,
-
-      fromDate: selectedRange.FromDate
-    }
-  };
-})(ChatAddForm);
-
-export default ChatAddForm;
+export default ChatAdd;

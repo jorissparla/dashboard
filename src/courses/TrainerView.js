@@ -13,6 +13,10 @@ import { graphql } from "react-apollo";
 import _ from "lodash";
 import { format } from "date-fns";
 
+if (!window.format) {
+  window.format = format;
+}
+
 const styles = {
   headerStyle: {
     fontSize: 18
@@ -72,7 +76,7 @@ class TrainerView extends React.Component {
 }
 
 const trainerQuery = gql`
-  query trainerQuery($from: String, $to: String) {
+  query trainerQuery($from: String!, $to: String!) {
     trainers(from: $from, to: $to) {
       trainer
       totalhours
@@ -83,8 +87,8 @@ const trainerQuery = gql`
 export default graphql(trainerQuery, {
   options: props => ({
     variables: {
-      from: format("YYYY-MM-DD", Date.parse(props.from)),
-      to: format("YYYY-MM-DD", Date.parse(props.to))
+      from: format(Date.parse(props.from), "YYYY-MM-DD"),
+      to: format(Date.parse(props.to), "YYYY-MM-DD")
     }
   })
 })(TrainerView);

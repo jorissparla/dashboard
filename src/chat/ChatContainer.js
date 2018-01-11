@@ -1,12 +1,35 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-//import gql from "graphql";
-//import { graphql } from "react-apollo";
 import { withRouter } from "react-router";
-import { fetchRanges, createChat } from "../actions";
 import { Card, OkCancelDialog } from "../common";
 import ChatAdd from "./ChatAdd";
 import Snackbar from "material-ui/Snackbar";
+import gql from "graphql-tag";
+import { graphql, compose } from "react-apollo";
+import { observer } from "mobx-react";
+import { observable } from "mobx";
+
+const chatAddEntry = observable({
+  weeknr: "",
+  team: "Finance",
+  region: "EMEA",
+  nrchats: 1,
+  responseintime: 0,
+  percentage: function() {
+    if (this.nrchats !== 0) {
+      return `${(100 * this.responseintime / this.nrchats).toFixed(1)} %`;
+    } else {
+      return `0.0 %`;
+    }
+  },
+  fromDate: new Date(),
+  report() {
+    return `weeknr: ${this.weeknr}, team: ${this.team} nrchats: ${this.nrchats}, responseintime: ${
+      this.responseintime
+    } percentage: ${this.percentage()}`;
+  }
+});
+
+const ChatAddObserver = observer(ChatAdd);
 
 class ChatContainer extends Component {
   state = {
@@ -16,25 +39,31 @@ class ChatContainer extends Component {
     showMessage: false,
     err: ""
   };
-  componentDidMount() {
-    this.props.fetchRanges();
-  }
 
   doCancel = () => {
     this.props.history.push("/chat");
   };
-  doSubmit(values) {
-    const { weeknr, team, nrchats, responseintime, fromDate } = values;
-    const mappedValues = { weeknr, team, nrchats, responseintime, fromDate };
 
+  findWeekfromDate = (weeknr, ranges) => {
+    const obj = ranges.find(o => o.Name === weeknr);
+    return obj.FromDate;
+  };
+  doSubmit = values => {
+    const { weeknr, team, nrchats, responseintime } = chatAddEntry;
+    const fromDate = this.findWeekfromDate(weeknr, this.props.data.ranges);
+    const input = { weeknr, team, nrchats, responseintime, fromDate };
+    console.log(input);
     this.props
-      .createChat(mappedValues)
+      .createNewChat({
+        variables: {
+          input
+        }
+      })
       .then(data => {
-        let err = !data.payload.message ? "success" : data.payload.message;
-        this.setState({ showMessage: true, err: err });
+        console.log(data);
       })
       .catch(error => console.log("error", error));
-  }
+  };
 
   showDialog() {
     if (!this.state.showDialog) {
@@ -51,26 +80,23 @@ class ChatContainer extends Component {
     );
   }
 
-  handleSubmit() {
-    window.alert(this.state.body);
-    this.setState({ showDialog: false });
-    this.props
-      .createChat(this.state.values)
-      .then(data => {
-        let err = !data.payload.message ? "success" : data.payload.message;
-        this.setState({ showMessage: true, err: err });
-      })
-      .catch(error => console.log("error", error));
-  }
   handleCancel() {
     this.setState({ showDialog: false });
   }
   render() {
-    const { ranges } = this.props;
-
+    if (this.props.data.loading) {
+      return <div>Loading...</div>;
+    }
+    const { ranges } = this.props.data;
+    console.log("chatcontainer props=>", this.props);
     return (
       <Card>
-        <ChatAdd ranges={ranges} onSave={this.doSubmit.bind(this)} onCancel={this.doCancel} />
+        <ChatAddObserver
+          ranges={ranges}
+          onSave={this.doSubmit}
+          onCancel={this.doCancel}
+          entry={chatAddEntry}
+        />
         <Snackbar
           open={this.state.showMessage}
           message={this.state.err}
@@ -82,8 +108,27 @@ class ChatContainer extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return { ranges: state.summary.ranges };
-};
+const createChatMutation = gql`
+  mutation createChat($input: ChatInputType) {
+    createChat(input: $input) {
+      id
+    }
+  }
+`;
+const queryRanges = gql`
+  query ranges {
+    ranges {
+      ID
+      FromDate
+      ToDate
+      Name
+      RangeType
+      FullRange
+    }
+  }
+`;
 
-export default connect(mapStateToProps, { fetchRanges, createChat })(withRouter(ChatContainer));
+export default compose(
+  graphql(createChatMutation, { name: "createNewChat" }),
+  graphql(queryRanges)
+)(withRouter(ChatContainer));

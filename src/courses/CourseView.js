@@ -20,6 +20,14 @@ import _ from "lodash";
 import AddCourseDialog from "./AddCourseDialog";
 import StudentListContainer from "./StudentListContainer";
 import TrainerView from "./TrainerView";
+import StudentChip from "./StudentChip";
+
+const StudentChipList = styled.div`
+  background-color: white;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 5px;
+`;
 
 const Title = styled.h3`
   font-weight: 200;
@@ -79,7 +87,8 @@ class CourseView extends React.Component {
     value: "",
     minDate: null,
     defaultDate: new Date(),
-    activeTab: "scheduled"
+    activeTab: "scheduled",
+    participants: { show: false, id: null, students: [] }
   };
 
   componentDidCatch(error) {
@@ -126,7 +135,19 @@ class CourseView extends React.Component {
               <TableRowColumn>
                 <Link to={`/courses/edit/${course.id}`}>{course.id}</Link>
               </TableRowColumn>
-              <TableRowColumn style={{ width: 20 }}>{course.students.length}</TableRowColumn>
+              <TableRowColumn
+                style={{ width: 20 }}
+                onMouseEnter={() =>
+                  this.setState({
+                    participants: { visible: true, id: course.id, students: course.students }
+                  })
+                }
+                onMouseLeave={() =>
+                  this.setState({ participants: { visible: false, id: null, students: [] } })
+                }
+              >
+                {course.students.length}
+              </TableRowColumn>
               <TableRowColumn>
                 {format(course.plannedcourses[0].startdate, "ddd, DD-MMM-YYYY")}
               </TableRowColumn>
@@ -149,7 +170,6 @@ class CourseView extends React.Component {
     const { open } = this.state;
     const { role } = this.props.user;
     const enabled = role === "Admin" || role === "PO";
-    console.log("====================>", enabled);
 
     const filteredCourses = _.chain(courses)
       .filter(course => Date.parse(course.plannedcourses[0].startdate) > Date.parse(filterDate))
@@ -185,6 +205,12 @@ class CourseView extends React.Component {
             </HeaderRight>
           </HeaderRow>
           <div>{this.renderCourses(filteredCourses)}</div>,
+          <StudentChipList>
+            {this.state.participants &&
+              this.state.participants.students.map(s => (
+                <StudentChip key={s.id} id={s.id} fullname={s.fullname} image={s.image} />
+              ))}
+          </StudentChipList>
           <div>
             {open === true && (
               <AddCourseDialog
@@ -278,7 +304,9 @@ const courseQuery = gql`
         count
       }
       students {
+        id
         fullname
+        image
       }
     }
     supportfolks {
