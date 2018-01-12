@@ -14,6 +14,7 @@ const Row = styled.div`
   overflow: hidden;
   margin-left: 10px;
   margin-right: 10px;
+  justify-content: flex-start;
 `;
 
 const Title = styled.h3`
@@ -25,15 +26,22 @@ const Title = styled.h3`
 const InfoSection = styled.div`
   display: flex;
   flex-direction: column;
-  width: 200px;
-  margin: 10px;
+  width: 380px;
+  padding: 5px;
+  border: 1px solid lightgrey;
 `;
 
 const DateSection = styled.div`
   padding-left: 10px;
   justify-content: flex-start;
   font-family: Roboto;
+  padding-top: 5px;
+  font-size: 18px;
   display: flex;
+
+  height: 30px;
+  justify-content: center;
+  align-content: center;
 `;
 
 const PrimaryText = styled.h3`
@@ -46,7 +54,7 @@ const PrimaryText = styled.h3`
 const SecondaryText = styled.div`
   display: flex;
   justify-content: flex-start;
-  font-size: 14px;
+  font-size: 18px;
   padding-bottom: 10px;
   white-space: pre-line;
 `;
@@ -57,22 +65,22 @@ const TextSection = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
+  margin-right: 10px;
+  padding: 10px;
 `;
 
 const Avatar = styled.img`
-  width: 100px;
-  height: 100px;
+  width: 350px;
+  height: 200px;
   display: flex;
-  padding: 10px;
-  margin: 10px;
-  border-radius: 50%;
+  object-fit: cover;
 `;
 const NewsItem = ({ news }) => {
   return (
     <Row>
       <InfoSection>
         <Avatar src={news.img} />
-        <DateSection>{format(news.create_date, "DD-MMM-YYYY")}</DateSection>
+        <DateSection>{format(news.create_date, "ddd, DD MMMM YYYY")}</DateSection>
       </InfoSection>
       <TextSection>
         <PrimaryText>{news.title}</PrimaryText>

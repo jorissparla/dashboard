@@ -13,13 +13,15 @@ const Left = styled.div`
   width: 10%;
   margin: 10px;
 `;
-const Right = styled.div`width: 80%;`;
+const Right = styled.div`
+  width: 80%;
+`;
 
 const inputImageField = field => {
   return (
     <div style={{ display: "flex", alignContent: "center" }}>
       <Left>
-        <Avatar src={field.input.value} />
+        <img src={field.input.value} />
       </Left>
     </div>
   );

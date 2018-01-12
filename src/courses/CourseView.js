@@ -26,7 +26,14 @@ const StudentChipList = styled.div`
   background-color: white;
   display: flex;
   flex-wrap: wrap;
-  margin: 5px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 2px;
+  color: hsla(0, 0%, 93%, 1);
+  border-radius: 4px;
+  border: solid 1px lightgray;
 `;
 
 const Title = styled.h3`
@@ -113,7 +120,7 @@ class CourseView extends React.Component {
 
   renderCourses = courses => {
     return (
-      <Table headerStyle={styles.headerStyle}>
+      <Table headerStyle={styles.headerStyle} ref="id_table">
         <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
           <TableRow>
             <HeaderColumn>TITLE</HeaderColumn>
@@ -158,6 +165,14 @@ class CourseView extends React.Component {
     );
   };
 
+  export = () => {
+    const tabel = this.refs;
+    if (!window.tabel) {
+      window.tabel = tabel;
+    }
+
+    console.log(tabel);
+  };
   render() {
     const { loading, error, courses, supportfolks } = this.props.data;
     if (loading) {
@@ -189,6 +204,7 @@ class CourseView extends React.Component {
               <Title>
                 Scheduled Training Starting<DatePicker
                   hintText="Enter StartDate Course"
+                  style={{ backgroundColor: "white", width: 100, borderRadius: 5 }}
                   value={this.state.startdate}
                   onChange={(e, value) => this.handleStartDateChange(e, value)}
                 />

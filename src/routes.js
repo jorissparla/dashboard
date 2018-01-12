@@ -32,6 +32,9 @@ import RequestResetPassword from "./auth/RequestResetPassword";
 import NewsListContainer from "./news/newslistcontainer";
 import NewsItemContainer from "./news/newsitemcontainer";
 import NewsItemAddContainer from "./news/newsitemaddcontainer";
+import NewsContainer from "./news/NewsContainer";
+import NewsCardContainer0 from "./news/newscardcontainer0";
+import NewsPage from "./news/newspage";
 
 import SupportCards from "./supportcard/SupportCards";
 import RequestEditAdd from "./supportcard/Request";
@@ -44,7 +47,7 @@ import AddCourseCard from "./courses/AddCourseCard";
 import StudentListContainer from "./courses/StudentListContainer";
 import StudentView from "./courses/StudentView";
 import AddStudentsToCourse from "./courses/AddStudentsToCourse";
-import NewsPage from "./news/newspage";
+
 //import SummaryChartContainer from "./charts/SummaryChartContainer";
 //import ChatGraphContainer from "./charts/ChatGraphContainer";
 import DashBoardStatsNew from "./DashBoardStatsNew";
@@ -185,7 +188,7 @@ class AppRoutes extends React.Component {
         <Route path="/historyday" component={HistoryDayContainer} />
         <Route path="/historyall" component={HistoryDayAll} />
         <Route path="test/edit/:id" component={NewsItemContainer} />
-        <Route path="test/new" component={NewsItemAddContainer} />
+        <Route exact path="/test/news" component={NewsPage} />
         <Route exact path="/courses" component={CourseList} />
         <Route exact path="/courseview" component={CourseView} />
         <Route exact path="/students" component={StudentListContainer} />

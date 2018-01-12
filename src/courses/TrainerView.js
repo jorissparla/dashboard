@@ -13,10 +13,6 @@ import { graphql } from "react-apollo";
 import _ from "lodash";
 import { format } from "date-fns";
 
-if (!window.format) {
-  window.format = format;
-}
-
 const styles = {
   headerStyle: {
     fontSize: 18

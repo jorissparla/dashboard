@@ -27,6 +27,7 @@ class NewsListContainer extends Component {
   }
 
   render() {
+    console.log("PPPPPPPPPPPPPPPPPPPPPPPPPPP");
     const { news, authenticated } = this.props;
     return (
       <div>
