@@ -55,6 +55,7 @@ import RequestList from "./supportcard/RequestContainer";
 import RequestEdit from "./supportcard/RequestEdit";
 import ImageConverter from "./utils/ConvertImages";
 import CustomerCommentsPage from "./customers/pages/CustomerCommentsMain";
+import AnniversaryList from "./awards/Anniversaries";
 
 const NotFound = () => <h2>Not Found!</h2>;
 
@@ -68,6 +69,7 @@ class AppRoutes extends React.Component {
     return (
       <Switch>
         <Route exact path="/image_convert" component={ImageConverter} />
+        <Route exact path="/anniversaries" component={AnniversaryList} />
         <AuthRoute
           allowed={["Admin", "PO", "SU", "Guest"]}
           user={user}
@@ -188,7 +190,7 @@ class AppRoutes extends React.Component {
         <Route path="/historyday" component={HistoryDayContainer} />
         <Route path="/historyall" component={HistoryDayAll} />
         <Route path="test/edit/:id" component={NewsItemContainer} />
-        <Route exact path="/test/news" component={NewsPage} />
+        <Route exact path="/test/news" component={DashBoardStatsNew} />
         <Route exact path="/courses" component={CourseList} />
         <Route exact path="/courseview" component={CourseView} />
         <Route exact path="/students" component={StudentListContainer} />

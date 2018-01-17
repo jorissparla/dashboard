@@ -5,13 +5,16 @@ import axios from "axios";
 
 class ImageConvert extends React.Component {
   state = { currentuser: "" };
+
   convertImage = async ({ image, navid, lastname }) => {
+    axios.defaults.maxContentLength = 10000;
     //await axios.put("http://localhost:3333").then(res => console.log(res));
     if (image) {
       let base64Image = image.split(";base64,").pop();
       console.log(lastname);
+      let name = navid + "." + lastname;
       axios
-        .post("http://localhost:3333/upload", { navid, lastname, image: base64Image })
+        .post("http://localhost:3333/upload", { name, image: base64Image })
         .then(res => console.log(res))
         .catch(e => console.log("Error:", e));
     }
