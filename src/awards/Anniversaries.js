@@ -5,6 +5,9 @@ import gql from "graphql-tag";
 import { graphql } from "react-apollo";
 import styled from "styled-components";
 import Avatar from "material-ui/Avatar";
+import format from "date-fns/format";
+import { WideTitle } from "../styles";
+
 const StyledInitials = styled.div`
   color: pink;
   background-color: white;
@@ -15,10 +18,27 @@ const StyledInitials = styled.div`
   font-size: 20px;
   border-radius: 50%;
   border-color: pink;
-  border: 2px solid pink;
-  height: 40px;
-  width: 40px;
+  border: 5px solid pink;
+  height: 80px;
+  width: 80px;
   margin: 5px;
+`;
+
+const P = styled.p`
+  font-family: Raleway;
+  font-size: 24px;
+`;
+
+const Y = styled.div`
+  display: flex;
+  font-size: 48px;
+  font-weight: 900;
+  color: black;
+  margin-right: 5px;
+`;
+const DIV = styled.div`
+  display: flex;
+  justify-content: center;
 `;
 
 const Image = ({ image, fullname }) => {
@@ -28,7 +48,7 @@ const Image = ({ image, fullname }) => {
     .join("")
     .toUpperCase();
   if (image) {
-    return <Avatar src={image} style={{ margin: 5 }} />;
+    return <Avatar src={image} style={{ margin: 5 }} size={80} />;
   } else {
     return <StyledInitials>{initials}</StyledInitials>;
   }
@@ -36,16 +56,61 @@ const Image = ({ image, fullname }) => {
 
 class AnniversaryList extends React.Component {
   state = {};
-  renderAnniversaries = anniversaries => {
+  yearsColor = years => {
+    switch (years) {
+      case 5:
+        return "#FF8A65";
+        break;
+
+      case 10:
+        return "#B3E5FC";
+        break;
+
+      case 15:
+        return "#4DB6AC";
+        break;
+
+      case 20:
+        return "white";
+        break;
+
+      case 25:
+        return "#FFC107";
+        break;
+
+      case 30:
+        return "#CE93D8";
+        break;
+
+      default:
+        return "white";
+        break;
+    }
+  };
+
+  renderAnniversaries = (anniversaries = []) => {
     return anniversaries.map(anniversary => (
-      <Card key={anniversary.id} expanded={true} style={{ display: "flex", margin: 20 }}>
+      <Card
+        key={anniversary.id}
+        expanded={true}
+        style={{
+          display: "flex",
+          margin: 20,
+          width: "22%",
+          backgroundColor: this.yearsColor(anniversary.years)
+        }}
+      >
         <CardHeader
-          title={anniversary.fullname}
-          subtitle={`${anniversary.years} Years`}
+          title={<P>{anniversary.fullname}</P>}
+          subtitle={
+            <DIV>
+              <Y>{anniversary.years}</Y> Years
+            </DIV>
+          }
           avatar={<Image image={anniversary.account.image} fullname={anniversary.fullname} />}
         />} />
         <CardActions>
-          <FlatButton label={anniversary.anniversarydate} />
+          <FlatButton label={format(anniversary.anniversarydate, "ddd, DD MMMM YYYY")} />
         </CardActions>
       </Card>
     ));
@@ -57,8 +122,12 @@ class AnniversaryList extends React.Component {
     }
     console.log(anniversaries);
     return (
-      <div style={{ display: "flex", margin: 20, flexWrap: "wrap" }}>
-        {this.renderAnniversaries(anniversaries)}
+      <div>
+        <WideTitle>Anniversaries</WideTitle>
+
+        <div style={{ display: "flex", margin: 20, flexWrap: "wrap" }}>
+          {this.renderAnniversaries(anniversaries)}
+        </div>
       </div>
     );
   }

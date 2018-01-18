@@ -8,6 +8,7 @@ import HistoryDayAll from "./charts/historydayallcontainer";
 import NewsPage from "./news/newspage";
 import SupportCards from "./supportcard/SupportCards";
 import KudoList from "./kudos/kudolistcomponentnew";
+import Anniversaries from "./awards/Anniversaries";
 //import Award from './awards/award'
 
 class DashBoardContainer extends Component {
@@ -32,7 +33,7 @@ class DashBoardContainer extends Component {
   }
 
   myTimer() {
-    const newIndex = this.state.index >= 8 ? 0 : this.state.index + 1;
+    const newIndex = this.state.index >= 9 ? 0 : this.state.index + 1;
     this.setState({ index: newIndex });
   }
 
@@ -59,6 +60,8 @@ class DashBoardContainer extends Component {
     const { region } = this.state;
     console.log(index, region);
     switch (index) {
+      case 9:
+        return <Anniversaries />;
       case 8:
         return <SupportCards region={region} />;
       case 7:
