@@ -50,8 +50,11 @@ const userquery = gql`
   }
 `;
 
-const ResetPassword = ({ data: { account, loading } }) => {
+const ResetPassword = props => {
+  const { account, loading } = props.data;
   if (loading) return <div>Loading</div>;
+  console.log(props);
+  if (!account) return <div> Error, contact your admin </div>;
   return (
     <div>
       Password Reset for {account.fullname}
