@@ -23,10 +23,12 @@ import { createHttpLink } from "apollo-link-http";
 import registerServiceWorker from "./registerServiceWorker";
 console.log("process.env", process.env);
 
-const { REACT_APP_PORT_GRAPHQL = 55555, REACT_APP_SERVER = "nlbavwixs" } = process.env;
+const { REACT_APP_PORT_GRAPHQL = 55555, REACT_APP_GRAPHQLSERVER = "nlbavwixs" } = process.env;
 
 const client = new ApolloClient({
-  link: createHttpLink({ uri: `http://${REACT_APP_SERVER}:${REACT_APP_PORT_GRAPHQL}/graphql` }),
+  link: createHttpLink({
+    uri: `http://${REACT_APP_GRAPHQLSERVER}:${REACT_APP_PORT_GRAPHQL}/graphql`
+  }),
   cache: new InMemoryCache()
 });
 

@@ -38,9 +38,9 @@ export const FETCH_ACCOUNTS = "FETCH_ACCOUNTS";
 export const FIND_STUDENTS = "FIND_STUDENTS";
 export const ENROLL_STUDENT = "ENROLL_STUDENT";
 
-const { REACT_APP_PORT1_REST = 3001, REACT_APP_SERVER = "nlbavwixs" } = process.env;
+const { REACT_APP_PORT1_REST = 3001, REACT_APP_GRAPHQLSERVER = "nlbavwixs" } = process.env;
 
-export const ROOT_URL = `http://${REACT_APP_SERVER}:${REACT_APP_PORT1_REST}/api`;
+export const ROOT_URL = `http://${REACT_APP_GRAPHQLSERVER}:${REACT_APP_PORT1_REST}/api`;
 //export const ROOT_URL = "http://localhost:3001/api";
 
 export const authError = error => {
