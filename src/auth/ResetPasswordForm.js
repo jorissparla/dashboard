@@ -20,7 +20,9 @@ class ResetPasswordForm extends Component {
 
   componentDidMount() {
     const token = this.props.match.params.token;
+
     const result = this.checkisValid(token);
+    console.log(token, result);
     if (result[0]) {
       this.setState({ id: result[1].user });
     }

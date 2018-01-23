@@ -5,6 +5,7 @@ import { SmallCard } from "../common/SmallCard";
 import Dialog from "material-ui/Dialog";
 import styled from "styled-components";
 import FlatButton from "material-ui/FlatButton";
+import NewCard from "./NewCard";
 import NewRequestForm from "./Request";
 import differenceInCalendarDays from "date-fns/difference_in_calendar_days";
 import moment from "moment";
@@ -127,6 +128,7 @@ class SupportCards extends React.Component {
               background="papayawhip"
             />
           )}
+
           {filteredCards.map(
             (
               {
