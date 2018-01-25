@@ -188,7 +188,7 @@ class CourseView extends React.Component {
 
     const filteredCourses = _.chain(courses)
       .filter(course => Date.parse(course.plannedcourses[0].startdate) > Date.parse(filterDate))
-      .orderBy(["course.plannedcourses[0].startdate"])
+      .orderBy(o => format(o.plannedcourses[0].startdate, "YYYYMMDD"), "desc")
       .value();
 
     return (
@@ -207,6 +207,7 @@ class CourseView extends React.Component {
                   style={{ backgroundColor: "white", width: 100, borderRadius: 5 }}
                   value={this.state.startdate}
                   onChange={(e, value) => this.handleStartDateChange(e, value)}
+                  autoOk={true}
                 />
               </Title>
             </HeaderLeft>
@@ -251,6 +252,7 @@ class CourseView extends React.Component {
                   name="studentfilterstartdate"
                   onChange={this.handleStudentFilterStartDateChange}
                   style={styles.datePicker}
+                  autoOk={true}
                 />
                 to
                 <DatePicker
@@ -259,6 +261,7 @@ class CourseView extends React.Component {
                   name="studentfilterenddate"
                   onChange={this.handleStudentFilterEndDateChange}
                   style={styles.datePicker}
+                  autoOk={true}
                 />
               </Title2>
             </HeaderLeft>
@@ -281,6 +284,7 @@ class CourseView extends React.Component {
                   name="studentfilterstartdate"
                   onChange={this.handleStudentFilterStartDateChange}
                   style={styles.datePicker}
+                  autoOk={true}
                 />
                 to
                 <DatePicker
@@ -289,6 +293,7 @@ class CourseView extends React.Component {
                   name="studentfilterenddate"
                   onChange={this.handleStudentFilterEndDateChange}
                   style={styles.datePicker}
+                  autoOk={true}
                 />
               </Title2>
             </HeaderLeft>

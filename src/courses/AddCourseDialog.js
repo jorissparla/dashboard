@@ -104,16 +104,23 @@ class AddCourseDialog extends React.Component {
     this.setState({ error: { startdate: "", enddate: "" } });
     if (!this.state.startdate) {
       this.setState({ ...this.state.error, error: { startdate: "Field(s) can not be empty" } });
-      return;
+      return false;
     }
     if (!this.state.enddate) {
       this.setState({ ...this.state.error, error: { enddate: "Field(s) can not be empty" } });
-      return;
+      return false;
     }
-    console.log("Saving", this.state);
-    this.props.onSave(this.state);
+    return true;
   };
 
+  validateAndSave = () => {
+    if (this.validate) {
+      console.log("Saving", this.state);
+      this.props.onSave(this.state);
+    }
+  };
+
+  saveAndAddStudents = () => {};
   validStyle = (val, fld) => {
     console.log(this.state, "fld", fld);
     //console.log("ValidStyle", val, "error", this.state.error);
@@ -201,6 +208,7 @@ class AddCourseDialog extends React.Component {
             hintText="Enter StartDate Course"
             value={this.state.startdate}
             name="startdate"
+            autoOk={true}
             onChange={(e, startdate) => this.setState({ startdate })}
           />
           ends{" "}
@@ -209,6 +217,8 @@ class AddCourseDialog extends React.Component {
             textFieldStyle={this.validStyle(this.state.enddate, "startdate")}
             hintText="Enter End Date Course"
             name="enddate"
+            autoOk={true}
+            minDate={this.state.startdate}
             value={this.state.enddate}
             onChange={(e, enddate) => this.setState({ enddate })}
           />
@@ -238,7 +248,7 @@ class AddCourseDialog extends React.Component {
           style={styles.button}
           primary={true}
           label="Save"
-          onTouchTap={() => this.validate()}
+          onTouchTap={() => this.validateAndSave()}
         />
         <RaisedButton style={styles.button} primary={false} label="Cancel" onTouchTap={onCancel} />
         {this.props.toStudents && (
