@@ -75,7 +75,7 @@ class CourseCard extends Component {
   handleDelete = id => {
     this.props
       .deleteCourse({ variables: { input: { id } } })
-      .then(this.props.history.push("/courses"))
+      .then(this.props.history.push(`/courses/${this.state.id}`))
       .then(this.props.data.refetch())
       .then(this.setState({ id: null }))
       //.then(() => setTimeout((window.location.href = "/courses"), 500))
@@ -91,27 +91,50 @@ class CourseCard extends Component {
       .catch(e => this.handleMessage(JSON.stringify(e, null, 2)));
   };
 
-  handleUpdatePlanned = async ({ id, startdate, enddate, status, trainer, hours }) => {
+  handleUpdatePlanned = async ({
+    id,
+    startdate,
+    enddate,
+    status,
+    trainer,
+    hours,
+    location,
+    type
+  }) => {
     const input = {
       id,
       startdate: addHours(startdate, 13),
       enddate: new Date(addHours(enddate, 13)),
       trainer,
       status,
-      hours
+      hours,
+      location,
+      type
     };
     await this.props.updatePlannedCourse({ variables: { input } });
     await this.props.data.refetch();
   };
-  handleAddPlanned = async ({ id, startdate, enddate, status, hours, trainer, courseid }) => {
+  handleAddPlanned = async ({
+    id,
+    startdate,
+    enddate,
+    status,
+    hours,
+    trainer,
+    courseid,
+    location,
+    type
+  }) => {
     const input = {
       id,
-      startdate: new Date(startdate),
-      enddate: new Date(enddate),
+      startdate: addHours(new Date(startdate), 13),
+      enddate: addHours(new Date(enddate), 13),
       trainer,
       status,
       hours,
-      courseid
+      courseid,
+      location,
+      type
     };
     await this.props.addPlannedCourse({ variables: { input } });
     await this.props.data.refetch();
@@ -155,6 +178,7 @@ class CourseCard extends Component {
       coursetypes,
       courses,
       supportfolks,
+      locations,
       statuses
     } = this.props.data;
     const { tabStyle } = styles;
@@ -211,8 +235,10 @@ class CourseCard extends Component {
             <PlannedCourses
               accounts={supportfolks}
               course={course}
+              coursetypes={coursetypes}
               courses={courses}
               trainer={trainer}
+              locations={locations}
               statuses={statuses.filter(s => s.type === "Planned")}
               planned={course ? course.plannedcourses : []}
               hours={course ? course.hours : ""}
@@ -261,7 +287,7 @@ const CourseUpdate = gql`
 `;
 
 const PlannedCourseUpdate = gql`
-  mutation updatePlannedCourse($input: InputCourseType) {
+  mutation updatePlannedCourse($input: InputPlannedCourseType) {
     updatePlannedCourse(input: $input) {
       course {
         id
@@ -308,6 +334,8 @@ const CourseQuery = gql`
         trainer
         hours
         team
+        type
+        location
         students {
           id
           fullname
@@ -340,6 +368,10 @@ const CourseQuery = gql`
       id
       type
       value
+    }
+    locations(filter: ["ESBA", "NLBA", "CZPA4"]) {
+      type
+      description
     }
     supportfolks {
       id

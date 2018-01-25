@@ -128,7 +128,6 @@ class SupportCards extends React.Component {
               background="papayawhip"
             />
           )}
-
           {filteredCards.map(
             (
               {

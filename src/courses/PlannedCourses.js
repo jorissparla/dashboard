@@ -115,7 +115,6 @@ class PlannedCoursesTable extends React.Component {
       authenticated,
       statuses
     } = this.props;
-
     return (
       <div>
         <HeaderRow>
@@ -159,8 +158,13 @@ class PlannedCoursesTable extends React.Component {
             courseid={course.id}
             trainer={course.trainer}
             statuses={statuses}
-            status={course.status}
+            status="Planned"
             team={course.team}
+            type={course.type}
+            location="N/A"
+            team={course.team}
+            locations={this.props.locations}
+            coursetypes={this.props.coursetypes}
             hours={hours}
             onSave={e => {
               console.log("onSave", JSON.stringify(e));
@@ -176,14 +180,21 @@ class PlannedCoursesTable extends React.Component {
             open={this.state.openedit}
             courses={courses}
             selectedcourse={course.id}
-            trainer={course.trainer}
+            planned={this.props.planned[0]}
+            trainer={this.props.planned[0].trainer}
             courseid={course.id}
-            hours={hours}
-            status={course.status}
+            coursetypes={this.props.coursetypes}
+            hours={this.props.planned[0].hours}
+            status={this.props.planned[0].status}
+            locations={this.props.locations}
+            location={this.props.planned[0].location}
+            type={this.props.planned[0].type}
+            team={course.team}
             statuses={statuses}
             id={this.state.id}
             startdate={new Date(this.state.selectedstartdate)}
             enddate={new Date(this.state.selectedenddate)}
+            toStudents={this.editRegisterClick}
             onSave={e => {
               console.log("onSave", e);
               this.props.onUpdate(e);

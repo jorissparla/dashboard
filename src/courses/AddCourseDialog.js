@@ -28,7 +28,9 @@ class AddCourseDialog extends React.Component {
     selectedcourse: null,
     trainer: null,
     error: { startdate: "", enddate: "" },
-    team: ""
+    team: "",
+    location: "N/A",
+    type: "Self Study"
   };
   componentDidMount() {
     const {
@@ -37,11 +39,30 @@ class AddCourseDialog extends React.Component {
       enddate,
       status,
       courseid,
+      type,
+      location,
       trainer,
       hours,
       id,
-      team
+      team,
+      planned,
+      locations
     } = this.props;
+    if (planned) {
+      this.setState({
+        startdate: planned.startdate,
+        enddate: planned.enddate,
+        selectedcourse,
+        trainer: planned.trainer,
+        id,
+        courseid,
+        type: planned.type,
+        location: planned.location,
+        hours: planned.hours,
+        team: planned.team,
+        status: planned.status
+      });
+    }
     this.setState({
       startdate,
       enddate,
@@ -49,10 +70,13 @@ class AddCourseDialog extends React.Component {
       trainer: trainer,
       id,
       courseid,
+      type,
+      location,
       hours,
       team,
-      status: status ? status : "Planned"
+      status
     });
+    console.log("PLanned", locations, this.props.planned);
   }
 
   handleChange = (event, index, selectedcourse) => {
@@ -61,6 +85,12 @@ class AddCourseDialog extends React.Component {
   };
   handleChangeTrainer = (event, index, trainer) => {
     this.setState({ trainer });
+  };
+  handleChangeType = (event, index, type) => {
+    this.setState({ type });
+  };
+  handleChangeLocation = (event, index, location) => {
+    this.setState({ location });
   };
   handleChangeStatus = (event, index, status) => {
     this.setState({ status });
@@ -94,7 +124,7 @@ class AddCourseDialog extends React.Component {
   };
 
   render() {
-    const { open, onCancel, courses, trainers, statuses } = this.props;
+    const { open, onCancel, courses, coursetypes, locations, trainers, statuses } = this.props;
     console.log(this.props);
     return (
       <Dialog open={open} style={{ width: "80%" }}>
@@ -124,6 +154,43 @@ class AddCourseDialog extends React.Component {
           >
             {trainers.map(trainer => (
               <MenuItem key={trainer.id} value={trainer.fullname} primaryText={trainer.fullname} />
+            ))}
+          </SelectField>
+        </div>
+        <div>
+          <SelectField
+            fullWidth={true}
+            hintText="Select Type"
+            name="type"
+            floatingLabelText="course Type"
+            value={this.state.type}
+            onChange={this.handleChangeType}
+          >
+            {coursetypes.map(coursetype => (
+              <MenuItem
+                key={coursetype.name}
+                value={coursetype.name}
+                primaryText={coursetype.name}
+              />
+            ))}
+          </SelectField>
+        </div>
+        <div>
+          <SelectField
+            fullWidth={true}
+            hintText="Select Location"
+            name="location"
+            floatingLabelText="course location (if applicable)"
+            value={this.state.location}
+            onChange={this.handleChangeLocation}
+          >
+            <MenuItem key={"N/A"} value="N/A" primaryText="N/A" />
+            {locations.map(location => (
+              <MenuItem
+                key={location.description}
+                value={location.description}
+                primaryText={location.description}
+              />
             ))}
           </SelectField>
         </div>
@@ -174,6 +241,15 @@ class AddCourseDialog extends React.Component {
           onTouchTap={() => this.validate()}
         />
         <RaisedButton style={styles.button} primary={false} label="Cancel" onTouchTap={onCancel} />
+        {this.props.toStudents && (
+          <RaisedButton
+            secondary={true}
+            style={styles.button}
+            primary={false}
+            label="To Students"
+            onTouchTap={() => this.props.toStudents()}
+          />
+        )}
       </Dialog>
     );
   }

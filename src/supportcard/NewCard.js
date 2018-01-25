@@ -37,14 +37,15 @@ const CardExampleWithAvatar = ({
     return link;
   }
 }) => (
-  <Card style={{ width: 300 }}>
-    <CardTitle title={title} subtitle={category} />
-    <CardText>{text.slice(0, 200).concat("...")}</CardText>
-    <CardActions>
+  <Card style={{ width: 350, maxHeight: 300, margin: 5 }}>
+    <CardTitle title={title.slice(0, 50)} subtitle={category} titleStyle={{ fontSize: 18 }} />
+    <CardText>{text.slice(0, 100).concat("...")}</CardText>
+    <CardActions style={{ marginBottom: 5, alignItems: "flex-end" }}>
       <RaisedButton
         primary={true}
         label={canEdit === true ? "Edit" : "View"}
         labelPosition="before"
+        href={canEdit ? editLink : viewLink}
         style={styles.button}
       />
       <RaisedButton
@@ -52,7 +53,8 @@ const CardExampleWithAvatar = ({
         label={"Open Files"}
         labelPosition="before"
         style={styles.button}
-        onClick={e => onAudit(viewLink, "SupportCard")}
+        href={link}
+        onClick={() => onFollowLink(viewLink, link)}
       />
     </CardActions>
   </Card>

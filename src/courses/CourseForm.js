@@ -80,7 +80,7 @@ class CourseForm extends Component {
             <Field
               name="hours"
               disabled={readOnly}
-              hintText="Number of Hours"
+              hintText="Default Number of Hours"
               underlineShow={true}
               component={Input}
               floatingLabelText="Est. hours"
@@ -94,7 +94,7 @@ class CourseForm extends Component {
                 component={SelectField}
                 disabled={readOnly}
                 hintText="Trainer"
-                floatingLabelText="Trainer"
+                floatingLabelText="Default Trainer"
                 style={{ flex: 2 }}
                 underlineShow={true}
                 underlineStyle={{ borderColor: "#039BE5" }}
@@ -140,7 +140,7 @@ class CourseForm extends Component {
                 disabled={readOnly}
                 component={SelectField}
                 hintText="Select a type"
-                floatingLabelText="type"
+                floatingLabelText="Default type"
                 style={{ flex: 2 }}
               >
                 {coursetypes.map(({ id, name }, index) => (
