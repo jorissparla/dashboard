@@ -6,23 +6,7 @@ import { graphql } from "react-apollo";
 import styled from "styled-components";
 import Avatar from "material-ui/Avatar";
 import format from "date-fns/format";
-import { WideTitle } from "../styles";
-
-const StyledInitials = styled.div`
-  color: pink;
-  background-color: white;
-  user-select: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  border-radius: 50%;
-  border-color: pink;
-  border: 5px solid pink;
-  height: 80px;
-  width: 80px;
-  margin: 5px;
-`;
+import { WideTitle, StyledInitials } from "../styles";
 
 const P = styled.p`
   font-family: Raleway;

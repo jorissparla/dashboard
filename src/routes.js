@@ -58,6 +58,7 @@ import CustomerCommentsPage from "./customers/pages/CustomerCommentsMain";
 import AnniversaryList from "./awards/Anniversaries";
 import AGLTest from "./supportcard/Test";
 import FeedbackList from "./feedback/feedbackList";
+import FeedbackEdit from "./feedback/feedbackEdit";
 
 const NotFound = () => <h2>Not Found!</h2>;
 
@@ -71,6 +72,7 @@ class AppRoutes extends React.Component {
     return (
       <Switch>
         <Route exact path="/feedback" component={FeedbackList} />
+        <Route exact path="/feedback/new" component={FeedbackEdit} />
         <Route exact path="/image_convert" component={ImageConverter} />
         <Route exact path="/agltest" component={AGLTest} />
         <Route exact path="/anniversaries" component={AnniversaryList} />

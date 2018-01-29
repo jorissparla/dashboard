@@ -11,6 +11,21 @@ export const BG = styled.div`
   background: #e6ecf0;
 `;
 
+export const StyledInitials = styled.div`
+  color: ${props => (props.color ? props.color : "#1da1f2")};
+  background-color: white;
+  user-select: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  border-radius: 50%;
+  border-color: ${props => (props.color ? props.color : "#1da1f2")};
+  border: 5px solid;
+  height: ${props => (props.size ? `${props.size}px` : "80px")};
+  width: ${props => (props.size ? `${props.size}px` : "80px")};
+`;
+
 export const CheckBox = styled.input.attrs({
   type: "checkbox",
   margin: "10px"
@@ -114,8 +129,6 @@ export const WideTitle = styled.h3`
   background-color: lightgrey;
   height: 50px;
   align-items: center;
-  width: 90%;
-  padding-right: 30px;
 `;
 
 export const Divider = styled.hr`
@@ -143,14 +156,19 @@ export const Title = styled.h3`
 export const HeaderRow = styled.div`
   display: flex;
   justify-content: space-between;
+  flex: 1;
 `;
 
 export const HeaderLeft = styled.div`
-  display: flex;
-  flex-grow: 5;
+  flex: 8 0;
 `;
 
-export const HeaderRight = styled.div``;
+export const HeaderRight = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1 1;
+`;
 
 export const niceblue = "#40a5ed";
 export const babyblue = "#ecf6fd";
