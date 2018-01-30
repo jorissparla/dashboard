@@ -7,6 +7,7 @@ import { List, ListItem } from "material-ui/List";
 import Divider from "material-ui/Divider";
 import Avatar from "material-ui/Avatar";
 import TextField from "material-ui/TextField";
+import DatePicker from "material-ui/DatePicker";
 import SelectField from "material-ui/SelectField";
 import MenuItem from "material-ui/MenuItem";
 import styled from "styled-components";
@@ -64,7 +65,23 @@ const querySupportFolks = gql`
   }
 `;
 
-const deleteEntry = gql`
+const createFeedback = gql`
+  mutation createFeedback($input: FeedbackInputType) {
+    createFeedback(input: $input) {
+      id
+    }
+  }
+`;
+
+const updateFeedback = gql`
+  mutation updateFeedback($input: FeedbackInputType) {
+    updateFeedback(input: $input) {
+      id
+    }
+  }
+`;
+
+const deleteFeedback = gql`
   mutation deleteFeedback($input: FeedbackInputType) {
     deleteFeedback(input: $input) {
       result
@@ -81,24 +98,54 @@ class FeedBackList extends Component {
     open: false,
     navid: "",
     fullname: "",
-    image: ""
+    image: "",
+    customername: "",
+    newtext: "",
+    createdAt: new Date()
   };
 
+  initState = () => {
+    this.setState({
+      currentid: null,
+      index: null,
+      text: "",
+      orgtext: "",
+      navid: "",
+      fullname: "",
+      image: "",
+      customername: "",
+      newtext: "",
+      createdAt: new Date()
+    });
+  };
   handleClick = (id, text, index) => {
     this.setState({ currentid: id, text, orgtext: text, index });
   };
 
-  handleChange = e => this.setState({ text: e.target.value });
-  handleBlur = e => console.log("Blur", e.target.value);
+  handleChangeText = e => this.setState({ text: e.target.value });
+  handleBlur = e => {
+    this.updateEntry();
+  };
   handleUndo = e => this.setState({ text: this.state.orgtext });
+
+  handleClear = id => {
+    const input = { id };
+    this.props.deleteFeedback({ variables: { input } }).then(() => {
+      this.props.data.refetch();
+      this.initState();
+    });
+  };
+
+  componentDidMount() {
+    console.log("mounting");
+  }
+
   renderListItem = (item, index) => {
     const { id, text, createdAt, forConsultant: { image, fullname } } = item;
-    const hi = parseInt(text.length / 300) + 1;
-    const h = hi === 1 ? 125 : 150;
-    console.log(h);
+
     return [
       <ListItem
-        style={{ height: h }}
+        style={{ height: index === this.state.index ? 150 : 75 }}
         onClick={() => this.handleClick(id, text, index)}
         key={id}
         leftAvatar={
@@ -133,7 +180,7 @@ class FeedBackList extends Component {
                 hintText="Select a person"
                 value={this.state.text}
                 onBlur={this.handleBlur}
-                onChange={this.handleChange}
+                onChange={this.handleChangeText}
               />
               <Save onClick={this.handleBlur} />
               <Undo onClick={this.handleUndo} />
@@ -143,17 +190,16 @@ class FeedBackList extends Component {
           )
         }
         secondaryTextLines={2}
-        rightIcon={<Clear onClick={() => this.props.history.push("/feedback/edit/" + id)} />}
+        rightIcon={<Clear onClick={() => this.handleClear(id)} />}
       />,
-      <Divider />
+      <Divider key="divider123" />
     ];
   };
   render() {
-    console.log(this.props);
     const { data: { loading, feedback, supportfolks } } = this.props;
     if (loading) return <div>Loading</div>;
     return [
-      <HeaderRow>
+      <HeaderRow key="sdsheaderrow">
         <HeaderLeft>
           <Title>Nice Customer Feedback</Title>
         </HeaderLeft>
@@ -164,18 +210,22 @@ class FeedBackList extends Component {
             style={{ margin: 10 }}
             onClick={() => this.setState({ open: true })}
           />
-          <RaisedButton label="Surveys" secondary={true} style={{ margin: 10 }} />
+          <RaisedButton
+            label="Surveys"
+            secondary={true}
+            style={{ margin: 10 }}
+            onClick={() => this.props.history.push("/comments")}
+          />
         </HeaderRight>
       </HeaderRow>,
-      <Paper>
-        <List>{feedback.map((item, index) => this.renderListItem(item, index))}</List>
+      <Paper key="555paper">
+        <List key="fblist">{feedback.map((item, index) => this.renderListItem(item, index))}</List>
       </Paper>,
-      <div>{this.state.open ? this.renderDialog() : null}</div>
+      <div key="stateopen43242">{this.state.open ? this.renderDialog() : null}</div>
     ];
   }
 
   handleChangePerson = (e, i, v) => {
-    console.log(i, v, this.props.data.supportfolks[i].fullname);
     this.setState({
       navid: v,
       fullname: this.props.data.supportfolks[i].fullname,
@@ -183,12 +233,54 @@ class FeedBackList extends Component {
     });
   };
 
+  handleChange = ({ target: { name, value } }, newValue) => {
+    this.setState({ [name]: value });
+  };
+
+  handleChangeDate = (e, d) => {
+    this.setState({ createdAt: d });
+  };
+
+  saveEntry = () => {
+    const input = {
+      createdAt: this.state.createdAt,
+      customername: this.state.customername,
+      consultant: this.state.fullname,
+      navid: this.state.navid,
+      text: this.state.newtext
+    };
+    this.props.createFeedback({ variables: { input } }).then(() => {
+      this.props.data.refetch();
+      this.initState();
+      this.setState({ open: false });
+    });
+  };
+
+  updateEntry = () => {
+    const input = {
+      id: this.state.currentid,
+      text: this.state.text
+    };
+    this.props.updateFeedback({ variables: { input } }).then(() => {
+      this.props.data.refetch();
+      this.initState();
+    });
+  };
+
   renderDialog = () => {
     const { data: { supportfolks } } = this.props;
     const actions = [
       <RaisedButton
+        key="okb"
         label="Ok"
         primary={true}
+        keyboardFocused={true}
+        onClick={this.saveEntry}
+      />,
+      <RaisedButton
+        key="canb"
+        label="Cancel"
+        secondary={true}
         keyboardFocused={true}
         onClick={() => this.setState({ open: false })}
       />
@@ -201,14 +293,14 @@ class FeedBackList extends Component {
         modal={false}
         open={this.state.open}
         onRequestClose={this.handleClose}
+        style={{ width: "900px" }}
       >
-        Open a Date Picker dialog from within a dialog.
-        <TextField hintText="Date Picker" />
         <SelectField
           id="person"
           name="person"
           hintText="Select a person"
           multiple={false}
+          fullWidth={true}
           onChange={this.handleChangePerson}
           style={{ flex: 2 }}
           value={this.state.navid}
@@ -217,11 +309,33 @@ class FeedBackList extends Component {
             <MenuItem key={person.id} value={person.navid} primaryText={person.fullname} />
           ))}
         </SelectField>
+        <TextField
+          id="customername"
+          name="customername"
+          hintText="Customer name"
+          fullWidth={true}
+          onChange={this.handleChange}
+          value={this.state.customername}
+        />
+        <DatePicker hintText="Date" value={this.state.createdAt} onChange={this.handleChangeDate} />
+        <TextField
+          id="newtext"
+          name="newtext"
+          multiLine={true}
+          fullWidth={true}
+          rows={2}
+          hintText="Feedback text"
+          onChange={this.handleChange}
+          value={this.state.newtext}
+        />
       </Dialog>
     );
   };
 }
 
-export default compose(graphql(queryFeedback), graphql(deleteFeedback, { name: "deleteFeedback" }))(
-  withRouter(FeedBackList)
-);
+export default compose(
+  graphql(queryFeedback),
+  graphql(updateFeedback, { name: "updateFeedback" }),
+  graphql(deleteFeedback, { name: "deleteFeedback" }),
+  graphql(createFeedback, { name: "createFeedback" })
+)(withRouter(FeedBackList));

@@ -68,9 +68,7 @@ class CommentList extends Component {
   copyToFeedBack = id => {
     this.props
       .copyCommentToFeedback({ variables: { incident_id: id } })
-      .then(res =>
-        this.props.history.push("/feedback/edit/" + res.data.createFeedbackFromSurvey.id)
-      );
+      .then(res => this.props.history.push("/feedback"));
   };
 
   renderListItem = (item, index) => {

@@ -74,8 +74,6 @@ class AppRoutes extends React.Component {
       <Switch>
         <Route exact path="/comments" component={CommentsList} />
         <Route exact path="/feedback" component={FeedbackList} />
-        <Route exact path="/feedback/new" component={FeedbackEdit} />
-        <Route exact path="/feedback/edit/:id" component={FeedbackEdit} />
         <Route exact path="/image_convert" component={ImageConverter} />
         <Route exact path="/agltest" component={AGLTest} />
         <Route exact path="/anniversaries" component={AnniversaryList} />
