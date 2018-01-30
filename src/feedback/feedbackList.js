@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import gql from "graphql-tag";
-import { graphql } from "react-apollo";
+import { graphql, compose } from "react-apollo";
 import Paper from "material-ui/Paper";
 import { withRouter } from "react-router";
 import { List, ListItem } from "material-ui/List";
@@ -60,6 +60,14 @@ const querySupportFolks = gql`
       navid
       fullname
       image
+    }
+  }
+`;
+
+const deleteEntry = gql`
+  mutation deleteFeedback($input: FeedbackInputType) {
+    deleteFeedback(input: $input) {
+      result
     }
   }
 `;
@@ -214,4 +222,6 @@ class FeedBackList extends Component {
   };
 }
 
-export default graphql(queryFeedback)(withRouter(FeedBackList));
+export default compose(graphql(queryFeedback), graphql(deleteFeedback, { name: "deleteFeedback" }))(
+  withRouter(FeedBackList)
+);
