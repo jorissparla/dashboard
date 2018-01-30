@@ -57,6 +57,7 @@ import ImageConverter from "./utils/ConvertImages";
 import CustomerCommentsPage from "./customers/pages/CustomerCommentsMain";
 import AnniversaryList from "./awards/Anniversaries";
 import AGLTest from "./supportcard/Test";
+import CommentsList from "./feedback/commentList";
 import FeedbackList from "./feedback/feedbackList";
 import FeedbackEdit from "./feedback/feedbackEdit";
 
@@ -71,8 +72,10 @@ class AppRoutes extends React.Component {
     }
     return (
       <Switch>
+        <Route exact path="/comments" component={CommentsList} />
         <Route exact path="/feedback" component={FeedbackList} />
         <Route exact path="/feedback/new" component={FeedbackEdit} />
+        <Route exact path="/feedback/edit/:id" component={FeedbackEdit} />
         <Route exact path="/image_convert" component={ImageConverter} />
         <Route exact path="/agltest" component={AGLTest} />
         <Route exact path="/anniversaries" component={AnniversaryList} />

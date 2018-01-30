@@ -1,4 +1,6 @@
 import styled, { keyframes } from "styled-components";
+import React from "react";
+import Avatar from "material-ui/Avatar";
 
 export const Typography = styled.div`
   font-family: Roboto;
@@ -170,6 +172,23 @@ export const HeaderRight = styled.div`
   flex: 1 1;
 `;
 
+export const Image = ({ image, fullname, size = 32 }) => {
+  const initials = fullname
+    .split(" ")
+    .map(name => name[0])
+    .join("")
+    .toUpperCase();
+  if (image) {
+    return <Avatar src={image} size={size} />;
+  } else {
+    return (
+      <StyledInitials color="#1da1f2" size={size}>
+        {initials}
+      </StyledInitials>
+    );
+  }
+};
+
 export const niceblue = "#40a5ed";
 export const babyblue = "#ecf6fd";
 export const twitterblue = "#1da1f2";
@@ -312,7 +331,7 @@ export const Papier1 = styled.div`
   margin-left: 20px;
   text-align: left;
 `;
-export const Avatar = styled.img`
+export const Avatar1 = styled.img`
   border-radius: 50%;
   width: 64px;
   height: 64px;

@@ -4,8 +4,12 @@ import TextField from "material-ui/TextField";
 import MenuItem from "material-ui/MenuItem";
 import RaisedButton from "material-ui/RaisedButton";
 import Divider from "material-ui/Divider";
-import UserAvatar from "react-user-avatar";
+import Avatar from "material-ui/Avatar";
+import styled from "styled-components";
+import gql from "graphql-tag";
+import { graphql } from "react-apollo";
 import { CardSection, Input } from "../common";
+import { Image } from "../styles";
 
 const styles = {
   TextFieldStyle: {
@@ -26,16 +30,39 @@ const buttonStyle2 = {
   margin: "20px"
 };
 
+const querySupportFolks = gql`
+  query supportFolks {
+    supportfolks {
+      id
+      navid
+      fullname
+      image
+    }
+  }
+`;
+
 class FeedbackForm extends Component {
   state = {
     createdAt: null,
     fullname: "",
     navid: "",
+    image: null,
     text: "",
     customername: ""
   };
   handleChange = () => {};
+  handleChangePerson = (e, i, v) => {
+    console.log(i, v, this.props.data.supportfolks[i].fullname);
+    this.setState({
+      navid: v,
+      fullname: this.props.data.supportfolks[i].fullname,
+      image: this.props.data.supportfolks[i].image
+    });
+  };
   render() {
+    console.log(this.props);
+    const { data: { loading, supportfolks } } = this.props;
+    if (loading) return <div>Loading</div>;
     return (
       <div>
         <CardSection style={{ fontSize: "36px", fontFamily: "Oswald" }}>
@@ -49,6 +76,20 @@ class FeedbackForm extends Component {
               alignItems: "center"
             }}
           >
+            <Image image={this.state.image} fullname={this.state.fullname} />
+            <SelectField
+              id="person"
+              name="person"
+              hintText="Select a person"
+              multiple={false}
+              onChange={this.handleChangePerson}
+              style={{ flex: 2 }}
+              value={this.state.navid}
+            >
+              {supportfolks.map(person => (
+                <MenuItem key={person.id} value={person.navid} primaryText={person.fullname} />
+              ))}
+            </SelectField>
             <TextField
               inputStyle={styles.TextFieldStyle}
               style={styles.TextFieldStyle}
@@ -90,4 +131,4 @@ class FeedbackForm extends Component {
   }
 }
 
-export default FeedbackForm;
+export default graphql(querySupportFolks)(FeedbackForm);
