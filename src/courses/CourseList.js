@@ -3,7 +3,10 @@ import gql from "graphql-tag";
 import { graphql } from "react-apollo";
 import { withRouter } from "react-router";
 import styled from "styled-components";
-import Card from "./Card";
+import _ from "lodash";
+import format from "date-fns/format";
+//import Card from "./Card";
+import Card from "./NewCard";
 import SearchBar from "../common/SearchBar";
 import { TitleBar } from "../common/TitleBar";
 import AddCard from "./AddCard";
@@ -35,11 +38,15 @@ class CourseList extends Component {
     if (error) {
       return <p>{error.message}</p>;
     }
-    const filteredCourses = courses.filter(
-      course =>
-        course.title.toUpperCase().includes(this.state.searchText.toUpperCase()) ||
-        course.team.toUpperCase().includes(this.state.searchText.toUpperCase())
-    );
+
+    const filteredCourses = _.chain(courses)
+      .filter(
+        course =>
+          course.title.toUpperCase().includes(this.state.searchText.toUpperCase()) ||
+          course.team.toUpperCase().includes(this.state.searchText.toUpperCase())
+      )
+      .orderBy(o => format(o.plannedcourses[0].startdate, "YYYYMMDD"), "desc")
+      .value();
     return (
       <div>
         <TitleBar>Courses</TitleBar>
@@ -65,6 +72,7 @@ const courseQuery = gql`
       id
       team
       title
+
       description
       link
       _studentsMeta {
@@ -72,6 +80,10 @@ const courseQuery = gql`
       }
       students {
         fullname
+      }
+      plannedcourses(limit: 1) {
+        startdate
+        studentcount
       }
     }
   }

@@ -10,6 +10,7 @@ import PageIcon from "material-ui/svg-icons/social/pages";
 import LinkIcon from "material-ui/svg-icons/content/link";
 import RequestListIcon from "material-ui/svg-icons/av/playlist-add";
 import GoLiveIcon from "material-ui/svg-icons/action/flight-takeoff";
+import FeedbackIcon from "material-ui/svg-icons/action/feedback";
 import MenuIcon from "material-ui/svg-icons/navigation/menu";
 //import IconMenu from "material-ui/IconMenu";
 import Divider from "material-ui/Divider";
@@ -91,6 +92,14 @@ class Header extends React.Component {
           leftIcon={<GoLiveIcon />}
           onClick={() => {
             history.push("/golives");
+          }}
+        />
+        <Divider />
+        <MenuItem
+          primaryText={<div style={{ color: "black" }}>Customer Feedback</div>}
+          leftIcon={<FeedbackIcon />}
+          onClick={() => {
+            history.push("/feedback");
           }}
         />
         <Divider />

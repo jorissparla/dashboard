@@ -27,11 +27,12 @@ const P = styled.p`
 const Left = styled.div`
   display: flex;
   flex-direction: column;
-  margin-right: 10px;
+  margin-right: 15px;
   left: 15px;
 `;
 const DateField = styled.div`
-  font-size: 10px;
+  font-size: 12px;
+  margin-right: 5px;
 `;
 
 const queryFeedback = gql`
@@ -141,7 +142,7 @@ class FeedBackList extends Component {
   }
 
   renderListItem = (item, index) => {
-    const { id, text, createdAt, forConsultant: { image, fullname } } = item;
+    const { id, text, createdAt, customername, forConsultant: { image, fullname } } = item;
 
     return [
       <ListItem
@@ -154,7 +155,7 @@ class FeedBackList extends Component {
             <DateField>{createdAt.substr(0, 10)}</DateField>
           </Left>
         }
-        primaryText={fullname.slice(0, 50)}
+        primaryText={`${fullname} (${customername} )`}
         secondaryText={
           this.state.currentid === id ? (
             <div
