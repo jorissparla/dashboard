@@ -84,6 +84,11 @@ const courseQuery = gql`
       plannedcourses(limit: 1) {
         startdate
         studentcount
+        students {
+          id
+          fullname
+          image
+        }
       }
     }
   }

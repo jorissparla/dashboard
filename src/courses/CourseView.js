@@ -173,6 +173,13 @@ class CourseView extends React.Component {
 
     console.log(tabel);
   };
+
+  setYear = year => {
+    this.setState({
+      studentfilterstartdate: new Date(year, 0, 1),
+      studentfilterenddate: new Date(year + 1, 0, 1)
+    });
+  };
   render() {
     const { loading, error, courses, supportfolks } = this.props.data;
     if (loading) {
@@ -245,6 +252,16 @@ class CourseView extends React.Component {
             <HeaderLeft>
               {" "}
               <Title2>
+                <RaisedButton
+                  label="2017"
+                  style={styles.button}
+                  onClick={() => this.setYear(2017)}
+                />
+                <RaisedButton
+                  label="2018"
+                  style={styles.button}
+                  onClick={() => this.setYear(2018)}
+                />
                 In Period from
                 <DatePicker
                   hintText="Enter StartDate Courses"

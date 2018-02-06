@@ -39,7 +39,6 @@ const HeaderColumn = ({ style, children }) => {
 class TrainerView extends React.Component {
   render() {
     const { data: { loading, trainers } } = this.props;
-    console.log("TrainerView", this.props);
     if (loading) {
       return <div>Loading...</div>;
     }

@@ -7,6 +7,20 @@ import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from "m
 import Badge from "material-ui/Badge";
 import { blue500 } from "material-ui/styles/colors";
 import { Link } from "react-router-dom";
+import StudentChip from "./StudentChip";
+
+const StudentChipList = styled.div`
+  background-color: white;
+  display: flex;
+  flex-wrap: wrap;
+  position: absolute;
+  top: -250%;
+  left: -20%;
+  padding: 2px;
+  color: hsla(0, 0%, 93%, 1);
+  border-radius: 4px;
+  border: solid 1px lightgray;
+`;
 
 const imgList = [
   "https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/auth.png",
@@ -104,63 +118,84 @@ const old = ({ course, index, count }) => {
   );
 };
 
-export default ({ course, index, count }) => {
-  let image = imgList[index % 7];
-  let bgColor;
-  switch (course.team) {
-    case "Logistics":
-      image = imgList[1];
-      bgColor = "#FF5722";
-      break;
-    case "Tools":
-      image = imgList[4];
-      bgColor = "#2196f3";
-      break;
-    case "Finance":
-      image = imgList[2];
-      bgColor = "#009688";
-      break;
+class NewCard extends React.Component {
+  state = { visible: false };
 
-    default:
-      image = imgList[0];
-      bgColor = "#673AB7";
-      break;
+  showStudents = () => {
+    this.setState({ visible: true });
+    setTimeout(() => {
+      console.log("showing");
+      this.setState({ visible: false });
+    }, 2000);
+  };
+  render() {
+    const { course, index, count } = this.props;
+    let image = imgList[index % 7];
+    let bgColor;
+    switch (course.team) {
+      case "Logistics":
+        image = imgList[1];
+        bgColor = "#FF5722";
+        break;
+      case "Tools":
+        image = imgList[4];
+        bgColor = "#2196f3";
+        break;
+      case "Finance":
+        image = imgList[2];
+        bgColor = "#009688";
+        break;
+
+      default:
+        image = imgList[0];
+        bgColor = "#673AB7";
+        break;
+    }
+
+    const pd = course.plannedcourses[0]
+      ? format(course.plannedcourses[0].startdate, "ddd, DDMMMYYYY")
+      : "";
+    const acount = course.plannedcourses[0] ? course.plannedcourses[0].studentcount : 0;
+    const students = course.plannedcourses[0] ? course.plannedcourses[0].students : [];
+    return (
+      <Card style={{ width: "22%", margin: 10 }}>
+        <CardMedia
+          overlay={<CardTitle title={course.title} />}
+          overlayContentStyle={{ fontSize: "20px", background: "rgba(0, 0, 0, 0.2)" }}
+          overlayContainerStyle={{ fontSize: "20px", background: "rgba(0, 0, 0, 0.2)" }}
+          overlayStyle={{ fontSize: "20px", background: "rgba(0, 0, 0, 0.2)" }}
+        >
+          <StyledImage src={image} />
+        </CardMedia>
+
+        <CardActions>
+          <BottomStyle>
+            <Link to={`courses/edit/${course.id || "/"}`}>
+              <FlatButton backgroundColor={blue500} label="View" style={{ color: "white" }} />
+            </Link>
+            <StyledBadge
+              badgeStyle={{ backgroundColor: bgColor }}
+              badgeContent={course.team.slice(0, 1).toUpperCase()}
+              primary={true}
+            />
+            <PD>{pd}</PD>
+            <StyledBadge
+              badgeStyle={{ backgroundColor: "black" }}
+              badgeContent={acount}
+              primary={true}
+              onMouseEnter={() => this.showStudents(0)}
+            />
+            <StudentChipList>
+              {this.state.visible &&
+                students.map(s => (
+                  <StudentChip key={s.id} id={s.id} fullname={s.fullname} image={s.image} />
+                ))}
+            </StudentChipList>
+          </BottomStyle>
+        </CardActions>
+      </Card>
+    );
   }
+}
 
-  const pd = course.plannedcourses[0]
-    ? format(course.plannedcourses[0].startdate, "ddd, DDMMMYYYY")
-    : "";
-  const acount = course.plannedcourses[0] ? course.plannedcourses[0].studentcount : 0;
-
-  return (
-    <Card style={{ width: "22%", margin: 10 }}>
-      <CardMedia
-        overlay={<CardTitle title={course.title} />}
-        overlayContentStyle={{ fontSize: "20px", background: "rgba(0, 0, 0, 0.2)" }}
-        overlayContainerStyle={{ fontSize: "20px", background: "rgba(0, 0, 0, 0.2)" }}
-        overlayStyle={{ fontSize: "20px", background: "rgba(0, 0, 0, 0.2)" }}
-      >
-        <StyledImage src={image} />
-      </CardMedia>
-
-      <CardActions>
-        <BottomStyle>
-          <Link to={`courses/edit/${course.id || "/"}`}>
-            <FlatButton backgroundColor={blue500} label="View" style={{ color: "white" }} />
-          </Link>
-          <StyledBadge
-            badgeStyle={{ backgroundColor: bgColor }}
-            badgeContent={course.team.slice(0, 1).toUpperCase()}
-            primary={true}
-          />
-          <PD>{pd}</PD>
-          <StyledBadge
-            badgeStyle={{ backgroundColor: "black" }}
-            badgeContent={acount}
-            primary={true}
-          />
-        </BottomStyle>
-      </CardActions>
-    </Card>
-  );
-};
+export default NewCard;
