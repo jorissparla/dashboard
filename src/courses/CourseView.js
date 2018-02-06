@@ -197,7 +197,6 @@ class CourseView extends React.Component {
       .filter(course => Date.parse(course.plannedcourses[0].startdate) > Date.parse(filterDate))
       .orderBy(o => format(o.plannedcourses[0].startdate, "YYYYMMDD"), "desc")
       .value();
-
     return (
       <Tabs
         inkBarStyle={styles.tabStyle}
