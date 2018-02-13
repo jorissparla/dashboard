@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import DashBoard from "./dashboard";
-import DashBoardStats from "./dashboardstats";
+//import DashBoardStats from "./dashboardstats";
+import DashBoardStats from "./DashBoardStatsNew";
 import { StyleLoader } from "./common";
 import GoLives from "./golives/goLiveListNew";
 import HistoryDayAll from "./charts/historydayallcontainer";
@@ -49,7 +50,7 @@ class DashBoardContainer extends Component {
     return (
       <div>
         <div>
-          <StyleLoader stylesheetPath="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css" />
+          {/*<StyleLoader stylesheetPath="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css" /> */}
         </div>
         {this.renderDashBoard(index)}
       </div>
@@ -71,15 +72,15 @@ class DashBoardContainer extends Component {
       case 6:
         return <DashBoard region={region} />;
       case 2:
-        return <DashBoardStats data={["Tools"]} region={region} />;
+        return <DashBoardStats data1={["Tools"]} team="Tools" region={region} />;
       case 3:
         return <GoLives region={region} />;
       case 4:
         return <HistoryDayAll region={region} />;
       case 0:
-        return <DashBoardStats data={["Logistics"]} region={region} />;
+        return <DashBoardStats data1={["Logistics"]} team="Logistics" region={region} />;
       case 1:
-        return <DashBoardStats data={["Finance"]} region={region} />;
+        return <DashBoardStats data1={["Finance"]} team="Finance" region={region} />;
       default:
         return <div>Invalid Dashboard</div>;
     }

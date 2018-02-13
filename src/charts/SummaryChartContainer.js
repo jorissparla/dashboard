@@ -10,13 +10,13 @@ class SummaryChartContainer extends React.Component {
     const { data: { loading, error, summaries }, region = "EMEA" } = this.props;
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error</div>;
-    console.log("SummaryChartContainer", region);
 
     const value = !this.props.value ? "supportBacklog" : this.props.value;
     const title = !this.props.title ? value : this.props.title;
     const type = !this.props.type ? "column" : this.props.type;
     const team = this.props.team;
     const summary = summaries; // .reverse()
+    console.log(`Summary: ${summary.length}`);
     const color = this.props.color;
     return (
       <SummaryChart
@@ -42,6 +42,8 @@ const querySummaries = gql`
       surveyScore
       nrSurveys
       backlog
+      escalated
+      chatpct
     }
   }
 `;

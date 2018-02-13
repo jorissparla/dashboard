@@ -176,8 +176,10 @@ class CourseView extends React.Component {
 
   setYear = year => {
     this.setState({
+      startdate: new Date(year, 0, 1),
       studentfilterstartdate: new Date(year, 0, 1),
-      studentfilterenddate: new Date(year + 1, 0, 1)
+      studentfilterenddate: new Date(year + 1, 0, 1),
+      enddate: new Date(year + 1, 0, 1)
     });
   };
   render() {
@@ -192,7 +194,7 @@ class CourseView extends React.Component {
     const { open } = this.state;
     const { role } = this.props.user;
     const enabled = role === "Admin" || role === "PO";
-
+    const currentYear = new Date().getFullYear();
     const filteredCourses = _.chain(courses)
       .filter(course => Date.parse(course.plannedcourses[0].startdate) > Date.parse(filterDate))
       .orderBy(o => format(o.plannedcourses[0].startdate, "YYYYMMDD"), "desc")
@@ -207,7 +209,19 @@ class CourseView extends React.Component {
           <HeaderRow>
             <HeaderLeft>
               {" "}
-              <Title>
+              <Title2>
+                <RaisedButton
+                  label={currentYear - 1}
+                  style={styles.button}
+                  primary={true}
+                  onClick={() => this.setYear(currentYear - 1)}
+                />
+                <RaisedButton
+                  label={currentYear}
+                  style={styles.button}
+                  secondary={true}
+                  onClick={() => this.setYear(currentYear)}
+                />
                 Scheduled Training Starting<DatePicker
                   hintText="Enter StartDate Course"
                   style={{ backgroundColor: "white", width: 100, borderRadius: 5 }}
@@ -215,7 +229,7 @@ class CourseView extends React.Component {
                   onChange={(e, value) => this.handleStartDateChange(e, value)}
                   autoOk={true}
                 />
-              </Title>
+              </Title2>
             </HeaderLeft>
             <HeaderRight>
               <RaisedButton
@@ -252,14 +266,16 @@ class CourseView extends React.Component {
               {" "}
               <Title2>
                 <RaisedButton
-                  label="2017"
+                  label={currentYear - 1}
                   style={styles.button}
-                  onClick={() => this.setYear(2017)}
+                  primary={true}
+                  onClick={() => this.setYear(currentYear - 1)}
                 />
                 <RaisedButton
-                  label="2018"
+                  label={currentYear}
                   style={styles.button}
-                  onClick={() => this.setYear(2018)}
+                  secondary={true}
+                  onClick={() => this.setYear(currentYear)}
                 />
                 In Period from
                 <DatePicker
@@ -293,6 +309,18 @@ class CourseView extends React.Component {
             <HeaderLeft>
               {" "}
               <Title2>
+                <RaisedButton
+                  label={currentYear - 1}
+                  style={styles.button}
+                  primary={true}
+                  onClick={() => this.setYear(currentYear - 1)}
+                />
+                <RaisedButton
+                  label={currentYear}
+                  style={styles.button}
+                  secondary={true}
+                  onClick={() => this.setYear(currentYear)}
+                />
                 In Period from
                 <DatePicker
                   hintText="Enter StartDate Courses"

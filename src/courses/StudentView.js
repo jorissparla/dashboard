@@ -219,6 +219,7 @@ const queryProfile = gql`
         id
         status
         course {
+          id
           title
           description
         }

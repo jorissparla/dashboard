@@ -84,12 +84,12 @@ class AppRoutes extends React.Component {
           path="/test"
           component={CustomerCommentsPage}
         />
-        <AuthRoute
-          allowed={["Admin", "PO", "SU", "Guest"]}
+        <EnhancedRoute
+          editors={["Admin", "PO", "SU"]}
           user={user}
           exact
           path="/coursedashboard"
-          component={CourseView}
+          component={RequireAuth(CourseView)}
         />
         <EnhancedRoute
           editors={["Admin", "PO"]}
@@ -109,7 +109,7 @@ class AppRoutes extends React.Component {
         <Route exact path="/q/:id" component={DashBoardContainer} />
         <Route allowed={["Admin"]} user={user} path="/main/1" component={DashBoard} />
         <Route path="/main/0" component={DashBoard0} />
-        <Route exact path="/team/:team" component={DashBoardStats} />
+        <Route exact path="/team/:team" component={DashBoardStatsNew} />
         <Route exact path="/team/:team/region/:region" component={DashBoardStats} />
         <Route exact path="/alerts" component={RequireAuth(AlertsList)} />
         <Route path="award" component={Award} />
@@ -197,7 +197,8 @@ class AppRoutes extends React.Component {
         <Route path="/historyday" component={HistoryDayContainer} />
         <Route path="/historyall" component={HistoryDayAll} />
         <Route path="test/edit/:id" component={NewsItemContainer} />
-        <Route exact path="/test/news" component={DashBoardStatsNew} />
+        <Route exact path="/test/dashboard" component={DashBoardStatsNew} />
+        <Route exact path="/test/dashboard/team/:team" component={DashBoardStatsNew} />
         <Route exact path="/courses" component={CourseList} />
         <Route exact path="/courseview" component={CourseView} />
         <Route exact path="/students" component={StudentListContainer} />

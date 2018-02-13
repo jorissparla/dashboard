@@ -138,13 +138,15 @@ class Header extends React.Component {
           />
         )}
         <Divider />
-        <MenuItem
-          primaryText={<div style={{ color: "black" }}>Courses Dashboard</div>}
-          leftIcon={<NewsIcon />}
-          onClick={() => {
-            history.push("/coursedashboard");
-          }}
-        />
+        {authenticated && (
+          <MenuItem
+            primaryText={<div style={{ color: "black" }}>Courses Dashboard</div>}
+            leftIcon={<NewsIcon />}
+            onClick={() => {
+              history.push("/coursedashboard");
+            }}
+          />
+        )}
         {authenticated &&
           validRole && (
             <MenuItem

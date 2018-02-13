@@ -6,13 +6,13 @@ import styled from "styled-components";
 const Card = styled.div`
   display: flex;
   position: relative;
-  margin: 20px;
+  margin: 10px;
   background-color: #fff;
   transition: box-shadow 0.25s;
   border-radius: 2px;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12),
     0 3px 1px -2px rgba(0, 0, 0, 0.2);
-  min-width: 30%;
+  width: 30%;
 `;
 
 const arColors = ["#c62828", "#90caf9", "#01579b", "#ffa726", "#4db6ac", "#fbc02d", "#4527a0"];
@@ -65,11 +65,14 @@ const renderSummary = (config, val, team, title, color, type, summary, xvalue) =
   }
 
   const mySummary = (summary || []).slice(); // .sort((a,b)=> a.weekNr > b.weekNr)
-  const filteredSummary = mySummary.reverse().reduce(({ xvalues, data }, item, index) => {
-    xvalues.push(item[xvalue]);
-    data.push({ y: item[val], color: arColors[index % 7] });
-    return { xvalues, data };
-  }, { xvalues: [], data: [] });
+  const filteredSummary = mySummary.reverse().reduce(
+    ({ xvalues, data }, item, index) => {
+      xvalues.push(item[xvalue]);
+      data.push({ y: item[val], color: arColors[index % 7] });
+      return { xvalues, data };
+    },
+    { xvalues: [], data: [] }
+  );
   config.xAxis.categories = filteredSummary.xvalues;
   const range = summary.map(item => item[val]);
   if (range.length > 0) {
