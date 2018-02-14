@@ -22,6 +22,7 @@ import RaisedButton from "material-ui/RaisedButton";
 
 const P = styled.p`
   white-space: pre-line;
+  font-size: 20px;
 `;
 
 const Left = styled.div`
@@ -191,33 +192,35 @@ class FeedBackList extends Component {
           )
         }
         secondaryTextLines={2}
-        rightIcon={<Clear onClick={() => this.handleClear(id)} />}
+        rightIcon={this.props.isEditor ? <Clear onClick={() => this.handleClear(id)} /> : <div />}
       />,
       <Divider key="divider123" />
     ];
   };
   render() {
-    const { data: { loading, feedback, supportfolks } } = this.props;
+    const { data: { loading, feedback, supportfolks }, isEditor } = this.props;
     if (loading) return <div>Loading</div>;
     return [
       <HeaderRow key="sdsheaderrow">
         <HeaderLeft>
           <Title>Nice Customer Feedback</Title>
         </HeaderLeft>
-        <HeaderRight>
-          <RaisedButton
-            label="New"
-            primary={true}
-            style={{ margin: 10 }}
-            onClick={() => this.setState({ open: true })}
-          />
-          <RaisedButton
-            label="Surveys"
-            secondary={true}
-            style={{ margin: 10 }}
-            onClick={() => this.props.history.push("/comments")}
-          />
-        </HeaderRight>
+        {isEditor && (
+          <HeaderRight>
+            <RaisedButton
+              label="New"
+              primary={true}
+              style={{ margin: 10 }}
+              onClick={() => this.setState({ open: true })}
+            />
+            <RaisedButton
+              label="Surveys"
+              secondary={true}
+              style={{ margin: 10 }}
+              onClick={() => this.props.history.push("/comments")}
+            />
+          </HeaderRight>
+        )}
       </HeaderRow>,
       <Paper key="555paper">
         <List key="fblist">{feedback.map((item, index) => this.renderListItem(item, index))}</List>

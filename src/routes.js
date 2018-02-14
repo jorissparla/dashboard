@@ -73,7 +73,14 @@ class AppRoutes extends React.Component {
     return (
       <Switch>
         <Route exact path="/comments" component={CommentsList} />
-        <Route exact path="/feedback" component={FeedbackList} />
+        <EnhancedRoute
+          auth="admin"
+          editors={["Admin", "PO"]}
+          user={user}
+          exact
+          path="/feedback"
+          component={FeedbackList}
+        />
         <Route exact path="/image_convert" component={ImageConverter} />
         <Route exact path="/agltest" component={AGLTest} />
         <Route exact path="/anniversaries" component={AnniversaryList} />
