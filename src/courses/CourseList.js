@@ -45,7 +45,7 @@ class CourseList extends Component {
           course.title.toUpperCase().includes(this.state.searchText.toUpperCase()) ||
           course.team.toUpperCase().includes(this.state.searchText.toUpperCase())
       )
-      .orderBy(o => format(o.plannedcourses[0].startdate, "YYYYMMDD"), "desc")
+      .orderBy(o => (o.plannedcourses[0] ? format(o.plannedcourses[0].startdate, "YYYYMMDD") : o.lastmodified), "desc")
       .value();
     return (
       <div>
