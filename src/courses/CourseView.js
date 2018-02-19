@@ -1,13 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import {
-  Table,
-  TableBody,
-  TableHeader,
-  TableHeaderColumn,
-  TableRow,
-  TableRowColumn
-} from "material-ui/Table";
+import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from "material-ui/Table";
 import { Tabs, Tab } from "material-ui/Tabs";
 import RaisedButton from "material-ui/RaisedButton";
 import DatePicker from "material-ui/DatePicker";
@@ -136,9 +129,7 @@ class CourseView extends React.Component {
             <TableRow key={course.id}>
               <TableRowColumn>{course.title}</TableRowColumn>
               <TableRowColumn style={{ width: 300 }}>{course.description}</TableRowColumn>
-              <TableRowColumn style={{ width: 90 }}>
-                {course.plannedcourses[0].status}
-              </TableRowColumn>
+              <TableRowColumn style={{ width: 90 }}>{course.plannedcourses[0].status}</TableRowColumn>
               <TableRowColumn>
                 <Link to={`/courses/edit/${course.id}`}>{course.id}</Link>
               </TableRowColumn>
@@ -149,15 +140,11 @@ class CourseView extends React.Component {
                     participants: { visible: true, id: course.id, students: course.students }
                   })
                 }
-                onMouseLeave={() =>
-                  this.setState({ participants: { visible: false, id: null, students: [] } })
-                }
+                onMouseLeave={() => this.setState({ participants: { visible: false, id: null, students: [] } })}
               >
                 {course.students.length}
               </TableRowColumn>
-              <TableRowColumn>
-                {format(course.plannedcourses[0].startdate, "ddd, DD-MMM-YYYY")}
-              </TableRowColumn>
+              <TableRowColumn>{format(course.plannedcourses[0].startdate, "ddd, DD-MMM-YYYY")}</TableRowColumn>
             </TableRow>
           ))}
         </TableBody>
@@ -196,8 +183,12 @@ class CourseView extends React.Component {
     const enabled = role === "Admin" || role === "PO";
     const currentYear = new Date().getFullYear();
     const filteredCourses = _.chain(courses)
-      .filter(course => Date.parse(course.plannedcourses[0].startdate) > Date.parse(filterDate))
-      .orderBy(o => format(o.plannedcourses[0].startdate, "YYYYMMDD"), "desc")
+      .filter(
+        course =>
+          course.plannedcourses[0] ? Date.parse(course.plannedcourses[0].startdate) > Date.parse(filterDate) : false
+      )
+      .orderBy(o => (o.plannedcourses[0] ? format(o.plannedcourses[0].startdate, "YYYYMMDD") : o.lastmodified), "desc")
+
       .value();
     return (
       <Tabs
@@ -343,10 +334,7 @@ class CourseView extends React.Component {
             </HeaderLeft>
             <HeaderRight />
           </HeaderRow>
-          <TrainerView
-            from={this.state.studentfilterstartdate}
-            to={this.state.studentfilterenddate}
-          />
+          <TrainerView from={this.state.studentfilterstartdate} to={this.state.studentfilterenddate} />
         </Tab>
       </Tabs>
     );
