@@ -1,6 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import { Table, TableBody, TableHeader, TableHeaderColumn, TableRow, TableRowColumn } from "material-ui/Table";
+import {
+  Table,
+  TableBody,
+  TableHeader,
+  TableHeaderColumn,
+  TableRow,
+  TableRowColumn
+} from "material-ui/Table";
 import { Tabs, Tab } from "material-ui/Tabs";
 import RaisedButton from "material-ui/RaisedButton";
 import DatePicker from "material-ui/DatePicker";
@@ -87,7 +94,7 @@ class CourseView extends React.Component {
     value: "",
     minDate: null,
     defaultDate: new Date(),
-    activeTab: "scheduled",
+    activeTab: "student",
     participants: { show: false, id: null, students: [] }
   };
 
@@ -129,7 +136,9 @@ class CourseView extends React.Component {
             <TableRow key={course.id}>
               <TableRowColumn>{course.title}</TableRowColumn>
               <TableRowColumn style={{ width: 300 }}>{course.description}</TableRowColumn>
-              <TableRowColumn style={{ width: 90 }}>{course.plannedcourses[0].status}</TableRowColumn>
+              <TableRowColumn style={{ width: 90 }}>
+                {course.plannedcourses[0].status}
+              </TableRowColumn>
               <TableRowColumn>
                 <Link to={`/courses/edit/${course.id}`}>{course.id}</Link>
               </TableRowColumn>
@@ -140,11 +149,15 @@ class CourseView extends React.Component {
                     participants: { visible: true, id: course.id, students: course.students }
                   })
                 }
-                onMouseLeave={() => this.setState({ participants: { visible: false, id: null, students: [] } })}
+                onMouseLeave={() =>
+                  this.setState({ participants: { visible: false, id: null, students: [] } })
+                }
               >
                 {course.students.length}
               </TableRowColumn>
-              <TableRowColumn>{format(course.plannedcourses[0].startdate, "ddd, DD-MMM-YYYY")}</TableRowColumn>
+              <TableRowColumn>
+                {format(course.plannedcourses[0].startdate, "ddd, DD-MMM-YYYY")}
+              </TableRowColumn>
             </TableRow>
           ))}
         </TableBody>
@@ -185,9 +198,15 @@ class CourseView extends React.Component {
     const filteredCourses = _.chain(courses)
       .filter(
         course =>
-          course.plannedcourses[0] ? Date.parse(course.plannedcourses[0].startdate) > Date.parse(filterDate) : false
+          course.plannedcourses[0]
+            ? Date.parse(course.plannedcourses[0].startdate) > Date.parse(filterDate)
+            : false
       )
-      .orderBy(o => (o.plannedcourses[0] ? format(o.plannedcourses[0].startdate, "YYYYMMDD") : o.lastmodified), "desc")
+      .orderBy(
+        o =>
+          o.plannedcourses[0] ? format(o.plannedcourses[0].startdate, "YYYYMMDD") : o.lastmodified,
+        "desc"
+      )
 
       .value();
     return (
@@ -196,6 +215,50 @@ class CourseView extends React.Component {
         value={this.state.activeTab}
         onChange={value => this.setState({ activeTab: value })}
       >
+        <Tab label="Training By Student" value="student">
+          <HeaderRow>
+            <HeaderLeft>
+              {" "}
+              <Title2>
+                <RaisedButton
+                  label={currentYear - 1}
+                  style={styles.button}
+                  primary={true}
+                  onClick={() => this.setYear(currentYear - 1)}
+                />
+                <RaisedButton
+                  label={currentYear}
+                  style={styles.button}
+                  secondary={true}
+                  onClick={() => this.setYear(currentYear)}
+                />
+                In Period from
+                <DatePicker
+                  hintText="Enter StartDate Courses"
+                  value={this.state.studentfilterstartdate}
+                  name="studentfilterstartdate"
+                  onChange={this.handleStudentFilterStartDateChange}
+                  style={styles.datePicker}
+                  autoOk={true}
+                />
+                to
+                <DatePicker
+                  hintText="Enter End Date Courses"
+                  value={this.state.studentfilterenddate}
+                  name="studentfilterenddate"
+                  onChange={this.handleStudentFilterEndDateChange}
+                  style={styles.datePicker}
+                  autoOk={true}
+                />
+              </Title2>
+            </HeaderLeft>
+            <HeaderRight />
+          </HeaderRow>
+          <StudentListContainer
+            startdate={this.state.studentfilterstartdate}
+            enddate={this.state.studentfilterenddate}
+          />
+        </Tab>
         <Tab label="Scheduled Course" value="scheduled">
           <HeaderRow>
             <HeaderLeft>
@@ -251,50 +314,7 @@ class CourseView extends React.Component {
             )}
           </div>
         </Tab>
-        <Tab label="Training By Student" value="student">
-          <HeaderRow>
-            <HeaderLeft>
-              {" "}
-              <Title2>
-                <RaisedButton
-                  label={currentYear - 1}
-                  style={styles.button}
-                  primary={true}
-                  onClick={() => this.setYear(currentYear - 1)}
-                />
-                <RaisedButton
-                  label={currentYear}
-                  style={styles.button}
-                  secondary={true}
-                  onClick={() => this.setYear(currentYear)}
-                />
-                In Period from
-                <DatePicker
-                  hintText="Enter StartDate Courses"
-                  value={this.state.studentfilterstartdate}
-                  name="studentfilterstartdate"
-                  onChange={this.handleStudentFilterStartDateChange}
-                  style={styles.datePicker}
-                  autoOk={true}
-                />
-                to
-                <DatePicker
-                  hintText="Enter End Date Courses"
-                  value={this.state.studentfilterenddate}
-                  name="studentfilterenddate"
-                  onChange={this.handleStudentFilterEndDateChange}
-                  style={styles.datePicker}
-                  autoOk={true}
-                />
-              </Title2>
-            </HeaderLeft>
-            <HeaderRight />
-          </HeaderRow>
-          <StudentListContainer
-            startdate={this.state.studentfilterstartdate}
-            enddate={this.state.studentfilterenddate}
-          />
-        </Tab>
+
         <Tab label="By Trainer" value="trainer">
           <HeaderRow>
             <HeaderLeft>
@@ -334,7 +354,10 @@ class CourseView extends React.Component {
             </HeaderLeft>
             <HeaderRight />
           </HeaderRow>
-          <TrainerView from={this.state.studentfilterstartdate} to={this.state.studentfilterenddate} />
+          <TrainerView
+            from={this.state.studentfilterstartdate}
+            to={this.state.studentfilterenddate}
+          />
         </Tab>
       </Tabs>
     );
