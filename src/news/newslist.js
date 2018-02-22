@@ -6,6 +6,8 @@ import ModeEdit from "material-ui/svg-icons/editor/mode-edit";
 import { blue500 } from "material-ui/styles/colors";
 import Paper from "material-ui/Paper";
 import styled from "styled-components";
+import gql from "graphql-tag";
+import { graphql } from "react-apollo";
 
 const P = styled.p`
   white-space: pre-line;
@@ -35,18 +37,9 @@ class NewsList extends Component {
             }
             primaryText={title}
             rightIcon={
-              authenticated &&
-                <ModeEdit
-                  color={blue500}
-                  onClick={() => this.props.onEdit(id)}
-                />
+              authenticated && <ModeEdit color={blue500} onClick={() => this.props.onEdit(id)} />
             }
-            secondaryText={
-              <P>
-                {body}
-              </P>
-            }
-            secondaryTextLines={4}
+            secondaryText={<P>{body}</P>}
           />
           <Divider inset={true} />
         </Paper>
@@ -55,11 +48,7 @@ class NewsList extends Component {
   };
 
   render() {
-    return (
-      <List>
-        {this.renderNews(this.props.news, this.props.authenticated)}
-      </List>
-    );
+    return <List>{this.renderNews(this.props.news || [], this.props.authenticated)}</List>;
   }
 }
 
