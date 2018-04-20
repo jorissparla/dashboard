@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import { fetchGoLives } from "../actions/index";
+import gql from "graphql-tag";
+import { graphql } from "react-apollo";
 //import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import moment from "moment";
 import Spinner from "../utils/spinner";
@@ -9,7 +9,10 @@ import Divider from "material-ui/Divider";
 import styled from "styled-components";
 
 const getDay = date =>
-  moment(date).format("MMM").toUpperCase().substr(0, 3) + moment(date).format("DD");
+  moment(date)
+    .format("MMM")
+    .toUpperCase()
+    .substr(0, 3) + moment(date).format("DD");
 
 const GoLiveListStyle = styled.div`
   margin-right: 10px;
@@ -17,8 +20,8 @@ const GoLiveListStyle = styled.div`
 
 const GoLiveItemStyle = styled.div`
   background-color: ${props => props["background-color"] && props["background-color"]};
-  
-  display:flex;
+
+  display: flex;
   flex-direction: column;
   align-items: space-between;
 `;
@@ -41,14 +44,6 @@ const H5Styled = styled.h3`
   font-family: Oswald;
 `;
 class GoLiveListSide extends Component {
-  componentDidMount() {
-    this.props.fetchGoLives();
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.timerhandle);
-  }
-
   renderItems(items) {
     if (!items) return <div>loading</div>;
     return items.map((item, index) => {
@@ -57,13 +52,11 @@ class GoLiveListSide extends Component {
       let color = index % 2 ? "blanchedalmond" : "white";
       return (
         <GoLiveItemStyle background-color={color} key={key}>
-
           <ListItem
             leftAvatar={<GoLiveDateStyle>{getDay(item.date)}</GoLiveDateStyle>}
             primaryText={
               <div>
-                <GoLiveCustomerStyle>{item.customername}</GoLiveCustomerStyle>
-                {" "}
+                <GoLiveCustomerStyle>{item.customername}</GoLiveCustomerStyle>{" "}
               </div>
             }
             //secondaryText= {item.version}
@@ -75,7 +68,13 @@ class GoLiveListSide extends Component {
   }
 
   render() {
-    const { golives } = this.props;
+    //const { golives } = this.props;
+    const { data: { loading, golives } } = this.props;
+    if (loading) {
+      <div>
+        <Spinner />
+      </div>;
+    }
     if (!golives || golives === null) {
       return (
         <div>
@@ -100,6 +99,20 @@ const mapStateToProps = state => {
     golives: state.summary.golives
   };
 };
-export default connect(mapStateToProps, {
-  fetchGoLives
-})(GoLiveListSide);
+
+const queryGoLives = gql`
+  query golives {
+    golives {
+      id
+      customername
+      customerid
+      country
+      region
+      version
+      comments
+      date
+    }
+  }
+`;
+
+export default graphql(queryGoLives)(GoLiveListSide);

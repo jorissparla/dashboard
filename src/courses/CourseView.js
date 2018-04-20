@@ -140,7 +140,7 @@ class CourseView extends React.Component {
                 {course.plannedcourses[0].status}
               </TableRowColumn>
               <TableRowColumn>
-                <Link to={`/courses/edit/${course.id}`}>{course.id}</Link>
+                <Link to={`/courses/edit/${course.id}`}>View Course</Link>
               </TableRowColumn>
               <TableRowColumn
                 style={{ width: 20 }}

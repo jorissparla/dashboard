@@ -1,17 +1,14 @@
 import React, { Component } from "react";
 import DashBoard from "./dashboard";
-//import DashBoardStats from "./dashboardstats";
 import DashBoardStats from "./DashBoardStatsNew";
 import { StyleLoader } from "./common";
 import GoLives from "./golives/goLiveListNew";
 import HistoryDayAll from "./charts/historydayallcontainer";
-//import NewsListContainer from "./news/newslistcontainer";
 import NewsPage from "./news/newspage";
 import SupportCards from "./supportcard/SupportCards";
 import KudoList from "./kudos/kudolistcomponentnew";
 import Anniversaries from "./awards/Anniversaries";
 import FeedbackList from "./feedback/feedbackList";
-//import Award from './awards/award'
 
 class DashBoardContainer extends Component {
   state = { index: 0, sel: null };

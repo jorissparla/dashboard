@@ -22,15 +22,16 @@ const StyledContainer = styled.div`
 class CourseList extends Component {
   state = { searchText: "" };
 
-  constructor(props) {
-    super(props);
-    console.log(props);
-  }
-
   handleSearchTextChange = val => {
     this.setState({ searchText: val });
   };
   render() {
+    const { history, authenticated, user } = this.props;
+    let validRole = false;
+    if (user) {
+      validRole = user.role !== "Guest";
+    }
+    console.log("CourseList", user);
     const { loading, error, courses } = this.props.data;
     if (loading) {
       return <p>Loading ...</p>;
@@ -45,7 +46,11 @@ class CourseList extends Component {
           course.title.toUpperCase().includes(this.state.searchText.toUpperCase()) ||
           course.team.toUpperCase().includes(this.state.searchText.toUpperCase())
       )
-      .orderBy(o => (o.plannedcourses[0] ? format(o.plannedcourses[0].startdate, "YYYYMMDD") : o.lastmodified), "desc")
+      .orderBy(
+        o =>
+          o.plannedcourses[0] ? format(o.plannedcourses[0].startdate, "YYYYMMDD") : o.lastmodified,
+        "desc"
+      )
       .value();
     return (
       <div>
@@ -56,9 +61,15 @@ class CourseList extends Component {
           hintText="Search for title or team...."
         />
         <StyledContainer>
-          <AddCard />
+          {validRole && <AddCard />}
           {filteredCourses.map((course, i) => (
-            <Card key={course.id} course={course} index={i} count={course._studentsMeta.count} />
+            <Card
+              key={course.id}
+              course={course}
+              index={i}
+              count={course._studentsMeta.count}
+              validRole={validRole}
+            />
           ))}
         </StyledContainer>
       </div>

@@ -119,7 +119,11 @@ class StudentView extends Component {
   }
 
   renderCourses(enrollments, navid) {
-    const authenticated = this.props.authenticated;
+    const { history, authenticated, user } = this.props;
+    let validRole = false;
+    if (user) {
+      validRole = user.role !== "Guest";
+    }
     if (!enrollments) return <div>Loading...</div>;
 
     return (
@@ -145,7 +149,8 @@ class StudentView extends Component {
               }
               secondaryTextLines={2}
               rightToggle={
-                authenticated && (
+                authenticated &&
+                validRole && (
                   <DetailsIcon
                     onClick={() => this.props.history.push(`/courses/edit/${enrol.course.id}`)}
                   />
@@ -161,6 +166,11 @@ class StudentView extends Component {
 
   render() {
     const { loading, error, account } = this.props.data;
+    const { history, authenticated, user } = this.props;
+    let validRole = false;
+    if (user) {
+      validRole = user.role !== "Guest";
+    }
     console.log("PROPS", this.props);
     if (loading) {
       return <p>Loading ...</p>;

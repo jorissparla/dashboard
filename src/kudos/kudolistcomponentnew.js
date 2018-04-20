@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
-import { connect } from "react-redux";
-import { fetchKudos } from "../actions/index";
 import { format } from "date-fns";
 import getMuiTheme from "material-ui/styles/getMuiTheme";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
@@ -68,11 +66,14 @@ class KudoListComponent extends Component {
 
   render() {
     //const kudos = this.props.kudos;
-    const { data: { loading, kudos } } = this.props;
-    console.log("KudoListComponentNew", this.props);
+    const { data: { loading, kudos, error } } = this.props;
+    console.log("KudoListComponentNew", this.props, kudos);
 
     if (loading) {
       return <div>Loading</div>;
+    }
+    if (error) {
+      return <div>Error: {error}</div>;
     }
     return (
       <MuiThemeProvider muiTheme={muiTheme}>

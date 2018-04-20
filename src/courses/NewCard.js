@@ -2,6 +2,7 @@ import React from "react";
 import Paper from "material-ui/Paper";
 import styled from "styled-components";
 import FlatButton from "material-ui/FlatButton";
+import RaisedButton from "material-ui/RaisedButton";
 import format from "date-fns/format";
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from "material-ui/Card";
 import Badge from "material-ui/Badge";
@@ -129,7 +130,7 @@ class NewCard extends React.Component {
     }, 2000);
   };
   render() {
-    const { course, index, count } = this.props;
+    const { course, index, count, validRole } = this.props;
     let image = imgList[index % 7];
     let bgColor;
     switch (course.team) {
@@ -171,7 +172,13 @@ class NewCard extends React.Component {
         <CardActions>
           <BottomStyle>
             <Link to={`courses/edit/${course.id || "/"}`}>
-              <FlatButton backgroundColor={blue500} label="View" style={{ color: "white" }} />
+              <RaisedButton
+                backgroundColor={blue500}
+                label="View"
+                style={{ color: "white" }}
+                labelStyle={{ color: "white" }}
+                disabled={!validRole}
+              />
             </Link>
             <StyledBadge
               badgeStyle={{ backgroundColor: bgColor }}

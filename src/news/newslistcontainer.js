@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-
 import { withRouter } from "react-router";
 import ContentAdd from "material-ui/svg-icons/content/add";
 import FloatingActionButton from "material-ui/FloatingActionButton";
@@ -61,5 +60,4 @@ const newsQuery = gql`
   }
 `;
 
-//export default connect(mapStateToProps, { fetchNews })(withRouter(withAuth(NewsListContainer)));
 export default graphql(newsQuery)(withRouter(withAuth(NewsListContainer)));

@@ -12,7 +12,9 @@ import { deepOrange500 } from "material-ui/styles/colors";
 import styled from "styled-components";
 //import Paper from 'material-ui/Paper'
 
-const H5Styled = styled.h5`font-family: Oswald;`;
+const H5Styled = styled.h5`
+  font-family: Oswald;
+`;
 
 const muiTheme = getMuiTheme({
   palette: {

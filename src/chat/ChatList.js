@@ -1,8 +1,6 @@
 import React, { Component } from "react";
-//import { connect } from "react-redux";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
-//import { fetchChat } from "../actions/index";
 import { Link } from "react-router-dom";
 import { List, ListItem } from "material-ui/List";
 import RaisedButton from "material-ui/RaisedButton";

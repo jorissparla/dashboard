@@ -23,6 +23,7 @@ import {
 } from "material-ui/Table";
 import _ from "lodash";
 import styled from "styled-components";
+import Excel from "../utils/Excel";
 
 const styles = {
   headerStyle: {
@@ -161,6 +162,7 @@ class StudentTables extends Component {
             borderBottom: "1px solid rgba(0,0,0,0.12)"
           }}
         />
+        <Excel data={filteredAccounts} />
         <Table headerStyle={headerStyle} onCellClick={(i, j) => console.log(i, j)}>
           <TableHeader style={headerStyle} adjustForCheckbox={false} displaySelectAll={false}>
             <TableRow>

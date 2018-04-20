@@ -55,9 +55,13 @@ class Header extends React.Component {
     const { history, authenticated, user } = this.props;
 
     let validRole = false;
+
+    let isAdmin = false;
     if (user) {
       validRole = user.role !== "Guest";
+      isAdmin = user.role === "Admin";
     }
+
     //console.log("AUTH", authenticated, validRole, user.role !== "Guest");
     return (
       <div onClick={() => this.toggleMenu()}>
@@ -120,23 +124,27 @@ class Header extends React.Component {
           />
         )}
         <Divider />
-        <MenuItem
-          primaryText={<div style={{ color: "black" }}>News</div>}
-          leftIcon={<NewsIcon />}
-          onClick={() => {
-            history.push("/news");
-          }}
-        />
+        {authenticated &&
+          isAdmin && (
+            <MenuItem
+              primaryText={<div style={{ color: "black" }}>News</div>}
+              leftIcon={<NewsIcon />}
+              onClick={() => {
+                history.push("/news");
+              }}
+            />
+          )}
         <Divider />
-        {authenticated && (
-          <MenuItem
-            primaryText={<div style={{ color: "black" }}>Chat</div>}
-            leftIcon={<ChatIcon />}
-            onClick={() => {
-              history.push("/chat");
-            }}
-          />
-        )}
+        {authenticated &&
+          isAdmin && (
+            <MenuItem
+              primaryText={<div style={{ color: "black" }}>Chat</div>}
+              leftIcon={<ChatIcon />}
+              onClick={() => {
+                history.push("/chat");
+              }}
+            />
+          )}
         <Divider />
         {authenticated && (
           <MenuItem
@@ -147,17 +155,17 @@ class Header extends React.Component {
             }}
           />
         )}
-        {authenticated &&
-          validRole && (
-            <MenuItem
-              primaryText={<div style={{ color: "black" }}>Courses</div>}
-              leftIcon={<PageIcon style={{ root: { color: "black" } }} />}
-              onClick={() => {
-                this.props.history.push("/courses");
-                //window.location.href = location.href;
-              }}
-            />
-          )}
+        {authenticated && (
+          //validRole && (
+          <MenuItem
+            primaryText={<div style={{ color: "black" }}>Courses</div>}
+            leftIcon={<PageIcon style={{ root: { color: "black" } }} />}
+            onClick={() => {
+              this.props.history.push("/courses");
+              //window.location.href = location.href;
+            }}
+          />
+        )}
         {authenticated &&
           validRole && (
             <MenuItem

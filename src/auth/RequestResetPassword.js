@@ -24,7 +24,11 @@ class RequestResetPassword extends Component {
           placeholder="email address"
         />
         <Row>
-          {!message && <Button onClick={this._doSubmit}>Send verification email </Button>}
+          {!message && (
+            <Button style={{ width: "200px" }} onClick={this._doSubmit}>
+              Send verification email{" "}
+            </Button>
+          )}
           <Button color="black" onClick={this._doCancel}>
             Cancel
           </Button>

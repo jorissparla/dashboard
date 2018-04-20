@@ -143,8 +143,8 @@ class FeedBackList extends Component {
   }
 
   renderListItem = (item, index) => {
-    const { id, text, createdAt, customername, forConsultant: { image, fullname } } = item;
-
+    const { id, text, createdAt, customername, forConsultant } = item;
+    const { image, fullname } = forConsultant || { image: "", fullname: "None" };
     return [
       <ListItem
         style={{ height: index === this.state.index ? 150 : 75 }}

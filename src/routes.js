@@ -118,7 +118,6 @@ class AppRoutes extends React.Component {
         <Route path="/main/0" component={DashBoard0} />
         <Route exact path="/team/:team" component={DashBoardStatsNew} />
         <Route exact path="/team/:team/region/:region" component={DashBoardStats} />
-        <Route exact path="/alerts" component={RequireAuth(AlertsList)} />
         <Route path="award" component={Award} />
         <EnhancedRoute
           auth="admin"

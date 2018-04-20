@@ -37,8 +37,17 @@ const CardExampleWithAvatar = ({
     return link;
   }
 }) => (
-  <Card style={{ width: 350, maxHeight: 300, margin: 5 }}>
-    <CardTitle title={title.slice(0, 50)} subtitle={category} titleStyle={{ fontSize: 18 }} />
+  <Card
+    style={{
+      width: 380,
+      height: 250,
+      maxHeight: 300,
+      margin: 5,
+      display: "flex",
+      flexDirection: "column"
+    }}
+  >
+    <CardTitle title={title.slice(0, 50)} subtitle={category} titleStyle={{ display:'flex', height: 50, overflow: 'none',fontSize: 18 }} />
     <CardText>{text.slice(0, 100).concat("...")}</CardText>
     <CardActions style={{ marginBottom: 5, alignItems: "flex-end" }}>
       <RaisedButton
