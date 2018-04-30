@@ -6,8 +6,6 @@ import ModeEdit from "material-ui/svg-icons/editor/mode-edit";
 import { blue500 } from "material-ui/styles/colors";
 import Paper from "material-ui/Paper";
 import styled from "styled-components";
-import gql from "graphql-tag";
-import { graphql } from "react-apollo";
 
 const P = styled.p`
   white-space: pre-line;

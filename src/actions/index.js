@@ -69,7 +69,7 @@ export const signinUser = async ({ email, password }) => {
     if (response) {
       console.log("response.data.user", response.data.user);
       localStorage.setItem("id", response.data.uic);
-      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("token", response.data.token || "PIN01");
       localStorage.setItem("email", email);
       localStorage.setItem("name", response.data.user.fullname);
       localStorage.setItem("picture", response.data.user.pic);

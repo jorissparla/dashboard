@@ -30,7 +30,6 @@ const Container = styled.div`
 `;
 
 const ProfilePicture = styled.div`
-  flex-base: 20%;
   flex: 0;
   margin: 20px;
 `;

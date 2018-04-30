@@ -23,6 +23,7 @@ import KudoListComponent from "./kudos/kudolistcomponent";
 import KudoListAll from "./kudos/kudolistall";
 import KudoListComponentNew from "./kudos/kudolistcomponentnew";
 import Signin from "./auth/signin";
+import SigninWithPIN from "./auth/SigninWithPIN";
 import Signout from "./auth/signout";
 import UpdatePassword from "./auth/resetpassword";
 import RequireAuth, { AuthRoute, EnhancedRoute } from "./auth/require_auth";
@@ -196,6 +197,7 @@ class AppRoutes extends React.Component {
         <Route path="/kudosall" component={KudoListAll} />
         <Route path="/kudolistcomponent" component={KudoListComponent} />
         <Route path="/signin" component={Signin} />
+        <Route path="/signinPIN" component={SigninWithPIN} />
         <Route path="/signout" component={Signout} />
         <Route path="/confirmation/:token" component={ResetPasswordForm} />
         <Route path="/forgot" component={RequestResetPassword} />
