@@ -1,7 +1,7 @@
 import React from "react";
 import RaisedButton from "material-ui/RaisedButton";
 import FileIcon from "material-ui/svg-icons/file/file-download";
-
+/*
 import { default as ExcelFile, ExcelSheet, ExcelColumn } from "react-data-export";
 
 class ExportStanden extends React.Component {
@@ -39,3 +39,4 @@ class ExportStanden extends React.Component {
 }
 
 export default ExportStanden;
+*/
