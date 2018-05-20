@@ -5,7 +5,6 @@ import TextField from "material-ui/TextField";
 import MenuItem from "material-ui/MenuItem";
 import RaisedButton from "material-ui/RaisedButton";
 import Divider from "material-ui/Divider";
-import UserAvatar from "react-user-avatar";
 
 const styles = {
   TextFieldStyle: {

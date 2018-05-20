@@ -1,0 +1,67 @@
+                                                                                
+                       === npm audit security report ===                        
+                                                                                
+# Run  npm update jws --depth 2  to resolve 3 vulnerabilities
+                                                                                
+  Moderate        Out-of-bounds Read                                            
+                                                                                
+  Package         base64url                                                     
+                                                                                
+  Dependency of   jsonwebtoken                                                  
+                                                                                
+  Path            jsonwebtoken > jws > jwa > base64url                          
+                                                                                
+  More info       https://nodesecurity.io/advisories/658                        
+                                                                                
+
+
+                                                                                
+  Moderate        Out-of-bounds Read                                            
+                                                                                
+  Package         base64url                                                     
+                                                                                
+  Dependency of   jsonwebtoken                                                  
+                                                                                
+  Path            jsonwebtoken > jws > base64url                                
+                                                                                
+  More info       https://nodesecurity.io/advisories/658                        
+                                                                                
+
+
+                                                                                
+  Moderate        Out-of-bounds Read                                            
+                                                                                
+  Package         base64url                                                     
+                                                                                
+  Dependency of   jsonwebtoken                                                  
+                                                                                
+  Path            jsonwebtoken > jws > jwa > ecdsa-sig-formatter > base64url    
+                                                                                
+  More info       https://nodesecurity.io/advisories/658                        
+                                                                                
+
+
+                                                                                
+                                 Manual Review                                  
+             Some vulnerabilities require your attention to resolve             
+                                                                                
+          Visit https://go.npm.me/audit-guide for additional guidance           
+                                                                                
+                                                                                
+  Critical        Command Injection                                             
+                                                                                
+  Package         macaddress                                                    
+                                                                                
+  Patched in      No patch available                                            
+                                                                                
+  Dependency of   react-scripts [dev]                                           
+                                                                                
+  Path            react-scripts > css-loader > cssnano >                        
+                  postcss-filter-plugins > uniqid > macaddress                  
+                                                                                
+  More info       https://nodesecurity.io/advisories/654                        
+                                                                                
+
+[!] 4 vulnerabilities found - Packages audited: 15904 (14444 dev, 334 optional)
+    Severity: 3 Moderate | 1 Critical
+
