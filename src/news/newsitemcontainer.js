@@ -1,13 +1,42 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import gql from "graphql-tag";
+import { graphql, compose } from "react-apollo";
 import { withRouter } from "react-router";
 import NewsItem from "./newsitem";
 import { fetchNewsItem, updateNews, deleteNews } from "../actions/index";
 
+const FETCHITEM_QUERY = gql`
+  query news ($id: ID){
+  news (id: $id) {
+    id
+    title
+    body
+    link
+    link_text
+    img
+    create_date
+    expire_date
+    user_id
+  }
+}
+`
+
+const UPDATE_ITEM_QUERY = gql`
+  mutation updateNews($input: NewsInputType) {
+    updateNews(input: $input) {
+      id
+
+    }
+  }
+
+`
+
 class NewsItemContainer extends Component {
-  doSubmit = values => {
-    window.alert(JSON.stringify(values, null, 2));
-    updateNews(values);
+  doSubmit = input => {
+    window.alert(JSON.stringify(input, null, 2));
+    // this.props.updateNews({ variables: { input } })
+    updateNews(input);
     setTimeout(() => this.props.history.push("/news"), 500);
   };
 
@@ -17,16 +46,25 @@ class NewsItemContainer extends Component {
   };
 
   async componentDidMount() {
+
     await this.props.fetchNewsItem(this.props.match.params.id);
   }
 
   render() {
+    //const newsItem = this.props.data;
+    console.log(this.props)
+    if (this.props.data.loading) {
+      return <div>Loading</div>
+    }
+    const news = this.props.data.news[0]
+    //const newsItem = this.props.data.news({ variables: { id: this.props.match.params.id } })
+    //console.log('NewsItem::', newsItem) //newsItem);
     if (!this.props.news) {
       return <div>Loading...</div>;
     }
     return (
       <NewsItem
-        initialValues={this.props.news}
+        initialValues={news}
         onSave={this.doSubmit}
         onDelete={this.doDelete}
         title="Edit news item"
@@ -45,4 +83,8 @@ export default connect(mapStateToProps, {
   fetchNewsItem,
   updateNews,
   deleteNews
-})(withRouter(NewsItemContainer));
+})(
+  compose(graphql(FETCHITEM_QUERY, { options: ownProps => ({ variables: { id: ownProps.match.params.id } }) }),
+    graphql(UPDATE_ITEM_QUERY, { name: 'updateNews' })
+
+  )(withRouter(NewsItemContainer)));

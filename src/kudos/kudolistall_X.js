@@ -1,35 +1,11 @@
 import React, { Component } from "react";
-//import KudoItem from './kudoitem'
 import { connect } from "react-redux";
 import { fetchKudos } from "../actions/index";
-//import IconButton from 'material-ui/IconButton';
+import moment from "moment";
+import { GridList, GridTile } from "material-ui/GridList";
 import getMuiTheme from "material-ui/styles/getMuiTheme";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-import { GridList, GridTile } from "material-ui/GridList";
-import FontIcon from "material-ui/FontIcon";
-import { red500 } from "material-ui/styles/colors";
 import { deepOrange500 } from "material-ui/styles/colors";
-import Paper from "material-ui/Paper";
-import styled from "styled-components";
-import moment from "moment";
-import UserAvatar from "react-user-avatar";
-//import Paper from 'material-ui/Paper'
-
-const H5Styled = styled.div`
-  font-family: Oswald;
-  font-size: 24px;
-`;
-
-const PaperStyled = styled(Paper)`
-  margin-top: 10px;
-  margin-bottom: 10px;
-`;
-
-const Container = styled.div`
-  font-family: Oswald;
-  display: flex;
-  flex-direction: column;
-`;
 
 const muiTheme = getMuiTheme({
   palette: {
@@ -39,11 +15,18 @@ const muiTheme = getMuiTheme({
 
 const styles = {
   root: {
-    display: "flex"
+    display: "flex",
+
+    justifyContent: "flex-start",
+    fontFamily: "Oswald",
+    fontHeight: "32px"
   },
   gridList: {
     overflowY: "auto",
-    flexGrow: "0.3",
+    marginTop: "10px",
+    flexGrow: "1",
+    height: "900px",
+    padding: "10px",
     opacity: 1,
     flexWrap: "wrap",
     overflowX: "auto",
@@ -54,7 +37,9 @@ const styles = {
     transition: "1s all",
     boxShadow: "rgba(0, 0, 0, 0.156863) 0px 3px 10px, rgba(0, 0, 0, 0.227451) 0px 3px 10px",
     backgroundColor: "rgb(255, 255, 255)",
-    borderRadius: "10px"
+    borderRadius: "15px",
+    height: "200px",
+    width: "200px"
   },
   paperStyle: {
     margin: "2px",
@@ -64,7 +49,6 @@ const styles = {
     justifyContent: "space-around"
   }
 };
-
 const mapGender = g => {
   if (g === "M") {
     return "men";
@@ -74,7 +58,7 @@ const mapGender = g => {
 };
 
 //const nrKudos = 4
-const indexList = [23, 34, 56, 24, 52, 19];
+const indexList = [23, 34, 56, 24, 52, 19, 94, 8, 12, 49, 51];
 
 const subTitle = name => (
   <span>
@@ -106,7 +90,7 @@ const DateView = date => {
   return <DateBox day={day} month={month} year={year} />;
 };
 
-class KudoListComponent0 extends Component {
+class KudoListAll extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -114,14 +98,39 @@ class KudoListComponent0 extends Component {
     };
   }
 
+  myTimer() {
+    const t1 = this.state.tijd;
+    this.setState({
+      tijd: t1 + 1
+    });
+    if (this.props.kudos) {
+      this.setState({
+        nrKudos: this.props.kudos.length,
+        displayedNrKudos: this.props.kudos.length
+      });
+      const { nrKudos, displayedNrKudos, tijd } = this.state;
+      if (tijd > nrKudos - displayedNrKudos) {
+        this.setState({
+          tijd: 0
+        });
+      }
+    }
+  }
   componentDidMount() {
     this.props.fetchKudos();
+    //this.timerhandle = setInterval(this.myTimer.bind(this), this.props.refreshRate || 15000)
   }
 
+  componentWillUnmount() {
+    //clearInterval(this.timerhandle)
+  }
   renderItems(kudos) {
     const nrKudos = this.props.kudos.length;
+    const index = this.state.tijd;
     let kl = kudos.slice(0, nrKudos);
-
+    if (index <= kudos.length - nrKudos) {
+      kl = kudos.slice(index, index + nrKudos);
+    }
     return kl.map(({ ownerrep_name, customer_name, gender, survey_date, pic }, index) => {
       const nr = indexList[index % nrKudos];
       const mgender = mapGender(gender);
@@ -134,20 +143,7 @@ class KudoListComponent0 extends Component {
           subtitle={subTitle(ownerrep_name)}
           actionIcon={DateView(survey_date)}
         >
-          {pic ? (
-            <img src={pic} alt="" />
-          ) : (
-            <UserAvatar
-              size="98"
-              style={{
-                fontSize: 48,
-                display: "flex",
-                justifyContent: "center",
-                color: "white"
-              }}
-              name={ownerrep_name}
-            />
-          )}
+          <img src={img} alt="" />
         </GridTile>
       );
     });
@@ -161,31 +157,19 @@ class KudoListComponent0 extends Component {
     }
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
-        <Container style={styles.root}>
-          <PaperStyled zDepth={1}>
-            <H5Styled>
-              <FontIcon className="material-icons" color={red500}>
-                favorite
-              </FontIcon>
-              Kudos (
-              {kudos.length})
-            </H5Styled>
-          </PaperStyled>
-          <GridList cellHeight={150} style={styles.gridList} cols={2}>
+        <div style={styles.root}>
+          Kudos
+          <GridList cellHeight={180} style={styles.gridList} cols={5}>
             {this.renderItems(kudos)}
           </GridList>
-        </Container>
+        </div>
       </MuiThemeProvider>
     );
   }
 }
 
 const mapStateToProps = state => {
-  return {
-    kudos: state.summary.kudos
-  };
+  return { kudos: state.summary.kudos };
 };
 
-export default connect(mapStateToProps, {
-  fetchKudos
-})(KudoListComponent0);
+export default connect(mapStateToProps, { fetchKudos })(KudoListAll);

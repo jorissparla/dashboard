@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
-//import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
 import moment from "moment";
 import Spinner from "../utils/spinner";
 import { List, ListItem } from "material-ui/List";

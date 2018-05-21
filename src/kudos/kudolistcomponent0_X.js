@@ -1,19 +1,33 @@
 import React, { Component } from "react";
-//import KudoItem from './kudoitem'
 import { connect } from "react-redux";
 import { fetchKudos } from "../actions/index";
-import moment from "moment";
-import { GridList, GridTile } from "material-ui/GridList";
 //import IconButton from 'material-ui/IconButton';
-import Subheader from "material-ui/Subheader";
 import getMuiTheme from "material-ui/styles/getMuiTheme";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import { GridList, GridTile } from "material-ui/GridList";
+import FontIcon from "material-ui/FontIcon";
+import { red500 } from "material-ui/styles/colors";
 import { deepOrange500 } from "material-ui/styles/colors";
+import Paper from "material-ui/Paper";
 import styled from "styled-components";
+import moment from "moment";
+import UserAvatar from "react-user-avatar";
 //import Paper from 'material-ui/Paper'
 
-const H5Styled = styled.h5`
+const H5Styled = styled.div`
   font-family: Oswald;
+  font-size: 24px;
+`;
+
+const PaperStyled = styled(Paper) `
+  margin-top: 10px;
+  margin-bottom: 10px;
+`;
+
+const Container = styled.div`
+  font-family: Oswald;
+  display: flex;
+  flex-direction: column;
 `;
 
 const muiTheme = getMuiTheme({
@@ -27,14 +41,8 @@ const styles = {
     display: "flex"
   },
   gridList: {
-    width: 900,
-    height: 900,
     overflowY: "auto",
-    marginTop: "5px",
     flexGrow: "0.3",
-    animationName: "insert-from-top",
-    animationDuration: "3s",
-    animationFillMode: "forwards",
     opacity: 1,
     flexWrap: "wrap",
     overflowX: "auto",
@@ -45,9 +53,7 @@ const styles = {
     transition: "1s all",
     boxShadow: "rgba(0, 0, 0, 0.156863) 0px 3px 10px, rgba(0, 0, 0, 0.227451) 0px 3px 10px",
     backgroundColor: "rgb(255, 255, 255)",
-    borderRadius: "15px",
-    height: "200px",
-    width: "200px"
+    borderRadius: "10px"
   },
   paperStyle: {
     margin: "2px",
@@ -57,6 +63,7 @@ const styles = {
     justifyContent: "space-around"
   }
 };
+
 const mapGender = g => {
   if (g === "M") {
     return "men";
@@ -98,7 +105,7 @@ const DateView = date => {
   return <DateBox day={day} month={month} year={year} />;
 };
 
-class KudoListComponent extends Component {
+class KudoListComponent0 extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -126,7 +133,20 @@ class KudoListComponent extends Component {
           subtitle={subTitle(ownerrep_name)}
           actionIcon={DateView(survey_date)}
         >
-          <img src={img} alt="" />
+          {pic ? (
+            <img src={pic} alt="" />
+          ) : (
+              <UserAvatar
+                size="98"
+                style={{
+                  fontSize: 48,
+                  display: "flex",
+                  justifyContent: "center",
+                  color: "white"
+                }}
+                name={ownerrep_name}
+              />
+            )}
         </GridTile>
       );
     });
@@ -140,24 +160,31 @@ class KudoListComponent extends Component {
     }
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
-        <div style={styles.root}>
-          <GridList cellHeight={180} style={styles.gridList} cols={3}>
-            <Subheader>
-              <H5Styled>
-                <i className="material-icons">favorite</i>
-                Kudos ({kudos.length})
-              </H5Styled>
-            </Subheader>
+        <Container style={styles.root}>
+          <PaperStyled zDepth={1}>
+            <H5Styled>
+              <FontIcon className="material-icons" color={red500}>
+                favorite
+              </FontIcon>
+              Kudos (
+              {kudos.length})
+            </H5Styled>
+          </PaperStyled>
+          <GridList cellHeight={150} style={styles.gridList} cols={2}>
             {this.renderItems(kudos)}
           </GridList>
-        </div>
+        </Container>
       </MuiThemeProvider>
     );
   }
 }
 
 const mapStateToProps = state => {
-  return { kudos: state.summary.kudos };
+  return {
+    kudos: state.summary.kudos
+  };
 };
 
-export default connect(mapStateToProps, { fetchKudos })(KudoListComponent);
+export default connect(mapStateToProps, {
+  fetchKudos
+})(KudoListComponent0);

@@ -1,15 +1,19 @@
 import React, { Component } from "react";
-//import KudoItem from './kudoitem'
 import { connect } from "react-redux";
 import { fetchKudos } from "../actions/index";
 import moment from "moment";
 import { GridList, GridTile } from "material-ui/GridList";
 //import IconButton from 'material-ui/IconButton';
+import Subheader from "material-ui/Subheader";
 import getMuiTheme from "material-ui/styles/getMuiTheme";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import { deepOrange500 } from "material-ui/styles/colors";
+import styled from "styled-components";
 //import Paper from 'material-ui/Paper'
-//import ReactCSSTransitionGroup from "react-addons-css-transition-group";
+
+const H5Styled = styled.h5`
+  font-family: Oswald;
+`;
 
 const muiTheme = getMuiTheme({
   palette: {
@@ -19,18 +23,17 @@ const muiTheme = getMuiTheme({
 
 const styles = {
   root: {
-    display: "flex",
-
-    justifyContent: "flex-start",
-    fontFamily: "Oswald",
-    fontHeight: "32px"
+    display: "flex"
   },
   gridList: {
+    width: 900,
+    height: 900,
     overflowY: "auto",
-    marginTop: "10px",
-    flexGrow: "1",
-    height: "900px",
-    padding: "10px",
+    marginTop: "5px",
+    flexGrow: "0.3",
+    animationName: "insert-from-top",
+    animationDuration: "3s",
+    animationFillMode: "forwards",
     opacity: 1,
     flexWrap: "wrap",
     overflowX: "auto",
@@ -62,7 +65,7 @@ const mapGender = g => {
 };
 
 //const nrKudos = 4
-const indexList = [23, 34, 56, 24, 52, 19, 94, 8, 12, 49, 51];
+const indexList = [23, 34, 56, 24, 52, 19];
 
 const subTitle = name => (
   <span>
@@ -94,7 +97,7 @@ const DateView = date => {
   return <DateBox day={day} month={month} year={year} />;
 };
 
-class KudoListAll extends Component {
+class KudoListComponent extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -102,39 +105,14 @@ class KudoListAll extends Component {
     };
   }
 
-  myTimer() {
-    const t1 = this.state.tijd;
-    this.setState({
-      tijd: t1 + 1
-    });
-    if (this.props.kudos) {
-      this.setState({
-        nrKudos: this.props.kudos.length,
-        displayedNrKudos: this.props.kudos.length
-      });
-      const { nrKudos, displayedNrKudos, tijd } = this.state;
-      if (tijd > nrKudos - displayedNrKudos) {
-        this.setState({
-          tijd: 0
-        });
-      }
-    }
-  }
   componentDidMount() {
     this.props.fetchKudos();
-    //this.timerhandle = setInterval(this.myTimer.bind(this), this.props.refreshRate || 15000)
   }
 
-  componentWillUnmount() {
-    //clearInterval(this.timerhandle)
-  }
   renderItems(kudos) {
     const nrKudos = this.props.kudos.length;
-    const index = this.state.tijd;
     let kl = kudos.slice(0, nrKudos);
-    if (index <= kudos.length - nrKudos) {
-      kl = kudos.slice(index, index + nrKudos);
-    }
+
     return kl.map(({ ownerrep_name, customer_name, gender, survey_date, pic }, index) => {
       const nr = indexList[index % nrKudos];
       const mgender = mapGender(gender);
@@ -162,8 +140,13 @@ class KudoListAll extends Component {
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
         <div style={styles.root}>
-          Kudos
-          <GridList cellHeight={180} style={styles.gridList} cols={5}>
+          <GridList cellHeight={180} style={styles.gridList} cols={3}>
+            <Subheader>
+              <H5Styled>
+                <i className="material-icons">favorite</i>
+                Kudos ({kudos.length})
+              </H5Styled>
+            </Subheader>
             {this.renderItems(kudos)}
           </GridList>
         </div>
@@ -176,4 +159,4 @@ const mapStateToProps = state => {
   return { kudos: state.summary.kudos };
 };
 
-export default connect(mapStateToProps, { fetchKudos })(KudoListAll);
+export default connect(mapStateToProps, { fetchKudos })(KudoListComponent);
