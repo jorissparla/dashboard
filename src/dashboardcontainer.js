@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import DashBoard from "./dashboard";
 import DashBoardStats from "./DashBoardStatsNew";
-import { StyleLoader } from "./common";
 import GoLives from "./golives/goLiveListNew";
 import HistoryDayAll from "./charts/historydayallcontainer";
 import NewsPage from "./news/newspage";
@@ -48,7 +47,6 @@ class DashBoardContainer extends Component {
     return (
       <div>
         <div>
-          {/*<StyleLoader stylesheetPath="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css" /> */}
         </div>
         {this.renderDashBoard(index)}
       </div>

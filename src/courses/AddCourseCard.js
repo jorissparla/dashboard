@@ -62,7 +62,6 @@ class AddCourseCard extends Component {
     if (loading) {
       return <div>Loading...</div>;
     }
-    console.log;
     return (
       <div>
         <Div>

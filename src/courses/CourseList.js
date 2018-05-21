@@ -26,7 +26,7 @@ class CourseList extends Component {
     this.setState({ searchText: val });
   };
   render() {
-    const { history, authenticated, user } = this.props;
+    const { user } = this.props;
     let validRole = false;
     if (user) {
       validRole = user.role !== "Guest";

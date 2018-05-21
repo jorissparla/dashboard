@@ -3,12 +3,9 @@ import SelectField from "material-ui/SelectField";
 import TextField from "material-ui/TextField";
 import MenuItem from "material-ui/MenuItem";
 import RaisedButton from "material-ui/RaisedButton";
-import Divider from "material-ui/Divider";
-import Avatar from "material-ui/Avatar";
-import styled from "styled-components";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
-import { CardSection, Input } from "../common";
+import { CardSection } from "../common";
 import { Image } from "../styles";
 
 const styles = {
@@ -50,7 +47,7 @@ class FeedbackForm extends Component {
     text: "",
     customername: ""
   };
-  handleChange = () => {};
+  handleChange = () => { };
   handleChangePerson = (e, i, v) => {
     console.log(i, v, this.props.data.supportfolks[i].fullname);
     this.setState({

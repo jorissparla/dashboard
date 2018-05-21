@@ -1,14 +1,11 @@
 import React from "react";
 import gql from "graphql-tag";
 import { graphql, compose } from "react-apollo";
-//import  SmallCard from "./NewCard";
 import { SmallCard } from "../common/SmallCard";
 import Dialog from "material-ui/Dialog";
 import styled from "styled-components";
 import FlatButton from "material-ui/FlatButton";
-import NewCard from "./NewCard";
 import NewRequestForm from "./Request";
-import differenceInCalendarDays from "date-fns/difference_in_calendar_days";
 import moment from "moment";
 import _ from "lodash";
 import SearchBar from "../common/SearchBar";
@@ -16,7 +13,7 @@ import withAuth from "../utils/withAuth";
 import AddCard from "./AddCard";
 import CategoryTabs from "./CategoryTabs";
 
-String.prototype.includes2 = function(search, start) {
+String.prototype.includes2 = function (search, start) {
   if (typeof start !== "number") {
     start = 0;
   }
@@ -75,8 +72,7 @@ class SupportCards extends React.Component {
   };
 
   render() {
-    const { authenticated, isEditor, user, data: { loading, error, supportcards } } = this.props;
-    //  console.log("me", this.props.me);
+    const { authenticated, isEditor, data: { loading, error, supportcards } } = this.props;
     const actions = [
       <FlatButton label="Cancel" primary={true} onClick={this.handleClose} />,
       <FlatButton label="Submit" primary={true} onClick={this.handleClose} />
@@ -123,12 +119,12 @@ class SupportCards extends React.Component {
           {authenticated && isEditor ? (
             <AddCard link="/supportcard/add" title="Add a New Card" background="papayawhip" />
           ) : (
-            <AddCard
-              link="supportcard/request"
-              title="Request a new Support Card"
-              background="papayawhip"
-            />
-          )}
+              <AddCard
+                link="supportcard/request"
+                title="Request a new Support Card"
+                background="papayawhip"
+              />
+            )}
           {filteredCards.map(
             (
               {
@@ -144,7 +140,6 @@ class SupportCards extends React.Component {
               const vieweditLink =
                 authenticated && isEditor ? `/supportcard/edit/${id}` : `/supportcard/view/${id}`;
               const viewLink = `/supportcard/view/${id}`;
-              // const isNew = differenceInCalendarDays(Date.parse(updatedAt), Date.now()) < 7;
 
               const isNew = Date.parse(updatedAt) > moment().add(-7, "days");
               return (

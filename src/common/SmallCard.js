@@ -4,7 +4,6 @@ import IconButton from "material-ui/IconButton";
 import ViewIcon from "material-ui/svg-icons/action/pageview";
 import ModeEdit from "material-ui/svg-icons/editor/mode-edit";
 import NewIcon from "material-ui/svg-icons/av/new-releases";
-import FolderIcon from "material-ui/svg-icons/file/folder-open";
 import { Link } from "react-router-dom";
 import { Papier, HR } from "../styles/index.js";
 import Divider from "material-ui/Divider";
@@ -71,7 +70,7 @@ const Outer = styled.div`
   flex-wrap: wrap;
 `;
 
-const StyledLink = styled(Link)`
+const StyledLink = styled(Link) `
   display: flex;
   align-items: center;
   text-decoration: none;

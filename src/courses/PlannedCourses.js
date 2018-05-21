@@ -103,14 +103,12 @@ class PlannedCoursesTable extends React.Component {
   };
   render() {
     const {
-      history,
       planned,
       onRowSelected,
       onCancel,
       course,
       courses,
       hours,
-      trainer,
       accounts,
       authenticated,
       statuses
@@ -159,7 +157,6 @@ class PlannedCoursesTable extends React.Component {
             trainer={course.trainer}
             statuses={statuses}
             status="Planned"
-            team={course.team}
             type={course.type}
             location="N/A"
             team={course.team}

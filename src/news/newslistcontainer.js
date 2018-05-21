@@ -9,9 +9,7 @@ import NewsList from "./newslist";
 import withAuth from "../utils/withAuth";
 
 class NewsListContainer extends Component {
-  constructor(props) {
-    super(props);
-  }
+
 
   onOpen = id => {
     this.props.history.replace(`/news/edit/${id}`);
@@ -44,9 +42,6 @@ class NewsListContainer extends Component {
     );
   }
 }
-const mapStateToProps = state => {
-  return { news: state.summary.news };
-};
 
 const newsQuery = gql`
   query news {

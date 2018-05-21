@@ -44,7 +44,7 @@ const Icon = styled.div`
 class AddNote extends Component {
   state = { note: "", dateValue: new Date() };
   handleClick = () => {
-    const { onAdd, details: { id, number } } = this.props;
+    const { onAdd, details: { id } } = this.props;
     onAdd({
       customerId: id,
       note: this.state.note,
@@ -58,7 +58,6 @@ class AddNote extends Component {
   };
 
   render() {
-    const { enabled } = this.props;
 
     return (
       <Container>

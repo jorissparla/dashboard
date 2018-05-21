@@ -5,16 +5,13 @@ import Paper from "material-ui/Paper";
 import { withRouter } from "react-router";
 import { List, ListItem } from "material-ui/List";
 import Divider from "material-ui/Divider";
-import Avatar from "material-ui/Avatar";
 import TextField from "material-ui/TextField";
 import DatePicker from "material-ui/DatePicker";
 import SelectField from "material-ui/SelectField";
 import MenuItem from "material-ui/MenuItem";
 import styled from "styled-components";
-import { HeaderRow, HeaderLeft, HeaderRight, WideTitle, Title, Image } from "../styles";
+import { HeaderRow, HeaderLeft, HeaderRight, Title, Image } from "../styles";
 import Dialog from "material-ui/Dialog";
-//import ModeEdit from "material-ui/svg-icons/editor/mode-edit";
-import ModeEdit from "material-ui/svg-icons/image/navigate-next";
 import Save from "material-ui/svg-icons/content/save";
 import Undo from "material-ui/svg-icons/content/undo";
 import Clear from "material-ui/svg-icons/content/clear";
@@ -56,16 +53,7 @@ const queryFeedback = gql`
     }
   }
 `;
-const querySupportFolks = gql`
-  query supportFolks {
-    supportfolks {
-      id
-      navid
-      fullname
-      image
-    }
-  }
-`;
+
 
 const createFeedback = gql`
   mutation createFeedback($input: FeedbackInputType) {
@@ -188,8 +176,8 @@ class FeedBackList extends Component {
               <Undo onClick={this.handleUndo} />
             </div>
           ) : (
-            <P>{text}</P>
-          )
+              <P>{text}</P>
+            )
         }
         secondaryTextLines={2}
         rightIcon={this.props.isEditor ? <Clear onClick={() => this.handleClear(id)} /> : <div />}

@@ -1,8 +1,5 @@
 import React from "react";
-//import ErrorDialog from "../errordialog";
 import { withRouter } from "react-router";
-import { Link } from "react-router-dom";
-//import styled from "styled-components";
 import { Button, Input, Form, Error } from "../styles";
 import gql from "graphql-tag";
 import { graphql, compose } from "react-apollo";

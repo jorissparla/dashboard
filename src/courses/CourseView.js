@@ -36,11 +36,7 @@ const StudentChipList = styled.div`
   border: solid 1px lightgray;
 `;
 
-const Title = styled.h3`
-  font-weight: 200;
-  font-family: Raleway;
-  padding-left: 30px;
-`;
+
 const Title2 = styled.h3`
   font-weight: 200;
   display: flex;

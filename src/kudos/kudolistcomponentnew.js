@@ -46,10 +46,10 @@ class KudoListComponent extends Component {
       const initials = pic
         ? ""
         : ownerrep_name
-            .split(" ")
-            .map(name => name[0])
-            .join("")
-            .toUpperCase();
+          .split(" ")
+          .map(name => name[0])
+          .join("")
+          .toUpperCase();
       return (
         <Card
           image={img}
@@ -86,9 +86,7 @@ class KudoListComponent extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return { kudos: state.summary.kudos };
-};
+
 
 const kudosQuery = gql`
   query kudosQuery {

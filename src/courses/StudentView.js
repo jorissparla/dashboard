@@ -7,7 +7,6 @@ import Avatar from "material-ui/Avatar";
 import Paper from "material-ui/Paper";
 import { List, ListItem } from "material-ui/List";
 import Divider from "material-ui/Divider";
-import { pinkA200 } from "material-ui/styles/colors";
 import IconMenu from "material-ui/IconMenu";
 import MenuItem from "material-ui/MenuItem";
 import IconButton from "material-ui/IconButton";
@@ -18,10 +17,9 @@ import FileFileDownload from "material-ui/svg-icons/file/file-download";
 import Chip from "material-ui/Chip";
 import format from "date-fns/format";
 import _ from "lodash";
-import { TitleBar } from "../common/TitleBar";
 import SearchBar from "../common/SearchBar";
 import withAuth from "../utils/withAuth";
-import { Title, HeaderRow, HeaderLeft, HeaderRight, StyledInitials } from "../styles";
+import { Title, HeaderRow, HeaderLeft, StyledInitials } from "../styles";
 import { initials } from "../utils/misc";
 
 const Container = styled.div`
@@ -118,7 +116,7 @@ class StudentView extends Component {
   }
 
   renderCourses(enrollments, navid) {
-    const { history, authenticated, user } = this.props;
+    const { authenticated, user } = this.props;
     let validRole = false;
     if (user) {
       validRole = user.role !== "Guest";
@@ -138,7 +136,7 @@ class StudentView extends Component {
                   <div style={{ margin: 4 }}>
                     {`${enrol.course.description}, ${enrol.plannedcourse.hours} hours, status: ${
                       enrol.plannedcourse.status
-                    }, by trainer: ${enrol.plannedcourse.trainer}`}
+                      }, by trainer: ${enrol.plannedcourse.trainer}`}
                   </div>
                   <Chip style={{ margin: 2 }}>{`Start  ${format(
                     enrol.plannedcourse.startdate,
@@ -165,12 +163,8 @@ class StudentView extends Component {
 
   render() {
     const { loading, error, account } = this.props.data;
-    const { history, authenticated, user } = this.props;
-    let validRole = false;
-    if (user) {
-      validRole = user.role !== "Guest";
-    }
-    console.log("PROPS", this.props);
+    //const { user } = this.props;
+
     if (loading) {
       return <p>Loading ...</p>;
     }
@@ -190,8 +184,8 @@ class StudentView extends Component {
             {account.image ? (
               <Avatar src={account.image} size={80} />
             ) : (
-              <StyledInitials>{initials(account.fullname)}</StyledInitials>
-            )}
+                <StyledInitials>{initials(account.fullname)}</StyledInitials>
+              )}
           </ProfilePicture>
 
           <Details>
@@ -199,7 +193,7 @@ class StudentView extends Component {
             <Content>
               {`in Team ${account.team}, Location ${
                 account.locationdetail ? account.locationdetail.location : account.location
-              }`}
+                }`}
             </Content>
           </Details>
         </Container>

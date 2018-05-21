@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
-import AlertsList from "./alerts/alertlist";
+//import AlertsList from "./alerts/alertlist";
 import AlertItem from "./alerts/alertitem";
 import ChatList from "./chat/ChatList";
 import ChatContainer from "./chat/ChatContainer";
@@ -13,11 +13,11 @@ import DashBoardStats from "./dashboardstats";
 import DashBoardContainer from "./dashboardcontainer";
 import HistoryDayContainer from "./charts/historydaycontainer";
 import HistoryDayAll from "./charts/historydayallcontainer";
-import GoLiveList from "./golives/golivelist";
+//import GoLiveList from "./golives/golivelist";
 import GoLiveList1 from "./golives/golivelist1";
 import GoLiveListNew from "./golives/goLiveListNew";
 import GoLiveListSide from "./golives/golivelistside";
-import GoLives from "./golives/golives";
+//import GoLives from "./golives/golives";
 import Award from "./awards/award";
 import KudoListComponent from "./kudos/kudolistcomponent";
 import KudoListAll from "./kudos/kudolistall";
@@ -33,9 +33,9 @@ import RequestResetPassword from "./auth/RequestResetPassword";
 import NewsListContainer from "./news/newslistcontainer";
 import NewsItemContainer from "./news/newsitemcontainer";
 import NewsItemAddContainer from "./news/newsitemaddcontainer";
-import NewsContainer from "./news/NewsContainer";
-import NewsCardContainer0 from "./news/newscardcontainer0";
-import NewsPage from "./news/newspage";
+//import NewsContainer from "./news/NewsContainer";
+//import NewsCardContainer0 from "./news/newscardcontainer0";
+//import NewsPage from "./news/newspage";
 
 import SupportCards from "./supportcard/SupportCards";
 import RequestEditAdd from "./supportcard/Request";
@@ -60,9 +60,18 @@ import AnniversaryList from "./awards/Anniversaries";
 import AGLTest from "./supportcard/Test";
 import CommentsList from "./feedback/commentList";
 import FeedbackList from "./feedback/feedbackList";
-import FeedbackEdit from "./feedback/feedbackEdit";
+//import FeedbackEdit from "./feedback/feedbackEdit";
+import { DashBoardContext } from './Provider'
 
-const NotFound = () => <h2>Not Found!</h2>;
+const NotFound = (props) => {
+  return <div> <DashBoardContext.Consumer>{
+    context => {
+      console.log('ContextMain', context);
+      return <h2>Not Found!</h2>
+    }
+  }</DashBoardContext.Consumer></div >
+};
+
 
 class AppRoutes extends React.Component {
   render() {
@@ -72,6 +81,7 @@ class AppRoutes extends React.Component {
       // return <div>Loading</div>;
     }
     return (
+
       <Switch>
         <Route exact path="/comments" component={CommentsList} />
         <EnhancedRoute
@@ -232,6 +242,7 @@ class AppRoutes extends React.Component {
         />
         <Route component={NotFound} />
       </Switch>
+
     );
   }
 }

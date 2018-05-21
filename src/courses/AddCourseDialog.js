@@ -120,7 +120,7 @@ class AddCourseDialog extends React.Component {
     }
   };
 
-  saveAndAddStudents = () => {};
+  saveAndAddStudents = () => { };
   validStyle = (val, fld) => {
     console.log(this.state, "fld", fld);
     //console.log("ValidStyle", val, "error", this.state.error);
@@ -208,7 +208,6 @@ class AddCourseDialog extends React.Component {
             hintText="Enter StartDate Course"
             value={this.state.startdate}
             name="startdate"
-            autoOk={true}
             onChange={(e, startdate) => this.setState({ startdate })}
           />
           ends{" "}
@@ -217,7 +216,6 @@ class AddCourseDialog extends React.Component {
             textFieldStyle={this.validStyle(this.state.enddate, "startdate")}
             hintText="Enter End Date Course"
             name="enddate"
-            autoOk={true}
             minDate={this.state.startdate}
             value={this.state.enddate}
             onChange={(e, enddate) => this.setState({ enddate })}

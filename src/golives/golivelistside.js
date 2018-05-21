@@ -59,7 +59,7 @@ class GoLiveListSide extends Component {
                 <GoLiveCustomerStyle>{item.customername}</GoLiveCustomerStyle>{" "}
               </div>
             }
-            //secondaryText= {item.version}
+          //secondaryText= {item.version}
           />
           <Divider />
         </GoLiveItemStyle>
@@ -71,7 +71,7 @@ class GoLiveListSide extends Component {
     //const { golives } = this.props;
     const { data: { loading, golives } } = this.props;
     if (loading) {
-      <div>
+      return <div>
         <Spinner />
       </div>;
     }
@@ -94,11 +94,7 @@ class GoLiveListSide extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    golives: state.summary.golives
-  };
-};
+
 
 const queryGoLives = gql`
   query golives {

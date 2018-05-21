@@ -4,10 +4,10 @@ import { graphql } from "react-apollo";
 import SummaryChart from "./NewSummaryChart";
 
 class SummaryChartContainer extends React.Component {
-  componentWillMount() {}
+  componentWillMount() { }
 
   render() {
-    const { data: { loading, error, summaries }, region = "EMEA" } = this.props;
+    const { data: { loading, error, summaries } } = this.props;
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error</div>;
 

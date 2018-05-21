@@ -4,7 +4,6 @@ import { withRouter } from "react-router";
 import { CardSection, Input } from "../common";
 import Divider from "material-ui/Divider";
 import Paper from "material-ui/Paper";
-import Avatar from "material-ui/Avatar";
 import RaisedButton from "material-ui/RaisedButton";
 import { fullWhite } from "material-ui/styles/colors";
 import styled from "styled-components";
@@ -21,7 +20,7 @@ const inputImageField = field => {
   return (
     <div style={{ display: "flex", alignContent: "center" }}>
       <Left>
-        <img src={field.input.value} />
+        <img src={field.input.value} alt="img" />
       </Left>
     </div>
   );

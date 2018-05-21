@@ -60,7 +60,7 @@ class CustomerDetailsWithNotes extends Component {
       _.sortBy(this.props.details.notes, ["date"], "desc").map(note =>
         _.extend({}, note, {
           month: format(note.date, "MMMM"),
-          day: parseInt(format(note.date, "DD")),
+          day: parseInt(format(note.date, "DD"), 10),
           newdate: Date.parse(note.date)
         })
       ) || [];

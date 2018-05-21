@@ -4,8 +4,8 @@ import "./App.css";
 //import AppChartCombi from './charts/appchartcombi'
 //import AlertWidget from "./alerts/alertwidget";
 import SummaryChartContainer from "./charts/SummaryChartContainer";
-import ChatGraphContainer from "./charts/ChatGraphContainer";
-import HistoryChartContainer from "./charts/HistoryChartContainer";
+//import ChatGraphContainer from "./charts/ChatGraphContainer";
+//import HistoryChartContainer from "./charts/HistoryChartContainer";
 //import { StyleLoaderM } from "./common";
 import styled from "styled-components";
 
@@ -42,7 +42,7 @@ class DashBoardStats extends React.Component {
     return team;
   };
   render() {
-    const { data, team } = this.props;
+    //const { data, team } = this.props;
 
     return (
       <Row>

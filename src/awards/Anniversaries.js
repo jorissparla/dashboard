@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from "material-ui/Card";
+import { Card, CardActions, CardHeader, } from "material-ui/Card";
 import FlatButton from "material-ui/FlatButton";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
@@ -44,31 +44,18 @@ class AnniversaryList extends React.Component {
     switch (years) {
       case 5:
         return "#FF8A65";
-        break;
-
       case 10:
         return "#B3E5FC";
-        break;
-
       case 15:
         return "#4DB6AC";
-        break;
-
       case 20:
         return "white";
-        break;
-
       case 25:
         return "#FFC107";
-        break;
-
       case 30:
         return "#CE93D8";
-        break;
-
       default:
         return "white";
-        break;
     }
   };
 

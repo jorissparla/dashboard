@@ -4,7 +4,6 @@ import SelectField from "material-ui/SelectField";
 import TextField from "material-ui/TextField";
 import MenuItem from "material-ui/MenuItem";
 import RaisedButton from "material-ui/RaisedButton";
-import Divider from "material-ui/Divider";
 
 const styles = {
   TextFieldStyle: {
@@ -74,13 +73,8 @@ class ChatAdd extends React.Component {
     }
   }
   render() {
-    const { ranges, onSave, onCancel } = this.props;
-    console.log(
-      "Observe",
-      ranges,
+    const { ranges, onCancel } = this.props;
 
-      this.props.entry.report()
-    );
     if (!ranges) {
       return <CardSection>Loading...</CardSection>;
     }

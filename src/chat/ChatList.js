@@ -7,7 +7,6 @@ import RaisedButton from "material-ui/RaisedButton";
 import Avatar from "material-ui/Avatar";
 import Divider from "material-ui/Divider";
 import _ from "lodash";
-import styled from "styled-components";
 import { HeaderRow, HeaderLeft, HeaderRight, WideTitle, colorAr, getColor } from "../styles";
 
 const styles = {

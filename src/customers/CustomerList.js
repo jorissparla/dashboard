@@ -19,7 +19,6 @@ class CustomerList extends Component {
   };
 
   renderCustomer = ({ id, name, number, followed }) => {
-    const { onSelect = () => console.log("noppes") } = this.props;
     return [
       <ListItem
         key={id}

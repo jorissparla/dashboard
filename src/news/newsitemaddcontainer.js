@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import { withRouter } from "react-router";
 import NewsItem from "./newsitem";
 import gql from "graphql-tag";
