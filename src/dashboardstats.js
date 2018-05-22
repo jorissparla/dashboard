@@ -1,7 +1,6 @@
 import React from "react";
 
 import "./App.css";
-//import AppChartCombi from './charts/appchartcombi'
 import AppChartContainer from "./charts/appchartcontainer";
 import ChatChartContainer from "./charts/chatchartcontainer";
 import HistoryChartContainer from "./charts/historycontainer";

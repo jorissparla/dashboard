@@ -54,7 +54,7 @@ import { DashBoardContext } from './Provider'
 const NotFound = (props) => {
   return <div> <DashBoardContext.Consumer>{
     context => {
-      console.log('ContextMain', context);
+      console.log('ContextMain', context, context.authenticated());
       return <h2>Not Found!</h2>
     }
   }</DashBoardContext.Consumer></div >

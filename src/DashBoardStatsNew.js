@@ -1,11 +1,7 @@
 import React from "react";
 
 import "./App.css";
-//import AppChartCombi from './charts/appchartcombi'
 import SummaryChartContainer from "./charts/SummaryChartContainer";
-//import ChatGraphContainer from "./charts/ChatGraphContainer";
-//import HistoryChartContainer from "./charts/HistoryChartContainer";
-//import { StyleLoaderM } from "./common";
 import styled from "styled-components";
 
 const Row = styled.div`
