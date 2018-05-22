@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import gql from "graphql-tag";
 import { graphql, compose } from "react-apollo";
 import { withRouter } from "react-router";
@@ -54,22 +53,16 @@ class NewsItemContainer extends Component {
     //deleteNews(id);
     const input = { id };
     this.props.deleteNews({ variables: { input } });
-    setTimeout(() => this.props.history.replace("/news"), 500);
+    setTimeout(() => this.props.history.push("/news"), 500);
   };
 
-  async componentDidMount() {
-    //await this.props.fetchNewsItem(this.props.match.params.id);
-  }
+
 
   render() {
-    //const newsItem = this.props.data;
-    console.log(this.props);
     if (this.props.data.loading) {
       return <div>Loading</div>;
     }
     const news = this.props.data.news[0];
-    //const newsItem = this.props.data.news({ variables: { id: this.props.match.params.id } })
-    //console.log('NewsItem::', newsItem) //newsItem);
     if (!this.props.news) {
       return <div>Loading...</div>;
     }
@@ -90,12 +83,11 @@ const mapStateToProps = state => {
   };
 };
 
-export default //connect(mapStateToProps, {  fetchNewsItem,  updateNews,  deleteNews})(
-compose(
-  graphql(FETCHITEM_QUERY, {
-    options: ownProps => ({ variables: { id: ownProps.match.params.id } })
-  }),
-  graphql(UPDATE_ITEM_QUERY, { name: "updateNews" }),
-  graphql(DELETE_ITEM_QUERY, { name: "deleteNews" })
-)(withRouter(NewsItemContainer));
-//);
+export default
+  compose(
+    graphql(FETCHITEM_QUERY, {
+      options: ownProps => ({ variables: { id: ownProps.match.params.id } })
+    }),
+    graphql(UPDATE_ITEM_QUERY, { name: "updateNews" }),
+    graphql(DELETE_ITEM_QUERY, { name: "deleteNews" })
+  )(withRouter(NewsItemContainer));

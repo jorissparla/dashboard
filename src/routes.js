@@ -2,11 +2,8 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
-//import AlertsList from "./alerts/alertlist";
-import AlertItem from "./alerts/alertitem";
 import ChatList from "./chat/ChatList";
 import ChatContainer from "./chat/ChatContainer";
-import AlertItemAddNew from "./alerts/alertitemaddnew";
 import DashBoard from "./dashboard";
 import DashBoardStats from "./dashboardstats";
 import DashBoardContainer from "./dashboardcontainer";
@@ -156,14 +153,7 @@ class AppRoutes extends React.Component {
           path="/supportcard/request"
           component={RequestEditAdd}
         />
-        <AuthRoute
-          allowed={["Admin", "PO", "SU"]}
-          user={user}
-          exact
-          path="/alerts/new"
-          component={RequireAuth(AlertItemAddNew)}
-        />
-        <Route path="/alerts/:id" component={RequireAuth(AlertItem)} />
+
         <Route exact path="/news" component={NewsListContainer} />
         <AuthRoute
           allowed={["Admin", "PO", "SU"]}

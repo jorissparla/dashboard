@@ -2,7 +2,6 @@ import React from "react";
 
 import "./App.css";
 //import AppChartCombi from './charts/appchartcombi'
-//import AlertWidget from "./alerts/alertwidget";
 import SummaryChartContainer from "./charts/SummaryChartContainer";
 //import ChatGraphContainer from "./charts/ChatGraphContainer";
 //import HistoryChartContainer from "./charts/HistoryChartContainer";
