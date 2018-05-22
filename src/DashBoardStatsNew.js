@@ -38,7 +38,7 @@ class DashBoardStats extends React.Component {
 
   getTeam = () => {
     const team = this.props.match ? this.props.match.params.team : this.props.team;
-    console.log(` RETURNS TEAM: ${team} , PROPS:  ${this.props.team}, PARAMS: ${this.props.match}`);
+    //console.log(` RETURNS TEAM: ${team} , PROPS:  ${this.props.team}, PARAMS: ${this.props.match}`);
     return team;
   };
   render() {
