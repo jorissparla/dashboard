@@ -2,7 +2,6 @@ import React from "react";
 
 import "./App.css";
 import KudoListComponentNew from "./kudos/kudolistcomponentnew";
-//import AlertWidget from './alerts/alertwidget'
 import NewsCardContainer from "./news/NewsContainer";
 import GoLiveListSide from "./golives/golivelistside";
 import { StyleLoaderM } from "./common";

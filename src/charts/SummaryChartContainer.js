@@ -4,7 +4,7 @@ import { graphql } from "react-apollo";
 import SummaryChart from "./NewSummaryChart";
 
 class SummaryChartContainer extends React.Component {
-  componentWillMount() { }
+  componentWillMount() {}
 
   render() {
     const { data: { loading, error, summaries } } = this.props;
@@ -16,7 +16,6 @@ class SummaryChartContainer extends React.Component {
     const type = !this.props.type ? "column" : this.props.type;
     const team = this.props.team;
     const summary = summaries; // .reverse()
-    console.log(`Summary: ${summary.length}`);
     const color = this.props.color;
     return (
       <SummaryChart

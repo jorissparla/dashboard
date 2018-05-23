@@ -1,36 +1,89 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
+import gql from "graphql-tag";
+import { graphql, compose } from "react-apollo";
 import { withRouter } from "react-router";
 import NewsItem from "./newsitem";
-import { fetchNewsItem, updateNews, deleteNews } from "../actions/index";
+import Snackbar from "material-ui/Snackbar";
+//import { fetchNewsItem, updateNews, deleteNews } from "../actions/index";
+
+const FETCHITEM_QUERY = gql`
+  query news($id: ID) {
+    news(id: $id) {
+      id
+      title
+      body
+      link
+      link_text
+      img
+      create_date
+      expire_date
+      user_id
+    }
+  }
+`;
+
+const UPDATE_ITEM_QUERY = gql`
+  mutation updateNews($input: NewsInputType) {
+    updateNews(input: $input) {
+      title
+    }
+  }
+`;
+
+const DELETE_ITEM_QUERY = gql`
+  mutation deleteNews($input: NewsInputType) {
+    deleteNews(input: $input) {
+      error
+    }
+  }
+`;
 
 class NewsItemContainer extends Component {
+  state = {
+    showMessage: false,
+    err: "No error"
+  };
   doSubmit = values => {
-    window.alert(JSON.stringify(values, null, 2));
-    updateNews(values);
+    //window.alert(JSON.stringify(values, null, 2));
+    //console.log(JSON.stringify(values, null, 2));
+    const { id, title, body, link, link_text, img } = values;
+    const input = { id, title, body, link, link_text, img };
+    console.log(input);
+    this.props.updateNews({ variables: { input } });
+    //updateNews(values);
     setTimeout(() => this.props.history.push("/news"), 500);
   };
 
   doDelete = id => {
-    deleteNews(id);
-    setTimeout(() => this.props.history.replace("/news"), 500);
+    //deleteNews(id);
+    const input = { id };
+    this.props.deleteNews({ variables: { input } });
+    setTimeout(() => this.props.history.push("/news"), 500);
   };
 
-  async componentDidMount() {
-    await this.props.fetchNewsItem(this.props.match.params.id);
-  }
-
   render() {
-    if (!this.props.news) {
+    if (this.props.data.loading) {
+      return <div>Loading</div>;
+    }
+    const news = this.props.data.news[0];
+    if (!news) {
       return <div>Loading...</div>;
     }
     return (
-      <NewsItem
-        initialValues={this.props.news}
-        onSave={this.doSubmit}
-        onDelete={this.doDelete}
-        title="Edit news item"
-      />
+      <React.Fragment>
+        <NewsItem
+          initialValues={news}
+          onSave={this.doSubmit}
+          onDelete={this.doDelete}
+          title="Edit news item"
+        />
+        <Snackbar
+          open={this.state.showMessage}
+          message={this.state.err}
+          autoHideDuration={4000}
+          onRequestClose={() => console.log("close")}
+        />
+      </React.Fragment>
     );
   }
 }
@@ -41,8 +94,10 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps, {
-  fetchNewsItem,
-  updateNews,
-  deleteNews
-})(withRouter(NewsItemContainer));
+export default compose(
+  graphql(FETCHITEM_QUERY, {
+    options: ownProps => ({ variables: { id: ownProps.match.params.id } })
+  }),
+  graphql(UPDATE_ITEM_QUERY, { name: "updateNews" }),
+  graphql(DELETE_ITEM_QUERY, { name: "deleteNews" })
+)(withRouter(NewsItemContainer));

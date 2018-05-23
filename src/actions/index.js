@@ -67,7 +67,6 @@ export const signinUser = async ({ email, password }) => {
       return { error: "Bad Login Info" };
     }
     if (response) {
-      console.log("response.data.user", response.data.user);
       localStorage.setItem("id", response.data.uic);
       localStorage.setItem("token", response.data.token || "PIN01");
       localStorage.setItem("email", email);

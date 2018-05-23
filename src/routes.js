@@ -2,25 +2,16 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
-//import AlertsList from "./alerts/alertlist";
-import AlertItem from "./alerts/alertitem";
 import ChatList from "./chat/ChatList";
 import ChatContainer from "./chat/ChatContainer";
-import AlertItemAddNew from "./alerts/alertitemaddnew";
 import DashBoard from "./dashboard";
-import DashBoard0 from "./dashboard0";
 import DashBoardStats from "./dashboardstats";
 import DashBoardContainer from "./dashboardcontainer";
 import HistoryDayContainer from "./charts/historydaycontainer";
 import HistoryDayAll from "./charts/historydayallcontainer";
-//import GoLiveList from "./golives/golivelist";
-import GoLiveList1 from "./golives/golivelist1";
 import GoLiveListNew from "./golives/goLiveListNew";
 import GoLiveListSide from "./golives/golivelistside";
-//import GoLives from "./golives/golives";
 import Award from "./awards/award";
-import KudoListComponent from "./kudos/kudolistcomponent";
-import KudoListAll from "./kudos/kudolistall";
 import KudoListComponentNew from "./kudos/kudolistcomponentnew";
 import Signin from "./auth/signin";
 import SigninWithPIN from "./auth/SigninWithPIN";
@@ -33,9 +24,6 @@ import RequestResetPassword from "./auth/RequestResetPassword";
 import NewsListContainer from "./news/newslistcontainer";
 import NewsItemContainer from "./news/newsitemcontainer";
 import NewsItemAddContainer from "./news/newsitemaddcontainer";
-//import NewsContainer from "./news/NewsContainer";
-//import NewsCardContainer0 from "./news/newscardcontainer0";
-//import NewsPage from "./news/newspage";
 
 import SupportCards from "./supportcard/SupportCards";
 import RequestEditAdd from "./supportcard/Request";
@@ -61,27 +49,23 @@ import AGLTest from "./supportcard/Test";
 import CommentsList from "./feedback/commentList";
 import FeedbackList from "./feedback/feedbackList";
 //import FeedbackEdit from "./feedback/feedbackEdit";
-import { DashBoardContext } from './Provider'
+import { DashBoardContext, withDashBoardContext } from "./Provider";
 
-const NotFound = (props) => {
-  return <div> <DashBoardContext.Consumer>{
-    context => {
-      console.log('ContextMain', context);
-      return <h2>Not Found!</h2>
-    }
-  }</DashBoardContext.Consumer></div >
-};
-
+const NotFound = props => {
+  //withDashBoardContext(props => {
+  console.log("PRO", props);
+  return <h2>Not Found</h2>;
+}; //);
 
 class AppRoutes extends React.Component {
   render() {
     const { user } = this.props;
+    console.log("PROE", this.props);
     if (!user) {
       console.log("loading");
       // return <div>Loading</div>;
     }
     return (
-
       <Switch>
         <Route exact path="/comments" component={CommentsList} />
         <EnhancedRoute
@@ -126,7 +110,6 @@ class AppRoutes extends React.Component {
         <Route exact path="/region/:region" component={DashBoardContainer} />
         <Route exact path="/q/:id" component={DashBoardContainer} />
         <Route allowed={["Admin"]} user={user} path="/main/1" component={DashBoard} />
-        <Route path="/main/0" component={DashBoard0} />
         <Route exact path="/team/:team" component={DashBoardStatsNew} />
         <Route exact path="/team/:team/region/:region" component={DashBoardStats} />
         <Route path="award" component={Award} />
@@ -166,14 +149,7 @@ class AppRoutes extends React.Component {
           path="/supportcard/request"
           component={RequestEditAdd}
         />
-        <AuthRoute
-          allowed={["Admin", "PO", "SU"]}
-          user={user}
-          exact
-          path="/alerts/new"
-          component={RequireAuth(AlertItemAddNew)}
-        />
-        <Route path="/alerts/:id" component={RequireAuth(AlertItem)} />
+
         <Route exact path="/news" component={NewsListContainer} />
         <AuthRoute
           allowed={["Admin", "PO", "SU"]}
@@ -200,12 +176,9 @@ class AppRoutes extends React.Component {
         />
 
         <Route path="/golivelist" component={GoLiveListNew} />
-        <Route path="/golivelist1" component={GoLiveList1} />
         <Route path="/golivelistside" component={GoLiveListSide} />
         <Route path="/golives" component={GoLiveListNew} />
         <Route path="/kudos" component={KudoListComponentNew} />
-        <Route path="/kudosall" component={KudoListAll} />
-        <Route path="/kudolistcomponent" component={KudoListComponent} />
         <Route path="/signin" component={Signin} />
         <Route path="/signinPIN" component={SigninWithPIN} />
         <Route path="/signout" component={Signout} />
@@ -242,7 +215,6 @@ class AppRoutes extends React.Component {
         />
         <Route component={NotFound} />
       </Switch>
-
     );
   }
 }

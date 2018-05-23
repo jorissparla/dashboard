@@ -1,12 +1,7 @@
 import React from "react";
 
 import "./App.css";
-//import AppChartCombi from './charts/appchartcombi'
-//import AlertWidget from "./alerts/alertwidget";
 import SummaryChartContainer from "./charts/SummaryChartContainer";
-//import ChatGraphContainer from "./charts/ChatGraphContainer";
-//import HistoryChartContainer from "./charts/HistoryChartContainer";
-//import { StyleLoaderM } from "./common";
 import styled from "styled-components";
 
 const Row = styled.div`
@@ -38,7 +33,7 @@ class DashBoardStats extends React.Component {
 
   getTeam = () => {
     const team = this.props.match ? this.props.match.params.team : this.props.team;
-    console.log(` RETURNS TEAM: ${team} , PROPS:  ${this.props.team}, PARAMS: ${this.props.match}`);
+    //console.log(` RETURNS TEAM: ${team} , PROPS:  ${this.props.team}, PARAMS: ${this.props.match}`);
     return team;
   };
   render() {
