@@ -49,27 +49,23 @@ import AGLTest from "./supportcard/Test";
 import CommentsList from "./feedback/commentList";
 import FeedbackList from "./feedback/feedbackList";
 //import FeedbackEdit from "./feedback/feedbackEdit";
-import { DashBoardContext } from './Provider'
+import { DashBoardContext, withDashBoardContext } from "./Provider";
 
-const NotFound = (props) => {
-  return <div> <DashBoardContext.Consumer>{
-    context => {
-      console.log('ContextMain', context, context.authenticated());
-      return <h2>Not Found!</h2>
-    }
-  }</DashBoardContext.Consumer></div >
-};
-
+const NotFound = props => {
+  //withDashBoardContext(props => {
+  console.log("PRO", props);
+  return <h2>Not Found</h2>;
+}; //);
 
 class AppRoutes extends React.Component {
   render() {
     const { user } = this.props;
+    console.log("PROE", this.props);
     if (!user) {
       console.log("loading");
       // return <div>Loading</div>;
     }
     return (
-
       <Switch>
         <Route exact path="/comments" component={CommentsList} />
         <EnhancedRoute
@@ -219,7 +215,6 @@ class AppRoutes extends React.Component {
         />
         <Route component={NotFound} />
       </Switch>
-
     );
   }
 }

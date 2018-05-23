@@ -34,11 +34,32 @@ const styles = {
 
 class Header extends React.Component {
   state = {
-    showdrawer: false
+    showdrawer: false,
+    ipaddress: ""
   };
   constructor(props) {
     super(props);
     this.hamburgerMenu = this.hamburgerMenu.bind(this);
+  }
+
+  componentDidMount() {
+    var self = this;
+    window.RTCPeerConnection =
+      window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection; //compatibility for Firefox and chrome
+    var pc = new RTCPeerConnection({ iceServers: [] }),
+      noop = function() {};
+    pc.createDataChannel(""); //create a bogus data channel
+    pc.createOffer(pc.setLocalDescription.bind(pc), noop); // create offer and set local description
+    pc.onicecandidate = function(ice) {
+      if (ice && ice.candidate && ice.candidate.candidate) {
+        var myIP = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/.exec(
+          ice.candidate.candidate
+        )[1];
+        console.log("my IP: ", myIP);
+        self.setState({ ipaddress: myIP });
+        pc.onicecandidate = noop;
+      }
+    };
   }
 
   toggleMenu = () => {
@@ -212,17 +233,19 @@ class Header extends React.Component {
   }
 
   renderToolBar() {
+    console.log("IP", this.state.ipaddress);
     return (
       <Toolbar style={styles}>
         <ToolbarGroup firstChild={true}>
           {this.hamburgerIcon()}
           {this.renderPicture()}
         </ToolbarGroup>
-
         <ToolbarGroup>
           <ToolbarTitle text="Infor Support Dashboard" style={{ color: "white" }} />
-        </ToolbarGroup>
-
+        </ToolbarGroup>{" "}
+        <ToolbarGroup>
+          <ToolbarTitle text={this.state.ipaddress} style={{ color: "white" }} />
+        </ToolbarGroup>{" "}
         <ToolbarGroup>{this.renderButtons()}</ToolbarGroup>
       </Toolbar>
     );

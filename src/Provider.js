@@ -1,9 +1,8 @@
-import React from 'react'
+import React from "react";
 
 const DashBoardContext = React.createContext({
-  name: 'Joris',
-
-})
+  name: "Joris"
+});
 
 export default class DashBoardContextProvider extends React.Component {
   state = {
@@ -13,7 +12,7 @@ export default class DashBoardContextProvider extends React.Component {
     role: localStorage.getItem("role"),
     fullname: localStorage.getItem("name"),
     setUser: (id, email, image, picture, fullname, role, token) => {
-      this.setState({ id, email, image, picture, fullname, role })
+      this.setState({ id, email, image, picture, fullname, role });
       localStorage.setItem("id", id);
       localStorage.setItem("token", token);
       localStorage.setItem("email", email);
@@ -21,11 +20,25 @@ export default class DashBoardContextProvider extends React.Component {
       localStorage.setItem("picture", image);
       localStorage.setItem("role", role);
     },
-    authenticated: () => this.state.email ? true : false
-  }
+    authenticated: () => (this.state.email ? true : false)
+  };
   render() {
-    return <DashBoardContext.Provider value={this.state}>{this.props.children}</DashBoardContext.Provider>
+    return (
+      <DashBoardContext.Provider value={this.state}>
+        {this.props.children}
+      </DashBoardContext.Provider>
+    );
   }
 }
 
-export { DashBoardContext }
+export function withDashBoardContext(Component) {
+  return function dashBoardedComponent(props) {
+    return (
+      <DashBoardContext.Consumer>
+        {context => <Component {...props} context={context} />}
+      </DashBoardContext.Consumer>
+    );
+  };
+}
+
+export { DashBoardContext };

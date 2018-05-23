@@ -21,10 +21,15 @@ import { ApolloClient, InMemoryCache } from "apollo-client-preset";
 import { ApolloProvider } from "react-apollo";
 import { createHttpLink } from "apollo-link-http";
 import registerServiceWorker from "./registerServiceWorker";
-import ContextProvider from './Provider'
+import ContextProvider from "./Provider";
+
 console.log("process.env", process.env);
 
-const { REACT_APP_PORT_GRAPHQL = 55555, REACT_APP_GRAPHQLSERVER = "nlbavwixs", REACT_APP_GRAPHQL_PATH = "" } = process.env;
+const {
+  REACT_APP_PORT_GRAPHQL = 55555,
+  REACT_APP_GRAPHQLSERVER = "nlbavwixs",
+  REACT_APP_GRAPHQL_PATH = ""
+} = process.env;
 
 //const uri = `http://localhost:4000`
 
@@ -83,7 +88,6 @@ const Main = () => (
   <ApolloProvider client={client}>
     <Provider store={store}>
       <MuiThemeProvider muiTheme={muiTheme}>
-
         <BrowserRouter>
           <ContextProvider>
             <App>
@@ -91,7 +95,6 @@ const Main = () => (
             </App>
           </ContextProvider>
         </BrowserRouter>
-
       </MuiThemeProvider>
     </Provider>
   </ApolloProvider>
