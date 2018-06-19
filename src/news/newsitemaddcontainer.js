@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { withRouter } from "react-router";
 import NewsItem from "./newsitem";
 import gql from "graphql-tag";
-import { graphql } from "react-apollo";
+import * as R from "ramda";
+import { graphql, Mutation } from "react-apollo";
 
 class NewsItemAddContainer extends Component {
   doSubmit = async values => {
@@ -10,7 +11,33 @@ class NewsItemAddContainer extends Component {
     setTimeout(() => this.props.history.push("/news"), 500);
   };
   render() {
-    return <NewsItem initialValues={{}} onSave={this.doSubmit} title="New news item" />;
+    return (
+      <Mutation
+        mutation={createNews}
+        update={(cache, { data: { createNews } }) => {
+          const query = ALL_NEWS;
+          const { news } = cache.readQuery({ query });
+          const idx = R.findIndex(R.propEq("id", news.id), news);
+          cache.writeQuery({
+            query,
+            data: { news: R.concat(news, [createNews]) }
+          });
+        }}
+      >
+        {(createNews, { data }) => {
+          return (
+            <NewsItem
+              initialValues={{}}
+              title="New news item"
+              onSave={values => {
+                createNews({ variables: { input: values } });
+                setTimeout(() => this.props.history.push("/news"), 500);
+              }}
+            />
+          );
+        }}
+      </Mutation>
+    );
   }
 }
 
@@ -22,4 +49,16 @@ const createNews = gql`
   }
 `;
 
-export default graphql(createNews, { name: "createNews" })(withRouter(NewsItemAddContainer));
+const ALL_NEWS = gql`
+  {
+    news {
+      title
+      body
+      img
+      expire_date
+      id
+    }
+  }
+`;
+
+export default withRouter(NewsItemAddContainer);

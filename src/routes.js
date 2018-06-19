@@ -50,17 +50,16 @@ import CommentsList from "./feedback/commentList";
 import FeedbackList from "./feedback/feedbackList";
 //import FeedbackEdit from "./feedback/feedbackEdit";
 import { DashBoardContext, withDashBoardContext } from "./Provider";
+import AniNews from "./news/aninews";
 
 const NotFound = props => {
   //withDashBoardContext(props => {
-  console.log("PRO", props);
   return <h2>Not Found</h2>;
 }; //);
 
 class AppRoutes extends React.Component {
   render() {
     const { user } = this.props;
-    console.log("PROE", this.props);
     if (!user) {
       console.log("loading");
       // return <div>Loading</div>;
@@ -84,7 +83,7 @@ class AppRoutes extends React.Component {
           user={user}
           exact
           path="/test"
-          component={CustomerCommentsPage}
+          component={AniNews}
         />
         <EnhancedRoute
           editors={["Admin", "PO", "SU"]}

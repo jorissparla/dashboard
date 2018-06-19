@@ -42,7 +42,7 @@ class Header extends React.Component {
     this.hamburgerMenu = this.hamburgerMenu.bind(this);
   }
 
-  componentDidMount() {
+  doSomething() {
     var self = this;
     window.RTCPeerConnection =
       window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection; //compatibility for Firefox and chrome
@@ -50,6 +50,7 @@ class Header extends React.Component {
     if (window.RTCPeerConnection) {
       var pc = new RTCPeerConnection({ iceServers: [] }),
         noop = function() {};
+
       pc.createDataChannel(""); //create a bogus data channel
       pc.createOffer(pc.setLocalDescription.bind(pc), noop); // create offer and set local description
       pc.onicecandidate = function(ice) {
@@ -63,6 +64,10 @@ class Header extends React.Component {
         }
       };
     }
+  }
+
+  componentDidMount() {
+    // this.doSomething()
   }
 
   toggleMenu = () => {
@@ -236,7 +241,6 @@ class Header extends React.Component {
   }
 
   renderToolBar() {
-    console.log("IP", this.state.ipaddress);
     return (
       <Toolbar style={styles}>
         <ToolbarGroup firstChild={true}>
@@ -247,7 +251,7 @@ class Header extends React.Component {
           <ToolbarTitle text="Infor Support Dashboard" style={{ color: "white" }} />
         </ToolbarGroup>{" "}
         <ToolbarGroup>
-          <ToolbarTitle text={this.state.ipaddress} style={{ color: "white" }} />
+          <ToolbarTitle text={this.state.ipaddress || ""} style={{ color: "white" }} />
         </ToolbarGroup>{" "}
         <ToolbarGroup>{this.renderButtons()}</ToolbarGroup>
       </Toolbar>
