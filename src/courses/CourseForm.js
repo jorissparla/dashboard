@@ -8,6 +8,7 @@ import Chip from "material-ui/Chip";
 import moment from "moment";
 import styled from "styled-components";
 import { NormalRaisedButton, CancelRaisedButton, DeleteButton } from "../common/TitleBar";
+import CreateCourseFolder from "./CreateCourseFolder";
 import withAuth from "../utils/withAuth";
 
 const SelectStyle = styled.div`
@@ -37,21 +38,21 @@ const teams = [
 ];
 
 class CourseForm extends Component {
-  state = {};
-  constructor() {
-    super();
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
-  }
+  state = { refresh: false, path: "" };
 
-  handleSubmit(e) {
+  handleSubmit = e => {
     //e.preventDefault();
     this.props.onSave(e);
-  }
+  };
 
-  handleDelete(e) {
+  handleDelete = e => {
     this.props.onDelete(e);
-  }
+  };
+
+  handleRerender = value => {
+    console.log("reRendered");
+    this.setState({ path: value });
+  };
   render() {
     const {
       handleSubmit,
@@ -208,6 +209,7 @@ class CourseForm extends Component {
               style={styles.textfieldstyle}
             />
           </CardSection>
+          {!course.link && <CreateCourseFolder id={course.id} reRender={this.handleRerender} />}
           <CardSection>
             {!readOnly && <NormalRaisedButton label="Save" type="submit" />}
             <CancelRaisedButton
