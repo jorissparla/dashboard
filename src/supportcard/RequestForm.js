@@ -1,6 +1,6 @@
 import React from "react";
 import Checkbox from "material-ui/Checkbox";
-import moment from "moment";
+import { format } from "date-fns";
 import AutoComplete from "material-ui/AutoComplete";
 import { TextArea, ViewText, Button, FlexCol, FlexRow } from "../styles";
 import styled from "styled-components";
@@ -52,24 +52,12 @@ class RequestForm extends React.Component {
         <FlexCol>
           <h2>Request</h2>
           <FlexRow>
-            <ViewText
-              placeholder="requested by"
-              background="grey"
-              color="white"
-              width="20%"
-            >
+            <ViewText placeholder="requested by" background="grey" color="white" width="20%">
               {this.state.name}
             </ViewText>
 
-            <ViewText
-              placeholder="requested date"
-              width="30%"
-              background="grey"
-              color="white"
-            >
-              {moment(Date.parse(this.state.createdAt)).format(
-                "dddd, DD-MMM-YYYY"
-              )}
+            <ViewText placeholder="requested date" width="30%" background="grey" color="white">
+              {format(Date.parse(this.state.createdAt, "dddd, DD-MMM-YYYY"))}
             </ViewText>
           </FlexRow>
           <FlexRow>
