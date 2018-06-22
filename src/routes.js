@@ -200,6 +200,12 @@ class AppRoutes extends React.Component {
           component={CourseCard}
         />
         <AuthRoute
+          allowed={["Admin", "PO", "SU", "Guest"]}
+          user={user}
+          path="/courses/view/:id"
+          component={props => <CourseCard {...props} view={true} />}
+        />
+        <AuthRoute
           allowed={["Admin", "PO"]}
           user={user}
           exact

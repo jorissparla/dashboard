@@ -18,9 +18,12 @@ import App from "./appnav";
 import "./index.css";
 
 //import { ApolloClient, InMemoryCache } from "apollo-client-preset";
-import ApolloClient from "apollo-boost";
+//import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "react-apollo";
+import { ApolloClient } from "apollo-client";
 import { createHttpLink } from "apollo-link-http";
+import { InMemoryCache } from "apollo-cache-inmemory";
+import { createUploadLink } from "apollo-upload-client";
 //import registerServiceWorker from "./registerServiceWorker";
 import ContextProvider from "./Provider";
 
@@ -33,9 +36,10 @@ const {
 //const uri = `http://localhost:4000`
 
 const uri = `http://${REACT_APP_GRAPHQLSERVER}:${REACT_APP_PORT_GRAPHQL}/${REACT_APP_GRAPHQL_PATH}`;
-
+const link = createUploadLink({ uri });
 const client = new ApolloClient({
-  uri
+  link,
+  cache: new InMemoryCache()
 });
 
 injectTapEventPlugin();

@@ -91,6 +91,10 @@ class CourseCard extends Component {
       .catch(e => this.handleMessage(JSON.stringify(e, null, 2)));
   };
 
+  handleRefetch = async () => {
+    await this.props.data.refetch();
+  };
+
   handleUpdatePlanned = async ({
     id,
     startdate,
@@ -181,6 +185,9 @@ class CourseCard extends Component {
       locations,
       statuses
     } = this.props.data;
+
+    const viewMode = this.props.view || false;
+    console.log("viewMode", viewMode);
     const { tabStyle } = styles;
     if (loading) {
       return <p>Loading ...</p>;
@@ -191,79 +198,83 @@ class CourseCard extends Component {
     const { planned } = this.state;
     const trainer = planned ? planned.trainer : "";
     const studentlist = planned ? planned.students : [];
-    return [
-      <Snackbar
-        open={this.state.showMessage}
-        message={this.state.message}
-        autoHideDuration={4000}
-        onRequestClose={this.autoCloseMessage}
-      />,
-      <Tabs
-        inkBarStyle={tabStyle}
-        value={this.state.activeTab}
-        onChange={value => this.setState({ activeTab: value })}
-      >
-        <Tab label="Course Details" value="course" key={1}>
-          <Div>
-            <Right>
-              <CourseForm
-                initialValues={course}
-                coursetypes={coursetypes}
-                statuses={statuses.filter(s => s.type === "Course")}
-                course={course}
-                trainers={supportfolks}
-                onSave={this.handleSave}
-                onDelete={this.showConfirmDialog}
-                readOnly={false}
-              />
-            </Right>
-            <YesNoDialog
-              open={this.state.toConfirmDeleteCourse}
-              handleYes={this.confirmedDeleteCourse}
-              handleNo={this.cancelDelete}
-              question="Delete This Course?"
-            />
-          </Div>
-        </Tab>
-        <Tab
-          key={2}
-          label="Schedules"
-          value="schedule"
+    return (
+      <React.Fragment>
+        <Snackbar
+          open={this.state.showMessage}
+          message={this.state.message}
+          autoHideDuration={4000}
+          onRequestClose={this.autoCloseMessage}
+        />,
+        <Tabs
+          inkBarStyle={tabStyle}
+          value={this.state.activeTab}
           onChange={value => this.setState({ activeTab: value })}
         >
-          <Left>
-            <PlannedCourses
-              accounts={supportfolks}
-              course={course}
-              coursetypes={coursetypes}
-              courses={courses}
-              trainer={trainer}
-              locations={locations}
-              statuses={statuses.filter(s => s.type === "Planned")}
-              planned={course ? course.plannedcourses : []}
-              hours={course ? course.hours : ""}
-              onCancel={() => this.props.history.push("/courses")}
-              onRowSelected={e => this.setState({ planned: e })}
-              onUpdate={v => this.handleUpdatePlanned(v)}
-              onAddNew={v => this.handleAddPlanned(v)}
-              onDelete={id => this.showConfirmDeletePlannedDialog(id)}
-              onRegister={e => this.props.history.push(`/courses/addstudents/${e.id}`)}
-            />
-            <YesNoDialog
-              open={this.state.toConfirmDeletePlanned}
-              handleYes={this.confirmedDeletePlanned}
-              handleNo={this.cancelDelete}
-              question="Delete Scheduled Course?"
-            />
-            <CourseStudentList students={studentlist} />
-          </Left>
-        </Tab>
-        <Tab label="Admin" value="admin">
-          {" "}
-          <Title>No Information Yet</Title>
-        </Tab>
-      </Tabs>
-    ];
+          <Tab label="Course Details" value="course" key={1}>
+            <Div>
+              <Right>
+                <CourseForm
+                  initialValues={course}
+                  coursetypes={coursetypes}
+                  statuses={statuses.filter(s => s.type === "Course")}
+                  course={course}
+                  trainers={supportfolks}
+                  onSave={this.handleSave}
+                  onDelete={this.showConfirmDialog}
+                  onRefetch={this.handleRefetch}
+                  readOnly={viewMode}
+                />
+              </Right>
+              <YesNoDialog
+                open={this.state.toConfirmDeleteCourse}
+                handleYes={this.confirmedDeleteCourse}
+                handleNo={this.cancelDelete}
+                question="Delete This Course?"
+              />
+            </Div>
+          </Tab>
+          {!viewMode && (
+            <Tab
+              key={2}
+              label="Schedules"
+              value="schedule"
+              onChange={value => this.setState({ activeTab: value })}
+            >
+              <Left>
+                <PlannedCourses
+                  accounts={supportfolks}
+                  course={course}
+                  coursetypes={coursetypes}
+                  courses={courses}
+                  trainer={trainer}
+                  locations={locations}
+                  statuses={statuses.filter(s => s.type === "Planned")}
+                  planned={course ? course.plannedcourses : []}
+                  hours={course ? course.hours : ""}
+                  onCancel={() => this.props.history.push("/courses")}
+                  onRowSelected={e => this.setState({ planned: e })}
+                  onUpdate={v => this.handleUpdatePlanned(v)}
+                  onAddNew={v => this.handleAddPlanned(v)}
+                  onDelete={id => this.showConfirmDeletePlannedDialog(id)}
+                  onRegister={e => this.props.history.push(`/courses/addstudents/${e.id}`)}
+                />
+                <YesNoDialog
+                  open={this.state.toConfirmDeletePlanned}
+                  handleYes={this.confirmedDeletePlanned}
+                  handleNo={this.cancelDelete}
+                  question="Delete Scheduled Course?"
+                />
+                <CourseStudentList students={studentlist} />
+              </Left>
+            </Tab>
+          )}
+          <Tab label="Admin" value="admin">
+            <Title>No Information Yet</Title>
+          </Tab>
+        </Tabs>
+      </React.Fragment>
+    );
   }
 }
 

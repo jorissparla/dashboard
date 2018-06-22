@@ -84,8 +84,12 @@ const deleteNews = ({ render }) => (
   </Mutation>
 );
 
+const newsComp = ({ render }) => {
+  <Query query={ALL_NEWS}>{(data, loading) => render(data, loading)}</Query>;
+};
+
 const NewsContainer = adopt({
-  news: <Query query={ALL_NEWS} />,
+  news: newsComp,
   deleteNews,
   updateNews
 });

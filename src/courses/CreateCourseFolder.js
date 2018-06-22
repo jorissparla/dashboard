@@ -19,8 +19,15 @@ const UPDATE_COURSE = gql`
   mutation updateCourse($input: InputCourseType) {
     updateCourse(input: $input) {
       course {
-        id
-        applicable
+        title
+        description
+        team
+        link
+        status
+        type
+        startdate
+        enddate
+        hours
       }
     }
   }
@@ -72,7 +79,6 @@ class CreateFolder extends Component {
 
   render() {
     const { id, classes } = this.props;
-    console.log(id);
     return (
       <Updater>
         {({ createFolder, updateCourse }) => {
@@ -87,7 +93,7 @@ class CreateFolder extends Component {
                 <Typography variant="headline" component="h2">
                   Create Folder
                 </Typography>
-                <form action="">
+                <div>
                   {this.state.folderName.length > 0 && (
                     <Button
                       variant="contained"
@@ -106,7 +112,7 @@ class CreateFolder extends Component {
                     onChange={this.handleChange("folderName")}
                     margin="normal"
                   />
-                </form>
+                </div>
               </Paper>
             </React.Fragment>
           );

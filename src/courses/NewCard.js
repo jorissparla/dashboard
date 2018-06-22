@@ -32,13 +32,11 @@ const imgList = [
   "https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/amb.png"
 ];
 
-
 const StyledImage = styled.img`
   width: 100%;
   height: 100px;
   object-fit: cover;
 `;
-
 
 const BottomStyle = styled.div`
   display: flex;
@@ -48,14 +46,12 @@ const BottomStyle = styled.div`
   align-items: center;
 `;
 
-
-
 const PD = styled.div`
   font-size: 14px;
   font-weight: 800;
 `;
 
-const StyledBadge = styled(Badge) `
+const StyledBadge = styled(Badge)`
   float: right;
   align-content: center;
   padding: 2px;
@@ -114,13 +110,12 @@ class NewCard extends React.Component {
 
         <CardActions>
           <BottomStyle>
-            <Link to={`courses/edit/${course.id || "/"}`}>
+            <Link to={`courses/${validRole ? "edit" : "view"}/${course.id || "/"}`}>
               <RaisedButton
                 backgroundColor={blue500}
                 label="View"
                 style={{ color: "white" }}
                 labelStyle={{ color: "white" }}
-                disabled={!validRole}
               />
             </Link>
             <StyledBadge

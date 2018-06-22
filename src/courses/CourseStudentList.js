@@ -16,31 +16,33 @@ const StudentList = ({ students, history, id }) => {
   if (!students) {
     return <div>No Students registered</div>;
   }
-  return [
-    <HeaderRow>
-      <HeaderLeft>
-        <Title>Registered for Selected Course</Title>
-      </HeaderLeft>
-      <HeaderRight />
-    </HeaderRow>,
-    <Div>
-      {students.map((student, index) => {
-        if (student) {
-          const { id, fullname, image } = student;
+  return (
+    <React.Fragment>
+      <HeaderRow>
+        <HeaderLeft>
+          <Title>Registered for Selected Course</Title>
+        </HeaderLeft>
+        <HeaderRight />
+      </HeaderRow>
+      <Div>
+        {students.map((student, index) => {
+          if (student) {
+            const { id, fullname, image } = student;
 
-          return (
-            <StudentChip
-              id={id}
-              key={id}
-              fullname={fullname}
-              image={image}
-              handleClick={() => history.push(`/students/${id}`)}
-            />
-          );
-        } else return <div />;
-      })}
-    </Div>
-  ];
+            return (
+              <StudentChip
+                id={id}
+                key={id}
+                fullname={fullname}
+                image={image}
+                handleClick={() => history.push(`/students/${id}`)}
+              />
+            );
+          } else return <div />;
+        })}
+      </Div>
+    </React.Fragment>
+  );
 };
 
 export default withRouter(StudentList);

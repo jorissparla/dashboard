@@ -9,6 +9,7 @@ import moment from "moment";
 import styled from "styled-components";
 import { NormalRaisedButton, CancelRaisedButton, DeleteButton } from "../common/TitleBar";
 import CreateCourseFolder from "./CreateCourseFolder";
+import CourseFileUploader from "./CourseFileUpload";
 import withAuth from "../utils/withAuth";
 
 const SelectStyle = styled.div`
@@ -52,6 +53,7 @@ class CourseForm extends Component {
   handleRerender = value => {
     console.log("reRendered");
     this.setState({ path: value });
+    this.props.onRefetch();
   };
   render() {
     const {
@@ -61,10 +63,11 @@ class CourseForm extends Component {
       history,
       coursetypes,
       trainers,
-      statuses
+      statuses,
+      readOnly
     } = this.props;
-    const readOnly = !authenticated;
-
+    //const readOnly = !authenticated;
+    console.log("readonly", readOnly);
     return (
       <form onSubmit={handleSubmit(this.handleSubmit)}>
         <Card>
@@ -199,15 +202,20 @@ class CourseForm extends Component {
               underlineShow={true}
               style={styles.textfieldstyle}
             />
-            <Field
-              name="link"
-              disabled={readOnly}
-              component={Input}
-              floatingLabelText="link to recording, folder, etc"
-              underlineShow={true}
-              fullWidth={true}
-              style={styles.textfieldstyle}
-            />
+            {1 == 1 && (
+              <Field
+                name="link"
+                disabled={readOnly}
+                component={Input}
+                floatingLabelText="link to recording, folder, etc"
+                underlineShow={true}
+                fullWidth={true}
+                style={styles.textfieldstyle}
+              />
+            )}
+          </CardSection>
+          <CardSection>
+            <CourseFileUploader id={course.id} link={course.link} readOnly={readOnly} />
           </CardSection>
           {!course.link && <CreateCourseFolder id={course.id} reRender={this.handleRerender} />}
           <CardSection>
