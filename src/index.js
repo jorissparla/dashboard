@@ -26,6 +26,7 @@ import { InMemoryCache } from "apollo-cache-inmemory";
 import { createUploadLink } from "apollo-upload-client";
 //import registerServiceWorker from "./registerServiceWorker";
 import ContextProvider from "./Provider";
+import { SharedSnackbarProvider } from "./SharedSnackbar.context";
 
 const {
   REACT_APP_PORT_GRAPHQL = 55555,
@@ -90,11 +91,13 @@ const Main = () => (
     <Provider store={store}>
       <MuiThemeProvider muiTheme={muiTheme}>
         <BrowserRouter>
-          <ContextProvider>
-            <App>
-              <AppRoutes />
-            </App>
-          </ContextProvider>
+          <SharedSnackbarProvider>
+            <ContextProvider>
+              <App>
+                <AppRoutes />
+              </App>
+            </ContextProvider>
+          </SharedSnackbarProvider>
         </BrowserRouter>
       </MuiThemeProvider>
     </Provider>

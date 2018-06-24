@@ -3,7 +3,7 @@ import { withRouter } from "react-router";
 import { Card, OkCancelDialog } from "../common";
 import ChatAdd from "./ChatAdd";
 import Snackbar from "material-ui/Snackbar";
-import { gql } from 'apollo-boost'
+import gql from 'graphql-tag'
 import { Mutation, Query } from "react-apollo";
 import { adopt } from "react-adopt";
 import * as R from "ramda";
