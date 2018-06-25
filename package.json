@@ -6,6 +6,7 @@
     "babel-polyfill": "^6.26.0",
     "prettier": "^1.13.5",
     "react-scripts": "1.1.4",
+    "source-map-explorer": "^1.5.0",
     "webpack-bundle-analyzer": "^2.13.1"
   },
   "dependencies": {
@@ -54,6 +55,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "analyze": "source-map-explorer build/static/js/main.*",
     "build": "react-scripts build",
     "copy": "xcopy /s /Y build \\\\nlbavwixs\\dashboard.beta",
     "beta": "npm run build && npm run copy",

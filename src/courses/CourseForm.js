@@ -215,11 +215,13 @@ class CourseForm extends Component {
             )}
           </CardSection>
           <CardSection>
-            {course.link && (
-              <CourseFileUploader id={course.id} link={course.link} readOnly={readOnly} />
-            )}
+            {course &&
+              course.link && (
+                <CourseFileUploader id={course.id} link={course.link} readOnly={readOnly} />
+              )}
           </CardSection>
-          {!course.link && <CreateCourseFolder id={course.id} reRender={this.handleRerender} />}
+          {course &&
+            !course.link && <CreateCourseFolder id={course.id} reRender={this.handleRerender} />}
           <CardSection>
             {!readOnly && <NormalRaisedButton label="Save" type="submit" />}
             <CancelRaisedButton
