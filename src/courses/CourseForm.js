@@ -5,9 +5,11 @@ import { SelectField } from "redux-form-material-ui";
 import { CardSection, Card, Input, MyDatePicker } from "../common";
 import MenuItem from "material-ui/MenuItem";
 import Chip from "material-ui/Chip";
-import moment from "moment";
+import { distanceInWordsToNow } from "date-fns";
 import styled from "styled-components";
 import { NormalRaisedButton, CancelRaisedButton, DeleteButton } from "../common/TitleBar";
+import CreateCourseFolder from "./CreateCourseFolder";
+import CourseFileUploader from "./CourseFileUpload";
 import withAuth from "../utils/withAuth";
 
 const SelectStyle = styled.div`
@@ -37,21 +39,22 @@ const teams = [
 ];
 
 class CourseForm extends Component {
-  state = {};
-  constructor() {
-    super();
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
-  }
+  state = { refresh: false, path: "" };
 
-  handleSubmit(e) {
+  handleSubmit = e => {
     //e.preventDefault();
     this.props.onSave(e);
-  }
+  };
 
-  handleDelete(e) {
+  handleDelete = e => {
     this.props.onDelete(e);
-  }
+  };
+
+  handleRerender = value => {
+    console.log("reRendered");
+    this.setState({ path: value });
+    this.props.onRefetch();
+  };
   render() {
     const {
       handleSubmit,
@@ -60,10 +63,11 @@ class CourseForm extends Component {
       history,
       coursetypes,
       trainers,
-      statuses
+      statuses,
+      readOnly
     } = this.props;
-    const readOnly = !authenticated;
-
+    //const readOnly = !authenticated;
+    console.log("readonly", readOnly);
     return (
       <form onSubmit={handleSubmit(this.handleSubmit)}>
         <Card>
@@ -198,16 +202,26 @@ class CourseForm extends Component {
               underlineShow={true}
               style={styles.textfieldstyle}
             />
-            <Field
-              name="link"
-              disabled={readOnly}
-              component={Input}
-              floatingLabelText="link to recording, folder, etc"
-              underlineShow={true}
-              fullWidth={true}
-              style={styles.textfieldstyle}
-            />
+            {1 == 1 && (
+              <Field
+                name="link"
+                disabled={readOnly}
+                component={Input}
+                floatingLabelText="link to recording, folder, etc"
+                underlineShow={true}
+                fullWidth={true}
+                style={styles.textfieldstyle}
+              />
+            )}
           </CardSection>
+          <CardSection>
+            {course &&
+              course.link && (
+                <CourseFileUploader id={course.id} link={course.link} readOnly={readOnly} />
+              )}
+          </CardSection>
+          {course &&
+            !course.link && <CreateCourseFolder id={course.id} reRender={this.handleRerender} />}
           <CardSection>
             {!readOnly && <NormalRaisedButton label="Save" type="submit" />}
             <CancelRaisedButton
@@ -221,7 +235,9 @@ class CourseForm extends Component {
                 <DeleteButton label="Delete" onClick={() => this.handleDelete(this.props.course)} />
               )}
             <Chip style={{ margin: 4 }}>
-              {course ? `Last updated  ${moment(course.lastmodified).calendar()}` : "not Saved yet"}
+              {course
+                ? `Last updated  ${distanceInWordsToNow(course.lastmodified)} ago`
+                : "not Saved yet"}
             </Chip>
           </CardSection>
         </Card>

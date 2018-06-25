@@ -5,7 +5,7 @@ import Chip from "material-ui/Chip";
 import { SelectField } from "redux-form-material-ui";
 import Paper from "material-ui/Paper";
 import MenuItem from "material-ui/MenuItem";
-import moment from "moment";
+import { format } from "date-fns";
 import { CardSection, Input } from "../common";
 import { NormalRaisedButton, CancelRaisedButton, DeleteButton } from "../common/TitleBar";
 
@@ -37,7 +37,7 @@ const SupportCardForm = props => {
     history
   } = props;
   const readOnly = !authenticated;
-  const updatedAt = supportcard ? supportcard.updatedAt : moment().format("YYYY-MM-DD");
+  const updatedAt = supportcard ? supportcard.updatedAt : format(new Date(), "YYYY-MM-DD");
   return (
     <Paper zDepth={1} style={paperStyle}>
       <form onSubmit={handleSubmit(onSave)}>

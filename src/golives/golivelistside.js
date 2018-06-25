@@ -1,17 +1,16 @@
 import React, { Component } from "react";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
-import moment from "moment";
+import { format } from "date-fns";
 import Spinner from "../utils/spinner";
 import { List, ListItem } from "material-ui/List";
 import Divider from "material-ui/Divider";
 import styled from "styled-components";
 
 const getDay = date =>
-  moment(date)
-    .format("MMM")
+  format(date, "MMM")
     .toUpperCase()
-    .substr(0, 3) + moment(date).format("DD");
+    .substr(0, 3) + format(date, "DD");
 
 const GoLiveListStyle = styled.div`
   margin-right: 10px;
@@ -58,7 +57,7 @@ class GoLiveListSide extends Component {
                 <GoLiveCustomerStyle>{item.customername}</GoLiveCustomerStyle>{" "}
               </div>
             }
-          //secondaryText= {item.version}
+            //secondaryText= {item.version}
           />
           <Divider />
         </GoLiveItemStyle>
@@ -68,11 +67,15 @@ class GoLiveListSide extends Component {
 
   render() {
     //const { golives } = this.props;
-    const { data: { loading, golives } } = this.props;
+    const {
+      data: { loading, golives }
+    } = this.props;
     if (loading) {
-      return <div>
-        <Spinner />
-      </div>;
+      return (
+        <div>
+          <Spinner />
+        </div>
+      );
     }
     if (!golives || golives === null) {
       return (
@@ -92,8 +95,6 @@ class GoLiveListSide extends Component {
     );
   }
 }
-
-
 
 const queryGoLives = gql`
   query golives {

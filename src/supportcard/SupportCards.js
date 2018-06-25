@@ -6,14 +6,14 @@ import Dialog from "material-ui/Dialog";
 import styled from "styled-components";
 import FlatButton from "material-ui/FlatButton";
 import NewRequestForm from "./Request";
-import moment from "moment";
+import { addDays } from "date-fns";
 import _ from "lodash";
 import SearchBar from "../common/SearchBar";
 import withAuth from "../utils/withAuth";
 import AddCard from "./AddCard";
 import CategoryTabs from "./CategoryTabs";
 
-String.prototype.includes2 = function (search, start) {
+String.prototype.includes2 = function(search, start) {
   if (typeof start !== "number") {
     start = 0;
   }
@@ -72,7 +72,11 @@ class SupportCards extends React.Component {
   };
 
   render() {
-    const { authenticated, isEditor, data: { loading, error, supportcards } } = this.props;
+    const {
+      authenticated,
+      isEditor,
+      data: { loading, error, supportcards }
+    } = this.props;
     const actions = [
       <FlatButton label="Cancel" primary={true} onClick={this.handleClose} />,
       <FlatButton label="Submit" primary={true} onClick={this.handleClose} />
@@ -86,14 +90,19 @@ class SupportCards extends React.Component {
     }
     const filteredCards = supportcards
       .filter(card => {
-        const { category: { name }, title } = card;
+        const {
+          category: { name },
+          title
+        } = card;
         return (
           _.includes(name.toUpperCase(), searchText.toUpperCase()) ||
           _.includes(title.toUpperCase(), searchText.toUpperCase())
         );
       })
       .filter(card => {
-        const { category: { name } } = card;
+        const {
+          category: { name }
+        } = card;
         return _.includes(name.toUpperCase(), selectedCategory.toUpperCase());
       });
     return (
@@ -119,12 +128,12 @@ class SupportCards extends React.Component {
           {authenticated && isEditor ? (
             <AddCard link="/supportcard/add" title="Add a New Card" background="papayawhip" />
           ) : (
-              <AddCard
-                link="supportcard/request"
-                title="Request a new Support Card"
-                background="papayawhip"
-              />
-            )}
+            <AddCard
+              link="supportcard/request"
+              title="Request a new Support Card"
+              background="papayawhip"
+            />
+          )}
           {filteredCards.map(
             (
               {
@@ -141,7 +150,7 @@ class SupportCards extends React.Component {
                 authenticated && isEditor ? `/supportcard/edit/${id}` : `/supportcard/view/${id}`;
               const viewLink = `/supportcard/view/${id}`;
 
-              const isNew = Date.parse(updatedAt) > moment().add(-7, "days");
+              const isNew = Date.parse(updatedAt) > addDays(new Date(), -7);
               return (
                 <SmallCard
                   color={backgroundcolor || cardColors[i % (cardColors.length - 1)].back}
@@ -197,6 +206,7 @@ const createAudit = gql`
   }
 `;
 
-export default compose(graphql(SupportCardQuery), graphql(createAudit, { name: "createAudit" }))(
-  withAuth(SupportCards)
-);
+export default compose(
+  graphql(SupportCardQuery),
+  graphql(createAudit, { name: "createAudit" })
+)(withAuth(SupportCards));

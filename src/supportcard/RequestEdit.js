@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import gql from "graphql-tag";
 import { graphql, compose } from "react-apollo";
 import { withRouter } from "react-router-dom";
-import moment from "moment";
+import { format } from "date-fns";
 import RequestForm from "./RequestForm";
 
 class RequestEdit extends Component {
@@ -16,7 +16,7 @@ class RequestEdit extends Component {
       assigned: other.assigned,
       text: other.text,
       complete: other.complete,
-      updatedAt: moment().format("YYYY-MM-DD")
+      updatedAt: format(new Date(), "YYYY-MM-DD")
     };
     console.log(input);
     const result = await this.props.updateRequest({ variables: { input } });

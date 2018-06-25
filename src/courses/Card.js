@@ -22,8 +22,8 @@ const StyledContainer = styled(Paper)`
   flex-direction: column;
   border: 1 px solid blue;
   padding: 10px;
-  width:22%;
-  min-width:200px;
+  width: 22%;
+  min-width: 200px;
   margin: 5px;
   justify-content: space-between;
 `;
@@ -31,7 +31,7 @@ const StyledContainer = styled(Paper)`
 const StyledImage = styled.img`
   width: 100%;
   height: 100px;
-   object-fit: cover;
+  object-fit: cover;
 `;
 const Title = styled.div`
   font-family: Roboto;
@@ -45,12 +45,12 @@ const Title = styled.div`
 const StyledBody = styled.p`
   margin: 5px;
   margin-bottom: 20px;
-    font-size: 15px;
+  font-size: 15px;
 `;
 const BottomStyle = styled.div`
-  display:flex;
+  display: flex;
   flex-direction: row;
-  width:100%;
+  width: 100%;
   justify-content: center;
 `;
 
@@ -62,44 +62,39 @@ const TeamSpan = styled.div`
 `;
 const StyledLink = styled.a`
   text-decoration: none;
-    :hover {
-    background:#0196F3;
+  :hover {
+    background: #0196f3;
     color: white;
   }
 `;
 
 const StyledBadge = styled(Badge)`
-float:right;
+  float: right;
   align-content: center;
   padding: 2px;
   margin-top: 15px;
 `;
-export default ({ course, index, count }) => {
+export default ({ course, index, count, validRole }) => {
+  console.log("validRole", validRole);
   const image = imgList[index % 7];
   return (
     <StyledContainer key={course.id}>
       <StyledImage src={image} />
       <StyledLink href={course.link || "/"}>
-        <Title>
-          {course.title}
-
-        </Title>
+        <Title>{course.title}</Title>
       </StyledLink>
       <StyledBadge badgeContent={count} primary={true} />
 
-      <StyledBody>
-        {course.description}
-      </StyledBody>
+      <StyledBody>{course.description}</StyledBody>
       <BottomStyle>
         <TeamSpan>{course.team}</TeamSpan>
-        <Link to={`courses/edit/${course.id || "/"}`}>
+        <Link to={`courses/${validRole ? "edit" : "view"}/${course.id || "/"}`}>
           <FlatButton
             backgroundColor={blue500}
-            label="View"
+            label={`${validRole ? "edit" : "view"}`}
             style={{ color: "white" }}
           />
         </Link>
-
       </BottomStyle>
     </StyledContainer>
   );

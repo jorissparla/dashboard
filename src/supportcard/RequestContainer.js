@@ -6,7 +6,7 @@ import { withRouter } from "react-router-dom";
 import Avatar from "material-ui/Avatar";
 import Divider from "material-ui/Divider";
 import NewIcon from "material-ui/svg-icons/av/new-releases";
-import moment from "moment";
+import { addDays, distanceInWordsToNow } from "date-fns";
 import { Loading } from "../styles";
 import styled from "styled-components";
 
@@ -23,17 +23,16 @@ const RequestItem = ({ item, handleClick }) => {
   const picture = account ? (account.image ? account.image : defaultPicture) : defaultPicture;
   const completeStatus = complete === 1 ? "Completed" : "";
   const assignedTo = assigned ? ` Assigned to ${assigned} ` : "";
-  //const isNew = moment().add(-7, "days") > createdAt;
-  const isNew = Date.parse(createdAt) > moment().add(-7, "days");
+  const isNew = Date.parse(createdAt) > addDays(new Date(), -7);
   return (
     <ListItem
       key={id}
       leftAvatar={<Avatar src={picture} />}
       rightAvatar={isNew ? <NewIcon color={"#3db5e8"} /> : <div />}
       primaryText={text}
-      secondaryText={`requested by ${name} , ${moment(
+      secondaryText={`requested by ${name} , ${distanceInWordsToNow(
         Date.parse(createdAt)
-      ).fromNow()}, ${completeStatus}, ${assignedTo}`}
+      )} ago, ${completeStatus}, ${assignedTo}`}
       onClick={() => handleClick(item)}
     />
   );
@@ -44,18 +43,22 @@ const HasDivider = expression => (expression ? <Divider /> : <div />);
 class RequestContainer extends Component {
   renderRequests = requests => (
     <List style={{ backgroundColor: "white" }}>
-      {requests.map((item, index) => [
-        <RequestItem
-          item={item}
-          key={item.id}
-          handleClick={() => this.props.history.push(`/supportcard/request/${item.id}`)}
-        />,
-        <HasDivider expression={index !== requests.length - 1} />
-      ])}
+      {requests.map((item, index) => (
+        <React.Fragment key={item.id}>
+          <RequestItem
+            item={item}
+            key={item.id}
+            handleClick={() => this.props.history.push(`/supportcard/request/${item.id}`)}
+          />
+          <HasDivider expression={index !== requests.length - 1} />
+        </React.Fragment>
+      ))}
     </List>
   );
   render() {
-    const { data: { loading, error, requests } } = this.props;
+    const {
+      data: { loading, error, requests }
+    } = this.props;
 
     //
     if (loading) {

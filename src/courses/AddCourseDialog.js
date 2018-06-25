@@ -114,13 +114,14 @@ class AddCourseDialog extends React.Component {
   };
 
   validateAndSave = () => {
+    console.log("inValidate");
     if (this.validate) {
       console.log("Saving", this.state);
       this.props.onSave(this.state);
     }
   };
 
-  saveAndAddStudents = () => { };
+  saveAndAddStudents = () => {};
   validStyle = (val, fld) => {
     console.log(this.state, "fld", fld);
     //console.log("ValidStyle", val, "error", this.state.error);
@@ -246,16 +247,16 @@ class AddCourseDialog extends React.Component {
           style={styles.button}
           primary={true}
           label="Save"
-          onTouchTap={() => this.validateAndSave()}
+          onClick={() => this.validateAndSave()}
         />
-        <RaisedButton style={styles.button} primary={false} label="Cancel" onTouchTap={onCancel} />
+        <RaisedButton style={styles.button} primary={false} label="Cancel" onClick={onCancel} />
         {this.props.toStudents && (
           <RaisedButton
             secondary={true}
             style={styles.button}
             primary={false}
             label="To Students"
-            onTouchTap={() => this.props.toStudents()}
+            onClick={() => this.props.toStudents()}
           />
         )}
       </Dialog>

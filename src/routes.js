@@ -29,7 +29,8 @@ import SupportCards from "./supportcard/SupportCards";
 import RequestEditAdd from "./supportcard/Request";
 import SupportCardEdit from "./supportcard/SupportCardEdit";
 import SupportCardAdd from "./supportcard/SupportCardAdd";
-import CourseList from "./courses/CourseList";
+//import CourseList from "./courses/CourseList";
+
 import CourseView from "./courses/CourseView";
 import CourseCard from "./courses/CourseCard";
 import AddCourseCard from "./courses/AddCourseCard";
@@ -46,21 +47,24 @@ import ImageConverter from "./utils/ConvertImages";
 import CustomerCommentsPage from "./customers/pages/CustomerCommentsMain";
 import AnniversaryList from "./awards/Anniversaries";
 import AGLTest from "./supportcard/Test";
-import CommentsList from "./feedback/commentList";
+//import CommentsList from "./feedback/commentList";
 import FeedbackList from "./feedback/feedbackList";
 //import FeedbackEdit from "./feedback/feedbackEdit";
 import { DashBoardContext, withDashBoardContext } from "./Provider";
+import AniNews from "./news/aninews";
+import DynamicImport from "./DynamicImport";
+
+const CommentsList = DynamicImport(() => import("./feedback/commentList"));
+const CourseList = DynamicImport(() => import("./courses/CourseList"));
 
 const NotFound = props => {
   //withDashBoardContext(props => {
-  console.log("PRO", props);
   return <h2>Not Found</h2>;
 }; //);
 
 class AppRoutes extends React.Component {
   render() {
     const { user } = this.props;
-    console.log("PROE", this.props);
     if (!user) {
       console.log("loading");
       // return <div>Loading</div>;
@@ -84,7 +88,7 @@ class AppRoutes extends React.Component {
           user={user}
           exact
           path="/test"
-          component={CustomerCommentsPage}
+          component={AniNews}
         />
         <EnhancedRoute
           editors={["Admin", "PO", "SU"]}
@@ -199,6 +203,12 @@ class AppRoutes extends React.Component {
           user={user}
           path="/courses/edit/:id"
           component={CourseCard}
+        />
+        <AuthRoute
+          allowed={["Admin", "PO", "SU", "Guest"]}
+          user={user}
+          path="/courses/view/:id"
+          component={props => <CourseCard {...props} view={true} />}
         />
         <AuthRoute
           allowed={["Admin", "PO"]}

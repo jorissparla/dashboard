@@ -5,7 +5,7 @@ import { SelectField, TextField } from "redux-form-material-ui";
 import { CardSection, Card, Input, MyDatePicker } from "../common";
 import MenuItem from "material-ui/MenuItem";
 import Chip from "material-ui/Chip";
-import moment from "moment";
+import { distanceInWordsToNow } from "date-fns";
 import styled from "styled-components";
 import {
   NormalRaisedButton,
@@ -248,7 +248,9 @@ class CourseForm extends Component {
                 />
               )}
             <Chip style={{ margin: 4 }}>
-              {course ? `Last updated  ${moment(course.lastmodified).calendar()}` : "not Saved yet"}
+              {course
+                ? `Last updated  ${distanceInWordsToNow(course.lastmodified)} ago`
+                : "not Saved yet"}
             </Chip>
           </CardSection>
         </Card>

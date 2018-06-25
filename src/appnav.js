@@ -20,6 +20,8 @@ import { withRouter } from "react-router";
 import { Toolbar, ToolbarGroup, ToolbarTitle } from "material-ui/Toolbar";
 import withAuth from "./utils/withAuth";
 
+import { SharedSnackbarConsumer } from "./SharedSnackbar.context";
+
 import FlatButton from "material-ui/FlatButton";
 
 function handleTouchTap() {
@@ -42,7 +44,7 @@ class Header extends React.Component {
     this.hamburgerMenu = this.hamburgerMenu.bind(this);
   }
 
-  componentDidMount() {
+  doSomething() {
     var self = this;
     window.RTCPeerConnection =
       window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection; //compatibility for Firefox and chrome
@@ -50,19 +52,22 @@ class Header extends React.Component {
     if (window.RTCPeerConnection) {
       var pc = new RTCPeerConnection({ iceServers: [] }),
         noop = function() {};
+
       pc.createDataChannel(""); //create a bogus data channel
       pc.createOffer(pc.setLocalDescription.bind(pc), noop); // create offer and set local description
       pc.onicecandidate = function(ice) {
         if (ice && ice.candidate && ice.candidate.candidate) {
-          var myIP = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/.exec(
-            ice.candidate.candidate
-          )[1];
+          var myIP = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/.exec(ice.candidate.candidate)[1];
           console.log("my IP: ", myIP);
           self.setState({ ipaddress: myIP });
           pc.onicecandidate = noop;
         }
       };
     }
+  }
+
+  componentDidMount() {
+    // this.doSomething()
   }
 
   toggleMenu = () => {
@@ -221,22 +226,18 @@ class Header extends React.Component {
         </FlatButton>
       );
     } else {
-      return (
-        <FlatButton onClick={() => this.logInLink()} label="Login" style={{ color: "white" }} />
-      );
+      return <FlatButton onClick={() => this.logInLink()} label="Login" style={{ color: "white" }} />;
     }
   }
 
   renderPicture() {
-    const picture =
-      localStorage.getItem("picture") || "https://randomuser.me/api/portraits/men/20.jpg";
+    const picture = localStorage.getItem("picture") || "https://randomuser.me/api/portraits/men/20.jpg";
     if (this.props.authenticated) {
       return <Avatar src={picture} />;
     } else return <div />;
   }
 
   renderToolBar() {
-    console.log("IP", this.state.ipaddress);
     return (
       <Toolbar style={styles}>
         <ToolbarGroup firstChild={true}>
@@ -244,10 +245,20 @@ class Header extends React.Component {
           {this.renderPicture()}
         </ToolbarGroup>
         <ToolbarGroup>
-          <ToolbarTitle text="Infor Support Dashboard" style={{ color: "white" }} />
+          <SharedSnackbarConsumer>
+            {({ openSnackbar }) => {
+              return (
+                <ToolbarTitle
+                  text="Infor Support Dashboard"
+                  style={{ color: "white" }}
+                  onClick={() => openSnackbar("You clicked Infor Support Dashboard")}
+                />
+              );
+            }}
+          </SharedSnackbarConsumer>
         </ToolbarGroup>{" "}
         <ToolbarGroup>
-          <ToolbarTitle text={this.state.ipaddress} style={{ color: "white" }} />
+          <ToolbarTitle text={this.state.ipaddress || ""} style={{ color: "white" }} />
         </ToolbarGroup>{" "}
         <ToolbarGroup>{this.renderButtons()}</ToolbarGroup>
       </Toolbar>
@@ -273,8 +284,7 @@ class Header extends React.Component {
   };
 
   getStyle = () => {
-    if (this.state.showdrawer)
-      return { left: "250px", width: "calc(100% - 270px)", position: "absolute" };
+    if (this.state.showdrawer) return { left: "250px", width: "calc(100% - 270px)", position: "absolute" };
     return { width: "100%" };
   };
   render() {
