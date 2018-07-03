@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import gql from "graphql-tag";
-import { Query } from "react-apollo";
-
+import { Query, Mutation } from "react-apollo";
+import { adopt } from "react-adopt";
 import { withRouter } from "react-router";
 import { withStyles } from "@material-ui/core/styles";
 
@@ -11,11 +11,54 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Paper from "@material-ui/core/Paper";
 import ListItemText from "@material-ui/core/ListItemText";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import ClearIcon from "@material-ui/icons/Clear";
+import IconButton from "@material-ui/core/IconButton";
 import Avatar from "@material-ui/core/Avatar";
 import Divider from "@material-ui/core/Divider";
 
 import _ from "lodash";
 import { WideTitle, colorAr, getColor } from "../styles";
+
+const DELETE_CHAT = gql`
+  mutation deleteChat($input: ChatInputType) {
+    deleteChat(input: $input) {
+      result
+    }
+  }
+`;
+const ALL_CHATS = gql`
+  {
+    chats {
+      id
+      weeknr
+      team
+      percentage
+      responseintime
+      nrchats
+    }
+  }
+`;
+
+const deleteChat = ({ render }) => (
+  <Mutation mutation={DELETE_CHAT}>{(mutation, result) => render({ mutation, result })}</Mutation>
+);
+
+const myChats = ({ render }) => <Query query={ALL_CHATS}>{data => render(data)}</Query>;
+
+const mapper = {
+  myChats,
+  deleteChat
+};
+
+const mapProps = ({ myRanges, myChats, deleteChat }) => ({
+  chats: myChats.data.chats,
+  loading: myChats.loading,
+  deleteChat: deleteChat.mutation,
+  deleteChatResult: deleteChat.result
+});
+
+const MyContainer = adopt(mapper, mapProps);
 
 const styles = {
   typo: {
@@ -43,10 +86,10 @@ const styles = {
   }
 };
 
-const RenderChat = ({ chat }) => {
+const RenderChat = ({ chat, onRemove }) => {
   return chat.map(({ id, team, nrchats, responseintime, percentage, version }, index) => {
     return (
-      <React.Fragment key={id} style={{ flexDirection: "row" }}>
+      <React.Fragment key={id}>
         <ListItem>
           <Avatar style={{ backgroundColor: getColor(index, colorAr), color: "white" }}>
             {team.slice(0, 2).toUpperCase()}
@@ -54,9 +97,17 @@ const RenderChat = ({ chat }) => {
 
           <ListItemText
             primary={`Number of chats in ${team}: ${nrchats}`}
-            secondary={<p>{` Responded in time: ${responseintime} ( ${percentage} %)`}</p>}
+            secondary={` Responded in time: ${responseintime} ( ${
+              !percentage ? (100 * responseintime) / nrchats : percentage
+            } %)`}
           />
+          <ListItemSecondaryAction>
+            <IconButton aria-label="Comments">
+              <ClearIcon onClick={() => onRemove(id)} />
+            </IconButton>
+          </ListItemSecondaryAction>
         </ListItem>
+
         <Divider inset={true} />
       </React.Fragment>
     );
@@ -67,12 +118,16 @@ class ChatList extends Component {
   render() {
     const { classes } = this.props;
     return (
-      <Query query={ALL_CHATS}>
-        {({ loading, error, data }) => {
+      <MyContainer>
+        {({ loading, error, data, chats, deleteChat, ...props }) => {
           if (loading) {
             return <div>Loading</div>;
           }
-          const chats = data.chats;
+          // const chats = data.chats;
+          const handleDelete = async id => {
+            const input = { id };
+            const result = await deleteChat({ variables: { input } });
+          };
           const chatsByWeek = _.chain(chats)
             .orderBy(["fromdate", "desc"])
             .groupBy(o => o.weeknr)
@@ -99,7 +154,7 @@ class ChatList extends Component {
                   {chatsByWeek.map((item, index) => (
                     <div key={index}>
                       <WideTitle>{item[0].weeknr}</WideTitle>
-                      <RenderChat chat={item} />
+                      <RenderChat chat={item} onRemove={id => handleDelete(id)} />
                     </div>
                   ))}
                 </List>
@@ -107,22 +162,9 @@ class ChatList extends Component {
             </React.Fragment>
           );
         }}
-      </Query>
+      </MyContainer>
     );
   }
 }
-
-const ALL_CHATS = gql`
-  {
-    chats {
-      id
-      weeknr
-      team
-      percentage
-      responseintime
-      nrchats
-    }
-  }
-`;
 
 export default withStyles(styles)(withRouter(ChatList));

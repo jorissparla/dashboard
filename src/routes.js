@@ -84,7 +84,7 @@ class AppRoutes extends React.Component {
         <Route exact path="/agltest" component={AGLTest} />
         <Route exact path="/anniversaries" component={AnniversaryList} />
         <AuthRoute
-          allowed={["Admin", "PO", "SU", "Guest"]}
+          allowed={["Admin", "PO", "SU", "Guest", "Chat"]}
           user={user}
           exact
           path="/test"
@@ -147,7 +147,7 @@ class AppRoutes extends React.Component {
           component={SupportCardAdd}
         />
         <AuthRoute
-          allowed={["Admin", "PO", "SU", "Guest"]}
+          allowed={["Admin", "PO", "SU", "Guest", "Chat"]}
           user={user}
           exact
           path="/supportcard/request"
@@ -169,8 +169,21 @@ class AppRoutes extends React.Component {
           path="/news/add"
           component={RequireAuth(NewsItemAddContainer)}
         />
-        <Route exact path="/chat" component={RequireAuth(ChatList)} />
-        <Route exact path="/chat/new" component={RequireAuth(ChatContainer)} />
+        <AuthRoute
+          allowed={["Admin", "PO", "SU", "Chat"]}
+          user={user}
+          exact
+          path="/chat"
+          component={RequireAuth(ChatList)}
+        />
+        <AuthRoute
+          allowed={["Admin", "PO", "SU", "Chat"]}
+          user={user}
+          exact
+          exact
+          path="/chat/new"
+          component={RequireAuth(ChatContainer)}
+        />
         <AuthRoute
           allowed={["Admin", "PO", "SU"]}
           user={user}
@@ -205,7 +218,7 @@ class AppRoutes extends React.Component {
           component={CourseCard}
         />
         <AuthRoute
-          allowed={["Admin", "PO", "SU", "Guest"]}
+          allowed={["Admin", "PO", "SU", "Guest", "Chat"]}
           user={user}
           path="/courses/view/:id"
           component={props => <CourseCard {...props} view={true} />}

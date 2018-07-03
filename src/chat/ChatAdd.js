@@ -1,29 +1,44 @@
 import React from "react";
 import { CardSection, Input } from "../common";
-import SelectField from "material-ui/SelectField";
-import TextField from "material-ui/TextField";
-import MenuItem from "material-ui/MenuItem";
-import RaisedButton from "material-ui/RaisedButton";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import { withStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+import InputLabel from "@material-ui/core/InputLabel";
+import Button from "@material-ui/core/Button";
+import FormControl from "@material-ui/core/FormControl";
 
-const styles = {
+const styles = theme => ({
+  root: {
+    display: "flex",
+    flexWrap: "wrap"
+  },
+  formControl: {
+    margin: theme.spacing.unit,
+    minWidth: 120
+  },
+  selectEmpty: {
+    marginTop: theme.spacing.unit * 2
+  },
+  button: {
+    margin: theme.spacing.unit
+  },
   TextFieldStyle: {
-    flex: 1,
-    width: 200,
-    padding: 2,
-    marginRight: 30
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 150
+  },
+  buttonStyle: {
+    backgroundColor: "#ffc600",
+    labelColor: "white",
+    margin: "20px"
+  },
+  buttonStyle2: {
+    backgroundColor: "black",
+    labelColor: "white",
+    margin: "20px"
   }
-};
-
-const buttonStyle = {
-  backgroundColor: "#ffc600",
-  labelColor: "white",
-  margin: "20px"
-};
-const buttonStyle2 = {
-  backgroundColor: "black",
-  labelColor: "white",
-  margin: "20px"
-};
+});
 
 const teams = [
   { key: "Finance", description: "Finance" },
@@ -39,143 +54,138 @@ const regions = [
 ];
 
 class ChatAdd extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = { dataSource: [] };
-  }
+  state = {
+    team: "Finance",
+    region: "EMEA",
+    weeknr: "",
+    nrchats: 0,
+    responseintime: 0,
+    dataSource: [],
+    name: "Joris"
+  };
 
+  componentDidMount() {
+    this.setState({ weeknr: this.props.ranges[2].Name });
+  }
   handleSubmit = e => {
-    console.log(this.props.entry.report());
-    this.props.onSave();
+    this.props.onSave(this.state);
   };
 
   doSubmit(values) {
     window.alert(`You submitted Parent:\n\n${JSON.stringify(values, null, 2)}`);
   }
 
-  handleChangeTeam = (e, i, v) => {
-    this.props.entry.team = v;
-  };
-  handleChangeRegion = (e, i, v) => {
-    this.props.entry.region = v;
-  };
-  handleChangeWeek = (e, i, v) => {
-    this.props.entry.weeknr = v;
+  handleChange = event => {
+    this.setState({ [event.target.name]: event.target.value });
   };
 
-  handleChange = ({ target: { name, value } }) => {
-    this.props.entry[name] = value;
-  };
-
-  componentDidMount() {
-    if (this.props.ranges) {
-      this.props.entry.weeknr = this.props.ranges[2].Name;
-    }
-  }
   render() {
-    const { ranges, onCancel } = this.props;
+    const { ranges, onCancel, classes } = this.props;
 
     if (!ranges) {
       return <CardSection>Loading...</CardSection>;
     }
-
+    const { team, region, weeknr, responseintime, nrchats } = this.state;
+    const percentage = (nrchats === 0 ? 100 : (100 * responseintime) / nrchats).toFixed(1);
     return (
       <div>
         <CardSection style={{ fontSize: "36px", fontFamily: "Oswald" }}>
           Add Chat Result
         </CardSection>
         <form>
-          <CardSection
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center"
-            }}
-          >
-            <SelectField
-              id="team"
-              name="team"
-              hintText="Select a team"
-              multiple={false}
-              onChange={this.handleChangeTeam}
-              style={{ flex: 2 }}
-              value={this.props.entry.team}
-            >
-              {teams.map(team => (
-                <MenuItem key={team.key} value={team.key} primaryText={team.description} />
-              ))}
-            </SelectField>
-            <SelectField
-              id="region"
-              name="region"
-              hintText="Select a region"
-              style={{ flex: 2 }}
-              onChange={this.handleChangeRegion}
-              value={this.props.entry.region}
-            >
-              {regions.map(region => (
-                <MenuItem key={region.key} value={region.key} primaryText={region.description} />
-              ))}
-            </SelectField>
+          <CardSection>
+            <FormControl className={classes.formControl}>
+              <InputLabel htmlFor="name-readonly">Team</InputLabel>
+              <Select
+                id="team"
+                name="team"
+                onChange={this.handleChange}
+                style={{ flex: 2 }}
+                value={team}
+              >
+                {teams.map(team => (
+                  <MenuItem key={team.key} value={team.key}>
+                    {team.description}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl className={classes.formControl}>
+              <InputLabel htmlFor="name-readonly">region</InputLabel>
+              <Select
+                id="region"
+                name="region"
+                style={{ flex: 2 }}
+                onChange={this.handleChange}
+                value={region}
+              >
+                {regions.map(region => (
+                  <MenuItem key={region.key} value={region.key}>
+                    {region.description}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl className={classes.formControl}>
+              <InputLabel htmlFor="name-readonly">weeknr</InputLabel>
+              <Select name="weeknr" id="weeknr" onChange={this.handleChange} value={weeknr}>
+                {ranges.map(range => (
+                  <MenuItem key={range.Name} value={range.Name} primaryText={range.Name}>
+                    {range.Name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </CardSection>
           <CardSection>
-            <SelectField
-              name="weeknr"
-              id="weeknr"
-              hintText="Select a week"
-              onChange={this.handleChangeWeek}
-              value={this.props.entry.weeknr}
-            >
-              {ranges.map(range => (
-                <MenuItem key={range.Name} value={range.Name} primaryText={range.Name} />
-              ))}
-            </SelectField>
             <Input name="fromDate" disabled={true} type="text" />
           </CardSection>
 
           <CardSection id="inputboxes">
             <TextField
-              inputStyle={styles.TextFieldStyle}
-              style={styles.TextFieldStyle}
+              className={classes.TextFieldStyle}
               name="nrchats"
-              floatingLabelText="Number of chats"
+              label="Number of chats"
               type="number"
               width={2}
               onChange={this.handleChange}
-              value={this.props.entry.nrchats}
+              value={nrchats}
             />
             <TextField
-              inputStyle={styles.TextFieldStyle}
-              style={styles.TextFieldStyle}
+              className={classes.TextFieldStyle}
               name="responseintime"
-              floatingLabelText="Responded in time"
+              label="Responded in time"
               type="number"
               onChange={this.handleChange}
-              value={this.props.entry.responseintime}
+              value={responseintime}
             />
             <TextField
-              inputStyle={styles.TextFieldStyle}
-              style={styles.TextFieldStyle}
+              className={classes.TextFieldStyle}
               name="percentage"
-              floatingLabelText="Responded in time"
+              label="Responded in time"
               type="text"
-              value={this.props.entry.percentage()}
+              value={percentage}
             />
           </CardSection>
           <CardSection>
-            <RaisedButton
-              primary={true}
-              style={buttonStyle}
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.button}
               label="Submit"
               onClick={this.handleSubmit}
-            />
-            <RaisedButton
-              secondary={true}
-              style={buttonStyle2}
-              label="Cancel"
+            >
+              Save
+            </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              className={classes.button}
               onClick={onCancel}
               type="reset"
-            />
+            >
+              Cancel
+            </Button>
           </CardSection>
         </form>
       </div>
@@ -183,4 +193,4 @@ class ChatAdd extends React.Component {
   }
 }
 
-export default ChatAdd;
+export default withStyles(styles)(ChatAdd);
