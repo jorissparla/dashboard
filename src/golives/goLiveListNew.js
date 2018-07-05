@@ -79,7 +79,8 @@ const GoLiveItem = ({ item, bg = "#ec407a" }) => {
       onClick={() =>
         window.open(
           `http://navigator.infor.com/n/incident_list.asp?ListType=CUSTOMERID&Value=${customerid}`
-        )}
+        )
+      }
     />
   );
 };
@@ -101,8 +102,8 @@ const goLivesContainer = ({ data: { loading, golives } }) => {
   console.log(goLivesByMonth);
   return (
     <List style={{ backgroundColor: "white" }}>
-      {goLivesByMonth.map(m => (
-        <div>
+      {goLivesByMonth.map((m, index) => (
+        <div key={index}>
           <Title>{m[0].month}</Title>
           <RenderMonthItems items={m} />
         </div>
