@@ -31,12 +31,13 @@ import { SharedSnackbarProvider } from "./SharedSnackbar.context";
 const {
   REACT_APP_PORT_GRAPHQL = 55555,
   REACT_APP_GRAPHQLSERVER = "nlbavwixs",
-  REACT_APP_GRAPHQL_PATH = ""
+  REACT_APP_GRAPHQL_PATH = "",
+  REACT_HTTP = "http"
 } = process.env;
 
 //const uri = `http://localhost:4000`
 
-const uri = `http://${REACT_APP_GRAPHQLSERVER}:${REACT_APP_PORT_GRAPHQL}/${REACT_APP_GRAPHQL_PATH}`;
+const uri = `${REACT_HTTP}://${REACT_APP_GRAPHQLSERVER}:${REACT_APP_PORT_GRAPHQL}/${REACT_APP_GRAPHQL_PATH}`;
 const link = createUploadLink({ uri });
 const client = new ApolloClient({
   link,
