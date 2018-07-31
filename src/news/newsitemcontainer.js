@@ -6,8 +6,6 @@ import { withRouter } from "react-router";
 import { adopt } from "react-adopt";
 import NewsItem from "./newsitem";
 import Snackbar from "material-ui/Snackbar";
-import { mapPropsStreamWithConfig } from "recompose";
-//import { fetchNewsItem, updateNews, deleteNews } from "../actions/index";
 
 const ALL_NEWS = gql`
   query news($id: ID) {

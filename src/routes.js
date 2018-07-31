@@ -49,6 +49,7 @@ import AnniversaryList from "./awards/Anniversaries";
 import AGLTest from "./supportcard/Test";
 //import CommentsList from "./feedback/commentList";
 import FeedbackList from "./feedback/feedbackList";
+import NewsPage from "./news/newspage";
 //import FeedbackEdit from "./feedback/feedbackEdit";
 import { DashBoardContext, withDashBoardContext } from "./Provider";
 import AniNews from "./news/aninews";
@@ -72,6 +73,7 @@ class AppRoutes extends React.Component {
     return (
       <Switch>
         <Route exact path="/comments" component={CommentsList} />
+        <Route exact path="/customercomments" component={CustomerCommentsPage} />
         <EnhancedRoute
           auth="admin"
           editors={["Admin", "PO"]}
@@ -88,7 +90,7 @@ class AppRoutes extends React.Component {
           user={user}
           exact
           path="/test"
-          component={AniNews}
+          component={NewsPage}
         />
         <EnhancedRoute
           editors={["Admin", "PO", "SU"]}

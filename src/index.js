@@ -38,7 +38,11 @@ const {
 console.log("process.env", process.env);
 //const uri = `http://localhost:4000`
 
-const uri = `${REACT_APP_HTTP}://${REACT_APP_GRAPHQLSERVER}:${REACT_APP_PORT_GRAPHQL}/${REACT_APP_GRAPHQL_PATH}`;
+const prefix = REACT_APP_HTTP.trim();
+console.log("prefix", `<${prefix}>`);
+let uri = `${REACT_APP_GRAPHQLSERVER}:${REACT_APP_PORT_GRAPHQL}/${REACT_APP_GRAPHQL_PATH}`;
+uri = prefix === "https" ? "https://" + uri : "http://" + uri;
+//`${REACT_APP_HTTP}://${REACT_APP_GRAPHQLSERVER}:${REACT_APP_PORT_GRAPHQL}/${REACT_APP_GRAPHQL_PATH}`;
 const link = createUploadLink({ uri });
 const client = new ApolloClient({
   link,
