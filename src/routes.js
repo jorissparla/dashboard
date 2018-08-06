@@ -58,6 +58,8 @@ import DynamicImport from "./DynamicImport";
 const CommentsList = DynamicImport(() => import("./feedback/commentList"));
 const CourseList = DynamicImport(() => import("./courses/CourseList"));
 
+const AccountList = DynamicImport(() => import("./Account/AccountList"));
+
 const NotFound = props => {
   //withDashBoardContext(props => {
   return <h2>Not Found</h2>;
@@ -73,6 +75,14 @@ class AppRoutes extends React.Component {
     return (
       <Switch>
         <Route exact path="/comments" component={CommentsList} />
+        <AuthRoute
+          auth="admin"
+          allowed={["Admin", "PO"]}
+          user={user}
+          exact
+          path="/accounts"
+          component={AccountList}
+        />
         <Route exact path="/customercomments" component={CustomerCommentsPage} />
         <EnhancedRoute
           auth="admin"

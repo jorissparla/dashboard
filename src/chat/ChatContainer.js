@@ -173,7 +173,7 @@ class ChatContainer extends Component {
                 input
               }
             });
-            this.props.history.push("/chat");
+           // this.props.history.push("/chat");
             console.log("result", result);
           };
           return (
