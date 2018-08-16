@@ -54,6 +54,7 @@ import NewsPage from "./news/newspage";
 import { DashBoardContext, withDashBoardContext } from "./Provider";
 import AniNews from "./news/aninews";
 import DynamicImport from "./DynamicImport";
+import ResolutionChart from "./charts/ResolutionChart";
 
 const CommentsList = DynamicImport(() => import("./feedback/commentList"));
 const CourseList = DynamicImport(() => import("./courses/CourseList"));
@@ -100,7 +101,7 @@ class AppRoutes extends React.Component {
           user={user}
           exact
           path="/test"
-          component={NewsPage}
+          component={ResolutionChart}
         />
         <EnhancedRoute
           editors={["Admin", "PO", "SU"]}
