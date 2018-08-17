@@ -11,6 +11,7 @@ const ALL_RESOLUTIONS = gql`
       avgTime
       Deployment
       Tenant
+      Number
     }
   }
 `;
@@ -24,6 +25,13 @@ const config = {
   },
   title: {
     text: "Average Time to Solution Proposed or Resolution"
+  },
+  legend: {
+    borderRadius: 5,
+    borderWidth: 1,
+    itemStyle: {
+      fontSize: 20
+    }
   },
 
   subtitle: {
@@ -53,6 +61,7 @@ const config = {
   },
   yAxis: {
     min: 0,
+    max: 60,
     title: {
       text: "Nr of Days"
     }
@@ -108,30 +117,42 @@ export default () => {
 
         const onPrem = resolutions
           .filter(item => item.Deployment === "On-Premise")
-          .map(item => item.avgTime);
+          .map(item => [].concat(item.Number.toString(), item.avgTime));
         const STCloud = resolutions
           .filter(item => item.Deployment === "Cloud" && item.Tenant === "Single Tenant")
-          .map(item => item.avgTime);
+          .map(item => [].concat(item.Number.toString(), item.avgTime));
         const MTCloud = resolutions
           .filter(item => item.Deployment === "Cloud" && item.Tenant === "Multi-Tenant")
-          .map(item => item.avgTime);
+          .map(item => [].concat(item.Number.toString(), item.avgTime));
         config.series.push({
           name: "On-Premise",
           data: onPrem,
           color: "rgba(248,161,63,1)",
-          dataLabels: { enabled: true }
+          dataLabels: {
+            enabled: true,
+            useHTML: true,
+            format: "<h2>{y} days</h2><BR> (#{point.name} )"
+          }
         });
         config.series.push({
           name: "Cloud ST",
           data: STCloud,
           color: "rgba(186,60,61,.9)",
-          dataLabels: { enabled: true }
+          dataLabels: {
+            enabled: true,
+            useHTML: true,
+            format: "<h2>{y} days</h2><BR> (#{point.name}  )"
+          }
         });
         config.series.push({
           name: "Cloud MT",
           data: MTCloud,
           color: "rgba(165,170,217,1)",
-          dataLabels: { enabled: true }
+          dataLabels: {
+            enabled: true,
+            useHTML: true,
+            format: "<h2>{y} days</h2><BR> (#{point.name}  )"
+          }
         });
         return <ReactHighCharts config={config} />;
       }}
