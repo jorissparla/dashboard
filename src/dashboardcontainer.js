@@ -46,8 +46,7 @@ class DashBoardContainer extends Component {
 
     return (
       <div>
-        <div>
-        </div>
+        <div />
         {this.renderDashBoard(index)}
       </div>
     );
@@ -74,6 +73,7 @@ class DashBoardContainer extends Component {
       case 3:
         return <GoLives region={region} />;
       case 4:
+        //return <GoLives region={region} />;
         return <HistoryDayAll region={region} />;
       case 0:
         return <DashBoardStats data1={["Logistics"]} team="Logistics" region={region} />;

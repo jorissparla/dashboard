@@ -53,7 +53,7 @@ arColors["Finance"] = "#01579b";
 
 const renderSummary = (config, xval, val, title, color, type, summary) => {
   xval = !xval ? "weekNr" : xval;
-  if (!summary) return config;
+  if (!summary) return <div>No data</div>;
   const range = summary.map(item => item[val]);
   color = arColors[val];
   if (color) {

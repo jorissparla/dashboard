@@ -64,7 +64,7 @@ const renderSummary = (config, val, team, title, color, type, summary, xvalue) =
   if (color) {
     config.plotOptions.area.color = color;
   }
-
+  console.log("SUMMARYCHART", val, team, title, color, type, summary, xvalue);
   const mySummary = (summary || []).slice(); // .sort((a,b)=> a.weekNr > b.weekNr)
   const filteredSummary = mySummary
     .filter(item => item.team === team)

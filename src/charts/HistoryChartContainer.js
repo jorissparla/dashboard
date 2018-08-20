@@ -5,7 +5,11 @@ import SummaryChart from "./NewSummaryChart";
 
 class HistoryChartContainer extends Component {
   render() {
-    const { data: { loading, error, history }, region = "EMEAs" } = this.props;
+    const {
+      data: { loading, error, history },
+      region = "EMEAs"
+    } = this.props;
+    console.log("HistoryChartContainer", this.props);
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error</div>;
     const value = !this.props.value ? "backlog" : this.props.value;
