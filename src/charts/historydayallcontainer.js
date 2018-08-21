@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import { fetchHistoryDay } from "../actions/index";
+import gql from "graphql-tag";
+import { Query } from "react-apollo";
 import HistoryChart from "./historychart";
 import styled from "styled-components";
 
@@ -13,71 +13,91 @@ const Contdiv = styled.div`
   width: 50%;
   height: 80%;
 `;
-
-class HistoryDayAll extends Component {
-  componentWillMount() {
-    this.setState({ index: 0 });
-  }
-
-  componentDidMount() {
-    this.props.fetchHistoryDay();
-  }
+/* 
+class HistoryDayAll1 extends Component {
 
   render() {
     //const data = (!this.props.data) ? [ 'LN', 'Logistics',  'Finance', 'Tools','LN','LN'] : this.props.data
 
     //const column = data[this.state.index || 0]
-    const history = this.props.history; // .reverse();
 
     const color = this.props.color || "#ffb74d";
     //const title = 'Backlog '.concat(column)
-    if (!history) return <div> Loading....</div>;
+    //if (!history) return <div> Loading....</div>;
     return (
-      <Flexdiv>
-        <Contdiv>
-          <HistoryChart
-            data={history}
-            title={`Backlog LN`}
-            type="area"
-            color={color}
-            xvalue="day"
-            value={`LN`}
-          />
-          <HistoryChart
-            data={history}
-            title={`Backlog Logistics`}
-            type="area"
-            color={color}
-            xvalue="day"
-            value={`Logistics`}
-          />
-        </Contdiv>
-        <Contdiv>
-          <HistoryChart
-            data={history}
-            title={`Backlog Finance`}
-            type="area"
-            color={color}
-            xvalue="day"
-            value={`Finance`}
-          />
+             
+          )
+  }
+}
+ */
 
-          <HistoryChart
-            data={history}
-            title={`Backlog Tools`}
-            type="area"
-            color={color}
-            xvalue="day"
-            value={`Tools`}
-          />
-        </Contdiv>
-      </Flexdiv>
+export default class HistoryDayAllContainer extends Component {
+  render() {
+    const color = this.props.color || "#ffb74d";
+    return (
+      <Query query={QUERY_HISTORY_DAY}>
+        {({ data, loading }) => {
+          if (loading) return <h2>Loading....</h2>;
+          console.log(data);
+          const history = data.historyday;
+          return (
+            <Flexdiv>
+              <Contdiv>
+                <HistoryChart
+                  data={history}
+                  title={`Backlog LN`}
+                  type="area"
+                  color={color}
+                  xvalue="day"
+                  value={`LN`}
+                />
+                <HistoryChart
+                  data={history}
+                  title={`Backlog Logistics`}
+                  type="area"
+                  color={color}
+                  xvalue="day"
+                  value={`Logistics`}
+                />
+              </Contdiv>
+              <Contdiv>
+                <HistoryChart
+                  data={history}
+                  title={`Backlog Finance`}
+                  type="area"
+                  color={color}
+                  xvalue="day"
+                  value={`Finance`}
+                />
+
+                <HistoryChart
+                  data={history}
+                  title={`Backlog Tools`}
+                  type="area"
+                  color={color}
+                  xvalue="day"
+                  value={`Tools`}
+                />
+              </Contdiv>
+            </Flexdiv>
+          );
+        }}
+      </Query>
     );
   }
 }
 
-const mapStateToProps = state => {
-  return { history: state.summary.history_day };
-};
-
-export default connect(mapStateToProps, { fetchHistoryDay })(HistoryDayAll);
+const QUERY_HISTORY_DAY = gql`
+  {
+    historyday {
+      id
+      day
+      month
+      LN
+      Tools
+      Finance
+      Logistics
+    }
+  }
+`;
+// export default connect(mapStateToProps, { fetchHistoryDay })(HistoryDayAll1);

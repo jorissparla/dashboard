@@ -1,13 +1,19 @@
 import React, { Component } from "react";
-import DashBoard from "./dashboard";
-import DashBoardStats from "./DashBoardStatsNew";
-import GoLives from "./golives/goLiveListNew";
+import DynamicImport from "./DynamicImport";
+
+//import DashBoard from "./dashboard";
+//import DashBoardStats from "./DashBoardStatsNew";
+
 import HistoryDayAll from "./charts/historydayallcontainer";
 import NewsPage from "./news/newspage";
 import SupportCards from "./supportcard/SupportCards";
 import KudoList from "./kudos/kudolistcomponentnew";
 import Anniversaries from "./awards/Anniversaries";
 import FeedbackList from "./feedback/feedbackList";
+
+const DashBoard = DynamicImport(() => import("./dashboard"));
+const DashBoardStats = DynamicImport(() => import("./DashBoardStatsNew"));
+const GoLives = DynamicImport(() => import("./golives/goLiveListNew"));
 
 class DashBoardContainer extends Component {
   state = { index: 0, sel: null };
@@ -73,7 +79,7 @@ class DashBoardContainer extends Component {
       case 3:
         return <GoLives region={region} />;
       case 4:
-        //return <GoLives region={region} />;
+        //  return <GoLives region={region} />;
         return <HistoryDayAll region={region} />;
       case 0:
         return <DashBoardStats data1={["Logistics"]} team="Logistics" region={region} />;
