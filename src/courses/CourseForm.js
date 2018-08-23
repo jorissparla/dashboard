@@ -62,6 +62,7 @@ class CourseForm extends Component {
       authenticated,
       history,
       coursetypes,
+      coursecategories,
       trainers,
       statuses,
       readOnly
@@ -148,6 +149,20 @@ class CourseForm extends Component {
                 style={{ flex: 2 }}
               >
                 {coursetypes.map(({ id, name }, index) => (
+                  <MenuItem key={`${index}_${id}`} value={name} primaryText={name} />
+                ))}
+              </Field>
+            </SelectStyle>
+            <SelectStyle>
+              <Field
+                name="category"
+                disabled={readOnly}
+                component={SelectField}
+                hintText="Select a category"
+                floatingLabelText="Default type"
+                style={{ flex: 2 }}
+              >
+                {coursecategories.map(({ id, name }, index) => (
                   <MenuItem key={`${index}_${id}`} value={name} primaryText={name} />
                 ))}
               </Field>

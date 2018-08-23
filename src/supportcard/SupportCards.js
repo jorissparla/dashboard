@@ -2,6 +2,7 @@ import React from "react";
 import gql from "graphql-tag";
 import { graphql, compose } from "react-apollo";
 import { SmallCard } from "../common/SmallCard";
+//import { SmallCard } from "./SupportCard";
 import Dialog from "material-ui/Dialog";
 import styled from "styled-components";
 import FlatButton from "material-ui/FlatButton";
@@ -37,7 +38,7 @@ const cardColors = [
   { back: "#B9F6CA", front: "#000" },
   { back: "#EDE7F6", front: "#000" },
   { back: "#80D8FF", front: "#000" },
-  { back: "#FFEB3B", front: "#000" },
+  { back: "#b39ddb", front: "#000" },
   { back: "#FFCC80", front: "#000" },
   { back: "#E1F5FE", front: "#000" },
   { back: "#607D8B", front: "#000" }
@@ -77,6 +78,7 @@ class SupportCards extends React.Component {
       isEditor,
       data: { loading, error, supportcards }
     } = this.props;
+    console.log("Auth", this.props);
     const actions = [
       <FlatButton label="Cancel" primary={true} onClick={this.handleClose} />,
       <FlatButton label="Submit" primary={true} onClick={this.handleClose} />
@@ -156,6 +158,7 @@ class SupportCards extends React.Component {
                   color={backgroundcolor || cardColors[i % (cardColors.length - 1)].back}
                   textcolor={color || cardColors[i % (cardColors.length - 1)].front}
                   key={id}
+                  authenticated={authenticated}
                   title={title}
                   isNew={isNew}
                   text={description}

@@ -180,6 +180,7 @@ class CourseCard extends Component {
       error,
       course,
       coursetypes,
+      coursecategories,
       courses,
       supportfolks,
       locations,
@@ -217,6 +218,7 @@ class CourseCard extends Component {
                 <CourseForm
                   initialValues={course}
                   coursetypes={coursetypes}
+                  coursecategories={coursecategories}
                   statuses={statuses.filter(s => s.type === "Course")}
                   course={course}
                   trainers={supportfolks}
@@ -334,6 +336,7 @@ const CourseQuery = gql`
       link
       status
       type
+      category
       startdate
       enddate
       hours
@@ -346,6 +349,7 @@ const CourseQuery = gql`
         hours
         team
         type
+
         location
         students {
           id
@@ -368,6 +372,10 @@ const CourseQuery = gql`
       }
     }
     coursetypes {
+      name
+    }
+    coursecategories {
+      id
       name
     }
     courses {

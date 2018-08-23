@@ -3,7 +3,7 @@ import { withRouter } from "react-router";
 import NewsItem from "./newsitem";
 import gql from "graphql-tag";
 import * as R from "ramda";
-import { graphql, Mutation } from "react-apollo";
+import { Mutation } from "react-apollo";
 
 class NewsItemAddContainer extends Component {
   doSubmit = async values => {
@@ -17,7 +17,7 @@ class NewsItemAddContainer extends Component {
         update={(cache, { data: { createNews } }) => {
           const query = ALL_NEWS;
           const { news } = cache.readQuery({ query });
-          const idx = R.findIndex(R.propEq("id", news.id), news);
+          // const idx = R.findIndex(R.propEq("id", news.id), news);
           cache.writeQuery({
             query,
             data: { news: R.concat(news, [createNews]) }

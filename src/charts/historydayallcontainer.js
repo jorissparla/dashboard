@@ -36,9 +36,11 @@ export default class HistoryDayAllContainer extends Component {
     const color = this.props.color || "#ffb74d";
     return (
       <Query query={QUERY_HISTORY_DAY}>
-        {({ data, loading }) => {
+        {({ data, loading, error }) => {
           if (loading) return <h2>Loading....</h2>;
+          if (error) return <div>error...</div>;
           console.log(data);
+          if (!data) return <div>No data</div>;
           const history = data.historyday;
           return (
             <Flexdiv>

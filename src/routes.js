@@ -2,15 +2,7 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
-import ChatList from "./chat/ChatList";
-import ChatContainer from "./chat/ChatContainer";
-import DashBoard from "./dashboard";
-import DashBoardStats from "./dashboardstats";
-import DashBoardContainer from "./dashboardcontainer";
-import HistoryDayContainer from "./charts/historydaycontainer";
-import HistoryDayAll from "./charts/historydayallcontainer";
-import GoLiveListNew from "./golives/goLiveListNew";
-import GoLiveListSide from "./golives/golivelistside";
+
 import Award from "./awards/award";
 import KudoListComponentNew from "./kudos/kudolistcomponentnew";
 import Signin from "./auth/signin";
@@ -25,7 +17,6 @@ import NewsListContainer from "./news/newslistcontainer";
 import NewsItemContainer from "./news/newsitemcontainer";
 import NewsItemAddContainer from "./news/newsitemaddcontainer";
 
-import SupportCards from "./supportcard/SupportCards";
 import RequestEditAdd from "./supportcard/Request";
 import SupportCardEdit from "./supportcard/SupportCardEdit";
 import SupportCardAdd from "./supportcard/SupportCardAdd";
@@ -40,7 +31,7 @@ import AddStudentsToCourse from "./courses/AddStudentsToCourse";
 
 //import SummaryChartContainer from "./charts/SummaryChartContainer";
 //import ChatGraphContainer from "./charts/ChatGraphContainer";
-import DashBoardStatsNew from "./DashBoardStatsNew";
+
 import RequestList from "./supportcard/RequestContainer";
 import RequestEdit from "./supportcard/RequestEdit";
 import ImageConverter from "./utils/ConvertImages";
@@ -54,12 +45,27 @@ import NewsPage from "./news/newspage";
 import { DashBoardContext, withDashBoardContext } from "./Provider";
 import AniNews from "./news/aninews";
 import DynamicImport from "./DynamicImport";
+import Loader from "./Loader";
 import ResolutionChart from "./charts/ResolutionChart";
 
 const CommentsList = DynamicImport(() => import("./feedback/commentList"));
 const CourseList = DynamicImport(() => import("./courses/CourseList"));
 
 const AccountList = DynamicImport(() => import("./Account/AccountList"));
+
+const ChatContainer = DynamicImport(() => import("./chat/ChatContainer"));
+const ChatList = DynamicImport(() => import("./chat/ChatList"));
+const SmallCard = DynamicImport(() => import("./supportcard/SupportCard"));
+//const DashBoard = Loader("./dashboard");
+const DashBoard = DynamicImport(() => import("./dashboard"));
+const DashBoardStats = DynamicImport(() => import("./dashboardstats"));
+const DashBoardContainer = DynamicImport(() => import("./dashboardcontainer"));
+const HistoryDayContainer = DynamicImport(() => import("./charts/historydaycontainer"));
+const HistoryDayAll = DynamicImport(() => import("./charts/historydayallcontainer"));
+const GoLiveListNew = DynamicImport(() => import("./golives/goLiveListNew"));
+const GoLiveListSide = DynamicImport(() => import("./golives/golivelistside"));
+const DashBoardStatsNew = DynamicImport(() => import("./DashBoardStatsNew"));
+const SupportCards = DynamicImport(() => import("./supportcard/SupportCards"));
 
 const NotFound = props => {
   //withDashBoardContext(props => {
@@ -76,6 +82,7 @@ class AppRoutes extends React.Component {
     return (
       <Switch>
         <Route exact path="/comments" component={CommentsList} />
+        <Route exact path="/smallcard" component={SmallCard} />
         <AuthRoute
           auth="admin"
           allowed={["Admin", "PO"]}

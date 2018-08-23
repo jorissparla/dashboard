@@ -1,22 +1,37 @@
 import React, { Component } from "react";
 import DynamicImport from "./DynamicImport";
 
-//import DashBoard from "./dashboard";
-//import DashBoardStats from "./DashBoardStatsNew";
-
-import HistoryDayAll from "./charts/historydayallcontainer";
-import NewsPage from "./news/newspage";
-import SupportCards from "./supportcard/SupportCards";
-import KudoList from "./kudos/kudolistcomponentnew";
 import Anniversaries from "./awards/Anniversaries";
 import FeedbackList from "./feedback/feedbackList";
 
 const DashBoard = DynamicImport(() => import("./dashboard"));
 const DashBoardStats = DynamicImport(() => import("./DashBoardStatsNew"));
 const GoLives = DynamicImport(() => import("./golives/goLiveListNew"));
+const SupportCards = DynamicImport(() => import("./supportcard/SupportCards"));
+const HistoryDayAll = DynamicImport(() => import("./charts/historydayallcontainer"));
+const NewsPage = DynamicImport(() => import("./news/newspage"));
+const KudoList = DynamicImport(() => import("./kudos/kudolistcomponentnew"));
 
 class DashBoardContainer extends Component {
-  state = { index: 0, sel: null };
+  state = {
+    index: 0,
+    sel: null,
+    region: "EMEA",
+    components: [
+      <DashBoardStats data1={["Logistics"]} team="Logistics" region={this.region} />,
+      <DashBoardStats data1={["Logistics"]} team="Logistics" region={this.region} />,
+      <DashBoardStats data1={["Finance"]} team="Finance" region={this.region} />,
+      <DashBoardStats data1={["Tools"]} team="Tools" region={this.region} />,
+      <GoLives region={this.region} />,
+      <HistoryDayAll region={this.region} />,
+      <KudoList />,
+      <DashBoard region={this.region} />,
+      <NewsPage region={this.region} />,
+      <SupportCards region={this.region} />,
+      <FeedbackList />,
+      <Anniversaries />
+    ]
+  };
 
   componentWillMount() {
     console.log("DashboardContainer", this.props.match.params.region);
@@ -53,10 +68,17 @@ class DashBoardContainer extends Component {
     return (
       <div>
         <div />
-        {this.renderDashBoard(index)}
+        {this.renderMyDashBoard(index)}
       </div>
     );
   }
+
+  renderMyDashBoard = index => {
+    const { region } = this.state;
+    console.log(index, region);
+    if (index > this.state.components.length - 1) return <div>Not found...</div>;
+    return this.state.components[index];
+  };
 
   renderDashBoard(index) {
     const { region } = this.state;
