@@ -18,19 +18,6 @@ class DashBoardStats extends React.Component {
   state = { index: 0, team: "Logistics" };
   teams = ["Logistics", "Finance", "Tools"];
 
-  myTimer = () => {
-    let newIndex;
-    if (this.state.index === 2) {
-      newIndex = 0;
-    } else {
-      newIndex = this.state.index + 1;
-    }
-    this.setState({ index: newIndex, team: this.teams[this.state.index] });
-  };
-  componentWillMount() {
-    // this.timerhandle = setInterval(this.myTimer, 45000);
-  }
-
   getTeam = () => {
     const team = this.props.match ? this.props.match.params.team : this.props.team;
     //console.log(` RETURNS TEAM: ${team} , PROPS:  ${this.props.team}, PARAMS: ${this.props.match}`);

@@ -2,12 +2,15 @@ import React from "react";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
 import SummaryChart from "./NewSummaryChart";
+import LoadingDots from "../common/LoadingDots";
 
 class SummaryChartContainer extends React.Component {
   componentWillMount() {}
 
   render() {
-    const { data: { loading, error, summaries } } = this.props;
+    const {
+      data: { loading, error, summaries }
+    } = this.props;
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error</div>;
 
