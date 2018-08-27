@@ -1,13 +1,11 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import { fetchHistoryDay } from "../actions/index";
+import gql from "graphql-tag";
+import { Query } from "react-apollo";
 import HistoryChart from "./historychart";
 
 class HistoryChartDayContainer extends Component {
   myTimer() {
-    const data = !this.props.data
-      ? ["LN", "Tools", "Logistics", "Finance"]
-      : this.props.data;
+    const data = !this.props.data ? ["LN", "Tools", "Logistics", "Finance"] : this.props.data;
     this.setState({
       index: this.state.index + 1,
       nrCols: data.length
@@ -26,11 +24,8 @@ class HistoryChartDayContainer extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchHistoryDay();
-    this.timerhandle = setInterval(
-      this.myTimer.bind(this),
-      this.props.refreshRate || 10000
-    );
+    //  this.props.fetchHistoryDay();
+    this.timerhandle = setInterval(this.myTimer.bind(this), this.props.refreshRate || 10000);
   }
 
   componentWillUnmount() {
@@ -43,30 +38,48 @@ class HistoryChartDayContainer extends Component {
       : this.props.data;
 
     const column = data[this.state.index || 0];
-    const history = this.props.history; // .reverse();
+    // console.log("historydaycontainer", this.props.history);
+    //const history = this.props.history; // .reverse();
 
     const color = this.props.color || "#ffb74d";
     const title = "Backlog ".concat(column);
-    if (!history) return <div> Loading....</div>;
+    // if (!history) return <div> Loading....</div>;
     return (
-      <div>
-        <HistoryChart
-          data={history}
-          title={title}
-          type="area"
-          color={color}
-          xvalue="day"
-          value={column}
-        />
-      </div>
+      <Query query={QUERY_HISTORY_DAY}>
+        {({ data, loading, ...props }) => {
+          console.log("CCC", loading, data, { props });
+          if (loading) {
+            return <h1>Loading....</h1>;
+          }
+
+          return (
+            <HistoryChart
+              data={data.historyday}
+              title={title}
+              type="area"
+              color={color}
+              xvalue="day"
+              value={column}
+            />
+          );
+        }}
+      </Query>
     );
   }
 }
 
-const mapStateToProps = state => {
-  return { history: state.summary.history_day };
-};
+const QUERY_HISTORY_DAY = gql`
+  {
+    historyday {
+      id
+      day
+      month
+      LN
+      Tools
+      Finance
+      Logistics
+    }
+  }
+`;
 
-export default connect(mapStateToProps, { fetchHistoryDay })(
-  HistoryChartDayContainer
-);
+export default HistoryChartDayContainer;

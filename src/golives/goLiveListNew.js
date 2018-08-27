@@ -57,7 +57,6 @@ const monthPart = d => format(Date.parse(d), "MMMM");
 
 const GoLiveItem = ({ item, bg = "#ec407a" }) => {
   const { id, day, customername, customerid, region, version, comments } = item;
-  console.log(item);
 
   return (
     <ListItem
@@ -79,7 +78,8 @@ const GoLiveItem = ({ item, bg = "#ec407a" }) => {
       onClick={() =>
         window.open(
           `http://navigator.infor.com/n/incident_list.asp?ListType=CUSTOMERID&Value=${customerid}`
-        )}
+        )
+      }
     />
   );
 };
@@ -98,11 +98,10 @@ const goLivesContainer = ({ data: { loading, golives } }) => {
     })
     .map(o => _.map(o, i => _.merge({ day: dayPart(i.date), month: monthPart(i.date) }, i)))
     .value();
-  console.log(goLivesByMonth);
   return (
     <List style={{ backgroundColor: "white" }}>
-      {goLivesByMonth.map(m => (
-        <div>
+      {goLivesByMonth.map((m, index) => (
+        <div key={index}>
           <Title>{m[0].month}</Title>
           <RenderMonthItems items={m} />
         </div>

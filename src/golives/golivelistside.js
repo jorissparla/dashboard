@@ -49,7 +49,7 @@ class GoLiveListSide extends Component {
 
       let color = index % 2 ? "blanchedalmond" : "white";
       return (
-        <GoLiveItemStyle background-color={color} key={key}>
+        <GoLiveItemStyle background-color={color} key={index + key}>
           <ListItem
             leftAvatar={<GoLiveDateStyle>{getDay(item.date)}</GoLiveDateStyle>}
             primaryText={

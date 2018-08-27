@@ -57,7 +57,9 @@ class Header extends React.Component {
       pc.createOffer(pc.setLocalDescription.bind(pc), noop); // create offer and set local description
       pc.onicecandidate = function(ice) {
         if (ice && ice.candidate && ice.candidate.candidate) {
-          var myIP = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/.exec(ice.candidate.candidate)[1];
+          var myIP = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/.exec(
+            ice.candidate.candidate
+          )[1];
           console.log("my IP: ", myIP);
           self.setState({ ipaddress: myIP });
           pc.onicecandidate = noop;
@@ -84,11 +86,13 @@ class Header extends React.Component {
     const { history, authenticated, user } = this.props;
 
     let validRole = false;
+    let isChat = false;
 
     let isAdmin = false;
     if (user) {
       validRole = user.role !== "Guest";
       isAdmin = user.role === "Admin";
+      isChat = user.role === "Chat";
     }
 
     //console.log("AUTH", authenticated, validRole, user.role !== "Guest");
@@ -165,7 +169,7 @@ class Header extends React.Component {
           )}
         <Divider />
         {authenticated &&
-          isAdmin && (
+          (isAdmin || isChat) && (
             <MenuItem
               primaryText={<div style={{ color: "black" }}>Chat</div>}
               leftIcon={<ChatIcon />}
@@ -226,18 +230,25 @@ class Header extends React.Component {
         </FlatButton>
       );
     } else {
-      return <FlatButton onClick={() => this.logInLink()} label="Login" style={{ color: "white" }} />;
+      return (
+        <FlatButton onClick={() => this.logInLink()} label="Login" style={{ color: "white" }} />
+      );
     }
   }
 
   renderPicture() {
-    const picture = localStorage.getItem("picture") || "https://randomuser.me/api/portraits/men/20.jpg";
+    const picture =
+      localStorage.getItem("picture") || "https://randomuser.me/api/portraits/men/20.jpg";
     if (this.props.authenticated) {
       return <Avatar src={picture} />;
     } else return <div />;
   }
 
   renderToolBar() {
+    let titleText = this.state.ipaddress ? this.state.ipaddress : "";
+    console.log(this.state.ipaddress);
+    titleText =
+      titleText + process.env.NODE_ENV !== "production" ? `(${process.env.NODE_ENV})` : "";
     return (
       <Toolbar style={styles}>
         <ToolbarGroup firstChild={true}>
@@ -258,7 +269,7 @@ class Header extends React.Component {
           </SharedSnackbarConsumer>
         </ToolbarGroup>{" "}
         <ToolbarGroup>
-          <ToolbarTitle text={this.state.ipaddress || ""} style={{ color: "white" }} />
+          <ToolbarTitle text={titleText} style={{ color: "white" }} />
         </ToolbarGroup>{" "}
         <ToolbarGroup>{this.renderButtons()}</ToolbarGroup>
       </Toolbar>
@@ -284,7 +295,8 @@ class Header extends React.Component {
   };
 
   getStyle = () => {
-    if (this.state.showdrawer) return { left: "250px", width: "calc(100% - 270px)", position: "absolute" };
+    if (this.state.showdrawer)
+      return { left: "250px", width: "calc(100% - 270px)", position: "absolute" };
     return { width: "100%" };
   };
   render() {

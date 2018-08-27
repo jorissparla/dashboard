@@ -38,10 +38,13 @@ const HeaderColumn = ({ style, children }) => {
 
 class TrainerView extends React.Component {
   render() {
-    const { data: { loading, trainers } } = this.props;
+    const {
+      data: { loading, trainers }
+    } = this.props;
     if (loading) {
       return <div>Loading...</div>;
     }
+    console.log("Trainers", trainers);
     return <div>{this.renderTrainers(trainers || [])}</div>;
   }
   renderTrainers = trainers => {

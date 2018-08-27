@@ -1,0 +1,8 @@
+{
+    "trailingSlash": false,
+    "rewrites": [
+      { "source": "/courses/**", "destination": "/index.html" },
+      { "source": "/supportcards/**", "destination": "/index.html" },
+      { "source": "/**/**", "destination": "/index.html" }
+    ]
+}

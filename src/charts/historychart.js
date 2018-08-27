@@ -51,15 +51,18 @@ arColors["Tools"] = "#90caf9";
 arColors["Logistics"] = "#c62828";
 arColors["Finance"] = "#01579b";
 
-const renderSummary = (config, xval, val, title, color, type, summary) => {
+const renderSummary = (config, xval, val, title, color, type, asummary) => {
   xval = !xval ? "weekNr" : xval;
-  if (!summary) return config;
+  if (!asummary) return config;
+  const summary = asummary.slice().reverse();
   const range = summary.map(item => item[val]);
+  const filteredSummary = summary.map(item => [].concat(item[xval], item[val]));
+  console.log("Range", title, val, range);
   color = arColors[val];
   if (color) {
     config.plotOptions.area.color = color;
   }
-  const filteredSummary = summary // .sort((a,b)=> a.row > b.row)
+  /*   const filteredSummary = summary // .sort((a,b)=> a.row > b.row)
     .reduce(
       ({ xvalues, data }, item) => {
         xvalues.push(item[xval]);
@@ -68,26 +71,29 @@ const renderSummary = (config, xval, val, title, color, type, summary) => {
       },
       { xvalues: [], data: [] }
     );
-  config.xAxis.categories = filteredSummary.xvalues;
+  console.table(filteredSummary); */
+  config.xAxis.categories = summary.map(i => i[xval]);
   if (range.length > 0) {
     config.yAxis = {};
     config.yAxis.floor = Math.floor(Math.min(...range) / 10 - 1) * 10;
     config.yAxis.ceiling = Math.floor(Math.max(...range) / 10 + 1) * 10;
   }
-
-  config.series[0] = {
-    data: filteredSummary.data,
+  config.series = [];
+  config.series.push({
+    data: range, //filteredSummary.data,
     name: xval,
     color: color,
     type: type,
     dataLabels: { enabled: true }
-  };
+  });
   config.title.text = title;
-  return config;
+  console.log("Title", title);
+  return JSON.parse(JSON.stringify(config));
 };
 
 const historyChart = ({ xvalue, value, title, color, type, data }) => {
   const newConfig = renderSummary(config, xvalue, value, title, color, type, data);
+  console.log({ newConfig });
   return (
     <div className="col s4">
       <div className="card">

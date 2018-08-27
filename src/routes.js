@@ -2,60 +2,67 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import { withRouter } from "react-router";
 import { connect } from "react-redux";
-import ChatList from "./chat/ChatList";
-import ChatContainer from "./chat/ChatContainer";
-import DashBoard from "./dashboard";
-import DashBoardStats from "./dashboardstats";
-import DashBoardContainer from "./dashboardcontainer";
-import HistoryDayContainer from "./charts/historydaycontainer";
-import HistoryDayAll from "./charts/historydayallcontainer";
-import GoLiveListNew from "./golives/goLiveListNew";
-import GoLiveListSide from "./golives/golivelistside";
-import Award from "./awards/award";
-import KudoListComponentNew from "./kudos/kudolistcomponentnew";
+
 import Signin from "./auth/signin";
 import SigninWithPIN from "./auth/SigninWithPIN";
 import Signout from "./auth/signout";
 import UpdatePassword from "./auth/resetpassword";
 import RequireAuth, { AuthRoute, EnhancedRoute } from "./auth/require_auth";
-import ResetPasswordForm from "./auth/ResetPasswordForm";
-import RequestResetPassword from "./auth/RequestResetPassword";
 
-import NewsListContainer from "./news/newslistcontainer";
-import NewsItemContainer from "./news/newsitemcontainer";
-import NewsItemAddContainer from "./news/newsitemaddcontainer";
-
-import SupportCards from "./supportcard/SupportCards";
-import RequestEditAdd from "./supportcard/Request";
-import SupportCardEdit from "./supportcard/SupportCardEdit";
-import SupportCardAdd from "./supportcard/SupportCardAdd";
-//import CourseList from "./courses/CourseList";
-
-import CourseView from "./courses/CourseView";
-import CourseCard from "./courses/CourseCard";
-import AddCourseCard from "./courses/AddCourseCard";
-import StudentListContainer from "./courses/StudentListContainer";
-import StudentView from "./courses/StudentView";
-import AddStudentsToCourse from "./courses/AddStudentsToCourse";
-
-//import SummaryChartContainer from "./charts/SummaryChartContainer";
-//import ChatGraphContainer from "./charts/ChatGraphContainer";
-import DashBoardStatsNew from "./DashBoardStatsNew";
-import RequestList from "./supportcard/RequestContainer";
-import RequestEdit from "./supportcard/RequestEdit";
-import ImageConverter from "./utils/ConvertImages";
-import CustomerCommentsPage from "./customers/pages/CustomerCommentsMain";
-import AnniversaryList from "./awards/Anniversaries";
-import AGLTest from "./supportcard/Test";
-//import CommentsList from "./feedback/commentList";
-import FeedbackList from "./feedback/feedbackList";
+//import NewsPage from "./news/newspage";
 //import FeedbackEdit from "./feedback/feedbackEdit";
 import { DashBoardContext, withDashBoardContext } from "./Provider";
-import AniNews from "./news/aninews";
 import DynamicImport from "./DynamicImport";
+import Loader from "./Loader";
+
+const AGLTest = DynamicImport(() => import("./supportcard/Test"));
+//const CommentsList = DynamicImport(() => import("./feedback/commentList"));
+const FeedbackList = DynamicImport(() => import("./feedback/feedbackList"));
+
+const Award = DynamicImport(() => import("./awards/award"));
+const KudoListComponentNew = DynamicImport(() => import("./kudos/kudolistcomponentnew"));
+const ResetPasswordForm = DynamicImport(() => import("./auth/ResetPasswordForm"));
+const RequestResetPassword = DynamicImport(() => import("./auth/RequestResetPassword"));
+
+const NewsListContainer = DynamicImport(() => import("./news/newslistcontainer"));
+const NewsItemContainer = DynamicImport(() => import("./news/newsitemcontainer"));
+const NewsItemAddContainer = DynamicImport(() => import("./news/newsitemaddcontainer"));
+const RequestList = DynamicImport(() => import("./supportcard/RequestContainer"));
+const RequestEdit = DynamicImport(() => import("./supportcard/RequestEdit"));
+const ImageConverter = DynamicImport(() => import("./utils/ConvertImages"));
+const CustomerCommentsPage = DynamicImport(() => import("./customers/pages/CustomerCommentsMain"));
+const AnniversaryList = DynamicImport(() => import("./awards/Anniversaries"));
+
+const ResolutionChart = DynamicImport(() => import("./charts/ResolutionChart"));
 
 const CommentsList = DynamicImport(() => import("./feedback/commentList"));
 const CourseList = DynamicImport(() => import("./courses/CourseList"));
+
+const AccountList = DynamicImport(() => import("./Account/AccountList"));
+
+const ChatContainer = DynamicImport(() => import("./chat/ChatContainer"));
+const ChatList = DynamicImport(() => import("./chat/ChatList"));
+const SmallCard = DynamicImport(() => import("./supportcard/SupportCard"));
+//const DashBoard = Loader("./dashboard");
+const DashBoard = DynamicImport(() => import("./dashboard"));
+const DashBoardStats = DynamicImport(() => import("./dashboardstats"));
+const DashBoardContainer = DynamicImport(() => import("./dashboardcontainer"));
+const HistoryDayContainer = DynamicImport(() => import("./charts/historydaycontainer"));
+const HistoryDayAll = DynamicImport(() => import("./charts/historydayallcontainer"));
+const GoLiveListNew = DynamicImport(() => import("./golives/goLiveListNew"));
+const GoLiveListSide = DynamicImport(() => import("./golives/golivelistside"));
+const DashBoardStatsNew = DynamicImport(() => import("./DashBoardStatsNew"));
+const SupportCards = DynamicImport(() => import("./supportcard/SupportCards"));
+
+const RequestEditAdd = DynamicImport(() => import("./supportcard/Request"));
+const SupportCardEdit = DynamicImport(() => import("./supportcard/SupportCardEdit"));
+const SupportCardAdd = DynamicImport(() => import("./supportcard/SupportCardAdd"));
+const CourseView = DynamicImport(() => import("./courses/CourseView"));
+const CourseCard = DynamicImport(() => import("./courses/CourseCard"));
+const AddCourseCard = DynamicImport(() => import("./courses/AddCourseCard"));
+const StudentListContainer = DynamicImport(() => import("./courses/StudentListContainer"));
+const StudentView = DynamicImport(() => import("./courses/StudentView"));
+const AddStudentsToCourse = DynamicImport(() => import("./courses/AddStudentsToCourse"));
 
 const NotFound = props => {
   //withDashBoardContext(props => {
@@ -72,6 +79,16 @@ class AppRoutes extends React.Component {
     return (
       <Switch>
         <Route exact path="/comments" component={CommentsList} />
+        <Route exact path="/smallcard" component={SmallCard} />
+        <AuthRoute
+          auth="admin"
+          allowed={["Admin", "PO"]}
+          user={user}
+          exact
+          path="/accounts"
+          component={AccountList}
+        />
+        <Route exact path="/customercomments" component={CustomerCommentsPage} />
         <EnhancedRoute
           auth="admin"
           editors={["Admin", "PO"]}
@@ -84,11 +101,11 @@ class AppRoutes extends React.Component {
         <Route exact path="/agltest" component={AGLTest} />
         <Route exact path="/anniversaries" component={AnniversaryList} />
         <AuthRoute
-          allowed={["Admin", "PO", "SU", "Guest"]}
+          allowed={["Admin", "PO", "SU", "Guest", "Chat"]}
           user={user}
           exact
           path="/test"
-          component={AniNews}
+          component={ResolutionChart}
         />
         <EnhancedRoute
           editors={["Admin", "PO", "SU"]}
@@ -147,7 +164,7 @@ class AppRoutes extends React.Component {
           component={SupportCardAdd}
         />
         <AuthRoute
-          allowed={["Admin", "PO", "SU", "Guest"]}
+          allowed={["Admin", "PO", "SU", "Guest", "Chat"]}
           user={user}
           exact
           path="/supportcard/request"
@@ -169,8 +186,21 @@ class AppRoutes extends React.Component {
           path="/news/add"
           component={RequireAuth(NewsItemAddContainer)}
         />
-        <Route exact path="/chat" component={RequireAuth(ChatList)} />
-        <Route exact path="/chat/new" component={RequireAuth(ChatContainer)} />
+        <AuthRoute
+          allowed={["Admin", "PO", "SU", "Chat"]}
+          user={user}
+          exact
+          path="/chat"
+          component={RequireAuth(ChatList)}
+        />
+        <AuthRoute
+          allowed={["Admin", "PO", "SU", "Chat"]}
+          user={user}
+          exact
+          exact
+          path="/chat/new"
+          component={RequireAuth(ChatContainer)}
+        />
         <AuthRoute
           allowed={["Admin", "PO", "SU"]}
           user={user}
@@ -205,7 +235,7 @@ class AppRoutes extends React.Component {
           component={CourseCard}
         />
         <AuthRoute
-          allowed={["Admin", "PO", "SU", "Guest"]}
+          allowed={["Admin", "PO", "SU", "Guest", "Chat"]}
           user={user}
           path="/courses/view/:id"
           component={props => <CourseCard {...props} view={true} />}

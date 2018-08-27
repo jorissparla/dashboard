@@ -1,0 +1,20 @@
+.card {
+  max-width: 405px;
+  margin: 5px;
+  justify-content: space-between;
+  display: flex;
+  flex-direction: column;
+  background: #b39ddb;
+}
+.media {
+  object-fit: cover;
+}
+.content {
+  max-height: 100px;
+  color: blue;
+  text-overflow: clip;
+}
+.header {
+  max-height: 50px;
+  text-overflow: ellipsis;
+}

@@ -73,7 +73,7 @@ const Avatar = styled.img`
   width: 350px;
   height: 200px;
   display: flex;
-  object-fit: cover;
+  object-fit: scale-down;
 `;
 const NewsItem = ({ news }) => {
   return (
@@ -97,7 +97,9 @@ const NewsPage = props => {
   if (props.error) {
     return <div>E</div>;
   }
-  const { data: { news } } = props;
+  const {
+    data: { news }
+  } = props;
   if (!news) {
     return <div>No news</div>;
   }

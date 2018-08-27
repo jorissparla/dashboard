@@ -1,5 +1,6 @@
-import { IconButton, Snackbar } from "@material-ui/core";
-import { Close } from "@material-ui/icons";
+import IconButton from "@material-ui/core/IconButton";
+import Snackbar from "@material-ui/core/Snackbar";
+import Close from "@material-ui/icons/Close";
 import React from "react";
 import { SharedSnackbarConsumer } from "./SharedSnackbar.context";
 

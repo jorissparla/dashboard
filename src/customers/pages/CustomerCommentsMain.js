@@ -62,9 +62,9 @@ const AccountTitle = styled.div`
   padding: 2px;
 `;
 
-const AccountComponent = ({ image, fullname }) => (
-  <AccountBox>
-    <AccountPicture image={image} onClick={() => alert("clicked")} />
+const AccountComponent = ({ image, fullname, handleClick }) => (
+  <AccountBox onClick={() => handleClick(fullname)}>
+    <AccountPicture image={image} />
     <AccountTitle>{fullname}</AccountTitle>
   </AccountBox>
 );
@@ -108,7 +108,9 @@ class MainPage extends React.Component {
     console.log("handleCustomerInfoUpdate");
   };
   render() {
-    const { data: { loading, accounts, customers } } = this.props;
+    const {
+      data: { loading, accounts, customers }
+    } = this.props;
     if (loading) {
       return <div>Loading</div>;
     }
@@ -123,12 +125,18 @@ class MainPage extends React.Component {
       <div>
         <Widget>
           {accounts.map(({ id, image, fullname }) => (
-            <AccountComponent key={id} image={image} fullname={fullname.split(" ")[0]} />
+            <AccountComponent
+              key={id}
+              image={image}
+              fullname={fullname.split(" ")[0]}
+              handleClick={name => this.handlesetSearchText(name)}
+            />
           ))}
         </Widget>
         <Container>
           <CustomerBoxWithSearchField>
             <SearchBar
+              defaultValue={this.state.searchText}
               onChange={this.handlesetSearchText}
               shade={false}
               hintText="Search on customer name or contact"
