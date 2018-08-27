@@ -48,6 +48,7 @@
     "redux-form-material-ui": "^4.3.4",
     "redux-promise": "^0.5.3",
     "redux-thunk": "^2.3.0",
+    "shortid": "^2.2.13",
     "styled-components": "^2.4.1"
   },
   "scripts": {
