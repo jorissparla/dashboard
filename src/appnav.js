@@ -245,10 +245,10 @@ class Header extends React.Component {
   }
 
   renderToolBar() {
-
-    let  titleText = this.state.ipaddress? this.state.ipaddress: ""
-    console.log(this.state.ipaddress)
-    titleText = titleText + process.env.NODE_ENV !== 'production' ? `(${process.env.NODE_ENV})`: ""
+    let titleText = this.state.ipaddress ? this.state.ipaddress : "";
+    console.log(this.state.ipaddress);
+    titleText =
+      titleText + process.env.NODE_ENV !== "production" ? `(${process.env.NODE_ENV})` : "";
     return (
       <Toolbar style={styles}>
         <ToolbarGroup firstChild={true}>
