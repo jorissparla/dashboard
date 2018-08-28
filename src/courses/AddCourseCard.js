@@ -58,7 +58,9 @@ class AddCourseCard extends Component {
   };
 
   render() {
-    const { data: { coursetypes, loading, statuses, supportfolks } } = this.props;
+    const {
+      data: { coursetypes, coursecategories, loading, statuses, supportfolks }
+    } = this.props;
     if (loading) {
       return <div>Loading...</div>;
     }
@@ -68,6 +70,7 @@ class AddCourseCard extends Component {
           <Right>
             <CourseForm
               coursetypes={coursetypes}
+              coursecategories={coursecategories}
               statuses={statuses.filter(s => s.type === "Course")}
               trainers={supportfolks}
               onSave={this.handleSave}
@@ -84,6 +87,10 @@ class AddCourseCard extends Component {
 const queryCourseTypes = gql`
   query coursetypes {
     coursetypes {
+      name
+    }
+    coursecategories {
+      id
       name
     }
     statuses {

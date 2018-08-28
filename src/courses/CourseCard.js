@@ -75,20 +75,18 @@ class CourseCard extends Component {
   handleDelete = id => {
     this.props
       .deleteCourse({ variables: { input: { id } } })
-      .then(this.props.history.push(`/courses/${this.state.id}`))
+      .then(this.props.history.push(`/courses`))
       .then(this.props.data.refetch())
       .then(this.setState({ id: null }))
       //.then(() => setTimeout((window.location.href = "/courses"), 500))
       .catch(e => this.handleMessage(JSON.stringify(e, null, 2)));
   };
 
-  handleDeletePlanned = id => {
-    this.props
-      .deletePlannedCourse({ variables: { input: { id } } })
-      // .then(this.props.data.refetch())
-      .then(this.setState({ planid: null }))
-      .then(this.props.history.push("/courses"))
-      .catch(e => this.handleMessage(JSON.stringify(e, null, 2)));
+  handleDeletePlanned = async id => {
+    await this.props.deletePlannedCourse({ variables: { input: { id } } });
+    await this.props.data.refetch();
+    this.setState({ planid: null });
+    this.props.history.push("/courses");
   };
 
   handleRefetch = async () => {
