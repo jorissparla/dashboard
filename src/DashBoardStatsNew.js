@@ -26,7 +26,7 @@ class DashBoardStats extends React.Component {
   };
   render() {
     //const { data, team } = this.props;
-
+    console.log("Rendering");
     return (
       <Row>
         <SummaryChartContainer

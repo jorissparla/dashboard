@@ -1,7 +1,7 @@
 import React from "react";
 import { signinUser } from "../actions";
-import gql from 'graphql-tag';
-import { compose, graphql } from 'react-apollo'
+import gql from "graphql-tag";
+import { graphql, Mutation } from "react-apollo";
 import { connect } from "react-redux";
 //import ErrorDialog from "../errordialog";
 import { withRouter } from "react-router";
@@ -9,9 +9,8 @@ import { Link } from "react-router-dom";
 //import styled from "styled-components";
 import { Button, Input, Form, Error } from "../styles";
 
-
 const MUTATION_SIGNIN = gql`
-  mutation signinUser ($input: AUTH_PROVIDER_EMAIL) {
+  mutation signinUser($input: AUTH_PROVIDER_EMAIL) {
     signinUser(input: $input) {
       token
       user {
@@ -21,10 +20,10 @@ const MUTATION_SIGNIN = gql`
         role
         image
       }
+      error
     }
   }
-
-`
+`;
 
 /* 
 
@@ -36,7 +35,6 @@ const MUTATION_SIGNIN = gql`
       localStorage.setItem("role", response.data.user.role);
 
       */
-
 
 const isRequired = value => (value ? true : false);
 const isValidemail = value =>
@@ -99,13 +97,22 @@ class Signin extends React.Component {
     const { email, password } = this.state;
     const err = this.validate();
     if (!err) {
-      const input = { email, password }
-      console.log('input', input)
-      const gres = await this.props.data({ variables: { input } });
-      const { token, user } = gres.data.signinUser;
-      console.log('GRES', token, user)
-      const result = await this.props.signinUser({ email, password });
-      if (!result.error) {
+      const input = { email, password };
+      console.log("input", input);
+      const result = await this.props.data({ variables: { input } });
+      //  const { token, user } = gres.data.signinUser;
+      //   console.log("GRES", token, user);
+      // const result = await this.props.signinUser({ email, password });
+      console.log("Result", result);
+      if (!result.data.signinUser.error) {
+        const { token, user } = result.data.signinUser;
+        localStorage.setItem("id", user.id);
+        localStorage.setItem("token", token || "PIN01");
+        localStorage.setItem("email", user.email);
+        localStorage.setItem("name", user.fullname);
+        localStorage.setItem("picture", user.image);
+        localStorage.setItem("role", user.role);
+
         this.props.history.push("/");
       } else {
         errors.submitError = "invalid email or password";
@@ -130,7 +137,7 @@ class Signin extends React.Component {
     }
   };
   render() {
-    console.log('this.props', this.props)
+    console.log("this.props", this.props);
     return (
       <Form>
         <Input
@@ -162,6 +169,7 @@ function mapStateToProps(state) {
   return { errorMessage: state.auth.error };
 }
 
-export default connect(mapStateToProps, { signinUser })(
-  graphql(MUTATION_SIGNIN, { name: 'data' })(
-    withRouter(Signin)));
+export default connect(
+  mapStateToProps,
+  { signinUser }
+)(graphql(MUTATION_SIGNIN, { name: "data" })(withRouter(Signin)));
