@@ -18,11 +18,11 @@ class DashBoardContainer extends Component {
     sel: null,
     region: "EMEA",
     components: [
+      <GoLives region={this.region} />,
       <DashBoardStats data1={["Logistics"]} team="Logistics" region={this.region} />,
       <DashBoardStats data1={["Logistics"]} team="Logistics" region={this.region} />,
       <DashBoardStats data1={["Finance"]} team="Finance" region={this.region} />,
       <DashBoardStats data1={["Tools"]} team="Tools" region={this.region} />,
-      <GoLives region={this.region} />,
       <HistoryDayAll region={this.region} />,
       <KudoList />,
       <DashBoard region={this.region} />,
