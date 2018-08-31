@@ -24,6 +24,7 @@
     "create-react-app": "^1.5.2",
     "date-fns": "^1.28.5",
     "dotenv": "^4.0.0",
+    "formik": "^1.1.1",
     "global": "^4.3.1",
     "graphql": "^0.11.7",
     "graphql-tag": "^2.9.2",
@@ -49,7 +50,8 @@
     "redux-promise": "^0.5.3",
     "redux-thunk": "^2.3.0",
     "shortid": "^2.2.13",
-    "styled-components": "^2.4.1"
+    "styled-components": "^2.4.1",
+    "yup": "^0.26.3"
   },
   "scripts": {
     "start": "react-scripts start",

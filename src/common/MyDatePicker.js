@@ -1,5 +1,4 @@
 import React from "react";
-//import DatePicker from 'redux-form-material-ui';
 import DatePicker from "material-ui/DatePicker";
 
 const styles = {
