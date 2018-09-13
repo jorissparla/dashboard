@@ -85,7 +85,7 @@ const GoLiveItem = ({ item, bg = "#ec407a" }) => {
 };
 
 const RenderMonthItems = ({ items }) =>
-  items.map((item, index) => <GoLiveItem item={item} bg={colors[index % 6]} />);
+  items.map((item, index) => <GoLiveItem key={index} item={item} bg={colors[index % 6]} />);
 
 const goLivesContainer = ({ data: { loading, golives } }) => {
   if (loading) {

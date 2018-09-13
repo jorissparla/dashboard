@@ -63,6 +63,7 @@ const AddCourseCard = DynamicImport(() => import("./courses/AddCourseCard"));
 const StudentListContainer = DynamicImport(() => import("./courses/StudentListContainer"));
 const StudentView = DynamicImport(() => import("./courses/StudentView"));
 const AddStudentsToCourse = DynamicImport(() => import("./courses/AddStudentsToCourse"));
+const TenantList = DynamicImport(() => import("./TenantList"));
 
 const NotFound = props => {
   //withDashBoardContext(props => {
@@ -71,7 +72,8 @@ const NotFound = props => {
 
 class AppRoutes extends React.Component {
   render() {
-    const { user } = this.props;
+    console.log("✔️✔️✔️✔️✔️", this.props);
+    const { user } = this.props.context;
     if (!user) {
       console.log("loading");
       // return <div>Loading</div>;
@@ -253,6 +255,7 @@ class AppRoutes extends React.Component {
           path="/courses/addstudents/:id"
           component={AddStudentsToCourse}
         />
+        <Route exact path="/tenant" component={TenantList} />
         <Route component={NotFound} />
       </Switch>
     );
@@ -264,4 +267,5 @@ const mapStateToProps = state => ({
   user: state.auth.user
 });
 
-export default withRouter(connect(mapStateToProps)(AppRoutes));
+//export default withRouter(connect(mapStateToProps)(AppRoutes));
+export default withRouter(withDashBoardContext(AppRoutes));

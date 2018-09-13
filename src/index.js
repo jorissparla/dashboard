@@ -35,11 +35,11 @@ const {
   REACT_APP_HTTP = "http"
 } = process.env;
 
-console.log("process.env", process.env);
+//console.log("process.env", process.env);
 //const uri = `http://localhost:4000`
 
 const prefix = REACT_APP_HTTP.trim();
-console.log("prefix", `<${prefix}>`);
+//console.log("prefix", `<${prefix}>`);
 let uri = `${REACT_APP_GRAPHQLSERVER}:${REACT_APP_PORT_GRAPHQL}`;
 uri = prefix === "https" ? "https://" + uri : "http://" + uri;
 //`${REACT_APP_HTTP}://${REACT_APP_GRAPHQLSERVER}:${REACT_APP_PORT_GRAPHQL}/${REACT_APP_GRAPHQL_PATH}`;
@@ -112,4 +112,5 @@ const Main = () => (
 
 ReactDOM.render(<Main />, document.getElementById("root"));
 
+export { Main };
 //registerServiceWorker();

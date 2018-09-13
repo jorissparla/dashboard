@@ -23,6 +23,8 @@ export default class DashBoardContextProvider extends React.Component {
     authenticated: () => (this.state.email ? true : false)
   };
   render() {
+    const { children } = this.props;
+    // if (typeof children ==='function') return
     return (
       <DashBoardContext.Provider value={this.state}>
         {this.props.children}
