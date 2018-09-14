@@ -64,6 +64,7 @@ const StudentListContainer = DynamicImport(() => import("./courses/StudentListCo
 const StudentView = DynamicImport(() => import("./courses/StudentView"));
 const AddStudentsToCourse = DynamicImport(() => import("./courses/AddStudentsToCourse"));
 const TenantList = DynamicImport(() => import("./TenantList"));
+const DonutChart = DynamicImport(() => import("./charts/DonutChart"));
 
 const NotFound = props => {
   //withDashBoardContext(props => {
@@ -255,6 +256,7 @@ class AppRoutes extends React.Component {
           path="/courses/addstudents/:id"
           component={AddStudentsToCourse}
         />
+        <Route exact path="/donut" component={DonutChart} />
         <Route exact path="/tenant" component={TenantList} />
         <Route component={NotFound} />
       </Switch>
