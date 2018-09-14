@@ -2,10 +2,17 @@ import React, { Component } from "react";
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import { VictoryBar, VictoryChart, VictoryTheme, VictoryPie } from "victory";
+import { withStyles } from "@material-ui/core/styles";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
 
 const INCIDENT_QUERY = gql`
-  {
-    accounts(firstname: "Jos") {
+  query accounts($firstName: String) {
+    accounts(firstname: $firstName) {
       stats {
         Status
         StatusCount
@@ -16,25 +23,72 @@ const INCIDENT_QUERY = gql`
         }
       }
     }
+    supportfolks {
+      id
+      firstname
+      lastname
+    }
   }
 `;
 
+const styles = theme => ({
+  root: {
+    display: "flex",
+    flexWrap: "wrap"
+  },
+  formControl: {
+    margin: theme.spacing.unit,
+    minWidth: 120
+  },
+  selectEmpty: {
+    marginTop: theme.spacing.unit * 2
+  }
+});
+
 const colors = ["#BA68C8", "#81D4FA", "#FF7043", "#8BC34A", "#ec407a", "#1da1f2", "#E57373"];
 
-export default class DonutChart extends Component {
-  state = { incidents: [] };
+class DonutChart extends Component {
+  state = {
+    incidents: [],
+    firstname: "Eddy",
+    name: "hai"
+  };
+
+  handleChange = event => {
+    console.log(event.target.name, event.target.value);
+    this.setState({ [event.target.name]: event.target.value });
+  };
   render() {
+    const { classes } = this.props;
     return (
-      <Query query={INCIDENT_QUERY}>
+      <Query query={INCIDENT_QUERY} variables={{ firstName: this.state.firstname || "Eddy" }}>
         {({ data, loading }) => {
           if (loading) return "...Loading";
-          const { accounts } = data;
+          const { accounts, supportfolks } = data;
           const { stats } = accounts[0];
           console.log(accounts, stats);
           const pieData = stats.map(stat => ({ x: stat.Status, y: stat.StatusCount }));
           console.log(JSON.stringify(pieData));
           return (
             <div>
+              <FormControl className={classes.formControl}>
+                <InputLabel shrink htmlFor="firstname-label-placeholder">
+                  First Name
+                </InputLabel>
+                <Select
+                  value={this.state.firstname}
+                  onChange={this.handleChange}
+                  input={<Input name="firstname" id="firstname-label-placeholder" />}
+                  displayEmpty
+                  name="firstname"
+                  className={classes.selectEmpty}
+                >
+                  {supportfolks.map(({ id, firstname }) => (
+                    <MenuItem value={firstname}>{firstname}</MenuItem>
+                  ))}
+                </Select>
+                <FormHelperText>Label + placeholder</FormHelperText>
+              </FormControl>
               <div style={{ width: "45%" }}>
                 <VictoryPie
                   colorScale={colors}
@@ -78,3 +132,5 @@ export default class DonutChart extends Component {
     );
   }
 }
+
+export default withStyles(styles)(DonutChart);

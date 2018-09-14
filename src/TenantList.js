@@ -3,10 +3,7 @@ import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import ListItemText from "@material-ui/core/ListItemText";
-import Chip from "@material-ui/core/Chip";
-import Avatar from "@material-ui/core/Avatar";
 import _ from "lodash";
 import { withStyles } from "@material-ui/core/styles";
 import deepOrange from "@material-ui/core/colors/deepOrange";
@@ -112,11 +109,17 @@ class TenantList extends Component {
                   return (
                     <ListItem key={tenant.id} className={classes.listItem}>
                       {index % 3 === 0 ? (
-                        <div className={`${classes.orangeAvatar} ${classes.bigAvatar}`}>{tenant.version}</div>
+                        <div className={`${classes.orangeAvatar} ${classes.bigAvatar}`}>
+                          {tenant.version}
+                        </div>
                       ) : index % 3 === 1 ? (
-                        <div className={`${classes.purpleAvatar} ${classes.bigAvatar}`}>{tenant.version}</div>
+                        <div className={`${classes.purpleAvatar} ${classes.bigAvatar}`}>
+                          {tenant.version}
+                        </div>
                       ) : (
-                        <div className={`${classes.blueAvatar} ${classes.bigAvatar}`}>{tenant.version}</div>
+                        <div className={`${classes.blueAvatar} ${classes.bigAvatar}`}>
+                          {tenant.version}
+                        </div>
                       )}
 
                       <ListItemText
