@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import { VictoryBar, VictoryChart, VictoryTheme, VictoryPie } from "victory";
@@ -9,6 +9,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
+import Component from "../common/component-component";
 
 const INCIDENT_QUERY = gql`
   query accounts($firstName: String) {
@@ -47,7 +48,7 @@ const styles = theme => ({
 
 const colors = ["#BA68C8", "#81D4FA", "#FF7043", "#8BC34A", "#ec407a", "#1da1f2", "#E57373"];
 
-class DonutChart extends Component {
+class DonutChart extends React.Component {
   state = {
     incidents: [],
     firstname: "Eddy",
@@ -56,79 +57,85 @@ class DonutChart extends Component {
 
   handleChange = event => {
     console.log(event.target.name, event.target.value);
-    this.setState({ [event.target.name]: event.target.value });
   };
   render() {
     const { classes } = this.props;
     return (
-      <Query query={INCIDENT_QUERY} variables={{ firstName: this.state.firstname || "Eddy" }}>
-        {({ data, loading }) => {
-          if (loading) return "...Loading";
-          const { accounts, supportfolks } = data;
-          const { stats } = accounts[0];
-          console.log(accounts, stats);
-          const pieData = stats.map(stat => ({ x: stat.Status, y: stat.StatusCount }));
-          console.log(JSON.stringify(pieData));
+      <Component initialValue={{ firstname: "Eddy", incidents: [] }}>
+        {({ state, setState }) => {
           return (
-            <div>
-              <FormControl className={classes.formControl}>
-                <InputLabel shrink htmlFor="firstname-label-placeholder">
-                  First Name
-                </InputLabel>
-                <Select
-                  value={this.state.firstname}
-                  onChange={this.handleChange}
-                  input={<Input name="firstname" id="firstname-label-placeholder" />}
-                  displayEmpty
-                  name="firstname"
-                  className={classes.selectEmpty}
-                >
-                  {supportfolks.map(({ id, firstname }) => (
-                    <MenuItem value={firstname}>{firstname}</MenuItem>
-                  ))}
-                </Select>
-                <FormHelperText>Label + placeholder</FormHelperText>
-              </FormControl>
-              <div style={{ width: "45%" }}>
-                <VictoryPie
-                  colorScale={colors}
-                  width={600}
-                  theme={VictoryTheme.material}
-                  innerRadius={50}
-                  data={pieData}
-                  padAngle={3}
-                  labels={d => `${d.x} (${d.y})`}
-                  events={[
-                    {
-                      target: "data",
-                      eventHandlers: {
-                        onClick: () => {
-                          return [
-                            {
-                              target: "labels",
-                              mutation: props => {
-                                this.setState({ incidents: stats[props.index].incidents });
-                                return `<h1>${props.text}</h1>`;
+            <Query query={INCIDENT_QUERY} variables={{ firstName: state.firstname || "Eddy" }}>
+              {({ data, loading }) => {
+                if (loading) return "...Loading";
+                const { accounts, supportfolks } = data;
+                const { stats } = accounts[0];
+                console.log(accounts, stats);
+                const pieData = stats.map(stat => ({ x: stat.Status, y: stat.StatusCount }));
+                return (
+                  <div>
+                    <FormControl className={classes.formControl}>
+                      <InputLabel shrink htmlFor="firstname-label-placeholder">
+                        First Name
+                      </InputLabel>
+                      <Select
+                        value={state.firstname}
+                        onChange={({ target: { name, value } }) => setState({ [name]: value })}
+                        input={<Input name="firstname" id="firstname-label-placeholder" />}
+                        displayEmpty
+                        name="firstname"
+                        className={classes.selectEmpty}
+                      >
+                        {supportfolks.map(({ id, firstname }) => (
+                          <MenuItem key={id} value={firstname}>
+                            {firstname}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                      <FormHelperText>Label + placeholder</FormHelperText>
+                    </FormControl>
+                    <div style={{ width: "45%" }}>
+                      <VictoryPie
+                        colorScale={colors}
+                        width={600}
+                        theme={VictoryTheme.material}
+                        innerRadius={50}
+                        data={pieData}
+                        padAngle={3}
+                        labels={d => `${d.x} (${d.y})`}
+                        events={[
+                          {
+                            target: "data",
+                            eventHandlers: {
+                              onClick: () => {
+                                return [
+                                  {
+                                    target: "labels",
+                                    mutation: props => {
+                                      setState({ incidents: stats[props.index].incidents });
+                                      return `<h1>${props.text}</h1>`;
+                                    }
+                                  }
+                                ];
                               }
                             }
-                          ];
-                        }
-                      }
-                    }
-                  ]}
-                />
-              </div>
-              <ul>
-                {this.state.incidents.map(inc => (
-                  <li>
-                    {inc.IncidentID}: {inc.summary}({inc.DaysUpdated})
-                  </li>
-                ))}
-              </ul>
-            </div>
+                          }
+                        ]}
+                      />
+                    </div>
+                    <ul>
+                      {state.incidents.map(inc => (
+                        <li key={inc.IncidentID}>
+                          {inc.IncidentID}: {inc.summary}({inc.DaysUpdated})
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              }}
+            </Query>
           );
         }}
-      </Query>
+      </Component>
     );
   }
 }
