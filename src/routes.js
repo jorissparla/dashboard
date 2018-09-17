@@ -63,6 +63,7 @@ const AddCourseCard = DynamicImport(() => import("./courses/AddCourseCard"));
 const StudentListContainer = DynamicImport(() => import("./courses/StudentListContainer"));
 const StudentView = DynamicImport(() => import("./courses/StudentView"));
 const AddStudentsToCourse = DynamicImport(() => import("./courses/AddStudentsToCourse"));
+const AddPlannedCourseRequest = DynamicImport(() => import("./courses/AddPlannedCourseRequest"));
 const TenantList = DynamicImport(() => import("./TenantList"));
 const DonutChart = DynamicImport(() => import("./charts/DonutChart"));
 const VSummaryChart = DynamicImport(() => import("./charts/VSummaryChart"));
@@ -75,7 +76,9 @@ const NotFound = props => {
 class AppRoutes extends React.Component {
   render() {
     console.log("✔️✔️✔️✔️✔️", this.props);
-    const { user } = this.props.context;
+    // const xuser = this.props.context.user;
+    const user = this.props.context;
+    const authenticated = this.props.context.authenticated();
     if (!user) {
       console.log("loading");
       // return <div>Loading</div>;
@@ -260,6 +263,8 @@ class AppRoutes extends React.Component {
         <Route exact path="/chart" component={VSummaryChart} />
         <Route exact path="/donut" component={DonutChart} />
         <Route exact path="/tenant" component={TenantList} />
+        <Route exact path="/addplannedcourserequest" component={AddPlannedCourseRequest} />
+
         <Route component={NotFound} />
       </Switch>
     );
@@ -271,5 +276,5 @@ const mapStateToProps = state => ({
   user: state.auth.user
 });
 
-//export default withRouter(connect(mapStateToProps)(AppRoutes));
+//export default withRouter(connect(mapStateToProps)(withDashBoardContext(AppRoutes)));
 export default withRouter(withDashBoardContext(AppRoutes));

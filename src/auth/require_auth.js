@@ -3,11 +3,12 @@ import { connect } from "react-redux";
 import { withRouter, Redirect } from "react-router";
 import { Route } from "react-router-dom";
 
-export const AuthRoute = ({ component: Component, allowed, user, ...rest }) => {
+export const AuthRoute = ({ component: Component, allowed, user, xuser, ...rest }) => {
   return (
     <Route
       {...rest}
       render={props => {
+        console.log("🙈🙈🙈🙈", props, { user }, { xuser });
         if (!user) {
           return <Redirect to={{ pathname: "/" }} />;
         }
