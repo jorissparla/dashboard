@@ -5,7 +5,7 @@ import { graphql, Query } from "react-apollo";
 
 const ALL_RESOLUTIONS = gql`
   {
-    resolutions {
+    resolutions(recent: 12) {
       id
       weeknr
       avgTime

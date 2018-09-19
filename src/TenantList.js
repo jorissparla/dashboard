@@ -8,7 +8,13 @@ import _ from "lodash";
 import { withStyles } from "@material-ui/core/styles";
 import deepOrange from "@material-ui/core/colors/deepOrange";
 import deepPurple from "@material-ui/core/colors/deepPurple";
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
 import SearchBar from "./common/SearchBar";
+import Chip from "@material-ui/core/Chip";
 const colors = ["#BA68C8", "#81D4FA", "#FF7043", "#8BC34A", "#ec407a", "#1da1f2", "#E57373"];
 
 const ALL_TENANTS = gql`
@@ -18,6 +24,7 @@ const ALL_TENANTS = gql`
       farm
       name
       version
+      customerid
       customer {
         name
       }
@@ -36,12 +43,34 @@ const styles = theme => ({
     fontSize: 20,
     fontWeight: 800
   },
-
+  card: {
+    minWidth: 275,
+    margin: 10,
+    width: 275
+  },
+  card2: {
+    minWidth: 275,
+    margin: 10
+  },
   chip: {
-    margin: theme.spacing.unit
+    margin: theme.spacing.unit,
+    marginBottom: 2
   },
   avatar: {
     margin: 10
+  },
+  flex: {
+    display: "flex",
+    flexWrap: "wrap",
+    background: "#eee"
+  },
+  flex2: {
+    display: "flex",
+    flexWrap: "wrap"
+  },
+  flexBot: {
+    display: "flex",
+    justifySelf: "flex-end"
   },
   bigAvatar: {
     width: 100,
@@ -68,8 +97,40 @@ const styles = theme => ({
   }
 });
 
+const TenantCard = ({ classes, customer, tenants }) => (
+  <Card className={customer === "Infor" ? classes.card2 : classes.card}>
+    <CardContent>
+      <Typography gutterBottom variant="headline" component="h2">
+        {customer}
+      </Typography>
+      <Typography className={classes.pos} color="textSecondary">
+        {tenants.length > 0 && tenants[0].farm}
+      </Typography>
+      <div className={classes.flex2}>
+        {tenants.map(({ name, version }) => (
+          <Chip label={`${name}:${version}`} classes={classes.chip} color="primary" />
+        ))}
+      </div>
+    </CardContent>
+    <CardActions>
+      <Button
+        size="small"
+        onClick={() =>
+          window.open(
+            "http://navigator.infor.com/n/incident_list.asp?ListType=CUSTOMERID&Value=" +
+              tenants[0].customerid
+          )
+        }
+      >
+        Incidents
+      </Button>
+    </CardActions>
+  </Card>
+);
+
 const tenantsByCustomer = (tenants, searchText) =>
   _.chain(tenants)
+    .filter(o => o.customer.name !== "Infor")
     .filter(
       t =>
         t.customer.name.toUpperCase().includes(searchText.toUpperCase()) ||
@@ -78,6 +139,8 @@ const tenantsByCustomer = (tenants, searchText) =>
     .sortBy(o => o.customer.name)
 
     .value();
+
+const inforTenant = tenants => tenants.filter(o => o.customer.name === "Infor");
 
 class TenantList extends Component {
   state = { searchText: "" };
@@ -99,11 +162,25 @@ class TenantList extends Component {
             return "...Loading";
           }
           const { tenants } = data;
-          //console.log(tenantsByCustomer(tenants));
+          const filteredTenants = tenantsByCustomer(tenants, this.state.searchText);
+          const uniques = filteredTenants
+            .map(v => v.customer.name)
+            .filter((v, i, a) => a.indexOf(v) === i);
+          console.log(uniques);
           return (
             <React.Fragment>
+              <Typography gutterBottom variant="headline" component="h2">
+                Multitenant customers
+              </Typography>
               <SearchBar onChange={this.handleSearchChange} />
-              <List>
+              <div className={classes.flex}>
+                {uniques.map(customer => {
+                  const sub = filteredTenants.filter(o => o.customer.name === customer);
+                  return <TenantCard classes={classes} customer={customer} tenants={sub} />;
+                })}
+                <TenantCard classes={classes} customer="Infor" tenants={inforTenant(tenants)} />
+              </div>
+              {/*      <List> 
                 {tenantsByCustomer(tenants, this.state.searchText).map((tenant, index) => {
                   const aClass = this.avatars(index);
                   return (
@@ -131,7 +208,7 @@ class TenantList extends Component {
                     </ListItem>
                   );
                 })}
-              </List>
+              </List>*/}
             </React.Fragment>
           );
         }}
