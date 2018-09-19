@@ -60,6 +60,7 @@ class DonutChart extends React.Component {
   };
   render() {
     const { classes } = this.props;
+    const navhttp = "http://navigator.infor.com/N/incident.asp?IncidentID=";
     return (
       <Component initialValue={{ firstname: "Eddy", incidents: [] }}>
         {({ state, setState }) => {
@@ -125,7 +126,9 @@ class DonutChart extends React.Component {
                     <ul>
                       {state.incidents.map(inc => (
                         <li key={inc.IncidentID}>
-                          {inc.IncidentID}: {inc.summary}({inc.DaysUpdated})
+                          <a href={navhttp + inc.IncidentID} target="_blank">
+                            {inc.IncidentID}: {inc.summary}({inc.DaysUpdated})
+                          </a>
                         </li>
                       ))}
                     </ul>
