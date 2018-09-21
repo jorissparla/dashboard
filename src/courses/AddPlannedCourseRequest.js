@@ -1,11 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import gql from "graphql-tag";
-import { Query } from "react-apollo";
-import deburr from "lodash/deburr";
+import { Query, Mutation } from "react-apollo";
 import { Formik } from "formik";
-import keycode from "keycode";
-import Downshift from "downshift";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
@@ -13,10 +10,12 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Chip from "@material-ui/core/Chip";
 import Button from "@material-ui/core/Button";
 import Component from "../common/component-component";
+import { StyledMultiple, StyledSimple } from "./StyledDropdowns";
 
 const ALL_USERS = gql`
   {
     supportfolks {
+      id
       fullname
     }
     courses {
@@ -25,258 +24,13 @@ const ALL_USERS = gql`
     }
   }
 `;
-
-function renderInput(inputProps) {
-  const { InputProps, classes, ref, ...other } = inputProps;
-
-  return (
-    <TextField
-      InputProps={{
-        inputRef: ref,
-        classes: {
-          root: classes.inputRoot
-        },
-        ...InputProps
-      }}
-      {...other}
-    />
-  );
-}
-
-function renderSuggestion({
-  suggestion,
-  fieldname = "label",
-  index,
-  itemProps,
-  highlightedIndex,
-  selectedItem
-}) {
-  const isHighlighted = highlightedIndex === index;
-  const isSelected = (selectedItem || "").indexOf(suggestion[fieldname]) > -1;
-
-  return (
-    <MenuItem
-      {...itemProps}
-      key={suggestion[fieldname]}
-      selected={isHighlighted}
-      component="div"
-      style={{
-        fontWeight: isSelected ? 500 : 400
-      }}
-    >
-      {suggestion[fieldname]}
-    </MenuItem>
-  );
-}
-
-function getSuggestions(value, fieldname, suggestions) {
-  const inputValue = deburr(value.trim()).toLowerCase();
-  const inputLength = inputValue.length;
-  let count = 0;
-
-  return inputLength === 0
-    ? []
-    : suggestions.filter(suggestion => {
-        const keep =
-          count < 10 && suggestion[fieldname].slice(0, inputLength).toLowerCase() === inputValue;
-
-        if (keep) {
-          count += 1;
-        }
-
-        return keep;
-      });
-}
-
-class DownShiftSingle extends React.Component {
-  static defaultProps = {
-    label: "Label",
-    placeholder: "Select ",
-    fieldname: "fieldname"
-  };
-
-  handleInputChange = event => {
-    const { setState, state } = this.props;
-    setState({ inputValue: event.target.value });
-  };
-
-  handleChange = item => {
-    const { setState, state } = this.props;
-
-    setState({
-      inputValue: "",
-      selectedItem: item
-    });
-  };
-  render() {
-    const { classes, suggestions, state, label, placeholder, fieldname } = this.props;
-    const { selectedItem } = state;
-    return (
-      <div className={classes.root}>
-        <Downshift id="downshift-simple" onChange={this.handleChange} selectedItem={selectedItem}>
-          {({
-            getInputProps,
-            getItemProps,
-            getMenuProps,
-            highlightedIndex,
-            inputValue: inputValue2,
-            selectedItem: selectedItem2,
-            isOpen
-          }) => (
-            <div className={classes.container}>
-              {renderInput({
-                fullWidth: true,
-                classes,
-                InputProps: getInputProps({
-                  placeholder: placeholder,
-                  onChange: this.handleInputChange
-                }),
-                label: label
-              })}
-              <div {...getMenuProps()}>
-                {isOpen ? (
-                  <Paper className={classes.paper} square>
-                    {getSuggestions(inputValue2, fieldname, suggestions).map((suggestion, index) =>
-                      renderSuggestion({
-                        suggestion,
-                        fieldname,
-                        index,
-                        itemProps: getItemProps({ item: suggestion[fieldname] }),
-                        highlightedIndex,
-                        selectedItem: selectedItem2
-                      })
-                    )}
-                  </Paper>
-                ) : null}
-              </div>
-            </div>
-          )}
-        </Downshift>
-      </div>
-    );
-  }
-}
-
-DownShiftSingle.propTypes = {
-  classes: PropTypes.object.isRequired,
-  state: PropTypes.object.isRequired,
-  setState: PropTypes.func.isRequired,
-  suggestions: PropTypes.array.isRequired
-};
-
-class DownshiftMultiple extends React.Component {
-  static defaultProps = {
-    label: "Students",
-    placeholder: "Select Multiple Students",
-    fieldname: "fullname"
-  };
-
-  handleKeyDown = event => {
-    const { setState, state } = this.props;
-    const { inputValue, selectedItem } = state;
-    if (selectedItem.length && !inputValue.length && keycode(event) === "backspace") {
-      setState({
-        selectedItem: selectedItem.slice(0, selectedItem.length - 1)
-      });
+const ADD_PLANNEDCOURSEREQUEST = gql`
+  mutation addPlannedCourseRequest($input: PlannedCourseRequestInput) {
+    addPlannedCourseRequest(input: $input) {
+      id
     }
-  };
-
-  handleInputChange = event => {
-    const { setState, state } = this.props;
-    setState({ inputValue: event.target.value });
-  };
-
-  handleChange = item => {
-    const { setState, state } = this.props;
-    let { selectedItem } = state;
-
-    if (selectedItem.indexOf(item) === -1) {
-      selectedItem = [...selectedItem, item];
-    }
-
-    setState({
-      inputValue: "",
-      selectedItem
-    });
-  };
-
-  handleDelete = item => () => {
-    const { setState } = this.props;
-    setState(state => {
-      const selectedItem = [...state.selectedItem];
-      selectedItem.splice(selectedItem.indexOf(item), 1);
-      return { selectedItem };
-    });
-  };
-
-  render() {
-    const { classes, label, placeholder, state, suggestions, fieldname } = this.props;
-    const { inputValue, selectedItem } = state;
-
-    return (
-      <div>
-        <Downshift
-          id="downshift-multiple"
-          inputValue={inputValue}
-          onChange={this.handleChange}
-          selectedItem={selectedItem}
-        >
-          {({
-            getInputProps,
-            getItemProps,
-            isOpen,
-            inputValue: inputValue2,
-            selectedItem: selectedItem2,
-            highlightedIndex
-          }) => (
-            <div className={classes.container}>
-              {renderInput({
-                fullWidth: true,
-                classes,
-                InputProps: getInputProps({
-                  startAdornment: selectedItem.map(item => (
-                    <Chip
-                      key={item}
-                      tabIndex={-1}
-                      label={item}
-                      className={classes.chip}
-                      onDelete={this.handleDelete(item)}
-                    />
-                  )),
-                  onChange: this.handleInputChange,
-                  onKeyDown: this.handleKeyDown,
-                  placeholder: placeholder
-                }),
-                label: label
-              })}
-              {isOpen ? (
-                <Paper className={classes.paper} square>
-                  {getSuggestions(inputValue2, fieldname, suggestions).map((suggestion, index) =>
-                    renderSuggestion({
-                      suggestion,
-                      fieldname,
-                      index,
-                      itemProps: getItemProps({ item: suggestion[fieldname] }),
-                      highlightedIndex,
-                      selectedItem: selectedItem2
-                    })
-                  )}
-                </Paper>
-              ) : null}
-            </div>
-          )}
-        </Downshift>
-      </div>
-    );
   }
-}
-
-DownshiftMultiple.propTypes = {
-  classes: PropTypes.object.isRequired,
-  state: PropTypes.object.isRequired,
-  setState: PropTypes.func.isRequired,
-  suggestions: PropTypes.array.isRequired
-};
+`;
 
 const styles = theme => ({
   root: {
@@ -314,16 +68,20 @@ const styles = theme => ({
   }
 });
 
-const StyledMultiple = withStyles(styles)(DownshiftMultiple);
-const StyledSimple = withStyles(styles)(DownShiftSingle);
-
 class AddPlannedCourseRequest extends React.Component {
+  getCourseId = (courses, title) => {
+    const filteredcourse = courses.filter(c => c.title === title);
+    if (filteredcourse.length > 0) {
+      return filteredcourse[0].id;
+    } else return null;
+  };
   render() {
     const { classes } = this.props;
     return (
       <Component
         initialValue={{
           inputValue: "",
+          inputDate: "09/09/2018",
           selectedItem: "",
           suggestions: []
         }}
@@ -340,7 +98,9 @@ class AddPlannedCourseRequest extends React.Component {
                   <Formik
                     initialValues={{
                       course: "",
-                      students: ""
+                      participants: "",
+                      startdate: "2018-09-09",
+                      enddate: "2018-10-10"
                     }}
                     onSubmit={async (
                       values,
@@ -360,9 +120,35 @@ class AddPlannedCourseRequest extends React.Component {
                       errors,
                       isSubmitting
                     }) => {
-                      console.log(values);
+                      console.log("Values", values);
                       return (
                         <Paper className={classes.paper2} elevation={1}>
+                          <TextField
+                            id="startdate"
+                            label="StartDate"
+                            type="date"
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            name="startdate"
+                            value={values.startdate}
+                            className={classes.textField}
+                            InputLabelProps={{
+                              shrink: true
+                            }}
+                          />
+                          <TextField
+                            id="enddate"
+                            label="EndDate"
+                            type="date"
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            name="enddate"
+                            value={values.enddate}
+                            className={classes.textField}
+                            InputLabelProps={{
+                              shrink: true
+                            }}
+                          />
                           <Component
                             initialValue={{
                               inputValue: "",
@@ -377,7 +163,10 @@ class AddPlannedCourseRequest extends React.Component {
                                   id="course"
                                   name="course"
                                   state={state}
-                                  onChange={handleChange}
+                                  onChange={item => {
+                                    setFieldValue("course", item);
+                                  }}
+                                  onBlur={handleBlur}
                                   setState={setState}
                                   suggestions={courses}
                                   label="course"
@@ -397,29 +186,55 @@ class AddPlannedCourseRequest extends React.Component {
                             }}
                           >
                             {({ state, setState }) => {
+                              console.log("Multiple", state);
                               return (
                                 <StyledMultiple
-                                  id="students"
-                                  name="students"
+                                  id="participants"
+                                  name="participants"
                                   state={state}
                                   setState={setState}
                                   suggestions={suggestions}
-                                  label="students"
+                                  onChange={item => {
+                                    console.log(item);
+                                    setFieldValue("participants", item);
+                                  }}
+                                  onBlur={handleBlur}
+                                  label="participants"
                                   fieldname="fullname"
-                                  placeholder="select multiple students"
+                                  placeholder="select multiple participants"
                                 />
                               );
                             }}
                           </Component>
-                          <Button
-                            variant="contained"
-                            color="secondary"
-                            className={classes.button}
-                            onClick={() => alert(JSON.stringify(values))}
-                            type="submit"
-                          >
-                            Save{" "}
-                          </Button>
+                          <Mutation mutation={ADD_PLANNEDCOURSEREQUEST}>
+                            {addPlannedCourseRequest => {
+                              console.log("Mutation Props", addPlannedCourseRequest);
+                              return (
+                                <Button
+                                  variant="contained"
+                                  color="secondary"
+                                  className={classes.button}
+                                  onClick={async () => {
+                                    const { startdate, enddate, participants } = values;
+                                    const input = {
+                                      courseid: this.getCourseId(courses, values.course),
+                                      startdate,
+                                      enddate,
+                                      participants
+                                    };
+                                    await addPlannedCourseRequest({
+                                      variables: {
+                                        input
+                                      }
+                                    });
+                                  }}
+                                  type="submit"
+                                >
+                                  Save{" "}
+                                </Button>
+                              );
+                            }}
+                          </Mutation>
                         </Paper>
                       );
                     }}
