@@ -6,11 +6,27 @@ import { Formik } from "formik";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
-import MenuItem from "@material-ui/core/MenuItem";
-import Chip from "@material-ui/core/Chip";
 import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import InputLabel from "@material-ui/core/InputLabel";
+import format from "date-fns/format";
+import addHours from "date-fns/add_hours";
 import Component from "../common/component-component";
 import { StyledMultiple, StyledSimple } from "./StyledDropdowns";
+import { DashBoardContext } from "../Provider";
+import * as yup from "yup";
+
+const validationSchema = yup.object().shape({
+  course: yup.string().required(),
+  participants: yup.string().required(),
+  // startdate: yup.string().required(),
+  //enddate: yup.string().required(),
+  hours: yup.string().required(),
+  type: yup.string().required(),
+  participants: yup.string().required()
+});
 
 const ALL_USERS = gql`
   {
@@ -21,6 +37,10 @@ const ALL_USERS = gql`
     courses {
       id
       title
+    }
+    coursetypes {
+      id
+      name
     }
   }
 `;
@@ -63,6 +83,19 @@ const styles = theme => ({
   inputRoot: {
     flexWrap: "wrap"
   },
+  textField: {
+    margin: 10,
+    width: 200
+  },
+  largetextField: {
+    marginTop: 10,
+    marginBottom: 10,
+    width: "90%"
+  },
+  column: {
+    display: "flex",
+    flexDirection: "column"
+  },
   divider: {
     height: theme.spacing.unit * 2
   }
@@ -93,21 +126,37 @@ class AddPlannedCourseRequest extends React.Component {
                 if (loading) return "Loading....";
                 const suggestions = data.supportfolks;
                 const courses = data.courses;
+                const coursetypes = data.coursetypes;
 
                 return (
                   <Formik
                     initialValues={{
                       course: "",
                       participants: "",
-                      startdate: "2018-09-09",
-                      enddate: "2018-10-10"
+                      startdate: format(addHours(Date.now(), 24), "YYYY-MM-DD"),
+                      enddate: format(addHours(Date.now(), 24), "YYYY-MM-DD"),
+                      hours: 4,
+                      details: "",
+                      type: ""
                     }}
+                    validationSchema={validationSchema}
                     onSubmit={async (
                       values,
                       { setSubmitting, setErrors /* setValues and other goodies */ }
                     ) => {
-                      console.log({ values });
-                      const input = values;
+                      console.log("values", values);
+                      const { startdate, enddate, participants, hours, details, type } = values;
+                      const input = {
+                        courseid: this.getCourseId(courses, values.course),
+                        startdate: format(startdate, "YYYY-MM-DD"),
+                        enddate: format(enddate, "YYYY-MM-DD"),
+                        hours,
+                        details,
+                        participants,
+                        type
+                        //  submittedBy: fullname
+                      };
+                      console.log("input", input);
                     }}
                   >
                     {({
@@ -120,35 +169,55 @@ class AddPlannedCourseRequest extends React.Component {
                       errors,
                       isSubmitting
                     }) => {
-                      console.log("Values", values);
                       return (
                         <Paper className={classes.paper2} elevation={1}>
-                          <TextField
-                            id="startdate"
-                            label="StartDate"
-                            type="date"
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            name="startdate"
-                            value={values.startdate}
-                            className={classes.textField}
-                            InputLabelProps={{
-                              shrink: true
-                            }}
-                          />
-                          <TextField
-                            id="enddate"
-                            label="EndDate"
-                            type="date"
-                            onChange={handleChange}
-                            onBlur={handleBlur}
-                            name="enddate"
-                            value={values.enddate}
-                            className={classes.textField}
-                            InputLabelProps={{
-                              shrink: true
-                            }}
-                          />
+                          <Typography variant="display2" gutterBottom>
+                            Add Planning Course Request
+                          </Typography>
+                          <div className={classes.column}>
+                            <TextField
+                              id="startdate"
+                              label="StartDate"
+                              type="date"
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              name="startdate"
+                              value={values.startdate}
+                              className={classes.textField}
+                              InputLabelProps={{
+                                shrink: true
+                              }}
+                            />
+                            {touched.startdate && errors.startdate && <div>{errors.startdate}</div>}
+                            <TextField
+                              id="enddate"
+                              label="EndDate"
+                              type="date"
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              name="enddate"
+                              value={values.enddate}
+                              className={classes.textField}
+                              InputLabelProps={{
+                                shrink: true
+                              }}
+                            />
+                            {touched.enddate && errors.enddate && <div>{errors.enddate}</div>}
+                            <TextField
+                              id="hours"
+                              label="hours"
+                              type="number"
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              name="enddate"
+                              value={values.hours}
+                              className={classes.textField}
+                              InputLabelProps={{
+                                shrink: true
+                              }}
+                            />
+                            {touched.hours && errors.hours && <div>{errors.hours}</div>}
+                          </div>
                           <Component
                             initialValue={{
                               inputValue: "",
@@ -157,7 +226,6 @@ class AddPlannedCourseRequest extends React.Component {
                             }}
                           >
                             {({ state, setState }) => {
-                              console.log("Simple", state);
                               return (
                                 <StyledSimple
                                   id="course"
@@ -175,9 +243,46 @@ class AddPlannedCourseRequest extends React.Component {
                                   placeholder="select course"
                                 />
                               );
+                              {
+                                touched.course && errors.course && <div>{errors.course}</div>;
+                              }
                             }}
                           </Component>
-
+                          <div className={classes.column}>
+                            <InputLabel shrink htmlFor="age-label-placeholder">
+                              Type of training
+                            </InputLabel>
+                            <Select
+                              id="type"
+                              name="type"
+                              placeholder="Enter type of training"
+                              onChange={handleChange}
+                              style={{ flex: 2 }}
+                              value={values.type}
+                            >
+                              {coursetypes.map(ctype => (
+                                <MenuItem key={ctype.name} value={ctype.name}>
+                                  {ctype.name}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                            {touched.type && errors.type && <div>{errors.type}</div>}
+                            <TextField
+                              id="details"
+                              label="Enter details"
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              name="details"
+                              multiline
+                              rowsMax="4"
+                              placeholder="Enter specific details if appropriate"
+                              value={values.details}
+                              className={classes.largetextField}
+                              InputLabelProps={{
+                                shrink: true
+                              }}
+                            />
+                          </div>
                           <Component
                             initialValue={{
                               inputValue: "",
@@ -186,7 +291,6 @@ class AddPlannedCourseRequest extends React.Component {
                             }}
                           >
                             {({ state, setState }) => {
-                              console.log("Multiple", state);
                               return (
                                 <StyledMultiple
                                   id="participants"
@@ -195,7 +299,6 @@ class AddPlannedCourseRequest extends React.Component {
                                   setState={setState}
                                   suggestions={suggestions}
                                   onChange={item => {
-                                    console.log(item);
                                     setFieldValue("participants", item);
                                   }}
                                   onBlur={handleBlur}
@@ -206,35 +309,58 @@ class AddPlannedCourseRequest extends React.Component {
                               );
                             }}
                           </Component>
-                          <Mutation mutation={ADD_PLANNEDCOURSEREQUEST}>
-                            {addPlannedCourseRequest => {
-                              console.log("Mutation Props", addPlannedCourseRequest);
+                          {touched.participants &&
+                            errors.participants && <div>{errors.participants}</div>}
+                          <DashBoardContext.Consumer>
+                            {({ email, fullname }) => {
                               return (
-                                <Button
-                                  variant="contained"
-                                  color="secondary"
-                                  className={classes.button}
-                                  onClick={async () => {
-                                    const { startdate, enddate, participants } = values;
-                                    const input = {
-                                      courseid: this.getCourseId(courses, values.course),
-                                      startdate,
-                                      enddate,
-                                      participants
-                                    };
-                                    await addPlannedCourseRequest({
-                                      variables: {
-                                        input
-                                      }
-                                    });
+                                <Mutation mutation={ADD_PLANNEDCOURSEREQUEST}>
+                                  {addPlannedCourseRequest => {
+                                    return (
+                                      <Button
+                                        variant="contained"
+                                        color="secondary"
+                                        className={classes.button}
+                                        onClick={
+                                          handleSubmit
+                                          /*                         async () => {
+                                          const {
+                                            startdate,
+                                            enddate,
+                                            participants,
+                                            hours,
+                                            details,
+                                            type
+                                          } = values;
+                                          return;
+                                          const input = {
+                                            courseid: this.getCourseId(courses, values.course),
+                                            startdate: format(startdate, "YYYY-MM-DD"),
+                                            enddate: format(enddate, "YYYY-MM-DD"),
+                                            hours,
+                                            details,
+                                            participants,
+                                            type,
+                                            submittedBy: fullname
+                                          };
+                                          const result = await addPlannedCourseRequest({
+                                            variables: {
+                                              input
+                                            }
+                                          });
+                                          console.log("result", result);
+                                        } */
+                                        }
+                                        type="submit"
+                                      >
+                                        Save{" "}
+                                      </Button>
+                                    );
                                   }}
-                                  type="submit"
-                                >
-                                  Save{" "}
-                                </Button>
+                                </Mutation>
                               );
                             }}
-                          </Mutation>
+                          </DashBoardContext.Consumer>
                         </Paper>
                       );
                     }}

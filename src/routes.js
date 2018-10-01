@@ -13,6 +13,7 @@ import RequireAuth, { AuthRoute, EnhancedRoute } from "./auth/require_auth";
 //import FeedbackEdit from "./feedback/feedbackEdit";
 import { DashBoardContext, withDashBoardContext } from "./Provider";
 import DynamicImport from "./DynamicImport";
+import NewsItemContainer from "./news/newsitemcontainer";
 import Loader from "./Loader";
 
 const AGLTest = DynamicImport(() => import("./supportcard/Test"));
@@ -25,7 +26,7 @@ const ResetPasswordForm = DynamicImport(() => import("./auth/ResetPasswordForm")
 const RequestResetPassword = DynamicImport(() => import("./auth/RequestResetPassword"));
 
 const NewsListContainer = DynamicImport(() => import("./news/newslistcontainer"));
-const NewsItemContainer = DynamicImport(() => import("./news/newsitemcontainer"));
+
 const NewsItemAddContainer = DynamicImport(() => import("./news/newsitemaddcontainer"));
 const RequestList = DynamicImport(() => import("./supportcard/RequestContainer"));
 const RequestEdit = DynamicImport(() => import("./supportcard/RequestEdit"));

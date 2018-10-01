@@ -26,35 +26,11 @@ const ALL_NEWS = gql`
 const UPDATE_NEWS = gql`
   mutation updateNews($input: NewsInputType) {
     updateNews(input: $input) {
-      id
       title
       body
-      link
-      link_text
-      img
-      create_date
-      expire_date
-      user_id
     }
   }
 `;
-
-const updateNews = ({ render }) => (
-  <Mutation
-    mutation={UPDATE_NEWS}
-    update={(cache, { data: { updateNews } }) => {
-      const query = ALL_NEWS;
-      const { news } = cache.readQuery({ query });
-      const idx = R.findIndex(R.propEq("id", news.id), news);
-      cache.writeQuery({
-        query,
-        data: { news: R.update(idx, updateNews, news) }
-      });
-    }}
-  >
-    {(mutation, result) => render({ mutation, result })}
-  </Mutation>
-);
 
 const DELETE_NEWS = gql`
   mutation deleteNews($input: NewsInputType) {
@@ -63,34 +39,6 @@ const DELETE_NEWS = gql`
     }
   }
 `;
-
-const deleteNews = ({ render }) => (
-  <Mutation
-    mutation={DELETE_NEWS}
-    update={(cache, { data: { deleteNews } }) => {
-      const query = ALL_NEWS;
-      const props = cache.readQuery({ query });
-      const { news } = props;
-      const byTodoId = R.propEq("id", deleteNews.id);
-      cache.writeQuery({
-        query,
-        data: { news: R.reject(byTodoId, news) }
-      });
-    }}
-  >
-    {(mutation, result) => render({ mutation, result })}
-  </Mutation>
-);
-
-const newsComp = ({ render }) => {
-  <Query query={ALL_NEWS}>{(data, loading) => render(data, loading)}</Query>;
-};
-
-const NewsContainer = adopt({
-  news: newsComp,
-  deleteNews,
-  updateNews
-});
 
 class NewsItemContainer extends Component {
   state = {
@@ -113,52 +61,56 @@ class NewsItemContainer extends Component {
     setTimeout(() => this.props.history.push("/news"), 500);
   };
 
+  handleDelete = async id => {};
+
   render() {
     const id = this.props.match.params.id;
     return (
-      <NewsContainer>
-        {({ news: { data, loading }, deleteNews, updateNews }) => {
-          console.log("Container||");
+      <Query query={ALL_NEWS} variables={{ id }}>
+        {({ data, loading }) => {
           if (loading) {
-            return <div>Loading</div>;
-          } else {
-            console.log("Container&&", id, data.news[0]);
-            const idx = R.findIndex(R.propEq("id", id), data.news);
-
-            const defaultValues = data.news[idx];
-            console.log("idx", idx), defaultValues;
-            const handleSubmit = async values => {
-              const { id, title, body, link, link_text, img } = values;
-              const input = { id, title, body, link, link_text, img };
-              await updateNews.mutation({ variables: { input } });
-              setTimeout(() => this.props.history.push("/news"), 500);
-            };
-
-            const handleDelete = async id => {
-              const input = { id };
-              await deleteNews.mutation({ variables: { input } });
-              setTimeout(() => this.props.history.push("/news"), 500);
-            };
-
-            return (
-              <React.Fragment>
-                <NewsItem
-                  initialValues={defaultValues}
-                  onSave={values => handleSubmit(values)}
-                  onDelete={id => handleDelete(id)}
-                  title="Edit news item"
-                />
-                <Snackbar
-                  open={this.state.showMessage}
-                  message={this.state.err}
-                  autoHideDuration={4000}
-                  onRequestClose={() => console.log("close")}
-                />
-              </React.Fragment>
-            );
+            return "Loading";
           }
+          const defaultValues = data.news[0];
+          return (
+            <Mutation mutation={UPDATE_NEWS}>
+              {updateNews => {
+                return (
+                  <Mutation mutation={DELETE_NEWS}>
+                    {deleteNews => {
+                      return (
+                        <React.Fragment>
+                          <NewsItem
+                            initialValues={defaultValues}
+                            onSave={async values => {
+                              const { id, title, body, link, link_text, img } = values;
+                              const input = { id, title, body, link, link_text, img };
+                              await updateNews({ variables: { input } });
+                              setTimeout(() => this.props.history.push("/news"), 500);
+                            }}
+                            onDelete={async id => {
+                              const input = { id };
+                              await deleteNews({ variables: { input } });
+                              setTimeout(() => this.props.history.push("/news"), 500);
+                            }}
+                            title="Edit news item"
+                          />
+                          <Snackbar
+                            open={this.state.showMessage}
+                            message={this.state.err}
+                            autoHideDuration={4000}
+                            onRequestClose={() => console.log("close")}
+                          />
+                        </React.Fragment>
+                      );
+                    }}
+                  </Mutation>
+                );
+              }}
+            </Mutation>
+          );
         }}
-      </NewsContainer>
+      </Query>
     );
   }
 
