@@ -1,10 +1,17 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { signoutUser } from '../actions';
+import React, { Component } from "react";
+import { signoutUser } from "../actions";
+import { withRouter } from "react-router-dom";
 
 class Signout extends Component {
   componentWillMount() {
-    this.props.signoutUser();
+    signoutUser();
+  }
+
+  componentDidMount() {
+    setTimeout(() => {
+      window.location.reload();
+      this.props.history.replace("/");
+    }, 2000);
   }
 
   render() {
@@ -12,4 +19,4 @@ class Signout extends Component {
   }
 }
 
-export default connect(null, {signoutUser})(Signout);
+export default withRouter(Signout);

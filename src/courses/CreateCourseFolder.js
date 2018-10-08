@@ -85,7 +85,9 @@ class CreateFolder extends Component {
           const onCreate = async name => {
             await createFolder({ variables: { name } });
             await updateCourse({ variables: { input: { id, link: name } } });
-            (await this.props.reRender) ? this.props.reRender(name) : () => console.log("nothing");
+            if (this.props.reRender) {
+              this.props.reRender(name);
+            }
           };
           return (
             <React.Fragment>

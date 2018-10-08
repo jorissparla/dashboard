@@ -13,12 +13,8 @@ import Button from "@material-ui/core/Button";
 import Collapse from "@material-ui/core/Collapse";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import ShareIcon from "@material-ui/icons/Share";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import ViewIcon from "@material-ui/icons/Pageview";
-import ModeEdit from "@material-ui/icons/ModeEdit";
-import NewIcon from "@material-ui/icons/NewReleases";
+import ModeEdit from "@material-ui/icons/Edit";
 
 import "./my.css";
 
@@ -97,12 +93,10 @@ class SupportCard extends React.Component {
       buttonText = "📂",
       category = "Cloud",
       link = "http://www.google.com",
-      action = null,
       color = "#FFFFF",
       canEdit = true,
       editLink = "",
       viewLink = "",
-      isNew = false,
       onAudit = () => console.log("onaudit"),
       onFollowLink = link => {
         console.log("onFollowLink");
@@ -116,13 +110,6 @@ class SupportCard extends React.Component {
         })}
         style={{ backgroundColor: `${color}` }}
       >
-        {/*    <CardMedia
-          component="img"
-          className="media"
-          height="100"
-          image="http://nlbavwixs.infor.com/images/categories/Cloud.png"
-          title="Contemplative Reptile"
-        /> */}
         <CardContent>
           <Typography gutterBottom variant="title">
             {title}
@@ -222,8 +209,6 @@ export default class MyCard extends React.Component {
               const {
                 title,
                 description,
-                id,
-                link,
                 category: { name, backgroundcolor }
               } = item;
               return (

@@ -145,7 +145,7 @@ class CourseForm extends Component {
                 disabled={readOnly}
                 component={SelectField}
                 hintText="Select a type"
-                floatingLabelText="Default type"
+                floatingLabelText="Select a type"
                 style={{ flex: 2 }}
               >
                 {coursetypes.map(({ id, name }, index) => (
@@ -159,7 +159,7 @@ class CourseForm extends Component {
                 disabled={readOnly}
                 component={SelectField}
                 hintText="Select a category"
-                floatingLabelText="Default type"
+                floatingLabelText="Select a category"
                 style={{ flex: 2 }}
               >
                 {coursecategories.map(({ id, name }, index) => (
@@ -217,7 +217,7 @@ class CourseForm extends Component {
               underlineShow={true}
               style={styles.textfieldstyle}
             />
-            {1 == 1 && (
+            {true && (
               <Field
                 name="link"
                 disabled={readOnly}

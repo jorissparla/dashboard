@@ -54,7 +54,6 @@ const queryFeedback = gql`
   }
 `;
 
-
 const createFeedback = gql`
   mutation createFeedback($input: FeedbackInputType) {
     createFeedback(input: $input) {
@@ -176,8 +175,8 @@ class FeedBackList extends Component {
               <Undo onClick={this.handleUndo} />
             </div>
           ) : (
-              <P>{text}</P>
-            )
+            <P>{text}</P>
+          )
         }
         secondaryTextLines={2}
         rightIcon={this.props.isEditor ? <Clear onClick={() => this.handleClear(id)} /> : <div />}
@@ -186,7 +185,10 @@ class FeedBackList extends Component {
     ];
   };
   render() {
-    const { data: { loading, feedback, supportfolks }, isEditor } = this.props;
+    const {
+      data: { loading, feedback },
+      isEditor
+    } = this.props;
     if (loading) return <div>Loading</div>;
     return [
       <HeaderRow key="sdsheaderrow">
@@ -260,7 +262,9 @@ class FeedBackList extends Component {
   };
 
   renderDialog = () => {
-    const { data: { supportfolks } } = this.props;
+    const {
+      data: { supportfolks }
+    } = this.props;
     const actions = [
       <RaisedButton
         key="okb"

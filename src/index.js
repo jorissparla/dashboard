@@ -11,14 +11,11 @@ import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "./routes";
 import getMuiTheme from "material-ui/styles/getMuiTheme";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
-import injectTapEventPlugin from "react-tap-event-plugin";
 import { blue500 } from "material-ui/styles/colors";
 import { AUTH_USER } from "./actions";
 import App from "./appnav";
 import "./index.css";
 
-//import { ApolloClient, InMemoryCache } from "apollo-client-preset";
-//import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "react-apollo";
 import { ApolloClient } from "apollo-client";
 import { createHttpLink } from "apollo-link-http";
@@ -35,11 +32,8 @@ const {
   REACT_APP_HTTP = "http"
 } = process.env;
 
-console.log("process.env", process.env);
-//const uri = `http://localhost:4000`
-
 const prefix = REACT_APP_HTTP.trim();
-console.log("prefix", `<${prefix}>`);
+//console.log("prefix", `<${prefix}>`);
 let uri = `${REACT_APP_GRAPHQLSERVER}:${REACT_APP_PORT_GRAPHQL}`;
 uri = prefix === "https" ? "https://" + uri : "http://" + uri;
 //`${REACT_APP_HTTP}://${REACT_APP_GRAPHQLSERVER}:${REACT_APP_PORT_GRAPHQL}/${REACT_APP_GRAPHQL_PATH}`;
@@ -49,7 +43,6 @@ const client = new ApolloClient({
   cache: new InMemoryCache()
 });
 
-injectTapEventPlugin();
 const createStoreWithMiddleware = applyMiddleware(promise, reduxThunk)(createStore);
 const store = createStoreWithMiddleware(
   reducers,
@@ -112,4 +105,5 @@ const Main = () => (
 
 ReactDOM.render(<Main />, document.getElementById("root"));
 
+export { Main };
 //registerServiceWorker();

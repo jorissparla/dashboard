@@ -3,6 +3,7 @@ import gql from "graphql-tag";
 import { Query } from "react-apollo";
 import SummaryChart from "./NewSummaryChart";
 import LoadingDots from "../common/LoadingDots";
+import shortid from "shortid";
 
 class SummaryChartContainer extends React.Component {
   render() {
@@ -17,23 +18,29 @@ class SummaryChartContainer extends React.Component {
     const type = !this.props.type ? "column" : this.props.type;
     const team = this.props.team || "Logistics";
     //  const summary = summaries; // .reverse()
+    console.log(value, title, type, team);
     const color = this.props.color;
     return (
       <Query query={querySummaries} variables={{ team }}>
         {({ data, loading }) => {
           if (loading) return <div>Loading....</div>;
-          const summary = data.summaries;
-          return (
-            <SummaryChart
-              data={summary}
-              title={title}
-              type={type}
-              xvalue="weekNr"
-              value={value}
-              color={color}
-              team={team}
-            />
-          );
+          if (data && data.summaries) {
+            const summary = data.summaries;
+            return (
+              <SummaryChart
+                id={shortid.generate()}
+                data={summary}
+                title={title}
+                type={type}
+                xvalue="weekNr"
+                value={value}
+                color={color}
+                team={team}
+              />
+            );
+          } else {
+            return "no data returned";
+          }
         }}
       </Query>
     );

@@ -126,7 +126,7 @@ class ChatList extends Component {
           // const chats = data.chats;
           const handleDelete = async id => {
             const input = { id };
-            const result = await deleteChat({ variables: { input } });
+            await deleteChat({ variables: { input } });
           };
           const chatsByWeek = _.chain(chats)
             .orderBy(["fromdate", "desc"])

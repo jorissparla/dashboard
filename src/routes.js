@@ -1,7 +1,6 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import { withRouter } from "react-router";
-import { connect } from "react-redux";
 
 import Signin from "./auth/signin";
 import SigninWithPIN from "./auth/SigninWithPIN";
@@ -9,11 +8,9 @@ import Signout from "./auth/signout";
 import UpdatePassword from "./auth/resetpassword";
 import RequireAuth, { AuthRoute, EnhancedRoute } from "./auth/require_auth";
 
-//import NewsPage from "./news/newspage";
-//import FeedbackEdit from "./feedback/feedbackEdit";
-import { DashBoardContext, withDashBoardContext } from "./Provider";
+import { withDashBoardContext } from "./Provider";
 import DynamicImport from "./DynamicImport";
-import Loader from "./Loader";
+import NewsItemContainer from "./news/newsitemcontainer";
 
 const AGLTest = DynamicImport(() => import("./supportcard/Test"));
 //const CommentsList = DynamicImport(() => import("./feedback/commentList"));
@@ -25,7 +22,7 @@ const ResetPasswordForm = DynamicImport(() => import("./auth/ResetPasswordForm")
 const RequestResetPassword = DynamicImport(() => import("./auth/RequestResetPassword"));
 
 const NewsListContainer = DynamicImport(() => import("./news/newslistcontainer"));
-const NewsItemContainer = DynamicImport(() => import("./news/newsitemcontainer"));
+
 const NewsItemAddContainer = DynamicImport(() => import("./news/newsitemaddcontainer"));
 const RequestList = DynamicImport(() => import("./supportcard/RequestContainer"));
 const RequestEdit = DynamicImport(() => import("./supportcard/RequestEdit"));
@@ -63,6 +60,10 @@ const AddCourseCard = DynamicImport(() => import("./courses/AddCourseCard"));
 const StudentListContainer = DynamicImport(() => import("./courses/StudentListContainer"));
 const StudentView = DynamicImport(() => import("./courses/StudentView"));
 const AddStudentsToCourse = DynamicImport(() => import("./courses/AddStudentsToCourse"));
+const AddPlannedCourseRequest = DynamicImport(() => import("./courses/AddPlannedCourseRequest"));
+const TenantList = DynamicImport(() => import("./TenantList"));
+const DonutChart = DynamicImport(() => import("./charts/DonutChart"));
+const VSummaryChart = DynamicImport(() => import("./charts/VSummaryChart"));
 
 const NotFound = props => {
   //withDashBoardContext(props => {
@@ -71,11 +72,11 @@ const NotFound = props => {
 
 class AppRoutes extends React.Component {
   render() {
-    const { user } = this.props;
-    if (!user) {
-      console.log("loading");
-      // return <div>Loading</div>;
-    }
+    console.log("✔️✔️✔️✔️✔️", this.props);
+    // const xuser = this.props.context.user;
+    const user = this.props.context;
+    const authenticated = this.props.context.authenticated();
+
     return (
       <Switch>
         <Route exact path="/comments" component={CommentsList} />
@@ -197,7 +198,6 @@ class AppRoutes extends React.Component {
           allowed={["Admin", "PO", "SU", "Chat"]}
           user={user}
           exact
-          exact
           path="/chat/new"
           component={RequireAuth(ChatContainer)}
         />
@@ -253,6 +253,11 @@ class AppRoutes extends React.Component {
           path="/courses/addstudents/:id"
           component={AddStudentsToCourse}
         />
+        <Route exact path="/chart" component={VSummaryChart} />
+        <Route exact path="/donut" component={DonutChart} />
+        <Route exact path="/tenant" component={TenantList} />
+        <Route exact path="/addplannedcourserequest" component={AddPlannedCourseRequest} />
+
         <Route component={NotFound} />
       </Switch>
     );
@@ -264,4 +269,5 @@ const mapStateToProps = state => ({
   user: state.auth.user
 });
 
-export default withRouter(connect(mapStateToProps)(AppRoutes));
+//export default withRouter(connect(mapStateToProps)(withDashBoardContext(AppRoutes)));
+export default withRouter(withDashBoardContext(AppRoutes));
