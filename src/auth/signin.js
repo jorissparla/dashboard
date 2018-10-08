@@ -1,10 +1,8 @@
 import React from "react";
-import { signinUser } from "../actions";
 import gql from "graphql-tag";
-import { graphql, Mutation } from "react-apollo";
+import { graphql } from "react-apollo";
 import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
-import { Error } from "../styles";
 import { Formik } from "formik";
 import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -132,7 +130,6 @@ class Signin extends React.Component {
                       name="password"
                       type="password"
                       label="password"
-                      type="password"
                       placeholder="Password"
                       className={classes.textField}
                       value={values.password}

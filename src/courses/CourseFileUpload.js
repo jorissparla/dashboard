@@ -3,11 +3,9 @@ import { withStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
-import Icon from "@material-ui/core/Icon";
 import IconButton from "@material-ui/core/IconButton";
 import FolderOpen from "@material-ui/icons/FolderOpen";
-import FileUpload from "@material-ui/icons/FileUpload";
-import Button from "@material-ui/core/Button";
+import FileUpload from "@material-ui/icons/FileCopy";
 import gql from "graphql-tag";
 import { Mutation } from "react-apollo";
 import styled from "styled-components";
@@ -62,7 +60,7 @@ const styles = theme => ({
 class CourseFileUploader extends Component {
   state = {};
   render() {
-    const { id, link, classes, readOnly } = this.props;
+    const { link, classes, readOnly } = this.props;
     return (
       <Mutation mutation={UPLOAD_MUTATION}>
         {(mutation, { data }) => {

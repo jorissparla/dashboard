@@ -1,7 +1,6 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import { withRouter } from "react-router";
-import { connect } from "react-redux";
 
 import Signin from "./auth/signin";
 import SigninWithPIN from "./auth/SigninWithPIN";
@@ -9,12 +8,9 @@ import Signout from "./auth/signout";
 import UpdatePassword from "./auth/resetpassword";
 import RequireAuth, { AuthRoute, EnhancedRoute } from "./auth/require_auth";
 
-//import NewsPage from "./news/newspage";
-//import FeedbackEdit from "./feedback/feedbackEdit";
-import { DashBoardContext, withDashBoardContext } from "./Provider";
+import { withDashBoardContext } from "./Provider";
 import DynamicImport from "./DynamicImport";
 import NewsItemContainer from "./news/newsitemcontainer";
-import Loader from "./Loader";
 
 const AGLTest = DynamicImport(() => import("./supportcard/Test"));
 //const CommentsList = DynamicImport(() => import("./feedback/commentList"));
@@ -80,10 +76,7 @@ class AppRoutes extends React.Component {
     // const xuser = this.props.context.user;
     const user = this.props.context;
     const authenticated = this.props.context.authenticated();
-    if (!user) {
-      console.log("loading");
-      // return <div>Loading</div>;
-    }
+
     return (
       <Switch>
         <Route exact path="/comments" component={CommentsList} />
@@ -204,7 +197,6 @@ class AppRoutes extends React.Component {
         <AuthRoute
           allowed={["Admin", "PO", "SU", "Chat"]}
           user={user}
-          exact
           exact
           path="/chat/new"
           component={RequireAuth(ChatContainer)}

@@ -1,14 +1,7 @@
 import React from "react";
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
-import {
-  VictoryLabel,
-  VictoryArea,
-  VictoryTheme,
-  VictoryChart,
-  VictoryAxis,
-  VictoryBar
-} from "victory";
+import { VictoryLabel, VictoryArea, VictoryTheme, VictoryChart } from "victory";
 
 const querySummaries = gql`
   query summaries($team: String) {
@@ -25,11 +18,6 @@ const querySummaries = gql`
     }
   }
 `;
-
-const colors = ["#BA68C8", "#81D4FA", "#FF7043", "#8BC34A", "#ec407a", "#1da1f2", "#E57373"];
-
-const FlexChart = ({ type, ...props }) =>
-  type !== "bar" ? <VictoryArea {...props} /> : <VictoryBar {...props} />;
 
 class VSummaryChart extends React.Component {
   static defaultProps = {

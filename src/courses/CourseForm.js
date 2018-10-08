@@ -217,7 +217,7 @@ class CourseForm extends Component {
               underlineShow={true}
               style={styles.textfieldstyle}
             />
-            {1 == 1 && (
+            {true && (
               <Field
                 name="link"
                 disabled={readOnly}

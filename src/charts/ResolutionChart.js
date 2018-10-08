@@ -1,7 +1,7 @@
 import React from "react";
 import ReactHighCharts from "react-highcharts";
 import gql from "graphql-tag";
-import { graphql, Query } from "react-apollo";
+import { Query } from "react-apollo";
 
 const ALL_RESOLUTIONS = gql`
   {

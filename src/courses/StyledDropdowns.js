@@ -83,12 +83,12 @@ class DownShiftSingle extends React.Component {
   };
 
   handleInputChange = event => {
-    const { setState, state } = this.props;
+    const { setState } = this.props;
     setState({ inputValue: event.target.value });
   };
 
   handleChange = item => {
-    const { setState, state } = this.props;
+    const { setState } = this.props;
 
     setState({
       inputValue: "",
@@ -172,7 +172,7 @@ class DownshiftMultiple extends React.Component {
   };
 
   handleInputChange = event => {
-    const { setState, state } = this.props;
+    const { setState } = this.props;
     setState({ inputValue: event.target.value });
   };
 
@@ -270,15 +270,7 @@ export default class SelectDropDown extends React.Component {
     console.log(value);
   };
   render() {
-    const {
-      classes,
-      suggestions,
-      state,
-      label,
-      placeholder,
-      fieldname,
-      idfieldname = "id"
-    } = this.props;
+    const { suggestions, state, label, placeholder, fieldname, idfieldname = "id" } = this.props;
     return (
       <React.Fragment>
         <InputLabel shrink htmlFor="age-label-placeholder">

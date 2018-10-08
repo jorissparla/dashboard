@@ -1,7 +1,7 @@
 import React from "react";
 import gql from "graphql-tag";
 import { Query } from "react-apollo";
-import { VictoryBar, VictoryChart, VictoryTheme, VictoryPie } from "victory";
+import { VictoryTheme, VictoryPie } from "victory";
 import { withStyles } from "@material-ui/core/styles";
 import Input from "@material-ui/core/Input";
 import InputLabel from "@material-ui/core/InputLabel";

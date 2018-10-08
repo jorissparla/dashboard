@@ -18,8 +18,6 @@ const Card = styled.div`
 
 const arColors = ["#c62828", "#90caf9", "#01579b", "#ffa726", "#4db6ac", "#fbc02d", "#4527a0"];
 
-const summaryChart1 = ({ value, team, title, color, type, data, xvalue = "weekNr" }) => {};
-
 export default class summaryChart extends Component {
   state = {
     config: {

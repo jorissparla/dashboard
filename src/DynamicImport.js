@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
-class DynamicImport extends Component {
+/* class DynamicImport extends Component {
   state = {
     component: null
   };
@@ -16,7 +15,7 @@ class DynamicImport extends Component {
     return this.props.children(this.state.component);
   }
 }
-
+ */
 export default function asyncComponent(importComponent) {
   class AsyncComponent extends Component {
     constructor(props) {
