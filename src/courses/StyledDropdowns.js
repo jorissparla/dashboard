@@ -6,7 +6,9 @@ import Downshift from "downshift";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
+import Select from "@material-ui/core/Select";
 import MenuItem from "@material-ui/core/MenuItem";
+import InputLabel from "@material-ui/core/InputLabel";
 import Chip from "@material-ui/core/Chip";
 
 function renderInput(inputProps) {
@@ -261,6 +263,46 @@ class DownshiftMultiple extends React.Component {
   }
 }
 
+export default class SelectDropDown extends React.Component {
+  handleChange = ({ target: { name, value } }) => {
+    this.props.setState({ selectedItem: value });
+    this.props.onChange(value);
+    console.log(value);
+  };
+  render() {
+    const {
+      classes,
+      suggestions,
+      state,
+      label,
+      placeholder,
+      fieldname,
+      idfieldname = "id"
+    } = this.props;
+    return (
+      <React.Fragment>
+        <InputLabel shrink htmlFor="age-label-placeholder">
+          {label}
+        </InputLabel>
+        <Select
+          id={fieldname}
+          name={fieldname}
+          placeholder={placeholder}
+          onChange={this.handleChange}
+          style={{ flex: 2 }}
+          value={state.selectedItem}
+        >
+          {suggestions.map(ctype => (
+            <MenuItem key={ctype[idfieldname]} value={ctype[fieldname]}>
+              {ctype[fieldname]}
+            </MenuItem>
+          ))}
+        </Select>
+      </React.Fragment>
+    );
+  }
+}
+
 DownshiftMultiple.propTypes = {
   classes: PropTypes.object.isRequired,
   state: PropTypes.object.isRequired,
@@ -306,5 +348,5 @@ const styles = theme => ({
 
 const StyledMultiple = withStyles(styles)(DownshiftMultiple);
 const StyledSimple = withStyles(styles)(DownShiftSingle);
-
-export { StyledMultiple, StyledSimple };
+const StyledSelect = withStyles(styles)(SelectDropDown);
+export { StyledMultiple, StyledSimple, StyledSelect };

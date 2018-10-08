@@ -14,7 +14,7 @@ import InputLabel from "@material-ui/core/InputLabel";
 import format from "date-fns/format";
 import addHours from "date-fns/add_hours";
 import Component from "../common/component-component";
-import { StyledMultiple, StyledSimple } from "./StyledDropdowns";
+import { StyledMultiple, StyledSimple, StyledSelect } from "./StyledDropdowns";
 import { DashBoardContext } from "../Provider";
 import * as yup from "yup";
 
@@ -132,6 +132,7 @@ class AddPlannedCourseRequest extends React.Component {
                   <Formik
                     initialValues={{
                       course: "",
+                      course2: "",
                       participants: "",
                       startdate: format(addHours(Date.now(), 24), "YYYY-MM-DD"),
                       enddate: format(addHours(Date.now(), 24), "YYYY-MM-DD"),
@@ -169,6 +170,7 @@ class AddPlannedCourseRequest extends React.Component {
                       errors,
                       isSubmitting
                     }) => {
+                      console.log("CurrentValues", values);
                       return (
                         <Paper className={classes.paper2} elevation={1}>
                           <Typography variant="display2" gutterBottom>
@@ -222,6 +224,7 @@ class AddPlannedCourseRequest extends React.Component {
                             initialValue={{
                               inputValue: "",
                               selectedItem: "",
+
                               suggestions: []
                             }}
                           >
@@ -243,29 +246,40 @@ class AddPlannedCourseRequest extends React.Component {
                                   placeholder="select course"
                                 />
                               );
-                              {
-                                touched.course && errors.course && <div>{errors.course}</div>;
-                              }
                             }}
                           </Component>
+                          {touched.course && errors.course && <div>{errors.course}</div>} }
                           <div className={classes.column}>
-                            <InputLabel shrink htmlFor="age-label-placeholder">
-                              Type of training
-                            </InputLabel>
-                            <Select
-                              id="type"
-                              name="type"
-                              placeholder="Enter type of training"
-                              onChange={handleChange}
-                              style={{ flex: 2 }}
-                              value={values.type}
+                            <Component
+                              initialValue={{
+                                inputValue: "",
+                                selectedItem: "",
+
+                                suggestions: []
+                              }}
                             >
-                              {coursetypes.map(ctype => (
-                                <MenuItem key={ctype.name} value={ctype.name}>
-                                  {ctype.name}
-                                </MenuItem>
-                              ))}
-                            </Select>
+                              {({ state, setState }) => {
+                                return (
+                                  <StyledSelect
+                                    id="coursetype"
+                                    name="coursetype"
+                                    state={state}
+                                    onChange={item => {
+                                      console.log("OnChange", item);
+                                      setFieldValue("type", item);
+                                    }}
+                                    onBlur={handleBlur}
+                                    setState={setState}
+                                    suggestions={coursetypes}
+                                    label="Course"
+                                    value={values.type}
+                                    fieldname="name"
+                                    placeholder="Enter type of training"
+                                  />
+                                );
+                              }}
+                            </Component>
+
                             {touched.type && errors.type && <div>{errors.type}</div>}
                             <TextField
                               id="details"
@@ -321,36 +335,7 @@ class AddPlannedCourseRequest extends React.Component {
                                         variant="contained"
                                         color="secondary"
                                         className={classes.button}
-                                        onClick={
-                                          handleSubmit
-                                          /*                         async () => {
-                                          const {
-                                            startdate,
-                                            enddate,
-                                            participants,
-                                            hours,
-                                            details,
-                                            type
-                                          } = values;
-                                          return;
-                                          const input = {
-                                            courseid: this.getCourseId(courses, values.course),
-                                            startdate: format(startdate, "YYYY-MM-DD"),
-                                            enddate: format(enddate, "YYYY-MM-DD"),
-                                            hours,
-                                            details,
-                                            participants,
-                                            type,
-                                            submittedBy: fullname
-                                          };
-                                          const result = await addPlannedCourseRequest({
-                                            variables: {
-                                              input
-                                            }
-                                          });
-                                          console.log("result", result);
-                                        } */
-                                        }
+                                        onClick={handleSubmit}
                                         type="submit"
                                       >
                                         Save{" "}

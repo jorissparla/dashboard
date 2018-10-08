@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import gql from "graphql-tag";
-import * as R from "ramda";
-import { graphql, compose, Mutation, Query } from "react-apollo";
+import { Mutation, Query } from "react-apollo";
 import { withRouter } from "react-router";
-import { adopt } from "react-adopt";
 import NewsItem from "./newsitem";
 import Snackbar from "material-ui/Snackbar";
 
@@ -44,21 +42,6 @@ class NewsItemContainer extends Component {
   state = {
     showMessage: false,
     err: "No error"
-  };
-  doSubmit = values => {
-    //window.alert(JSON.stringify(values, null, 2));
-    //console.log(JSON.stringify(values, null, 2));
-    const { id, title, body, link, link_text, img } = values;
-    const input = { id, title, body, link, link_text, img };
-    this.props.updateNews({ variables: { input } });
-    setTimeout(() => this.props.history.push("/news"), 500);
-  };
-
-  doDelete = id => {
-    //deleteNews(id);
-    const input = { id };
-    this.props.deleteNews({ variables: { input } });
-    setTimeout(() => this.props.history.push("/news"), 500);
   };
 
   handleDelete = async id => {};
@@ -113,46 +96,7 @@ class NewsItemContainer extends Component {
       </Query>
     );
   }
-
-  render2() {
-    if (this.props.data.loading) {
-      return <div>Loading</div>;
-    }
-    const news = this.props.data.news[0];
-    if (!news) {
-      return <div>Loading...</div>;
-    }
-    return (
-      <React.Fragment>
-        <NewsItem
-          initialValues={news}
-          onSave={this.doSubmit}
-          onDelete={this.doDelete}
-          title="Edit news item"
-        />
-        <Snackbar
-          open={this.state.showMessage}
-          message={this.state.err}
-          autoHideDuration={4000}
-          onRequestClose={() => console.log("close")}
-        />
-      </React.Fragment>
-    );
-  }
 }
 
-const mapStateToProps = state => {
-  return {
-    news: state.summary.newsItem[0]
-  };
-};
-
-export default /* compose(
-  graphql(ALL_NEWS, {
-    options: ownProps => ({ variables: { id: ownProps.match.params.id } })
-  }),
-  graphql(UPDATE_NEWS, { name: "updateNews" }),
-  graphql(DELETE_NEWS, { name: "deleteNews" })
-)( */
-withRouter(NewsItemContainer);
+export default withRouter(NewsItemContainer);
 //);

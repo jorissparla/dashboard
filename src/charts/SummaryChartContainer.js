@@ -24,19 +24,23 @@ class SummaryChartContainer extends React.Component {
       <Query query={querySummaries} variables={{ team }}>
         {({ data, loading }) => {
           if (loading) return <div>Loading....</div>;
-          const summary = data.summaries;
-          return (
-            <SummaryChart
-              id={shortid.generate()}
-              data={summary}
-              title={title}
-              type={type}
-              xvalue="weekNr"
-              value={value}
-              color={color}
-              team={team}
-            />
-          );
+          if (data && data.summaries) {
+            const summary = data.summaries;
+            return (
+              <SummaryChart
+                id={shortid.generate()}
+                data={summary}
+                title={title}
+                type={type}
+                xvalue="weekNr"
+                value={value}
+                color={color}
+                team={team}
+              />
+            );
+          } else {
+            return "no data returned";
+          }
         }}
       </Query>
     );
