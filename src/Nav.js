@@ -25,15 +25,21 @@ import { SharedSnackbarConsumer } from "./SharedSnackbar.context";
 
 import FlatButton from "material-ui/FlatButton";
 
-function handleTouchTap() {
-  alert("onTouchTap triggered on the title component");
-}
-
 const styles = {
   title: {
     cursor: "pointer"
   }
 };
+
+const NavLink = ({ title, Icon, navigateTo, history }) => (
+  <MenuItem
+    primaryText={<div style={{ color: "black" }}>{title}</div>}
+    leftIcon={Icon && <Icon style={{ root: { color: "black" } }} />}
+    onClick={() => {
+      history.push(navigateTo);
+    }}
+  />
+);
 
 class Header extends React.Component {
   state = {
@@ -58,9 +64,7 @@ class Header extends React.Component {
       pc.createOffer(pc.setLocalDescription.bind(pc), noop); // create offer and set local description
       pc.onicecandidate = function(ice) {
         if (ice && ice.candidate && ice.candidate.candidate) {
-          var myIP = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/.exec(
-            ice.candidate.candidate
-          )[1];
+          var myIP = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/.exec(ice.candidate.candidate)[1];
           console.log("my IP: ", myIP);
           self.setState({ ipaddress: myIP });
           pc.onicecandidate = noop;
@@ -99,94 +103,27 @@ class Header extends React.Component {
     //console.log("AUTH", authenticated, validRole, user.role !== "Guest");
     return (
       <div onClick={() => this.toggleMenu()}>
-        <MenuItem
-          primaryText={<div style={{ color: "black" }}>Home</div>}
-          leftIcon={<ActionHome style={{ root: { color: "black" } }} />}
-          onClick={() => {
-            history.push("/");
-          }}
-        />
-        <MenuItem
-          primaryText={<div style={{ color: "black", marginLeft: 10 }}>Logistics</div>}
-          onClick={() => {
-            history.push("/team/Logistics");
-          }}
-        />
-        <MenuItem
-          primaryText={<div style={{ color: "black", marginLeft: 10 }}>Finance</div>}
-          onClick={() => {
-            history.push("/team/Finance");
-          }}
-        />
-        <MenuItem
-          primaryText={<div style={{ color: "black", marginLeft: 10 }}>Tools</div>}
-          onClick={() => {
-            history.push("/team/Tools");
-          }}
-        />
+        <NavLink title="Home" Icon={ActionHome} navigateTo="/" history={history} />
+        <NavLink title="Logistics" Icon={null} navigateTo="/team/logistics" history={history} />
+        <NavLink title="Finance" Icon={null} navigateTo="/team/finance" history={history} />
+        <NavLink title="Tools" Icon={null} navigateTo="/team/tools" history={history} />
+
         <Divider />
-        <MenuItem
-          primaryText={<div style={{ color: "black" }}>Golives</div>}
-          leftIcon={<GoLiveIcon />}
-          onClick={() => {
-            history.push("/golives");
-          }}
-        />
+        <NavLink title="Go Lives" Icon={GoLiveIcon} navigateTo="/golives" history={history} />
+        <NavLink title="MT Customers" Icon={ExtensionIcon} navigateTo="/tenant" history={history} />
+        <NavLink title="Customer Feedback" Icon={FeedbackIcon} navigateTo="/feedback" history={history} />
+
         <Divider />
-        <MenuItem
-          primaryText={<div style={{ color: "black" }}>MT Customers</div>}
-          leftIcon={<ExtensionIcon />}
-          onClick={() => {
-            history.push("/tenant");
-          }}
-        />
-        <Divider />
-        <MenuItem
-          primaryText={<div style={{ color: "black" }}>Customer Feedback</div>}
-          leftIcon={<FeedbackIcon />}
-          onClick={() => {
-            history.push("/feedback");
-          }}
-        />
-        <Divider />
-        <MenuItem
-          primaryText={<div style={{ color: "black" }}>SupportCards</div>}
-          leftIcon={<LinkIcon />}
-          onClick={() => {
-            history.push("/supportcard");
-          }}
-        />
+        <NavLink title="Support Cards" Icon={LinkIcon} navigateTo="/supportcard" history={history} />
         {authenticated && (
-          <MenuItem
-            primaryText={<div style={{ color: "black" }}>Requests SupportCards</div>}
-            leftIcon={<RequestListIcon />}
-            onClick={() => {
-              history.push("/requestlist");
-            }}
-          />
+          <NavLink title="Requests SupportCards" Icon={RequestListIcon} navigateTo="/requestlist" history={history} />
         )}
+
+        <Divider />
+        {authenticated && isAdmin && <NavLink title="News" Icon={NewsIcon} navigateTo="/news" history={history} />}
         <Divider />
         {authenticated &&
-          isAdmin && (
-            <MenuItem
-              primaryText={<div style={{ color: "black" }}>News</div>}
-              leftIcon={<NewsIcon />}
-              onClick={() => {
-                history.push("/news");
-              }}
-            />
-          )}
-        <Divider />
-        {authenticated &&
-          (isAdmin || isChat) && (
-            <MenuItem
-              primaryText={<div style={{ color: "black" }}>Chat</div>}
-              leftIcon={<ChatIcon />}
-              onClick={() => {
-                history.push("/chat");
-              }}
-            />
-          )}
+          (isAdmin || isChat) && <NavLink title="Chat" Icon={ChatIcon} navigateTo="/chat" history={history} />}
         <Divider />
         {authenticated && (
           <MenuItem
@@ -239,15 +176,12 @@ class Header extends React.Component {
         </FlatButton>
       );
     } else {
-      return (
-        <FlatButton onClick={() => this.logInLink()} label="Login" style={{ color: "white" }} />
-      );
+      return <FlatButton onClick={() => this.logInLink()} label="Login" style={{ color: "white" }} />;
     }
   }
 
   renderPicture() {
-    const picture =
-      localStorage.getItem("picture") || "https://randomuser.me/api/portraits/men/20.jpg";
+    const picture = localStorage.getItem("picture") || "https://randomuser.me/api/portraits/men/20.jpg";
     if (this.props.authenticated) {
       return <Avatar src={picture} />;
     } else return <div />;
@@ -255,13 +189,13 @@ class Header extends React.Component {
 
   renderToolBar() {
     let titleText = this.state.ipaddress ? this.state.ipaddress : "";
-    console.log(this.state.ipaddress);
-    titleText =
-      titleText + process.env.NODE_ENV !== "production" ? `(${process.env.NODE_ENV})` : "";
+    titleText = titleText + process.env.NODE_ENV !== "production" ? `(${process.env.NODE_ENV})` : "";
     return (
       <Toolbar style={styles}>
         <ToolbarGroup firstChild={true}>
-          {this.hamburgerIcon()}
+          <IconButton>
+            <MenuIcon color="white" onClick={() => this.toggleMenu()} />
+          </IconButton>
           {this.renderPicture()}
         </ToolbarGroup>
         <ToolbarGroup>
@@ -285,27 +219,13 @@ class Header extends React.Component {
     );
   }
 
-  renderAppBar() {
-    return (
-      <AppBar
-        style={styles}
-        showMenuIconButton={true}
-        title={<span style={styles.title}>Infor Support Dashboard</span>}
-        onLeftIconButtonTouchTap={() => window.alert("Menu")}
-        onTitleTouchTap={handleTouchTap}
-        iconElementRight={this.renderButtons()}
-      />
-    );
-  }
-
   getLeft = () => {
     if (this.state.showdrawer) return 250;
     return 0;
   };
 
   getStyle = () => {
-    if (this.state.showdrawer)
-      return { left: "250px", width: "calc(100% - 270px)", position: "absolute" };
+    if (this.state.showdrawer) return { left: "250px", width: "calc(100% - 270px)", position: "absolute" };
     return { width: "100%" };
   };
   render() {

@@ -13,7 +13,7 @@ import getMuiTheme from "material-ui/styles/getMuiTheme";
 import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
 import { blue500 } from "material-ui/styles/colors";
 import { AUTH_USER } from "./actions";
-import App from "./appnav";
+import App from "./Nav";
 import "./index.css";
 
 import { ApolloProvider } from "react-apollo";

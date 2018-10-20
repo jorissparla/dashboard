@@ -3,6 +3,11 @@
   "editor.tabSize": 2,
   "editor.fontLigatures": true,
   "editor.fontFamily": "'Dank Mono'",
-  "vsicons.presets.angular": false,
-  "prettier.singleQuote": false
+  "workbench.colorCustomizations": {
+    "titleBar.activeForeground": "#000",
+    "titleBar.inactiveForeground": "#000000CC",
+    "titleBar.activeBackground": "#ea00ff",
+    "titleBar.inactiveBackground": "#ea00ff"
+  },
+  "workbench.colorTheme": "Visual Studio Light"
 }
