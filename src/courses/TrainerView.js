@@ -1,13 +1,10 @@
 import React from "react";
-import {
-  Table,
-  TableBody,
-  TableHeader,
-  TableHeaderColumn,
-  TableRow,
-  TableRowColumn
-} from "material-ui/Table";
 
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
 import _ from "lodash";
@@ -33,7 +30,7 @@ const styles = {
 
 const HeaderColumn = ({ style, children }) => {
   const newStyle = _.extend({}, styles.headerStyle, style);
-  return <TableHeaderColumn style={newStyle}>{children}</TableHeaderColumn>;
+  return <TableCell style={newStyle}>{children}</TableCell>;
 };
 
 class TrainerView extends React.Component {
@@ -50,20 +47,20 @@ class TrainerView extends React.Component {
   renderTrainers = trainers => {
     return (
       <Table headerStyle={styles.headerStyle}>
-        <TableHeader adjustForCheckbox={false} displaySelectAll={false}>
+        <TableHead adjustForCheckbox={false} displaySelectAll={false}>
           <TableRow>
             <HeaderColumn>TRAINER</HeaderColumn>
             <HeaderColumn>COURSES</HeaderColumn>
             <HeaderColumn>HOURS</HeaderColumn>
           </TableRow>
-        </TableHeader>
+        </TableHead>
         <TableBody showRowHover={true} displayRowCheckbox={false}>
           {trainers.map(({ trainer, totalcourses, totalhours }, index) => {
             return (
               <TableRow key={index}>
-                <TableRowColumn>{trainer}</TableRowColumn>
-                <TableRowColumn>{totalcourses}</TableRowColumn>
-                <TableRowColumn>{totalhours}</TableRowColumn>
+                <TableCell>{trainer}</TableCell>
+                <TableCell>{totalcourses}</TableCell>
+                <TableCell>{totalhours}</TableCell>
               </TableRow>
             );
           })}

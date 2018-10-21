@@ -4,7 +4,7 @@ import { graphql } from "react-apollo";
 import { withRouter } from "react-router";
 import styled from "styled-components";
 import StudentTable from "./StudentTable";
-import CircularProgress from "material-ui/CircularProgress";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const Div = styled.div`
   display: flex;
@@ -26,13 +26,7 @@ class StudentListContainer extends Component {
     if (error) {
       return <p>{error.message}</p>;
     }
-    return (
-      <StudentTable
-        accounts={accounts}
-        startdate={this.props.startdate}
-        enddate={this.props.enddate}
-      />
-    );
+    return <StudentTable accounts={accounts} startdate={this.props.startdate} enddate={this.props.enddate} />;
   }
 }
 

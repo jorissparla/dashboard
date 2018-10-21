@@ -1,44 +1,139 @@
 import React from "react";
-import AppBar from "material-ui/AppBar";
-import IconButton from "material-ui/IconButton";
-import Avatar from "material-ui/Avatar";
-import ActionHome from "material-ui/svg-icons/action/home";
-import NewsIcon from "material-ui/svg-icons/action/event";
-import PeopleIcon from "material-ui/svg-icons/social/people";
-import ChatIcon from "material-ui/svg-icons/communication/chat";
-import PageIcon from "material-ui/svg-icons/social/pages";
-import LinkIcon from "material-ui/svg-icons/content/link";
-import RequestListIcon from "material-ui/svg-icons/av/playlist-add";
-import GoLiveIcon from "material-ui/svg-icons/action/flight-takeoff";
-import ExtensionIcon from "material-ui/svg-icons/action/extension";
-import FeedbackIcon from "material-ui/svg-icons/action/feedback";
-import MenuIcon from "material-ui/svg-icons/navigation/menu";
+//import AppBar from "material-ui/AppBar";
+import AppBar from "@material-ui/core/AppBar";
+//import IconButton from "material-ui/IconButton";
+import IconButton from "@material-ui/core/IconButton";
+import Avatar from "@material-ui/core/Avatar";
+import ActionHome from "@material-ui/icons/Home";
+import NewsIcon from "@material-ui/icons/Event";
+import PeopleIcon from "@material-ui/icons/People";
+import ChatIcon from "@material-ui/icons/Chat";
+import PageIcon from "@material-ui/icons/Pages";
+import LinkIcon from "@material-ui/icons/Link";
+import RequestListIcon from "@material-ui/icons/PlaylistAdd";
+import GoLiveIcon from "@material-ui/icons/FlightTakeoff";
+import ExtensionIcon from "@material-ui/icons/Extension";
+import FeedbackIcon from "@material-ui/icons/Feedback";
+import MenuIcon from "@material-ui/icons/Menu";
+//import FlatButton from "@material-ui/core/FlatButton";
+import Button from "@material-ui/core/Button";
 //import IconMenu from "material-ui/IconMenu";
-import Divider from "material-ui/Divider";
-import Drawer from "material-ui/Drawer";
-import MenuItem from "material-ui/MenuItem";
+import Divider from "@material-ui/core/Divider";
+//import Drawer from "material-ui/Drawer";
+import Drawer from "@material-ui/core/Drawer";
+import MenuItem from "@material-ui/core/MenuItem";
 import { withRouter } from "react-router";
-import { Toolbar, ToolbarGroup, ToolbarTitle } from "material-ui/Toolbar";
+//import { Toolbar, ToolbarGroup, ToolbarTitle } from "material-ui/Toolbar";
+import Toolbar from "@material-ui/core/Toolbar";
+//import ToolbarGroup from "@material-ui/core/ToolbarGroup";
+//import ToolbarTitle from "@material-ui/core/ToolbarTitle";
+import Typography from "@material-ui/core/Typography";
+import { withStyles } from "@material-ui/core/styles";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
 import withAuth from "./utils/withAuth";
-
 import { SharedSnackbarConsumer } from "./SharedSnackbar.context";
+import Signout from "./Signout";
+import User from "./User";
 
-import FlatButton from "material-ui/FlatButton";
+const drawerWidth = 240;
 
-const styles = {
-  title: {
-    cursor: "pointer"
+const styles = theme => ({
+  root: {
+    flexGrow: 1
+  },
+  appFrame: {
+    height: 64,
+    zIndex: 1,
+    overflow: "hidden",
+    position: "relative",
+    display: "flex",
+    width: "100%"
+  },
+  appBar: {
+    position: "absolute",
+    display: "flex",
+    transition: theme.transitions.create(["margin", "width"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen
+    })
+  },
+  appBarShift: {
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(["margin", "width"], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen
+    })
+  },
+  "appBarShift-left": {
+    marginLeft: drawerWidth
+  },
+  "appBarShift-right": {
+    marginRight: drawerWidth
+  },
+  menuButton: {
+    marginLeft: 12,
+    marginRight: 20
+  },
+  hamburger: {
+    color: "white"
+  },
+  hide: {
+    display: "none"
+  },
+  drawerPaper: {
+    position: "relative",
+    width: drawerWidth
+  },
+  drawerHeader: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    padding: "0 8px",
+    ...theme.mixins.toolbar
+  },
+  content: {
+    flexGrow: 1,
+    backgroundColor: theme.palette.background.default,
+    padding: theme.spacing.unit * 3,
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen
+    })
+  },
+  "content-left": {
+    marginLeft: -drawerWidth
+  },
+  "content-right": {
+    marginRight: -drawerWidth
+  },
+  contentShift: {
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen
+    })
+  },
+  "contentShift-left": {
+    marginLeft: 0
+  },
+  "contentShift-right": {
+    marginRight: 0
   }
-};
+});
 
 const NavLink = ({ title, Icon, navigateTo, history }) => (
   <MenuItem
-    primaryText={<div style={{ color: "black" }}>{title}</div>}
-    leftIcon={Icon && <Icon style={{ root: { color: "black" } }} />}
     onClick={() => {
       history.push(navigateTo);
     }}
-  />
+  >
+    {Icon && (
+      <ListItemIcon>
+        <Icon />
+      </ListItemIcon>
+    )}
+    <ListItemText>{title}</ListItemText>
+  </MenuItem>
 );
 
 class Header extends React.Component {
@@ -46,10 +141,6 @@ class Header extends React.Component {
     showdrawer: false,
     ipaddress: ""
   };
-  constructor(props) {
-    super(props);
-    this.hamburgerMenu = this.hamburgerMenu.bind(this);
-  }
 
   doSomething() {
     var self = this;
@@ -81,13 +172,13 @@ class Header extends React.Component {
     this.setState({ showdrawer: !this.state.showdrawer });
   };
 
-  hamburgerIcon = () => (
+  hamburgerIcon = ({ c }) => (
     <IconButton>
-      <MenuIcon color="white" onClick={() => this.toggleMenu()} />
+      <MenuIcon onClick={() => this.toggleMenu()} />
     </IconButton>
   );
 
-  hamburgerMenu() {
+  hamburgerMenu = ({ openSnackbar }) => {
     const { history, authenticated, user } = this.props;
 
     let validRole = false;
@@ -107,58 +198,42 @@ class Header extends React.Component {
         <NavLink title="Logistics" Icon={null} navigateTo="/team/logistics" history={history} />
         <NavLink title="Finance" Icon={null} navigateTo="/team/finance" history={history} />
         <NavLink title="Tools" Icon={null} navigateTo="/team/tools" history={history} />
-
         <Divider />
         <NavLink title="Go Lives" Icon={GoLiveIcon} navigateTo="/golives" history={history} />
         <NavLink title="MT Customers" Icon={ExtensionIcon} navigateTo="/tenant" history={history} />
         <NavLink title="Customer Feedback" Icon={FeedbackIcon} navigateTo="/feedback" history={history} />
-
         <Divider />
         <NavLink title="Support Cards" Icon={LinkIcon} navigateTo="/supportcard" history={history} />
         {authenticated && (
-          <NavLink title="Requests SupportCards" Icon={RequestListIcon} navigateTo="/requestlist" history={history} />
-        )}
-
-        <Divider />
-        {authenticated && isAdmin && <NavLink title="News" Icon={NewsIcon} navigateTo="/news" history={history} />}
-        <Divider />
-        {authenticated &&
-          (isAdmin || isChat) && <NavLink title="Chat" Icon={ChatIcon} navigateTo="/chat" history={history} />}
-        <Divider />
-        {authenticated && (
-          <MenuItem
-            primaryText={<div style={{ color: "black" }}>Courses Dashboard</div>}
-            leftIcon={<NewsIcon />}
-            onClick={() => {
-              history.push("/coursedashboard");
-            }}
-          />
-        )}
-        {authenticated && (
-          //validRole && (
-          <MenuItem
-            primaryText={<div style={{ color: "black" }}>Courses</div>}
-            leftIcon={<PageIcon style={{ root: { color: "black" } }} />}
-            onClick={() => {
-              this.props.history.push("/courses");
-              //window.location.href = location.href;
-            }}
-          />
-        )}
-        {authenticated &&
-          validRole && (
-            <MenuItem
-              primaryText={<div style={{ color: "black" }}>Students</div>}
-              leftIcon={<PeopleIcon />}
-              onClick={() => {
-                history.push("/students");
+          <React.Fragment>
+            <NavLink title="Requests SupportCards" Icon={RequestListIcon} navigateTo="/requestlist" history={history} />
+            <Divider />
+            {(isAdmin || isChat) && <NavLink title="Chat" Icon={ChatIcon} navigateTo="/chat" history={history} />}
+            <Divider />
+            {authenticated && isAdmin && <NavLink title="News" Icon={NewsIcon} navigateTo="/news" history={history} />}
+            <Divider />
+            <NavLink title="Courses Dashboard" Icon={NewsIcon} navigateTo="/coursedashboard" history={history} />
+            <NavLink title="Courses" Icon={PageIcon} navigateTo="/courses" history={history} />
+            {validRole && <NavLink title="Students" Icon={PeopleIcon} navigateTo="/students" history={history} />}
+            <Signout>
+              {signout => {
+                return (
+                  <MenuItem
+                    onClick={() => {
+                      openSnackbar("Signing out");
+                      signout();
+                    }}
+                  >
+                    Signout
+                  </MenuItem>
+                );
               }}
-            />
-          )}
-        <MenuItem primaryText="Sign out" />
+            </Signout>
+          </React.Fragment>
+        )}
       </div>
     );
-  }
+  };
   logOutLink = () => {
     const { history } = this.props;
     history.push("/signout");
@@ -171,12 +246,16 @@ class Header extends React.Component {
   renderButtons() {
     if (this.props.authenticated) {
       return (
-        <FlatButton onClick={() => this.logOutLink()} label="Logout" style={{ color: "white" }}>
-          {/*  <Avatar src="https://randomuser.me/api/portraits/men/20.jpg" /> */}
-        </FlatButton>
+        <Button onClick={() => this.logOutLink()} color="inherit">
+          Logout
+        </Button>
       );
     } else {
-      return <FlatButton onClick={() => this.logInLink()} label="Login" style={{ color: "white" }} />;
+      return (
+        <Button onClick={() => this.logInLink()} color="inherit">
+          Login
+        </Button>
+      );
     }
   }
 
@@ -187,35 +266,14 @@ class Header extends React.Component {
     } else return <div />;
   }
 
-  renderToolBar() {
-    let titleText = this.state.ipaddress ? this.state.ipaddress : "";
-    titleText = titleText + process.env.NODE_ENV !== "production" ? `(${process.env.NODE_ENV})` : "";
+  renderImage() {
     return (
-      <Toolbar style={styles}>
-        <ToolbarGroup firstChild={true}>
-          <IconButton>
-            <MenuIcon color="white" onClick={() => this.toggleMenu()} />
-          </IconButton>
-          {this.renderPicture()}
-        </ToolbarGroup>
-        <ToolbarGroup>
-          <SharedSnackbarConsumer>
-            {({ openSnackbar }) => {
-              return (
-                <ToolbarTitle
-                  text="Infor Support Dashboard"
-                  style={{ color: "white" }}
-                  onClick={() => openSnackbar("You clicked Infor Support Dashboard")}
-                />
-              );
-            }}
-          </SharedSnackbarConsumer>
-        </ToolbarGroup>{" "}
-        <ToolbarGroup>
-          <ToolbarTitle text={titleText} style={{ color: "white" }} />
-        </ToolbarGroup>{" "}
-        <ToolbarGroup>{this.renderButtons()}</ToolbarGroup>
-      </Toolbar>
+      <User>
+        {payload => {
+          console.log(payload);
+          return <p>User</p>;
+        }}
+      </User>
     );
   }
 
@@ -224,21 +282,57 @@ class Header extends React.Component {
     return 0;
   };
 
-  getStyle = () => {
-    if (this.state.showdrawer) return { left: "250px", width: "calc(100% - 270px)", position: "absolute" };
-    return { width: "100%" };
-  };
   render() {
-    return [
-      <Drawer open={this.state.showdrawer} key="drawer">
-        {" "}
-        {this.hamburgerMenu()}
-      </Drawer>,
-      <div style={this.getStyle()} key="rest">
-        {this.renderToolBar()}
-        {this.props.children}
-      </div>
-    ];
+    const { classes, theme, authenticated } = this.props;
+    let titleText = this.state.ipaddress ? this.state.ipaddress : "";
+    titleText = titleText + process.env.NODE_ENV !== "production" ? `(${process.env.NODE_ENV})` : "";
+    return (
+      <SharedSnackbarConsumer>
+        {({ openSnackbar }) => {
+          return (
+            <React.Fragment>
+              <Drawer
+                classes={{
+                  paper: classes.drawerPaper
+                }}
+                anchor="left"
+                open={this.state.showdrawer}
+                key="drawer"
+              >
+                {this.hamburgerMenu({ openSnackbar })}
+              </Drawer>
+              <div className={classes.appFrame}>
+                <AppBar position="static">
+                  <Toolbar>
+                    <IconButton>
+                      <MenuIcon className={classes.hamburger} onClick={() => this.toggleMenu()} />
+                    </IconButton>
+                    {this.renderPicture()}
+                    {this.renderImage()}
+                    <Typography variant="h6" color="inherit">
+                      Infor Support Dashboard
+                    </Typography>
+                    <Typography variant="h6" color="inherit">
+                      {titleText}
+                    </Typography>
+
+                    {authenticated ? (
+                      <Button onClick={() => this.logOutLink()} color="inherit">
+                        Logout
+                      </Button>
+                    ) : (
+                      <Button onClick={() => this.logInLink()} color="inherit">
+                        Login
+                      </Button>
+                    )}
+                  </Toolbar>
+                </AppBar>
+              </div>
+            </React.Fragment>
+          );
+        }}
+      </SharedSnackbarConsumer>
+    );
   }
 }
-export default withRouter(withAuth(Header));
+export default withRouter(withAuth(withStyles(styles)(Header)));

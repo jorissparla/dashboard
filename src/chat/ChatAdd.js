@@ -89,20 +89,12 @@ class ChatAdd extends React.Component {
     const percentage = (nrchats === 0 ? 100 : (100 * responseintime) / nrchats).toFixed(1);
     return (
       <div>
-        <CardSection style={{ fontSize: "36px", fontFamily: "Oswald" }}>
-          Add Chat Result
-        </CardSection>
+        <CardSection style={{ fontSize: "36px", fontFamily: "Oswald" }}>Add Chat Result</CardSection>
         <form>
           <CardSection>
             <FormControl className={classes.formControl}>
               <InputLabel htmlFor="name-readonly">Team</InputLabel>
-              <Select
-                id="team"
-                name="team"
-                onChange={this.handleChange}
-                style={{ flex: 2 }}
-                value={team}
-              >
+              <Select id="team" name="team" onChange={this.handleChange} style={{ flex: 2 }} value={team}>
                 {teams.map(team => (
                   <MenuItem key={team.key} value={team.key}>
                     {team.description}
@@ -112,13 +104,7 @@ class ChatAdd extends React.Component {
             </FormControl>
             <FormControl className={classes.formControl}>
               <InputLabel htmlFor="name-readonly">region</InputLabel>
-              <Select
-                id="region"
-                name="region"
-                style={{ flex: 2 }}
-                onChange={this.handleChange}
-                value={region}
-              >
+              <Select id="region" name="region" style={{ flex: 2 }} onChange={this.handleChange} value={region}>
                 {regions.map(region => (
                   <MenuItem key={region.key} value={region.key}>
                     {region.description}
@@ -138,7 +124,7 @@ class ChatAdd extends React.Component {
             </FormControl>
           </CardSection>
           <CardSection>
-            <Input name="fromDate" disabled={true} type="text" />
+            <TextField name="fromDate" disabled={true} type="text" />
           </CardSection>
 
           <CardSection id="inputboxes">
@@ -177,13 +163,7 @@ class ChatAdd extends React.Component {
             >
               Save
             </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              className={classes.button}
-              onClick={onCancel}
-              type="reset"
-            >
+            <Button variant="contained" color="secondary" className={classes.button} onClick={onCancel} type="reset">
               Cancel
             </Button>
           </CardSection>

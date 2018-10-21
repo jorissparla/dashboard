@@ -1,6 +1,6 @@
 import styled, { keyframes } from "styled-components";
 import React from "react";
-import Avatar from "material-ui/Avatar";
+import Avatar from "@material-ui/core/Avatar";
 
 export const Typography = styled.div`
   font-family: Roboto;
@@ -232,8 +232,7 @@ export const Button = styled.a`
   cursor: pointer;
   font-weight: 500;
   border-radius: 4px;
-  border: 1px solid
-    ${props => (props.bordercolor ? props.bordercolor : props.color ? props.color : niceblue)};
+  border: 1px solid ${props => (props.bordercolor ? props.bordercolor : props.color ? props.color : niceblue)};
   text-decoration: none;
   color: ${props => (props.color ? props.color : niceblue)};
   font-family: "Segoe UI", Roboto;

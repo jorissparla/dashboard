@@ -1,10 +1,16 @@
 import React from "react";
 import styled from "styled-components";
-import RaisedButton from "material-ui/RaisedButton";
+import Button from "@material-ui/core/Button";
 import format from "date-fns/format";
-import { Card, CardActions, CardMedia, CardTitle } from "material-ui/Card";
-import Badge from "material-ui/Badge";
-import { blue500 } from "material-ui/styles/colors";
+//import { Card, CardActions, CardMedia, CardTitle } from "material-ui/Card";
+import Card from "@material-ui/core/Card";
+import CardActionArea from "@material-ui/core/CardActionArea";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CardMedia from "@material-ui/core/CardMedia";
+import Badge from "@material-ui/core/Badge";
+import Typography from "@material-ui/core/Typography";
+import blue from "@material-ui/core/colors/blue";
 import { Link } from "react-router-dom";
 import StudentChip from "./StudentChip";
 
@@ -92,49 +98,30 @@ class NewCard extends React.Component {
         break;
     }
 
-    const pd = course.plannedcourses[0]
-      ? format(course.plannedcourses[0].startdate, "ddd, DDMMMYYYY")
-      : "";
+    const pd = course.plannedcourses[0] ? format(course.plannedcourses[0].startdate, "ddd, DDMMMYYYY") : "";
     const acount = course.plannedcourses[0] ? course.plannedcourses[0].studentcount : 0;
     const students = course.plannedcourses[0] ? course.plannedcourses[0].students : [];
     return (
       <Card style={{ width: "22%", margin: 10 }}>
-        <CardMedia
-          overlay={<CardTitle title={course.title} />}
-          overlayContentStyle={{ fontSize: "20px", background: "rgba(0, 0, 0, 0.2)" }}
-          overlayContainerStyle={{ fontSize: "20px", background: "rgba(0, 0, 0, 0.2)" }}
-          overlayStyle={{ fontSize: "20px", background: "rgba(0, 0, 0, 0.2)" }}
-        >
-          <StyledImage src={image} />
-        </CardMedia>
-
+        <CardMedia component="img" image={image} />
+        <CardContent>
+          <Typography gutterBottom variant="h6" component="h2">
+            {course.title}
+          </Typography>
+        </CardContent>
         <CardActions>
           <BottomStyle>
-            <Link to={`courses/${validRole ? "edit" : "view"}/${course.id || "/"}`}>
-              <RaisedButton
-                backgroundColor={blue500}
-                label="View"
-                style={{ color: "white" }}
-                labelStyle={{ color: "white" }}
-              />
+            <Link to={`${validRole ? "edit" : "view"}/${course.id || "/"}`}>
+              <Button color="primary" variant="contained">
+                View
+              </Button>
             </Link>
-            <StyledBadge
-              badgeStyle={{ backgroundColor: bgColor }}
-              badgeContent={course.team.slice(0, 1).toUpperCase()}
-              primary={true}
-            />
+            <Badge color="secondary" badgeContent={course.team.slice(0, 1).toUpperCase()} />
             <PD>{pd}</PD>
-            <StyledBadge
-              badgeStyle={{ backgroundColor: "black" }}
-              badgeContent={acount}
-              primary={true}
-              onMouseEnter={() => this.showStudents(0)}
-            />
+            <Badge badgeContent={acount} color="primary" onMouseEnter={() => this.showStudents(0)} />
             <StudentChipList>
               {this.state.visible &&
-                students.map(s => (
-                  <StudentChip key={s.id} id={s.id} fullname={s.fullname} image={s.image} />
-                ))}
+                students.map(s => <StudentChip key={s.id} id={s.id} fullname={s.fullname} image={s.image} />)}
             </StudentChipList>
           </BottomStyle>
         </CardActions>

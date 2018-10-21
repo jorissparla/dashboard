@@ -1,11 +1,15 @@
 import React, { Component } from "react";
 import gql from "graphql-tag";
 import { graphql } from "react-apollo";
-import { List, ListItem } from "material-ui/List";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import { withRouter } from "react-router-dom";
-import Avatar from "material-ui/Avatar";
-import Divider from "material-ui/Divider";
-import NewIcon from "material-ui/svg-icons/av/new-releases";
+import Avatar from "@material-ui/core/Avatar";
+import Divider from "@material-ui/core/Divider";
+import NewIcon from "@material-ui/icons/NewReleases";
 import { addDays, distanceInWordsToNow } from "date-fns";
 import { Loading } from "../styles";
 import styled from "styled-components";
@@ -25,16 +29,16 @@ const RequestItem = ({ item, handleClick }) => {
   const assignedTo = assigned ? ` Assigned to ${assigned} ` : "";
   const isNew = Date.parse(createdAt) > addDays(new Date(), -7);
   return (
-    <ListItem
-      key={id}
-      leftAvatar={<Avatar src={picture} />}
-      rightAvatar={isNew ? <NewIcon color={"#3db5e8"} /> : <div />}
-      primaryText={text}
-      secondaryText={`requested by ${name} , ${distanceInWordsToNow(
-        Date.parse(createdAt)
-      )} ago, ${completeStatus}, ${assignedTo}`}
-      onClick={() => handleClick(item)}
-    />
+    <ListItem onClick={() => handleClick(item)}>
+      <Avatar src={picture} />}
+      <ListItemText
+        primary={text}
+        secondary={`requested by ${name} , ${distanceInWordsToNow(
+          Date.parse(createdAt)
+        )} ago, ${completeStatus}, ${assignedTo}`}
+      />
+      <ListItemSecondaryAction>{isNew ? <NewIcon color={"#3db5e8"} /> : <div />}</ListItemSecondaryAction>
+    </ListItem>
   );
 };
 

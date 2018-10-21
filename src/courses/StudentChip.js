@@ -1,9 +1,9 @@
 import React from "react";
-import Chip from "material-ui/Chip";
-import Avatar from "material-ui/Avatar";
+import Chip from "@material-ui/core/Chip";
+import Avatar from "@material-ui/core/Avatar";
 import _ from "lodash";
-import { pinkA200, transparent } from "material-ui/styles/colors";
-
+import pink from "@material-ui/core/colors/pink";
+import transparent from "@material-ui/core/colors/deepOrange";
 const returnInitials = fullname => {
   return fullname
     .split(" ")
@@ -25,7 +25,7 @@ const StudentChip = ({ id, fullname, image, handleClick }) => (
     {image ? (
       <Avatar src={image} />
     ) : (
-      <Avatar color={pinkA200} backgroundColor={transparent} style={{ left: 8 }}>
+      <Avatar color={pink} backgroundColor={transparent} style={{ left: 8 }}>
         {returnInitials(fullname)}
       </Avatar>
     )}

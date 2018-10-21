@@ -1,5 +1,5 @@
 import React from "react";
-import Paper from "material-ui/Paper";
+import Paper from "@material-ui/core/Paper";
 
 const styles = {
   containerStyle: {
@@ -27,9 +27,5 @@ const styles = {
 
 export const Card = props => {
   const cardStyle = { ...styles.containerStyle, ...props.style };
-  return (
-    <Paper zDepth={1} style={cardStyle}>
-      {props.children}
-    </Paper>
-  );
+  return <Paper style={cardStyle}>{props.children}</Paper>;
 };

@@ -1,9 +1,9 @@
 import React from "react";
-import Paper from "material-ui/Paper";
+import Paper from "@material-ui/core/Paper";
 import styled from "styled-components";
-import FlatButton from "material-ui/FlatButton";
-import Badge from "material-ui/Badge";
-import { blue500 } from "material-ui/styles/colors";
+import Button from "@material-ui/core/Button";
+import Badge from "@material-ui/core/Badge";
+import blue from "@material-ui/core/colors/blue";
 import { Link } from "react-router-dom";
 
 const imgList = [
@@ -89,11 +89,9 @@ export default ({ course, index, count, validRole }) => {
       <BottomStyle>
         <TeamSpan>{course.team}</TeamSpan>
         <Link to={`courses/${validRole ? "edit" : "view"}/${course.id || "/"}`}>
-          <FlatButton
-            backgroundColor={blue500}
-            label={`${validRole ? "edit" : "view"}`}
-            style={{ color: "white" }}
-          />
+          <Button variant="contained" color="primary" style={{ color: "white" }}>{`${
+            validRole ? "edit" : "view"
+          }`}</Button>
         </Link>
       </BottomStyle>
     </StyledContainer>

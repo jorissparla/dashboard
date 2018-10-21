@@ -96,7 +96,7 @@ const styles = theme => ({
 const TenantCard = ({ classes, customer, tenants }) => (
   <Card className={customer === "Infor" ? classes.card2 : classes.card}>
     <CardContent>
-      <Typography gutterBottom variant="headline" component="h2">
+      <Typography gutterBottom variant="h5" component="h2">
         {customer}
       </Typography>
       <Typography className={classes.pos} color="textSecondary">
@@ -104,7 +104,7 @@ const TenantCard = ({ classes, customer, tenants }) => (
       </Typography>
       <div className={classes.flex2}>
         {tenants.map(({ name, version }) => (
-          <Chip label={`${name}:${version}`} classes={classes.chip} color="primary" />
+          <Chip key={name} label={`${name}:${version}`} className={classes.chip} color="primary" />
         ))}
       </div>
     </CardContent>
@@ -113,8 +113,7 @@ const TenantCard = ({ classes, customer, tenants }) => (
         size="small"
         onClick={() =>
           window.open(
-            "http://navigator.infor.com/n/incident_list.asp?ListType=CUSTOMERID&Value=" +
-              tenants[0].customerid
+            "http://navigator.infor.com/n/incident_list.asp?ListType=CUSTOMERID&Value=" + tenants[0].customerid
           )
         }
       >
@@ -159,20 +158,18 @@ class TenantList extends Component {
           }
           const { tenants } = data;
           const filteredTenants = tenantsByCustomer(tenants, this.state.searchText);
-          const uniques = filteredTenants
-            .map(v => v.customer.name)
-            .filter((v, i, a) => a.indexOf(v) === i);
+          const uniques = filteredTenants.map(v => v.customer.name).filter((v, i, a) => a.indexOf(v) === i);
           console.log(uniques);
           return (
             <React.Fragment>
-              <Typography gutterBottom variant="headline" component="h2">
+              <Typography gutterBottom variant="h5" component="h2">
                 Multitenant customers
               </Typography>
               <SearchBar onChange={this.handleSearchChange} />
               <div className={classes.flex}>
-                {uniques.map(customer => {
+                {uniques.map((customer, index) => {
                   const sub = filteredTenants.filter(o => o.customer.name === customer);
-                  return <TenantCard classes={classes} customer={customer} tenants={sub} />;
+                  return <TenantCard key={index} classes={classes} customer={customer} tenants={sub} />;
                 })}
                 <TenantCard classes={classes} customer="Infor" tenants={inforTenant(tenants)} />
               </div>

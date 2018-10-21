@@ -89,10 +89,7 @@ class Signin extends React.Component {
           }
           return errors;
         }}
-        onSubmit={async (
-          values,
-          { setSubmitting, setErrors /* setValues and other goodies */ }
-        ) => {
+        onSubmit={async (values, { setSubmitting, setErrors /* setValues and other goodies */ }) => {
           console.log({ values });
           const input = values;
           const result = await this.props.data({ variables: { input } });
@@ -107,7 +104,7 @@ class Signin extends React.Component {
         {({ values, handleChange, handleBlur, handleSubmit, touched, errors, isSubmitting }) => {
           return (
             <Paper className={classes.root} elevation={1}>
-              <Typography variant="display1" gutterBottom>
+              <Typography variant="h4  " gutterBottom>
                 Log in
               </Typography>
               <form onSubmit={handleSubmit} className={classes.form}>

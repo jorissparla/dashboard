@@ -3,8 +3,10 @@ import gql from "graphql-tag";
 import { graphql } from "react-apollo";
 import { format } from "date-fns";
 import Spinner from "../utils/spinner";
-import { List, ListItem } from "material-ui/List";
-import Divider from "material-ui/Divider";
+//import { List, ListItem } from "material-ui/List";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import Divider from "@material-ui/core/Divider";
 import styled from "styled-components";
 
 const getDay = date =>

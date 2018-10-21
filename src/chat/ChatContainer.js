@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router";
 import { Card, OkCancelDialog } from "../common";
 import ChatAdd from "./ChatAdd";
-import Snackbar from "material-ui/Snackbar";
+import Snackbar from "@material-ui/core/Snackbar";
 import gql from "graphql-tag";
 import { Mutation, Query } from "react-apollo";
 import { adopt } from "react-adopt";
@@ -58,6 +58,7 @@ const ALL_CHATS = gql`
 const addChat = ({ render }) => (
   <Mutation
     mutation={ADD_CHAT}
+    refetchQueries={[{ query: ALL_CHATS }]}
     update={(cache, { data: { createChat } }) => {
       const query = ALL_CHATS;
       const props = cache.readQuery({ query });
@@ -74,26 +75,12 @@ const addChat = ({ render }) => (
 );
 
 const deleteChat = ({ render }) => (
-  <Mutation
-    mutation={DELETE_CHAT}
-    update={(cache, { data: { deleteChat } }) => {
-      const query = ALL_CHATS;
-      const { chats } = cache.readQuery({ query });
-      const byChatid = R.propEq("id", deleteChat.id);
-
-      cache.writeQuery({
-        query,
-        data: { chats: R.reject(byChatid, chats) }
-      });
-    }}
-  >
+  <Mutation mutation={DELETE_CHAT} refetchQueries={[{ query: ALL_CHATS }]}>
     {(mutation, result) => render({ mutation, result })}
   </Mutation>
 );
 
-const myRanges = ({ render }) => (
-  <Query query={ALL_RANGES}>{(data, loading) => render(data, loading)}</Query>
-);
+const myRanges = ({ render }) => <Query query={ALL_RANGES}>{(data, loading) => render(data, loading)}</Query>;
 
 const myChats = ({ render }) => <Query query={ALL_CHATS}>{data => render(data)}</Query>;
 
@@ -173,7 +160,7 @@ class ChatContainer extends Component {
                 input
               }
             });
-           // this.props.history.push("/chat");
+            // this.props.history.push("/chat");
             console.log("result", result);
           };
           return (

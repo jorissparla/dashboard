@@ -1,12 +1,17 @@
 import React from "react";
-import { blue500 } from "material-ui/styles/colors";
-import FloatingActionButton from "material-ui/FloatingActionButton";
-import ContentAdd from "material-ui/svg-icons/content/add";
-import { Card, CardTitle, CardText } from "material-ui/Card";
+import blue from "@material-ui/core/colors/blue";
+import Button from "@material-ui/core/Button";
+import AddIcon from "@material-ui/icons/Add";
+import ContentAdd from "@material-ui/icons/Add";
+//import { Card, CardTitle, CardText } from "material-ui/Card";
+import Card from "@material-ui/core/Card";
+import CardActionArea from "@material-ui/core/CardActionArea";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CardMedia from "@material-ui/core/CardMedia";
+import Typography from "@material-ui/core/Typography";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-
-
 
 const Title = styled.div`
   font-family: Roboto;
@@ -17,8 +22,7 @@ const Title = styled.div`
   text-align: center;
 `;
 
-
-const StyledLink = styled(Link) `
+const StyledLink = styled(Link)`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -29,26 +33,26 @@ const StyledLink = styled(Link) `
   }
 `;
 
-
-
 export default ({
   link = "courses/create",
   title = "Add a new Course",
-  color = { blue500 },
+  color = { blue },
   background = "papayawhip"
 }) => {
   return (
     <Card style={{ width: "22%", margin: 10 }}>
-      <CardTitle>
-        <Title>{title}</Title>
-      </CardTitle>
-      <CardText>
-        <StyledLink to={link || "/"}>
-          <FloatingActionButton secondary={true}>
-            <ContentAdd />
-          </FloatingActionButton>
-        </StyledLink>
-      </CardText>
+      <CardContent>
+        <Typography gutterBottom variant="h5" component="h2">
+          <Title>{title}</Title>
+        </Typography>
+        <CardActionArea>
+          <StyledLink to={link || "/"}>
+            <Button variant="fab" color="primary" aria-label="Add">
+              <AddIcon />
+            </Button>
+          </StyledLink>
+        </CardActionArea>
+      </CardContent>
     </Card>
   );
 };
