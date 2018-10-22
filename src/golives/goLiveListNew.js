@@ -84,7 +84,6 @@ const GoLiveItem = ({ item, bg = "#ec407a", index, classes }) => {
   const { id, day, customername, customerid, region, version, comments } = item;
   const nr = index % 3;
   const className = `classes.color${nr}`;
-  console.log(className);
   return (
     <ListItem
       key={id}

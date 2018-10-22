@@ -1,19 +1,18 @@
-import React from 'react';
-import Paper from '@material-ui/core/Paper';
-import blue from '@material-ui/core/colors/blue';
-import Button from '@material-ui/core/Button';
-import AddIcon from '@material-ui/icons/Add';
-import ContentAdd from '@material-ui/icons/Add';
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
+import React from "react";
+import Paper from "@material-ui/core/Paper";
+import blue from "@material-ui/core/colors/blue";
+import Button from "@material-ui/core/Button";
+import AddIcon from "@material-ui/icons/Add";
+import ContentAdd from "@material-ui/icons/Add";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
 
 const StyledContainer = styled(Paper)`
   display: flex;
   flex-direction: column;
   border: 1 px solid blue;
   padding: 10px;
-  width: 18%;
-  min-width: 120px;
+  width: 17%;
   height: 200px;
   margin: 5px;
   background-color: ${props => props.background};
@@ -49,15 +48,15 @@ const StyledLink = styled(Link)`
 `;
 
 export default ({
-  link = 'courses/create',
-  title = 'Add a new Course',
+  link = "courses/create",
+  title = "Add a new Course",
   color = blue,
-  background = 'papayawhip',
+  background = "papayawhip",
   onClick
 }) => {
   return (
     <StyledContainer>
-      <StyledLink onClick={onClick} to={link || '/'}>
+      <StyledLink onClick={onClick} to={link || "/"}>
         <StyledAddIcon>
           <Button variant="fab" color="primary" aria-label="Add">
             <AddIcon />

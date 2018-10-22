@@ -57,10 +57,16 @@ const styles = theme => ({
     height: "100%"
   },
   titleField: {
-    fontFamily: "Didact Gothic",
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
     fontSize: "40px",
-    color: "#039BE5",
-    fontWeight: 800
+    color: "#039BE5"
+  },
+  contentField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    backgroundColor: "#eeeeee99",
+    fontSize: 40
   },
   dense: {
     marginTop: 19
@@ -88,10 +94,16 @@ const SupportCardForm = props => {
   } = props;
   const readOnly = !authenticated;
   const updatedAt = supportcard ? supportcard.updatedAt : format(new Date(), "YYYY-MM-DD");
-  console.log(updatedAt);
+  console.log({ initialValues });
   return (
     <Paper style={paperStyle}>
-      <Formik initialValues={initialValues} onSubmit={values => console.log("Submitting value", values)}>
+      <Formik
+        initialValues={initialValues}
+        onSubmit={values => {
+          console.log("Submitting value", values);
+          onSave(values);
+        }}
+      >
         {({ values, touched, errors, dirty, isSubmitting, handleChange, handleBlur, handleSubmit, handleReset }) => {
           return (
             <form onSubmit={handleSubmit}>
@@ -108,7 +120,7 @@ const SupportCardForm = props => {
               <TextField
                 id="description"
                 label="Description"
-                className={classes.titleField}
+                className={classes.contentField}
                 value={values.description}
                 onChange={handleChange}
                 onBlur={handleBlur}
@@ -121,10 +133,10 @@ const SupportCardForm = props => {
               <FormControl className={classes.formControl}>
                 <InputLabel htmlFor="category-simple">Category</InputLabel>
                 <Select
-                  value={values.category}
+                  value={values.categoryname}
                   onChange={handleChange}
                   inputProps={{
-                    name: "category",
+                    name: "categoryname",
                     id: "category-simple"
                   }}
                 >
@@ -136,13 +148,13 @@ const SupportCardForm = props => {
                 </Select>
               </FormControl>
               <FormControl className={classes.formControl}>
-                <InputLabel htmlFor="owner-simple">Owner</InputLabel>
+                <InputLabel htmlFor="owner">Owner</InputLabel>
                 <Select
                   value={values.owner}
                   onChange={handleChange}
                   inputProps={{
                     name: "owner",
-                    id: "owner-simple"
+                    id: "owner"
                   }}
                 >
                   {owners.map(({ id, name }) => (

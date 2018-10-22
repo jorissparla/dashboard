@@ -42,6 +42,14 @@ const styles = theme => ({
   root: {
     flexGrow: 1
   },
+
+  grow: {
+    flexGrow: 1
+  },
+  menuButton: {
+    marginLeft: -12,
+    marginRight: 20
+  },
   appFrame: {
     height: 64,
     zIndex: 1,
@@ -71,10 +79,7 @@ const styles = theme => ({
   "appBarShift-right": {
     marginRight: drawerWidth
   },
-  menuButton: {
-    marginLeft: 12,
-    marginRight: 20
-  },
+
   hamburger: {
     color: "white"
   },
@@ -259,13 +264,6 @@ class Header extends React.Component {
     }
   }
 
-  renderPicture() {
-    const picture = localStorage.getItem("picture") || "https://randomuser.me/api/portraits/men/20.jpg";
-    if (this.props.authenticated) {
-      return <Avatar src={picture} />;
-    } else return <div />;
-  }
-
   renderImage() {
     return (
       <User>
@@ -286,6 +284,7 @@ class Header extends React.Component {
     const { classes, theme, authenticated } = this.props;
     let titleText = this.state.ipaddress ? this.state.ipaddress : "";
     titleText = titleText + process.env.NODE_ENV !== "production" ? `(${process.env.NODE_ENV})` : "";
+    const picture = localStorage.getItem("picture") || "https://randomuser.me/api/portraits/men/20.jpg";
     return (
       <SharedSnackbarConsumer>
         {({ openSnackbar }) => {
@@ -301,20 +300,23 @@ class Header extends React.Component {
               >
                 {this.hamburgerMenu({ openSnackbar })}
               </Drawer>
-              <div className={classes.appFrame}>
+
+              <div className={classes.root}>
                 <AppBar position="static">
                   <Toolbar>
-                    <IconButton>
-                      <MenuIcon className={classes.hamburger} onClick={() => this.toggleMenu()} />
+                    <IconButton className={classes.menuButton} color="inherit" aria-label="Menu">
+                      <MenuIcon onClick={() => this.toggleMenu()} />
                     </IconButton>
-                    {this.renderPicture()}
-                    {this.renderImage()}
-                    <Typography variant="h6" color="inherit">
-                      Infor Support Dashboard
+                    {authenticated && (
+                      <Button>
+                        <Avatar src={picture} />
+                      </Button>
+                    )}
+                    {/*this.renderImage()*/}
+                    <Typography variant="h6" color="inherit" className={classes.grow}>
+                      Infor Support Dashboard {titleText}
                     </Typography>
-                    <Typography variant="h6" color="inherit">
-                      {titleText}
-                    </Typography>
+                    <Typography variant="h6" color="inherit" />
 
                     {authenticated ? (
                       <Button onClick={() => this.logOutLink()} color="inherit">
