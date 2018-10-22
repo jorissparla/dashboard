@@ -3,9 +3,9 @@ import gql from "graphql-tag";
 import { graphql, compose } from "react-apollo";
 import { SmallCard } from "../common/SmallCard";
 //import { SmallCard } from "./SupportCard";
-import Dialog from "material-ui/Dialog";
+import Dialog from "@material-ui/core/Dialog";
 import styled from "styled-components";
-import FlatButton from "material-ui/FlatButton";
+import Button from "@material-ui/core/Button";
 import NewRequestForm from "./Request";
 import { addDays } from "date-fns";
 import _ from "lodash";
@@ -80,8 +80,8 @@ class SupportCards extends React.Component {
     } = this.props;
     console.log("Auth", this.props);
     const actions = [
-      <FlatButton label="Cancel" primary={true} onClick={this.handleClose} />,
-      <FlatButton label="Submit" primary={true} onClick={this.handleClose} />
+      <Button variant="contained" color="secondary"  onClick={this.handleClose} >Cancel</Button>,
+      <Button  variant="contained" color="primary" onClick={this.handleClose} >Submit</Button>
     ];
     const { searchText, selectedCategory } = this.state;
     if (loading) {
