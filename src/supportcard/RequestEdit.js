@@ -1,55 +1,63 @@
 import React, { Component } from "react";
 import gql from "graphql-tag";
-import { graphql, compose } from "react-apollo";
+import { graphql, compose, Query, Mutation } from "react-apollo";
 import { withRouter } from "react-router-dom";
 import { format } from "date-fns";
 import RequestForm from "./RequestForm";
+import { ALL_REQUESTS_QUERY } from "./RequestContainer";
 
 class RequestEdit extends Component {
   state = {};
 
-  handleSave = async values => {
+  handleSave = async (values, updateRequest) => {
     console.log("handleSave", values);
-    const { accounts, ...other } = values;
+    const { id, assigned, text, complete } = values;
     const input = {
-      id: other.id,
-      assigned: other.assigned,
-      text: other.text,
-      complete: other.complete,
+      id,
+      assigned,
+      text,
+      complete,
       updatedAt: format(new Date(), "YYYY-MM-DD")
     };
     console.log(input);
-    const result = await this.props.updateRequest({ variables: { input } });
+    const result = await updateRequest({ variables: { input } });
     this.props.history.push("/requestlist");
     console.log("result", result);
   };
 
   render() {
-    if (this.props.request.loading) {
-      return <div>Loading...</div>;
-    }
-    if (this.props.request.error) {
-      return <div>Error...</div>;
-    }
-
-    const { request, accounts } = this.props.request;
-
     return (
-      <RequestForm
-        request={request}
-        accounts={accounts}
-        onSave={this.handleSave}
-        onCancel={() => {
-          console.log("cancel");
-          this.props.history.push("/requestlist");
+      <Query query={CURRENT_REQUEST_QUERY} variables={{ id: this.props.match.params.id }}>
+        {({ data, loading, error }) => {
+          if (loading) {
+            return "Loading...";
+          }
+          const { request, accounts } = data;
+          return (
+            <Mutation mutation={UPDATE_REQUEST_MUTATION} refetchQueries={[{ query: ALL_REQUESTS_QUERY }]}>
+              {updateRequest => {
+                return (
+                  <RequestForm
+                    request={request}
+                    accounts={accounts}
+                    onSave={values => this.handleSave(values, updateRequest)}
+                    onCancel={() => {
+                      console.log("cancel");
+                      this.props.history.push("/requestlist");
+                    }}
+                  />
+                );
+              }}
+            </Mutation>
+          );
         }}
-      />
+      </Query>
     );
   }
 }
 
-const queryRequest = gql`
-  query getRequest($id: ID!) {
+const CURRENT_REQUEST_QUERY = gql`
+  query CURRENT_REQUEST_QUERY($id: ID!) {
     request(id: $id) {
       id
       name
@@ -66,18 +74,12 @@ const queryRequest = gql`
     }
   }
 `;
-const updateRequest = gql`
-  mutation updateRequest($input: InputRequestType) {
+const UPDATE_REQUEST_MUTATION = gql`
+  mutation UPDATE_REQUEST_MUTATION($input: InputRequestType) {
     updateRequest(input: $input) {
       id
     }
   }
 `;
 
-export default compose(
-  graphql(queryRequest, {
-    name: "request",
-    options: ownProps => ({ variables: { id: ownProps.match.params.id } })
-  }),
-  graphql(updateRequest, { name: "updateRequest" })
-)(withRouter(RequestEdit));
+export default withRouter(RequestEdit);

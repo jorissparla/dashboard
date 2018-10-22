@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import gql from "graphql-tag";
-import { graphql } from "react-apollo";
+import { graphql, Query, Mutation } from "react-apollo";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
@@ -75,7 +75,7 @@ class RequestContainer extends Component {
     return (
       <div>
         <Title>Open Requests</Title>
-        {this.renderRequests(openRequests)}
+        {openRequests.length === 0 ? "No Open Requests" : this.renderRequests(openRequests)}
         <Title>Completed Requests</Title>
         {this.renderRequests(closedRequests)}
       </div>
@@ -83,8 +83,8 @@ class RequestContainer extends Component {
   }
 }
 
-const queryRequests = gql`
-  query request {
+const ALL_REQUESTS_QUERY = gql`
+  query ALL_REQUESTS_QUERY {
     requests {
       id
       name
@@ -100,4 +100,6 @@ const queryRequests = gql`
   }
 `;
 
-export default graphql(queryRequests, { name: "data" })(withRouter(RequestContainer));
+export default graphql(ALL_REQUESTS_QUERY, { name: "data" })(withRouter(RequestContainer));
+
+export { ALL_REQUESTS_QUERY };
