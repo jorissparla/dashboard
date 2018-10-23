@@ -38,11 +38,7 @@ export const FETCH_ACCOUNTS = "FETCH_ACCOUNTS";
 export const FIND_STUDENTS = "FIND_STUDENTS";
 export const ENROLL_STUDENT = "ENROLL_STUDENT";
 
-const {
-  REACT_APP_PORT1_REST = 3001,
-  REACT_APP_GRAPHQLSERVER = "nlbavwixs",
-  REACT_APP_HTTP = "http"
-} = process.env;
+const { REACT_APP_PORT1_REST = 3001, REACT_APP_GRAPHQLSERVER = "nlbavwixs", REACT_APP_HTTP = "http" } = process.env;
 
 export const ROOT_URL = `${REACT_APP_HTTP}://${REACT_APP_GRAPHQLSERVER}:${REACT_APP_PORT1_REST}/api`;
 
@@ -62,6 +58,7 @@ function to(promise) {
 }
 
 export const signinUser = async ({ email, password }) => {
+  console.log("AXIOS login");
   return async dispatch => {
     let err, response;
     [err, response] = await to(axios.post(`${ROOT_URL}/signin`, { email, password }));
