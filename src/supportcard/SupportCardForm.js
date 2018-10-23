@@ -1,8 +1,6 @@
 import React from "react";
 import { withRouter } from "react-router";
-// import { Field, reduxForm } from 'redux-form';
 import Chip from "@material-ui/core/Chip";
-//import { SelectField } from 'redux-form-material-ui';
 import Select from "@material-ui/core/Select";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
@@ -12,13 +10,8 @@ import { CardSection } from "../common";
 import { Formik } from "formik";
 import Button from "@material-ui/core/Button";
 import { withStyles } from "@material-ui/core/styles";
-import Input from "@material-ui/core/Input";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
-import FilledInput from "@material-ui/core/FilledInput";
 import InputLabel from "@material-ui/core/InputLabel";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
-import { NormalRaisedButton, CancelRaisedButton, DeleteButton } from "../common/TitleBar";
 
 const owners = [
   { id: "Ricardo Exposito", name: "Ricardo Exposito" },
@@ -294,8 +287,5 @@ const SupportCardForm = props => {
     </Paper>
   );
 };
-/* export default reduxForm({ form: 'CardForm', enableReinitialize: true })(
-  withRouter(withStyles(styles)(SupportCardForm))
-); */
 
 export default withRouter(withStyles(styles)(SupportCardForm));

@@ -43,7 +43,7 @@ console.log(uri);
 //`${REACT_APP_HTTP}://${REACT_APP_GRAPHQLSERVER}:${REACT_APP_PORT_GRAPHQL}/${REACT_APP_GRAPHQL_PATH}`;
 const link = createUploadLink(createHttpLink({ uri }));
 const client = new ApolloClient({
-  link: createHttpLink({ uri, credentials: "include" }),
+  link: createUploadLink({ uri, credentials: "include" }),
   cache: new InMemoryCache()
 });
 

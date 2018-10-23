@@ -1,16 +1,13 @@
-import React from 'react';
-import { Field, reduxForm } from 'redux-form';
-import { withRouter } from 'react-router';
-import { CardSection, Input } from '../common';
-import Divider from '@material-ui/core/Divider';
-import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
-import { fullWhite } from '@material-ui/core/colors';
-import styled from 'styled-components';
-import { Formik } from 'formik';
-import { TextField, Avatar } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
+import React from "react";
+import { withRouter } from "react-router";
+import { CardSection, Input } from "../common";
+import Button from "@material-ui/core/Button";
+import styled from "styled-components";
+import { Formik } from "formik";
+import { TextField, Avatar } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
+import Paper from "@material-ui/core/Paper";
+import Typography from "@material-ui/core/Typography";
 
 const Left = styled.div`
   width: 10%;
@@ -26,12 +23,12 @@ const styles = theme => ({
     paddingTop: theme.spacing.unit * 2,
     paddingBottom: theme.spacing.unit * 2,
     padding: theme.spacing.unit * 2,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    margin: '15px',
-    padding: '10px',
-    minWidth: '200px'
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    margin: "15px",
+    padding: "10px",
+    minWidth: "200px"
   },
   button: {
     margin: theme.spacing.unit
@@ -39,7 +36,7 @@ const styles = theme => ({
 
   buttonDel: {
     margin: theme.spacing.unit,
-    backgroundColor: '#000'
+    backgroundColor: "#000"
   },
 
   textField: {
@@ -51,7 +48,7 @@ const styles = theme => ({
 
 const inputImageField = field => {
   return (
-    <div style={{ display: 'flex', alignContent: 'center' }}>
+    <div style={{ display: "flex", alignContent: "center" }}>
       <Left>
         <img src={field.input.value} alt="img" />
       </Left>
@@ -59,16 +56,7 @@ const inputImageField = field => {
   );
 };
 
-const NewsItem = ({
-  initialValues: newsitem,
-  onSave,
-  onDelete,
-  onCancel,
-  handleSubmit,
-  title,
-  history,
-  classes
-}) => {
+const NewsItem = ({ initialValues: newsitem, onSave, onDelete, onCancel, handleSubmit, title, history, classes }) => {
   const handleDelete = e => {
     e.preventDefault();
     onDelete(newsitem.id);
@@ -112,7 +100,7 @@ const NewsItem = ({
               rowsMax={8}
               fullWidth
             />
-            <div style={{ display: 'flex', alignContent: 'center' }}>
+            <div style={{ display: "flex", alignContent: "center" }}>
               <Left>
                 <Avatar src={values.img} />
               </Left>
@@ -129,22 +117,11 @@ const NewsItem = ({
               </Right>
             </div>
             <CardSection>
-              <Button
-                className={classes.button}
-                variant="contained"
-                color="primary"
-                label="Save"
-                type="submit"
-              >
+              <Button className={classes.button} variant="contained" color="primary" label="Save" type="submit">
                 Save
               </Button>
               {onDelete && (
-                <Button
-                  className={classes.button}
-                  variant="contained"
-                  label="Delete"
-                  onClick={handleDelete}
-                >
+                <Button className={classes.button} variant="contained" label="Delete" onClick={handleDelete}>
                   Delete
                 </Button>
               )}
@@ -153,7 +130,7 @@ const NewsItem = ({
                 variant="contained"
                 label="Cancel"
                 color="secondary"
-                onClick={() => history.push('/news')}
+                onClick={() => history.push("/news")}
               >
                 Cancel
               </Button>
@@ -165,5 +142,4 @@ const NewsItem = ({
   );
 };
 
-//export default reduxForm({ form: '_newsitem', enableReinitialize: true })(withRouter(NewsItem));
 export default withRouter(withStyles(styles)(NewsItem));
