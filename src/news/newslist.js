@@ -1,11 +1,15 @@
-import React, { Component } from "react";
-import { List, ListItem } from "material-ui/List";
-import Divider from "material-ui/Divider";
-import Avatar from "material-ui/Avatar";
-import ModeEdit from "material-ui/svg-icons/editor/mode-edit";
-import { blue500 } from "material-ui/styles/colors";
-import Paper from "material-ui/Paper";
-import styled from "styled-components";
+import React, { Component } from 'react';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Divider from '@material-ui/core/Divider';
+import Avatar from '@material-ui/core/Avatar';
+import ModeEdit from '@material-ui/icons/Edit';
+import blue500 from '@material-ui/core/colors/blue';
+import Paper from '@material-ui/core/Paper';
+import styled from 'styled-components';
+import { ListItemSecondaryAction } from '@material-ui/core';
+import IconButton from '@material-ui/core/IconButton';
 
 const P = styled.p`
   white-space: pre-line;
@@ -26,19 +30,20 @@ class NewsList extends Component {
       const { title, body, img, expire_date, id } = newsitem;
       return (
         <Paper key={id}>
-          <ListItem
-            leftAvatar={
-              <Left>
-                <Avatar src={img} />
-                <DateField>{expire_date.substr(0, 10)}</DateField>
-              </Left>
-            }
-            primaryText={title}
-            rightIcon={
-              authenticated && <ModeEdit color={blue500} onClick={() => this.props.onEdit(id)} />
-            }
-            secondaryText={<P>{body}</P>}
-          />
+          <ListItem>
+            <Left>
+              <Avatar src={img} />
+              <DateField>{expire_date.substr(0, 10)}</DateField>
+            </Left>
+            <ListItemText primary={title} secondary={body} />
+            <ListItemSecondaryAction>
+              {authenticated && (
+                <IconButton aria-label="Comments">
+                  <ModeEdit color="primary" onClick={() => this.props.onEdit(id)} />
+                </IconButton>
+              )}
+            </ListItemSecondaryAction>
+          </ListItem>
           <Divider inset={true} />
         </Paper>
       );

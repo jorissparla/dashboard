@@ -1,24 +1,25 @@
-import React, { Component } from "react";
-import gql from "graphql-tag";
-import { graphql, compose } from "react-apollo";
-import Paper from "@material-ui/core/Paper";
-import { withRouter } from "react-router";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import Divider from "@material-ui/core/Divider";
-import TextField from "@material-ui/core/TextField";
-import SelectField from "material-ui/SelectField";
-import MenuItem from "@material-ui/core/MenuItem";
-import styled from "styled-components";
-import { HeaderRow, HeaderLeft, HeaderRight, Title, Image } from "../styles";
-import Dialog from "@material-ui/core/Dialog";
-import Save from "@material-ui/icons/Save";
-import Undo from "@material-ui/icons/Undo";
-import Clear from "@material-ui/icons/Clear";
-import Button from "@material-ui/core/Button";
+import React, { Component } from 'react';
+import gql from 'graphql-tag';
+import { graphql, compose } from 'react-apollo';
+import Paper from '@material-ui/core/Paper';
+import { withRouter } from 'react-router';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import Divider from '@material-ui/core/Divider';
+import TextField from '@material-ui/core/TextField';
+import SelectField from 'material-ui/SelectField';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import styled from 'styled-components';
+import { HeaderRow, HeaderLeft, HeaderRight, Title, Image } from '../styles';
+import Dialog from '@material-ui/core/Dialog';
+import Save from '@material-ui/icons/Save';
+import Undo from '@material-ui/icons/Undo';
+import Clear from '@material-ui/icons/Clear';
+import Button from '@material-ui/core/Button';
 
 const P = styled.div`
   white-space: pre-line;
@@ -92,14 +93,14 @@ class FeedBackList extends Component {
   state = {
     index: null,
     currentid: null,
-    text: "",
-    orgtext: "",
+    text: '',
+    orgtext: '',
     open: false,
-    navid: "",
-    fullname: "",
-    image: "",
-    customername: "",
-    newtext: "",
+    navid: '',
+    fullname: '',
+    image: '',
+    customername: '',
+    newtext: '',
     createdAt: new Date()
   };
 
@@ -107,13 +108,13 @@ class FeedBackList extends Component {
     this.setState({
       currentid: null,
       index: null,
-      text: "",
-      orgtext: "",
-      navid: "",
-      fullname: "",
-      image: "",
-      customername: "",
-      newtext: "",
+      text: '',
+      orgtext: '',
+      navid: '',
+      fullname: '',
+      image: '',
+      customername: '',
+      newtext: '',
       createdAt: new Date()
     });
   };
@@ -136,12 +137,12 @@ class FeedBackList extends Component {
   };
 
   componentDidMount() {
-    console.log("mounting");
+    console.log('mounting');
   }
 
   renderListItem = (item, index) => {
     const { id, text, createdAt, customername, forConsultant } = item;
-    const { image, fullname } = forConsultant || { image: "", fullname: "None" };
+    const { image, fullname } = forConsultant || { image: '', fullname: 'None' };
     return (
       <React.Fragment key={index}>
         <ListItem key={index}>
@@ -159,10 +160,10 @@ class FeedBackList extends Component {
               this.state.currentid === id ? (
                 <div
                   style={{
-                    display: "flex",
-                    justifyContent: "center",
+                    display: 'flex',
+                    justifyContent: 'center',
                     marginRight: 2,
-                    color: "#40a5ed",
+                    color: '#40a5ed',
                     height: 100
                   }}
                 >
@@ -172,12 +173,11 @@ class FeedBackList extends Component {
                     multiLine={true}
                     rows={2}
                     style={{
-                      fontSize: "14px",
-                      border: " 1px solid #40a5ed",
-                      textColor: "white",
+                      fontSize: '14px',
+                      border: ' 1px solid #40a5ed',
+                      textColor: 'white',
                       marginTop: 0
                     }}
-                    hintText="Select a person"
                     value={this.state.text}
                     onBlur={this.handleBlur}
                     onChange={this.handleChangeText}
@@ -186,7 +186,7 @@ class FeedBackList extends Component {
                   <Undo onClick={this.handleUndo} />
                 </div>
               ) : (
-                <P>{text}</P>
+                <div>{text}</div>
               )
             }
           />
@@ -214,10 +214,18 @@ class FeedBackList extends Component {
         </HeaderLeft>
         {isEditor && (
           <HeaderRight>
-            <Button variant="contained" color="primary" onClick={() => this.setState({ open: true })}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => this.props.history.push('/addfeedback')}
+            >
               New
             </Button>
-            <Button variant="contained" color="secondary" onClick={() => this.props.history.push("/comments")}>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => this.props.history.push('/comments')}
+            >
               Surveys
             </Button>
           </HeaderRight>
@@ -225,8 +233,7 @@ class FeedBackList extends Component {
       </HeaderRow>,
       <Paper key="555paper">
         <List key="fblist">{feedback.map((item, index) => this.renderListItem(item, index))}</List>
-      </Paper>,
-      <div key="stateopen43242">{this.state.open ? this.renderDialog() : null}</div>
+      </Paper>
     ];
   }
 
@@ -280,7 +287,12 @@ class FeedBackList extends Component {
       <Button key="okb" variant="contained" color="primary" onClick={this.saveEntry}>
         Ok
       </Button>,
-      <Button key="canb" variant="contained" color="secondary" onClick={() => this.setState({ open: false })}>
+      <Button
+        key="canb"
+        variant="contained"
+        color="secondary"
+        onClick={() => this.setState({ open: false })}
+      >
         Cancel
       </Button>
     ];
@@ -292,36 +304,43 @@ class FeedBackList extends Component {
         modal={false}
         open={this.state.open}
         onRequestClose={this.handleClose}
-        style={{ width: "900px" }}
+        style={{ width: '900px' }}
       >
-        <SelectField
+        <Select
           id="person"
           name="person"
           hintText="Select a person"
           multiple={false}
-          fullWidth={true}
+          fullWidth
           onChange={this.handleChangePerson}
           style={{ flex: 2 }}
           value={this.state.navid}
         >
           {supportfolks.map(person => (
-            <MenuItem key={person.id} value={person.navid} primaryText={person.fullname} />
+            <MenuItem key={person.id} value={person.navid} primaryText={person.fullname}>
+              {person.fullname}
+            </MenuItem>
           ))}
-        </SelectField>
+        </Select>
         <TextField
           id="customername"
           name="customername"
           hintText="Customer name"
-          fullWidth={true}
+          fullWidth
           onChange={this.handleChange}
           value={this.state.customername}
         />
-        <TextField type="date" label="Date" value={this.state.createdAt} onChange={this.handleChangeDate} />
+        <TextField
+          type="date"
+          label="Date"
+          /* value={this.state.createdAt} */
+          onChange={this.handleChangeDate}
+        />
         <TextField
           id="newtext"
           name="newtext"
-          multiLine={true}
-          fullWidth={true}
+          multiLine
+          fullWidth
           rows={2}
           label="Feedback text"
           onChange={this.handleChange}
@@ -334,7 +353,7 @@ class FeedBackList extends Component {
 
 export default compose(
   graphql(queryFeedback),
-  graphql(updateFeedback, { name: "updateFeedback" }),
-  graphql(deleteFeedback, { name: "deleteFeedback" }),
-  graphql(createFeedback, { name: "createFeedback" })
+  graphql(updateFeedback, { name: 'updateFeedback' }),
+  graphql(deleteFeedback, { name: 'deleteFeedback' }),
+  graphql(createFeedback, { name: 'createFeedback' })
 )(withRouter(FeedBackList));

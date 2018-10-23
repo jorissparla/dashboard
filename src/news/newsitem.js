@@ -1,12 +1,16 @@
-import React from "react";
-import { Field, reduxForm } from "redux-form";
-import { withRouter } from "react-router";
-import { CardSection, Input } from "../common";
-import Divider from "material-ui/Divider";
-import Paper from "material-ui/Paper";
-import RaisedButton from "material-ui/RaisedButton";
-import { fullWhite } from "material-ui/styles/colors";
-import styled from "styled-components";
+import React from 'react';
+import { Field, reduxForm } from 'redux-form';
+import { withRouter } from 'react-router';
+import { CardSection, Input } from '../common';
+import Divider from '@material-ui/core/Divider';
+import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
+import { fullWhite } from '@material-ui/core/colors';
+import styled from 'styled-components';
+import { Formik } from 'formik';
+import { TextField, Avatar } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 
 const Left = styled.div`
   width: 10%;
@@ -16,9 +20,38 @@ const Right = styled.div`
   width: 80%;
 `;
 
+const styles = theme => ({
+  root: {
+    ...theme.mixins.gutters(),
+    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2,
+    padding: theme.spacing.unit * 2,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    margin: '15px',
+    padding: '10px',
+    minWidth: '200px'
+  },
+  button: {
+    margin: theme.spacing.unit
+  },
+
+  buttonDel: {
+    margin: theme.spacing.unit,
+    backgroundColor: '#000'
+  },
+
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    marginBottom: 20
+  }
+});
+
 const inputImageField = field => {
   return (
-    <div style={{ display: "flex", alignContent: "center" }}>
+    <div style={{ display: 'flex', alignContent: 'center' }}>
       <Left>
         <img src={field.input.value} alt="img" />
       </Left>
@@ -33,80 +66,104 @@ const NewsItem = ({
   onCancel,
   handleSubmit,
   title,
-  history
+  history,
+  classes
 }) => {
   const handleDelete = e => {
     e.preventDefault();
     onDelete(newsitem.id);
   };
   return (
-    <form onSubmit={handleSubmit(onSave)}>
-      <Paper>
-        <CardSection style={{ fontSize: "36px", fontFamily: "Oswald" }}>{title}</CardSection>
-      </Paper>
-      <Paper>
-        <CardSection>
-          <RaisedButton primary={true} label="Save" type="submit" />
-          {onDelete && (
-            <RaisedButton
-              backgroundColor={"#212121"}
-              labelColor={fullWhite}
-              label="Delete"
-              onClick={handleDelete}
-            />
-          )}
-          <RaisedButton label="Cancel" onClick={() => history.push("/news")} />
-        </CardSection>
-        <Divider />
-        <Field
-          name="title"
-          hintText="Enter the title of the newsitem"
-          underlineShow={true}
-          component={Input}
-          floatingLabelText="title"
-          fullWidth={true}
-          style={{
-            fontFamily: "Kristen ITC Regular",
-            fontSize: "24px",
-            color: "#039BE5",
-            fontWeight: 800
-          }}
-        />
+    <Formik
+      initialValues={newsitem}
+      onSubmit={values => {
+        console.log(values);
+        onSave(values);
+      }}
+    >
+      {({ values, handleChange, handleBlur, handleSubmit }) => (
+        <form onSubmit={handleSubmit}>
+          <Paper className={classes.root}>
+            <CardSection>
+              <Typography variant="h5" gutterBottom>
+                {title}
+              </Typography>
+            </CardSection>
 
-        <Field
-          name="body"
-          hintText="Provide a detailed description"
-          underlineShow={true}
-          component={Input}
-          floatingLabelText="text"
-          multiLine={true}
-          rows={4}
-          rowsMax={4}
-          fullWidth={true}
-          style={{
-            background: "lightyellow",
-            border: "1px solid lightgray"
-          }}
-        />
-        <div style={{ display: "flex", alignContent: "center" }}>
-          <Left>
-            <Field component={inputImageField} name="img" />
-          </Left>
-          <Right>
-            <Field
-              name="img"
-              hintText="Copy the Image URL into the field"
-              underlineShow={true}
-              component={Input}
-              floatingLabelText="Image URL"
-              fullWidth={true}
-              onChange={e => console.log(e, newsitem)}
+            <TextField
+              name="title"
+              className={classes.textField}
+              value={values.title}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              label="Enter the title of the newsitem"
+              fullWidth
             />
-          </Right>
-        </div>
-      </Paper>
-    </form>
+
+            <TextField
+              name="body"
+              className={classes.textField}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.body}
+              label="Provide a detailed description"
+              multiline
+              rows={8}
+              rowsMax={8}
+              fullWidth
+            />
+            <div style={{ display: 'flex', alignContent: 'center' }}>
+              <Left>
+                <Avatar src={values.img} />
+              </Left>
+              <Right>
+                <TextField
+                  name="img"
+                  className={classes.textField}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.img}
+                  label="Copy the Image URL into the field"
+                  fullWidth
+                />
+              </Right>
+            </div>
+            <CardSection>
+              <Button
+                className={classes.button}
+                variant="contained"
+                color="primary"
+                label="Save"
+                type="submit"
+              >
+                Save
+              </Button>
+              {onDelete && (
+                <Button
+                  className={classes.button}
+                  variant="contained"
+                  label="Delete"
+                  onClick={handleDelete}
+                >
+                  Delete
+                </Button>
+              )}
+              <Button
+                className={classes.button}
+                variant="contained"
+                label="Cancel"
+                color="secondary"
+                onClick={() => history.push('/news')}
+              >
+                Cancel
+              </Button>
+            </CardSection>
+          </Paper>
+        </form>
+      )}
+    </Formik>
   );
 };
 
-export default reduxForm({ form: "_newsitem", enableReinitialize: true })(withRouter(NewsItem));
+//export default reduxForm({ form: '_newsitem', enableReinitialize: true })(withRouter(NewsItem));
+export default withRouter(withStyles(styles)(NewsItem));
