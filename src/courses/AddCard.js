@@ -12,7 +12,36 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { withStyles } from "@material-ui/core/styles";
 
+const styles = theme => ({
+  container: {
+    display: "flex",
+    flexWrap: "wrap"
+  },
+  button: {
+    margin: theme.spacing.unit,
+    alignContent: "center",
+    display: "flex"
+  },
+
+  buttonDel: {
+    margin: theme.spacing.unit,
+    backgroundColor: "#000"
+  },
+
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200,
+    height: "100%"
+  },
+  center: {
+    alignContent: "center",
+    display: "flex",
+    flexDirection: "column"
+  }
+});
 const Title = styled.div`
   font-family: Roboto;
   font-size: 2rem;
@@ -24,6 +53,7 @@ const Title = styled.div`
 
 const StyledLink = styled(Link)`
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   text-decoration: none;
@@ -33,11 +63,12 @@ const StyledLink = styled(Link)`
   }
 `;
 
-export default ({
+const AddCard = ({
   link = "courses/create",
-  title = "Add a new Course",
+  title = "Add  Course",
   color = { blue },
-  background = "papayawhip"
+  background = "papayawhip",
+  classes
 }) => {
   return (
     <Card style={{ width: "22%", margin: 10 }}>
@@ -47,7 +78,7 @@ export default ({
         </Typography>
         <CardActionArea>
           <StyledLink to={link || "/"}>
-            <Button variant="fab" color="primary" aria-label="Add">
+            <Button variant="fab" color="primary" aria-label="Add" className={classes.button}>
               <AddIcon />
             </Button>
           </StyledLink>
@@ -56,3 +87,4 @@ export default ({
     </Card>
   );
 };
+export default withStyles(styles)(AddCard);

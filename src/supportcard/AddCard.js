@@ -6,10 +6,41 @@ import AddIcon from "@material-ui/icons/Add";
 import ContentAdd from "@material-ui/icons/Add";
 import styled from "styled-components";
 import { Link } from "react-router-dom";
+import { withStyles } from "@material-ui/core/styles";
+
+const styles = theme => ({
+  container: {
+    display: "flex",
+    flexWrap: "wrap"
+  },
+  button: {
+    margin: theme.spacing.unit,
+    alignContent: "center",
+    display: "flex"
+  },
+
+  buttonDel: {
+    margin: theme.spacing.unit,
+    backgroundColor: "#000"
+  },
+
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200,
+    height: "100%"
+  },
+  center: {
+    alignContent: "center",
+    display: "flex",
+    flexDirection: "column"
+  }
+});
 
 const StyledContainer = styled(Paper)`
   display: flex;
   flex-direction: column;
+  align-content: center;
   border: 1 px solid blue;
   padding: 10px;
   width: 17%;
@@ -47,23 +78,28 @@ const StyledLink = styled(Link)`
   }}
 `;
 
-export default ({
+const AddCard = ({
   link = "courses/create",
-  title = "Add a new Course",
+  title = "Add  Course",
   color = blue,
   background = "papayawhip",
-  onClick
+  onClick,
+  classes
 }) => {
   return (
     <StyledContainer>
       <StyledLink onClick={onClick} to={link || "/"}>
-        <StyledAddIcon>
-          <Button variant="fab" color="primary" aria-label="Add">
+        <div className={classes.center}>
+          <Button variant="fab" color="primary" aria-label="Add" className={classes.button}>
             <AddIcon />
           </Button>
-        </StyledAddIcon>
-        <Title>{title}</Title>
+          <Title>
+            {title}
+            &times;
+          </Title>
+        </div>
       </StyledLink>
     </StyledContainer>
   );
 };
+export default withStyles(styles)(AddCard);

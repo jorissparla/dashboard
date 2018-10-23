@@ -11,8 +11,9 @@ import { withRouter } from "react-router";
 import Divider from "@material-ui/core/Divider";
 import Avatar from "@material-ui/core/Avatar";
 import styled from "styled-components";
-import { HeaderRow, HeaderLeft, Title, StyledInitials } from "../styles";
+import { HeaderRow, HeaderLeft, HeaderRight, Title, StyledInitials } from "../styles";
 import ModeEdit from "@material-ui/icons/FileCopy";
+import Button from "@material-ui/core/Button";
 
 const P = styled.div`
   white-space: pre-line;
@@ -105,6 +106,14 @@ class CommentList extends Component {
         <HeaderLeft>
           <Title>Customer Comments</Title>
         </HeaderLeft>
+        <HeaderRight>
+          <Button variant="contained" color="primary" onClick={() => this.props.history.push("/feedback")}>
+            Feedback
+          </Button>
+          <Button variant="contained" color="secondary" onClick={() => this.props.history.push("/comments")}>
+            Surveys
+          </Button>
+        </HeaderRight>
       </HeaderRow>,
       <Paper key="pa1">
         <List>{comments.map((item, index) => this.renderListItem(item, index))}</List>
