@@ -44,7 +44,7 @@ const Fat = styled.h3`
 }
 `;
 
-const queryFeedback = gql`
+const ALL_FEEDBACK_QUERY = gql`
   query feedbackQuery {
     feedback {
       id
@@ -232,7 +232,9 @@ class FeedBackList extends Component {
         )}
       </HeaderRow>,
       <Paper key="555paper">
-        <List key="fblist">{feedback.map((item, index) => this.renderListItem(item, index))}</List>
+        <List key="fblist">
+          {feedback ? feedback.map((item, index) => this.renderListItem(item, index)) : <div />}
+        </List>
       </Paper>
     ];
   }
@@ -352,7 +354,7 @@ class FeedBackList extends Component {
 }
 
 export default compose(
-  graphql(queryFeedback),
+  graphql(ALL_FEEDBACK_QUERY),
   graphql(updateFeedback, { name: 'updateFeedback' }),
   graphql(deleteFeedback, { name: 'deleteFeedback' }),
   graphql(createFeedback, { name: 'createFeedback' })

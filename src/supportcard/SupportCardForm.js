@@ -1,38 +1,38 @@
-import React from "react";
-import { withRouter } from "react-router";
-import Chip from "@material-ui/core/Chip";
-import Select from "@material-ui/core/Select";
-import TextField from "@material-ui/core/TextField";
-import Paper from "@material-ui/core/Paper";
-import MenuItem from "@material-ui/core/MenuItem";
-import { format } from "date-fns";
-import { CardSection } from "../common";
-import { Formik } from "formik";
-import Button from "@material-ui/core/Button";
-import { withStyles } from "@material-ui/core/styles";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormControl from "@material-ui/core/FormControl";
+import React from 'react';
+import { withRouter } from 'react-router';
+import Chip from '@material-ui/core/Chip';
+import Select from '@material-ui/core/Select';
+import TextField from '@material-ui/core/TextField';
+import Paper from '@material-ui/core/Paper';
+import MenuItem from '@material-ui/core/MenuItem';
+import { format } from 'date-fns';
+import { CardSection } from '../common';
+import { Formik } from 'formik';
+import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core/styles';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
 
 const owners = [
-  { id: "Ricardo Exposito", name: "Ricardo Exposito" },
-  { id: "Massimo Favaro", name: "Massimo Favaro" },
-  { id: "Maribel Aguilella", name: "Maribel Aguilella" },
-  { id: "Joris Sparla", name: "Joris Sparla" }
+  { id: 'Ricardo Exposito', name: 'Ricardo Exposito' },
+  { id: 'Massimo Favaro', name: 'Massimo Favaro' },
+  { id: 'Maribel Aguilella', name: 'Maribel Aguilella' },
+  { id: 'Joris Sparla', name: 'Joris Sparla' }
 ];
 
 const paperStyle = {
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "space-between",
-  margin: "15px",
-  padding: "10px",
-  minWidth: "200px"
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'space-between',
+  margin: '15px',
+  padding: '10px',
+  minWidth: '200px'
 };
 
 const styles = theme => ({
   container: {
-    display: "flex",
-    flexWrap: "wrap"
+    display: 'flex',
+    flexWrap: 'wrap'
   },
   button: {
     margin: theme.spacing.unit
@@ -40,25 +40,25 @@ const styles = theme => ({
 
   buttonDel: {
     margin: theme.spacing.unit,
-    backgroundColor: "#000"
+    backgroundColor: '#000'
   },
 
   textField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
     width: 200,
-    height: "100%"
+    height: '100%'
   },
   titleField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
-    fontSize: "40px",
-    color: "#039BE5"
+    fontSize: '40px',
+    color: '#039BE5'
   },
   contentField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
-    backgroundColor: "#eeeeee99",
+    backgroundColor: '#eeeeee99',
     fontSize: 40
   },
   dense: {
@@ -76,7 +76,7 @@ const styles = theme => ({
 const SupportCardForm = props => {
   const {
     supportcard,
-    categories = [{ id: 1, category: "Cloud" }, { id: 2, category: "IXS" }],
+    categories = [{ id: 1, category: 'Cloud' }, { id: 2, category: 'IXS' }],
     initialValues,
     onSave,
     authenticated,
@@ -86,18 +86,28 @@ const SupportCardForm = props => {
     classes
   } = props;
   const readOnly = !authenticated;
-  const updatedAt = supportcard ? supportcard.updatedAt : format(new Date(), "YYYY-MM-DD");
+  const updatedAt = supportcard ? supportcard.updatedAt : format(new Date(), 'YYYY-MM-DD');
   console.log({ initialValues });
   return (
     <Paper style={paperStyle}>
       <Formik
         initialValues={initialValues}
         onSubmit={values => {
-          console.log("Submitting value", values);
+          console.log('Submitting value', values);
           onSave(values);
         }}
       >
-        {({ values, touched, errors, dirty, isSubmitting, handleChange, handleBlur, handleSubmit, handleReset }) => {
+        {({
+          values,
+          touched,
+          errors,
+          dirty,
+          isSubmitting,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          handleReset
+        }) => {
           return (
             <form onSubmit={handleSubmit}>
               <TextField
@@ -129,8 +139,8 @@ const SupportCardForm = props => {
                   value={values.categoryname}
                   onChange={handleChange}
                   inputProps={{
-                    name: "categoryname",
-                    id: "category-simple"
+                    name: 'categoryname',
+                    id: 'category-simple'
                   }}
                 >
                   {categories.map(({ id, name }) => (
@@ -146,8 +156,8 @@ const SupportCardForm = props => {
                   value={values.owner}
                   onChange={handleChange}
                   inputProps={{
-                    name: "owner",
-                    id: "owner"
+                    name: 'owner',
+                    id: 'owner'
                   }}
                 >
                   {owners.map(({ id, name }) => (
@@ -243,16 +253,13 @@ const SupportCardForm = props => {
               <CardSection>
                 {!readOnly && (
                   <React.Fragment>
-                    <Button variant="contained" color="primary" className={classes.button} type="submit">
-                      Save
-                    </Button>
                     <Button
                       variant="contained"
-                      color="secondary"
+                      color="primary"
                       className={classes.button}
-                      onClick={() => setTimeout(history.push("/supportcard"), 500)}
+                      type="submit"
                     >
-                      Cancel
+                      Save
                     </Button>
                   </React.Fragment>
                 )}
@@ -278,6 +285,14 @@ const SupportCardForm = props => {
                       View Link
                     </Button>
                   )}
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  className={classes.button}
+                  onClick={() => setTimeout(history.push('/supportcard'), 500)}
+                >
+                  Cancel
+                </Button>
                 <Chip style={{ margin: 4 }} label={`Last updated at ${updatedAt}`} />
               </CardSection>
             </form>

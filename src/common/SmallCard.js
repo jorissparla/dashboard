@@ -53,6 +53,8 @@ const BottomStyle = styled.div`
   justify-content: space-between;
   display: flex;
   align-items: center;
+  padding-top: 20px;
+  padding-bottom: 10px;
 `;
 
 const StyledBody = styled.p`

@@ -1,7 +1,7 @@
-import React from "react";
-import Paper from "material-ui/Paper";
-import styled from "styled-components";
-import FlatButton from "material-ui/FlatButton";
+import React from 'react';
+import Paper from '@material-ui/core/Paper';
+import styled from 'styled-components';
+import Button from '@material-ui/core/Button';
 
 const Container = styled.div`
   margin: 10px;
@@ -9,7 +9,7 @@ const Container = styled.div`
   flex-direction: column;
   min-width: 150px;
   min-height: 150px;
-  width: ${props => (props.width ? props.width : "20%")};
+  width: ${props => (props.width ? props.width : '20%')};
 `;
 
 const StyledImage = styled.img`
@@ -66,20 +66,20 @@ const Outer = styled.div`
   display: flex;
   flex-wrap: wrap;
 `;
-const { REACT_APP_SERVER = "nlbavwixs" } = process.env;
+const { REACT_APP_SERVER = 'nlbavwixs' } = process.env;
 
 const imageURL = `http://${REACT_APP_SERVER}/ixs/_mugshots/infor_gmaggio_20170209161047.jpg`;
 const URL2 = `http://${REACT_APP_SERVER}/ixs/_mugshots/infor_imohnen_20170209102233.JPG`;
-const URL3 = "https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/auth.png";
+const URL3 = 'https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/auth.png';
 
 const Card = ({
   image = imageURL,
-  title = "Inke Mohnen",
-  text = "Papier Und KartonFabrik",
-  buttonText = "18 April 2017",
+  title = 'Inke Mohnen',
+  text = 'Papier Und KartonFabrik',
+  buttonText = '18 April 2017',
   action = null,
-  width = "20%",
-  initials = "JS"
+  width = '20%',
+  initials = 'JS'
 }) => {
   return (
     <Container width={width}>
@@ -90,7 +90,9 @@ const Card = ({
           <StyledBody>{text}</StyledBody>
         </Inner>
         <Footer>
-          <FlatButton style={{ color: "rgb(3,155,229)" }}>{buttonText.toUpperCase()} </FlatButton>
+          <Button variant="contained" style={{ color: 'rgb(3,155,229)' }}>
+            {buttonText.toUpperCase()}{' '}
+          </Button>
         </Footer>
       </Paper>
     </Container>

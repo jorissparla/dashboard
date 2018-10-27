@@ -7,6 +7,7 @@ import { TextField, Select, FormControl, InputLabel, MenuItem } from '@material-
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import format from 'date-fns/format';
+import { withRouter } from 'react-router';
 
 const QUERY_SUPPORT_FOLKS = gql`
   query QUERY_SUPPORT_FOLKS {
@@ -72,7 +73,7 @@ const styles = theme => ({
 });
 
 const AddFeedback = props => {
-  const { classes, supportfolks, onSave = v => console.log } = props;
+  const { history, classes, supportfolks, onSave = v => console.log } = props;
   return (
     <Query query={QUERY_SUPPORT_FOLKS}>
       {({ data, loading, error }) => {
@@ -97,8 +98,11 @@ const AddFeedback = props => {
                     const [{ navid }] = supportfolks.filter(
                       person => (person.fullname = values.consultant)
                     );
-                    const res = createFeedback({ variables: { input: { ...values, navid } } });
+                    const res = await createFeedback({
+                      variables: { input: { ...values, navid } }
+                    });
                     console.log('result');
+                    await history.push('feedback');
                   }}
                 >
                   {({ values, handleChange, handleSubmit, handleBlur }) => (
@@ -157,7 +161,12 @@ const AddFeedback = props => {
                           >
                             Save
                           </Button>
-                          <Button variant="contained" className={classes.button} color="secondary">
+                          <Button
+                            variant="contained"
+                            onClick={() => history.push('feedback')}
+                            className={classes.button}
+                            color="secondary"
+                          >
                             Cancel
                           </Button>
                         </div>
@@ -174,4 +183,4 @@ const AddFeedback = props => {
   );
 };
 
-export default withStyles(styles)(AddFeedback);
+export default withRouter(withStyles(styles)(AddFeedback));

@@ -1,26 +1,27 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react';
+import styled from 'styled-components';
 
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import gql from "graphql-tag";
-import { graphql } from "react-apollo";
-import { Link } from "react-router-dom";
-import addDays from "date-fns/add_days";
-import format from "date-fns/format";
-import _ from "lodash";
-import { withStyles } from "@material-ui/core/styles";
-import AddCourseDialog from "./AddCourseDialog";
-import StudentListContainer from "./StudentListContainer";
-import TrainerView from "./TrainerView";
-import StudentChip from "./StudentChip";
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import gql from 'graphql-tag';
+import { graphql } from 'react-apollo';
+import { Link } from 'react-router-dom';
+import addDays from 'date-fns/add_days';
+import format from 'date-fns/format';
+import _ from 'lodash';
+import { withStyles } from '@material-ui/core/styles';
+import AddCourseDialog from './AddCourseDialog';
+import StudentListContainer from './StudentListContainer';
+import TrainerView from './TrainerView';
+import StudentChip from './StudentChip';
+import EditStudentsOnCourse from './EditStudentsOnCourse';
 
 const StudentChipList = styled.div`
   background-color: white;
@@ -63,11 +64,11 @@ const styles = {
   },
   button: {
     margin: 12,
-    background: "#2196f3"
+    background: '#2196f3'
   },
   tabStyle: {
-    backgroundColor: "#2196f3",
-    fontSize: "1rem"
+    backgroundColor: '#2196f3',
+    fontSize: '1rem'
   },
   textField: {
     margin: 10,
@@ -85,15 +86,15 @@ const HeaderColumn = ({ style, children }) => {
 };
 class CourseView extends React.Component {
   state = {
-    startdate: format(addDays(new Date(), -7), "YYYY-MM-DD"),
-    studentfilterstartdate: format(addDays(new Date(), -180), "YYYY-MM-DD"),
-    studentfilterenddate: format(new Date(), "YYYY-MM-DD"),
+    startdate: format(addDays(new Date(), -7), 'YYYY-MM-DD'),
+    studentfilterstartdate: format(addDays(new Date(), -180), 'YYYY-MM-DD'),
+    studentfilterenddate: format(new Date(), 'YYYY-MM-DD'),
     open: false,
     course: 1,
-    value: "",
+    value: '',
     minDate: null,
     defaultDate: new Date(),
-    activeTab: "student",
+    activeTab: 'student',
     participants: { show: false, id: null, students: [] }
   };
 
@@ -146,11 +147,15 @@ class CourseView extends React.Component {
                     participants: { visible: true, id: course.id, students: course.students }
                   })
                 }
-                onMouseLeave={() => this.setState({ participants: { visible: false, id: null, students: [] } })}
+                onMouseLeave={() =>
+                  this.setState({ participants: { visible: false, id: null, students: [] } })
+                }
               >
                 {course.students.length}
               </TableCell>
-              <TableCell>{format(course.plannedcourses[0].startdate, "ddd, DD-MMM-YYYY")}</TableCell>
+              <TableCell>
+                {format(course.plannedcourses[0].startdate, 'ddd, DD-MMM-YYYY')}
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -187,14 +192,20 @@ class CourseView extends React.Component {
     const filterDate = this.state.startdate;
     const { open, value, activeTab } = this.state;
     const { role } = this.props.user;
-    const enabled = role === "Admin" || role === "PO";
+    const enabled = role === 'Admin' || role === 'PO';
     const currentYear = new Date().getFullYear();
     const filteredCourses = _.chain(courses)
       .filter(
         course =>
-          course.plannedcourses[0] ? Date.parse(course.plannedcourses[0].startdate) > Date.parse(filterDate) : false
+          course.plannedcourses[0]
+            ? Date.parse(course.plannedcourses[0].startdate) > Date.parse(filterDate)
+            : false
       )
-      .orderBy(o => (o.plannedcourses[0] ? format(o.plannedcourses[0].startdate, "YYYYMMDD") : o.lastmodified), "desc")
+      .orderBy(
+        o =>
+          o.plannedcourses[0] ? format(o.plannedcourses[0].startdate, 'YYYYMMDD') : o.lastmodified,
+        'desc'
+      )
 
       .value();
     console.log(this.state);
@@ -203,7 +214,7 @@ class CourseView extends React.Component {
         <Tabs
           value={this.state.activeTab}
           onChange={(event, value) => {
-            console.log("Value", value);
+            console.log('Value', value);
             this.setState({ activeTab: value });
           }}
         >
@@ -211,11 +222,11 @@ class CourseView extends React.Component {
           <Tab label="Scheduled Course" value="scheduled" />
           <Tab label="By Trainer" value="trainer" />
         </Tabs>
-        {activeTab === "student" && (
+        {activeTab === 'student' && (
           <React.Fragment>
             <HeaderRow>
               <HeaderLeft>
-                {" "}
+                {' '}
                 <Title2>
                   <Button
                     variant="contained"
@@ -225,7 +236,11 @@ class CourseView extends React.Component {
                   >
                     {currentYear - 1}
                   </Button>
-                  <Button variant="contained" color="secondary" onClick={() => this.setYear(currentYear)}>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => this.setYear(currentYear)}
+                  >
                     {currentYear}
                   </Button>
                   In Period from
@@ -256,11 +271,11 @@ class CourseView extends React.Component {
             />
           </React.Fragment>
         )}
-        {activeTab === "scheduled" && (
+        {activeTab === 'scheduled' && (
           <React.Fragment>
             <HeaderRow>
               <HeaderLeft>
-                {" "}
+                {' '}
                 <Title2>
                   <Button
                     variant="contained"
@@ -270,7 +285,11 @@ class CourseView extends React.Component {
                   >
                     {currentYear - 1}
                   </Button>
-                  <Button variant="contained" color="secondary" onClick={() => this.setYear(currentYear)}>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => this.setYear(currentYear)}
+                  >
                     {currentYear}
                   </Button>
                   Scheduled Training Starting
@@ -289,7 +308,7 @@ class CourseView extends React.Component {
                 </Button>
               </HeaderRight>
             </HeaderRow>
-            <div>{this.renderCourses(filteredCourses)}</div>,
+            <div>{this.renderCourses(filteredCourses)}</div>,<EditStudentsOnCourse />
             <StudentChipList>
               {this.state.participants &&
                 this.state.participants.students.map(s => (
@@ -302,18 +321,18 @@ class CourseView extends React.Component {
                   open={open}
                   trainers={supportfolks}
                   courses={courses}
-                  onSave={e => console.log("onSave", JSON.stringify(e))}
+                  onSave={e => console.log('onSave', JSON.stringify(e))}
                   onCancel={() => this.setState({ open: false })}
                 />
               )}
             </div>
           </React.Fragment>
         )}
-        {activeTab === "trainer" && (
+        {activeTab === 'trainer' && (
           <React.Fragment>
             <HeaderRow>
               <HeaderLeft>
-                {" "}
+                {' '}
                 <Title2>
                   <Button
                     variant="contained"
@@ -323,7 +342,11 @@ class CourseView extends React.Component {
                   >
                     {currentYear - 1}
                   </Button>
-                  <Button variant="contained" color="secondary" onClick={() => this.setYear(currentYear)}>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => this.setYear(currentYear)}
+                  >
                     {currentYear}
                   </Button>
                   In Period from
@@ -348,7 +371,10 @@ class CourseView extends React.Component {
               </HeaderLeft>
               <HeaderRight />
             </HeaderRow>
-            <TrainerView from={this.state.studentfilterstartdate} to={this.state.studentfilterenddate} />
+            <TrainerView
+              from={this.state.studentfilterstartdate}
+              to={this.state.studentfilterenddate}
+            />
           </React.Fragment>
         )}
       </React.Fragment>

@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import gql from "graphql-tag";
-import { graphql } from "react-apollo";
-import { withRouter } from "react-router";
-import styled from "styled-components";
-import StudentTable from "./StudentTable";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import React, { Component } from 'react';
+import gql from 'graphql-tag';
+import { graphql } from 'react-apollo';
+import { withRouter } from 'react-router';
+import styled from 'styled-components';
+import StudentTable from './StudentTable';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 const Div = styled.div`
   display: flex;
@@ -14,7 +14,7 @@ const Div = styled.div`
 
 class StudentListContainer extends Component {
   render() {
-    const { loading, error, accounts } = this.props.data;
+    const { loading, error, supportfolks } = this.props.data;
 
     if (loading) {
       return (
@@ -26,13 +26,19 @@ class StudentListContainer extends Component {
     if (error) {
       return <p>{error.message}</p>;
     }
-    return <StudentTable accounts={accounts} startdate={this.props.startdate} enddate={this.props.enddate} />;
+    return (
+      <StudentTable
+        accounts={supportfolks}
+        startdate={this.props.startdate}
+        enddate={this.props.enddate}
+      />
+    );
   }
 }
 
 const accountsQuery = gql`
   query accountsQuery {
-    accounts(region: "EMEA", teams: ["LOG", "FIN", "TLS"]) {
+    supportfolks {
       id
       firstname
       lastname

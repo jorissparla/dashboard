@@ -1,17 +1,16 @@
-import React, { Component } from "react";
-import gql from "graphql-tag";
-import { graphql, compose } from "react-apollo";
-import { withRouter } from "react-router";
-import styled from "styled-components";
-import { Tabs, Tab } from "material-ui/Tabs";
-import Snackbar from "material-ui/Snackbar";
-import CourseForm from "./CourseForm";
-import CourseStudentList from "./CourseStudentList";
-import PlannedCourses from "./PlannedCourses";
-import YesNoDialog from "../common/YesNoDialog";
-import { Title } from "../styles";
-import _ from "lodash";
-import addHours from "date-fns/add_hours";
+import React, { Component } from 'react';
+import gql from 'graphql-tag';
+import { graphql, compose } from 'react-apollo';
+import { withRouter } from 'react-router';
+import styled from 'styled-components';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import CourseForm from './CourseForm';
+import CourseStudentList from './CourseStudentList';
+import PlannedCourses from './PlannedCourses';
+import { Title } from '../styles';
+import _ from 'lodash';
+import addHours from 'date-fns/add_hours';
 
 const Div = styled.div`
   display: flex;
@@ -26,8 +25,8 @@ const Right = styled.div`
 
 const styles = {
   tabStyle: {
-    backgroundColor: "#2196f3",
-    fontSize: "1rem"
+    backgroundColor: '#2196f3',
+    fontSize: '1rem'
   }
 };
 
@@ -39,9 +38,9 @@ class CourseCard extends Component {
     id: null,
     planid: null,
     confirmed: false,
-    activeTab: "course",
+    activeTab: 'course',
     showMessage: false,
-    message: "Done"
+    message: 'Done'
   };
 
   handleMessage = message => {
@@ -49,13 +48,13 @@ class CourseCard extends Component {
   };
 
   autoCloseMessage = () => {
-    this.setState({ showMessage: false, message: "" });
+    this.setState({ showMessage: false, message: '' });
   };
   showConfirmDialog = ({ id }) => {
     this.setState({ toConfirmDeleteCourse: true, id });
   };
   showConfirmDeletePlannedDialog = id => {
-    console.log("hier", id);
+    console.log('hier', id);
     this.setState({ toConfirmDeletePlanned: true, planid: id });
   };
 
@@ -65,7 +64,7 @@ class CourseCard extends Component {
   };
   confirmedDeletePlanned = () => {
     this.setState({ toConfirmDeletePlanned: false });
-    console.log("deleting", this.state.planid);
+    console.log('deleting', this.state.planid);
     this.handleDeletePlanned(this.state.planid);
   };
 
@@ -86,7 +85,7 @@ class CourseCard extends Component {
     await this.props.deletePlannedCourse({ variables: { input: { id } } });
     await this.props.data.refetch();
     this.setState({ planid: null });
-    this.props.history.push("/courses");
+    this.props.history.push('/courses');
   };
 
   handleRefetch = async () => {
@@ -144,18 +143,18 @@ class CourseCard extends Component {
 
   handleSave = e => {
     const input = _.pick(e, [
-      "id",
-      "team",
-      "title",
-      "description",
-      "link",
-      "type",
-      "hours",
-      "startdate",
-      "enddate",
-      "status",
-      "applicable",
-      "trainer"
+      'id',
+      'team',
+      'title',
+      'description',
+      'link',
+      'type',
+      'hours',
+      'startdate',
+      'enddate',
+      'status',
+      'applicable',
+      'trainer'
     ]);
     this.props
       .updateCourse({
@@ -164,7 +163,7 @@ class CourseCard extends Component {
         }
       })
       .then(this.props.data.refetch())
-      .then(this.handleMessage("Updated"))
+      .then(this.handleMessage('Updated'))
       .catch(e => this.handleMessage(JSON.stringify(e, null, 2)));
   };
 
@@ -186,7 +185,7 @@ class CourseCard extends Component {
     } = this.props.data;
 
     const viewMode = this.props.view || false;
-    console.log("viewMode", viewMode);
+    console.log('viewMode', viewMode);
     const { tabStyle } = styles;
     if (loading) {
       return <p>Loading ...</p>;
@@ -194,85 +193,64 @@ class CourseCard extends Component {
     if (error) {
       return <p>{error.message}</p>;
     }
-    const { planned } = this.state;
-    const trainer = planned ? planned.trainer : "";
+    const { planned, activeTab } = this.state;
+    const trainer = planned ? planned.trainer : '';
     const studentlist = planned ? planned.students : [];
+    console.log(this.state);
     return (
       <React.Fragment>
-        <Snackbar
-          open={this.state.showMessage}
-          message={this.state.message}
-          autoHideDuration={4000}
-          onRequestClose={this.autoCloseMessage}
-        />,
         <Tabs
-          inkBarStyle={tabStyle}
           value={this.state.activeTab}
-          onChange={value => this.setState({ activeTab: value })}
+          onChange={(event, value) => {
+            console.log('Value', value);
+            this.setState({ activeTab: value });
+          }}
         >
-          <Tab label="Course Details" value="course" key={1}>
-            <Div>
-              <Right>
-                <CourseForm
-                  initialValues={course}
-                  coursetypes={coursetypes}
-                  coursecategories={coursecategories}
-                  statuses={statuses.filter(s => s.type === "Course")}
-                  course={course}
-                  trainers={supportfolks}
-                  onSave={this.handleSave}
-                  onDelete={this.showConfirmDialog}
-                  onRefetch={this.handleRefetch}
-                  readOnly={viewMode}
-                />
-              </Right>
-              <YesNoDialog
-                open={this.state.toConfirmDeleteCourse}
-                handleYes={this.confirmedDeleteCourse}
-                handleNo={this.cancelDelete}
-                question="Delete This Course?"
-              />
-            </Div>
-          </Tab>
-          {!viewMode && (
-            <Tab
-              key={2}
-              label="Schedules"
-              value="schedule"
-              onChange={value => this.setState({ activeTab: value })}
-            >
-              <Left>
-                <PlannedCourses
-                  accounts={supportfolks}
-                  course={course}
-                  coursetypes={coursetypes}
-                  courses={courses}
-                  trainer={trainer}
-                  locations={locations}
-                  statuses={statuses.filter(s => s.type === "Planned")}
-                  planned={course ? course.plannedcourses : []}
-                  hours={course ? course.hours : ""}
-                  onCancel={() => this.props.history.push("/courses")}
-                  onRowSelected={e => this.setState({ planned: e })}
-                  onUpdate={v => this.handleUpdatePlanned(v)}
-                  onAddNew={v => this.handleAddPlanned(v)}
-                  onDelete={id => this.showConfirmDeletePlannedDialog(id)}
-                  onRegister={e => this.props.history.push(`/courses/addstudents/${e.id}`)}
-                />
-                <YesNoDialog
-                  open={this.state.toConfirmDeletePlanned}
-                  handleYes={this.confirmedDeletePlanned}
-                  handleNo={this.cancelDelete}
-                  question="Delete Scheduled Course?"
-                />
-                <CourseStudentList students={studentlist} />
-              </Left>
-            </Tab>
-          )}
-          <Tab label="Admin" value="admin">
-            <Title>No Information Yet</Title>
-          </Tab>
+          <Tab label="Course Details" value="course" key={1} />
+          {!viewMode && <Tab key={2} label="Schedules" value="schedule" />}
+          <Tab label="Admin" value="admin" />
         </Tabs>
+        {activeTab === 'course' && (
+          <Div>
+            <Right>
+              {/*               <CourseForm
+                initialValues={course}
+                coursetypes={coursetypes}
+                coursecategories={coursecategories}
+                statuses={statuses.filter(s => s.type === 'Course')}
+                course={course}
+                trainers={supportfolks}
+                onSave={this.handleSave}
+                onDelete={this.showConfirmDialog}
+                onRefetch={this.handleRefetch}
+                readOnly={viewMode}
+              /> */}
+            </Right>
+          </Div>
+        )}
+        {activeTab === 'schedule' && (
+          <Left>
+            <PlannedCourses
+              accounts={supportfolks}
+              course={course}
+              coursetypes={coursetypes}
+              courses={courses}
+              trainer={trainer}
+              locations={locations}
+              statuses={statuses.filter(s => s.type === 'Planned')}
+              planned={course ? course.plannedcourses : []}
+              hours={course ? course.hours : ''}
+              onCancel={() => this.props.history.push('/courses')}
+              onRowSelected={e => this.setState({ planned: e })}
+              onUpdate={v => this.handleUpdatePlanned(v)}
+              onAddNew={v => this.handleAddPlanned(v)}
+              onDelete={id => this.showConfirmDeletePlannedDialog(id)}
+              onRegister={e => this.props.history.push(`/courses/addstudents/${e.id}`)}
+            />
+            <CourseStudentList students={studentlist} />
+          </Left>
+        )}
+        {activeTab === 'admin' && <Title>No Information Yet</Title>}
       </React.Fragment>
     );
   }
@@ -398,11 +376,11 @@ const CourseQuery = gql`
 `;
 
 export default compose(
-  graphql(CourseDelete, { name: "deleteCourse" }),
-  graphql(CourseUpdate, { name: "updateCourse" }),
-  graphql(PlannedCourseUpdate, { name: "updatePlannedCourse" }),
-  graphql(PlannedCourseAdd, { name: "addPlannedCourse" }),
-  graphql(PlannedCourseDelete, { name: "deletePlannedCourse" }),
+  graphql(CourseDelete, { name: 'deleteCourse' }),
+  graphql(CourseUpdate, { name: 'updateCourse' }),
+  graphql(PlannedCourseUpdate, { name: 'updatePlannedCourse' }),
+  graphql(PlannedCourseAdd, { name: 'addPlannedCourse' }),
+  graphql(PlannedCourseDelete, { name: 'deletePlannedCourse' }),
   graphql(CourseQuery, {
     options: ownProps => ({ variables: { id: ownProps.match.params.id } })
   })
