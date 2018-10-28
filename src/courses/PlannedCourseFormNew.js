@@ -11,11 +11,13 @@ import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import * as yup from 'yup';
+import format from 'date-fns/format';
+import addHours from 'date-fns/add_hours';
 import { distanceInWordsToNow } from 'date-fns';
 
 const validationSchema = yup.object().shape({
-  title: yup.string().required(),
-  description: yup.string().required(),
+  startdate: yup.string().required(),
+  enddate: yup.string().required(),
   hours: yup.string().required()
 });
 const styles = theme => ({
@@ -64,6 +66,9 @@ const styles = theme => ({
     marginRight: theme.spacing.unit,
     marginBottom: 20,
     width: 50
+  },
+  error: {
+    color: '#f44336'
   }
 });
 
@@ -98,23 +103,24 @@ const teams = [
   { id: 4, name: 'General' }
 ];
 
-class CourseForm extends React.Component {
+class PlannedCourseForm extends React.Component {
   state = {
     initialValues: this.props.initialValues || {
-      title: '',
+      courseid: this.props.course.id,
       hours: 4,
       trainer: 'LN Employee',
       status: 'Released',
       team: 'Logistics',
       type: 'Class Room Training',
       category: 'Product',
-      description: '',
-      link: ''
+      startdate: format(addHours(Date.now(), 24), 'YYYY-MM-DD'),
+      enddate: format(addHours(Date.now(), 24), 'YYYY-MM-DD'),
+      updatedAt: ''
     }
   };
 
   render() {
-    console.log('rendering initialValues', this.state.initialValues);
+    console.log(this.props);
     const { classes, history, id } = this.props;
     return (
       <Query query={QUERY_ALL_FIELDS}>
@@ -124,14 +130,14 @@ class CourseForm extends React.Component {
           }
 
           const { coursetypes, coursecategories, statuses, locations, supportfolks } = data;
-          const { title } = this.state.initialValues;
+          const { course, id } = this.props;
+          const nstartdate = format(addHours(Date.now(), 24), 'YYYY-MM-DD');
+          const nenddate = format(addHours(Date.now(), 24), 'YYYY-MM-DD');
           return (
             <Formik
               initialValues={this.state.initialValues}
               onSubmit={async values => {
-                this.setState({
-                  initialValues: { title: values.title, ...this.state.initialValues }
-                });
+                console.log(values);
                 this.props.onSave(values);
               }}
               validationSchema={validationSchema}
@@ -149,19 +155,37 @@ class CourseForm extends React.Component {
                 <form onSubmit={handleSubmit}>
                   <Paper className={classes.root}>
                     <Typography variant="h5" gutterBottom>
-                      {title ? `Edit ${values.title}` : 'New Course'}
+                      {id
+                        ? `Edit Scheduled Training for ${course.title}`
+                        : `New Scheduled Training for ${course.title}`}
                     </Typography>
                     <div className={classes.block}>
                       <TextField
-                        name="title"
-                        className={classes.titleField}
-                        label="title"
-                        fullWidth
-                        value={values.title}
+                        id="startdate"
+                        label="StartDate"
+                        type="date"
                         onChange={handleChange}
                         onBlur={handleBlur}
+                        name="startdate"
+                        value={values.startdate}
+                        className={classes.textField}
+                        InputLabelProps={{
+                          shrink: true
+                        }}
                       />
-
+                      <TextField
+                        id="enddate"
+                        label="StartDate"
+                        type="date"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        name="enddate"
+                        value={values.enddate}
+                        className={classes.textField}
+                        InputLabelProps={{
+                          shrink: true
+                        }}
+                      />
                       <TextField
                         name="hours"
                         className={classes.hourField}
@@ -173,21 +197,13 @@ class CourseForm extends React.Component {
                         onBlur={handleBlur}
                       />
                     </div>
-                    {touched.title && errors.title && <div>{errors.title}</div>}
-                    {touched.hours && errors.hours && <div>{errors.hours}</div>}
-                    <TextField
-                      name="description"
-                      fullwidth
-                      multiline
-                      rows={4}
-                      className={classes.textField}
-                      label="description"
-                      value={values.description}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      variant="outlined"
-                    />
-                    {touched.description && errors.description && <div>{errors.description}</div>}
+                    {touched.startdate &&
+                      errors.startdate && <div className={classes.error}>{errors.startdate}</div>}
+                    {touched.enddate &&
+                      errors.enddate && <div className={classes.error}>{errors.enddate}</div>}
+                    {touched.hours &&
+                      errors.hours && <div className={classes.error}>{errors.hours}</div>}
+
                     <div className={classes.block}>
                       <FormControl className={classes.formControl}>
                         <InputLabel shrink htmlFor="type">
@@ -265,25 +281,6 @@ class CourseForm extends React.Component {
                           ))}
                         </Select>
                       </FormControl>
-                      <FormControl className={classes.formControl}>
-                        <InputLabel shrink htmlFor="category">
-                          Category
-                        </InputLabel>
-                        <Select
-                          id="category"
-                          name="category"
-                          value={values.category}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          className={classes.button}
-                        >
-                          {coursecategories.map(({ id, name }) => (
-                            <MenuItem key={id} value={name}>
-                              {name}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
                     </div>
                     <div className={classes.block}>
                       <Button
@@ -308,7 +305,7 @@ class CourseForm extends React.Component {
                           <Button
                             variant="contained"
                             className={classes.buttonDel}
-                            onClick={() => this.props.onDelete(id)}
+                            onClick={() => console.log(id)}
                           >
                             Delete course
                           </Button>
@@ -330,8 +327,8 @@ class CourseForm extends React.Component {
                       )}
                       <Chip
                         label={
-                          values.id
-                            ? `Last updated  ${distanceInWordsToNow(values.lastmodified)} ago`
+                          values.updatedAt
+                            ? `Last updated  ${distanceInWordsToNow(values.updatedAt)} ago`
                             : 'not Saved yet'
                         }
                       />
@@ -347,4 +344,4 @@ class CourseForm extends React.Component {
   }
 }
 
-export default withRouter(withStyles(styles)(CourseForm));
+export default withRouter(withStyles(styles)(PlannedCourseForm));

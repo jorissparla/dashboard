@@ -5,8 +5,8 @@ import Component from '../common/component-component';
 import { StyledMultiple } from './StyledDropdowns';
 import { Formik } from 'formik';
 
-const QUERY_COURSE_WITHPARTICIPANTS = gql`
-  query QUERY_COURSE_WITHPARTICIPANTS($id: ID) {
+const QUERY_PLANNEDCOURSE_WITHPARTICIPANTS = gql`
+  query QUERY_PLANNEDCOURSE_WITHPARTICIPANTS($id: ID) {
     plannedcourse(id: $id) {
       id
       course {
@@ -44,7 +44,7 @@ class EditStudentsOnCourse extends React.Component {
   render() {
     return (
       <Query
-        query={QUERY_COURSE_WITHPARTICIPANTS}
+        query={QUERY_PLANNEDCOURSE_WITHPARTICIPANTS}
         variables={{ id: this.props.id || '611E0A88-8690-4102-A629-F7E3B28874A3' }}
       >
         {({ data, loading, error }) => {
@@ -54,14 +54,20 @@ class EditStudentsOnCourse extends React.Component {
           if (!data) {
             return 'No data';
           }
-          const { plannedCourse, supportfolks } = data;
+          const { plannedcourse, supportfolks } = data;
+          console.log(
+            this.props.id,
+            plannedcourse.students.map(({ fullname }) => fullname).join(';')
+          );
           const suggestions = supportfolks;
-          console.log('Suggestions', suggestions);
-          const participants = plannedCourse
-            ? plannedCourse.students.map(({ fullname }) => fullname).join(';')
+          const participants = plannedcourse
+            ? plannedcourse.students.map(({ fullname }) => fullname).join(';')
             : '';
           return (
-            <Formik initialValues={participants} onSubmit={values => console.log(values)}>
+            <Formik
+              initialValues={{ participants, id: 0 }}
+              onSubmit={values => console.log(values)}
+            >
               {({
                 values,
                 handleChange,
@@ -74,27 +80,34 @@ class EditStudentsOnCourse extends React.Component {
               }) => (
                 <Component
                   initialValue={{
+                    participants,
                     inputValue: '',
                     selectedItem: [],
                     suggestions: []
                   }}
                 >
                   {({ state, setState }) => {
+                    console.log(values);
                     return (
-                      <StyledMultiple
-                        id="participants"
-                        name="participants"
-                        state={state}
-                        setState={setState}
-                        suggestions={suggestions}
-                        onChange={item => {
-                          setFieldValue('participants', item);
-                        }}
-                        onBlur={handleBlur}
-                        label="participants"
-                        fieldname="fullname"
-                        placeholder="select multiple participants"
-                      />
+                      <React.Fragment>
+                        <StyledMultiple
+                          id="participants"
+                          name="participants"
+                          state={state}
+                          setState={setState}
+                          suggestions={suggestions}
+                          onChange={item => {
+                            setFieldValue('participants', item);
+                          }}
+                          onBlur={handleBlur}
+                          label="participants"
+                          fieldname="fullname"
+                          placeholder="select multiple participants"
+                        />
+                        <button type="submit" onClick={handleSubmit}>
+                          Save
+                        </button>
+                      </React.Fragment>
                     );
                   }}
                 </Component>

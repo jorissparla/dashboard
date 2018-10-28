@@ -12,8 +12,10 @@ import TestLogin from './TestLogin';
 import { withDashBoardContext } from './Provider';
 import DynamicImport from './DynamicImport';
 import NewsItemContainer from './news/newsitemcontainer';
-import CourseFormNew from './courses/CourseFormNew'
-
+import CourseAdd from './courses/CourseAdd';
+import CourseEdit from './courses/CourseEdit';
+import PlannedCourseAdd from './courses/PlannedCourseAdd';
+import PlannedCourseEdit from './courses/PlannedCourseEdit';
 
 const AGLTest = DynamicImport(() => import('./supportcard/Test'));
 //const CommentsList = DynamicImport(() => import("./feedback/commentList"));
@@ -84,7 +86,24 @@ class AppRoutes extends React.Component {
 
     return (
       <Switch>
-        <Route exact path="/xyz" component={CourseFormNew} />
+        <Route exact path="/xyz/:id" component={CourseEdit} />
+        <Route
+          exact
+          path="/scheduledcourses/:id"
+          component={({
+            match: {
+              params: { id }
+            }
+          }) => (
+            <h1>
+              planned traing for course
+              {id}
+            </h1>
+          )}
+        />
+        <Route exact path="/scheduledcourses/:id/new" component={PlannedCourseAdd} />
+        <Route exact path="/scheduledcourses/:id/edit/:id2" component={PlannedCourseEdit} />
+        <Route exact path="/xyz/" component={CourseAdd} />
         <Route exact path="/testlogin" component={TestLogin} />
         <Route exact path="/comments" component={CommentsList} />
         <Route exact path="/smallcard" component={SmallCard} />

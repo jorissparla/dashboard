@@ -5,6 +5,7 @@ import Paper from '@material-ui/core/Paper';
 import { Formik } from 'formik';
 import { TextField, Select, FormControl, InputLabel, MenuItem } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import { withRouter } from 'react-router';
 import PropTypes from 'prop-types';
 
 const QUERY_SINGLE_COURSE_WITHDATA = gql`
@@ -200,4 +201,4 @@ class PlannedCoursesForm extends React.Component {
   }
 }
 
-export default PlannedCoursesForm;
+export default withStyles(styles)(withRouter(PlannedCoursesForm));
