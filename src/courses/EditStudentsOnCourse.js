@@ -2,7 +2,9 @@ import React from 'react';
 import gql from 'graphql-tag';
 import { Query, Mutation } from 'react-apollo';
 import Component from '../common/component-component';
+import SaveIcon from '@material-ui/icons/Save';
 import { StyledMultiple } from './StyledDropdowns';
+
 import { Formik } from 'formik';
 
 const QUERY_PLANNEDCOURSE_WITHPARTICIPANTS = gql`
@@ -27,7 +29,7 @@ const QUERY_PLANNEDCOURSE_WITHPARTICIPANTS = gql`
 `;
 
 const ADD_PARTICIPANTS_TO_COURSE = gql`
-  mutation ADD_PARTICIPANTS_TO_COURSE($participants: String, $id: ID) {
+  mutation ADD_PARTICIPANTS_TO_COURSE($participants: String!, $id: ID!) {
     updatePlannedCourseParticipants(participants: $participants, where: { id: $id }) {
       course {
         id
@@ -38,8 +40,7 @@ const ADD_PARTICIPANTS_TO_COURSE = gql`
 
 class EditStudentsOnCourse extends React.Component {
   state = {
-    plannedCourseId: '',
-    participants: ''
+    plannedCourseId: ''
   };
   render() {
     return (
@@ -55,64 +56,69 @@ class EditStudentsOnCourse extends React.Component {
             return 'No data';
           }
           const { plannedcourse, supportfolks } = data;
-          console.log(
-            this.props.id,
-            plannedcourse.students.map(({ fullname }) => fullname).join(';')
-          );
           const suggestions = supportfolks;
           const participants = plannedcourse
-            ? plannedcourse.students.map(({ fullname }) => fullname).join(';')
-            : '';
+            ? plannedcourse.students.map(({ fullname }) => fullname)
+            : [];
           return (
-            <Formik
-              initialValues={{ participants, id: 0 }}
-              onSubmit={values => console.log(values)}
+            <Component
+              initialValue={{
+                participants,
+                inputValue: '',
+                selectedItem: [...participants],
+                suggestions: []
+              }}
             >
-              {({
-                values,
-                handleChange,
-                handleBlur,
-                handleSubmit,
-                setFieldValue,
-                touched,
-                errors,
-                isSubmitting
-              }) => (
-                <Component
-                  initialValue={{
-                    participants,
-                    inputValue: '',
-                    selectedItem: [],
-                    suggestions: []
-                  }}
-                >
-                  {({ state, setState }) => {
-                    console.log(values);
-                    return (
-                      <React.Fragment>
-                        <StyledMultiple
-                          id="participants"
-                          name="participants"
-                          state={state}
-                          setState={setState}
-                          suggestions={suggestions}
-                          onChange={item => {
-                            setFieldValue('participants', item);
-                          }}
-                          onBlur={handleBlur}
-                          label="participants"
-                          fieldname="fullname"
-                          placeholder="select multiple participants"
-                        />
-                        <button type="submit" onClick={handleSubmit}>
-                          Save
-                        </button>
-                      </React.Fragment>
-                    );
-                  }}
-                </Component>
-              )}
-            </Formik>
+              {({ state, setState }) => {
+                return (
+                  <Mutation mutation={ADD_PARTICIPANTS_TO_COURSE}>
+                    {updatePlannedCourseParticipants => {
+                      return (
+                        <React.Fragment>
+                          <StyledMultiple
+                            id="participants"
+                            name="participants"
+                            state={state}
+                            setState={async v => {
+                              await setState(v);
+                              console.log('z');
+                              //if (v.selectedItem) this.props.onChange(v.selectedItem);
+                            }}
+                            suggestions={suggestions}
+                            onChange={async participants => {
+                              this.props.onChange(state);
+                              //console.log('Change-added', a, state);
+                              await updatePlannedCourseParticipants({
+                                variables: { participants, id: this.props.id }
+                              });
+                            }}
+                            onDelete={async deletedValue => {
+                              const participants = state.selectedItem
+                                .filter(name => name !== deletedValue)
+                                .join(';');
+                              await updatePlannedCourseParticipants({
+                                variables: { participants, id: this.props.id }
+                              });
+                            }}
+                            label="participants"
+                            fieldname="fullname"
+                            placeholder="select multiple participants"
+                          />
+                          <SaveIcon
+                            type="submit"
+                            onClick={() => {
+                              console.log(state);
+                            }}
+                          >
+                            Save
+                          </SaveIcon>
+                        </React.Fragment>
+                      );
+                    }}
+                  </Mutation>
+                );
+              }}
+            </Component>
           );
         }}
       </Query>
@@ -120,3 +126,5 @@ class EditStudentsOnCourse extends React.Component {
   }
 }
 export default EditStudentsOnCourse;
+
+export { QUERY_PLANNEDCOURSE_WITHPARTICIPANTS, ADD_PARTICIPANTS_TO_COURSE };
