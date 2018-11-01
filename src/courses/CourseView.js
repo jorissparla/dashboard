@@ -22,6 +22,7 @@ import StudentListContainer from './StudentListContainer';
 import TrainerView from './TrainerView';
 import StudentChip from './StudentChip';
 import EditStudentsOnCourse from './EditStudentsOnCourse';
+import ScheduledCoursesInPeriod from './ScheduledCoursesinPeriod';
 
 const StudentChipList = styled.div`
   background-color: white;
@@ -174,10 +175,10 @@ class CourseView extends React.Component {
 
   setYear = year => {
     this.setState({
-      startdate: new Date(year, 0, 1),
-      studentfilterstartdate: new Date(year, 0, 1),
-      studentfilterenddate: new Date(year + 1, 0, 1),
-      enddate: new Date(year + 1, 0, 1)
+      startdate: format(new Date(year, 0, 1), 'YYYY-MM-DD'),
+      studentfilterstartdate: format(new Date(year, 0, 1), 'YYYY-MM-DD'),
+      studentfilterenddate: format(new Date(year + 1, 0, 1), 'YYYY-MM-DD'),
+      enddate: format(new Date(year + 1, 0, 1), 'YYYY-MM-DD')
     });
   };
   render() {
@@ -308,9 +309,13 @@ class CourseView extends React.Component {
                 </Button>
               </HeaderRight>
             </HeaderRow>
-            <div>{this.renderCourses(filteredCourses)}</div>,<EditStudentsOnCourse />
+            <div>
+              <ScheduledCoursesInPeriod startdate={this.state.startdate} />
+              {/* this.renderCourses(filteredCourses) */}
+            </div>
             <StudentChipList>
               {this.state.participants &&
+                this.state.participants.students &&
                 this.state.participants.students.map(s => (
                   <StudentChip key={s.id} id={s.id} fullname={s.fullname} image={s.image} />
                 ))}
