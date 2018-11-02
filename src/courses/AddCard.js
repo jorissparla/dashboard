@@ -20,6 +20,16 @@ const styles = theme => ({
     display: 'flex',
     flexWrap: 'wrap'
   },
+  card: {
+    width: 320,
+    margin: 10
+  },
+
+  media: {
+    height: 120,
+    objectFit: 'cover',
+    minWidth: 300
+  },
   button: {
     margin: theme.spacing.unit,
     alignContent: 'center',
@@ -52,18 +62,6 @@ const Title = styled.div`
   text-align: center;
 `;
 
-const StyledLink = styled(Link)`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-decoration: none;
-  :hover {
-    background: #0196f3;
-    color: white;
-  }
-`;
-
 const AddCard = ({
   link = 'courses/create',
   title = 'Add  Course',
@@ -73,23 +71,23 @@ const AddCard = ({
   history
 }) => {
   return (
-    <Card style={{ width: '22%', margin: 10 }}>
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="h2">
-          <Title>{title}</Title>
-        </Typography>
-        <CardActionArea>
-          <Button
-            variant="fab"
-            color="primary"
-            aria-label="Add"
-            className={classes.button}
-            onClick={() => history.push(link)}
-          >
-            <AddIcon />
-          </Button>
-        </CardActionArea>
-      </CardContent>
+    <Card className={classes.card}>
+      <CardActionArea>
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="h2">
+            <Title>{title}</Title>
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+      <Button
+        variant="fab"
+        color="primary"
+        aria-label="Add"
+        className={classes.button}
+        onClick={() => history.push(link)}
+      >
+        <AddIcon />
+      </Button>
     </Card>
   );
 };

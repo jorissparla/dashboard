@@ -16,12 +16,11 @@ import { Link } from 'react-router-dom';
 import addDays from 'date-fns/add_days';
 import format from 'date-fns/format';
 import _ from 'lodash';
+import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
-import AddCourseDialog from './AddCourseDialog';
-import StudentListContainer from './StudentListContainer';
-import TrainerView from './TrainerView';
+import TrainerViewNew from './TrainerViewNew';
 import StudentChip from './StudentChip';
-import EditStudentsOnCourse from './EditStudentsOnCourse';
+import StudentTableNew from './StudentTableNew';
 import ScheduledCoursesInPeriod from './ScheduledCoursesinPeriod';
 
 const StudentChipList = styled.div`
@@ -59,7 +58,7 @@ const HeaderLeft = styled.div`
 
 const HeaderRight = styled.div``;
 
-const styles = {
+const styles = theme => ({
   headerStyle: {
     fontSize: 18
   },
@@ -78,8 +77,12 @@ const styles = {
   datePicker: {
     marginLeft: 12,
     width: 150
+  },
+  text: {
+    marginLeft: 10,
+    marginRight: 10
   }
-};
+});
 
 const HeaderColumn = ({ style, children }) => {
   const newStyle = _.extend({}, styles.headerStyle, style);
@@ -90,11 +93,7 @@ class CourseView extends React.Component {
     startdate: format(addDays(new Date(), -7), 'YYYY-MM-DD'),
     studentfilterstartdate: format(addDays(new Date(), -180), 'YYYY-MM-DD'),
     studentfilterenddate: format(new Date(), 'YYYY-MM-DD'),
-    open: false,
-    course: 1,
     value: '',
-    minDate: null,
-    defaultDate: new Date(),
     activeTab: 'student',
     participants: { show: false, id: null, students: [] }
   };
@@ -102,75 +101,15 @@ class CourseView extends React.Component {
   componentDidCatch(error) {
     //alert(JSON.stringify(error));
   }
-  handleStartDateChange = (e, value) => {
+  handleStartDateChange = ({ target: { value } }) => {
+    console.log(value);
     this.setState({ startdate: value });
   };
-  handleStudentFilterStartDateChange = (e, value) => {
+  handleStudentFilterStartDateChange = ({ target: { value } }) => {
     this.setState({ studentfilterstartdate: value });
   };
-  handleStudentFilterEndDateChange = (e, value) => {
+  handleStudentFilterEndDateChange = ({ target: { value } }) => {
     this.setState({ studentfilterenddate: value });
-  };
-
-  handleChange = (event, index, course) => {
-    this.setState({ course });
-  };
-  toggleDialog = () => {
-    this.setState({ open: !this.state.open });
-  };
-
-  renderCourses = courses => {
-    return (
-      <Table headerStyle={styles.headerStyle} ref="id_table">
-        <TableHead adjustForCheckbox={false} displaySelectAll={false}>
-          <TableRow>
-            <HeaderColumn>TITLE</HeaderColumn>
-            <HeaderColumn style={{ width: 300 }}>DESCRIPTION</HeaderColumn>
-            <HeaderColumn style={{ width: 90 }}>STATUS</HeaderColumn>
-            <HeaderColumn>ID</HeaderColumn>
-            <HeaderColumn style={{ width: 20 }}>👤</HeaderColumn>
-            <HeaderColumn>COURSE DATE</HeaderColumn>
-          </TableRow>
-        </TableHead>
-        <TableBody showRowHover={true} displayRowCheckbox={false}>
-          {courses.map(course => (
-            <TableRow key={course.id}>
-              <TableCell>{course.title}</TableCell>
-              <TableCell style={{ width: 300 }}>{course.description}</TableCell>
-              <TableCell style={{ width: 90 }}>{course.plannedcourses[0].status}</TableCell>
-              <TableCell>
-                <Link to={`/courses/edit/${course.id}`}>View Course</Link>
-              </TableCell>
-              <TableCell
-                style={{ width: 20 }}
-                onMouseEnter={() =>
-                  this.setState({
-                    participants: { visible: true, id: course.id, students: course.students }
-                  })
-                }
-                onMouseLeave={() =>
-                  this.setState({ participants: { visible: false, id: null, students: [] } })
-                }
-              >
-                {course.students.length}
-              </TableCell>
-              <TableCell>
-                {format(course.plannedcourses[0].startdate, 'ddd, DD-MMM-YYYY')}
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    );
-  };
-
-  export = () => {
-    const tabel = this.refs;
-    if (!window.tabel) {
-      window.tabel = tabel;
-    }
-
-    console.log(tabel);
   };
 
   setYear = year => {
@@ -183,32 +122,12 @@ class CourseView extends React.Component {
   };
   render() {
     const { classes } = this.props;
-    const { loading, error, courses, supportfolks } = this.props.data;
-    if (loading) {
-      return <p>Loading ...</p>;
-    }
-    if (error) {
-      return <p>{error.message}</p>;
-    }
-    const filterDate = this.state.startdate;
-    const { open, value, activeTab } = this.state;
+
+    const { value, activeTab } = this.state;
     const { role } = this.props.user;
     const enabled = role === 'Admin' || role === 'PO';
     const currentYear = new Date().getFullYear();
-    const filteredCourses = _.chain(courses)
-      .filter(
-        course =>
-          course.plannedcourses[0]
-            ? Date.parse(course.plannedcourses[0].startdate) > Date.parse(filterDate)
-            : false
-      )
-      .orderBy(
-        o =>
-          o.plannedcourses[0] ? format(o.plannedcourses[0].startdate, 'YYYYMMDD') : o.lastmodified,
-        'desc'
-      )
 
-      .value();
     console.log(this.state);
     return (
       <React.Fragment>
@@ -227,7 +146,6 @@ class CourseView extends React.Component {
           <React.Fragment>
             <HeaderRow>
               <HeaderLeft>
-                {' '}
                 <Title2>
                   <Button
                     variant="contained"
@@ -244,18 +162,20 @@ class CourseView extends React.Component {
                   >
                     {currentYear}
                   </Button>
-                  In Period from
+                  <div className={classes.text}>From</div>
                   <TextField
                     type="date"
+                    variant="outlined"
                     label="Enter StartDate Courses"
                     value={this.state.studentfilterstartdate}
                     name="studentfilterstartdate"
                     onChange={this.handleStudentFilterStartDateChange}
                     className={classes.textField}
                   />
-                  to
+                  <div className={classes.text}>To</div>
                   <TextField
                     type="date"
+                    variant="outlined"
                     label="Enter End Date Courses"
                     value={this.state.studentfilterenddate}
                     name="studentfilterenddate"
@@ -266,7 +186,7 @@ class CourseView extends React.Component {
               </HeaderLeft>
               <HeaderRight />
             </HeaderRow>
-            <StudentListContainer
+            <StudentTableNew
               startdate={this.state.studentfilterstartdate}
               enddate={this.state.studentfilterenddate}
             />
@@ -293,8 +213,9 @@ class CourseView extends React.Component {
                   >
                     {currentYear}
                   </Button>
-                  Scheduled Training Starting
+                  <div className={classes.text}>Scheduled Training Starting</div>
                   <TextField
+                    variant="outlined"
                     type="date"
                     label="Enter StartDate Course"
                     value={this.state.startdate}
@@ -304,14 +225,13 @@ class CourseView extends React.Component {
                 </Title2>
               </HeaderLeft>
               <HeaderRight>
-                <Button disabled={!enabled} color="primary" onClick={this.toggleDialog}>
+                <Button disabled={!enabled} color="primary" onClick={() => console.log('new')}>
                   New
                 </Button>
               </HeaderRight>
             </HeaderRow>
             <div>
               <ScheduledCoursesInPeriod startdate={this.state.startdate} />
-              {/* this.renderCourses(filteredCourses) */}
             </div>
             <StudentChipList>
               {this.state.participants &&
@@ -320,17 +240,6 @@ class CourseView extends React.Component {
                   <StudentChip key={s.id} id={s.id} fullname={s.fullname} image={s.image} />
                 ))}
             </StudentChipList>
-            <div>
-              {open === true && (
-                <AddCourseDialog
-                  open={open}
-                  trainers={supportfolks}
-                  courses={courses}
-                  onSave={e => console.log('onSave', JSON.stringify(e))}
-                  onCancel={() => this.setState({ open: false })}
-                />
-              )}
-            </div>
           </React.Fragment>
         )}
         {activeTab === 'trainer' && (
@@ -354,9 +263,10 @@ class CourseView extends React.Component {
                   >
                     {currentYear}
                   </Button>
-                  In Period from
+                  <div className={classes.text}>From</div>
                   <TextField
                     type="date"
+                    variant="outlined"
                     label="Enter StartDate Courses"
                     value={this.state.studentfilterstartdate}
                     name="studentfilterstartdate"
@@ -366,6 +276,7 @@ class CourseView extends React.Component {
                   to
                   <TextField
                     type="date"
+                    variant="outlined"
                     label="Enter End Date Courses"
                     value={this.state.studentfilterenddate}
                     name="studentfilterenddate"
@@ -376,7 +287,7 @@ class CourseView extends React.Component {
               </HeaderLeft>
               <HeaderRight />
             </HeaderRow>
-            <TrainerView
+            <TrainerViewNew
               from={this.state.studentfilterstartdate}
               to={this.state.studentfilterenddate}
             />
@@ -386,33 +297,4 @@ class CourseView extends React.Component {
     );
   }
 }
-const courseQuery = gql`
-  query courseQuery {
-    courses {
-      id
-      team
-      title
-      description
-      link
-      plannedcourses(limit: 1) {
-        startdate
-        status
-      }
-      startdate
-      _studentsMeta {
-        count
-      }
-      students {
-        id
-        fullname
-        image
-      }
-    }
-    supportfolks {
-      id
-      fullname
-    }
-  }
-`;
-
-export default graphql(courseQuery)(withStyles(styles)(CourseView));
+export default withStyles(styles)(CourseView);

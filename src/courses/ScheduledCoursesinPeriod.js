@@ -46,7 +46,7 @@ const ScheduledCoursesInPeriod = ({ startdate }) => {
         const { plannedcourses } = data;
         return (
           <Table ref="id_table">
-            <TableHead adjustForCheckbox={false} displaySelectAll={false}>
+            <TableHead>
               <TableRow>
                 <HeaderColumn>TITLE</HeaderColumn>
                 <HeaderColumn style={{ width: 300 }}>DESCRIPTION</HeaderColumn>

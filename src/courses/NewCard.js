@@ -14,21 +14,13 @@ import blue from '@material-ui/core/colors/blue';
 import { withStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
 import StudentChip from './StudentChip';
-
-const StudentChipList = styled.div`
-  background-color: white;
-  display: flex;
-  flex-wrap: wrap;
-  position: absolute;
-  top: -250%;
-  left: -20%;
-  padding: 2px;
-  color: hsla(0, 0%, 93%, 1);
-  border-radius: 4px;
-  border: solid 1px lightgray;
-`;
+import Image1 from '../static/image1.jpg';
+import Image2 from '../static/image2.png';
+import Image3 from '../static/image3.png';
+import Image4 from '../static/image4.png';
 
 const imgList = [
+  '/static/image1.jpg',
   'https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/auth.png',
   'https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/analytics.png',
   'https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/storage.png',
@@ -38,12 +30,6 @@ const imgList = [
   'https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/crash.png',
   'https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/amb.png'
 ];
-
-const StyledImage = styled.img`
-  width: 100%;
-  height: 100px;
-  object-fit: cover;
-`;
 
 const BottomStyle = styled.div`
   display: flex;
@@ -78,10 +64,25 @@ const styles = theme => ({
     padding: '10px',
     minWidth: '200px'
   },
+  card: {
+    width: 320,
+    margin: 10
+  },
   button: {
     margin: theme.spacing.unit,
     width: 200,
     margin: 10
+  },
+  media: {
+    height: 120,
+    objectFit: 'cover',
+    minWidth: 300
+  },
+  label: {
+    color: 'black',
+    padding: 10,
+    background: '#fffeee88',
+    transform: 'rotateZ(-5deg)'
   },
   link: {
     display: 'flex',
@@ -92,34 +93,22 @@ const styles = theme => ({
 class NewCard extends React.Component {
   state = { visible: false };
 
-  showStudents = () => {
-    this.setState({ visible: true });
-    setTimeout(() => {
-      console.log('showing');
-      this.setState({ visible: false });
-    }, 2000);
-  };
   render() {
     const { course, index, validRole, classes } = this.props;
     let image = imgList[index % 7];
     let bgColor;
     switch (course.team) {
       case 'Logistics':
-        image = imgList[1];
-        bgColor = '#FF5722';
+        image = Image1; //imgList[1];
         break;
       case 'Tools':
-        image = imgList[4];
-        bgColor = '#2196f3';
+        image = Image2; //imgList[4];
         break;
       case 'Finance':
-        image = imgList[2];
-        bgColor = '#009688';
+        image = Image4; //imgList[2];
         break;
-
       default:
-        image = imgList[0];
-        bgColor = '#673AB7';
+        image = Image3; //imgList[0];
         break;
     }
     if (course.id === '7E17D4A8-834E-41B4-9F40-1EC90F653001') {
@@ -131,13 +120,15 @@ class NewCard extends React.Component {
     const acount = lastPlannedCourse ? lastPlannedCourse.studentcount : 0;
     const students = lastPlannedCourse ? lastPlannedCourse.students : [];
     return (
-      <Card style={{ width: '22%', margin: 10 }}>
-        <CardMedia component="img" image={image} />
-        <CardContent>
-          <Typography gutterBottom variant="h6" component="h2">
-            {course.title}
-          </Typography>
-        </CardContent>
+      <Card className={classes.card}>
+        <CardActionArea>
+          <CardMedia className={classes.media} image={image}>
+            <Typography className={classes.label} gutterBottom variant="h6" component="h2">
+              {course.title}
+            </Typography>
+          </CardMedia>
+          <CardContent />
+        </CardActionArea>
         <CardActions>
           <BottomStyle>
             <Link
