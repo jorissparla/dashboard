@@ -16,6 +16,7 @@ import CourseAdd from './courses/CourseAdd';
 import CourseEdit from './courses/CourseEdit';
 import PlannedCourseAdd from './courses/PlannedCourseAdd';
 import PlannedCourseEdit from './courses/PlannedCourseEdit';
+import PlannedCourses from './courses/PlannedCoursesNew';
 
 const AGLTest = DynamicImport(() => import('./supportcard/Test'));
 //const CommentsList = DynamicImport(() => import("./feedback/commentList"));
@@ -86,7 +87,10 @@ class AppRoutes extends React.Component {
 
     return (
       <Switch>
-        <Route exact path="/xyz/:id" component={CourseEdit} />
+        <EnhancedRoute exact path="/xyz/planned/:id" component={PlannedCourses} user={user} />
+        <EnhancedRoute exact path="/xyz/:id" component={CourseEdit} user={user} />
+        <EnhancedRoute exact path="/xyz/edit/:id" component={CourseEdit} user={user} />
+        <EnhancedRoute exact path="/xyz/view/:id" component={CourseEdit} user={user} view={true} />
         <Route
           exact
           path="/scheduledcourses/:id"

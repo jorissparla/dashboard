@@ -132,7 +132,7 @@ class NewCard extends React.Component {
         <CardActions>
           <BottomStyle>
             <Link
-              to={`${validRole ? 'edit' : 'view'}/${course.id || '/'}`}
+              to={`courses/${validRole ? 'edit' : 'view'}/${course.id || '/'}`}
               className={classes.link}
             >
               <Badge color="secondary" badgeContent={acount}>

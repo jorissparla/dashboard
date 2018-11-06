@@ -67,7 +67,9 @@ class CourseEdit extends React.Component {
   };
   render() {
     const id = this.props.match.params.id;
-    const { history } = this.props;
+    const { history, user } = this.props;
+    console.log('user', this.props);
+    const { view } = this.props;
     return (
       <Query query={QUERY_SINGLE_COURSE} variables={{ id }}>
         {({ data, loading, error }) => {
@@ -80,6 +82,7 @@ class CourseEdit extends React.Component {
                 return (
                   <CourseFormNew
                     id={id}
+                    view={view}
                     initialValues={data.course}
                     onDelete={async id => {
                       console.log('ID is', id);

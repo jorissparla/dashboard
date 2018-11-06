@@ -115,7 +115,7 @@ class CourseForm extends React.Component {
 
   render() {
     console.log('rendering initialValues', this.state.initialValues);
-    const { classes, history, id } = this.props;
+    const { classes, history, id, view } = this.props;
     return (
       <Query query={QUERY_ALL_FIELDS}>
         {({ data, loading, error }) => {
@@ -125,6 +125,7 @@ class CourseForm extends React.Component {
 
           const { coursetypes, coursecategories, statuses, locations, supportfolks } = data;
           const { title } = this.state.initialValues;
+          const optionalProps = ['disabled'];
           return (
             <Formik
               initialValues={this.state.initialValues}
@@ -157,6 +158,7 @@ class CourseForm extends React.Component {
                         className={classes.titleField}
                         label="title"
                         fullWidth
+                        disabled={view}
                         value={values.title}
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -169,6 +171,7 @@ class CourseForm extends React.Component {
                         value={values.hours}
                         type="number"
                         fullWidth
+                        disabled={view}
                         onChange={handleChange}
                         onBlur={handleBlur}
                       />
@@ -177,7 +180,8 @@ class CourseForm extends React.Component {
                     {touched.hours && errors.hours && <div>{errors.hours}</div>}
                     <TextField
                       name="description"
-                      fullwidth
+                      fullWidth
+                      disabled={view}
                       multiline
                       rows={4}
                       className={classes.textField}
@@ -196,6 +200,7 @@ class CourseForm extends React.Component {
                         <Select
                           id="type"
                           name="type"
+                          disabled={view}
                           value={values.type}
                           onChange={handleChange}
                           onBlur={handleBlur}
@@ -215,6 +220,7 @@ class CourseForm extends React.Component {
                         <Select
                           id="trainer"
                           name="trainer"
+                          disabled={view}
                           value={values.trainer}
                           onChange={handleChange}
                           onBlur={handleBlur}
@@ -234,6 +240,7 @@ class CourseForm extends React.Component {
                         <Select
                           id="status"
                           name="status"
+                          disabled={view}
                           value={values.status}
                           onChange={handleChange}
                           onBlur={handleBlur}
@@ -253,6 +260,7 @@ class CourseForm extends React.Component {
                         <Select
                           id="team"
                           name="team"
+                          disabled={view}
                           value={values.team}
                           onChange={handleChange}
                           onBlur={handleBlur}
@@ -272,6 +280,7 @@ class CourseForm extends React.Component {
                         <Select
                           id="category"
                           name="category"
+                          disabled={view}
                           value={values.category}
                           onChange={handleChange}
                           onBlur={handleBlur}
@@ -286,15 +295,17 @@ class CourseForm extends React.Component {
                       </FormControl>
                     </div>
                     <div className={classes.block}>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        className={classes.button}
-                        onClick={handleSubmit}
-                        type="submit"
-                      >
-                        Save
-                      </Button>
+                      {!view && (
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          className={classes.button}
+                          onClick={handleSubmit}
+                          type="submit"
+                        >
+                          Save
+                        </Button>
+                      )}
                       <Button
                         variant="contained"
                         color="secondary"
@@ -303,31 +314,32 @@ class CourseForm extends React.Component {
                       >
                         Back to courses
                       </Button>
-                      {id && (
-                        <React.Fragment>
-                          <Button
-                            variant="contained"
-                            className={classes.buttonDel}
-                            onClick={() => this.props.onDelete(id)}
-                          >
-                            Delete course
-                          </Button>
-                          <Button
-                            variant="contained"
-                            className={classes.button}
-                            onClick={() => history.push('/scheduledcourses/' + id)}
-                          >
-                            Schedule Courses
-                          </Button>
-                          <Button
-                            variant="contained"
-                            className={classes.button}
-                            onClick={() => history.push('/scheduledcourses/' + id + '/new')}
-                          >
-                            Schedule New Course
-                          </Button>
-                        </React.Fragment>
-                      )}
+                      {id &&
+                        !view && (
+                          <React.Fragment>
+                            <Button
+                              variant="contained"
+                              className={classes.buttonDel}
+                              onClick={() => this.props.onDelete(id)}
+                            >
+                              Delete course
+                            </Button>
+                            <Button
+                              variant="contained"
+                              className={classes.button}
+                              onClick={() => history.push('/scheduledcourses/' + id)}
+                            >
+                              Schedule Courses
+                            </Button>
+                            <Button
+                              variant="contained"
+                              className={classes.button}
+                              onClick={() => history.push('/scheduledcourses/' + id + '/new')}
+                            >
+                              Schedule New Course
+                            </Button>
+                          </React.Fragment>
+                        )}
                       <Chip
                         label={
                           values.id
