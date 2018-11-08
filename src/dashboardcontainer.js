@@ -18,6 +18,7 @@ class DashBoardContainer extends Component {
     sel: null,
     region: 'EMEA',
     components: [
+      <NewsPage region={this.region} />,
       <GoLives region={this.region} />,
       <DashBoardStats data1={['Logistics']} team="Logistics" region={this.region} />,
       <DashBoardStats data1={['Logistics']} team="Logistics" region={this.region} />,
@@ -26,7 +27,6 @@ class DashBoardContainer extends Component {
       <HistoryDayAll region={this.region} />,
       <KudoList />,
       <DashBoard region={this.region} />,
-      <NewsPage region={this.region} />,
       <SupportCards region={this.region} />,
       <FeedbackList />,
       <Anniversaries />
@@ -34,7 +34,6 @@ class DashBoardContainer extends Component {
   };
 
   componentWillMount() {
-    console.log('DashboardContainer', this.props.match.params.region);
     const region = this.props.match.params.region || 'EMEA';
     this.setState({ region: region });
   }
@@ -75,14 +74,12 @@ class DashBoardContainer extends Component {
 
   renderMyDashBoard = index => {
     const { region } = this.state;
-    console.log(index, region);
     if (index > this.state.components.length - 1) return <div>Not found...</div>;
     return this.state.components[index];
   };
 
   renderDashBoard(index) {
     const { region } = this.state;
-    console.log(index, region);
     switch (index) {
       case 10:
         return <Anniversaries />;

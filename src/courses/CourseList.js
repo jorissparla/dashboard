@@ -67,6 +67,7 @@ class CourseList extends Component {
               course={course}
               index={i}
               count={course._studentsMeta.count}
+              
               validRole={validRole}
             />
           ))}

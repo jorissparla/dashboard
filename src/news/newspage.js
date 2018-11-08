@@ -1,118 +1,18 @@
-import React from "react";
-import gql from "graphql-tag";
-import { graphql } from "react-apollo";
-import styled from "styled-components";
-import { format } from "date-fns";
-
-const Row = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  background: #fff;
-  min-height: 100px;
-  border-bottom: solid 1px lightgrey;
-  overflow: hidden;
-  margin-left: 10px;
-  margin-right: 10px;
-  justify-content: flex-start;
-`;
-
-const Title = styled.h3`
-  font-family: Raleway;
-  font-weight: 200;
-  padding-left: 20px;
-`;
-
-const InfoSection = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 380px;
-  padding: 5px;
-  border: 1px solid lightgrey;
-`;
-
-const DateSection = styled.div`
-  padding-left: 10px;
-  justify-content: flex-start;
-  font-family: Roboto;
-  padding-top: 5px;
-  font-size: 18px;
-  display: flex;
-
-  height: 30px;
-  justify-content: center;
-  align-content: center;
-`;
-
-const PrimaryText = styled.h3`
-  display: flex;
-  font-weight: 300;
-  font-family: Raleway;
-  color: #0276ae;
-`;
-
-const SecondaryText = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  font-size: 18px;
-  padding-bottom: 10px;
-  white-space: pre-line;
-`;
-
-const TextSection = styled.div`
-  display: flex;
-  font-family: Roboto;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  margin-right: 10px;
-  padding: 10px;
-`;
-
-const Avatar = styled.img`
-  width: 350px;
-  height: 200px;
-  display: flex;
-  object-fit: scale-down;
-`;
-const NewsItem = ({ news }) => {
-  return (
-    <Row>
-      <InfoSection>
-        <Avatar src={news.img} />
-        <DateSection>{format(news.create_date, "ddd, DD MMMM YYYY")}</DateSection>
-      </InfoSection>
-      <TextSection>
-        <PrimaryText>{news.title}</PrimaryText>
-        <SecondaryText> {news.body}</SecondaryText>
-      </TextSection>
-    </Row>
-  );
-};
-
-const NewsPage = props => {
-  if (props.data.loading) {
-    return <div>Loading...</div>;
-  }
-  if (props.error) {
-    return <div>E</div>;
-  }
-  const {
-    data: { news }
-  } = props;
-  if (!news) {
-    return <div>No news</div>;
-  }
-  return (
-    <div>
-      <Title>What's New?</Title>
-
-      {news.map(item => <NewsItem news={item} key={item.id} />)}
-    </div>
-  );
-};
-
-const NewsItemsQuery = gql`
+import React from 'react';
+import gql from 'graphql-tag';
+import { graphql, Query } from 'react-apollo';
+import styled from 'styled-components';
+import { format } from 'date-fns';
+import { withStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+const QUERY_NEWSITEMS = gql`
   query news {
     news {
       id
@@ -124,4 +24,81 @@ const NewsItemsQuery = gql`
   }
 `;
 
-export default graphql(NewsItemsQuery, { name: "data" })(NewsPage);
+const styles = theme => ({
+  root: {
+    display: 'flex',
+    margin: 30,
+    flexWrap: 'wrap'
+  },
+  card: {
+    maxWidth: 345,
+    margin: 10,
+    '&:hover': {
+      transform: 'rotateZ(-5deg)',
+      maxWidth: 400
+    }
+  },
+  media: {
+    height: 380,
+    objectFit: 'cover',
+    display: 'flex',
+    flexDirection: 'column-reverse'
+  },
+  title: {
+    color: 'white',
+    justifyContent: 'flex-end',
+    fontWeight: 500,
+    padding: 10,
+    fontSize: 24,
+    background: '#00000099'
+  },
+  details: {
+    display: 'flex',
+    flexDirection: 'column'
+  }
+});
+
+function MediaNewsCard({ news: { title, body, img, create_date }, classes }) {
+  return (
+    <Card className={classes.card}>
+      <CardActionArea>
+        <CardMedia className={classes.media} image={img} title={title}>
+          <Typography gutterBottom variant="h5" component="h2" className={classes.title}>
+            {title}
+          </Typography>
+        </CardMedia>
+        <CardContent>
+          <Typography component="p">{body}</Typography>
+        </CardContent>
+      </CardActionArea>
+      <CardActions>
+        <Button size="small" color="primary" variant="outlined">
+          {format(create_date, 'dddd, DD MMMM YYYY')}
+        </Button>
+      </CardActions>
+    </Card>
+  );
+}
+
+const NewsPage = props => {
+  const { classes } = props;
+  return (
+    <Query query={QUERY_NEWSITEMS}>
+      {({ data, loading }) => {
+        if (loading) {
+          return 'loading...';
+        }
+        const { news } = data;
+        return (
+          <div className={classes.root}>
+            {news.map(item => (
+              <MediaNewsCard news={item} key={item.id} classes={classes} />
+            ))}
+          </div>
+        );
+      }}
+    </Query>
+  );
+};
+
+export default withStyles(styles)(NewsPage);

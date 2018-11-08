@@ -75,8 +75,8 @@ const styles = theme => ({
 });
 
 const QUERY_SCHEDULED_COURSES = gql`
-  query QUERY_SCHEDULED_COURSES($id: ID) {
-    course(id: $id) {
+  query QUERY_SCHEDULED_COURSES($nid: ID) {
+    course(id: $nid) {
       title
       plannedcourses {
         id
@@ -114,12 +114,14 @@ class PlannedCoursesTableNew extends React.Component {
     const { classes, authenticated } = this.props;
     const id = this.props.match.params.id;
     return (
-      <Query query={QUERY_SCHEDULED_COURSES} variables={{ id }}>
-        {({ data, loading }) => {
-          if (loading) {
+      <Query query={QUERY_SCHEDULED_COURSES} variables={{ nid: id }} fetchPolicy="no-cache">
+        {props => {
+          if (props.loading) {
             return 'loading';
           }
-          const { course } = data;
+          console.log(props);
+          if (!props.data) return 'Loading...';
+          const { course } = props.data;
           console.log('plannedcourses', course);
           return (
             <React.Fragment>
@@ -130,16 +132,10 @@ class PlannedCoursesTableNew extends React.Component {
                   </Title>
                 </HeaderLeft>
                 <HeaderRight>
-                  <Button variant="contained" color="secondary" style={styles.buttonback}>
+                  <Button variant="contained" color="secondary" className={classes.buttonback}>
                     "Back to Courses"
                   </Button>
-                  <Button
-                    variant="contained"
-                    backgroundColor="#000"
-                    labelColor="#fff"
-                    np
-                    style={styles.button}
-                  >
+                  <Button variant="contained" labelColor="#fff" className={classes.button}>
                     Edit Registration
                   </Button>
                   <Button
@@ -147,7 +143,7 @@ class PlannedCoursesTableNew extends React.Component {
                     variant="contained"
                     color="primary"
                     enabled={authenticated.toString()}
-                    style={styles.button}
+                    className={classes.button}
                     onClick={() => this.setState({ opennew: true })}
                   >
                     New
@@ -155,7 +151,7 @@ class PlannedCoursesTableNew extends React.Component {
                 </HeaderRight>
               </HeaderRow>
 
-              <Table enabled={this.props.authenticated}>
+              <Table>
                 <TableHead>
                   <TableRow>
                     <HeaderColumn>STARTDATE</HeaderColumn>
@@ -169,11 +165,7 @@ class PlannedCoursesTableNew extends React.Component {
                 </TableHead>
                 <TableBody>
                   {course.plannedcourses.map((plan, index) => (
-                    <TableRow
-                      key={index}
-                      selectable={true}
-                      onClick={() => this.setState({ selected: index })}
-                    >
+                    <TableRow key={index} onClick={() => this.setState({ selected: index })}>
                       <RowColumn>{fmtDate(plan.startdate)}</RowColumn>
                       <RowColumn>{fmtDate(plan.enddate)}</RowColumn>
                       <RowColumn small={true}>{plan.trainer}</RowColumn>
@@ -183,10 +175,9 @@ class PlannedCoursesTableNew extends React.Component {
                         {plan.studentcount}{' '}
                         {
                           <PeopleIcon
-                            hoverColor={purple}
                             title="Edit registration"
                             onClick={e => {
-                              this.editRegisterClick();
+                              //  this.editRegisterClick();
                             }}
                           />
                         }
@@ -205,10 +196,7 @@ class PlannedCoursesTableNew extends React.Component {
                             })
                           }
                         />
-                        <TrashIcon
-                          hoverColor={purple}
-                          onClick={() => this.props.onDelete(plan.id)}
-                        />
+                        <TrashIcon hoverColor={purple} onClick={() => console.log(plan.id)} />
                       </RowColumn>
                     </TableRow>
                   ))}

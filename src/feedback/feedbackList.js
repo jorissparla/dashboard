@@ -151,11 +151,7 @@ class FeedBackList extends Component {
             <DateField>{createdAt.substr(0, 10)}</DateField>
           </Left>
           <ListItemText
-            primary={
-              <Fat>
-                {fullname} ({customername} )
-              </Fat>
-            }
+            primary={`${fullname} ( ${customername} )`}
             secondary={
               this.state.currentid === id ? (
                 <div

@@ -1,9 +1,9 @@
-import React from "react";
-import gql from "graphql-tag";
-import { Query } from "react-apollo";
-import SummaryChart from "./NewSummaryChart";
-import LoadingDots from "../common/LoadingDots";
-import shortid from "shortid";
+import React from 'react';
+import gql from 'graphql-tag';
+import { Query } from 'react-apollo';
+import SummaryChart from './NewSummaryChart';
+import LoadingDots from '../common/LoadingDots';
+import shortid from 'shortid';
 
 class SummaryChartContainer extends React.Component {
   render() {
@@ -13,12 +13,11 @@ class SummaryChartContainer extends React.Component {
     /*     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error</div>; */
 
-    const value = !this.props.value ? "supportBacklog" : this.props.value;
+    const value = !this.props.value ? 'supportBacklog' : this.props.value;
     const title = !this.props.title ? value : this.props.title;
-    const type = !this.props.type ? "column" : this.props.type;
-    const team = this.props.team || "Logistics";
+    const type = !this.props.type ? 'column' : this.props.type;
+    const team = this.props.team || 'Logistics';
     //  const summary = summaries; // .reverse()
-    console.log(value, title, type, team);
     const color = this.props.color;
     return (
       <Query query={querySummaries} variables={{ team }}>
@@ -39,7 +38,7 @@ class SummaryChartContainer extends React.Component {
               />
             );
           } else {
-            return "no data returned";
+            return 'no data returned';
           }
         }}
       </Query>

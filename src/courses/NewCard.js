@@ -42,6 +42,8 @@ const BottomStyle = styled.div`
 const PD = styled.div`
   font-size: 14px;
   font-weight: 800;
+  box-sizing: border-box;
+  border-radius: 4px;
 `;
 
 const StyledBadge = styled(Badge)`
@@ -79,9 +81,11 @@ const styles = theme => ({
     minWidth: 300
   },
   label: {
-    color: 'black',
+    color: 'white',
+    fontWeight: 800,
     padding: 10,
-    background: '#fffeee88',
+    fontSize: 24,
+    background: '#ccceee66',
     transform: 'rotateZ(-5deg)'
   },
   link: {
@@ -135,14 +139,14 @@ class NewCard extends React.Component {
               to={`courses/${validRole ? 'edit' : 'view'}/${course.id || '/'}`}
               className={classes.link}
             >
-              <Badge color="secondary" badgeContent={acount}>
-                <Button color="primary" variant="contained">
-                  View
-                </Button>
-              </Badge>
+              <Button color="primary" variant="contained">
+                View
+              </Button>
             </Link>
             <Button variant="outlined">{course.team.slice().toUpperCase()}</Button>
-            <PD>{pd}</PD>
+            <Badge color="secondary" badgeContent={acount}>
+              <PD>{pd}</PD>
+            </Badge>
           </BottomStyle>
         </CardActions>
       </Card>
