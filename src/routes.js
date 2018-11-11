@@ -17,6 +17,7 @@ import CourseEdit from './courses/CourseEdit';
 import PlannedCourseAdd from './courses/PlannedCourseAdd';
 import PlannedCourseEdit from './courses/PlannedCourseEdit';
 import PlannedCourses from './courses/PlannedCoursesNew';
+import PlannedCourseRequestList from './courses/PlannedCourseRequestList';
 import DashBoardContainer from './dashboardcontainer';
 import NewsPage from './news/newspage';
 import User from './User';
@@ -104,6 +105,7 @@ class AppRoutes extends React.Component {
                 component={PlannedCourses}
                 user={user}
               />
+              <Route exact path="/plannedcourserequestlist" component={PlannedCourseRequestList} />
               <EnhancedRoute exact path="/xyz/:id" component={CourseEdit} user={user} />
               <EnhancedRoute exact path="/xyz/edit/:id" component={CourseEdit} user={user} />
               <EnhancedRoute
@@ -129,7 +131,7 @@ class AppRoutes extends React.Component {
               />
               <Route exact path="/scheduledcourses/:id/new" component={PlannedCourseAdd} />
               <Route exact path="/scheduledcourses/:id/edit/:id2" component={PlannedCourseEdit} />
-              <Route exact path="/xyz/" component={CourseAdd} />
+              <Route exact path="/courses/create" component={CourseAdd} />
               <Route exact path="/testlogin" component={TestLogin} />
               <Route exact path="/comments" component={CommentsList} />
               <Route exact path="/smallcard" component={SmallCard} />
@@ -312,7 +314,7 @@ class AppRoutes extends React.Component {
                 allowed={['Admin', 'PO']}
                 user={user}
                 exact
-                path="/courses/create"
+                path="/coursesxyz"
                 component={AddCourseCard}
               />
               <AuthRoute

@@ -1,10 +1,10 @@
-import gql from "graphql-tag";
-import { graphql } from "react-apollo";
-import React from "react";
-import { withRouter } from "react-router";
-import SupportCardForm from "./SupportCardForm";
-import withAuth from "../utils/withAuth";
-import { SharedSnackbarConsumer } from "../SharedSnackbar.context";
+import gql from 'graphql-tag';
+import { graphql } from 'react-apollo';
+import React from 'react';
+import { withRouter } from 'react-router';
+import SupportCardForm from './SupportCardForm';
+import withAuth from '../utils/withAuth';
+import { SharedSnackbarConsumer } from '../SharedSnackbar.context';
 
 class SupportCardEdit extends React.Component {
   constructor(props) {
@@ -18,12 +18,12 @@ class SupportCardEdit extends React.Component {
     this.props
       .deleteSupportCard({ id })
       // .then(this.props.data.refetch())
-      .then(() => setTimeout(this.props.history.push("/supportcard"), 500))
+      .then(() => setTimeout(this.props.history.push('/supportcard'), 500))
       .catch(e => alert(JSON.stringify(e, null, 2)));
   }
 
   handleSave = async e => {
-    const { id, title, description, categoryname, link, owner = "none" } = e;
+    const { id, title, description, categoryname, link, owner = 'none' } = e;
 
     await this.props
       .modifySupportCard({
@@ -35,14 +35,14 @@ class SupportCardEdit extends React.Component {
         owner
       })
       // .then(this.props.data.refetch())
-      .then(() => this.props.history.push("/supportcard"))
+      .then(() => this.props.history.push('/supportcard'))
       .catch(e => window.alert(JSON.stringify(e, null, 2)));
   };
 
   render() {
     const { loading, error, categories, supportcard, me } = this.props.data;
     const { authenticated, isEditor } = this.props;
-    console.log("me", me);
+    console.log('me', me);
     if (loading) {
       return <p>Loading ...</p>;
     }
@@ -59,11 +59,11 @@ class SupportCardEdit extends React.Component {
               supportcard={supportcard}
               onSave={async values => {
                 await this.handleSave(values);
-                openSnackbar("saved SupportCard");
+                openSnackbar('saved SupportCard');
               }}
               onDelete={async values => {
                 await this.handleDelete(values);
-                openSnackbar("Deleted SupportCard");
+                openSnackbar('Deleted SupportCard');
               }}
               readOnly={!(authenticated && isEditor)}
               authenticated={authenticated && isEditor}
@@ -96,6 +96,7 @@ const CURRENT_SUPPORTCARD_QUERY = gql`
       name
     }
     me {
+      id
       fullname
     }
   }

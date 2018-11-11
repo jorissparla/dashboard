@@ -252,6 +252,7 @@ const updateStatus = gql`
     setStudentCourseStatus(input: $input) {
       enrollment {
         course {
+          id
           title
         }
         status

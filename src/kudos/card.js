@@ -83,7 +83,7 @@ const Card = ({
 }) => {
   return (
     <Container width={width}>
-      <Paper zDepth={1}>
+      <Paper>
         {initials ? <StyledInitials>{initials}</StyledInitials> : <StyledImage src={image} />}
         <Inner>
           <Title>{title}</Title>

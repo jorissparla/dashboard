@@ -4,6 +4,7 @@ import { Query, Mutation } from 'react-apollo';
 import Component from '../common/component-component';
 import SaveIcon from '@material-ui/icons/Save';
 import { StyledMultiple } from './StyledDropdowns';
+import { QUERY_SCHEDULED_COURSES } from './PlannedCoursesNew';
 
 import { Formik } from 'formik';
 
@@ -33,6 +34,11 @@ const ADD_PARTICIPANTS_TO_COURSE = gql`
     updatePlannedCourseParticipants(participants: $participants, where: { id: $id }) {
       course {
         id
+        studentcount
+        students {
+          id
+          fullname
+        }
       }
     }
   }
@@ -55,23 +61,28 @@ class EditStudentsOnCourse extends React.Component {
           if (!data) {
             return 'No data';
           }
+
           const { plannedcourse, supportfolks } = data;
           const suggestions = supportfolks;
           const participants = plannedcourse
             ? plannedcourse.students.map(({ fullname }) => fullname)
             : [];
+
           return (
             <Component
               initialValue={{
                 participants,
                 inputValue: '',
                 selectedItem: [...participants],
-                suggestions: []
+                suggestions: suggestions
               }}
             >
               {({ state, setState }) => {
                 return (
-                  <Mutation mutation={ADD_PARTICIPANTS_TO_COURSE}>
+                  <Mutation
+                    mutation={ADD_PARTICIPANTS_TO_COURSE}
+                    /*   refetchQueries={[{ query: QUERY_PLANNEDCOURSE_WITHPARTICIPANTS }]} */
+                  >
                     {updatePlannedCourseParticipants => {
                       return (
                         <React.Fragment>
@@ -86,19 +97,22 @@ class EditStudentsOnCourse extends React.Component {
                             }}
                             suggestions={suggestions}
                             onChange={async participants => {
-                              this.props.onChange(state);
                               //console.log('Change-added', a, state);
-                              await updatePlannedCourseParticipants({
+                              const result = await updatePlannedCourseParticipants({
                                 variables: { participants, id: this.props.id }
                               });
+                              console.log(result);
+                              this.props.onChange(result);
                             }}
                             onDelete={async deletedValue => {
                               const participants = state.selectedItem
                                 .filter(name => name !== deletedValue)
                                 .join(';');
-                              await updatePlannedCourseParticipants({
+                              const result = await updatePlannedCourseParticipants({
                                 variables: { participants, id: this.props.id }
                               });
+                              console.log(result);
+                              this.props.onChange(result);
                             }}
                             label="participants"
                             fieldname="fullname"

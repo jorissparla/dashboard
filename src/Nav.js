@@ -229,6 +229,12 @@ class Header extends React.Component {
               navigateTo="/requestlist"
               history={history}
             />
+            <NavLink
+              title="Submit Scheduled Training Request"
+              Icon={RequestListIcon}
+              navigateTo="/addplannedcourserequest"
+              history={history}
+            />
             <Divider />
             {(isAdmin || isChat) && (
               <NavLink title="Chat" Icon={ChatIcon} navigateTo="/chat" history={history} />

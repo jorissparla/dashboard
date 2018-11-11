@@ -5,6 +5,7 @@ import { adopt } from 'react-adopt';
 import _ from 'lodash';
 import { withRouter } from 'react-router';
 import CourseFormNew from './CourseFormNew';
+import { QUERY_ALL_COURSES } from './CourseList';
 
 const COURSE_DELETE_MUTATION = gql`
   mutation COURSE_DELETE_MUTATION($input: InputCourseType) {
@@ -55,7 +56,11 @@ const Composed = adopt({
       {render}
     </Mutation>
   ),
-  deleteCourse: ({ render }) => <Mutation mutation={COURSE_DELETE_MUTATION}>{render}</Mutation>
+  deleteCourse: ({ render }) => (
+    <Mutation mutation={COURSE_DELETE_MUTATION} refetchQueries={[{ query: QUERY_ALL_COURSES }]}>
+      {render}
+    </Mutation>
+  )
 });
 
 class CourseEdit extends React.Component {

@@ -180,7 +180,7 @@ class SupportCard extends React.Component {
 }
 
 const ALLCARDS = gql`
-  {
+  query ALLCARDS {
     supportcards {
       id
       title
@@ -189,6 +189,7 @@ const ALLCARDS = gql`
       created
       updatedAt
       category {
+        id
         name
         color
         backgroundcolor

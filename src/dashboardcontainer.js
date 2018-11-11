@@ -47,7 +47,7 @@ class DashBoardContainer extends Component {
       this.setState({ index: 0, sel: sel });
     }
 
-    this.timerID = setInterval(this.myTimer, 5000); //,this.props.refreshInterval || 60000);
+    this.timerID = setInterval(this.myTimer, 60000); //,this.props.refreshInterval || 60000);
   }
 
   myTimer = () => {

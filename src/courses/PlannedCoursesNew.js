@@ -13,9 +13,10 @@ import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import { blue, red, grey, purple } from '@material-ui/core/colors';
 import { format } from 'date-fns';
-import AddCourseDialog from './AddCourseDialog';
+import { withRouter } from 'react-router';
 import { Title, HeaderRow, HeaderLeft, HeaderRight } from '../styles';
 import withAuth from '../utils/withAuth';
+import EditStudentsOnCourse from './EditStudentsOnCourse';
 const styles = theme => ({
   root: {
     ...theme.mixins.gutters(),
@@ -46,8 +47,7 @@ const styles = theme => ({
     width: 90
   },
   button: {
-    margin: 12,
-    background: '#2196f3'
+    margin: 12
   },
   button2: {
     margin: 12,
@@ -74,9 +74,18 @@ const styles = theme => ({
   }
 });
 
+const PLANNEDCOURSE_DELETE_MUTATION = gql`
+  mutation PLANNEDCOURSE_DELETE_MUTATION($input: InputPlannedCourseType) {
+    deletePlannedCourse(input: $input) {
+      text
+    }
+  }
+`;
+
 const QUERY_SCHEDULED_COURSES = gql`
   query QUERY_SCHEDULED_COURSES($nid: ID) {
     course(id: $nid) {
+      id
       title
       plannedcourses {
         id
@@ -85,9 +94,9 @@ const QUERY_SCHEDULED_COURSES = gql`
         trainer
         hours
         studentcount
-      }
-      students {
-        fullname
+        students {
+          fullname
+        }
       }
     }
   }
@@ -110,16 +119,21 @@ const RowColumn = ({ children, small }) => {
 };
 
 class PlannedCoursesTableNew extends React.Component {
+  state = {
+    selected: ''
+  };
   render() {
     const { classes, authenticated } = this.props;
     const id = this.props.match.params.id;
+    const { selected } = this.state;
+    console.log('TTTTTT', this.state);
     return (
-      <Query query={QUERY_SCHEDULED_COURSES} variables={{ nid: id }} fetchPolicy="no-cache">
+      <Query query={QUERY_SCHEDULED_COURSES} variables={{ nid: id }}>
         {props => {
           if (props.loading) {
             return 'loading';
           }
-          console.log(props);
+          console.log('props', props);
           if (!props.data) return 'Loading...';
           const { course } = props.data;
           console.log('plannedcourses', course);
@@ -132,19 +146,22 @@ class PlannedCoursesTableNew extends React.Component {
                   </Title>
                 </HeaderLeft>
                 <HeaderRight>
-                  <Button variant="contained" color="secondary" className={classes.buttonback}>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    className={classes.buttonback}
+                    onClick={() => this.props.history.push(`/courses/edit/${course.id}`)}
+                  >
                     "Back to Courses"
                   </Button>
-                  <Button variant="contained" labelColor="#fff" className={classes.button}>
-                    Edit Registration
-                  </Button>
+
                   <Button
                     label="New"
                     variant="contained"
                     color="primary"
                     enabled={authenticated.toString()}
                     className={classes.button}
-                    onClick={() => this.setState({ opennew: true })}
+                    onClick={() => this.props.history.push(`/scheduledcourses/${course.id}/new`)}
                   >
                     New
                   </Button>
@@ -165,40 +182,51 @@ class PlannedCoursesTableNew extends React.Component {
                 </TableHead>
                 <TableBody>
                   {course.plannedcourses.map((plan, index) => (
-                    <TableRow key={index} onClick={() => this.setState({ selected: index })}>
-                      <RowColumn>{fmtDate(plan.startdate)}</RowColumn>
-                      <RowColumn>{fmtDate(plan.enddate)}</RowColumn>
-                      <RowColumn small={true}>{plan.trainer}</RowColumn>
-                      <RowColumn small={true}>{plan.status}</RowColumn>
-                      <RowColumn small={true}>{plan.hours}</RowColumn>
-                      <RowColumn small={true}>
-                        {plan.studentcount}{' '}
-                        {
-                          <PeopleIcon
-                            title="Edit registration"
-                            onClick={e => {
-                              //  this.editRegisterClick();
-                            }}
-                          />
-                        }
-                      </RowColumn>
-                      <RowColumn small={true}>
-                        <EditIcon
-                          hoverColor={grey}
-                          onClick={() =>
-                            this.setState({
-                              openedit: true,
-                              id: plan.id,
-                              trainer: plan.trainer,
-                              status: plan.status,
-                              selectedstartdate: plan.startdate,
-                              selectedenddate: plan.enddate
-                            })
+                    <React.Fragment key={index}>
+                      <TableRow key={index}>
+                        <RowColumn>{fmtDate(plan.startdate)}</RowColumn>
+                        <RowColumn>{fmtDate(plan.enddate)}</RowColumn>
+                        <RowColumn small={true}>{plan.trainer}</RowColumn>
+                        <RowColumn small={true}>{plan.status}</RowColumn>
+                        <RowColumn small={true}>{plan.hours}</RowColumn>
+                        <RowColumn small={true}>
+                          {plan.studentcount}{' '}
+                          {
+                            <PeopleIcon
+                              title="Edit registration"
+                              onClick={e => {
+                                console.log(selected, plan.id);
+                                this.setState({ selected: plan.id });
+                                /*  if (selected === plan.id) {
+                                  this.setState({ selected: '' });
+                                } else {
+                                  this.setState({ selected: plan.id });
+                                } */
+                                //  this.editRegisterClick();
+                              }}
+                            />
                           }
-                        />
-                        <TrashIcon hoverColor={purple} onClick={() => console.log(plan.id)} />
-                      </RowColumn>
-                    </TableRow>
+                        </RowColumn>
+                        <RowColumn small={true}>
+                          <EditIcon onClick={() => console.log('test')} />
+                          <TrashIcon onClick={() => console.log(plan.id)} />
+                        </RowColumn>
+                      </TableRow>
+                      {selected === plan.id && (
+                        <TableRow>
+                          <TableCell colSpan={6}>
+                            <EditStudentsOnCourse
+                              id={plan.id}
+                              initialValues={{ students: plan.students }}
+                              onChange={state => {
+                                console.log('State', state);
+                                //this.setState({ selected: '' });
+                              }}
+                            />
+                          </TableCell>
+                        </TableRow>
+                      )}
+                    </React.Fragment>
                   ))}
                 </TableBody>
               </Table>
@@ -210,4 +238,5 @@ class PlannedCoursesTableNew extends React.Component {
   }
 }
 
-export default withAuth(withStyles(styles)(PlannedCoursesTableNew));
+export default withAuth(withStyles(styles)(withRouter(PlannedCoursesTableNew)));
+export { QUERY_SCHEDULED_COURSES };

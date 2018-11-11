@@ -81,12 +81,13 @@ const styles = theme => ({
     minWidth: 300
   },
   label: {
+    transform: 'rotateZ(-5deg)',
     color: 'white',
-    fontWeight: 800,
+    justifyContent: 'flex-end',
+    fontWeight: 500,
     padding: 10,
     fontSize: 24,
-    background: '#ccceee66',
-    transform: 'rotateZ(-5deg)'
+    background: '#00000099'
   },
   link: {
     display: 'flex',

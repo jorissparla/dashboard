@@ -1,14 +1,14 @@
-import React from "react";
-import gql from "graphql-tag";
-import { graphql } from "react-apollo";
-import { withRouter } from "react-router";
-import { Link } from "react-router-dom";
-import { Formik } from "formik";
-import { withStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
-import Paper from "@material-ui/core/Paper";
-import Typography from "@material-ui/core/Typography";
+import React from 'react';
+import gql from 'graphql-tag';
+import { graphql } from 'react-apollo';
+import { withRouter } from 'react-router';
+import { Link } from 'react-router-dom';
+import { Formik } from 'formik';
+import { withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 
 const MUTATION_SIGNIN = gql`
   mutation signinUser($input: AUTH_PROVIDER_EMAIL) {
@@ -33,7 +33,7 @@ const styles = theme => ({
     marginRight: 50
   },
   input: {
-    display: "none"
+    display: 'none'
   },
   textField: {
     marginLeft: theme.spacing.unit,
@@ -44,52 +44,56 @@ const styles = theme => ({
     ...theme.mixins.gutters(),
     paddingTop: theme.spacing.unit * 2,
     paddingBottom: theme.spacing.unit * 2,
-    margin: "100px 300px 100px 300px",
-    width: "700px",
-    backgroundColor: "#eef"
+    margin: '100px 300px 100px 300px',
+    width: '700px',
+    backgroundColor: '#eef'
   },
   form: {
-    display: "flex"
+    display: 'flex',
+    flexDirection: 'column'
   },
   cols: {
-    flexDirection: "column",
+    flexDirection: 'column',
     marginTop: 30
   }
 });
 
 class Signin extends React.Component {
   setLogin = (user, token) => {
-    localStorage.setItem("id", user.id);
-    localStorage.setItem("token", token || "PIN01");
-    localStorage.setItem("email", user.email);
-    localStorage.setItem("name", user.fullname);
-    localStorage.setItem("picture", user.image);
-    localStorage.setItem("role", user.role);
+    localStorage.setItem('id', user.id);
+    localStorage.setItem('token', token || 'PIN01');
+    localStorage.setItem('email', user.email);
+    localStorage.setItem('name', user.fullname);
+    localStorage.setItem('picture', user.image);
+    localStorage.setItem('role', user.role);
   };
 
   render() {
-    console.log("signin this.props", this.props);
+    console.log('signin this.props', this.props);
     const { classes } = this.props;
     return (
       <Formik
         initialValues={{
-          email: "",
-          password: ""
+          email: '',
+          password: ''
         }}
         validate={values => {
           // same as above, but feel free to move this into a class method now.
           let errors = {};
           if (!values.email) {
-            errors.email = "Required";
+            errors.email = 'Required';
           } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-            errors.email = "Invalid email address";
+            errors.email = 'Invalid email address';
           }
           if (!values.password) {
-            errors.password = "Password Required";
+            errors.password = 'Password Required';
           }
           return errors;
         }}
-        onSubmit={async (values, { setSubmitting, setErrors /* setValues and other goodies */ }) => {
+        onSubmit={async (
+          values,
+          { setSubmitting, setErrors /* setValues and other goodies */ }
+        ) => {
           console.log({ values });
           const input = values;
           const result = await this.props.data({ variables: { input } });
@@ -97,14 +101,14 @@ class Signin extends React.Component {
             const { token, user } = result.data.signinUser;
             this.setLogin(user, token);
             window.location.reload();
-            await this.props.history.push("/");
+            await this.props.history.push('/');
           }
         }}
       >
         {({ values, handleChange, handleBlur, handleSubmit, touched, errors, isSubmitting }) => {
           return (
             <Paper className={classes.root} elevation={1}>
-              <Typography variant="h4  " gutterBottom>
+              <Typography variant="h6" gutterBottom component="h2">
                 Log in
               </Typography>
               <form onSubmit={handleSubmit} className={classes.form}>
@@ -159,4 +163,4 @@ class Signin extends React.Component {
   }
 }
 
-export default graphql(MUTATION_SIGNIN, { name: "data" })(withStyles(styles)(withRouter(Signin)));
+export default graphql(MUTATION_SIGNIN, { name: 'data' })(withStyles(styles)(withRouter(Signin)));

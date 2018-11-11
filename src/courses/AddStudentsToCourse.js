@@ -1,23 +1,23 @@
-import React, { Component } from "react";
-import gql from "graphql-tag";
-import { graphql, compose } from "react-apollo";
-import { List, ListItem } from "material-ui/List";
-import Divider from "material-ui/Divider";
-import Avatar from "material-ui/Avatar";
-import Chip from "material-ui/Chip";
-import Paper from "material-ui/Paper";
-import { red500 } from "material-ui/styles/colors";
-import { withRouter } from "react-router";
-import styled from "styled-components";
-import SearchBar from "../common/SearchBar";
-import CircularProgress from "material-ui/CircularProgress";
-import ContentAdd from "material-ui/svg-icons/content/add";
-import FloatingActionButton from "material-ui/FloatingActionButton";
-import RaisedButton from "material-ui/RaisedButton";
-import { pinkA200, transparent } from "material-ui/styles/colors";
-import _ from "lodash";
-import { TitleBar } from "../common/TitleBar";
-import withAuth from "../utils/withAuth";
+import React, { Component } from 'react';
+import gql from 'graphql-tag';
+import { graphql, compose } from 'react-apollo';
+import { List, ListItem } from 'material-ui/List';
+import Divider from 'material-ui/Divider';
+import Avatar from 'material-ui/Avatar';
+import Chip from 'material-ui/Chip';
+import Paper from 'material-ui/Paper';
+import { red500 } from 'material-ui/styles/colors';
+import { withRouter } from 'react-router';
+import styled from 'styled-components';
+import SearchBar from '../common/SearchBar';
+import CircularProgress from 'material-ui/CircularProgress';
+import ContentAdd from 'material-ui/svg-icons/content/add';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import RaisedButton from 'material-ui/RaisedButton';
+import { pinkA200, transparent } from 'material-ui/styles/colors';
+import _ from 'lodash';
+import { TitleBar } from '../common/TitleBar';
+import withAuth from '../utils/withAuth';
 
 const Div = styled.div`
   display: flex;
@@ -42,7 +42,7 @@ const Right = styled.div`
 `;
 
 class AddStudentsToCourse extends Component {
-  state = { searchText: "" };
+  state = { searchText: '' };
 
   handleSearchChange = val => {
     this.setState({ searchText: val });
@@ -53,7 +53,7 @@ class AddStudentsToCourse extends Component {
         student ? (
           <Chip
             onRequestDelete={() => {
-              console.log("RequestDelete", this.props.data);
+              console.log('RequestDelete', this.props.data);
               const { plannedcourses } = this.props.data;
               const thiscourse = plannedcourses[0];
               const input = {
@@ -89,7 +89,9 @@ class AddStudentsToCourse extends Component {
   };
 
   render() {
-    const { data: { loading, error, supportfolks, plannedcourses } } = this.props;
+    const {
+      data: { loading, error, supportfolks, plannedcourses }
+    } = this.props;
     if (loading) {
       return (
         <Div>
@@ -100,7 +102,7 @@ class AddStudentsToCourse extends Component {
     if (error) {
       return <p>{error.message}</p>;
     }
-    console.log("PROPS", this.props);
+    console.log('PROPS', this.props);
     const plannedcourse = plannedcourses[0];
     const filteredAccounts0 = _.chain(supportfolks)
       .filter(account => account.locationdetail && account.team)
@@ -121,8 +123,7 @@ class AddStudentsToCourse extends Component {
       <div>
         <Paper>
           <TitleBar>
-            Add Students to Course ' {plannedcourse.course.title}
-            '
+            Add Students to Course ' {plannedcourse.course.title}'
             <RaisedButton
               style={{ marginLeft: 20 }}
               label="back to course"
@@ -138,9 +139,9 @@ class AddStudentsToCourse extends Component {
                 onChange={this.handleSearchChange}
                 hintText="Search on name or team or location.."
                 style={{
-                  background: "#FAFAFA",
-                  display: "flex",
-                  borderBottom: "1px solid rgba(0,0,0,0.12)"
+                  background: '#FAFAFA',
+                  display: 'flex',
+                  borderBottom: '1px solid rgba(0,0,0,0.12)'
                 }}
               />
             </Paper>
@@ -223,6 +224,7 @@ const addStudentToCourse = gql`
     addStudentToCourse(input: $input) {
       plannedcourse {
         course {
+          id
           title
           _studentsMeta {
             count
@@ -276,8 +278,8 @@ const selectedCourse = gql`
   }
 `;
 export default compose(
-  graphql(removeStudentFromCourse, { name: "removeStudentFromCourse" }),
-  graphql(addStudentToCourse, { name: "addStudentToCourse" }),
+  graphql(removeStudentFromCourse, { name: 'removeStudentFromCourse' }),
+  graphql(addStudentToCourse, { name: 'addStudentToCourse' }),
   graphql(selectedCourse, {
     options: ownProps => ({ variables: { id: ownProps.match.params.id } })
   })

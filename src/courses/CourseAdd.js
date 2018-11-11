@@ -34,7 +34,7 @@ const CourseAdd = props => (
 
             const result = await addCourse({ variables: { input } });
             console.log('Result', result);
-            props.history.push('/xyz/' + result.data.addCourse.id);
+            props.history.push('/courses/edit/' + result.data.addCourse.id);
           }}
         />
       );
