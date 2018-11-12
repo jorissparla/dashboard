@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 
-import "./App.css";
-import SummaryChartContainer from "./charts/SummaryChartContainer";
-import styled from "styled-components";
-import shortid from "shortid";
+import './App.css';
+import SummaryChartContainer from './charts/SummaryChartContainer';
+import styled from 'styled-components';
+import shortid from 'shortid';
 
 const Row = styled.div`
   margin-left: 10px;
@@ -16,8 +16,8 @@ const Row = styled.div`
 `;
 
 class DashBoardStats extends React.Component {
-  state = { index: 0, team: "Logistics" };
-  teams = ["Logistics", "Finance", "Tools"];
+  state = { index: 0, team: 'Logistics' };
+  teams = ['Logistics', 'Finance', 'Tools'];
 
   getTeam = () => {
     const team = this.props.match ? this.props.match.params.team : this.props.team;
@@ -26,13 +26,14 @@ class DashBoardStats extends React.Component {
   };
   render() {
     //const { data, team } = this.props;
-    console.log("Rendering");
+    console.log('Rendering');
     return (
       <Row>
         <SummaryChartContainer
           id={shortid.generate()}
           team={this.getTeam()}
-          title="Support Backlog"
+          value="newbacklog"
+          title="Support Backlog (excl. Solution Proposed)"
           refreshRate={0}
           type="areaspline"
           color="#555555"

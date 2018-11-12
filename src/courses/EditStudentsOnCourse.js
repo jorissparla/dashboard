@@ -118,14 +118,14 @@ class EditStudentsOnCourse extends React.Component {
                             fieldname="fullname"
                             placeholder="select multiple participants"
                           />
-                          <SaveIcon
+                          {/*   <SaveIcon
                             type="submit"
                             onClick={() => {
                               console.log(state);
                             }}
                           >
                             Save
-                          </SaveIcon>
+                          </SaveIcon> */}
                         </React.Fragment>
                       );
                     }}

@@ -1,19 +1,20 @@
-import React, { Component } from "react";
-import gql from "graphql-tag";
-import { graphql, compose } from "react-apollo";
-import Paper from "@material-ui/core/Paper";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import { withRouter } from "react-router";
-import Divider from "@material-ui/core/Divider";
-import Avatar from "@material-ui/core/Avatar";
-import styled from "styled-components";
-import { HeaderRow, HeaderLeft, HeaderRight, Title, StyledInitials } from "../styles";
-import ModeEdit from "@material-ui/icons/FileCopy";
-import Button from "@material-ui/core/Button";
+import React, { Component } from 'react';
+import gql from 'graphql-tag';
+import { graphql, compose } from 'react-apollo';
+import Paper from '@material-ui/core/Paper';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import { withRouter } from 'react-router';
+import Divider from '@material-ui/core/Divider';
+import Avatar from '@material-ui/core/Avatar';
+import styled from 'styled-components';
+import { HeaderRow, HeaderLeft, HeaderRight, Title, StyledInitials } from '../styles';
+import ModeEdit from '@material-ui/icons/FileCopy';
+import Button from '@material-ui/core/Button';
+import { ALL_FEEDBACK_QUERY } from './feedbackList';
 
 const P = styled.div`
   white-space: pre-line;
@@ -32,9 +33,9 @@ const DateField = styled.div`
 
 const Image = ({ image, fullname, size = 32 }) => {
   const initials = fullname
-    .split(" ")
+    .split(' ')
     .map(name => name[0])
-    .join("")
+    .join('')
     .toUpperCase();
   if (image) {
     return <Avatar src={image} size={size} />;
@@ -74,7 +75,7 @@ class CommentList extends Component {
   copyToFeedBack = id => {
     this.props
       .copyCommentToFeedback({ variables: { incident_id: id } })
-      .then(res => this.props.history.push("/feedback"));
+      .then(res => this.props.history.push('/feedback'));
   };
 
   renderListItem = (item, index) => {
@@ -86,7 +87,10 @@ class CommentList extends Component {
             <Image image={pic} fullname={ownerrep_name} />
             <DateField>{survey_date.substr(0, 10)}</DateField>
           </Left>
-          <ListItemText primary={`${customer_name.slice(0, 50)} (${ownerrep_name})`} secondary={comment} />
+          <ListItemText
+            primary={`${customer_name.slice(0, 50)} (${ownerrep_name})`}
+            secondary={comment}
+          />
           <ListItemSecondaryAction>
             <ModeEdit onClick={() => this.copyToFeedBack(incident_id)} />
           </ListItemSecondaryAction>
@@ -107,10 +111,18 @@ class CommentList extends Component {
           <Title>Customer Comments</Title>
         </HeaderLeft>
         <HeaderRight>
-          <Button variant="contained" color="primary" onClick={() => this.props.history.push("/feedback")}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => this.props.history.push('/feedback')}
+          >
             Feedback
           </Button>
-          <Button variant="contained" color="secondary" onClick={() => this.props.history.push("/comments")}>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => this.props.history.push('/comments')}
+          >
             Surveys
           </Button>
         </HeaderRight>
@@ -124,5 +136,10 @@ class CommentList extends Component {
 
 export default compose(
   graphql(queryComments),
-  graphql(copyCommentToFeedback, { name: "copyCommentToFeedback" })
+  graphql(copyCommentToFeedback, {
+    name: 'copyCommentToFeedback',
+    options: {
+      refetchQueries: [{ query: ALL_FEEDBACK_QUERY }]
+    }
+  })
 )(withRouter(CommentList));

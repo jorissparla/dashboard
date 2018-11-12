@@ -154,7 +154,7 @@ class FeedBackList extends Component {
             primary={`${fullname} ( ${customername} )`}
             secondary={
               this.state.currentid === id ? (
-                <div
+                <React.Fragment
                   style={{
                     display: 'flex',
                     justifyContent: 'center',
@@ -180,9 +180,9 @@ class FeedBackList extends Component {
                   />
                   <Save onClick={this.handleBlur} />
                   <Undo onClick={this.handleUndo} />
-                </div>
+                </React.Fragment>
               ) : (
-                <div>{text}</div>
+                text
               )
             }
           />
@@ -355,3 +355,5 @@ export default compose(
   graphql(deleteFeedback, { name: 'deleteFeedback' }),
   graphql(createFeedback, { name: 'createFeedback' })
 )(withRouter(FeedBackList));
+
+export { ALL_FEEDBACK_QUERY };

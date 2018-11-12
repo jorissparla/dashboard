@@ -20,7 +20,7 @@ class SummaryChartContainer extends React.Component {
     //  const summary = summaries; // .reverse()
     const color = this.props.color;
     return (
-      <Query query={querySummaries} variables={{ team }}>
+      <Query query={QUERY_SUMMARY_DATA} variables={{ team }}>
         {({ data, loading }) => {
           if (loading) return <div>Loading....</div>;
           if (data && data.summaries) {
@@ -46,7 +46,7 @@ class SummaryChartContainer extends React.Component {
   }
 }
 
-const querySummaries = gql`
+const QUERY_SUMMARY_DATA = gql`
   query summaries($team: String) {
     summaries(team: $team, recent: 6) {
       weekNr
@@ -58,6 +58,7 @@ const querySummaries = gql`
       backlog
       escalated
       chatpct
+      newbacklog
     }
   }
 `;

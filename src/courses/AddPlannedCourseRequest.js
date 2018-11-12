@@ -1,6 +1,7 @@
 import React from 'react';
 import gql from 'graphql-tag';
 import { Query, Mutation } from 'react-apollo';
+import { withRouter } from 'react-router';
 import { Formik } from 'formik';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
@@ -347,15 +348,27 @@ class AddPlannedCourseRequest extends React.Component {
                                       <Mutation mutation={ADD_PLANNEDCOURSEREQUEST}>
                                         {addPlannedCourseRequest => {
                                           return (
-                                            <Button
-                                              variant="contained"
-                                              color="secondary"
-                                              className={classes.button}
-                                              onClick={handleSubmit}
-                                              type="submit"
-                                            >
-                                              Save{' '}
-                                            </Button>
+                                            <React.Fragment>
+                                              <Button
+                                                variant="contained"
+                                                color="primary"
+                                                className={classes.button}
+                                                onClick={handleSubmit}
+                                                type="submit"
+                                              >
+                                                Save{' '}
+                                              </Button>
+
+                                              <Button
+                                                variant="contained"
+                                                color="secondary"
+                                                className={classes.button}
+                                                onClick={() => this.props.history.push('/')}
+                                                type="submit"
+                                              >
+                                                Cancel
+                                              </Button>
+                                            </React.Fragment>
                                           );
                                         }}
                                       </Mutation>
@@ -378,4 +391,4 @@ class AddPlannedCourseRequest extends React.Component {
     );
   }
 }
-export default withStyles(styles)(AddPlannedCourseRequest);
+export default withStyles(styles)(withRouter(AddPlannedCourseRequest));

@@ -205,6 +205,7 @@ class Header extends React.Component {
         <NavLink title="Logistics" Icon={null} navigateTo="/team/logistics" history={history} />
         <NavLink title="Finance" Icon={null} navigateTo="/team/finance" history={history} />
         <NavLink title="Tools" Icon={null} navigateTo="/team/tools" history={history} />
+        <NavLink title="Backlog" Icon={null} navigateTo="/historyall" history={history} />
         <Divider />
         <NavLink title="Go Lives" Icon={GoLiveIcon} navigateTo="/golives" history={history} />
         <NavLink title="MT Customers" Icon={ExtensionIcon} navigateTo="/tenant" history={history} />

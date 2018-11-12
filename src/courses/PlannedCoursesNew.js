@@ -208,7 +208,13 @@ class PlannedCoursesTableNew extends React.Component {
                           }
                         </RowColumn>
                         <RowColumn small={true}>
-                          <EditIcon onClick={() => console.log('test')} />
+                          <EditIcon
+                            onClick={() =>
+                              this.props.history.push(
+                                `/scheduledcourses/${course.id}/edit/${plan.id}`
+                              )
+                            }
+                          />
                           <TrashIcon onClick={() => console.log(plan.id)} />
                         </RowColumn>
                       </TableRow>

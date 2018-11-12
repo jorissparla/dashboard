@@ -81,6 +81,7 @@ const Container = styled.div`
   flex-direction: column;
   margin-bottom: 5px;
   margin-top: 10px;
+  background: #eeeeee;
 `;
 
 function SupporCard(props) {

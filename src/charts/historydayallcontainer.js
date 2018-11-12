@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import gql from "graphql-tag";
-import { Query } from "react-apollo";
-import HistoryChart from "./historychart";
-import styled from "styled-components";
+import React, { Component } from 'react';
+import gql from 'graphql-tag';
+import { Query } from 'react-apollo';
+import HistoryChart from './historychart';
+import styled from 'styled-components';
 
 const Flexdiv = styled.div`
   display: flex;
@@ -33,7 +33,7 @@ class HistoryDayAll1 extends Component {
 
 export default class HistoryDayAllContainer extends Component {
   render() {
-    const color = this.props.color || "#ffb74d";
+    const color = this.props.color || '#ffb74d';
     return (
       <Query query={QUERY_HISTORY_DAY}>
         {({ data, loading, error }) => {
@@ -47,7 +47,7 @@ export default class HistoryDayAllContainer extends Component {
               <Contdiv>
                 <HistoryChart
                   data={history}
-                  title={`Backlog LN`}
+                  title={`Backlog LN (excl. Sol.Proposed)`}
                   type="area"
                   color={color}
                   xvalue="day"
@@ -55,7 +55,7 @@ export default class HistoryDayAllContainer extends Component {
                 />
                 <HistoryChart
                   data={history}
-                  title={`Backlog Logistics`}
+                  title={`Backlog Logistics (excl. Sol.Proposed)`}
                   type="area"
                   color={color}
                   xvalue="day"
@@ -65,7 +65,7 @@ export default class HistoryDayAllContainer extends Component {
               <Contdiv>
                 <HistoryChart
                   data={history}
-                  title={`Backlog Finance`}
+                  title={`Backlog Finance (excl. Sol.Proposed)`}
                   type="area"
                   color={color}
                   xvalue="day"
@@ -74,7 +74,7 @@ export default class HistoryDayAllContainer extends Component {
 
                 <HistoryChart
                   data={history}
-                  title={`Backlog Tools`}
+                  title={`Backlog Tools (excl. Sol.Proposed)`}
                   type="area"
                   color={color}
                   xvalue="day"
