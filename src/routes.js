@@ -21,6 +21,7 @@ import PlannedCourseRequestList from './courses/PlannedCourseRequestList';
 import DashBoardContainer from './dashboardcontainer';
 import NewsPage from './news/newspage';
 import User from './User';
+import UserPermissions from './UserPermissions';
 //const DashBoardContainer = DynamicImport(() => import('./dashboardcontainer'));
 const AGLTest = DynamicImport(() => import('./supportcard/Test'));
 //const CommentsList = DynamicImport(() => import("./feedback/commentList"));
@@ -106,6 +107,7 @@ class AppRoutes extends React.Component {
                 user={user}
               />
               <Route exact path="/plannedcourserequestlist" component={PlannedCourseRequestList} />
+              <EnhancedRoute exact path="/bla" component={UserPermissions} user={user} />
               <EnhancedRoute exact path="/xyz/:id" component={CourseEdit} user={user} />
               <EnhancedRoute exact path="/xyz/edit/:id" component={CourseEdit} user={user} />
               <EnhancedRoute
