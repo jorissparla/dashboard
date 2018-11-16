@@ -9,15 +9,18 @@ import "./index.css";
 import reducers from "./reducers";
 import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "./routes";
+import { createMuiTheme } from "@material-ui/core/styles";
+import MuiThemeProvider from "@material-ui/core/styles/MuiThemeProvider";
 import getMuiTheme from "material-ui/styles/getMuiTheme";
-import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+//import MuiThemeProvider from "material-ui/styles/MuiThemeProvider";
+import blue from "@material-ui/core/colors/blue";
 import { blue500 } from "material-ui/styles/colors";
 import { AUTH_USER } from "./actions";
-import App from "./appnav";
+import App from "./Nav";
 import "./index.css";
 
 import { ApolloProvider } from "react-apollo";
-import { ApolloClient } from "apollo-client";
+import ApolloClient from "apollo-client";
 import { createHttpLink } from "apollo-link-http";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { createUploadLink } from "apollo-upload-client";
@@ -36,12 +39,18 @@ const prefix = REACT_APP_HTTP.trim();
 //console.log("prefix", `<${prefix}>`);
 let uri = `${REACT_APP_GRAPHQLSERVER}:${REACT_APP_PORT_GRAPHQL}`;
 uri = prefix === "https" ? "https://" + uri : "http://" + uri;
+console.log(uri);
 //`${REACT_APP_HTTP}://${REACT_APP_GRAPHQLSERVER}:${REACT_APP_PORT_GRAPHQL}/${REACT_APP_GRAPHQL_PATH}`;
-const link = createUploadLink({ uri });
+const link = createUploadLink(createHttpLink({ uri }));
 const client = new ApolloClient({
-  link,
+  link: createUploadLink({ uri, credentials: "include" }),
   cache: new InMemoryCache()
 });
+
+/* const client = new ApolloClient({
+  link: createHttpLink({ uri: "http://localhost:4000", credentials: "include" }),
+  cache: new InMemoryCache()
+}); */
 
 const createStoreWithMiddleware = applyMiddleware(promise, reduxThunk)(createStore);
 const store = createStoreWithMiddleware(
@@ -62,39 +71,24 @@ if (token) {
   store.dispatch({ type: AUTH_USER, user });
 }
 
-const muiTheme = getMuiTheme({
+const muiTheme = createMuiTheme({
+  typography: {
+    useNextVariants: true
+  },
   palette: {
-    primary1Color: blue500
-  },
-  appBar: {
-    height: 50,
-    color: blue500,
-    textColor: "white"
-  },
-  toolbar: {
-    height: 50,
-    backgroundColor: blue500
-  },
-  menuitemStyle: {
-    textColor: "black"
-  },
-  tabs: {
-    backgroundColor: "white",
-    textColor: blue500,
-    selectedTextColor: "black"
+    primary: blue
   }
 });
 
 const Main = () => (
   <ApolloProvider client={client}>
     <Provider store={store}>
-      <MuiThemeProvider muiTheme={muiTheme}>
+      <MuiThemeProvider theme={muiTheme}>
         <BrowserRouter>
           <SharedSnackbarProvider>
             <ContextProvider>
-              <App>
-                <AppRoutes />
-              </App>
+              <App />
+              <AppRoutes />
             </ContextProvider>
           </SharedSnackbarProvider>
         </BrowserRouter>

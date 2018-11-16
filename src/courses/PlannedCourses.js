@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Table,
   TableBody,
@@ -6,16 +6,16 @@ import {
   TableHeaderColumn,
   TableRow,
   TableRowColumn
-} from "material-ui/Table";
-import EditIcon from "material-ui/svg-icons/image/edit";
-import TrashIcon from "material-ui/svg-icons/action/delete";
-import PeopleIcon from "material-ui/svg-icons/social/people";
-import RaisedButton from "material-ui/RaisedButton";
-import { blue500, red500, grey400, purple400 } from "material-ui/styles/colors";
-import { format } from "date-fns";
-import AddCourseDialog from "./AddCourseDialog";
-import { Title, HeaderRow, HeaderLeft, HeaderRight } from "../styles";
-import withAuth from "../utils/withAuth";
+} from '@material-ui/core/Table';
+import EditIcon from '@material-ui/icons/Edit';
+import TrashIcon from '@material-ui/icons/Delete';
+import PeopleIcon from '@material-ui/icons/People';
+import Button from '@material-ui/core/Button';
+import { blue, red, grey, purple } from '@material-ui/core/colors';
+import { format } from 'date-fns';
+import AddCourseDialog from './AddCourseDialog';
+import { Title, HeaderRow, HeaderLeft, HeaderRight } from '../styles';
+import withAuth from '../utils/withAuth';
 const styles = {
   headerStyle: {
     fontSize: 18,
@@ -35,35 +35,35 @@ const styles = {
   },
   button: {
     margin: 12,
-    background: "#2196f3"
+    background: '#2196f3'
   },
   button2: {
     margin: 12,
-    backgroundColor: "black",
-    primaryColor1: "black"
+    backgroundColor: 'black',
+    primaryColor1: 'black'
   },
   buttonback: {
     margin: 12,
-    backgroundColor: "orange"
+    backgroundColor: 'orange'
   },
 
   iconStyle0: {
     width: 24,
-    color: "black"
+    color: 'black'
   },
   iconStyle: {
     width: 24,
-    color: blue500
+    color: blue
   },
   iconStyle2: {
     marginLeft: 5,
     width: 24,
-    color: red500
+    color: red
   }
 };
 
 const fmtDate = val => {
-  return format(val, "ddd, DD MMM YYYY");
+  return format(val, 'ddd, DD MMM YYYY');
 };
 
 const HeaderColumn = ({ children, small }) => {
@@ -85,7 +85,7 @@ class PlannedCoursesTable extends React.Component {
     openedit: false,
     opennew: false,
     courseid: null,
-    value: "",
+    value: '',
     minDate: null,
     defaultDate: Date.now(),
     selected: null,
@@ -95,7 +95,7 @@ class PlannedCoursesTable extends React.Component {
   visibleStyle = (style, index) => {
     if (this.state.selected === index) {
       return style;
-    } else return { display: "none" };
+    } else return { display: 'none' };
   };
 
   editRegisterClick = e => {
@@ -122,14 +122,16 @@ class PlannedCoursesTable extends React.Component {
             </Title>
           </HeaderLeft>
           <HeaderRight>
-            <RaisedButton
-              secondary={true}
-              label="Back to Courses"
+            <Button
+              variant="contained"
+              color="secondary"
               style={styles.buttonback}
               onClick={() => onCancel()}
-            />
-            <RaisedButton
-              label="Edit Registration"
+            >
+              "Back to Courses"
+            </Button>
+            <Button
+              variant="contained"
               backgroundColor="#000"
               disabled={this.state.disableregister}
               labelColor="#fff"
@@ -137,14 +139,19 @@ class PlannedCoursesTable extends React.Component {
               onClick={e => {
                 this.editRegisterClick();
               }}
-            />
-            <RaisedButton
+            >
+              Edit Registration
+            </Button>
+            <Button
               label="New"
+              variant="contained"
+              color="primary"
               enabled={authenticated.toString()}
-              primary={true}
               style={styles.button}
               onClick={() => this.setState({ opennew: true })}
-            />
+            >
+              New
+            </Button>
           </HeaderRight>
         </HeaderRow>
         {this.state.opennew === true && (
@@ -164,7 +171,7 @@ class PlannedCoursesTable extends React.Component {
             coursetypes={this.props.coursetypes}
             hours={hours}
             onSave={e => {
-              console.log("onSave", JSON.stringify(e));
+              console.log('onSave', JSON.stringify(e));
               this.props.onAddNew(e);
               this.setState({ opennew: false });
             }}
@@ -193,7 +200,7 @@ class PlannedCoursesTable extends React.Component {
             enddate={new Date(this.state.selectedenddate)}
             toStudents={this.editRegisterClick}
             onSave={e => {
-              console.log("onSave", e);
+              console.log('onSave', e);
               this.props.onUpdate(e);
               this.setState({ openedit: false });
             }}
@@ -242,11 +249,11 @@ class PlannedCoursesTable extends React.Component {
                 <RowColumn small={true}>{plan.status}</RowColumn>
                 <RowColumn small={true}>{plan.hours}</RowColumn>
                 <RowColumn small={true}>
-                  {plan.studentcount}{" "}
+                  {plan.studentcount}{' '}
                   {
                     <PeopleIcon
                       style={this.visibleStyle(styles.iconStyle2, index)}
-                      hoverColor={purple400}
+                      hoverColor={purple}
                       title="Edit registration"
                       onClick={e => {
                         this.editRegisterClick();
@@ -257,7 +264,7 @@ class PlannedCoursesTable extends React.Component {
                 <RowColumn small={true}>
                   <EditIcon
                     style={this.visibleStyle(styles.iconStyle0, index)}
-                    hoverColor={grey400}
+                    hoverColor={grey}
                     onClick={() =>
                       this.setState({
                         openedit: true,
@@ -271,7 +278,7 @@ class PlannedCoursesTable extends React.Component {
                   />
                   <TrashIcon
                     style={this.visibleStyle(styles.iconStyle, index)}
-                    hoverColor={purple400}
+                    hoverColor={purple}
                     onClick={() => this.props.onDelete(plan.id)}
                   />
                 </RowColumn>

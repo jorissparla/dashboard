@@ -1,29 +1,28 @@
-import React from "react";
-import Paper from "material-ui/Paper";
-import TextField from "material-ui/TextField";
-import FontIcon from "material-ui/FontIcon";
-import ActionSearch from "material-ui/svg-icons/action/search";
+import React from 'react';
+import Paper from '@material-ui/core/Paper';
+import TextField from '@material-ui/core/TextField';
+import FontIcon from '@material-ui/core/Icon';
+import ActionSearch from '@material-ui/icons/Search';
 
 export default ({
   onChange,
-  hintText = "Search..",
-  defaultValue = "",
-  style = { display: "flex", marginBottom: 5 },
+  hintText = 'Search..',
+  defaultValue = '',
+  style = { display: 'flex', marginBottom: 10, alignItems: 'center' },
   shade = true
 }) => {
   return (
-    <Paper zDepth={shade ? 2 : 0} style={style}>
-      <FontIcon style={{ margin: "10px" }}>
+    <Paper style={style}>
+      <FontIcon style={{ margin: '10px' }}>
         <ActionSearch />
       </FontIcon>
       <TextField
-        hintText={hintText}
-        underlineShow={false}
+        label={hintText}
         defaultValue={defaultValue}
         placeholder={hintText}
         onChange={e => onChange(e.target.value)}
         fullWidth={true}
-        style={{ color: "black" }}
+        style={{ color: 'black', padding: 1, marginBottom: 10 }}
       />
     </Paper>
   );

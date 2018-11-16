@@ -1,16 +1,22 @@
-import React, { Component } from "react";
-import gql from "graphql-tag";
-import { graphql, compose } from "react-apollo";
-import Paper from "material-ui/Paper";
-import { List, ListItem } from "material-ui/List";
-import { withRouter } from "react-router";
-import Divider from "material-ui/Divider";
-import Avatar from "material-ui/Avatar";
-import styled from "styled-components";
-import { HeaderRow, HeaderLeft, Title, StyledInitials } from "../styles";
-import ModeEdit from "material-ui/svg-icons/content/content-copy";
+import React, { Component } from 'react';
+import gql from 'graphql-tag';
+import { graphql, compose } from 'react-apollo';
+import Paper from '@material-ui/core/Paper';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import { withRouter } from 'react-router';
+import Divider from '@material-ui/core/Divider';
+import Avatar from '@material-ui/core/Avatar';
+import styled from 'styled-components';
+import { HeaderRow, HeaderLeft, HeaderRight, Title, StyledInitials } from '../styles';
+import ModeEdit from '@material-ui/icons/FileCopy';
+import Button from '@material-ui/core/Button';
+import { ALL_FEEDBACK_QUERY } from './feedbackList';
 
-const P = styled.p`
+const P = styled.div`
   white-space: pre-line;
 `;
 
@@ -19,6 +25,7 @@ const Left = styled.div`
   flex-direction: column;
   margin-right: 10px;
   left: 15px;
+  min-width: 100px;
 `;
 const DateField = styled.div`
   font-size: 10px;
@@ -26,9 +33,9 @@ const DateField = styled.div`
 
 const Image = ({ image, fullname, size = 32 }) => {
   const initials = fullname
-    .split(" ")
+    .split(' ')
     .map(name => name[0])
-    .join("")
+    .join('')
     .toUpperCase();
   if (image) {
     return <Avatar src={image} size={size} />;
@@ -68,36 +75,57 @@ class CommentList extends Component {
   copyToFeedBack = id => {
     this.props
       .copyCommentToFeedback({ variables: { incident_id: id } })
-      .then(res => this.props.history.push("/feedback"));
+      .then(res => this.props.history.push('/feedback'));
   };
 
   renderListItem = (item, index) => {
     const { incident_id, pic, survey_date, customer_name, comment, ownerrep_name } = item;
-    return [
-      <ListItem
-        key={incident_id}
-        leftAvatar={
+    return (
+      <React.Fragment key={index}>
+        <ListItem key={index * index + 1}>
           <Left>
             <Image image={pic} fullname={ownerrep_name} />
             <DateField>{survey_date.substr(0, 10)}</DateField>
           </Left>
-        }
-        primaryText={`${customer_name.slice(0, 50)} (${ownerrep_name})`}
-        secondaryTextLines={2}
-        secondaryText={<P>{comment}</P>}
-        rightIcon={<ModeEdit onClick={() => this.copyToFeedBack(incident_id)} />}
-      />,
-      <Divider key={index} />
-    ];
+          <ListItemText
+            primary={`${customer_name.slice(0, 50)} (${ownerrep_name})`}
+            secondary={comment}
+          />
+          <ListItemSecondaryAction>
+            <ModeEdit onClick={() => this.copyToFeedBack(incident_id)} />
+          </ListItemSecondaryAction>
+        </ListItem>
+
+        <Divider key={index} />
+      </React.Fragment>
+    );
   };
   render() {
-    const { data: { loading, comments } } = this.props;
+    const {
+      data: { loading, comments }
+    } = this.props;
     if (loading) return <div>Loading</div>;
     return [
       <HeaderRow key="hr1">
         <HeaderLeft>
           <Title>Customer Comments</Title>
         </HeaderLeft>
+        <HeaderRight>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => this.props.history.push('/feedback')}
+          >
+            Feedback
+          </Button>
+          <Button
+            variant="contained"
+            color="secondary"
+            onClick={() => this.props.history.push('/comments')}
+          >
+            Surveys
+          </Button>
+        </HeaderRight>
       </HeaderRow>,
       <Paper key="pa1">
         <List>{comments.map((item, index) => this.renderListItem(item, index))}</List>
@@ -108,5 +136,10 @@ class CommentList extends Component {
 
 export default compose(
   graphql(queryComments),
-  graphql(copyCommentToFeedback, { name: "copyCommentToFeedback" })
+  graphql(copyCommentToFeedback, {
+    name: 'copyCommentToFeedback',
+    options: {
+      refetchQueries: [{ query: ALL_FEEDBACK_QUERY }]
+    }
+  })
 )(withRouter(CommentList));

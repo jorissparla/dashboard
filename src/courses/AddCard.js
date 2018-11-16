@@ -1,13 +1,58 @@
-import React from "react";
-import { blue500 } from "material-ui/styles/colors";
-import FloatingActionButton from "material-ui/FloatingActionButton";
-import ContentAdd from "material-ui/svg-icons/content/add";
-import { Card, CardTitle, CardText } from "material-ui/Card";
-import styled from "styled-components";
-import { Link } from "react-router-dom";
+import React from 'react';
+import blue from '@material-ui/core/colors/blue';
+import Button from '@material-ui/core/Button';
+import AddIcon from '@material-ui/icons/Add';
+import ContentAdd from '@material-ui/icons/Add';
+//import { Card, CardTitle, CardText } from "material-ui/Card";
+import Card from '@material-ui/core/Card';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import Typography from '@material-ui/core/Typography';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import { withStyles } from '@material-ui/core/styles';
+import { withRouter } from 'react-router';
 
+const styles = theme => ({
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap'
+  },
+  card: {
+    width: 320,
+    margin: 10
+  },
 
+  media: {
+    height: 120,
+    objectFit: 'cover',
+    minWidth: 300
+  },
+  button: {
+    margin: theme.spacing.unit,
+    alignContent: 'center',
+    display: 'flex'
+  },
 
+  buttonDel: {
+    margin: theme.spacing.unit,
+    backgroundColor: '#000'
+  },
+
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200,
+    height: '100%'
+  },
+  center: {
+    alignContent: 'center',
+    display: 'flex',
+    flexDirection: 'column'
+  }
+});
 const Title = styled.div`
   font-family: Roboto;
   font-size: 2rem;
@@ -17,38 +62,33 @@ const Title = styled.div`
   text-align: center;
 `;
 
-
-const StyledLink = styled(Link) `
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-decoration: none;
-  :hover {
-    background: #0196f3;
-    color: white;
-  }
-`;
-
-
-
-export default ({
-  link = "courses/create",
-  title = "Add a new Course",
-  color = { blue500 },
-  background = "papayawhip"
+const AddCard = ({
+  link = 'courses/create',
+  title = 'Add  Course',
+  color = { blue },
+  background = 'papayawhip',
+  classes,
+  history
 }) => {
   return (
-    <Card style={{ width: "22%", margin: 10 }}>
-      <CardTitle>
-        <Title>{title}</Title>
-      </CardTitle>
-      <CardText>
-        <StyledLink to={link || "/"}>
-          <FloatingActionButton secondary={true}>
-            <ContentAdd />
-          </FloatingActionButton>
-        </StyledLink>
-      </CardText>
+    <Card className={classes.card}>
+      <CardActionArea>
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="h2">
+            <Title>{title}</Title>
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+      <Button
+        variant="fab"
+        color="primary"
+        aria-label="Add"
+        className={classes.button}
+        onClick={() => history.push(link)}
+      >
+        <AddIcon />
+      </Button>
     </Card>
   );
 };
+export default withStyles(styles)(withRouter(AddCard));

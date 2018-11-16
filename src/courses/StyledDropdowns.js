@@ -1,15 +1,15 @@
-import React from "react";
-import PropTypes from "prop-types";
-import deburr from "lodash/deburr";
-import keycode from "keycode";
-import Downshift from "downshift";
-import { withStyles } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
-import Paper from "@material-ui/core/Paper";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import InputLabel from "@material-ui/core/InputLabel";
-import Chip from "@material-ui/core/Chip";
+import React from 'react';
+import PropTypes from 'prop-types';
+import deburr from 'lodash/deburr';
+import keycode from 'keycode';
+import Downshift from 'downshift';
+import { withStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import Paper from '@material-ui/core/Paper';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import InputLabel from '@material-ui/core/InputLabel';
+import Chip from '@material-ui/core/Chip';
 
 function renderInput(inputProps) {
   const { InputProps, classes, ref, ...other } = inputProps;
@@ -30,15 +30,15 @@ function renderInput(inputProps) {
 
 function renderSuggestion({
   suggestion,
-  fieldname = "label",
-  idfieldname = "id",
+  fieldname = 'label',
+  idfieldname = 'id',
   index,
   itemProps,
   highlightedIndex,
   selectedItem
 }) {
   const isHighlighted = highlightedIndex === index;
-  const isSelected = (selectedItem || "").indexOf(suggestion[fieldname]) > -1;
+  const isSelected = (selectedItem || '').indexOf(suggestion[fieldname]) > -1;
 
   return (
     <MenuItem
@@ -76,10 +76,10 @@ function getSuggestions(value, fieldname, suggestions) {
 
 class DownShiftSingle extends React.Component {
   static defaultProps = {
-    label: "Label",
-    placeholder: "Select ",
-    fieldname: "fieldname",
-    idfieldname: "id"
+    label: 'Label',
+    placeholder: 'Select ',
+    fieldname: 'fieldname',
+    idfieldname: 'id'
   };
 
   handleInputChange = event => {
@@ -91,7 +91,7 @@ class DownShiftSingle extends React.Component {
     const { setState } = this.props;
 
     setState({
-      inputValue: "",
+      inputValue: '',
       selectedItem: item
     });
     this.props.onChange(item);
@@ -155,16 +155,16 @@ DownShiftSingle.propTypes = {
 
 class DownshiftMultiple extends React.Component {
   static defaultProps = {
-    label: "Students",
-    placeholder: "Select Multiple Students",
-    fieldname: "fullname",
-    idfieldname: "id"
+    label: 'Students',
+    placeholder: 'Select Multiple Students',
+    fieldname: 'fullname',
+    idfieldname: 'id'
   };
 
   handleKeyDown = event => {
     const { setState, state } = this.props;
     const { inputValue, selectedItem } = state;
-    if (selectedItem.length && !inputValue.length && keycode(event) === "backspace") {
+    if (selectedItem.length && !inputValue.length && keycode(event) === 'backspace') {
       setState({
         selectedItem: selectedItem.slice(0, selectedItem.length - 1)
       });
@@ -177,6 +177,7 @@ class DownshiftMultiple extends React.Component {
   };
 
   handleChange = item => {
+    console.log('xxx', item);
     const { setState, state } = this.props;
     let { selectedItem } = state;
 
@@ -185,10 +186,10 @@ class DownshiftMultiple extends React.Component {
     }
 
     setState({
-      inputValue: "",
+      inputValue: '',
       selectedItem
     });
-    this.props.onChange(selectedItem.join(";"));
+    this.props.onChange(selectedItem.join(';'));
   };
 
   handleDelete = item => () => {
@@ -196,6 +197,9 @@ class DownshiftMultiple extends React.Component {
     setState(state => {
       const selectedItem = [...state.selectedItem];
       selectedItem.splice(selectedItem.indexOf(item), 1);
+      if (this.props.onDelete) {
+        this.props.onDelete(item);
+      }
       return { selectedItem };
     });
   };
@@ -270,7 +274,7 @@ export default class SelectDropDown extends React.Component {
     console.log(value);
   };
   render() {
-    const { suggestions, state, label, placeholder, fieldname, idfieldname = "id" } = this.props;
+    const { suggestions, state, label, placeholder, fieldname, idfieldname = 'id' } = this.props;
     return (
       <React.Fragment>
         <InputLabel shrink htmlFor="age-label-placeholder">
@@ -314,10 +318,10 @@ const styles = theme => ({
   },
   container: {
     flexGrow: 1,
-    position: "relative"
+    position: 'relative'
   },
   paper: {
-    position: "relative",
+    position: 'relative',
     zIndex: 1,
     marginTop: theme.spacing.unit,
     left: 0,
@@ -331,7 +335,7 @@ const styles = theme => ({
     margin: `${theme.spacing.unit / 2}px ${theme.spacing.unit / 4}px`
   },
   inputRoot: {
-    flexWrap: "wrap"
+    flexWrap: 'wrap'
   },
   divider: {
     height: theme.spacing.unit * 2

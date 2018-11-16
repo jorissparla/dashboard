@@ -1,20 +1,20 @@
-import React from "react";
-import Paper from "material-ui/Paper";
-import styled from "styled-components";
-import FlatButton from "material-ui/FlatButton";
-import Badge from "material-ui/Badge";
-import { blue500 } from "material-ui/styles/colors";
-import { Link } from "react-router-dom";
+import React from 'react';
+import Paper from '@material-ui/core/Paper';
+import styled from 'styled-components';
+import Button from '@material-ui/core/Button';
+import Badge from '@material-ui/core/Badge';
+import blue from '@material-ui/core/colors/blue';
+import { Link } from 'react-router-dom';
 
 const imgList = [
-  "https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/auth.png",
-  "https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/analytics.png",
-  "https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/storage.png",
-  "https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/hosting.png",
-  "https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/database.png",
-  "https://www.gstatic.com/mobilesdk/170215_mobilesdk/discoveryCards/2x/functions.png",
-  "https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/crash.png",
-  "https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/amb.png"
+  'https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/auth.png',
+  'https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/analytics.png',
+  'https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/storage.png',
+  'https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/hosting.png',
+  'https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/database.png',
+  'https://www.gstatic.com/mobilesdk/170215_mobilesdk/discoveryCards/2x/functions.png',
+  'https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/crash.png',
+  'https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/amb.png'
 ];
 
 const StyledContainer = styled(Paper)`
@@ -75,25 +75,23 @@ const StyledBadge = styled(Badge)`
   margin-top: 15px;
 `;
 export default ({ course, index, count, validRole }) => {
-  console.log("validRole", validRole);
+  console.log('validRole', validRole);
   const image = imgList[index % 7];
   return (
     <StyledContainer key={course.id}>
       <StyledImage src={image} />
-      <StyledLink href={course.link || "/"}>
-        <Title>{course.title}</Title>
+      <StyledLink href={course.link || '/'}>
+        <Title>x{course.title}</Title>
       </StyledLink>
       <StyledBadge badgeContent={count} primary={true} />
 
       <StyledBody>{course.description}</StyledBody>
       <BottomStyle>
         <TeamSpan>{course.team}</TeamSpan>
-        <Link to={`courses/${validRole ? "edit" : "view"}/${course.id || "/"}`}>
-          <FlatButton
-            backgroundColor={blue500}
-            label={`${validRole ? "edit" : "view"}`}
-            style={{ color: "white" }}
-          />
+        <Link to={`courses/${validRole ? 'edit' : 'view'}/${course.id || '/'}`}>
+          <Button variant="contained" color="primary" style={{ color: 'white' }}>{`${
+            validRole ? 'edit' : 'view'
+          }`}</Button>
         </Link>
       </BottomStyle>
     </StyledContainer>

@@ -1,264 +1,362 @@
-import React, { Component } from "react";
-import { Field, reduxForm } from "redux-form";
-import { withRouter } from "react-router";
-import { SelectField, TextField } from "redux-form-material-ui";
-import { CardSection, Card, Input, MyDatePicker } from "../common";
-import MenuItem from "material-ui/MenuItem";
-import Chip from "material-ui/Chip";
-import { distanceInWordsToNow } from "date-fns";
-import styled from "styled-components";
-import {
-  NormalRaisedButton,
-  CancelRaisedButton,
-  DeleteButton,
-  RegisterButton
-} from "../common/TitleBar";
-import withAuth from "../utils/withAuth";
+import React from 'react';
+import gql from 'graphql-tag';
+import { Query, Mutation } from 'react-apollo';
+import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
+import Chip from '@material-ui/core/Chip';
+import Typography from '@material-ui/core/Typography';
+import { Formik } from 'formik';
+import { TextField, Select, FormControl, InputLabel, MenuItem } from '@material-ui/core';
+import { withStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router';
+import * as yup from 'yup';
+import { distanceInWordsToNow } from 'date-fns';
 
-const StyledField = styled(Field)`
-  margin-right: 5px;
-`;
-
-const SelectStyle = styled.div`
-  margin: 5px;
-  width: 20%;
-`;
-
-const styles = {
-  textfieldstyle: {
-    marginRight: 20,
-    flexGrow: 3
+const validationSchema = yup.object().shape({
+  title: yup.string().required(),
+  description: yup.string().required(),
+  hours: yup.string().required()
+});
+const styles = theme => ({
+  root: {
+    ...theme.mixins.gutters(),
+    paddingTop: theme.spacing.unit * 2,
+    paddingBottom: theme.spacing.unit * 2,
+    padding: theme.spacing.unit * 2,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    margin: '15px',
+    padding: '10px',
+    minWidth: '200px'
   },
-  hoursfieldstyle: {
-    marginRight: 20,
+  button: {
+    margin: theme.spacing.unit,
+    width: 200,
+    margin: 10
+  },
+
+  block: {
+    display: 'flex',
+    margin: 10,
+    alignItems: 'center'
+  },
+  buttonDel: {
+    margin: theme.spacing.unit,
+    color: '#FFF',
+    backgroundColor: '#000'
+  },
+
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    marginBottom: 20
+  },
+  titleField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    marginBottom: 20,
+    width: '90%'
+  },
+  hourField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    marginBottom: 20,
     width: 50
-  },
-  descriptionstyle: {
-    whitespace: "pre-line"
   }
-};
+});
+
+const QUERY_ALL_FIELDS = gql`
+  query QUERY_ALL_FIELDS {
+    coursetypes {
+      name
+    }
+    coursecategories {
+      id
+      name
+    }
+    statuses(type: "Course") {
+      id
+      value
+    }
+    locations(filter: ["ESBA", "NLBA", "CZPA4"]) {
+      type
+      description
+    }
+    supportfolks {
+      id
+      fullname
+    }
+  }
+`;
 
 const teams = [
-  { id: 1, name: "Logistics" },
-  { id: 2, name: "Finance" },
-  { id: 3, name: "Tools" },
-  { id: 4, name: "General" }
-];
-const status = [
-  { id: 1, name: "In Development" },
-  { id: 2, name: "Released" },
-  { id: 3, name: "Expired" }
+  { id: 1, name: 'Logistics' },
+  { id: 2, name: 'Finance' },
+  { id: 3, name: 'Tools' },
+  { id: 4, name: 'General' }
 ];
 
-const coursetypes = [
-  {
-    id: 1,
-    name: "Webex / Recording"
-  },
-  {
-    id: 2,
-    name: "Class Room Training"
-  },
-  {
-    id: 3,
-    name: "On Line Training"
-  },
-  {
-    id: 4,
-    name: "Self Study"
-  },
-  {
-    id: 5,
-    name: "Knowledge Transfer"
-  }
-];
+class CourseForm extends React.Component {
+  state = {
+    initialValues: this.props.initialValues || {
+      title: '',
+      hours: 4,
+      trainer: 'LN Employee',
+      status: 'Released',
+      team: 'Logistics',
+      type: 'Class Room Training',
+      category: 'Product',
+      description: '',
+      link: ''
+    }
+  };
 
-class CourseForm extends Component {
-  state = {};
-  constructor() {
-    super();
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
-  }
-
-  handleSubmit(e) {
-    //e.preventDefault();
-    this.props.onSave(e);
-  }
-
-  handleDelete(e) {
-    this.props.onDelete(e);
-  }
   render() {
-    const { handleSubmit, course, authenticated, history } = this.props;
-    const readOnly = !authenticated;
+    console.log('rendering initialValues', this.state.initialValues);
+    const { classes, history, id, view } = this.props;
     return (
-      <form onSubmit={handleSubmit(this.handleSubmit)}>
-        <Card>
-          <CardSection style={{ display: "flex", justifyContent: "space-between" }}>
-            <Field
-              name="title"
-              disabled={readOnly}
-              hintText="Title"
-              underlineShow={true}
-              component={Input}
-              floatingLabelText="title"
-              style={styles.textfieldstyle}
-            />
-            <Field
-              name="hours"
-              disabled={readOnly}
-              hintText="Number of Hours"
-              underlineShow={true}
-              component={Input}
-              floatingLabelText="hours"
-              style={styles.hoursfieldstyle}
-            />
-          </CardSection>
-          <CardSection>
-            <Field
-              name="trainer"
-              disabled={readOnly}
-              textFieldStyle={{ width: 50 }}
-              hintText="Trainer"
-              underlineShow={true}
-              component={Input}
-              floatingLabelText="Trainer"
-              style={styles.textfieldstyle}
-            />
-            <SelectStyle>
-              <Field
-                name="status"
-                component={SelectField}
-                disabled={readOnly}
-                hintText="Status"
-                floatingLabelText="Status"
-                style={{ flex: 2, marginTop: "-5px" }}
-                underlineShow={true}
-                underlineStyle={{ borderColor: "#039BE5" }}
-              >
-                {status.map(({ id, name }) => (
-                  <MenuItem key={id} value={name} primaryText={name} />
-                ))}
-              </Field>
-            </SelectStyle>
-          </CardSection>
-          <CardSection>
-            <Field
-              name="description"
-              disabled={readOnly}
-              hintText="Description"
-              underlineShow={true}
-              component={Input}
-              multiLine={true}
-              rows={3}
-              rowsMax={4}
-              fullWidth={true}
-              floatingLabelText="description"
-              style={styles.descriptionstyle}
-            />
-          </CardSection>
-          <CardSection>
-            <SelectStyle>
-              <Field
-                name="team"
-                disabled={readOnly}
-                component={SelectField}
-                hintText="Select a team"
-                floatingLabelText="team"
-                style={{ flex: 2 }}
-              >
-                {teams.map(team => (
-                  <MenuItem key={team.id} value={team.name} primaryText={team.name} />
-                ))}
-              </Field>
-            </SelectStyle>
-            <SelectStyle>
-              <Field
-                name="type"
-                disabled={readOnly}
-                component={SelectField}
-                hintText="Select a type"
-                floatingLabelText="type"
-                style={{ flex: 2 }}
-              >
-                {coursetypes.map(type => (
-                  <MenuItem key={type.id} value={type.name} primaryText={type.name} />
-                ))}
-              </Field>
-            </SelectStyle>
-            <SelectStyle>
-              <Field
-                textFieldStyle={{ width: 150 }}
-                name="startdate"
-                disabled={readOnly}
-                hintText="startdate"
-                component={MyDatePicker}
-                floatingLabelText="start date"
-              />
-            </SelectStyle>
-            <SelectStyle>
-              <Field
-                textFieldStyle={{ width: 150 }}
-                name="enddate"
-                disabled={readOnly}
-                hintText="enddate"
-                component={MyDatePicker}
-                floatingLabelText="end date"
-                autoOk={true}
-              />
-            </SelectStyle>
-          </CardSection>
-          <CardSection>
-            <Field
-              name="applicable"
-              disabled={readOnly}
-              component={Input}
-              floatingLabelText="Applicable for"
-              underlineShow={true}
-              style={styles.textfieldstyle}
-            />
-            <Field
-              name="link"
-              disabled={readOnly}
-              component={Input}
-              floatingLabelText="link"
-              underlineShow={true}
-              fullWidth={true}
-              style={styles.textfieldstyle}
-            />
-          </CardSection>
-          <CardSection>
-            {!readOnly && <NormalRaisedButton label="Save" type="submit" />}
-            <CancelRaisedButton
-              secondary={true}
-              label="Cancel"
-              type="reset"
-              onClick={() => setInterval(history.push("/courses"), 500)}
-            />
-            {!readOnly &&
-              course && (
-                <DeleteButton label="Delete" onClick={() => this.handleDelete(this.props.course)} />
+      <Query query={QUERY_ALL_FIELDS}>
+        {({ data, loading, error }) => {
+          if (loading) {
+            return 'Loading...';
+          }
+
+          const { coursetypes, coursecategories, statuses, locations, supportfolks } = data;
+          const { title } = this.state.initialValues;
+          const optionalProps = ['disabled'];
+          return (
+            <Formik
+              initialValues={this.state.initialValues}
+              onSubmit={async values => {
+                this.setState({
+                  initialValues: { title: values.title, ...this.state.initialValues }
+                });
+                this.props.onSave(values);
+              }}
+              validationSchema={validationSchema}
+            >
+              {({
+                values,
+                handleChange,
+                handleBlur,
+                handleSubmit,
+                setFieldValue,
+                touched,
+                errors,
+                isSubmitting
+              }) => (
+                <form onSubmit={handleSubmit}>
+                  <Paper className={classes.root}>
+                    <Typography variant="h5" gutterBottom>
+                      {title ? `Edit ${values.title}` : 'New Course'}
+                    </Typography>
+                    <div className={classes.block}>
+                      <TextField
+                        name="title"
+                        className={classes.titleField}
+                        label="title"
+                        fullWidth
+                        disabled={view}
+                        value={values.title}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+
+                      <TextField
+                        name="hours"
+                        className={classes.hourField}
+                        label="hours"
+                        value={values.hours}
+                        type="number"
+                        fullWidth
+                        disabled={view}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                    </div>
+                    {touched.title && errors.title && <div>{errors.title}</div>}
+                    {touched.hours && errors.hours && <div>{errors.hours}</div>}
+                    <TextField
+                      name="description"
+                      fullWidth
+                      disabled={view}
+                      multiline
+                      rows={4}
+                      className={classes.textField}
+                      label="description"
+                      value={values.description}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      variant="outlined"
+                    />
+                    {touched.description && errors.description && <div>{errors.description}</div>}
+                    <div className={classes.block}>
+                      <FormControl className={classes.formControl}>
+                        <InputLabel shrink htmlFor="type">
+                          Course Type
+                        </InputLabel>
+                        <Select
+                          id="type"
+                          name="type"
+                          disabled={view}
+                          value={values.type}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          className={classes.button}
+                        >
+                          {coursetypes.map(({ name }) => (
+                            <MenuItem key={name} value={name}>
+                              {name}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                      <FormControl className={classes.formControl}>
+                        <InputLabel shrink htmlFor="trainer">
+                          Trainer
+                        </InputLabel>
+                        <Select
+                          id="trainer"
+                          name="trainer"
+                          disabled={view}
+                          value={values.trainer}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          className={classes.button}
+                        >
+                          {supportfolks.map(({ fullname }) => (
+                            <MenuItem key={fullname} value={fullname}>
+                              {fullname}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                      <FormControl className={classes.formControl}>
+                        <InputLabel shrink htmlFor="status">
+                          Status
+                        </InputLabel>
+                        <Select
+                          id="status"
+                          name="status"
+                          disabled={view}
+                          value={values.status}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          className={classes.button}
+                        >
+                          {statuses.map(({ value }) => (
+                            <MenuItem key={value} value={value}>
+                              {value}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                      <FormControl className={classes.formControl}>
+                        <InputLabel shrink htmlFor="team">
+                          Team
+                        </InputLabel>
+                        <Select
+                          id="team"
+                          name="team"
+                          disabled={view}
+                          value={values.team}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          className={classes.button}
+                        >
+                          {teams.map(({ name }) => (
+                            <MenuItem key={name} value={name}>
+                              {name}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                      <FormControl className={classes.formControl}>
+                        <InputLabel shrink htmlFor="category">
+                          Category
+                        </InputLabel>
+                        <Select
+                          id="category"
+                          name="category"
+                          disabled={view}
+                          value={values.category}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          className={classes.button}
+                        >
+                          {coursecategories.map(({ id, name }) => (
+                            <MenuItem key={id} value={name}>
+                              {name}
+                            </MenuItem>
+                          ))}
+                        </Select>
+                      </FormControl>
+                    </div>
+                    <div className={classes.block}>
+                      {!view && (
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          className={classes.button}
+                          onClick={handleSubmit}
+                          type="submit"
+                        >
+                          Save
+                        </Button>
+                      )}
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        className={classes.button}
+                        onClick={() => history.push('/courses')}
+                      >
+                        Back to courses
+                      </Button>
+                      {id &&
+                        !view && (
+                          <React.Fragment>
+                            <Button
+                              variant="contained"
+                              className={classes.buttonDel}
+                              onClick={() => this.props.onDelete(id)}
+                            >
+                              Delete course
+                            </Button>
+                            <Button
+                              variant="contained"
+                              className={classes.button}
+                              onClick={() => history.push('/scheduledcourses/' + id)}
+                            >
+                              Schedule Courses
+                            </Button>
+                            <Button
+                              variant="contained"
+                              className={classes.button}
+                              onClick={() => history.push('/scheduledcourses/' + id + '/new')}
+                            >
+                              Schedule New Course
+                            </Button>
+                          </React.Fragment>
+                        )}
+                      <Chip
+                        label={
+                          values.id
+                            ? `Last updated  ${distanceInWordsToNow(values.lastmodified)} ago`
+                            : 'not Saved yet'
+                        }
+                      />
+                    </div>
+                  </Paper>
+                </form>
               )}
-            {!readOnly &&
-              course && (
-                <RegisterButton
-                  label="Edit Registration"
-                  onClick={() => history.push(`/courses/addstudents/${this.props.course.id}`)}
-                />
-              )}
-            <Chip style={{ margin: 4 }}>
-              {course
-                ? `Last updated  ${distanceInWordsToNow(course.lastmodified)} ago`
-                : "not Saved yet"}
-            </Chip>
-          </CardSection>
-        </Card>
-      </form>
+            </Formik>
+          );
+        }}
+      </Query>
     );
   }
 }
 
-export default reduxForm({ form: "courseform", enableReinitialize: true })(
-  withAuth(withRouter(CourseForm))
-);
+export default withRouter(withStyles(styles)(CourseForm));

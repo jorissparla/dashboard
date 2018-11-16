@@ -92,7 +92,7 @@ class CreateFolder extends Component {
           return (
             <React.Fragment>
               <Paper className={classes.root} elevation={2}>
-                <Typography variant="headline" component="h2">
+                <Typography variant="h5" component="h2">
                   Create Folder
                 </Typography>
                 <div>

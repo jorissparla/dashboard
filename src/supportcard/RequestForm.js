@@ -1,17 +1,65 @@
 import React from "react";
-import Checkbox from "material-ui/Checkbox";
+import Checkbox from "@material-ui/core/Checkbox";
 import { format } from "date-fns";
-import AutoComplete from "material-ui/AutoComplete";
-import { TextArea, ViewText, Button, FlexCol, FlexRow } from "../styles";
+import Select from "@material-ui/core/Select";
+import Paper from "@material-ui/core/Paper";
+import MenuItem from "@material-ui/core/MenuItem";
+import TextField from "@material-ui/core/TextField";
+import { Formik } from "formik";
+import Button from "@material-ui/core/Button";
+import { TextArea, ViewText, FlexCol, FlexRow } from "../styles";
+import { withStyles } from "@material-ui/core/styles";
 import styled from "styled-components";
+import { FormControl, InputLabel, FormControlLabel } from "@material-ui/core";
+import Chip from "@material-ui/core/Chip";
+import Typography from "@material-ui/core/Typography";
 
-const Form = styled.form`
-  margin: 30px;
-  border: 1px solid lightgrey;
-  border-radius: 2px;
-  padding: 5px;
-  background: white;
-`;
+const paperStyle = {
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-between",
+  margin: "15px",
+  padding: "10px",
+  minWidth: "200px"
+};
+const styles = theme => ({
+  container: {
+    display: "flex",
+    flexWrap: "wrap"
+  },
+  button: {
+    margin: theme.spacing.unit
+  },
+
+  buttonDel: {
+    margin: theme.spacing.unit,
+    backgroundColor: "#000"
+  },
+
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200,
+    height: "100%",
+    marginBottom: 20
+  },
+  titleField: {
+    fontFamily: "Didact Gothic",
+    fontSize: "40px",
+    color: "#039BE5",
+    fontWeight: 800
+  },
+  dense: {
+    marginTop: 19
+  },
+  formControl: {
+    margin: theme.spacing.unit,
+    minWidth: 250
+  },
+  menu: {
+    width: 200
+  }
+});
 
 class RequestForm extends React.Component {
   componentWillMount() {
@@ -29,77 +77,108 @@ class RequestForm extends React.Component {
   };
 
   handleChange = ({ target: { name, value } }) => {
-    console.log(this.state);
     this.setState({
       [name]: value
     });
   };
 
-  handleSave = () => {
-    this.setState({ updatedAt: Date.now() });
-    this.props.onSave(this.state);
-  };
-  handleSelect = v => {
-    this.setState({ assigned: v });
-  };
   handleCancel = () => {
     this.props.onCancel();
   };
   render() {
     const datasource = this.props.accounts.map(item => item.fullname);
+    const assignees = this.props.accounts.map(item => ({ id: item.id, name: item.fullname }));
+    const { classes } = this.props;
+    console.log(this.props.request.createdAt);
+    const createdAt = format(Date.parse(this.props.request.createdAt || Date.now(), "dddd, DD-MMM-YYYY"));
     return (
-      <Form width="800px">
-        <FlexCol>
-          <h2>Request</h2>
-          <FlexRow>
-            <ViewText placeholder="requested by" background="grey" color="white" width="20%">
-              {this.state.name}
-            </ViewText>
-
-            <ViewText placeholder="requested date" width="30%" background="grey" color="white">
-              {format(Date.parse(this.state.createdAt, "dddd, DD-MMM-YYYY"))}
-            </ViewText>
-          </FlexRow>
-          <FlexRow>
-            <TextArea
-              rows="3"
-              cols="80"
-              width="90%"
-              name="text"
-              placeholder="text"
-              value={this.state.text}
-              onChange={this.handleChange}
-            />
-          </FlexRow>
-          <FlexRow>
-            <Checkbox
-              label="complete"
-              checked={this.state.checked}
-              onCheck={this.updateCheck}
-              style={{ display: "flex", paddingLeft: 20 }}
-            />
-            <AutoComplete
-              hintText="Assigned to"
-              dataSource={datasource}
-              filter={AutoComplete.caseInsensitiveFilter}
-              onUpdateInput={this.handleSelect}
-              style={{ display: "flex", paddingLeft: 20 }}
-              name="assigned"
-              value={this.state.assigned}
-            />
-          </FlexRow>
-          <FlexRow>
-            <Button onClick={this.handleSave} width="100px">
-              Save
-            </Button>
-            <Button onClick={this.handleCancel} width="100px" color="black">
-              Cancel
-            </Button>
-          </FlexRow>
-        </FlexCol>
-      </Form>
+      <Formik initialValues={this.props.request} onSubmit={values => this.props.onSave(values)}>
+        {({ values, touched, errors, dirty, isSubmitting, handleChange, handleBlur, handleSubmit, handleReset }) => {
+          return (
+            <Paper style={paperStyle}>
+              <form width="800px">
+                <FlexCol>
+                  <Typography variant="h5" gutterBottom>
+                    Request
+                  </Typography>
+                  <FlexRow>
+                    <TextField
+                      variant="outlined"
+                      className={classes.textField}
+                      value={values.name}
+                      label="name of requester"
+                    />
+                  </FlexRow>
+                  <FlexRow>
+                    <TextField
+                      variant="outlined"
+                      fullWidth
+                      multiline
+                      rows="3"
+                      cols="80"
+                      width="90%"
+                      name="text"
+                      placeholder="text"
+                      value={values.text}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                    />
+                  </FlexRow>
+                  <FlexRow>
+                    <FormControl className={classes.formControl}>
+                      <InputLabel htmlFor="owner-simple">Assigned</InputLabel>
+                      <Select
+                        value={values.assigned}
+                        onChange={handleChange}
+                        inputProps={{
+                          name: "assigned",
+                          id: "assigned-simple"
+                        }}
+                      >
+                        {assignees.map(({ id, name }) => (
+                          <MenuItem key={id} value={name}>
+                            {name}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                    <FormControl className={classes.formControl}>
+                      <FormControlLabel
+                        control={
+                          <Checkbox
+                            name="complete"
+                            checked={values.complete}
+                            onChange={handleChange}
+                            value={values.checked}
+                            color="primary"
+                          />
+                        }
+                        label="complete"
+                      />
+                    </FormControl>
+                  </FlexRow>
+                  <FlexRow>
+                    <Button variant="contained" color="primary" onClick={handleSubmit} className={classes.button}>
+                      Save
+                    </Button>
+                    <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={this.handleCancel}
+                      className={classes.button}
+                    >
+                      Cancel
+                    </Button>
+                    <Chip name="createdAt" label={`Created at ${values.createdAt}`} />
+                  </FlexRow>
+                </FlexCol>
+              </form>
+            </Paper>
+          );
+        }}
+      </Formik>
     );
   }
 }
 
-export default RequestForm;
+export default withStyles(styles)(RequestForm);

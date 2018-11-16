@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 export default class Component extends React.Component {
   state = this.props.initialValue || {};
@@ -9,7 +9,7 @@ export default class Component extends React.Component {
   render() {
     const { children } = this.props;
     const { state } = this;
-    if (typeof children === "function") {
+    if (typeof children === 'function') {
       return children({ state, setState: this._setState });
     } else {
       return children || null;

@@ -19,15 +19,16 @@ import Divider from "@material-ui/core/Divider";
 
 import _ from "lodash";
 import { WideTitle, colorAr, getColor } from "../styles";
+import DeleteChat from "./DeleteChat";
 
-const DELETE_CHAT = gql`
-  mutation deleteChat($input: ChatInputType) {
+const DELETE_CHAT_MUTATION = gql`
+  mutation DELETE_CHAT_MUTATION($input: ChatInputType) {
     deleteChat(input: $input) {
       result
     }
   }
 `;
-const ALL_CHATS = gql`
+const ALL_CHATS_QUERY = gql`
   {
     chats {
       id
@@ -41,10 +42,10 @@ const ALL_CHATS = gql`
 `;
 
 const deleteChat = ({ render }) => (
-  <Mutation mutation={DELETE_CHAT}>{(mutation, result) => render({ mutation, result })}</Mutation>
+  <Mutation mutation={DELETE_CHAT_MUTATION}>{(mutation, result) => render({ mutation, result })}</Mutation>
 );
 
-const myChats = ({ render }) => <Query query={ALL_CHATS}>{data => render(data)}</Query>;
+const myChats = ({ render }) => <Query query={ALL_CHATS_QUERY}>{data => render(data)}</Query>;
 
 const mapper = {
   myChats,
@@ -103,7 +104,7 @@ const RenderChat = ({ chat, onRemove }) => {
           />
           <ListItemSecondaryAction>
             <IconButton aria-label="Comments">
-              <ClearIcon onClick={() => onRemove(id)} />
+              <DeleteChat id={id} />
             </IconButton>
           </ListItemSecondaryAction>
         </ListItem>
@@ -137,7 +138,7 @@ class ChatList extends Component {
           return (
             <React.Fragment>
               <Paper className={classes.root}>
-                <WideTitle variant="display1" gutterBottom className={classes.typo}>
+                <WideTitle variant="h4  " gutterBottom className={classes.typo}>
                   Chat
                   <Button
                     variant="fab"
@@ -168,3 +169,4 @@ class ChatList extends Component {
 }
 
 export default withStyles(styles)(withRouter(ChatList));
+export { ALL_CHATS_QUERY };

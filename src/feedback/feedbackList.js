@@ -1,23 +1,27 @@
-import React, { Component } from "react";
-import gql from "graphql-tag";
-import { graphql, compose } from "react-apollo";
-import Paper from "material-ui/Paper";
-import { withRouter } from "react-router";
-import { List, ListItem } from "material-ui/List";
-import Divider from "material-ui/Divider";
-import TextField from "material-ui/TextField";
-import DatePicker from "material-ui/DatePicker";
-import SelectField from "material-ui/SelectField";
-import MenuItem from "material-ui/MenuItem";
-import styled from "styled-components";
-import { HeaderRow, HeaderLeft, HeaderRight, Title, Image } from "../styles";
-import Dialog from "material-ui/Dialog";
-import Save from "material-ui/svg-icons/content/save";
-import Undo from "material-ui/svg-icons/content/undo";
-import Clear from "material-ui/svg-icons/content/clear";
-import RaisedButton from "material-ui/RaisedButton";
+import React, { Component } from 'react';
+import gql from 'graphql-tag';
+import { graphql, compose } from 'react-apollo';
+import Paper from '@material-ui/core/Paper';
+import { withRouter } from 'react-router';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import Divider from '@material-ui/core/Divider';
+import TextField from '@material-ui/core/TextField';
+import SelectField from 'material-ui/SelectField';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import styled from 'styled-components';
+import { HeaderRow, HeaderLeft, HeaderRight, Title, Image } from '../styles';
+import Dialog from '@material-ui/core/Dialog';
+import Save from '@material-ui/icons/Save';
+import Undo from '@material-ui/icons/Undo';
+import Clear from '@material-ui/icons/Clear';
+import Button from '@material-ui/core/Button';
 
-const P = styled.p`
+const P = styled.div`
   white-space: pre-line;
   font-size: 20px;
 `;
@@ -27,13 +31,20 @@ const Left = styled.div`
   flex-direction: column;
   margin-right: 15px;
   left: 15px;
+  min-width: 100px;
 `;
 const DateField = styled.div`
   font-size: 12px;
   margin-right: 5px;
 `;
 
-const queryFeedback = gql`
+const Fat = styled.h3`
+  font-weight: 100;
+  font-family: Raleway, Roboto;
+}
+`;
+
+const ALL_FEEDBACK_QUERY = gql`
   query feedbackQuery {
     feedback {
       id
@@ -82,14 +93,14 @@ class FeedBackList extends Component {
   state = {
     index: null,
     currentid: null,
-    text: "",
-    orgtext: "",
+    text: '',
+    orgtext: '',
     open: false,
-    navid: "",
-    fullname: "",
-    image: "",
-    customername: "",
-    newtext: "",
+    navid: '',
+    fullname: '',
+    image: '',
+    customername: '',
+    newtext: '',
     createdAt: new Date()
   };
 
@@ -97,13 +108,13 @@ class FeedBackList extends Component {
     this.setState({
       currentid: null,
       index: null,
-      text: "",
-      orgtext: "",
-      navid: "",
-      fullname: "",
-      image: "",
-      customername: "",
-      newtext: "",
+      text: '',
+      orgtext: '',
+      navid: '',
+      fullname: '',
+      image: '',
+      customername: '',
+      newtext: '',
       createdAt: new Date()
     });
   };
@@ -126,64 +137,66 @@ class FeedBackList extends Component {
   };
 
   componentDidMount() {
-    console.log("mounting");
+    console.log('mounting');
   }
 
   renderListItem = (item, index) => {
     const { id, text, createdAt, customername, forConsultant } = item;
-    const { image, fullname } = forConsultant || { image: "", fullname: "None" };
-    return [
-      <ListItem
-        style={{ height: index === this.state.index ? 150 : 75 }}
-        onClick={() => this.handleClick(id, text, index)}
-        key={id}
-        leftAvatar={
+    const { image, fullname } = forConsultant || { image: '', fullname: 'None' };
+    return (
+      <React.Fragment key={index}>
+        <ListItem key={index}>
           <Left>
             <Image image={image} fullname={fullname} />
             <DateField>{createdAt.substr(0, 10)}</DateField>
           </Left>
-        }
-        primaryText={`${fullname} (${customername} )`}
-        secondaryText={
-          this.state.currentid === id ? (
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                marginRight: 2,
-                color: "#40a5ed",
-                height: 100
-              }}
-            >
-              <TextField
-                fullWidth={true}
-                underlineShow={true}
-                multiLine={true}
-                rows={2}
-                style={{
-                  fontSize: "14px",
-                  border: " 1px solid #40a5ed",
-                  textColor: "white",
-                  marginTop: 0
-                }}
-                hintText="Select a person"
-                value={this.state.text}
-                onBlur={this.handleBlur}
-                onChange={this.handleChangeText}
-              />
-              <Save onClick={this.handleBlur} />
-              <Undo onClick={this.handleUndo} />
-            </div>
-          ) : (
-            <P>{text}</P>
-          )
-        }
-        secondaryTextLines={2}
-        rightIcon={this.props.isEditor ? <Clear onClick={() => this.handleClear(id)} /> : <div />}
-      />,
-      <Divider key="divider123" />
-    ];
+          <ListItemText
+            primary={`${fullname} ( ${customername} )`}
+            secondary={
+              this.state.currentid === id ? (
+                <React.Fragment
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    marginRight: 2,
+                    color: '#40a5ed',
+                    height: 100
+                  }}
+                >
+                  <TextField
+                    fullWidth={true}
+                    underlineShow={true}
+                    multiLine={true}
+                    rows={2}
+                    style={{
+                      fontSize: '14px',
+                      border: ' 1px solid #40a5ed',
+                      textColor: 'white',
+                      marginTop: 0
+                    }}
+                    value={this.state.text}
+                    onBlur={this.handleBlur}
+                    onChange={this.handleChangeText}
+                  />
+                  <Save onClick={this.handleBlur} />
+                  <Undo onClick={this.handleUndo} />
+                </React.Fragment>
+              ) : (
+                text
+              )
+            }
+          />
+
+          <ListItemSecondaryAction>
+            {this.props.isEditor ? <Clear onClick={() => this.handleClear(id)} /> : <div />}
+          </ListItemSecondaryAction>
+        </ListItem>
+
+        <Divider key="divider123" />
+      </React.Fragment>
+    );
   };
+
   render() {
     const {
       data: { loading, feedback },
@@ -197,25 +210,28 @@ class FeedBackList extends Component {
         </HeaderLeft>
         {isEditor && (
           <HeaderRight>
-            <RaisedButton
-              label="New"
-              primary={true}
-              style={{ margin: 10 }}
-              onClick={() => this.setState({ open: true })}
-            />
-            <RaisedButton
-              label="Surveys"
-              secondary={true}
-              style={{ margin: 10 }}
-              onClick={() => this.props.history.push("/comments")}
-            />
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => this.props.history.push('/addfeedback')}
+            >
+              New
+            </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={() => this.props.history.push('/comments')}
+            >
+              Surveys
+            </Button>
           </HeaderRight>
         )}
       </HeaderRow>,
       <Paper key="555paper">
-        <List key="fblist">{feedback.map((item, index) => this.renderListItem(item, index))}</List>
-      </Paper>,
-      <div key="stateopen43242">{this.state.open ? this.renderDialog() : null}</div>
+        <List key="fblist">
+          {feedback ? feedback.map((item, index) => this.renderListItem(item, index)) : <div />}
+        </List>
+      </Paper>
     ];
   }
 
@@ -266,20 +282,17 @@ class FeedBackList extends Component {
       data: { supportfolks }
     } = this.props;
     const actions = [
-      <RaisedButton
-        key="okb"
-        label="Ok"
-        primary={true}
-        keyboardFocused={true}
-        onClick={this.saveEntry}
-      />,
-      <RaisedButton
+      <Button key="okb" variant="contained" color="primary" onClick={this.saveEntry}>
+        Ok
+      </Button>,
+      <Button
         key="canb"
-        label="Cancel"
-        secondary={true}
-        keyboardFocused={true}
+        variant="contained"
+        color="secondary"
         onClick={() => this.setState({ open: false })}
-      />
+      >
+        Cancel
+      </Button>
     ];
 
     return (
@@ -289,38 +302,45 @@ class FeedBackList extends Component {
         modal={false}
         open={this.state.open}
         onRequestClose={this.handleClose}
-        style={{ width: "900px" }}
+        style={{ width: '900px' }}
       >
-        <SelectField
+        <Select
           id="person"
           name="person"
           hintText="Select a person"
           multiple={false}
-          fullWidth={true}
+          fullWidth
           onChange={this.handleChangePerson}
           style={{ flex: 2 }}
           value={this.state.navid}
         >
           {supportfolks.map(person => (
-            <MenuItem key={person.id} value={person.navid} primaryText={person.fullname} />
+            <MenuItem key={person.id} value={person.navid} primaryText={person.fullname}>
+              {person.fullname}
+            </MenuItem>
           ))}
-        </SelectField>
+        </Select>
         <TextField
           id="customername"
           name="customername"
           hintText="Customer name"
-          fullWidth={true}
+          fullWidth
           onChange={this.handleChange}
           value={this.state.customername}
         />
-        <DatePicker hintText="Date" value={this.state.createdAt} onChange={this.handleChangeDate} />
+        <TextField
+          type="date"
+          label="Date"
+          /* value={this.state.createdAt} */
+          onChange={this.handleChangeDate}
+        />
         <TextField
           id="newtext"
           name="newtext"
-          multiLine={true}
-          fullWidth={true}
+          multiLine
+          fullWidth
           rows={2}
-          hintText="Feedback text"
+          label="Feedback text"
           onChange={this.handleChange}
           value={this.state.newtext}
         />
@@ -330,8 +350,10 @@ class FeedBackList extends Component {
 }
 
 export default compose(
-  graphql(queryFeedback),
-  graphql(updateFeedback, { name: "updateFeedback" }),
-  graphql(deleteFeedback, { name: "deleteFeedback" }),
-  graphql(createFeedback, { name: "createFeedback" })
+  graphql(ALL_FEEDBACK_QUERY),
+  graphql(updateFeedback, { name: 'updateFeedback' }),
+  graphql(deleteFeedback, { name: 'deleteFeedback' }),
+  graphql(createFeedback, { name: 'createFeedback' })
 )(withRouter(FeedBackList));
+
+export { ALL_FEEDBACK_QUERY };

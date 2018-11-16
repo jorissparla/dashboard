@@ -1,8 +1,6 @@
 import React from "react";
 import { withRouter } from "react-router";
-//import "./App.css";
-import Header from "./appnav";
-import { AppBar, Drawer, MenuItem } from "material-ui";
+import { Drawer, MenuItem } from "material-ui";
 
 const SideBarDrawer = () => (
   <Drawer open={true}>
@@ -15,7 +13,6 @@ class App extends React.Component {
     return (
       <div>
         <SideBarDrawer />
-        {/*<Header>{this.props.children}</Header>*/}
       </div>
     );
   }
