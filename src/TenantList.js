@@ -12,6 +12,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import SearchBar from './common/SearchBar';
 import Chip from '@material-ui/core/Chip';
+import format from 'date-fns/format';
 
 const ALL_TENANTS = gql`
   {
@@ -24,6 +25,7 @@ const ALL_TENANTS = gql`
       customer {
         name
       }
+      lastupdated
     }
   }
 `;
@@ -42,7 +44,10 @@ const styles = theme => ({
   card: {
     minWidth: 275,
     margin: 10,
-    width: 275
+    width: 275,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between'
   },
   card2: {
     minWidth: 275,
@@ -93,36 +98,40 @@ const styles = theme => ({
   }
 });
 
-const TenantCard = ({ classes, customer, tenants }) => (
-  <Card className={customer === 'Infor' ? classes.card2 : classes.card}>
-    <CardContent>
-      <Typography gutterBottom variant="h5" component="h2">
-        {customer}
-      </Typography>
-      <Typography className={classes.pos} color="textSecondary">
-        {tenants.length > 0 && tenants[0].farm}
-      </Typography>
-      <div className={classes.flex2}>
-        {tenants.map(({ id, name, version }) => (
-          <Chip key={id} label={`${name}:${version}`} className={classes.chip} color="primary" />
-        ))}
-      </div>
-    </CardContent>
-    <CardActions>
-      <Button
-        size="small"
-        onClick={() =>
-          window.open(
-            'http://navigator.infor.com/n/incident_list.asp?ListType=CUSTOMERID&Value=' +
-              tenants[0].customerid
-          )
-        }
-      >
-        Incidents
-      </Button>
-    </CardActions>
-  </Card>
-);
+const TenantCard = ({ classes, customer, tenants }) => {
+  const max = _.maxBy(tenants, t => format(t.lastupdated, 'YYYYMMDD')).lastupdated;
+  return (
+    <Card className={customer === 'Infor' ? classes.card2 : classes.card}>
+      <CardContent>
+        <Typography gutterBottom variant="h5" component="h2">
+          {customer}
+        </Typography>
+        <Typography className={classes.pos} color="textSecondary">
+          {tenants.length > 0 && tenants[0].farm}
+        </Typography>
+        <div className={classes.flex2}>
+          {tenants.map(({ id, name, version }) => (
+            <Chip key={id} label={`${name}:${version}`} className={classes.chip} color="primary" />
+          ))}
+        </div>
+      </CardContent>
+      <CardActions>
+        <Button
+          size="small"
+          onClick={() =>
+            window.open(
+              'http://navigator.infor.com/n/incident_list.asp?ListType=CUSTOMERID&Value=' +
+                tenants[0].customerid
+            )
+          }
+        >
+          Incidents
+        </Button>
+        <Button variant="contained">{format(max, 'DDMMMYYYY')}</Button>
+      </CardActions>
+    </Card>
+  );
+};
 
 const tenantsByCustomer = (tenants, searchText) =>
   _.chain(tenants)
@@ -163,10 +172,11 @@ class TenantList extends Component {
             .map(v => v.customer.name)
             .filter((v, i, a) => a.indexOf(v) === i);
           console.log(uniques);
+          const max = _.maxBy(tenants, t => format(t.lastupdated, 'YYYYMMDD')).lastupdated;
           return (
             <React.Fragment>
               <Typography gutterBottom variant="h5" component="h2">
-                Multitenant customers
+                {` Multitenant customers - last change (${format(max, 'DDMMMYYYY')})`}
               </Typography>
               <SearchBar onChange={this.handleSearchChange} />
               <div className={classes.flex}>
