@@ -8,6 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import { Formik } from 'formik';
 import { TextField, Select, FormControl, InputLabel, MenuItem } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
+import Badge from '@material-ui/core/Badge';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import * as yup from 'yup';
@@ -31,10 +32,16 @@ const styles = theme => ({
     padding: '10px',
     minWidth: '200px'
   },
+  margin: {
+    margin: theme.spacing.unit * 2,
+    color: 'black'
+  },
   button: {
+    width: 200
+  },
+  button2: {
     margin: theme.spacing.unit,
-    width: 200,
-    margin: 10
+    width: 200
   },
 
   block: {
@@ -87,6 +94,17 @@ const QUERY_ALL_FIELDS = gql`
     supportfolks {
       id
       fullname
+    }
+  }
+`;
+
+const QUERY_PLANNED_COURSES = gql`
+  query QUERY_PLANNED_COURSES($id: ID) {
+    course(id: $id) {
+      id
+      plannedcourses {
+        id
+      }
     }
   }
 `;
@@ -309,7 +327,7 @@ class CourseForm extends React.Component {
                       <Button
                         variant="contained"
                         color="secondary"
-                        className={classes.button}
+                        className={classes.button2}
                         onClick={() => history.push('/courses')}
                       >
                         Back to courses
@@ -317,23 +335,48 @@ class CourseForm extends React.Component {
                       {id &&
                         !view && (
                           <React.Fragment>
+                            <Query query={QUERY_PLANNED_COURSES} variables={{ id }}>
+                              {({ data, loading }) => {
+                                if (loading) {
+                                  return 'loading';
+                                } else {
+                                  const {
+                                    course: { plannedcourses }
+                                  } = data;
+                                  console.log(data);
+                                  return (
+                                    <React.Fragment>
+                                      <Badge
+                                        color="primary"
+                                        badgeContent={plannedcourses.length}
+                                        className={classes.margin}
+                                      >
+                                        <Button
+                                          variant="contained"
+                                          className={classes.button}
+                                          onClick={() => history.push('/scheduledcourses/' + id)}
+                                        >
+                                          Scheduled Courses
+                                        </Button>
+                                      </Badge>
+                                      <Button
+                                        variant="contained"
+                                        disabled={plannedcourses.length > 0}
+                                        className={classes.buttonDel}
+                                        onClick={() => this.props.onDelete(id)}
+                                      >
+                                        Delete course
+                                      </Button>
+                                    </React.Fragment>
+                                  );
+                                }
+                              }}
+                            </Query>
+
                             <Button
                               variant="contained"
-                              className={classes.buttonDel}
-                              onClick={() => this.props.onDelete(id)}
-                            >
-                              Delete course
-                            </Button>
-                            <Button
-                              variant="contained"
-                              className={classes.button}
-                              onClick={() => history.push('/scheduledcourses/' + id)}
-                            >
-                              Schedule Courses
-                            </Button>
-                            <Button
-                              variant="contained"
-                              className={classes.button}
+                              color="secondary"
+                              className={classes.button2}
                               onClick={() => history.push('/scheduledcourses/' + id + '/new')}
                             >
                               Schedule New Course
@@ -360,3 +403,4 @@ class CourseForm extends React.Component {
 }
 
 export default withRouter(withStyles(styles)(CourseForm));
+export { QUERY_PLANNED_COURSES };

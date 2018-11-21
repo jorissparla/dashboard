@@ -188,35 +188,6 @@ class TenantList extends Component {
                 })}
                 <TenantCard classes={classes} customer="Infor" tenants={inforTenant(tenants)} />
               </div>
-              {/*      <List> 
-                {tenantsByCustomer(tenants, this.state.searchText).map((tenant, index) => {
-                  const aClass = this.avatars(index);
-                  return (
-                    <ListItem key={tenant.id} className={classes.listItem}>
-                      {index % 3 === 0 ? (
-                        <div className={`${classes.orangeAvatar} ${classes.bigAvatar}`}>
-                          {tenant.version}
-                        </div>
-                      ) : index % 3 === 1 ? (
-                        <div className={`${classes.purpleAvatar} ${classes.bigAvatar}`}>
-                          {tenant.version}
-                        </div>
-                      ) : (
-                        <div className={`${classes.blueAvatar} ${classes.bigAvatar}`}>
-                          {tenant.version}
-                        </div>
-                      )}
-
-                      <ListItemText
-                        primary={<div className={classes.itemtitle}> {tenant.customer.name}</div>}
-                        secondary={`
-                      ${tenant.name} runs on farn ${tenant.farm}
-                      `}
-                      />
-                    </ListItem>
-                  );
-                })}
-              </List>*/}
             </React.Fragment>
           );
         }}

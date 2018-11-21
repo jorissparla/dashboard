@@ -177,7 +177,6 @@ class DownshiftMultiple extends React.Component {
   };
 
   handleChange = item => {
-    console.log('xxx', item);
     const { setState, state } = this.props;
     let { selectedItem } = state;
 
@@ -207,7 +206,6 @@ class DownshiftMultiple extends React.Component {
   render() {
     const { classes, label, placeholder, state, suggestions, fieldname, idfieldname } = this.props;
     const { inputValue, selectedItem } = state;
-
     return (
       <div>
         <Downshift
@@ -271,7 +269,6 @@ export default class SelectDropDown extends React.Component {
   handleChange = ({ target: { name, value } }) => {
     this.props.setState({ selectedItem: value });
     this.props.onChange(value);
-    console.log(value);
   };
   render() {
     const { suggestions, state, label, placeholder, fieldname, idfieldname = 'id' } = this.props;

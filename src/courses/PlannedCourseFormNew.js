@@ -7,6 +7,7 @@ import Chip from '@material-ui/core/Chip';
 import Typography from '@material-ui/core/Typography';
 import { Formik } from 'formik';
 import { TextField, Select, FormControl, InputLabel, MenuItem } from '@material-ui/core';
+import Badge from '@material-ui/core/Badge';
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
@@ -14,6 +15,8 @@ import * as yup from 'yup';
 import format from 'date-fns/format';
 import addHours from 'date-fns/add_hours';
 import { distanceInWordsToNow } from 'date-fns';
+import { adopt } from 'react-adopt';
+import { QUERY_PLANNED_COURSES } from './CourseFormNew';
 
 const validationSchema = yup.object().shape({
   startdate: yup.string().required(),
@@ -33,12 +36,18 @@ const styles = theme => ({
     padding: '10px',
     minWidth: '200px'
   },
-  button: {
+  button2: {
     margin: theme.spacing.unit,
-    width: 200,
+    maxWidth: 200,
     margin: 10
   },
-
+  button: {
+    width: 200
+  },
+  margin: {
+    margin: theme.spacing.unit * 2,
+    color: 'black'
+  },
   block: {
     display: 'flex',
     margin: 10,
@@ -96,6 +105,15 @@ const QUERY_ALL_FIELDS = gql`
   }
 `;
 
+const Composed = adopt({
+  coursedata: ({ render }) => <Query query={QUERY_ALL_FIELDS}>{render}</Query>,
+  plannedcourses: ({ id, render }) => (
+    <Query query={QUERY_PLANNED_COURSES} variables={{ id }}>
+      {render}
+    </Query>
+  )
+});
+
 const teams = [
   { id: 1, name: 'Logistics' },
   { id: 2, name: 'Finance' },
@@ -120,15 +138,20 @@ class PlannedCourseForm extends React.Component {
   };
 
   render() {
-    console.log(this.props);
     const { classes, history, id } = this.props;
     return (
-      <Query query={QUERY_ALL_FIELDS}>
-        {({ data, loading, error }) => {
-          if (loading) {
+      <Composed id={id}>
+        {({
+          coursedata: { data, loading, error },
+          plannedcourses: { data: plannedcoursedata, loading: loading2 }
+        }) => {
+          if (loading || loading2) {
             return 'Loading...';
           }
-
+          const {
+            course: { plannedcourses }
+          } = plannedcoursedata;
+          console.log('xxxx', plannedcourses, loading2);
           const { coursetypes, coursecategories, statuses, locations, supportfolks } = data;
           const { course, id } = this.props;
           const nstartdate = format(addHours(Date.now(), 24), 'YYYY-MM-DD');
@@ -286,7 +309,7 @@ class PlannedCourseForm extends React.Component {
                       <Button
                         variant="contained"
                         color="primary"
-                        className={classes.button}
+                        className={classes.button2}
                         onClick={handleSubmit}
                         type="submit"
                       >
@@ -295,7 +318,7 @@ class PlannedCourseForm extends React.Component {
                       <Button
                         variant="contained"
                         color="secondary"
-                        className={classes.button}
+                        className={classes.button2}
                         onClick={() => history.push('/courses')}
                       >
                         Back to courses
@@ -304,21 +327,28 @@ class PlannedCourseForm extends React.Component {
                         <React.Fragment>
                           <Button
                             variant="contained"
+                            disabled={true}
                             className={classes.buttonDel}
                             onClick={() => console.log(id)}
                           >
-                            Delete course
+                            Delete Scheduled course
                           </Button>
-                          <Button
-                            variant="contained"
-                            className={classes.button}
-                            onClick={() => history.push('/scheduledcourses/' + id)}
+                          <Badge
+                            color="primary"
+                            badgeContent={plannedcourses.length}
+                            className={classes.margin}
                           >
-                            Schedule Courses
-                          </Button>
+                            <Button
+                              variant="contained"
+                              className={classes.button}
+                              onClick={() => history.push('/scheduledcourses/' + id)}
+                            >
+                              Scheduled Courses
+                            </Button>
+                          </Badge>
                           <Button
                             variant="contained"
-                            className={classes.button}
+                            className={classes.button2}
                             onClick={() => history.push('/scheduledcourses/' + id + '/new')}
                           >
                             Schedule New Course
@@ -339,7 +369,7 @@ class PlannedCourseForm extends React.Component {
             </Formik>
           );
         }}
-      </Query>
+      </Composed>
     );
   }
 }

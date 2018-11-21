@@ -5,7 +5,7 @@ import Component from '../common/component-component';
 import SaveIcon from '@material-ui/icons/Save';
 import { StyledMultiple } from './StyledDropdowns';
 import { QUERY_SCHEDULED_COURSES } from './PlannedCoursesNew';
-
+import { adopt } from 'react-adopt';
 import { Formik } from 'formik';
 
 const QUERY_PLANNEDCOURSE_WITHPARTICIPANTS = gql`
@@ -44,81 +44,87 @@ const ADD_PARTICIPANTS_TO_COURSE = gql`
   }
 `;
 
+const Composed = adopt({
+  plannedcoursewithparticipants: ({ id, render }) => (
+    <Query query={QUERY_PLANNEDCOURSE_WITHPARTICIPANTS} variables={{ id }}>
+      {render}
+    </Query>
+  ),
+  updatePlannedCourseParticipants: ({ render }) => (
+    <Mutation mutation={ADD_PARTICIPANTS_TO_COURSE}>{render}</Mutation>
+  )
+});
+
 class EditStudentsOnCourse extends React.Component {
   state = {
     plannedCourseId: ''
   };
   render() {
     return (
-      <Query
-        query={QUERY_PLANNEDCOURSE_WITHPARTICIPANTS}
-        variables={{ id: this.props.id || '611E0A88-8690-4102-A629-F7E3B28874A3' }}
-      >
-        {({ data, loading, error }) => {
-          if (loading) {
-            return 'Loading';
-          }
-          if (!data) {
-            return 'No data';
-          }
+      <React.Fragment>
+        <React.Suspense fallback={<div>Loading</div>}>
+          <Composed id={this.props.id}>
+            {({
+              updatePlannedCourseParticipants,
+              plannedcoursewithparticipants: { data, loading }
+            }) => {
+              if (loading) {
+                return 'Loading...';
+              }
+              if (!data) {
+                return 'No data';
+              }
+              const { plannedcourse, supportfolks: suggestions } = data;
 
-          const { plannedcourse, supportfolks } = data;
-          const suggestions = supportfolks;
-          const participants = plannedcourse
-            ? plannedcourse.students.map(({ fullname }) => fullname)
-            : [];
+              const participants = plannedcourse
+                ? plannedcourse.students.map(({ fullname }) => fullname)
+                : [];
 
-          return (
-            <Component
-              initialValue={{
-                participants,
-                inputValue: '',
-                selectedItem: [...participants],
-                suggestions: suggestions
-              }}
-            >
-              {({ state, setState }) => {
-                return (
-                  <Mutation
-                    mutation={ADD_PARTICIPANTS_TO_COURSE}
-                    /*   refetchQueries={[{ query: QUERY_PLANNEDCOURSE_WITHPARTICIPANTS }]} */
-                  >
-                    {updatePlannedCourseParticipants => {
-                      return (
-                        <React.Fragment>
-                          <StyledMultiple
-                            id="participants"
-                            name="participants"
-                            state={state}
-                            setState={async v => {
-                              await setState(v);
-                              console.log('z');
-                              //if (v.selectedItem) this.props.onChange(v.selectedItem);
-                            }}
-                            suggestions={suggestions}
-                            onChange={async participants => {
-                              //console.log('Change-added', a, state);
-                              const result = await updatePlannedCourseParticipants({
-                                variables: { participants, id: this.props.id }
-                              });
-                              console.log(result);
-                              this.props.onChange(result);
-                            }}
-                            onDelete={async deletedValue => {
-                              const participants = state.selectedItem
-                                .filter(name => name !== deletedValue)
-                                .join(';');
-                              const result = await updatePlannedCourseParticipants({
-                                variables: { participants, id: this.props.id }
-                              });
-                              console.log(result);
-                              this.props.onChange(result);
-                            }}
-                            label="participants"
-                            fieldname="fullname"
-                            placeholder="select multiple participants"
-                          />
-                          {/*   <SaveIcon
+              return (
+                <Component
+                  initialValue={{
+                    participants,
+                    inputValue: '',
+                    selectedItem: [...participants],
+                    suggestions: suggestions
+                  }}
+                >
+                  {({ state, setState }) => {
+                    return (
+                      <React.Fragment>
+                        <StyledMultiple
+                          id="participants"
+                          name="participants"
+                          state={state}
+                          setState={async v => {
+                            await setState(v);
+                            console.log('z');
+                            //if (v.selectedItem) this.props.onChange(v.selectedItem);
+                          }}
+                          suggestions={state.suggestions}
+                          onChange={async participants => {
+                            //console.log('Change-added', a, state);
+                            const result = await updatePlannedCourseParticipants({
+                              variables: { participants, id: this.props.id }
+                            });
+                            console.log(result);
+                            this.props.onChange(result);
+                          }}
+                          onDelete={async deletedValue => {
+                            const participants = state.selectedItem
+                              .filter(name => name !== deletedValue)
+                              .join(';');
+                            const result = await updatePlannedCourseParticipants({
+                              variables: { participants, id: this.props.id }
+                            });
+                            console.log(result);
+                            this.props.onChange(result);
+                          }}
+                          label="participants"
+                          fieldname="fullname"
+                          placeholder="select multiple participants"
+                        />
+                        {/*   <SaveIcon
                             type="submit"
                             onClick={() => {
                               console.log(state);
@@ -126,16 +132,15 @@ class EditStudentsOnCourse extends React.Component {
                           >
                             Save
                           </SaveIcon> */}
-                        </React.Fragment>
-                      );
-                    }}
-                  </Mutation>
-                );
-              }}
-            </Component>
-          );
-        }}
-      </Query>
+                      </React.Fragment>
+                    );
+                  }}
+                </Component>
+              );
+            }}
+          </Composed>
+        </React.Suspense>
+      </React.Fragment>
     );
   }
 }
