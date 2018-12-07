@@ -33,11 +33,13 @@ const PlannedCourseAdd = ({
       return (
         <Mutation
           mutation={ADD_PLANNEDCOURSE_MUTATION}
-          refetchQueries={[{ query: QUERY_ALL_COURSES }]}
+
+          //refetchQueries={[{ query: QUERY_ALL_COURSES }]}
         >
           {addPlannedCourse => {
             return (
               <PlannedCourseFormNew
+                id={id}
                 course={course}
                 onSave={async values => {
                   let input = _.pick(values, [

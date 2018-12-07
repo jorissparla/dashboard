@@ -139,6 +139,7 @@ class PlannedCourseForm extends React.Component {
 
   render() {
     const { classes, history, id } = this.props;
+    console.log('IDDDD', id);
     return (
       <Composed id={id}>
         {({
