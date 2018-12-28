@@ -28,10 +28,11 @@ const Cat = styled.div`
 const TitleWrapper = styled.div`
   display: flex;
   flex-direction: row;
+  font-family: 'Montserrat', Roboto;
 `;
 const Title = styled.div`
-  font-family: 'Roboto';
-  font-size: 18px;
+  font-family: 'Montserrat', Roboto;
+  font-size: 16px;
   font-weight: bold;
   padding: 2px;
   flex-grow: 0;
@@ -60,11 +61,12 @@ const BottomStyle = styled.div`
 const StyledBody = styled.p`
   margin: 5px;
   margin-bottom: 20px;
-  font-size: 15px;
+  font-size: 12px;
   flex-grow: 1;
   font-size: 12px;
   font-family: Helvetica;
   overflow: hidden;
+  font-family: Montserrat;
 `;
 
 const Outer = styled.div`
@@ -85,6 +87,7 @@ const StyledLink = styled(Link)`
 const StyledPapier = Papier.extend`
   display: flex;
   justify-content: space-between;
+  font-family: Montserrat;
   width: 18%;
   min-width: 200px;
   color: ${props => (props.textcolor ? props.textcolor : 'black')};

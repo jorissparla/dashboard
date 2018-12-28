@@ -20,6 +20,7 @@ import SearchBar from '../common/SearchBar';
 import withAuth from '../utils/withAuth';
 import AddCard from './AddCard';
 import CategoryTabs from './CategoryTabs';
+import ACard from './ACard';
 
 const styles = {
   card: {
@@ -103,7 +104,7 @@ function SupporCard(props) {
       <CardActionArea>
         <CardMedia className={classes.media}>
           <Typography gutterBottom variant="h6" component="h3">
-            {title}
+            A {title}
           </Typography>
         </CardMedia>
         <CardContent>
@@ -210,6 +211,10 @@ class SupportCards extends React.Component {
               background="papayawhip"
             />
           )}
+          {/* {filteredCards.map((card, index) => (
+            <ACard key={index} {...card} />
+          ))} */}
+          ;
           {filteredCards.map(
             (
               {

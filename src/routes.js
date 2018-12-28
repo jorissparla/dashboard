@@ -22,6 +22,7 @@ import DashBoardContainer from './dashboardcontainer';
 import NewsPage from './news/newspage';
 import User from './User';
 import UserPermissions from './UserPermissions';
+import CourseFileUpload from './courses/CourseFileUpload';
 //const DashBoardContainer = DynamicImport(() => import('./dashboardcontainer'));
 const AGLTest = DynamicImport(() => import('./supportcard/Test'));
 //const CommentsList = DynamicImport(() => import("./feedback/commentList"));
@@ -100,6 +101,7 @@ class AppRoutes extends React.Component {
           console.log('👴👴👴', data);
           return (
             <Switch>
+              <Route exact path="/fileupload" component={CourseFileUpload} />
               <EnhancedRoute
                 exact
                 path="/scheduledcourses/:id"

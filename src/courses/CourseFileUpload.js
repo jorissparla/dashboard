@@ -1,22 +1,22 @@
-import React, { Component } from "react";
-import { withStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
-import IconButton from "@material-ui/core/IconButton";
-import FolderOpen from "@material-ui/icons/FolderOpen";
-import FileUpload from "@material-ui/icons/FileCopy";
-import gql from "graphql-tag";
-import { Mutation } from "react-apollo";
-import styled from "styled-components";
-const PATH_PREFIX = "\\\\nlbavwdocsup1\\Training\\";
-const LINK_PREFIX = "http://nlbavwdocsup1:5001/";
+import React, { Component } from 'react';
+import { withStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import TextField from '@material-ui/core/TextField';
+import IconButton from '@material-ui/core/IconButton';
+import FolderOpen from '@material-ui/icons/FolderOpen';
+import FileUpload from '@material-ui/icons/FileCopy';
+import gql from 'graphql-tag';
+import { Mutation } from 'react-apollo';
+import styled from 'styled-components';
+const PATH_PREFIX = '\\\\nlbavwdocsup1\\Training\\';
+const LINK_PREFIX = 'http://nlbavwdocsup1:5001/';
 
 const UploadButtonWrapper = styled.div`
   position: relative;
   overflow: hidden;
   display: inline-block;
-  input[type="file"] {
+  input[type='file'] {
     font-size: 100px;
     position: absolute;
     left: 0;
@@ -38,11 +38,11 @@ const viewLink = path => path.replace(PATH_PREFIX, LINK_PREFIX);
 
 const styles = theme => ({
   root: {
-    width: "100%"
+    width: '100%'
   },
   container: {
-    display: "flex",
-    flexWrap: "wrap"
+    display: 'flex',
+    flexWrap: 'wrap'
   },
   textField: {
     marginLeft: theme.spacing.unit,
@@ -60,11 +60,15 @@ const styles = theme => ({
 class CourseFileUploader extends Component {
   state = {};
   render() {
-    const { link, classes, readOnly } = this.props;
+    const {
+      link = '\\\\nlbavwixs.infor.com\\images\\oeps',
+      classes,
+      readOnly = false
+    } = this.props;
     return (
       <Mutation mutation={UPLOAD_MUTATION}>
         {(mutation, { data }) => {
-          console.log("DATA", data);
+          console.log('DATA', data);
           return (
             <React.Fragment>
               <Paper className={classes.root} elevation={2}>
@@ -92,7 +96,7 @@ class CourseFileUploader extends Component {
                           multiple
                           required
                           onChange={({ target: { validity, files } }) => {
-                            console.log("files", files, link);
+                            console.log('files', files, link);
                             return (
                               validity.valid &&
                               mutation({

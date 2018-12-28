@@ -318,6 +318,13 @@ class PlannedCourseForm extends React.Component {
                       </Button>
                       <Button
                         variant="contained"
+                        className={classes.buttonDel}
+                        onClick={() => history.push(`/courses/edit/${id}`)}
+                      >
+                        Back to course
+                      </Button>
+                      <Button
+                        variant="contained"
                         color="secondary"
                         className={classes.button2}
                         onClick={() => history.push('/courses')}
