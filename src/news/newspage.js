@@ -33,6 +33,10 @@ const styles = theme => ({
   card: {
     maxWidth: 345,
     margin: 10,
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    transition: '0.5s ease all',
     '&:hover': {
       transform: 'rotateZ(-5deg)',
       maxWidth: 400
