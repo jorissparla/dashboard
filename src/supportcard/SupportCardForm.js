@@ -12,6 +12,8 @@ import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
+import ReactMarkdown from 'react-markdown';
+import { read } from 'fs';
 
 const owners = [
   { id: 'Ricardo Exposito', name: 'Ricardo Exposito' },
@@ -55,6 +57,9 @@ const styles = theme => ({
     fontSize: '40px',
     color: '#039BE5'
   },
+  content: {
+    display: 'flex'
+  },
   contentField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
@@ -67,6 +72,10 @@ const styles = theme => ({
   formControl: {
     margin: theme.spacing.unit,
     minWidth: 120
+  },
+  markdown: {
+    width: '90vw',
+    height: '50vh'
   },
   menu: {
     width: 200
@@ -118,26 +127,36 @@ const SupportCardForm = props => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 margin="normal"
+                disabled={readOnly}
                 fullWidth
               />
-              <TextField
-                id="description"
-                label="Description"
-                className={classes.contentField}
-                value={values.description}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                margin="normal"
-                fullWidth
-                multiline
-                rows={12}
-                rowsMax={12}
-              />
+              <div className={classes.content}>
+                {!readOnly && (
+                  <TextField
+                    id="description"
+                    label="Description"
+                    className={classes.contentField}
+                    value={values.description}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    margin="normal"
+                    fullWidth
+                    multiline
+                    rows={12}
+                    rowsMax={12}
+                  />
+                )}
+                <div className={classes.markdown}>
+                  {!readOnly && <h5>Preview</h5>}
+                  <ReactMarkdown source={values.description} />
+                </div>
+              </div>
               <FormControl className={classes.formControl}>
                 <InputLabel htmlFor="category-simple">Category</InputLabel>
                 <Select
                   value={values.categoryname}
                   onChange={handleChange}
+                  disabled={readOnly}
                   inputProps={{
                     name: 'categoryname',
                     id: 'category-simple'
@@ -155,6 +174,7 @@ const SupportCardForm = props => {
                 <Select
                   value={values.owner}
                   onChange={handleChange}
+                  disabled={readOnly}
                   inputProps={{
                     name: 'owner',
                     id: 'owner'

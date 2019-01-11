@@ -21,6 +21,7 @@ import './my.css';
 const Outer = styled.div`
   display: flex;
   flex-wrap: wrap;
+  font-family: 'Open Sans';
 `;
 
 const styles = theme => ({
@@ -114,8 +115,8 @@ class SupportCard extends React.Component {
         style={{ backgroundColor: `${color}` }}
       >
         <CardContent>
-          <Typography gutterBottom variant="title">
-            A{title}
+          <Typography gutterBottom variant="h6">
+            {title}
           </Typography>
           {false && <Typography component="p">{text.slice(0, 100).concat('...')}</Typography>}
         </CardContent>
