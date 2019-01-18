@@ -199,7 +199,7 @@ class PlannedCourseForm extends React.Component {
                       />
                       <TextField
                         id="enddate"
-                        label="StartDate"
+                        label="EndDate"
                         type="date"
                         onChange={handleChange}
                         onBlur={handleBlur}
@@ -335,9 +335,12 @@ class PlannedCourseForm extends React.Component {
                         <React.Fragment>
                           <Button
                             variant="contained"
-                            disabled={true}
+                            disabled={this.props.id2 ? false : true}
                             className={classes.buttonDel}
-                            onClick={() => console.log(id)}
+                            onClick={async () => {
+                              console.log('Deleting', this.props.id2);
+                              this.props.onDelete(this.props.id2);
+                            }}
                           >
                             Delete Scheduled course
                           </Button>

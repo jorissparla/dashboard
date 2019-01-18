@@ -17,6 +17,8 @@ const StyledContainer = styled.div`
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: flex-start;
+
+  pointer-events: ${props => (props.readonly === true ? 'none' : 'all')};
 `;
 
 class CourseList extends Component {
@@ -59,7 +61,7 @@ class CourseList extends Component {
           onChange={this.handleSearchTextChange}
           hintText="Search for title or team...."
         />
-        <StyledContainer>
+        <StyledContainer readonly={Object.keys(user).length === 0}>
           {validRole && <AddCard />}
           {filteredCourses.map((course, i) => (
             <Card
@@ -67,7 +69,6 @@ class CourseList extends Component {
               course={course}
               index={i}
               count={course._studentsMeta.count}
-              
               validRole={validRole}
             />
           ))}

@@ -75,10 +75,12 @@ class EditStudentsOnCourse extends React.Component {
                 return 'No data';
               }
               const { plannedcourse, supportfolks: suggestions } = data;
-
-              const participants = plannedcourse
-                ? plannedcourse.students.map(({ fullname }) => fullname)
-                : [];
+              let participants = [];
+              if (plannedcourse.students) {
+                participants = plannedcourse
+                  ? plannedcourse.students.map(({ fullname }) => fullname)
+                  : [];
+              }
 
               return (
                 <Component

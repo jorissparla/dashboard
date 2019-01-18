@@ -298,7 +298,7 @@ class AppRoutes extends React.Component {
               <Route path="test/edit/:id" component={NewsItemContainer} />
               <Route exact path="/test/dashboard" component={DashBoardStatsNew} />
               <Route exact path="/test/dashboard/team/:team" component={DashBoardStatsNew} />
-              <Route exact path="/courses" component={CourseList} />
+              <Route exact path="/courses" component={CourseList} user={user} />
               <Route exact path="/courseview" component={CourseView} />
               <Route exact path="/students" component={StudentListContainer} />
               <Route path="/students/:id" component={StudentView} />

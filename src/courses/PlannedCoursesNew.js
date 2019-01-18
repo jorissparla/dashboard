@@ -152,7 +152,7 @@ class PlannedCoursesTableNew extends React.Component {
                     className={classes.buttonback}
                     onClick={() => this.props.history.push(`/courses/edit/${course.id}`)}
                   >
-                    "Back to Courses"
+                    Back to Course
                   </Button>
 
                   <Button

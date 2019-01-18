@@ -68,9 +68,10 @@ class PlannedCourseRequestList extends React.Component {
                       {plannedcourserequests.map(
                         ({ id, startdate, hours, details, course: { title }, students }) => {
                           const partipants = students.map(st => st.fullname).join(';');
+                          console.log(students);
                           return (
                             <React.Fragment>
-                              <ListItem>
+                              <ListItem key={id}>
                                 <ListItemText primary={title} secondary={details} />
                                 <ListItemText primary={hours} secondary={partipants} />
                                 <ListItemSecondaryAction>

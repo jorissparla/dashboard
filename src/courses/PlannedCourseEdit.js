@@ -108,6 +108,10 @@ class PlannedCourseEdit extends React.Component {
           if (loading) {
             return 'loading...';
           }
+          console.log('DDDDATA', data);
+          if (!data || !data.plannedcourse) {
+            history.push(`/courses/edit/${id}`);
+          }
           let {
             plannedcourse: { startdate, enddate },
             plannedcourse: { students }
@@ -127,10 +131,11 @@ class PlannedCourseEdit extends React.Component {
                     <PlannedCourseFormNew
                       course={data.plannedcourse.course}
                       id={id}
+                      id2={id2}
                       initialValues={{ ...data.plannedcourse, ...dates }}
                       onDelete={async id => {
                         await deletePlannedCourse({ variables: { input: { id } } });
-                        history.push('/courses');
+                        history.push(`/courses/edit/${id}`);
                       }}
                       onSave={async values => {
                         const input = _.pick(values, [

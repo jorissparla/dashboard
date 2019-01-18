@@ -11,6 +11,7 @@ const SupportCards = DynamicImport(() => import('./supportcard/SupportCards'));
 const HistoryDayAll = DynamicImport(() => import('./charts/historydayallcontainer'));
 const NewsPage = DynamicImport(() => import('./news/newspage'));
 const KudoList = DynamicImport(() => import('./kudos/kudolistcomponentnew'));
+const CourseList = DynamicImport(() => import('./courses/CourseList'));
 
 class DashBoardContainer extends Component {
   state = {
@@ -25,6 +26,7 @@ class DashBoardContainer extends Component {
       <DashBoardStats data1={['Finance']} team="Finance" region={this.region} />,
       <DashBoardStats data1={['Tools']} team="Tools" region={this.region} />,
       <HistoryDayAll region={this.region} />,
+      <CourseList />,
       <KudoList />,
       <DashBoard region={this.region} />,
       <SupportCards region={this.region} />,
