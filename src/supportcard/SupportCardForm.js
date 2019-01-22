@@ -13,7 +13,6 @@ import { withStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import ReactMarkdown from 'react-markdown';
-import { read } from 'fs';
 
 const owners = [
   { id: 'Ricardo Exposito', name: 'Ricardo Exposito' },
@@ -89,7 +88,6 @@ const SupportCardForm = props => {
     initialValues,
     onSave,
     authenticated,
-    handleSubmit,
     onDelete,
     history,
     classes

@@ -3,7 +3,6 @@ import Paper from '@material-ui/core/Paper';
 import blue from '@material-ui/core/colors/blue';
 import Button from '@material-ui/core/Button';
 import AddIcon from '@material-ui/icons/Add';
-import ContentAdd from '@material-ui/icons/Add';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
@@ -59,24 +58,14 @@ const Title = styled.div`
   display: flex;
 `;
 
-const StyledAddIcon = styled.div`
-  width: 18%;
-  min-width: 130px;
-  justify-content: center;
-  align-items: center;
-  display: flex;
-  font-size: 48px;
-  height: 100px;
-  margin-left: auto;
-  margin-right: auto;
-`;
+
 const StyledLink = styled(Link)`
   text-decoration: none;
-  cursor: pointer
+  cursor: pointer;
   :hover {
     border: 2px solid lightgrey;
     border-radius: 2px;
-  }}
+  }
 `;
 
 const AddCard = ({

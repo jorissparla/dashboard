@@ -5,10 +5,8 @@ import { withRouter } from 'react-router';
 import styled from 'styled-components';
 import _ from 'lodash';
 import format from 'date-fns/format';
-//import Card from "./Card";
 import Card from './NewCard';
 import SearchBar from '../common/SearchBar';
-import { TitleBar } from '../common/TitleBar';
 import AddCard from './AddCard';
 import withAuth from '../utils/withAuth';
 const StyledContainer = styled.div`

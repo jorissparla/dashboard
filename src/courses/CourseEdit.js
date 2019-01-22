@@ -68,12 +68,11 @@ class CourseEdit extends React.Component {
     id: this.props.match.params.id
   };
   handleSave = async (input, updateCourse) => {
-    const result = await updateCourse({ variables: { input } });
+    await updateCourse({ variables: { input } });
   };
   render() {
     const id = this.props.match.params.id;
-    const { history, user } = this.props;
-    console.log('user', this.props);
+    const { history } = this.props;
     const { view } = this.props;
     return (
       <Query query={QUERY_SINGLE_COURSE} variables={{ id }}>

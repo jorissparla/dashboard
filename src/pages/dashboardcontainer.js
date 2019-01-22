@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
-import DynamicImport from './DynamicImport';
+import DynamicImport from '../DynamicImport';
 
-import Anniversaries from './awards/Anniversaries';
-import FeedbackList from './feedback/feedbackList';
+import Anniversaries from '../awards/Anniversaries';
+import FeedbackList from '../feedback/feedbackList';
 
-const DashBoard = DynamicImport(() => import('./dashboard'));
-const DashBoardStats = DynamicImport(() => import('./DashBoardStatsNew'));
-const GoLives = DynamicImport(() => import('./golives/goLiveListNew'));
-const SupportCards = DynamicImport(() => import('./supportcard/SupportCards'));
-const HistoryDayAll = DynamicImport(() => import('./charts/historydayallcontainer'));
-const NewsPage = DynamicImport(() => import('./news/newspage'));
-const KudoList = DynamicImport(() => import('./kudos/kudolistcomponentnew'));
-const CourseList = DynamicImport(() => import('./courses/CourseList'));
+const DashBoard = DynamicImport(() => import('../dashboard'));
+const DashBoardStats = DynamicImport(() => import('../DashBoardStatsNew'));
+const GoLives = DynamicImport(() => import('../golives/goLiveListNew'));
+const SupportCards = DynamicImport(() => import('./SupportCards'));
+const HistoryDayAll = DynamicImport(() => import('../charts/historydayallcontainer'));
+const NewsPage = DynamicImport(() => import('./newspage'));
+const KudoList = DynamicImport(() => import('../kudos/kudolistcomponentnew'));
+const CourseList = DynamicImport(() => import('../courses/CourseList'));
 
 class DashBoardContainer extends Component {
   state = {
@@ -29,6 +29,7 @@ class DashBoardContainer extends Component {
       <CourseList />,
       <KudoList />,
       <DashBoard region={this.region} />,
+
       <SupportCards region={this.region} />,
       <FeedbackList />,
       <Anniversaries />
@@ -75,7 +76,6 @@ class DashBoardContainer extends Component {
   }
 
   renderMyDashBoard = index => {
-    const { region } = this.state;
     if (index > this.state.components.length - 1) return <div>Not found...</div>;
     return this.state.components[index];
   };

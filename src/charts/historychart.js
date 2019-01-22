@@ -56,22 +56,13 @@ const renderSummary = (config, xval, val, title, color, type, asummary) => {
   if (!asummary) return config;
   const summary = asummary.slice().reverse();
   const range = summary.map(item => item[val]);
-  const filteredSummary = summary.map(item => [].concat(item[xval], item[val]));
+  // const filteredSummary = summary.map(item => [].concat(item[xval], item[val]));
   console.log('Range', title, val, range);
   color = arColors[val];
   if (color) {
     config.plotOptions.area.color = color;
   }
-  /*   const filteredSummary = summary // .sort((a,b)=> a.row > b.row)
-    .reduce(
-      ({ xvalues, data }, item) => {
-        xvalues.push(item[xval]);
-        data.push(item[val]);
-        return { xvalues, data };
-      },
-      { xvalues: [], data: [] }
-    );
-  console.table(filteredSummary); */
+
   config.xAxis.categories = summary.map(i => i[xval]);
   if (range.length > 0) {
     config.yAxis = {};

@@ -1,19 +1,14 @@
 import React from 'react';
 import gql from 'graphql-tag';
-import { graphql, Query } from 'react-apollo';
-import { format } from 'date-fns';
-import Spinner from '../utils/spinner';
+import {  Query } from 'react-apollo';
 import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Divider from '@material-ui/core/Divider';
 import Save from '@material-ui/icons/Save';
 import Undo from '@material-ui/icons/Undo';
-import Clear from '@material-ui/icons/Clear';
-import Button from '@material-ui/core/Button';
 import User from '../User';
 
 const styles = theme => ({
@@ -61,7 +56,6 @@ class PlannedCourseRequestList extends React.Component {
                 if (loading) {
                   return 'loading';
                 }
-                const { me } = data;
                 return (
                   <React.Fragment>
                     <List>

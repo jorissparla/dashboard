@@ -2,7 +2,7 @@ import React from "react";
 import ClearIcon from "@material-ui/icons/Clear";
 
 import gql from "graphql-tag";
-import { Query, Mutation } from "react-apollo";
+import {  Mutation } from "react-apollo";
 import { SharedSnackbarConsumer } from "../SharedSnackbar.context";
 
 import { ALL_CHATS_QUERY } from "./ChatList";

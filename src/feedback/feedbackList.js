@@ -6,11 +6,9 @@ import { withRouter } from 'react-router';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Divider from '@material-ui/core/Divider';
 import TextField from '@material-ui/core/TextField';
-import SelectField from 'material-ui/SelectField';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
 import styled from 'styled-components';
@@ -20,11 +18,6 @@ import Save from '@material-ui/icons/Save';
 import Undo from '@material-ui/icons/Undo';
 import Clear from '@material-ui/icons/Clear';
 import Button from '@material-ui/core/Button';
-
-const P = styled.div`
-  white-space: pre-line;
-  font-size: 20px;
-`;
 
 const Left = styled.div`
   display: flex;
@@ -36,12 +29,6 @@ const Left = styled.div`
 const DateField = styled.div`
   font-size: 12px;
   margin-right: 5px;
-`;
-
-const Fat = styled.h3`
-  font-weight: 100;
-  font-family: Raleway, Roboto;
-}
 `;
 
 const ALL_FEEDBACK_QUERY = gql`

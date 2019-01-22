@@ -5,15 +5,11 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import Avatar from '@material-ui/core/Avatar';
 import ModeEdit from '@material-ui/icons/Edit';
-import blue500 from '@material-ui/core/colors/blue';
 import Paper from '@material-ui/core/Paper';
 import styled from 'styled-components';
 import { ListItemSecondaryAction } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 
-const P = styled.p`
-  white-space: pre-line;
-`;
 const Left = styled.div`
   display: flex;
   flex-direction: column;

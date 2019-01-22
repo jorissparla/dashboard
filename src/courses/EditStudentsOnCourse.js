@@ -2,11 +2,8 @@ import React from 'react';
 import gql from 'graphql-tag';
 import { Query, Mutation } from 'react-apollo';
 import Component from '../common/component-component';
-import SaveIcon from '@material-ui/icons/Save';
 import { StyledMultiple } from './StyledDropdowns';
-import { QUERY_SCHEDULED_COURSES } from './PlannedCoursesNew';
 import { adopt } from 'react-adopt';
-import { Formik } from 'formik';
 
 const QUERY_PLANNEDCOURSE_WITHPARTICIPANTS = gql`
   query QUERY_PLANNEDCOURSE_WITHPARTICIPANTS($id: ID) {

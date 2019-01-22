@@ -1,6 +1,6 @@
 import React from 'react';
 import gql from 'graphql-tag';
-import { Query, Mutation } from 'react-apollo';
+import { Query } from 'react-apollo';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
@@ -9,7 +9,6 @@ import { Formik } from 'formik';
 import { TextField, Select, FormControl, InputLabel, MenuItem } from '@material-ui/core';
 import Badge from '@material-ui/core/Badge';
 import { withStyles } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import * as yup from 'yup';
 import format from 'date-fns/format';
@@ -33,7 +32,6 @@ const styles = theme => ({
     flexDirection: 'column',
     justifyContent: 'space-between',
     margin: '15px',
-    padding: '10px',
     minWidth: '200px'
   },
   button2: {
@@ -153,10 +151,10 @@ class PlannedCourseForm extends React.Component {
             course: { plannedcourses }
           } = plannedcoursedata;
           console.log('xxxx', plannedcourses, loading2);
-          const { coursetypes, coursecategories, statuses, locations, supportfolks } = data;
+          const { coursetypes,  statuses, supportfolks } = data;
           const { course, id } = this.props;
-          const nstartdate = format(addHours(Date.now(), 24), 'YYYY-MM-DD');
-          const nenddate = format(addHours(Date.now(), 24), 'YYYY-MM-DD');
+          // const nstartdate = format(addHours(Date.now(), 24), 'YYYY-MM-DD');
+          // const nenddate = format(addHours(Date.now(), 24), 'YYYY-MM-DD');
           return (
             <Formik
               initialValues={this.state.initialValues}

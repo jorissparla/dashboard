@@ -1,6 +1,6 @@
 import React from 'react';
 import gql from 'graphql-tag';
-import { Query, Mutation } from 'react-apollo';
+import { Query } from 'react-apollo';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -11,7 +11,7 @@ import TrashIcon from '@material-ui/icons/Delete';
 import PeopleIcon from '@material-ui/icons/People';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
-import { blue, red, grey, purple } from '@material-ui/core/colors';
+import { blue, red} from '@material-ui/core/colors';
 import { format } from 'date-fns';
 import { withRouter } from 'react-router';
 import { Title, HeaderRow, HeaderLeft, HeaderRight } from '../styles';
@@ -27,7 +27,6 @@ const styles = theme => ({
     flexDirection: 'column',
     justifyContent: 'space-between',
     margin: '15px',
-    padding: '10px',
     minWidth: '200px'
   },
   headerStyle: {
@@ -74,7 +73,7 @@ const styles = theme => ({
   }
 });
 
-const PLANNEDCOURSE_DELETE_MUTATION = gql`
+export const PLANNEDCOURSE_DELETE_MUTATION = gql`
   mutation PLANNEDCOURSE_DELETE_MUTATION($input: InputPlannedCourseType) {
     deletePlannedCourse(input: $input) {
       text

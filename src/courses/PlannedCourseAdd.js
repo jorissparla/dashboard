@@ -33,8 +33,7 @@ const PlannedCourseAdd = ({
       return (
         <Mutation
           mutation={ADD_PLANNEDCOURSE_MUTATION}
-
-          //refetchQueries={[{ query: QUERY_ALL_COURSES }]}
+          refetchQueries={[{ query: QUERY_ALL_COURSES }]}
         >
           {addPlannedCourse => {
             return (

@@ -38,10 +38,7 @@ const styles = theme => ({
     height: 0,
     paddingTop: '56.25%' // 16:9
   },
-  actions: {
-    marginTop: 10,
-    marginBottom: 10
-  },
+
   expand: {
     transform: 'rotate(0deg)',
     transition: theme.transitions.create('transform', {
@@ -70,6 +67,8 @@ const styles = theme => ({
     textShadow: '1px 1px 1px rgba(0,0,0, 0.1)'
   },
   actions: {
+    marginTop: 10,
+    marginBottom: 10,
     display: 'flex',
     justifyContent: 'space-between'
   },

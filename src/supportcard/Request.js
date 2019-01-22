@@ -5,15 +5,9 @@ import styled from 'styled-components';
 import { withRouter } from 'react-router';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
-import MenuItem from '@material-ui/core/MenuItem';
-import { format } from 'date-fns';
-import { CardSection } from '../common';
-import { Formik } from 'formik';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-import { ViewText, Form } from '../styles';
+import { ViewText } from '../styles';
 export const niceblue = '#40a5ed';
 export const babyblue = '#ecf6fd';
 export const twitterblue = '#1da1f2';
@@ -97,9 +91,7 @@ const Error = styled.div`
   margin-left: 8px;
 `;
 
-const StyledTextField = styled(TextField)`
-  margin: 20px;
-`;
+
 class Request extends Component {
   state = {
     name: this.props.user.name,

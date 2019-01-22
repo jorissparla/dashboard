@@ -1,16 +1,7 @@
 import React from 'react';
 import { Query, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import Avatar from '@material-ui/core/Avatar';
-import Divider from '@material-ui/core/Divider';
 
-import Component from './common/component-component';
-import { withStyles } from '@material-ui/core/styles';
 import SearchBar from './common/SearchBar';
 import _ from 'lodash';
 
@@ -58,7 +49,7 @@ export default class UserSearchList extends React.Component {
   }
   render() {
     const { limit = 5 } = this.props;
-    const { searchFields = ['fullname'] } = this.props;
+    // const { searchFields = ['fullname'] } = this.props;
     return (
       <Query query={QUERY_SUPPORT_FOLKS}>
         {({ data, loading }) => {

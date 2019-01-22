@@ -59,7 +59,6 @@ class CourseForm extends Component {
     const {
       handleSubmit,
       course,
-      authenticated,
       history,
       coursetypes,
       coursecategories,

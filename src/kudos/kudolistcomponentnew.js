@@ -4,7 +4,6 @@ import { graphql } from 'react-apollo';
 import { format } from 'date-fns';
 import styled from 'styled-components';
 import { Card } from './card';
-import deepOrange500 from '@material-ui/core/colors/deepOrange';
 
 const Outer = styled.div`
   display: flex;

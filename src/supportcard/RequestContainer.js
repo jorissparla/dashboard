@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import gql from "graphql-tag";
-import { graphql, Query, Mutation } from "react-apollo";
+import { graphql } from "react-apollo";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import { withRouter } from "react-router-dom";
 import Avatar from "@material-ui/core/Avatar";
@@ -23,7 +22,7 @@ const { REACT_APP_SERVER = "nlbavwixs" } = process.env;
 const defaultPicture = `http://${REACT_APP_SERVER}/images/male.png`;
 
 const RequestItem = ({ item, handleClick }) => {
-  const { id, name, text, createdAt, account, complete, assigned } = item;
+  const { name, text, createdAt, account, complete, assigned } = item;
   const picture = account ? (account.image ? account.image : defaultPicture) : defaultPicture;
   const completeStatus = complete === 1 ? "Completed" : "";
   const assignedTo = assigned ? ` Assigned to ${assigned} ` : "";

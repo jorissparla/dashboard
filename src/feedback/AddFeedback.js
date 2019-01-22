@@ -53,7 +53,6 @@ const styles = theme => ({
     flexDirection: 'column',
     justifyContent: 'space-between',
     margin: '15px',
-    padding: '10px',
     minWidth: '200px'
   },
   button: {
@@ -73,10 +72,10 @@ const styles = theme => ({
 });
 
 const AddFeedback = props => {
-  const { history, classes, supportfolks, onSave = v => console.log } = props;
+  const { history, classes } = props;
   return (
     <Query query={QUERY_SUPPORT_FOLKS}>
-      {({ data, loading, error }) => {
+      {({ data, loading }) => {
         if (loading) {
           return 'loading';
         }
@@ -98,10 +97,9 @@ const AddFeedback = props => {
                     const [{ navid }] = supportfolks.filter(
                       person => (person.fullname = values.consultant)
                     );
-                    const res = await createFeedback({
+                    await createFeedback({
                       variables: { input: { ...values, navid } }
                     });
-                    console.log('result');
                     await history.push('feedback');
                   }}
                 >

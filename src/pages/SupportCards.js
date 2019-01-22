@@ -13,14 +13,13 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import NewRequestForm from './Request';
+import NewRequestForm from '../supportcard/Request';
 import { addDays } from 'date-fns';
 import _ from 'lodash';
 import SearchBar from '../common/SearchBar';
 import withAuth from '../utils/withAuth';
-import AddCard from './AddCard';
-import CategoryTabs from './CategoryTabs';
-import ACard from './ACard';
+import AddCard from '../supportcard/AddCard';
+import CategoryTabs from '../supportcard/CategoryTabs';
 
 const styles = {
   card: {
@@ -85,46 +84,46 @@ const Container = styled.div`
   background: #eeeeee;
 `;
 
-function SupporCard(props) {
-  const {
-    color,
-    classes,
-    title,
-    isNew,
-    text,
-    category,
-    buttonText,
-    link,
-    canEdit,
-    editLink,
-    viewLink
-  } = props;
-  return (
-    <Card className={classes.card} style={{ backgroundColor: color }}>
-      <CardActionArea>
-        <CardMedia className={classes.media}>
-          <Typography gutterBottom variant="h6" component="h3">
-            A {title}
-          </Typography>
-        </CardMedia>
-        <CardContent>
-          <Typography component="p" className={classes.smallText}>
-            {text.slice(0, 200)}
-          </Typography>
-        </CardContent>
-      </CardActionArea>
-      <CardActions>
-        <Button size="small" color="primary" variant="contained">
-          View
-        </Button>
-        {category}
-        <Button size="small" color="primary">
-          {category}
-        </Button>
-      </CardActions>
-    </Card>
-  );
-}
+// function SupporCard(props) {
+//   const {
+//     color,
+//     classes,
+//     title,
+//     isNew,
+//     text,
+//     category,
+//     buttonText,
+//     link,
+//     canEdit,
+//     editLink,
+//     viewLink
+//   } = props;
+//   return (
+//     <Card className={classes.card} style={{ backgroundColor: color }}>
+//       <CardActionArea>
+//         <CardMedia className={classes.media}>
+//           <Typography gutterBottom variant="h6" component="h3">
+//             A {title}
+//           </Typography>
+//         </CardMedia>
+//         <CardContent>
+//           <Typography component="p" className={classes.smallText}>
+//             {text.slice(0, 200)}
+//           </Typography>
+//         </CardContent>
+//       </CardActionArea>
+//       <CardActions>
+//         <Button size="small" color="primary" variant="contained">
+//           View
+//         </Button>
+//         {category}
+//         <Button size="small" color="primary">
+//           {category}
+//         </Button>
+//       </CardActions>
+//     </Card>
+//   );
+// }
 
 class SupportCards extends React.Component {
   state = { searchText: '', selectedCategory: '', showRequest: false };
@@ -144,7 +143,6 @@ class SupportCards extends React.Component {
 
   render() {
     const {
-      classes,
       authenticated,
       isEditor,
       data: { loading, error, supportcards }

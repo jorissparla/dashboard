@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import gql from 'graphql-tag';
-import { graphql, Query } from 'react-apollo';
+import { graphql } from 'react-apollo';
 import { format } from 'date-fns';
 import Spinner from '../utils/spinner';
 import { withStyles } from '@material-ui/core/styles';
@@ -10,7 +10,6 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import styled from 'styled-components';
-import Avatar from '@material-ui/core/Avatar';
 
 const getDay = date =>
   format(date, 'MMM')
@@ -29,14 +28,6 @@ const GoLiveItemStyle = styled.div`
   align-items: space-between;
 `;
 
-const GoLiveDateStyle = styled.div`
-  color: darkBlack;
-  font-family: Oswald;
-  font-weight: bold;
-  font-size: 18px;
-  justify-content: center;
-  padding-top: 10px;
-`;
 const GoLiveCustomerStyle = styled.div`
   color: darkblue;
   font-family: Roboto;
@@ -57,7 +48,6 @@ const styles = theme => ({
     flexDirection: 'column',
     justifyContent: 'space-between',
     margin: '15px',
-    padding: '10px',
     minWidth: '200px'
   },
   headerStyle: {

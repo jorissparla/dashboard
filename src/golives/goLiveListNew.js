@@ -3,11 +3,9 @@ import gql from "graphql-tag";
 import { graphql } from "react-apollo";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Avatar from "@material-ui/core/Avatar";
 import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import styled from "styled-components";
 import _ from "lodash";
 import { format } from "date-fns";
@@ -83,7 +81,6 @@ const monthPart = d => format(Date.parse(d), "MMMM");
 const GoLiveItem = ({ item, bg = "#ec407a", index, classes }) => {
   const { id, day, customername, customerid, region, version, comments } = item;
   const nr = index % 3;
-  const className = `classes.color${nr}`;
   return (
     <ListItem
       key={id}

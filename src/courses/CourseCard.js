@@ -5,7 +5,6 @@ import { withRouter } from 'react-router';
 import styled from 'styled-components';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import CourseForm from './CourseForm';
 import CourseStudentList from './CourseStudentList';
 import PlannedCourses from './PlannedCourses';
 import { Title } from '../styles';
@@ -177,7 +176,6 @@ class CourseCard extends Component {
       error,
       course,
       coursetypes,
-      coursecategories,
       courses,
       supportfolks,
       locations,
@@ -186,7 +184,6 @@ class CourseCard extends Component {
 
     const viewMode = this.props.view || false;
     console.log('viewMode', viewMode);
-    const { tabStyle } = styles;
     if (loading) {
       return <p>Loading ...</p>;
     }

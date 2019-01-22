@@ -1,22 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import gql from 'graphql-tag';
-import { graphql } from 'react-apollo';
-import { Link } from 'react-router-dom';
 import addDays from 'date-fns/add_days';
 import format from 'date-fns/format';
 import _ from 'lodash';
-import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import TrainerViewNew from './TrainerViewNew';
 import StudentChip from './StudentChip';
@@ -84,10 +75,6 @@ const styles = theme => ({
   }
 });
 
-const HeaderColumn = ({ style, children }) => {
-  const newStyle = _.extend({}, styles.headerStyle, style);
-  return <TableCell style={newStyle}>{children}</TableCell>;
-};
 class CourseView extends React.Component {
   state = {
     startdate: format(addDays(new Date(), -7), 'YYYY-MM-DD'),
@@ -133,8 +120,7 @@ class CourseView extends React.Component {
       <React.Fragment>
         <Tabs
           value={this.state.activeTab}
-          onChange={(event, value) => {
-            console.log('Value', value);
+          onChange={value => {
             this.setState({ activeTab: value });
           }}
         >

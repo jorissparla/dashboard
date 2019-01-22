@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import gql from "graphql-tag";
-import { graphql, compose, Query, Mutation } from "react-apollo";
+import {  Query, Mutation } from "react-apollo";
 import { withRouter } from "react-router-dom";
 import { format } from "date-fns";
 import RequestForm from "./RequestForm";

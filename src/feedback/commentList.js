@@ -5,7 +5,6 @@ import Paper from '@material-ui/core/Paper';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import { withRouter } from 'react-router';
 import Divider from '@material-ui/core/Divider';
@@ -15,10 +14,6 @@ import { HeaderRow, HeaderLeft, HeaderRight, Title, StyledInitials } from '../st
 import ModeEdit from '@material-ui/icons/FileCopy';
 import Button from '@material-ui/core/Button';
 import { ALL_FEEDBACK_QUERY } from './feedbackList';
-
-const P = styled.div`
-  white-space: pre-line;
-`;
 
 const Left = styled.div`
   display: flex;

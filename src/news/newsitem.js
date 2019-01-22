@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router';
-import { CardSection, Input } from '../common';
+import { CardSection } from '../common';
 import Button from '@material-ui/core/Button';
 import styled from 'styled-components';
 import { Formik } from 'formik';
@@ -27,7 +27,6 @@ const styles = theme => ({
     flexDirection: 'column',
     justifyContent: 'space-between',
     margin: '15px',
-    padding: '10px',
     minWidth: '200px'
   },
   button: {
@@ -46,15 +45,7 @@ const styles = theme => ({
   }
 });
 
-const inputImageField = field => {
-  return (
-    <div style={{ display: 'flex', alignContent: 'center' }}>
-      <Left>
-        <img src={field.input.value} alt="img" />
-      </Left>
-    </div>
-  );
-};
+
 
 const NewsItem = ({
   initialValues: newsitem,

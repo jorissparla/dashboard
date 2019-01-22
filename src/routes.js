@@ -18,12 +18,11 @@ import PlannedCourseAdd from './courses/PlannedCourseAdd';
 import PlannedCourseEdit from './courses/PlannedCourseEdit';
 import PlannedCourses from './courses/PlannedCoursesNew';
 import PlannedCourseRequestList from './courses/PlannedCourseRequestList';
-import DashBoardContainer from './dashboardcontainer';
-import NewsPage from './news/newspage';
+import DashBoardContainer from './pages/dashboardcontainer';
+import NewsPage from './pages/newspage';
 import User from './User';
 import UserPermissions from './UserPermissions';
 import CourseFileUpload from './courses/CourseFileUpload';
-//const DashBoardContainer = DynamicImport(() => import('./dashboardcontainer'));
 const AGLTest = DynamicImport(() => import('./supportcard/Test'));
 //const CommentsList = DynamicImport(() => import("./feedback/commentList"));
 const FeedbackList = DynamicImport(() => import('./feedback/feedbackList'));
@@ -63,13 +62,12 @@ const HistoryDayAll = DynamicImport(() => import('./charts/historydayallcontaine
 const GoLiveListNew = DynamicImport(() => import('./golives/goLiveListNew'));
 const GoLiveListSide = DynamicImport(() => import('./golives/golivelistside'));
 const DashBoardStatsNew = DynamicImport(() => import('./DashBoardStatsNew'));
-const SupportCards = DynamicImport(() => import('./supportcard/SupportCards'));
+const SupportCards = DynamicImport(() => import('./pages/SupportCards'));
 
 const RequestEditAdd = DynamicImport(() => import('./supportcard/Request'));
 const SupportCardEdit = DynamicImport(() => import('./supportcard/SupportCardEdit'));
 const SupportCardAdd = DynamicImport(() => import('./supportcard/SupportCardAdd'));
 const CourseView = DynamicImport(() => import('./courses/CourseView'));
-const CourseCard = DynamicImport(() => import('./courses/CourseCard'));
 const AddCourseCard = DynamicImport(() => import('./courses/AddCourseCard'));
 const StudentListContainer = DynamicImport(() => import('./courses/StudentTableNew'));
 const StudentView = DynamicImport(() => import('./courses/StudentView'));
@@ -87,9 +85,8 @@ const NotFound = props => {
 class AppRoutes extends React.Component {
   render() {
     console.log('✔️✔️✔️✔️✔️', this.props);
-    // const xuser = this.props.context.user;
     const user = this.props.context;
-    const authenticated = this.props.context.authenticated();
+    //const authenticated = this.props.context.authenticated();
 
     return (
       <User>
@@ -101,6 +98,16 @@ class AppRoutes extends React.Component {
           console.log('👴👴👴', data);
           return (
             <Switch>
+              <Route exact path="/" component={DashBoardContainer} />
+              <Route exact path="/newspage" component={NewsPage} />
+              <EnhancedRoute
+                auth="admin"
+                editors={['Admin', 'PO']}
+                user={user}
+                exact
+                path="/supportcard"
+                component={SupportCards}
+              />
               <Route exact path="/fileupload" component={CourseFileUpload} />
               <EnhancedRoute
                 exact
@@ -201,21 +208,13 @@ class AppRoutes extends React.Component {
                 path="/supportcard/request/:id"
                 component={RequireAuth(RequestEdit)}
               />
-              <Route exact path="/" component={DashBoardContainer} />
               <Route exact path="/region/:region" component={DashBoardContainer} />
               <Route exact path="/q/:id" component={DashBoardContainer} />
               <Route allowed={['Admin']} user={user} path="/main/1" component={DashBoard} />
               <Route exact path="/team/:team" component={DashBoardStatsNew} />
               <Route exact path="/team/:team/region/:region" component={DashBoardStats} />
               <Route path="award" component={Award} />
-              <EnhancedRoute
-                auth="admin"
-                editors={['Admin', 'PO']}
-                user={user}
-                exact
-                path="/supportcard"
-                component={SupportCards}
-              />
+
               <EnhancedRoute
                 editors={['Admin', 'PO']}
                 allowed={['Admin', 'PO']}
@@ -246,7 +245,7 @@ class AppRoutes extends React.Component {
               />
 
               <Route exact path="/news" component={NewsListContainer} />
-              <Route exact path="/newspage" component={NewsPage} />
+
               <AuthRoute
                 allowed={['Admin', 'PO', 'SU']}
                 user={user}
@@ -341,10 +340,5 @@ class AppRoutes extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-  authenticated: state.auth.authenticated,
-  user: state.auth.user
-});
 
-//export default withRouter(connect(mapStateToProps)(withDashBoardContext(AppRoutes)));
 export default withRouter(withDashBoardContext(AppRoutes));
