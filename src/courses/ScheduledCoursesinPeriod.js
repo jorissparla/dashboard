@@ -1,17 +1,14 @@
 import React from 'react';
-import styled from 'styled-components';
-
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import gql from 'graphql-tag';
-import { graphql, Query } from 'react-apollo';
+import {  Query } from 'react-apollo';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import format from 'date-fns/format';
-import { withStyles } from '@material-ui/core/styles';
 
 const HeaderColumn = ({ style, children }) => {
   const newStyle = _.extend({}, { fontSize: 18 }, style);

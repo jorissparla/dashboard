@@ -135,7 +135,7 @@ class StudentTables extends Component {
       startdate = format(new Date(new Date().getFullYear(), 0, 1), 'YYYY-MM-DD');
     }
     if (!enddate) {
-      enddate: format(new Date(new Date().getFullYear() + 1, 0, 1), 'YYYY-MM-DD');
+      enddate = format(new Date(new Date().getFullYear() + 1, 0, 1), 'YYYY-MM-DD');
     }
     const { headerStyle, rowstyle, avatarstyle } = styles;
     console.log('Startdate', startdate);

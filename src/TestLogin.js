@@ -1,6 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { ApolloProvider, Query, Mutation } from 'react-apollo';
+import { Query, Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import Button from '@material-ui/core/Button';
 import Signout from './Signout';
@@ -34,8 +33,6 @@ const SIGNIN_MUTATION = gql`
 const User = props => (
   <Query query={CURRENT_USER_QUERY}>{payload => props.children(payload)}</Query>
 );
-
-const Error = ({ error }) => <div className="error">{error}</div>;
 
 const Index = () => (
   <Mutation mutation={SIGNIN_MUTATION} refetchQueries={[{ query: CURRENT_USER_QUERY }]}>
@@ -82,7 +79,11 @@ const Index = () => (
                               width: 200
                             }}
                           >
-                            <img src={me.image} style={{ borderRadius: '50%', width: 48 }} />
+                            <img
+                              src={me.image}
+                              style={{ borderRadius: '50%', width: 48 }}
+                              alt="me"
+                            />
                             <Button variant="contained" onClick={signout}>
                               Sign you out
                               {me.fullname}

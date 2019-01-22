@@ -1,25 +1,24 @@
-import React, { Component } from "react";
-import gql from "graphql-tag";
-import { Query, Mutation } from "react-apollo";
-import { adopt } from "react-adopt";
-import { withRouter } from "react-router";
-import { withStyles } from "@material-ui/core/styles";
+import React, { Component } from 'react';
+import gql from 'graphql-tag';
+import { Query, Mutation } from 'react-apollo';
+import { adopt } from 'react-adopt';
+import { withRouter } from 'react-router';
+import { withStyles } from '@material-ui/core/styles';
 
-import Button from "@material-ui/core/Button";
-import AddIcon from "@material-ui/icons/Add";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import Paper from "@material-ui/core/Paper";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import ClearIcon from "@material-ui/icons/Clear";
-import IconButton from "@material-ui/core/IconButton";
-import Avatar from "@material-ui/core/Avatar";
-import Divider from "@material-ui/core/Divider";
+import Button from '@material-ui/core/Button';
+import AddIcon from '@material-ui/icons/Add';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import Paper from '@material-ui/core/Paper';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import IconButton from '@material-ui/core/IconButton';
+import Avatar from '@material-ui/core/Avatar';
+import Divider from '@material-ui/core/Divider';
 
-import _ from "lodash";
-import { WideTitle, colorAr, getColor } from "../styles";
-import DeleteChat from "./DeleteChat";
+import _ from 'lodash';
+import { WideTitle, colorAr, getColor } from '../styles';
+import DeleteChat from './DeleteChat';
 
 const DELETE_CHAT_MUTATION = gql`
   mutation DELETE_CHAT_MUTATION($input: ChatInputType) {
@@ -42,7 +41,9 @@ const ALL_CHATS_QUERY = gql`
 `;
 
 const deleteChat = ({ render }) => (
-  <Mutation mutation={DELETE_CHAT_MUTATION}>{(mutation, result) => render({ mutation, result })}</Mutation>
+  <Mutation mutation={DELETE_CHAT_MUTATION}>
+    {(mutation, result) => render({ mutation, result })}
+  </Mutation>
 );
 
 const myChats = ({ render }) => <Query query={ALL_CHATS_QUERY}>{data => render(data)}</Query>;
@@ -63,24 +64,24 @@ const MyContainer = adopt(mapper, mapProps);
 
 const styles = {
   typo: {
-    backgroundColor: "lightgrey"
+    backgroundColor: 'lightgrey'
   },
   listStyle: {
-    backgroundColor: "white",
+    backgroundColor: 'white',
     marginRight: 20
   },
 
   subheaderStyle: {
     fontSize: 56,
-    fontFamily: "Oswald",
-    color: "dodgerblue",
+    fontFamily: 'Oswald',
+    color: 'dodgerblue',
     marginLeft: 20,
     marginTop: 20,
     padding: 10,
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "row",
-    display: "flex"
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    display: 'flex'
   },
   button: {
     margin: 12
@@ -92,7 +93,7 @@ const RenderChat = ({ chat, onRemove }) => {
     return (
       <React.Fragment key={id}>
         <ListItem>
-          <Avatar style={{ backgroundColor: getColor(index, colorAr), color: "white" }}>
+          <Avatar style={{ backgroundColor: getColor(index, colorAr), color: 'white' }}>
             {team.slice(0, 2).toUpperCase()}
           </Avatar>
 
@@ -130,7 +131,7 @@ class ChatList extends Component {
             await deleteChat({ variables: { input } });
           };
           const chatsByWeek = _.chain(chats)
-            .orderBy(["fromdate", "desc"])
+            .orderBy(['fromdate', 'desc'])
             .groupBy(o => o.weeknr)
             .map(o => o)
             .value();
@@ -151,7 +152,7 @@ class ChatList extends Component {
                     <AddIcon />
                   </Button>
                 </WideTitle>
-                <List style={{ backgroundColor: "white" }}>
+                <List style={{ backgroundColor: 'white' }}>
                   {chatsByWeek.map((item, index) => (
                     <div key={index}>
                       <WideTitle>{item[0].weeknr}</WideTitle>

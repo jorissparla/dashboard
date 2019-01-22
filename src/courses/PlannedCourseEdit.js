@@ -88,7 +88,7 @@ class PlannedCourseEdit extends React.Component {
       id: this.state.id2,
       updatedAt: format(Date.now(), 'YYYY-MM-DD')
     };
-    const result = await updatePlannedCourse({ variables: { input } });
+     await updatePlannedCourse({ variables: { input } });
     const participants = this.state.participants.map(p => p.fullname).join(';');
     console.log('Patricipants', participants);
     await updatePlannedCourseParticipants({

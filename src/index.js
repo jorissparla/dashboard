@@ -18,7 +18,6 @@ import './index.css';
 
 import { ApolloProvider } from 'react-apollo';
 import ApolloClient from 'apollo-client';
-import { createHttpLink } from 'apollo-link-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { createUploadLink } from 'apollo-upload-client';
 import ContextProvider from './Provider';
@@ -32,7 +31,6 @@ const {
 } = process.env;
 
 const prefix = REACT_APP_HTTP.trim();
-//console.log("prefix", `<${prefix}>`);
 let uri = `${REACT_APP_GRAPHQLSERVER}:${REACT_APP_PORT_GRAPHQL}`;
 uri = prefix === 'https' ? 'https://' + uri : 'http://' + uri;
 console.log(uri);

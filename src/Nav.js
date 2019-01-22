@@ -322,7 +322,7 @@ class Header extends React.Component {
   };
 
   render() {
-    const { classes, theme, authenticated } = this.props;
+    const { classes, authenticated } = this.props;
     let titleText = this.state.ipaddress ? this.state.ipaddress : '';
     titleText =
       titleText + process.env.NODE_ENV !== 'production' ? `(${process.env.NODE_ENV})` : '';

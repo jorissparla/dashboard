@@ -1,6 +1,6 @@
 import React from 'react';
 import gql from 'graphql-tag';
-import { Query, Mutation } from 'react-apollo';
+import { Query } from 'react-apollo';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
@@ -9,7 +9,6 @@ import { Formik } from 'formik';
 import { TextField, Select, FormControl, InputLabel, MenuItem } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import Badge from '@material-ui/core/Badge';
-import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
 import * as yup from 'yup';
 import { distanceInWordsToNow } from 'date-fns';
@@ -29,7 +28,6 @@ const styles = theme => ({
     flexDirection: 'column',
     justifyContent: 'space-between',
     margin: '15px',
-    padding: '10px',
     minWidth: '200px'
   },
   margin: {
@@ -136,14 +134,13 @@ class CourseForm extends React.Component {
     const { classes, history, id, view } = this.props;
     return (
       <Query query={QUERY_ALL_FIELDS}>
-        {({ data, loading, error }) => {
+        {({ data, loading }) => {
           if (loading) {
             return 'Loading...';
           }
 
           const { coursetypes, coursecategories, statuses, locations, supportfolks } = data;
           const { title } = this.state.initialValues;
-          const optionalProps = ['disabled'];
           return (
             <Formik
               initialValues={this.state.initialValues}

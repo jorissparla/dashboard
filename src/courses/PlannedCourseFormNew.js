@@ -37,7 +37,6 @@ const styles = theme => ({
   button2: {
     margin: theme.spacing.unit,
     maxWidth: 200,
-    margin: 10
   },
   button: {
     width: 200

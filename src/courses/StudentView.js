@@ -14,7 +14,6 @@ import MenuItem from '@material-ui/core/MenuItem';
 import Icon from '@material-ui/core/Icon';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import DownIcon from '@material-ui/icons/ExpandMore';
-import DetailsIcon from '@material-ui/icons/Details';
 import FileFileDownload from '@material-ui/icons/CloudQueue';
 import Chip from '@material-ui/core/Chip';
 import format from 'date-fns/format';
@@ -118,10 +117,12 @@ class StudentView extends Component {
   }
 
   renderCourses(enrollments, navid) {
-    const { authenticated, user } = this.props;
-    let validRole = false;
+    const { user } = this.props;
+    let validRole;
     if (user) {
       validRole = user.role !== 'Guest';
+    } else {
+      validRole = false;
     }
     if (!enrollments) return <div>Loading...</div>;
 

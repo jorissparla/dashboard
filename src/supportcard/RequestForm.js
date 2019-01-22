@@ -1,6 +1,5 @@
 import React from 'react';
 import Checkbox from '@material-ui/core/Checkbox';
-import { format } from 'date-fns';
 import Select from '@material-ui/core/Select';
 import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';

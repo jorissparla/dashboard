@@ -1,17 +1,17 @@
-import React from "react";
-import { CardSection, Input } from "../common";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import { withStyles } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
-import InputLabel from "@material-ui/core/InputLabel";
-import Button from "@material-ui/core/Button";
-import FormControl from "@material-ui/core/FormControl";
+import React from 'react';
+import { CardSection } from '../common';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
+import { withStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import InputLabel from '@material-ui/core/InputLabel';
+import Button from '@material-ui/core/Button';
+import FormControl from '@material-ui/core/FormControl';
 
 const styles = theme => ({
   root: {
-    display: "flex",
-    flexWrap: "wrap"
+    display: 'flex',
+    flexWrap: 'wrap'
   },
   formControl: {
     margin: theme.spacing.unit,
@@ -29,39 +29,39 @@ const styles = theme => ({
     width: 150
   },
   buttonStyle: {
-    backgroundColor: "#ffc600",
-    labelColor: "white",
-    margin: "20px"
+    backgroundColor: '#ffc600',
+    labelColor: 'white',
+    margin: '20px'
   },
   buttonStyle2: {
-    backgroundColor: "black",
-    labelColor: "white",
-    margin: "20px"
+    backgroundColor: 'black',
+    labelColor: 'white',
+    margin: '20px'
   }
 });
 
 const teams = [
-  { key: "Finance", description: "Finance" },
-  { key: "Logistics", description: "Logistics" },
-  { key: "Tools", description: "Tools" }
+  { key: 'Finance', description: 'Finance' },
+  { key: 'Logistics', description: 'Logistics' },
+  { key: 'Tools', description: 'Tools' }
 ];
 
 const regions = [
-  { key: "EMEA", description: "EMEA" },
-  { key: "NA", description: "NA" },
-  { key: "APJ", description: "APJ" },
-  { key: "LA", description: "LA" }
+  { key: 'EMEA', description: 'EMEA' },
+  { key: 'NA', description: 'NA' },
+  { key: 'APJ', description: 'APJ' },
+  { key: 'LA', description: 'LA' }
 ];
 
 class ChatAdd extends React.Component {
   state = {
-    team: "Finance",
-    region: "EMEA",
-    weeknr: "",
+    team: 'Finance',
+    region: 'EMEA',
+    weeknr: '',
     nrchats: 0,
     responseintime: 0,
     dataSource: [],
-    name: "Joris"
+    name: 'Joris'
   };
 
   componentDidMount() {
@@ -89,12 +89,20 @@ class ChatAdd extends React.Component {
     const percentage = (nrchats === 0 ? 100 : (100 * responseintime) / nrchats).toFixed(1);
     return (
       <div>
-        <CardSection style={{ fontSize: "36px", fontFamily: "Oswald" }}>Add Chat Result</CardSection>
+        <CardSection style={{ fontSize: '36px', fontFamily: 'Oswald' }}>
+          Add Chat Result
+        </CardSection>
         <form>
           <CardSection>
             <FormControl className={classes.formControl}>
               <InputLabel htmlFor="name-readonly">Team</InputLabel>
-              <Select id="team" name="team" onChange={this.handleChange} style={{ flex: 2 }} value={team}>
+              <Select
+                id="team"
+                name="team"
+                onChange={this.handleChange}
+                style={{ flex: 2 }}
+                value={team}
+              >
                 {teams.map(team => (
                   <MenuItem key={team.key} value={team.key}>
                     {team.description}
@@ -104,7 +112,13 @@ class ChatAdd extends React.Component {
             </FormControl>
             <FormControl className={classes.formControl}>
               <InputLabel htmlFor="name-readonly">region</InputLabel>
-              <Select id="region" name="region" style={{ flex: 2 }} onChange={this.handleChange} value={region}>
+              <Select
+                id="region"
+                name="region"
+                style={{ flex: 2 }}
+                onChange={this.handleChange}
+                value={region}
+              >
                 {regions.map(region => (
                   <MenuItem key={region.key} value={region.key}>
                     {region.description}
@@ -163,7 +177,13 @@ class ChatAdd extends React.Component {
             >
               Save
             </Button>
-            <Button variant="contained" color="secondary" className={classes.button} onClick={onCancel} type="reset">
+            <Button
+              variant="contained"
+              color="secondary"
+              className={classes.button}
+              onClick={onCancel}
+              type="reset"
+            >
               Cancel
             </Button>
           </CardSection>

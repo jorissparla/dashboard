@@ -73,7 +73,7 @@ const StudentListContainer = DynamicImport(() => import('./courses/StudentTableN
 const StudentView = DynamicImport(() => import('./courses/StudentView'));
 const AddStudentsToCourse = DynamicImport(() => import('./courses/AddStudentsToCourse'));
 const AddPlannedCourseRequest = DynamicImport(() => import('./courses/AddPlannedCourseRequest'));
-const TenantList = DynamicImport(() => import('./TenantList'));
+const TenantList = DynamicImport(() => import('./pages/TenantList'));
 const DonutChart = DynamicImport(() => import('./charts/DonutChart'));
 const VSummaryChart = DynamicImport(() => import('./charts/VSummaryChart'));
 
@@ -108,6 +108,7 @@ class AppRoutes extends React.Component {
                 path="/supportcard"
                 component={SupportCards}
               />
+              <Route exact path="/tenant" component={TenantList} />
               <Route exact path="/fileupload" component={CourseFileUpload} />
               <EnhancedRoute
                 exact
@@ -328,7 +329,7 @@ class AppRoutes extends React.Component {
               />
               <Route exact path="/chart" component={VSummaryChart} />
               <Route exact path="/donut" component={DonutChart} />
-              <Route exact path="/tenant" component={TenantList} />
+
               <Route exact path="/addplannedcourserequest" component={AddPlannedCourseRequest} />
 
               <Route component={NotFound} />
@@ -339,6 +340,5 @@ class AppRoutes extends React.Component {
     );
   }
 }
-
 
 export default withRouter(withDashBoardContext(AppRoutes));

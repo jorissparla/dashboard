@@ -110,7 +110,7 @@ class CourseView extends React.Component {
   render() {
     const { classes } = this.props;
 
-    const { value, activeTab } = this.state;
+    const { activeTab } = this.state;
     const { role } = this.props.user;
     const enabled = role === 'Admin' || role === 'PO';
     const currentYear = new Date().getFullYear();

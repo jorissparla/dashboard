@@ -2,16 +2,10 @@ import React from 'react';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import SummaryChart from './NewSummaryChart';
-import LoadingDots from '../common/LoadingDots';
 import shortid from 'shortid';
 
 class SummaryChartContainer extends React.Component {
   render() {
-    /*     const {
-      data: { loading, error, summaries }
-    } = this.props; */
-    /*     if (loading) return <div>Loading...</div>;
-    if (error) return <div>Error</div>; */
 
     const value = !this.props.value ? 'supportBacklog' : this.props.value;
     const title = !this.props.title ? value : this.props.title;
