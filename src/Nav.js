@@ -2,6 +2,11 @@ import React from 'react';
 //import AppBar from "material-ui/AppBar";
 import AppBar from '@material-ui/core/AppBar';
 //import IconButton from "material-ui/IconButton";
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import Typography from '@material-ui/core/Typography';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import IconButton from '@material-ui/core/IconButton';
 import Avatar from '@material-ui/core/Avatar';
 import ActionHome from '@material-ui/icons/Home';
@@ -14,6 +19,8 @@ import RequestListIcon from '@material-ui/icons/PlaylistAdd';
 import GoLiveIcon from '@material-ui/icons/FlightTakeoff';
 import ExtensionIcon from '@material-ui/icons/Extension';
 import FeedbackIcon from '@material-ui/icons/Feedback';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import MenuIcon from '@material-ui/icons/Menu';
 //import FlatButton from "@material-ui/core/FlatButton";
 import Button from '@material-ui/core/Button';
@@ -23,11 +30,7 @@ import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import MenuItem from '@material-ui/core/MenuItem';
 import { withRouter } from 'react-router';
-//import { Toolbar, ToolbarGroup, ToolbarTitle } from "material-ui/Toolbar";
 import Toolbar from '@material-ui/core/Toolbar';
-//import ToolbarGroup from "@material-ui/core/ToolbarGroup";
-//import ToolbarTitle from "@material-ui/core/ToolbarTitle";
-import Typography from '@material-ui/core/Typography';
 import { withStyles } from '@material-ui/core/styles';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -86,6 +89,10 @@ const styles = theme => ({
   hide: {
     display: 'none'
   },
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0
+  },
   drawerPaper: {
     position: 'relative',
     width: drawerWidth
@@ -96,6 +103,19 @@ const styles = theme => ({
     justifyContent: 'flex-end',
     padding: '0 8px',
     ...theme.mixins.toolbar
+  },
+  heading: {
+    fontSize: theme.typography.pxToRem(15),
+    flexBasis: '33.33%',
+    flexShrink: 0
+  },
+  secondaryHeading: {
+    fontSize: theme.typography.pxToRem(15),
+    color: theme.palette.text.secondary
+  },
+  panelDetails: {
+    display: 'flex',
+    flexDirection: 'column'
   },
   content: {
     flexGrow: 1,
@@ -141,39 +161,62 @@ const NavLink = ({ title, Icon, navigateTo, history }) => (
   </MenuItem>
 );
 
+function useToggle(initialState = false) {
+  const [on, setOn] = React.useState(initialState);
+  const toggle = () => setOn(!on);
+
+  return [on, toggle];
+}
+
+function ExpandableMenuItem({ title, Icon, children, classes }) {
+  const [expanded, toggleExpanded] = useToggle(false);
+
+  return (
+    <ExpansionPanel expanded={expanded} onChange={toggleExpanded}>
+      <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+        <ListItemIcon>
+          <Icon />
+        </ListItemIcon>
+        <Typography className={classes.secondaryHeading}>{title}</Typography>
+      </ExpansionPanelSummary>
+      <ExpansionPanelDetails className={classes.panelDetails}>{children}</ExpansionPanelDetails>
+    </ExpansionPanel>
+  );
+}
+
 class Header extends React.Component {
   state = {
-    showdrawer: false,
-    ipaddress: ''
+    showdrawer: false
+    // ipaddress: ''
   };
 
-  doSomething() {
-    var self = this;
-    window.RTCPeerConnection =
-      window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection; //compatibility for Firefox and chrome
-    //console.log("RTC", window.RTCPeerConnection);
-    if (window.RTCPeerConnection) {
-      var pc = new RTCPeerConnection({ iceServers: [] }),
-        noop = function() {};
+  // doSomething() {
+  //   var self = this;
+  //   window.RTCPeerConnection =
+  //     window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection; //compatibility for Firefox and chrome
+  //   //console.log("RTC", window.RTCPeerConnection);
+  //   if (window.RTCPeerConnection) {
+  //     var pc = new RTCPeerConnection({ iceServers: [] }),
+  //       noop = function() {};
 
-      pc.createDataChannel(''); //create a bogus data channel
-      pc.createOffer(pc.setLocalDescription.bind(pc), noop); // create offer and set local description
-      pc.onicecandidate = function(ice) {
-        if (ice && ice.candidate && ice.candidate.candidate) {
-          var myIP = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/.exec(
-            ice.candidate.candidate
-          )[1];
-          console.log('my IP: ', myIP);
-          self.setState({ ipaddress: myIP });
-          pc.onicecandidate = noop;
-        }
-      };
-    }
-  }
+  //     pc.createDataChannel(''); //create a bogus data channel
+  //     pc.createOffer(pc.setLocalDescription.bind(pc), noop); // create offer and set local description
+  //     pc.onicecandidate = function(ice) {
+  //       if (ice && ice.candidate && ice.candidate.candidate) {
+  //         var myIP = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/.exec(
+  //           ice.candidate.candidate
+  //         )[1];
+  //         console.log('my IP: ', myIP);
+  //         self.setState({ ipaddress: myIP });
+  //         pc.onicecandidate = noop;
+  //       }
+  //     };
+  //   }
+  // }
 
-  componentDidMount() {
-    // this.doSomething()
-  }
+  // componentDidMount() {
+  //   // this.doSomething()
+  // }
 
   toggleMenu = () => {
     this.setState({ showdrawer: !this.state.showdrawer });
@@ -185,7 +228,7 @@ class Header extends React.Component {
     </IconButton>
   );
 
-  hamburgerMenu = ({ openSnackbar }) => {
+  hamburgerMenu = ({ openSnackbar, classes }) => {
     const { history, authenticated, user } = this.props;
 
     let validRole = false;
@@ -200,14 +243,18 @@ class Header extends React.Component {
 
     //console.log("AUTH", authenticated, validRole, user.role !== "Guest");
     return (
-      <div onClick={() => this.toggleMenu()}>
+      <div onClick={() => console.log('toggle')}>
         <NavLink title="Home" Icon={ActionHome} navigateTo="/" history={history} />
-        <NavLink title="Logistics" Icon={null} navigateTo="/team/logistics" history={history} />
-        <NavLink title="Finance" Icon={null} navigateTo="/team/finance" history={history} />
-        <NavLink title="Tools" Icon={null} navigateTo="/team/tools" history={history} />
-        <NavLink title="Backlog" Icon={null} navigateTo="/historyall" history={history} />
+        <ExpandableMenuItem classes={classes} title="Stats Graphs" Icon={GoLiveIcon}>
+          <NavLink title="Logistics" Icon={null} navigateTo="/team/logistics" history={history} />
+          <NavLink title="Finance" Icon={null} navigateTo="/team/finance" history={history} />
+          <NavLink title="Tools" Icon={null} navigateTo="/team/tools" history={history} />
+          <NavLink title="Backlog" Icon={null} navigateTo="/historyall" history={history} />
+        </ExpandableMenuItem>
         <Divider />
-        <NavLink title="Go Lives" Icon={GoLiveIcon} navigateTo="/golives" history={history} />
+        <ExpandableMenuItem classes={classes} title="Go Lives" Icon={GoLiveIcon}>
+          <NavLink title="Go Lives" Icon={GoLiveIcon} navigateTo="/golives" history={history} />
+        </ExpandableMenuItem>
         <NavLink title="MT Customers" Icon={ExtensionIcon} navigateTo="/tenant" history={history} />
         <NavLink
           title="Customer Feedback"
@@ -322,7 +369,7 @@ class Header extends React.Component {
   };
 
   render() {
-    const { classes, authenticated } = this.props;
+    const { classes, authenticated, theme } = this.props;
     let titleText = this.state.ipaddress ? this.state.ipaddress : '';
     titleText =
       titleText + process.env.NODE_ENV !== 'production' ? `(${process.env.NODE_ENV})` : '';
@@ -342,16 +389,20 @@ class Header extends React.Component {
                 return (
                   <React.Fragment>
                     <Drawer
-                      classes={{
-                        paper: classes.drawerPaper
-                      }}
+                      className={classes.drawer}
                       anchor="left"
                       open={this.state.showdrawer}
                       key="drawer"
+                      variant="persistent"
                     >
-                      {this.hamburgerMenu({ openSnackbar })}
+                      {this.hamburgerMenu({ openSnackbar, classes })}
                     </Drawer>
-
+                    <div className={classes.drawerHeader}>
+                      <IconButton onClick={() => this.toggleMenu()}>
+                        {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                      </IconButton>
+                    </div>
+                    <Divider />
                     <div className={classes.root}>
                       <AppBar position="static">
                         <Toolbar>
@@ -395,4 +446,4 @@ class Header extends React.Component {
     );
   }
 }
-export default withRouter(withAuth(withStyles(styles)(Header)));
+export default withRouter(withAuth(withStyles(styles, { withTheme: true })(Header)));
