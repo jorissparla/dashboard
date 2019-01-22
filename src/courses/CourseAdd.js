@@ -4,7 +4,7 @@ import { Mutation } from 'react-apollo';
 import _ from 'lodash';
 import { withRouter } from 'react-router';
 import CourseFormNew from './CourseFormNew';
-import { QUERY_ALL_COURSES } from './CourseList';
+import { QUERY_ALL_COURSES } from '../pages/CourseList';
 
 const ADD_COURSE_MUTATION = gql`
   mutation ADD_COURSE_MUTATION($input: InputCourseType) {

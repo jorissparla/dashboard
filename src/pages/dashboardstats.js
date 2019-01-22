@@ -1,17 +1,17 @@
-import React from "react";
+import React from 'react';
 
-import "./App.css";
-import AppChartContainer from "./charts/appchartcontainer";
-import ChatChartContainer from "./charts/chatchartcontainer";
-import HistoryChartContainer from "./charts/historycontainer";
-import { StyleLoaderM } from "./common";
+import '../App.css';
+import AppChartContainer from '../charts/appchartcontainer';
+import ChatChartContainer from '../charts/chatchartcontainer';
+import HistoryChartContainer from '../charts/historycontainer';
+import { StyleLoaderM } from '../common';
 
 const DashBoardStats = props => {
   let { data1 = [], region } = props;
-  console.log("DashBoardStats", props);
-  const team = props.match ? props.match.params.team || "" : "";
+  console.log('DashBoardStats', props);
+  const team = props.match ? props.match.params.team || '' : '';
   if (!region) {
-    region = props.match ? props.match.params.region || "EMEA" : "EMEA";
+    region = props.match ? props.match.params.region || 'EMEA' : 'EMEA';
   }
   if (team) {
     data1.push(team);
@@ -22,7 +22,7 @@ const DashBoardStats = props => {
       <div className="col s12">
         <div className="row">
           <AppChartContainer
-            data={data1 || ["Tools", "Logistics", "Finance"]}
+            data={data1 || ['Tools', 'Logistics', 'Finance']}
             title="Support Backlog"
             roepie={region}
             refreshRate={0}
@@ -30,7 +30,7 @@ const DashBoardStats = props => {
             type="spline"
           />
           <AppChartContainer
-            data={data1 || ["Tools", "Logistics", "Finance"]}
+            data={data1 || ['Tools', 'Logistics', 'Finance']}
             value="surveyScore"
             title="Survey"
             type="column"
@@ -39,7 +39,7 @@ const DashBoardStats = props => {
           />
           <HistoryChartContainer data={data1} color="#ffb74d" refreshRate={0} region={region} />
           <AppChartContainer
-            data={data1 || ["Tools", "Logistics", "Finance"]}
+            data={data1 || ['Tools', 'Logistics', 'Finance']}
             value="opened"
             title="Opened"
             color="#b39ddb"
@@ -48,7 +48,7 @@ const DashBoardStats = props => {
             region={region}
           />
           <AppChartContainer
-            data={data1 || ["Tools", "Logistics", "Finance"]}
+            data={data1 || ['Tools', 'Logistics', 'Finance']}
             value="Closed"
             title="Closed"
             color="#ffc600"
@@ -57,7 +57,7 @@ const DashBoardStats = props => {
             region={region}
           />
           <ChatChartContainer
-            data={data1 || ["Tools", "Logistics", "Finance"]}
+            data={data1 || ['Tools', 'Logistics', 'Finance']}
             title="Chats"
             type="column"
             value="percentage"

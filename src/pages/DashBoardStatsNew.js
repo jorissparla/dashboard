@@ -1,7 +1,7 @@
 import React from 'react';
 
-import './App.css';
-import SummaryChartContainer from './charts/SummaryChartContainer';
+import '../App.css';
+import SummaryChartContainer from '../charts/SummaryChartContainer';
 import styled from 'styled-components';
 import shortid from 'shortid';
 

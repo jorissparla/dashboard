@@ -46,22 +46,20 @@ const AnniversaryList = DynamicImport(() => import('./awards/Anniversaries'));
 const ResolutionChart = DynamicImport(() => import('./charts/ResolutionChart'));
 
 const CommentsList = DynamicImport(() => import('./feedback/commentList'));
-const CourseList = DynamicImport(() => import('./courses/CourseList'));
+const CourseList = DynamicImport(() => import('./pages/CourseList'));
 
 const AccountList = DynamicImport(() => import('./Account/AccountList'));
 
 const ChatContainer = DynamicImport(() => import('./chat/ChatContainer'));
 const ChatList = DynamicImport(() => import('./chat/ChatList'));
 const SmallCard = DynamicImport(() => import('./supportcard/SupportCard'));
-//const DashBoard = Loader("./dashboard");
-const DashBoard = DynamicImport(() => import('./dashboard'));
-const DashBoardStats = DynamicImport(() => import('./dashboardstats'));
+const DashBoardStats = DynamicImport(() => import('./pages/dashboardstats'));
 
 const HistoryDayContainer = DynamicImport(() => import('./charts/historydaycontainer'));
 const HistoryDayAll = DynamicImport(() => import('./charts/historydayallcontainer'));
 const GoLiveListNew = DynamicImport(() => import('./golives/goLiveListNew'));
 const GoLiveListSide = DynamicImport(() => import('./golives/golivelistside'));
-const DashBoardStatsNew = DynamicImport(() => import('./DashBoardStatsNew'));
+const DashBoardStatsNew = DynamicImport(() => import('./pages/DashBoardStatsNew'));
 const SupportCards = DynamicImport(() => import('./pages/SupportCards'));
 
 const RequestEditAdd = DynamicImport(() => import('./supportcard/Request'));
@@ -109,6 +107,10 @@ class AppRoutes extends React.Component {
                 component={SupportCards}
               />
               <Route exact path="/tenant" component={TenantList} />
+              />
+              <Route exact path="/region/:region" component={DashBoardContainer} />
+              <Route exact path="/team/:team" component={DashBoardStatsNew} />
+              <Route exact path="/team/:team/region/:region" component={DashBoardStats} />
               <Route exact path="/fileupload" component={CourseFileUpload} />
               <EnhancedRoute
                 exact
@@ -209,13 +211,7 @@ class AppRoutes extends React.Component {
                 path="/supportcard/request/:id"
                 component={RequireAuth(RequestEdit)}
               />
-              <Route exact path="/region/:region" component={DashBoardContainer} />
-              <Route exact path="/q/:id" component={DashBoardContainer} />
-              <Route allowed={['Admin']} user={user} path="/main/1" component={DashBoard} />
-              <Route exact path="/team/:team" component={DashBoardStatsNew} />
-              <Route exact path="/team/:team/region/:region" component={DashBoardStats} />
               <Route path="award" component={Award} />
-
               <EnhancedRoute
                 editors={['Admin', 'PO']}
                 allowed={['Admin', 'PO']}
@@ -244,9 +240,7 @@ class AppRoutes extends React.Component {
                 path="/supportcard/request"
                 component={RequestEditAdd}
               />
-
               <Route exact path="/news" component={NewsListContainer} />
-
               <AuthRoute
                 allowed={['Admin', 'PO', 'SU']}
                 user={user}
@@ -282,7 +276,6 @@ class AppRoutes extends React.Component {
                 path="/news/add"
                 component={RequireAuth(NewsItemAddContainer)}
               />
-
               <Route path="/golivelist" component={GoLiveListNew} />
               <Route path="/golivelistside" component={GoLiveListSide} />
               <Route path="/golives" component={GoLiveListNew} />
@@ -329,9 +322,7 @@ class AppRoutes extends React.Component {
               />
               <Route exact path="/chart" component={VSummaryChart} />
               <Route exact path="/donut" component={DonutChart} />
-
               <Route exact path="/addplannedcourserequest" component={AddPlannedCourseRequest} />
-
               <Route component={NotFound} />
             </Switch>
           );

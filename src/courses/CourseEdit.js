@@ -5,7 +5,7 @@ import { adopt } from 'react-adopt';
 import _ from 'lodash';
 import { withRouter } from 'react-router';
 import CourseFormNew from './CourseFormNew';
-import { QUERY_ALL_COURSES } from './CourseList';
+import { QUERY_ALL_COURSES } from '../pages/CourseList';
 
 const COURSE_DELETE_MUTATION = gql`
   mutation COURSE_DELETE_MUTATION($input: InputCourseType) {

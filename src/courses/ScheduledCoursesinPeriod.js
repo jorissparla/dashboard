@@ -5,7 +5,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import gql from 'graphql-tag';
-import {  Query } from 'react-apollo';
+import { Query } from 'react-apollo';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import format from 'date-fns/format';
@@ -49,7 +49,11 @@ const ScheduledCoursesInPeriod = ({ startdate }) => {
                 <HeaderColumn style={{ width: 300 }}>DESCRIPTION</HeaderColumn>
                 <HeaderColumn style={{ width: 90 }}>STATUS</HeaderColumn>
                 <HeaderColumn>ID</HeaderColumn>
-                <HeaderColumn style={{ width: 20 }}>👤</HeaderColumn>
+                <HeaderColumn style={{ width: 20 }}>
+                  <span role="img" aria-label="people">
+                    👤
+                  </span>
+                </HeaderColumn>
                 <HeaderColumn>COURSE DATE</HeaderColumn>
               </TableRow>
             </TableHead>
