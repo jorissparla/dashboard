@@ -1,12 +1,12 @@
-import React from 'react';
-import styled from 'styled-components';
-import Icon from '@material-ui/core/Icon';
-import ViewIcon from '@material-ui/icons/Pageview';
-import ModeEdit from '@material-ui/icons/Edit';
-import NewIcon from '@material-ui/icons/NewReleases';
-import { Link } from 'react-router-dom';
-import { Papier, HR } from '../styles/index.js';
-import Divider from '@material-ui/core/Divider';
+import React from "react";
+import styled from "styled-components";
+import Icon from "@material-ui/core/Icon";
+import ViewIcon from "@material-ui/icons/Pageview";
+import ModeEdit from "@material-ui/icons/Edit";
+import NewIcon from "@material-ui/icons/NewReleases";
+import { Link } from "react-router-dom";
+import { Papier, HR } from "../styles/index.js";
+import Divider from "@material-ui/core/Divider";
 
 const OtherButton = styled.a`
   display: flex;
@@ -20,7 +20,7 @@ const Text = styled.div`
   padding-left: 3px;
   cursor: pointer;
   font-weight: 900;
-  color: ${props => (props.textcolor ? props.textcolor : 'black')};
+  color: ${props => (props.textcolor ? props.textcolor : "black")};
 `;
 const Cat = styled.div`
   font-weight: 800;
@@ -28,10 +28,10 @@ const Cat = styled.div`
 const TitleWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  font-family: 'Montserrat', Roboto;
+  font-family: "Montserrat", Roboto;
 `;
 const Title = styled.div`
-  font-family: 'Montserrat', Roboto;
+  font-family: "Montserrat", Roboto;
   font-size: 16px;
   font-weight: bold;
   padding: 2px;
@@ -84,32 +84,32 @@ const StyledLink = styled(Link)`
   }
 `;
 
-const StyledPapier = Papier.extend`
+const StyledPapier = styled(Papier)`
   display: flex;
   justify-content: space-between;
   font-family: Montserrat;
   width: 18%;
   min-width: 200px;
-  color: ${props => (props.textcolor ? props.textcolor : 'black')};
-  background-color: ${props => (props.color ? props.color : 'lightblue')};
+  color: ${props => (props.textcolor ? props.textcolor : "black")};
+  background-color: ${props => (props.color ? props.color : "lightblue")};
 `;
 
 const SmallCard = ({
-  title = 'Procedure',
-  text = 'Papier Und KartonFabrik',
-  buttonText = 'Modify',
-  category = 'Cloud',
-  link = 'http://www.google.com',
+  title = "Procedure",
+  text = "Papier Und KartonFabrik",
+  buttonText = "Modify",
+  category = "Cloud",
+  link = "http://www.google.com",
   action = null,
-  color = '#FFFFF',
-  textcolor = '#000',
+  color = "#FFFFF",
+  textcolor = "#000",
   canEdit = false,
-  editLink = '',
-  viewLink = '',
+  editLink = "",
+  viewLink = "",
   isNew = false,
-  onAudit = () => console.log('onaudit'),
+  onAudit = () => console.log("onaudit"),
   onFollowLink = link => {
-    console.log('onFollowLink');
+    console.log("onFollowLink");
     return link;
   }
 }) => {
@@ -124,7 +124,7 @@ const SmallCard = ({
         )}
       </TitleWrapper>
       <HR />
-      <StyledBody>{text.slice(0, 200).concat('...')}</StyledBody>
+      <StyledBody>{text.slice(0, 200).concat("...")}</StyledBody>
       <Divider />
       <BottomStyle>
         <StyledLink to={editLink} onClick={e => onAudit(editLink)}>
@@ -132,7 +132,10 @@ const SmallCard = ({
           <Icon>{canEdit === true ? <ModeEdit /> : <ViewIcon />}</Icon>
         </StyledLink>
         {canEdit && (
-          <StyledLink to={viewLink} onClick={e => onAudit(viewLink, 'SupportCard')}>
+          <StyledLink
+            to={viewLink}
+            onClick={e => onAudit(viewLink, "SupportCard")}
+          >
             <Icon>
               <ViewIcon />
             </Icon>

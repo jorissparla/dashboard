@@ -5,7 +5,7 @@ import Avatar from "@material-ui/core/Avatar";
 export const Typography = styled.div`
   font-family: Roboto;
 `;
-export const BasicFlex = Typography.extend`
+export const BasicFlex = styled(Typography)`
   display: flex;
   padding: 5px;
 `;
@@ -341,11 +341,11 @@ export const Avatar1 = styled.img`
   overflow: hidden;
 `;
 
-export const UserName = BasicFlex.extend`
+export const UserName = styled(BasicFlex)`
   font-size: 16px;
 `;
 
-export const AlertBox = Typography.extend`
+export const AlertBox = styled(Typography)`
   padding: 16px 16px 16px 60px;
   position: relative;
   border-radius: 4px;
@@ -367,7 +367,7 @@ export const H1 = styled.h1`
   font-family: Roboto;
 `;
 
-export const Pop = BasicFlex.extend`
+export const Pop = styled(BasicFlex)`
   position: absolute;
   top: 50%;
   left: 50%;
@@ -380,7 +380,7 @@ export const Pop = BasicFlex.extend`
   border: solid 1px hsla(0, 0%, 20%, 1);
   box-shadow: 1px 1px 3px hsla(0, 0%, 0%, 0.7);
 `;
-export const Pop2 = BasicFlex.extend`
+export const Pop2 = styled(BasicFlex)`
   position: absolute;
   top: 50%;
   left: 50%;
@@ -418,7 +418,7 @@ export const Sym = styled.span`
   }
 `;
 
-export const NotificationMsg = Typography.extend`
+export const NotificationMsg = styled(Typography)`
   font-size: 16px;
   color: rgba(0, 0, 0, 0.85);
   margin-bottom: 4px;
@@ -426,7 +426,7 @@ export const NotificationMsg = Typography.extend`
   display: inline-block;
 `;
 
-export const NotificationText = Typography.extend`
+export const NotificationText = styled(BasicFlex)`
   font-size: 12px;
   color: rgba(0, 0, 0, 0.65);
 `;
