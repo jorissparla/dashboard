@@ -1,7 +1,9 @@
 import React from 'react';
-//import AppBar from "material-ui/AppBar";
+import classNames from 'classnames';
+import { withRouter } from 'react-router';
+import { withStyles } from '@material-ui/core/styles';
+import Toolbar from '@material-ui/core/Toolbar';
 import AppBar from '@material-ui/core/AppBar';
-//import IconButton from "material-ui/IconButton";
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
@@ -22,48 +24,24 @@ import FeedbackIcon from '@material-ui/icons/Feedback';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import MenuIcon from '@material-ui/icons/Menu';
-//import FlatButton from "@material-ui/core/FlatButton";
 import Button from '@material-ui/core/Button';
-//import IconMenu from "material-ui/IconMenu";
 import Divider from '@material-ui/core/Divider';
-//import Drawer from "material-ui/Drawer";
 import Drawer from '@material-ui/core/Drawer';
 import MenuItem from '@material-ui/core/MenuItem';
-import { withRouter } from 'react-router';
-import Toolbar from '@material-ui/core/Toolbar';
-import { withStyles } from '@material-ui/core/styles';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import withAuth from './utils/withAuth';
-import { SharedSnackbarConsumer } from './SharedSnackbar.context';
 import Signout from './Signout';
 import User from './User';
+import { List } from '@material-ui/core';
 
-const drawerWidth = 240;
+const drawerWidth = 340;
 
 const styles = theme => ({
   root: {
-    flexGrow: 1
-  },
-
-  grow: {
-    flexGrow: 1
-  },
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20
-  },
-  appFrame: {
-    height: 64,
-    zIndex: 1,
-    overflow: 'hidden',
-    position: 'relative',
-    display: 'flex',
-    width: '100%'
+    display: 'flex'
   },
   appBar: {
-    position: 'absolute',
-    display: 'flex',
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
@@ -71,20 +49,15 @@ const styles = theme => ({
   },
   appBarShift: {
     width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: drawerWidth,
     transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen
     })
   },
-  'appBarShift-left': {
-    marginLeft: drawerWidth
-  },
-  'appBarShift-right': {
-    marginRight: drawerWidth
-  },
-
-  hamburger: {
-    color: 'white'
+  menuButton: {
+    marginLeft: 12,
+    marginRight: 20
   },
   hide: {
     display: 'none'
@@ -94,15 +67,30 @@ const styles = theme => ({
     flexShrink: 0
   },
   drawerPaper: {
-    position: 'relative',
     width: drawerWidth
   },
   drawerHeader: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'flex-end',
     padding: '0 8px',
-    ...theme.mixins.toolbar
+    ...theme.mixins.toolbar,
+    justifyContent: 'flex-end'
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing.unit * 3,
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen
+    }),
+    marginLeft: -drawerWidth
+  },
+  contentShift: {
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen
+    }),
+    marginLeft: 0
   },
   heading: {
     fontSize: theme.typography.pxToRem(15),
@@ -116,39 +104,13 @@ const styles = theme => ({
   panelDetails: {
     display: 'flex',
     flexDirection: 'column'
-  },
-  content: {
-    flexGrow: 1,
-    backgroundColor: theme.palette.background.default,
-    padding: theme.spacing.unit * 3,
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen
-    })
-  },
-  'content-left': {
-    marginLeft: -drawerWidth
-  },
-  'content-right': {
-    marginRight: -drawerWidth
-  },
-  contentShift: {
-    transition: theme.transitions.create('margin', {
-      easing: theme.transitions.easing.easeOut,
-      duration: theme.transitions.duration.enteringScreen
-    })
-  },
-  'contentShift-left': {
-    marginLeft: 0
-  },
-  'contentShift-right': {
-    marginRight: 0
   }
 });
 
-const NavLink = ({ title, Icon, navigateTo, history }) => (
+const NavLink = ({ title, Icon, navigateTo, history, toggleMenu }) => (
   <MenuItem
     onClick={() => {
+      // toggleMenu();
       history.push(navigateTo);
     }}
   >
@@ -170,7 +132,7 @@ function useToggle(initialState = false) {
 
 function ExpandableMenuItem({ title, Icon, children, classes }) {
   const [expanded, toggleExpanded] = useToggle(false);
-
+  console.log(children);
   return (
     <ExpansionPanel expanded={expanded} onChange={toggleExpanded}>
       <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
@@ -186,40 +148,11 @@ function ExpandableMenuItem({ title, Icon, children, classes }) {
 
 class Header extends React.Component {
   state = {
-    showdrawer: false
-    // ipaddress: ''
+    open: false
   };
 
-  // doSomething() {
-  //   var self = this;
-  //   window.RTCPeerConnection =
-  //     window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection; //compatibility for Firefox and chrome
-  //   //console.log("RTC", window.RTCPeerConnection);
-  //   if (window.RTCPeerConnection) {
-  //     var pc = new RTCPeerConnection({ iceServers: [] }),
-  //       noop = function() {};
-
-  //     pc.createDataChannel(''); //create a bogus data channel
-  //     pc.createOffer(pc.setLocalDescription.bind(pc), noop); // create offer and set local description
-  //     pc.onicecandidate = function(ice) {
-  //       if (ice && ice.candidate && ice.candidate.candidate) {
-  //         var myIP = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/.exec(
-  //           ice.candidate.candidate
-  //         )[1];
-  //         console.log('my IP: ', myIP);
-  //         self.setState({ ipaddress: myIP });
-  //         pc.onicecandidate = noop;
-  //       }
-  //     };
-  //   }
-  // }
-
-  // componentDidMount() {
-  //   // this.doSomething()
-  // }
-
   toggleMenu = () => {
-    this.setState({ showdrawer: !this.state.showdrawer });
+    this.setState({ open: !this.state.open });
   };
 
   hamburgerIcon = ({ c }) => (
@@ -228,7 +161,7 @@ class Header extends React.Component {
     </IconButton>
   );
 
-  hamburgerMenu = ({ openSnackbar, classes }) => {
+  hamburgerMenu = ({ classes }) => {
     const { history, authenticated, user } = this.props;
 
     let validRole = false;
@@ -243,7 +176,7 @@ class Header extends React.Component {
 
     //console.log("AUTH", authenticated, validRole, user.role !== "Guest");
     return (
-      <div onClick={() => console.log('toggle')}>
+      <List>
         <NavLink title="Home" Icon={ActionHome} navigateTo="/" history={history} />
         <ExpandableMenuItem classes={classes} title="Stats Graphs" Icon={GoLiveIcon}>
           <NavLink title="Logistics" Icon={null} navigateTo="/team/logistics" history={history} />
@@ -313,7 +246,8 @@ class Header extends React.Component {
                 return (
                   <MenuItem
                     onClick={() => {
-                      openSnackbar('Signing out');
+                      // TODO: replace this
+                      // openSnackbar('Signing out');
                       signout();
                     }}
                   >
@@ -324,7 +258,7 @@ class Header extends React.Component {
             </Signout>
           </React.Fragment>
         )}
-      </div>
+      </List>
     );
   };
   logOutLink = () => {
@@ -364,12 +298,13 @@ class Header extends React.Component {
   }
 
   getLeft = () => {
-    if (this.state.showdrawer) return 250;
+    if (this.state.open) return 250;
     return 0;
   };
 
   render() {
     const { classes, authenticated, theme } = this.props;
+    const { open } = this.state;
     let titleText = this.state.ipaddress ? this.state.ipaddress : '';
     titleText =
       titleText + process.env.NODE_ENV !== 'production' ? `(${process.env.NODE_ENV})` : '';
@@ -384,62 +319,62 @@ class Header extends React.Component {
 
           console.log('🎈🎈🎈', data);
           return (
-            <SharedSnackbarConsumer>
-              {({ openSnackbar }) => {
-                return (
-                  <React.Fragment>
-                    <Drawer
-                      className={classes.drawer}
-                      anchor="left"
-                      open={this.state.showdrawer}
-                      key="drawer"
-                      variant="persistent"
+            <React.Fragment>
+              <div className={classes.root}>
+                <AppBar
+                  position="fixed"
+                  className={classNames(classes.appBar, {
+                    [classes.appBarShift]: open
+                  })}
+                >
+                  <Toolbar disableGutters={!open}>
+                    <IconButton
+                      color="inherit"
+                      aria-label="Open drawer"
+                      onClick={this.toggleMenu}
+                      className={classNames(classes.menuButton, open && classes.hide)}
                     >
-                      {this.hamburgerMenu({ openSnackbar, classes })}
-                    </Drawer>
-                    <div className={classes.drawerHeader}>
-                      <IconButton onClick={() => this.toggleMenu()}>
-                        {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-                      </IconButton>
-                    </div>
-                    <Divider />
-                    <div className={classes.root}>
-                      <AppBar position="static">
-                        <Toolbar>
-                          <IconButton
-                            className={classes.menuButton}
-                            color="inherit"
-                            aria-label="Menu"
-                          >
-                            <MenuIcon onClick={() => this.toggleMenu()} />
-                          </IconButton>
-                          {authenticated && (
-                            <Button>
-                              <Avatar src={picture} />
-                            </Button>
-                          )}
-                          {/*this.renderImage()*/}
-                          <Typography variant="h6" color="inherit" className={classes.grow}>
-                            Infor Support Dashboard {titleText}
-                          </Typography>
-                          <Typography variant="h6" color="inherit" />
+                      <MenuIcon />
+                    </IconButton>
+                    {authenticated && (
+                      <Button>
+                        <Avatar src={picture} />
+                      </Button>
+                    )}
+                    {/*this.renderImage()*/}
+                    <Typography variant="h6" color="inherit" className={classes.grow}>
+                      Infor Support Dashboard {titleText}
+                    </Typography>
+                    <Typography variant="h6" color="inherit" />
 
-                          {authenticated ? (
-                            <Button onClick={() => this.logOutLink()} color="inherit">
-                              Logout
-                            </Button>
-                          ) : (
-                            <Button onClick={() => this.logInLink()} color="inherit">
-                              Login
-                            </Button>
-                          )}
-                        </Toolbar>
-                      </AppBar>
-                    </div>
-                  </React.Fragment>
-                );
-              }}
-            </SharedSnackbarConsumer>
+                    {authenticated ? (
+                      <Button onClick={() => this.logOutLink()} color="inherit">
+                        Logout
+                      </Button>
+                    ) : (
+                      <Button onClick={() => this.logInLink()} color="inherit">
+                        Login
+                      </Button>
+                    )}
+                  </Toolbar>
+                </AppBar>
+                <Drawer
+                  className={classes.drawer}
+                  anchor="left"
+                  open={this.state.open}
+                  key="drawer"
+                  variant="persistent"
+                >
+                  <div className={classes.drawerHeader}>
+                    <IconButton onClick={() => this.toggleMenu()}>
+                      {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+                    </IconButton>
+                  </div>
+                  <Divider />
+                  {this.hamburgerMenu({ classes })}
+                </Drawer>
+              </div>
+            </React.Fragment>
           );
         }}
       </User>
