@@ -1,11 +1,11 @@
-import React from "react";
-import ClearIcon from "@material-ui/icons/Clear";
+import React from 'react';
+import ClearIcon from '@material-ui/icons/Clear';
 
-import gql from "graphql-tag";
-import {  Mutation } from "react-apollo";
-import { SharedSnackbarConsumer } from "../SharedSnackbar.context";
+import gql from 'graphql-tag';
+import { Mutation } from 'react-apollo';
+import { SharedSnackbarConsumer } from '../SharedSnackbar.context';
 
-import { ALL_CHATS_QUERY } from "./ChatList";
+import { ALL_CHATS_QUERY } from '../pages/ChatList';
 const DELETE_CHAT_MUTATION = gql`
   mutation DELETE_CHAT_MUTATION($input: ChatInputType) {
     deleteChat(input: $input) {
@@ -33,7 +33,7 @@ const DeleteChat = ({ id }) => {
                 onClick={async () => {
                   const res = await deleteChat();
                   console.log(res);
-                  openSnackbar("Item deleted");
+                  openSnackbar('Item deleted');
                 }}
               />
             );

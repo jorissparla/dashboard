@@ -18,7 +18,7 @@ import Divider from '@material-ui/core/Divider';
 
 import _ from 'lodash';
 import { WideTitle, colorAr, getColor } from '../styles';
-import DeleteChat from './DeleteChat';
+import DeleteChat from '../chat/DeleteChat';
 
 const DELETE_CHAT_MUTATION = gql`
   mutation DELETE_CHAT_MUTATION($input: ChatInputType) {
@@ -62,7 +62,10 @@ const mapProps = ({ myRanges, myChats, deleteChat }) => ({
 
 const MyContainer = adopt(mapper, mapProps);
 
-const styles = {
+const styles = theme => ({
+  root: {
+    marginTop: 60
+  },
   typo: {
     backgroundColor: 'lightgrey'
   },
@@ -86,7 +89,7 @@ const styles = {
   button: {
     margin: 12
   }
-};
+});
 
 const RenderChat = ({ chat, onRemove }) => {
   return chat.map(({ id, team, nrchats, responseintime, percentage, version }, index) => {

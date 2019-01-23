@@ -13,7 +13,7 @@ import styled from 'styled-components';
 import { HeaderRow, HeaderLeft, HeaderRight, Title, StyledInitials } from '../styles';
 import ModeEdit from '@material-ui/icons/FileCopy';
 import Button from '@material-ui/core/Button';
-import { ALL_FEEDBACK_QUERY } from './feedbackList';
+import { ALL_FEEDBACK_QUERY } from '../pages/feedbackList';
 
 const Left = styled.div`
   display: flex;

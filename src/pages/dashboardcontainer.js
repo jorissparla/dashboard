@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import DynamicImport from '../DynamicImport';
 
 import Anniversaries from '../awards/Anniversaries';
-import FeedbackList from '../feedback/feedbackList';
+import FeedbackList from './feedbackList';
 import CourseList from './CourseList';
 
 const DashBoard = DynamicImport(() => import('../dashboard'));
 const DashBoardStats = DynamicImport(() => import('./DashBoardStatsNew'));
-const GoLives = DynamicImport(() => import('../golives/goLiveListNew'));
+const GoLives = DynamicImport(() => import('./goLiveListNew'));
 const SupportCards = DynamicImport(() => import('./SupportCards'));
 const HistoryDayAll = DynamicImport(() => import('../charts/historydayallcontainer'));
 const NewsPage = DynamicImport(() => import('./newspage'));

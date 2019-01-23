@@ -25,7 +25,7 @@ import UserPermissions from './UserPermissions';
 import CourseFileUpload from './courses/CourseFileUpload';
 const AGLTest = DynamicImport(() => import('./supportcard/Test'));
 //const CommentsList = DynamicImport(() => import("./feedback/commentList"));
-const FeedbackList = DynamicImport(() => import('./feedback/feedbackList'));
+const FeedbackList = DynamicImport(() => import('./pages/feedbackList'));
 const AddFeedback = DynamicImport(() => import('./feedback/AddFeedback'));
 
 const Award = DynamicImport(() => import('./awards/award'));
@@ -51,13 +51,13 @@ const CourseList = DynamicImport(() => import('./pages/CourseList'));
 const AccountList = DynamicImport(() => import('./Account/AccountList'));
 
 const ChatContainer = DynamicImport(() => import('./chat/ChatContainer'));
-const ChatList = DynamicImport(() => import('./chat/ChatList'));
+const ChatList = DynamicImport(() => import('./pages/ChatList'));
 const SmallCard = DynamicImport(() => import('./supportcard/SupportCard'));
 const DashBoardStats = DynamicImport(() => import('./pages/dashboardstats'));
 
 const HistoryDayContainer = DynamicImport(() => import('./charts/historydaycontainer'));
 const HistoryDayAll = DynamicImport(() => import('./charts/historydayallcontainer'));
-const GoLiveListNew = DynamicImport(() => import('./golives/goLiveListNew'));
+const GoLiveListNew = DynamicImport(() => import('./pages/goLiveListNew'));
 const GoLiveListSide = DynamicImport(() => import('./golives/golivelistside'));
 const DashBoardStatsNew = DynamicImport(() => import('./pages/DashBoardStatsNew'));
 const SupportCards = DynamicImport(() => import('./pages/SupportCards'));
