@@ -48,32 +48,42 @@ const Composed = adopt({
     </Query>
   ),
   updatePlannedCourseParticipants: ({ render }) => (
-    <Mutation mutation={ADD_PARTICIPANTS_TO_COURSE}>{render}</Mutation>
+    <Mutation
+      mutation={ADD_PARTICIPANTS_TO_COURSE}
+      refetchQueries={[{ query: QUERY_PLANNEDCOURSE_WITHPARTICIPANTS }]}
+    >
+      {render}
+    </Mutation>
   )
 });
 
 class EditStudentsOnCourse extends React.Component {
   state = {
-    plannedCourseId: ''
+    plannedCourseId: this.props.id,
+    participants: this.props.initialValues.students || []
   };
+  componentDidUpdate(prevProps, prevState) {
+    console.log('cdu', this.state);
+  }
+
   render() {
+    console.log('Rerender', this.state);
+    if (!this.props.id) {
+      return null;
+    }
     return (
       <React.Fragment>
         <React.Suspense fallback={<div>Loading</div>}>
           <Composed id={this.props.id}>
-            {({
-              updatePlannedCourseParticipants,
-              plannedcoursewithparticipants: { data, loading }
-            }) => {
+            {({ updatePlannedCourseParticipants, plannedcoursewithparticipants }) => {
+              const { data, loading } = plannedcoursewithparticipants;
               if (loading) {
                 return 'Loading...';
               }
-              if (!data) {
-                return 'No data';
-              }
+              console.log('Line 75', plannedcoursewithparticipants, data, loading, this.props);
               const { plannedcourse, supportfolks: suggestions } = data;
               let participants = [];
-              if (plannedcourse.students) {
+              if (plannedcourse && plannedcourse.students) {
                 participants = plannedcourse
                   ? plannedcourse.students.map(({ fullname }) => fullname)
                   : [];

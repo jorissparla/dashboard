@@ -24,6 +24,9 @@ const PLANNEDCOURSE_UPDATE_MUTATION = gql`
     updatePlannedCourse(input: $input) {
       course {
         id
+        students {
+          fullname
+        }
       }
     }
   }
@@ -41,6 +44,7 @@ const QUERY_SINGLE_PLANNEDCOURSE = gql`
       type
       hours
       updatedAt
+      details
       course {
         id
         title
@@ -57,7 +61,7 @@ const Composed = adopt({
     <Mutation
       mutation={PLANNEDCOURSE_UPDATE_MUTATION}
       awaitRefetchQueries={true}
-      refetchQueries={[{ query: QUERY_SINGLE_PLANNEDCOURSE }]}
+      // refetchQueries={[{ query: QUERY_SINGLE_PLANNEDCOURSE }]}
     >
       {render}
     </Mutation>
@@ -66,7 +70,7 @@ const Composed = adopt({
     <Mutation
       mutation={ADD_PARTICIPANTS_TO_COURSE}
       awaitRefetchQueries={true}
-      refetchQueries={[{ query: QUERY_SINGLE_PLANNEDCOURSE }]}
+      // refetchQueries={[{ query: QUERY_SINGLE_PLANNEDCOURSE }]}
     >
       {render}
     </Mutation>
@@ -88,8 +92,10 @@ class PlannedCourseEdit extends React.Component {
       id: this.state.id2,
       updatedAt: format(Date.now(), 'YYYY-MM-DD')
     };
-     await updatePlannedCourse({ variables: { input } });
-    const participants = this.state.participants.map(p => p.fullname).join(';');
+    const res = await updatePlannedCourse({ variables: { input } });
+    const lop = res.data.updatePlannedCourse.course.students;
+    console.log(this.state, lop);
+    const participants = lop.map(p => p.fullname).join(';');
     console.log('Patricipants', participants);
     await updatePlannedCourseParticipants({
       variables: { participants, id: this.state.id2 }
@@ -135,9 +141,10 @@ class PlannedCourseEdit extends React.Component {
                       initialValues={{ ...data.plannedcourse, ...dates }}
                       onDelete={async id => {
                         await deletePlannedCourse({ variables: { input: { id } } });
-                        history.push(`/courses/edit/${id}`);
+                        history.push(`/courses/edit/${this.props.match.params.id}`);
                       }}
                       onSave={async values => {
+                        console.log('edut', values);
                         const input = _.pick(values, [
                           'id',
                           'courseid',
@@ -149,6 +156,7 @@ class PlannedCourseEdit extends React.Component {
                           'hours',
                           'status',
                           'applicable',
+                          'details',
                           'trainer'
                         ]);
                         this.handleSave(

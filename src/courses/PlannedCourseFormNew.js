@@ -36,7 +36,7 @@ const styles = theme => ({
   },
   button2: {
     margin: theme.spacing.unit,
-    maxWidth: 200,
+    maxWidth: 200
   },
   button: {
     width: 200
@@ -126,6 +126,7 @@ class PlannedCourseForm extends React.Component {
       trainer: 'LN Employee',
       status: 'Released',
       team: 'Logistics',
+      details: '',
       type: 'Class Room Training',
       category: 'Product',
       startdate: format(addHours(Date.now(), 24), 'YYYY-MM-DD'),
@@ -150,7 +151,7 @@ class PlannedCourseForm extends React.Component {
             course: { plannedcourses }
           } = plannedcoursedata;
           console.log('xxxx', plannedcourses, loading2);
-          const { coursetypes,  statuses, supportfolks } = data;
+          const { coursetypes, statuses, supportfolks } = data;
           const { course, id } = this.props;
           // const nstartdate = format(addHours(Date.now(), 24), 'YYYY-MM-DD');
           // const nenddate = format(addHours(Date.now(), 24), 'YYYY-MM-DD');
@@ -218,12 +219,16 @@ class PlannedCourseForm extends React.Component {
                         onBlur={handleBlur}
                       />
                     </div>
-                    {touched.startdate &&
-                      errors.startdate && <div className={classes.error}>{errors.startdate}</div>}
-                    {touched.enddate &&
-                      errors.enddate && <div className={classes.error}>{errors.enddate}</div>}
-                    {touched.hours &&
-                      errors.hours && <div className={classes.error}>{errors.hours}</div>}
+
+                    {touched.startdate && errors.startdate && (
+                      <div className={classes.error}>{errors.startdate}</div>
+                    )}
+                    {touched.enddate && errors.enddate && (
+                      <div className={classes.error}>{errors.enddate}</div>
+                    )}
+                    {touched.hours && errors.hours && (
+                      <div className={classes.error}>{errors.hours}</div>
+                    )}
 
                     <div className={classes.block}>
                       <FormControl className={classes.formControl}>
@@ -302,6 +307,25 @@ class PlannedCourseForm extends React.Component {
                           ))}
                         </Select>
                       </FormControl>
+                    </div>
+                    <div className={classes.block}>
+                      <TextField
+                        id="details"
+                        label="details"
+                        type="text"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        name="details"
+                        placeholder="Provide details on content"
+                        multiline
+                        rows="2"
+                        value={values.details}
+                        fullWidth
+                        className={classes.textField}
+                        InputLabelProps={{
+                          shrink: true
+                        }}
+                      />
                     </div>
                     <div className={classes.block}>
                       <Button
