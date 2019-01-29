@@ -117,7 +117,15 @@ class PlannedCoursesForm extends React.Component {
   render() {
     return (
       <div>
-        <Formik initialValues={{ courseid: this.props.courseid }}>
+        <Formik
+          initialValues={{ courseid: this.props.courseid }}
+          onSubmit={async (
+            values,
+            { setSubmitting, setErrors /* setValues and other goodies */ }
+          ) => {
+            console.log('xxx', values);
+          }}
+        >
           {({
             values,
             handleChange,

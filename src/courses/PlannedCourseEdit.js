@@ -144,7 +144,7 @@ class PlannedCourseEdit extends React.Component {
                         history.push(`/courses/edit/${this.props.match.params.id}`);
                       }}
                       onSave={async values => {
-                        console.log('edut', values);
+                        console.log('onSave method', values);
                         const input = _.pick(values, [
                           'id',
                           'courseid',

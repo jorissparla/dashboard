@@ -11,7 +11,7 @@ import TrashIcon from '@material-ui/icons/Delete';
 import PeopleIcon from '@material-ui/icons/People';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
-import { blue, red} from '@material-ui/core/colors';
+import { blue, red } from '@material-ui/core/colors';
 import { format } from 'date-fns';
 import { withRouter } from 'react-router';
 import { Title, HeaderRow, HeaderLeft, HeaderRight } from '../styles';
@@ -125,7 +125,7 @@ class PlannedCoursesTableNew extends React.Component {
     const { classes, authenticated } = this.props;
     const id = this.props.match.params.id;
     const { selected } = this.state;
-    console.log('TTTTTT', this.state);
+    console.log('Entering class PlannedCoursesTableNew', this.state);
     return (
       <Query query={QUERY_SCHEDULED_COURSES} variables={{ nid: id }}>
         {props => {

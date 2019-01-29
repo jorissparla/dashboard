@@ -129,20 +129,6 @@ class AppRoutes extends React.Component {
                 user={user}
                 view={true}
               />
-              <Route
-                exact
-                path="/scheduledcourses/:id"
-                component={({
-                  match: {
-                    params: { id }
-                  }
-                }) => (
-                  <h1>
-                    planned traing for course
-                    {id}
-                  </h1>
-                )}
-              />
               <Route exact path="/scheduledcourses/:id/new" component={PlannedCourseAdd} />
               <Route exact path="/scheduledcourses/:id/edit/:id2" component={PlannedCourseEdit} />
               <Route exact path="/courses/create" component={CourseAdd} />

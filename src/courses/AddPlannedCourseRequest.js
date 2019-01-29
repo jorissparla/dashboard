@@ -130,258 +130,261 @@ class AddPlannedCourseRequest extends React.Component {
             >
               {({ state, setState }) => {
                 return (
-                  <Query query={ALL_USERS}>
-                    {({ data, loading }) => {
-                      if (loading) return 'Loading....';
-                      const suggestions = data.supportfolks;
-                      const courses = data.courses;
-                      const coursetypes = data.coursetypes;
-
+                  <Mutation mutation={ADD_PLANNEDCOURSEREQUEST}>
+                    {addPlannedCourseRequest => {
                       return (
-                        <Formik
-                          initialValues={{
-                            course: '',
-                            course2: '',
-                            participants: '',
-                            startdate: format(addHours(Date.now(), 24), 'YYYY-MM-DD'),
-                            enddate: format(addHours(Date.now(), 24), 'YYYY-MM-DD'),
-                            hours: 4,
-                            details: '',
-                            type: 'Self Study'
-                          }}
-                          validationSchema={validationSchema}
-                          onSubmit={async (
-                            values,
-                            { setSubmitting, setErrors /* setValues and other goodies */ }
-                          ) => {
-                            console.log('values', values);
-                            const {
-                              startdate,
-                              enddate,
-                              participants,
-                              hours,
-                              details,
-                              type
-                            } = values;
-                            const input = {
-                              courseid: this.getCourseId(courses, values.course),
-                              startdate: format(startdate, 'YYYY-MM-DD'),
-                              enddate: format(enddate, 'YYYY-MM-DD'),
-                              hours,
-                              details,
-                              participants,
-                              type
-                              //  submittedBy: fullname
-                            };
-                            console.log('input', input);
-                          }}
-                        >
-                          {({
-                            values,
-                            handleChange,
-                            handleBlur,
-                            handleSubmit,
-                            setFieldValue,
-                            touched,
-                            errors,
-                            isSubmitting
-                          }) => {
-                            console.log('CurrentValues', values);
+                        <Query query={ALL_USERS}>
+                          {({ data, loading }) => {
+                            if (loading) return 'Loading....';
+                            const suggestions = data.supportfolks;
+                            const courses = data.courses;
+                            const coursetypes = data.coursetypes;
+
                             return (
-                              <Paper className={classes.paper2} elevation={1}>
-                                <Typography variant="h5" gutterBottom>
-                                  Add a request for a new scheduled or completed training
-                                </Typography>
-                                <div className={classes.column}>
-                                  <TextField
-                                    id="startdate"
-                                    label="StartDate"
-                                    type="date"
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    name="startdate"
-                                    value={values.startdate}
-                                    className={classes.textField}
-                                    InputLabelProps={{
-                                      shrink: true
-                                    }}
-                                  />
-                                  {touched.startdate &&
-                                    errors.startdate && <div>{errors.startdate}</div>}
-                                  <TextField
-                                    id="enddate"
-                                    label="EndDate"
-                                    type="date"
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    name="enddate"
-                                    value={values.enddate}
-                                    className={classes.textField}
-                                    InputLabelProps={{
-                                      shrink: true
-                                    }}
-                                  />
-                                  {touched.enddate && errors.enddate && <div>{errors.enddate}</div>}
-                                  <TextField
-                                    id="hours"
-                                    label="hours"
-                                    type="number"
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    name="enddate"
-                                    value={values.hours}
-                                    className={classes.textField}
-                                    InputLabelProps={{
-                                      shrink: true
-                                    }}
-                                  />
-                                  {touched.hours && errors.hours && <div>{errors.hours}</div>}
-                                </div>
-                                <Component
-                                  initialValue={{
-                                    inputValue: '',
-                                    selectedItem: '',
-
-                                    suggestions: []
-                                  }}
-                                >
-                                  {({ state, setState }) => {
-                                    return (
-                                      <StyledSimple
-                                        id="course"
-                                        name="course"
-                                        state={state}
-                                        onChange={item => {
-                                          setFieldValue('course', item);
-                                        }}
-                                        onBlur={handleBlur}
-                                        setState={setState}
-                                        suggestions={courses}
-                                        label="select course"
-                                        value={values.selectedItem}
-                                        fieldname="title"
-                                        placeholder="start typing to select course"
-                                      />
-                                    );
-                                  }}
-                                </Component>
-                                {touched.course && errors.course && <div>{errors.course}</div>}
-                                <div className={classes.column}>
-                                  <Component
-                                    initialValue={{
-                                      inputValue: '',
-                                      selectedItem: 'Self Study',
-                                      type: 'Self Study',
-                                      suggestions: []
-                                    }}
-                                  >
-                                    {({ state, setState }) => {
-                                      return (
-                                        <StyledSelect
-                                          id="coursetype"
-                                          name="coursetype"
-                                          state={state}
-                                          onChange={item => {
-                                            console.log('OnChange', item);
-                                            setFieldValue('type', item);
-                                          }}
+                              <Formik
+                                initialValues={{
+                                  course: '',
+                                  course2: '',
+                                  participants: '',
+                                  startdate: format(addHours(Date.now(), 24), 'YYYY-MM-DD'),
+                                  enddate: format(addHours(Date.now(), 24), 'YYYY-MM-DD'),
+                                  hours: 4,
+                                  details: '',
+                                  type: 'Self Study'
+                                }}
+                                validationSchema={validationSchema}
+                                onSubmit={async (
+                                  values,
+                                  { setSubmitting, setErrors /* setValues and other goodies */ }
+                                ) => {
+                                  const {
+                                    startdate,
+                                    enddate,
+                                    participants,
+                                    hours,
+                                    details,
+                                    type
+                                  } = values;
+                                  const input = {
+                                    courseid: this.getCourseId(courses, values.course),
+                                    startdate: format(startdate, 'YYYY-MM-DD'),
+                                    enddate: format(enddate, 'YYYY-MM-DD'),
+                                    hours,
+                                    details,
+                                    participants,
+                                    type
+                                    //  submittedBy: fullname
+                                  };
+                                  console.log('input', JSON.stringify(input));
+                                  const result = await addPlannedCourseRequest({
+                                    variables: { input }
+                                  });
+                                  console.log('result', result);
+                                }}
+                              >
+                                {({
+                                  values,
+                                  handleChange,
+                                  handleBlur,
+                                  handleSubmit,
+                                  setFieldValue,
+                                  touched,
+                                  errors,
+                                  isSubmitting
+                                }) => {
+                                  return (
+                                    <Paper className={classes.paper2} elevation={1}>
+                                      <Typography variant="h5" gutterBottom>
+                                        Add a request for a new scheduled or completed training
+                                      </Typography>
+                                      <div className={classes.column}>
+                                        <TextField
+                                          id="startdate"
+                                          label="StartDate"
+                                          type="date"
+                                          onChange={handleChange}
                                           onBlur={handleBlur}
-                                          setState={setState}
-                                          suggestions={coursetypes}
-                                          label="Type of Course"
-                                          value={values.type}
-                                          fieldname="name"
-                                          placeholder="Enter type of training"
+                                          name="startdate"
+                                          value={values.startdate}
+                                          className={classes.textField}
+                                          InputLabelProps={{
+                                            shrink: true
+                                          }}
                                         />
-                                      );
-                                    }}
-                                  </Component>
+                                        {touched.startdate && errors.startdate && (
+                                          <div>{errors.startdate}</div>
+                                        )}
+                                        <TextField
+                                          id="enddate"
+                                          label="EndDate"
+                                          type="date"
+                                          onChange={handleChange}
+                                          onBlur={handleBlur}
+                                          name="enddate"
+                                          value={values.enddate}
+                                          className={classes.textField}
+                                          InputLabelProps={{
+                                            shrink: true
+                                          }}
+                                        />
+                                        {touched.enddate && errors.enddate && (
+                                          <div>{errors.enddate}</div>
+                                        )}
+                                        <TextField
+                                          id="hours"
+                                          label="hours"
+                                          type="number"
+                                          onChange={handleChange}
+                                          onBlur={handleBlur}
+                                          name="hours"
+                                          value={values.hours}
+                                          className={classes.textField}
+                                          InputLabelProps={{
+                                            shrink: true
+                                          }}
+                                        />
+                                        {touched.hours && errors.hours && <div>{errors.hours}</div>}
+                                      </div>
+                                      <Component
+                                        initialValue={{
+                                          inputValue: '',
+                                          selectedItem: '',
 
-                                  {touched.type && errors.type && <div>{errors.type}</div>}
-                                  <TextField
-                                    id="details"
-                                    label="Enter details"
-                                    onChange={handleChange}
-                                    onBlur={handleBlur}
-                                    name="details"
-                                    multiline
-                                    rowsMax="4"
-                                    placeholder="Enter specific details if appropriate"
-                                    value={values.details}
-                                    className={classes.largetextField}
-                                    InputLabelProps={{
-                                      shrink: true
-                                    }}
-                                  />
-                                </div>
-                                <Component
-                                  initialValue={{
-                                    inputValue: '',
-                                    selectedItem: [defaultUser],
-                                    suggestions: []
-                                  }}
-                                >
-                                  {({ state, setState }) => {
-                                    return (
-                                      <StyledMultiple
-                                        id="participants"
-                                        name="participants"
-                                        state={state}
-                                        setState={setState}
-                                        suggestions={suggestions}
-                                        onChange={item => {
-                                          setFieldValue('participants', item);
+                                          suggestions: []
                                         }}
-                                        onBlur={handleBlur}
-                                        label="participants"
-                                        fieldname="fullname"
-                                        placeholder="select multiple participants"
-                                      />
-                                    );
-                                  }}
-                                </Component>
-                                {touched.participants &&
-                                  errors.participants && <div>{errors.participants}</div>}
-                                <DashBoardContext.Consumer>
-                                  {({ email, fullname }) => {
-                                    return (
-                                      <Mutation mutation={ADD_PLANNEDCOURSEREQUEST}>
-                                        {addPlannedCourseRequest => {
+                                      >
+                                        {({ state, setState }) => {
                                           return (
-                                            <React.Fragment>
-                                              <Button
-                                                variant="contained"
-                                                color="primary"
-                                                className={classes.button}
-                                                onClick={handleSubmit}
-                                                type="submit"
-                                              >
-                                                Save{' '}
-                                              </Button>
-
-                                              <Button
-                                                variant="contained"
-                                                color="secondary"
-                                                className={classes.button}
-                                                onClick={() => this.props.history.push('/')}
-                                                type="submit"
-                                              >
-                                                Cancel
-                                              </Button>
-                                            </React.Fragment>
+                                            <StyledSimple
+                                              id="course"
+                                              name="course"
+                                              state={state}
+                                              onChange={item => {
+                                                setFieldValue('course', item);
+                                              }}
+                                              onBlur={handleBlur}
+                                              setState={setState}
+                                              suggestions={courses}
+                                              label="select course"
+                                              value={values.selectedItem}
+                                              fieldname="title"
+                                              placeholder="start typing to select course"
+                                            />
                                           );
                                         }}
-                                      </Mutation>
-                                    );
-                                  }}
-                                </DashBoardContext.Consumer>
-                              </Paper>
+                                      </Component>
+                                      {touched.course && errors.course && (
+                                        <div>{errors.course}</div>
+                                      )}
+                                      <div className={classes.column}>
+                                        <Component
+                                          initialValue={{
+                                            inputValue: '',
+                                            selectedItem: 'Self Study',
+                                            type: 'Self Study',
+                                            suggestions: []
+                                          }}
+                                        >
+                                          {({ state, setState }) => {
+                                            return (
+                                              <StyledSelect
+                                                id="coursetype"
+                                                name="coursetype"
+                                                state={state}
+                                                onChange={item => {
+                                                  console.log('OnChange', item);
+                                                  setFieldValue('type', item);
+                                                }}
+                                                onBlur={handleBlur}
+                                                setState={setState}
+                                                suggestions={coursetypes}
+                                                label="Type of Course"
+                                                value={values.type}
+                                                fieldname="name"
+                                                placeholder="Enter type of training"
+                                              />
+                                            );
+                                          }}
+                                        </Component>
+
+                                        {touched.type && errors.type && <div>{errors.type}</div>}
+                                        <TextField
+                                          id="details"
+                                          label="Enter details"
+                                          onChange={handleChange}
+                                          onBlur={handleBlur}
+                                          name="details"
+                                          multiline
+                                          rowsMax="4"
+                                          placeholder="Enter specific details if appropriate"
+                                          value={values.details}
+                                          className={classes.largetextField}
+                                          InputLabelProps={{
+                                            shrink: true
+                                          }}
+                                        />
+                                      </div>
+                                      <Component
+                                        initialValue={{
+                                          inputValue: '',
+                                          selectedItem: [defaultUser],
+                                          suggestions: []
+                                        }}
+                                      >
+                                        {({ state, setState }) => {
+                                          return (
+                                            <StyledMultiple
+                                              id="participants"
+                                              name="participants"
+                                              state={state}
+                                              setState={setState}
+                                              suggestions={suggestions}
+                                              onChange={item => {
+                                                setFieldValue('participants', item);
+                                              }}
+                                              onBlur={handleBlur}
+                                              label="participants"
+                                              fieldname="fullname"
+                                              placeholder="select multiple participants"
+                                            />
+                                          );
+                                        }}
+                                      </Component>
+                                      {touched.participants && errors.participants && (
+                                        <div>{errors.participants}</div>
+                                      )}
+
+                                      <React.Fragment>
+                                        <Button
+                                          variant="contained"
+                                          color="primary"
+                                          className={classes.button}
+                                          onClick={handleSubmit}
+                                          type="submit"
+                                        >
+                                          Save{' '}
+                                        </Button>
+
+                                        <Button
+                                          variant="contained"
+                                          color="secondary"
+                                          className={classes.button}
+                                          onClick={() => this.props.history.push('/')}
+                                          type="submit"
+                                        >
+                                          Cancel
+                                        </Button>
+                                      </React.Fragment>
+                                    </Paper>
+                                  );
+                                }}
+                              </Formik>
                             );
                           }}
-                        </Formik>
+                        </Query>
                       );
                     }}
-                  </Query>
+                  </Mutation>
                 );
               }}
             </Component>
