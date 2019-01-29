@@ -65,7 +65,7 @@ const SupportCards = DynamicImport(() => import('./pages/SupportCards'));
 const RequestEditAdd = DynamicImport(() => import('./supportcard/Request'));
 const SupportCardEdit = DynamicImport(() => import('./supportcard/SupportCardEdit'));
 const SupportCardAdd = DynamicImport(() => import('./supportcard/SupportCardAdd'));
-const CourseView = DynamicImport(() => import('./courses/CourseView'));
+const CourseView = DynamicImport(() => import('./pages/CourseView'));
 const AddCourseCard = DynamicImport(() => import('./courses/AddCourseCard'));
 const StudentListContainer = DynamicImport(() => import('./courses/StudentTableNew'));
 const StudentView = DynamicImport(() => import('./courses/StudentView'));

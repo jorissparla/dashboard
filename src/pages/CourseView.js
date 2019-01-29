@@ -9,10 +9,10 @@ import addDays from 'date-fns/add_days';
 import format from 'date-fns/format';
 import _ from 'lodash';
 import { withStyles } from '@material-ui/core/styles';
-import TrainerViewNew from './TrainerViewNew';
-import StudentChip from './StudentChip';
-import StudentTableNew from './StudentTableNew';
-import ScheduledCoursesInPeriod from './ScheduledCoursesinPeriod';
+import TrainerViewNew from '../courses/TrainerViewNew';
+import StudentChip from '../courses/StudentChip';
+import StudentTableNew from '../courses/StudentTableNew';
+import ScheduledCoursesInPeriod from '../courses/ScheduledCoursesinPeriod';
 
 const StudentChipList = styled.div`
   background-color: white;
@@ -120,7 +120,7 @@ class CourseView extends React.Component {
       <React.Fragment>
         <Tabs
           value={this.state.activeTab}
-          onChange={value => {
+          onChange={(event, value) => {
             this.setState({ activeTab: value });
           }}
         >

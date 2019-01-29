@@ -46,6 +46,7 @@ const HeaderColumn = ({ style, children }) => {
 
 class TrainerView extends React.Component {
   render() {
+    console.log('Trainers');
     const { from, to, classes } = this.props;
 
     return (
