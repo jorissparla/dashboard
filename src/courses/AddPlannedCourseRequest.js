@@ -260,38 +260,27 @@ class AddPlannedCourseRequest extends React.Component {
                                         />
                                         {touched.hours && errors.hours && <div>{errors.hours}</div>}
                                       </div>
-                                      <Component
-                                        initialValue={{
-                                          inputValue: '',
-                                          selectedItem: '',
 
-                                          suggestions: []
-                                        }}
-                                      >
-                                        {({ state, setState }) => {
-                                          return (
-                                            <div>
-                                              <FormControl className={classes.formControl}>
-                                                <FormHelperText>Select Course</FormHelperText>
-                                                <NativeSelect
-                                                  id="course"
-                                                  value={values.course}
-                                                  onChange={handleChange}
-                                                  onBlur={handleBlur}
-                                                  name="course"
-                                                  className={classes.selectEmpty}
-                                                >
-                                                  {courses.map(({ id, title }) => (
-                                                    <option key={id} value={title}>
-                                                      {title}
-                                                    </option>
-                                                  ))}
-                                                </NativeSelect>
-                                              </FormControl>
-                                            </div>
-                                          );
-                                        }}
-                                      </Component>
+                                      <div>
+                                        <FormControl className={classes.formControl}>
+                                          <FormHelperText>Select Course</FormHelperText>
+                                          <NativeSelect
+                                            id="course"
+                                            value={values.course}
+                                            onChange={handleChange}
+                                            onBlur={handleBlur}
+                                            name="course"
+                                            className={classes.selectEmpty}
+                                          >
+                                            {courses.map(({ id, title }) => (
+                                              <option key={id} value={title}>
+                                                {title}
+                                              </option>
+                                            ))}
+                                          </NativeSelect>
+                                        </FormControl>
+                                      </div>
+
                                       {touched.course && errors.course && (
                                         <div>{errors.course}</div>
                                       )}
