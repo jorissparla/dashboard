@@ -38,6 +38,11 @@ const styles = theme => ({
   button: {
     margin: theme.spacing.unit
   },
+  button2: {
+    margin: theme.spacing.unit,
+    height: '40px',
+    backgroundColor: 'palevioletred'
+  },
 
   buttonDel: {
     margin: theme.spacing.unit,
@@ -63,7 +68,8 @@ const styles = theme => ({
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
     backgroundColor: '#eeeeee99',
-    fontSize: 40
+    fontSize: 40,
+    minHeight: '50vh'
   },
   dense: {
     marginTop: 19
@@ -74,7 +80,7 @@ const styles = theme => ({
   },
   markdown: {
     width: '90vw',
-    height: '50vh',
+    height: '60vh',
     overflow: 'scroll'
   },
   menu: {
@@ -94,6 +100,7 @@ const SupportCardForm = props => {
     classes
   } = props;
   const readOnly = !authenticated;
+  const [on, toggle] = React.useState(false);
   const updatedAt = supportcard ? supportcard.updatedAt : format(new Date(), 'YYYY-MM-DD');
   console.log({ initialValues });
   return (
@@ -130,7 +137,7 @@ const SupportCardForm = props => {
                 fullWidth
               />
               <div className={classes.content}>
-                {!readOnly && (
+                {!readOnly && on && (
                   <TextField
                     id="description"
                     label="Description"
@@ -141,14 +148,24 @@ const SupportCardForm = props => {
                     margin="normal"
                     fullWidth
                     multiline
-                    rows={12}
-                    rowsMax={12}
+                    rows={25}
                   />
                 )}
-                <div className={classes.markdown}>
-                  {!readOnly && <h5>Preview</h5>}
-                  <ReactMarkdown source={values.description} />
-                </div>
+                {!on && (
+                  <div className={classes.markdown}>
+                    <ReactMarkdown source={values.description} />
+                  </div>
+                )}
+                {!readOnly && (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    className={classes.button2}
+                    onClick={() => toggle(!on)}
+                  >
+                    {on ? 'Preview' : 'Edit '}
+                  </Button>
+                )}
               </div>
               <FormControl className={classes.formControl}>
                 <InputLabel htmlFor="category-simple">Category</InputLabel>
