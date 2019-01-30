@@ -11,6 +11,7 @@ import Save from '@material-ui/icons/Save';
 import Undo from '@material-ui/icons/Undo';
 import User from '../User';
 import AcceptPlannedCourseRequest from '../courses/AcceptPlannedCourseRequest';
+import DeletePlannedCourseRequest from '../courses/DeletePlannedCourseRequest';
 
 const styles = theme => ({
   root: {},
@@ -20,10 +21,13 @@ const styles = theme => ({
   button: {
     margin: 12,
     background: '#2196f3'
+  },
+  listItem: {
+    minWidth: '45vw'
   }
 });
 
-const QUERY_PLANNEDCOURSEREQUESTS = gql`
+export const QUERY_PLANNEDCOURSEREQUESTS = gql`
   query QUERY_PLANNEDCOURSEREQUESTS {
     plannedcourserequests {
       id
@@ -43,6 +47,7 @@ const QUERY_PLANNEDCOURSEREQUESTS = gql`
 
 class PlannedCourseRequestList extends React.Component {
   render() {
+    const { classes } = this.props;
     return (
       <Query query={QUERY_PLANNEDCOURSEREQUESTS}>
         {({ data, loading }) => {
@@ -65,19 +70,23 @@ class PlannedCourseRequestList extends React.Component {
                           const partipants = students.map(st => st.fullname).join(';');
                           console.log(students);
                           return (
-                            <React.Fragment>
+                            <React.Fragment key={id}>
                               <ListItem key={id}>
-                                <ListItemText primary={title} secondary={details || title} />
+                                <ListItemText
+                                  primary={title}
+                                  secondary={details || title}
+                                  className={classes.listItem}
+                                />
                                 <ListItemText
                                   primary={`Hours: ${hours} Date: ${startdate}`}
                                   secondary={partipants}
+                                  className={classes.listItem}
                                 />
                                 <ListItemSecondaryAction>
                                   <AcceptPlannedCourseRequest id={id} />
-                                  <Save onClick={() => console.log('test')} />
-
-                                  <Undo onClick={() => console.log('test')} />
+                                  <DeletePlannedCourseRequest id={id} />
                                 </ListItemSecondaryAction>
+                                <ListItemSecondaryAction />
                               </ListItem>
                               <Divider />
                             </React.Fragment>

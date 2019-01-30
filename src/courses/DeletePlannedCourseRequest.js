@@ -41,22 +41,20 @@ const Composed = adopt({
   )
 });
 
-function AcceptPlannedCourseRequest({ id }) {
+function DeletePlannedCourseRequest({ id }) {
   return (
     <SharedSnackbarConsumer>
       {({ openSnackbar }) => (
         <Composed>
           {({ converttoplannedcourse, deleteplannedcourserequest }) => {
             return (
-              <Check
+              <ClearIcon
                 onClick={async () => {
-                  const res = await converttoplannedcourse({ variables: { input: { id } } });
-                  console.log(res);
                   const response = await deleteplannedcourserequest({
                     variables: { input: { id } }
                   });
                   console.log(response);
-                  openSnackbar('Item converted');
+                  openSnackbar('Item Deleted');
                 }}
               />
             );
@@ -66,4 +64,4 @@ function AcceptPlannedCourseRequest({ id }) {
     </SharedSnackbarConsumer>
   );
 }
-export default AcceptPlannedCourseRequest;
+export default DeletePlannedCourseRequest;

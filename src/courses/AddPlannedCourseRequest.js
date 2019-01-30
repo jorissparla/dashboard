@@ -159,7 +159,7 @@ class AddPlannedCourseRequest extends React.Component {
                                 initialValues={{
                                   course: courses ? courses[0].title : '',
                                   course2: '',
-                                  participants: '',
+                                  participants: defaultUser,
                                   startdate: format(addHours(Date.now(), 24), 'YYYY-MM-DD'),
                                   enddate: format(addHours(Date.now(), 24), 'YYYY-MM-DD'),
                                   hours: 4,
@@ -288,21 +288,6 @@ class AddPlannedCourseRequest extends React.Component {
                                                   ))}
                                                 </NativeSelect>
                                               </FormControl>
-                                              {/* <StyledSimple
-                                                id="course"
-                                                name="course"
-                                                state={state}
-                                                onChange={item => {
-                                                  setFieldValue('course', item);
-                                                }}
-                                                onBlur={handleBlur}
-                                                setState={setState}
-                                                suggestions={courses}
-                                                label="select course by start typing"
-                                                value={values.selectedItem}
-                                                fieldname="title"
-                                                placeholder="start typing to select course"
-                                              /> */}
                                             </div>
                                           );
                                         }}
