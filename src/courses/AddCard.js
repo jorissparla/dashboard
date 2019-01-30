@@ -9,6 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import styled from 'styled-components';
 import { withStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router';
+import { Fab } from '@material-ui/core';
 
 const styles = theme => ({
   container: {
@@ -74,7 +75,7 @@ const AddCard = ({
           </Typography>
         </CardContent>
       </CardActionArea>
-      <Button
+      <Fab
         variant="fab"
         color="primary"
         aria-label="Add"
@@ -82,7 +83,7 @@ const AddCard = ({
         onClick={() => history.push(link)}
       >
         <AddIcon />
-      </Button>
+      </Fab>
     </Card>
   );
 };

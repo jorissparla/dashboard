@@ -1,14 +1,15 @@
-import React, { Component } from "react";
-import { Query } from "react-apollo";
-import { withRouter } from "react-router";
-import gql from "graphql-tag";
-import { withStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Button from "@material-ui/core/Button";
-import AddIcon from "@material-ui/icons/Add";
-import Typography from "@material-ui/core/Typography";
-import NewsList from "./newslist";
-import withAuth from "../utils/withAuth";
+import React, { Component } from 'react';
+import { Query } from 'react-apollo';
+import { withRouter } from 'react-router';
+import gql from 'graphql-tag';
+import { withStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
+import AddIcon from '@material-ui/icons/Add';
+import Typography from '@material-ui/core/Typography';
+import NewsList from './newslist';
+import withAuth from '../utils/withAuth';
+import { Fab } from '@material-ui/core';
 
 const styles = theme => ({
   button: {
@@ -57,7 +58,7 @@ class Test extends Component {
                 <Typography variant="display3" gutterBottom>
                   News
                 </Typography>
-                <Button
+                <Fab
                   variant="fab"
                   color="secondary"
                   aria-label="add"
@@ -65,7 +66,7 @@ class Test extends Component {
                   onClick={() => this.onNew()}
                 >
                   <AddIcon />
-                </Button>
+                </Fab>
                 <NewsList news={news} onEdit={this.onOpen} authenticated={authenticated} />
               </Paper>
             </React.Fragment>

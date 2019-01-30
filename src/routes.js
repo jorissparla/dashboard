@@ -17,7 +17,7 @@ import CourseEdit from './courses/CourseEdit';
 import PlannedCourseAdd from './courses/PlannedCourseAdd';
 import PlannedCourseEdit from './courses/PlannedCourseEdit';
 import PlannedCourses from './courses/PlannedCoursesNew';
-import PlannedCourseRequestList from './courses/PlannedCourseRequestList';
+import PlannedCourseRequestList from './pages/PlannedCourseRequestList';
 import DashBoardContainer from './pages/dashboardcontainer';
 import NewsPage from './pages/newspage';
 import User from './User';

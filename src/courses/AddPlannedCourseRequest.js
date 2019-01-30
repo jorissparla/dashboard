@@ -157,7 +157,7 @@ class AddPlannedCourseRequest extends React.Component {
                             return (
                               <Formik
                                 initialValues={{
-                                  course: '',
+                                  course: courses ? courses[0].title : '',
                                   course2: '',
                                   participants: '',
                                   startdate: format(addHours(Date.now(), 24), 'YYYY-MM-DD'),
@@ -275,8 +275,9 @@ class AddPlannedCourseRequest extends React.Component {
                                                 <FormHelperText>Select Course</FormHelperText>
                                                 <NativeSelect
                                                   id="course"
-                                                  value={values.selectedItem}
+                                                  value={values.course}
                                                   onChange={handleChange}
+                                                  onBlur={handleBlur}
                                                   name="course"
                                                   className={classes.selectEmpty}
                                                 >

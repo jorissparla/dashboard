@@ -6,6 +6,7 @@ import AddIcon from '@material-ui/icons/Add';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
+import { Fab } from '@material-ui/core';
 
 const styles = theme => ({
   container: {
@@ -58,7 +59,6 @@ const Title = styled.div`
   display: flex;
 `;
 
-
 const StyledLink = styled(Link)`
   text-decoration: none;
   cursor: pointer;
@@ -80,9 +80,9 @@ const AddCard = ({
     <StyledContainer>
       <StyledLink onClick={onClick} to={link || '/'}>
         <div className={classes.center}>
-          <Button variant="fab" color="primary" aria-label="Add" className={classes.button}>
+          <Fab variant="fab" color="primary" aria-label="Add" className={classes.button}>
             <AddIcon />
-          </Button>
+          </Fab>
           <Title>{title}</Title>
         </div>
       </StyledLink>

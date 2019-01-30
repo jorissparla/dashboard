@@ -1,6 +1,6 @@
 import React from 'react';
 import gql from 'graphql-tag';
-import {  Query } from 'react-apollo';
+import { Query } from 'react-apollo';
 import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -10,6 +10,7 @@ import Divider from '@material-ui/core/Divider';
 import Save from '@material-ui/icons/Save';
 import Undo from '@material-ui/icons/Undo';
 import User from '../User';
+import AcceptPlannedCourseRequest from '../courses/AcceptPlannedCourseRequest';
 
 const styles = theme => ({
   root: {},
@@ -66,9 +67,13 @@ class PlannedCourseRequestList extends React.Component {
                           return (
                             <React.Fragment>
                               <ListItem key={id}>
-                                <ListItemText primary={title} secondary={details} />
-                                <ListItemText primary={hours} secondary={partipants} />
+                                <ListItemText primary={title} secondary={details || title} />
+                                <ListItemText
+                                  primary={`Hours: ${hours} Date: ${startdate}`}
+                                  secondary={partipants}
+                                />
                                 <ListItemSecondaryAction>
+                                  <AcceptPlannedCourseRequest id={id} />
                                   <Save onClick={() => console.log('test')} />
 
                                   <Undo onClick={() => console.log('test')} />

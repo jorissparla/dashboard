@@ -19,6 +19,7 @@ import Divider from '@material-ui/core/Divider';
 import _ from 'lodash';
 import { WideTitle, colorAr, getColor } from '../styles';
 import DeleteChat from '../chat/DeleteChat';
+import { Fab } from '@material-ui/core';
 
 const DELETE_CHAT_MUTATION = gql`
   mutation DELETE_CHAT_MUTATION($input: ChatInputType) {
@@ -144,7 +145,7 @@ class ChatList extends Component {
               <Paper className={classes.root}>
                 <WideTitle variant="h4  " gutterBottom className={classes.typo}>
                   Chat
-                  <Button
+                  <Fab
                     variant="fab"
                     mini
                     color="secondary"
@@ -153,7 +154,7 @@ class ChatList extends Component {
                     onClick={() => this.props.history.push(`/chat/new`)}
                   >
                     <AddIcon />
-                  </Button>
+                  </Fab>
                 </WideTitle>
                 <List style={{ backgroundColor: 'white' }}>
                   {chatsByWeek.map((item, index) => (
