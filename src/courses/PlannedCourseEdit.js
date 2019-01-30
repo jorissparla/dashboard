@@ -7,10 +7,11 @@ import format from 'date-fns/format';
 import { withRouter } from 'react-router';
 import PlannedCourseFormNew from './PlannedCourseFormNew';
 import EditStudentsOnCourse from './EditStudentsOnCourse';
-import {
-  QUERY_PLANNEDCOURSE_WITHPARTICIPANTS,
-  ADD_PARTICIPANTS_TO_COURSE
-} from './EditStudentsOnCourse';
+import Button from '@material-ui/core/Button';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import { ADD_PARTICIPANTS_TO_COURSE } from './EditStudentsOnCourse';
 const PLANNEDCOURSE_DELETE_MUTATION = gql`
   mutation PLANNEDCOURSE_DELETE_MUTATION($input: InputPlannedCourseType) {
     deletePlannedCourse(input: $input) {
@@ -56,6 +57,12 @@ const QUERY_SINGLE_PLANNEDCOURSE = gql`
   }
 `;
 
+const styles = theme => ({
+  close: {
+    padding: theme.spacing.unit / 2
+  }
+});
+
 const Composed = adopt({
   updatePlannedCourse: ({ render }) => (
     <Mutation
@@ -84,7 +91,9 @@ class PlannedCourseEdit extends React.Component {
   state = {
     id: this.props.match.params.id,
     id2: this.props.match.params.id2,
-    participants: []
+    participants: [],
+    open: false,
+    message: ''
   };
   handleSave = async (values, updatePlannedCourse, updatePlannedCourseParticipants) => {
     const input = {
@@ -94,27 +103,38 @@ class PlannedCourseEdit extends React.Component {
     };
     const res = await updatePlannedCourse({ variables: { input } });
     const lop = res.data.updatePlannedCourse.course.students;
-    console.log(this.state, lop);
     const participants = lop.map(p => p.fullname).join(';');
-    console.log('Patricipants', participants);
-    await updatePlannedCourseParticipants({
+    const result = await updatePlannedCourseParticipants({
       variables: { participants, id: this.state.id2 }
     });
+    console.log(result);
+    if (result.data) {
+      this.setState({ open: true, message: 'Schedule Updated' });
+    } else {
+      this.setState({ open: true, message: 'An error has occurred' });
+    }
+  };
+
+  handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+
+    this.setState({ open: false, message: '' });
   };
 
   handleParticipants = participants => this.setState({ participants });
+
   render() {
     const id = this.props.match.params.id;
     const id2 = this.props.match.params.id2;
     const { history } = this.props;
-    // console.log('students', this.state.participants);
     return (
       <Query query={QUERY_SINGLE_PLANNEDCOURSE} variables={{ id: id2 }}>
         {({ data, loading, error }) => {
           if (loading) {
             return 'loading...';
           }
-          console.log('DDDDATA', data);
           if (!data || !data.plannedcourse) {
             history.push(`/courses/edit/${id}`);
           }
@@ -134,6 +154,33 @@ class PlannedCourseEdit extends React.Component {
               {({ updatePlannedCourse, deletePlannedCourse, updatePlannedCourseParticipants }) => {
                 return (
                   <React.Fragment>
+                    <Snackbar
+                      anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'left'
+                      }}
+                      open={this.state.open}
+                      autoHideDuration={3000}
+                      onClose={this.handleClose}
+                      ContentProps={{
+                        'aria-describedby': 'message-id'
+                      }}
+                      message={<span id="message-id">Data Submitted</span>}
+                      action={[
+                        <Button key="undo" color="primary" size="small" onClick={this.handleClose}>
+                          {this.state.message}
+                        </Button>,
+                        <IconButton
+                          key="close"
+                          aria-label="Close"
+                          color="inherit"
+                          // className={classes.close}
+                          onClick={this.handleClose}
+                        >
+                          <CloseIcon />
+                        </IconButton>
+                      ]}
+                    />
                     <PlannedCourseFormNew
                       course={data.plannedcourse.course}
                       id={id}
@@ -144,7 +191,6 @@ class PlannedCourseEdit extends React.Component {
                         history.push(`/courses/edit/${this.props.match.params.id}`);
                       }}
                       onSave={async values => {
-                        console.log('onSave method', values);
                         const input = _.pick(values, [
                           'id',
                           'courseid',

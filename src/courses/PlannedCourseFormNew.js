@@ -137,7 +137,6 @@ class PlannedCourseForm extends React.Component {
 
   render() {
     const { classes, history, id } = this.props;
-    console.log('IDDDD', id);
     return (
       <Composed id={id}>
         {({
@@ -150,7 +149,6 @@ class PlannedCourseForm extends React.Component {
           const {
             course: { plannedcourses }
           } = plannedcoursedata;
-          console.log('xxxx', plannedcourses, loading2);
           const { coursetypes, statuses, supportfolks } = data;
           const { course, id } = this.props;
           // const nstartdate = format(addHours(Date.now(), 24), 'YYYY-MM-DD');
@@ -159,7 +157,6 @@ class PlannedCourseForm extends React.Component {
             <Formik
               initialValues={this.state.initialValues}
               onSubmit={async values => {
-                console.log(values);
                 this.props.onSave(values);
               }}
               validationSchema={validationSchema}
@@ -359,7 +356,6 @@ class PlannedCourseForm extends React.Component {
                             disabled={this.props.id2 ? false : true}
                             className={classes.buttonDel}
                             onClick={async () => {
-                              console.log('Deleting', this.props.id2);
                               this.props.onDelete(this.props.id2);
                             }}
                           >

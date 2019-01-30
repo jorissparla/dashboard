@@ -12,7 +12,6 @@ import format from 'date-fns/format';
 import addHours from 'date-fns/add_hours';
 import Component from '../common/component-component';
 import { StyledMultiple, StyledSimple, StyledSelect } from './StyledDropdowns';
-import { DashBoardContext } from '../Provider';
 import * as yup from 'yup';
 import User from '../User';
 

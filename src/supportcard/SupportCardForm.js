@@ -74,7 +74,8 @@ const styles = theme => ({
   },
   markdown: {
     width: '90vw',
-    height: '50vh'
+    height: '50vh',
+    overflow: 'scroll'
   },
   menu: {
     width: 200
@@ -281,28 +282,26 @@ const SupportCardForm = props => {
                     </Button>
                   </React.Fragment>
                 )}
-                {!readOnly &&
-                  supportcard && (
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      className={classes.buttonDel}
-                      onClick={() => onDelete(supportcard)}
-                    >
-                      Delete
-                    </Button>
-                  )}
-                {readOnly &&
-                  supportcard && (
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      className={classes.buttonDel}
-                      onClick={() => window.open(initialValues.link)}
-                    >
-                      View Link
-                    </Button>
-                  )}
+                {!readOnly && supportcard && (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    className={classes.buttonDel}
+                    onClick={() => onDelete(supportcard)}
+                  >
+                    Delete
+                  </Button>
+                )}
+                {readOnly && supportcard && (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    className={classes.buttonDel}
+                    onClick={() => window.open(initialValues.link)}
+                  >
+                    View Link
+                  </Button>
+                )}
                 <Button
                   variant="contained"
                   color="secondary"

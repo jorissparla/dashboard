@@ -122,9 +122,7 @@ class PlannedCoursesForm extends React.Component {
           onSubmit={async (
             values,
             { setSubmitting, setErrors /* setValues and other goodies */ }
-          ) => {
-            console.log('xxx', values);
-          }}
+          ) => {}}
         >
           {({
             values,

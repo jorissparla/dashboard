@@ -62,12 +62,8 @@ class EditStudentsOnCourse extends React.Component {
     plannedCourseId: this.props.id,
     participants: this.props.initialValues.students || []
   };
-  componentDidUpdate(prevProps, prevState) {
-    console.log('cdu', this.state);
-  }
 
   render() {
-    console.log('Rerender', this.state);
     if (!this.props.id) {
       return null;
     }
@@ -80,7 +76,6 @@ class EditStudentsOnCourse extends React.Component {
               if (loading) {
                 return 'Loading...';
               }
-              console.log('Line 75', plannedcoursewithparticipants, data, loading, this.props);
               const { plannedcourse, supportfolks: suggestions } = data;
               let participants = [];
               if (plannedcourse && plannedcourse.students) {
@@ -107,16 +102,13 @@ class EditStudentsOnCourse extends React.Component {
                           state={state}
                           setState={async v => {
                             await setState(v);
-                            console.log('z');
                             //if (v.selectedItem) this.props.onChange(v.selectedItem);
                           }}
                           suggestions={state.suggestions}
                           onChange={async participants => {
-                            //console.log('Change-added', a, state);
                             const result = await updatePlannedCourseParticipants({
                               variables: { participants, id: this.props.id }
                             });
-                            console.log(result);
                             this.props.onChange(result);
                           }}
                           onDelete={async deletedValue => {
@@ -126,21 +118,12 @@ class EditStudentsOnCourse extends React.Component {
                             const result = await updatePlannedCourseParticipants({
                               variables: { participants, id: this.props.id }
                             });
-                            console.log(result);
                             this.props.onChange(result);
                           }}
                           label="participants"
                           fieldname="fullname"
                           placeholder="select multiple participants"
                         />
-                        {/*   <SaveIcon
-                            type="submit"
-                            onClick={() => {
-                              console.log(state);
-                            }}
-                          >
-                            Save
-                          </SaveIcon> */}
                       </React.Fragment>
                     );
                   }}
