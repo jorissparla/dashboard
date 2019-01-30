@@ -28,7 +28,8 @@ const styles = theme => ({
     flexDirection: 'column',
     justifyContent: 'space-between',
     margin: '15px',
-    minWidth: '200px'
+    minWidth: '200px',
+    backgroundColor: 'rgba(219, 112, 147, 0.2);'
   },
   margin: {
     margin: theme.spacing.unit * 2,
@@ -329,57 +330,56 @@ class CourseForm extends React.Component {
                       >
                         Back to courses
                       </Button>
-                      {id &&
-                        !view && (
-                          <React.Fragment>
-                            <Query query={QUERY_PLANNED_COURSES} variables={{ id }}>
-                              {({ data, loading }) => {
-                                if (loading) {
-                                  return 'loading';
-                                } else {
-                                  const {
-                                    course: { plannedcourses }
-                                  } = data;
-                                  console.log(data);
-                                  return (
-                                    <React.Fragment>
-                                      <Badge
-                                        color="primary"
-                                        badgeContent={plannedcourses.length}
-                                        className={classes.margin}
-                                      >
-                                        <Button
-                                          variant="contained"
-                                          className={classes.button}
-                                          onClick={() => history.push('/scheduledcourses/' + id)}
-                                        >
-                                          Scheduled Courses
-                                        </Button>
-                                      </Badge>
+                      {id && !view && (
+                        <React.Fragment>
+                          <Query query={QUERY_PLANNED_COURSES} variables={{ id }}>
+                            {({ data, loading }) => {
+                              if (loading) {
+                                return 'loading';
+                              } else {
+                                const {
+                                  course: { plannedcourses }
+                                } = data;
+                                console.log(data);
+                                return (
+                                  <React.Fragment>
+                                    <Badge
+                                      color="primary"
+                                      badgeContent={plannedcourses.length}
+                                      className={classes.margin}
+                                    >
                                       <Button
                                         variant="contained"
-                                        disabled={plannedcourses.length > 0}
-                                        className={classes.buttonDel}
-                                        onClick={() => this.props.onDelete(id)}
+                                        className={classes.button}
+                                        onClick={() => history.push('/scheduledcourses/' + id)}
                                       >
-                                        Delete course
+                                        Scheduled Courses
                                       </Button>
-                                    </React.Fragment>
-                                  );
-                                }
-                              }}
-                            </Query>
+                                    </Badge>
+                                    <Button
+                                      variant="contained"
+                                      disabled={plannedcourses.length > 0}
+                                      className={classes.buttonDel}
+                                      onClick={() => this.props.onDelete(id)}
+                                    >
+                                      Delete course
+                                    </Button>
+                                  </React.Fragment>
+                                );
+                              }
+                            }}
+                          </Query>
 
-                            <Button
-                              variant="contained"
-                              color="secondary"
-                              className={classes.button2}
-                              onClick={() => history.push('/scheduledcourses/' + id + '/new')}
-                            >
-                              Schedule New Course
-                            </Button>
-                          </React.Fragment>
-                        )}
+                          <Button
+                            variant="contained"
+                            color="secondary"
+                            className={classes.button2}
+                            onClick={() => history.push('/scheduledcourses/' + id + '/new')}
+                          >
+                            Schedule New Course
+                          </Button>
+                        </React.Fragment>
+                      )}
                       <Chip
                         label={
                           values.id

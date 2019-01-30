@@ -214,7 +214,7 @@ class PlannedCoursesTableNew extends React.Component {
                               )
                             }
                           />
-                          <TrashIcon onClick={() => console.log(plan.id)} />
+                          {/* <TrashIcon onClick={() => console.log(plan.id)} /> */}
                         </RowColumn>
                       </TableRow>
                       {selected === plan.id && (

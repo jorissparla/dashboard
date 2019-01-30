@@ -14,6 +14,8 @@ import Component from '../common/component-component';
 import { StyledMultiple, StyledSimple, StyledSelect } from './StyledDropdowns';
 import * as yup from 'yup';
 import User from '../User';
+import _ from 'lodash';
+import { NativeSelect, FormControl, FormHelperText } from '@material-ui/core';
 
 const validationSchema = yup.object().shape({
   course: yup.string().required(),
@@ -49,7 +51,8 @@ const ADD_PLANNEDCOURSEREQUEST = gql`
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    marginBottom: 10
+    marginBottom: 10,
+    marginLeft: 200
   },
   button: {
     margin: theme.spacing.unit,
@@ -86,6 +89,10 @@ const styles = theme => ({
     marginBottom: 10,
     width: '90%'
   },
+  selectEmpty: {
+    width: '90vw',
+    marginBottom: 10
+  },
   column: {
     display: 'flex',
     flexDirection: 'column'
@@ -96,11 +103,18 @@ const styles = theme => ({
 });
 
 class AddPlannedCourseRequest extends React.Component {
+  state = {
+    age: ''
+  };
+
   getCourseId = (courses, title) => {
     const filteredcourse = courses.filter(c => c.title === title);
     if (filteredcourse.length > 0) {
       return filteredcourse[0].id;
     } else return null;
+  };
+  handleChange = name => event => {
+    this.setState({ [name]: event.target.value });
   };
   render() {
     const { classes } = this.props;
@@ -136,7 +150,8 @@ class AddPlannedCourseRequest extends React.Component {
                           {({ data, loading }) => {
                             if (loading) return 'Loading....';
                             const suggestions = data.supportfolks;
-                            const courses = data.courses;
+                            const courses = _.sortBy(data.courses, 'title');
+
                             const coursetypes = data.coursetypes;
 
                             return (
@@ -191,6 +206,7 @@ class AddPlannedCourseRequest extends React.Component {
                                   errors,
                                   isSubmitting
                                 }) => {
+                                  console.log('values', values);
                                   return (
                                     <Paper className={classes.paper2} elevation={1}>
                                       <Typography variant="h5" gutterBottom>
@@ -254,21 +270,39 @@ class AddPlannedCourseRequest extends React.Component {
                                       >
                                         {({ state, setState }) => {
                                           return (
-                                            <StyledSimple
-                                              id="course"
-                                              name="course"
-                                              state={state}
-                                              onChange={item => {
-                                                setFieldValue('course', item);
-                                              }}
-                                              onBlur={handleBlur}
-                                              setState={setState}
-                                              suggestions={courses}
-                                              label="select course"
-                                              value={values.selectedItem}
-                                              fieldname="title"
-                                              placeholder="start typing to select course"
-                                            />
+                                            <div>
+                                              <FormControl className={classes.formControl}>
+                                                <FormHelperText>Select Course</FormHelperText>
+                                                <NativeSelect
+                                                  id="course"
+                                                  value={values.selectedItem}
+                                                  onChange={handleChange}
+                                                  name="course"
+                                                  className={classes.selectEmpty}
+                                                >
+                                                  {courses.map(({ id, title }) => (
+                                                    <option key={id} value={title}>
+                                                      {title}
+                                                    </option>
+                                                  ))}
+                                                </NativeSelect>
+                                              </FormControl>
+                                              {/* <StyledSimple
+                                                id="course"
+                                                name="course"
+                                                state={state}
+                                                onChange={item => {
+                                                  setFieldValue('course', item);
+                                                }}
+                                                onBlur={handleBlur}
+                                                setState={setState}
+                                                suggestions={courses}
+                                                label="select course by start typing"
+                                                value={values.selectedItem}
+                                                fieldname="title"
+                                                placeholder="start typing to select course"
+                                              /> */}
+                                            </div>
                                           );
                                         }}
                                       </Component>

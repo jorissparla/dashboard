@@ -32,7 +32,8 @@ const styles = theme => ({
     flexDirection: 'column',
     justifyContent: 'space-between',
     margin: '15px',
-    minWidth: '200px'
+    minWidth: '200px',
+    backgroundColor: 'rgba(33, 150, 243, 0.22)'
   },
   button2: {
     margin: theme.spacing.unit,
