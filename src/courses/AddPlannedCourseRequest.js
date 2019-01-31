@@ -17,6 +17,7 @@ import User from "../User";
 import _ from "lodash";
 import { NativeSelect, FormControl, FormHelperText } from "@material-ui/core";
 import { QUERY_PLANNEDCOURSEREQUESTS } from "../pages/PlannedCourseRequestList";
+import { QUERY_SCHEDULED_COURSES } from "./PlannedCoursesNew";
 
 const validationSchema = yup.object().shape({
   course: yup.string().required(),
