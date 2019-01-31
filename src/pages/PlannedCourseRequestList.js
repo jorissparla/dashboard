@@ -1,5 +1,6 @@
 import React from "react";
 import gql from "graphql-tag";
+import { withRouter } from "react-router";
 import { Query } from "react-apollo";
 import { withStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
@@ -8,9 +9,22 @@ import ListItemText from "@material-ui/core/ListItemText";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import Divider from "@material-ui/core/Divider";
 import { format } from "date-fns";
+import styled from "styled-components";
 import User from "../User";
 import AcceptPlannedCourseRequest from "../courses/AcceptPlannedCourseRequest";
 import DeletePlannedCourseRequest from "../courses/DeletePlannedCourseRequest";
+import { Button } from "@material-ui/core";
+
+const Header = styled.div`
+  display: flex;
+  padding-top: 10px;
+  padding-left: 16px;
+  padding-right: 10px;
+  border-radius: 4px;
+  padding-bottom: 10px;
+  justify-content: center;
+  background-color: #eeeeee;
+`;
 
 const styles = theme => ({
   root: {},
@@ -68,6 +82,19 @@ class PlannedCourseRequestList extends React.Component {
                 }
                 return (
                   <React.Fragment>
+                    <Header className={classes.header}>
+                      <h3>List of requests</h3>
+                      <Button
+                        variant="contained"
+                        color="secondary"
+                        className={classes.button}
+                        onClick={() =>
+                          this.props.history.push("/addplannedcourserequest")
+                        }
+                      >
+                        Add
+                      </Button>
+                    </Header>
                     <List>
                       {plannedcourserequests.map(
                         ({
@@ -119,4 +146,4 @@ class PlannedCourseRequestList extends React.Component {
   }
 }
 
-export default withStyles(styles)(PlannedCourseRequestList);
+export default withStyles(styles)(withRouter(PlannedCourseRequestList));
