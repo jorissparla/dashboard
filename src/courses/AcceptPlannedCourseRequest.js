@@ -57,7 +57,7 @@ const Composed = adopt({
   )
 });
 
-function AcceptPlannedCourseRequest({ id, history, courseid }) {
+function AcceptPlannedCourseRequest({ id, history, courseid, approver }) {
   const [show, setShow] = useState(false);
   const [message, setMessage] = useState("Thank you");
   const handleClose = () => {
@@ -72,7 +72,7 @@ function AcceptPlannedCourseRequest({ id, history, courseid }) {
             const accept = async goto => {
               setShow(true);
               const res = await converttoplannedcourse({
-                variables: { input: { id } }
+                variables: { input: { id, approver } }
               });
               console.log(res);
               const response = await deleteplannedcourserequest({

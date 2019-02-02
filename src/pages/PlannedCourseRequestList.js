@@ -72,7 +72,7 @@ class PlannedCourseRequestList extends React.Component {
             return "loading";
           }
           const { plannedcourserequests } = data;
-
+          let approver = "";
           return (
             <User>
               {({ data, loading }) => {
@@ -82,7 +82,9 @@ class PlannedCourseRequestList extends React.Component {
                 console.log(data);
                 if (data && data.me) {
                   enabled = ["Admin", "PO"].some(item => item === data.me.role);
+                  approver = data.me.email;
                 }
+
                 return (
                   <React.Fragment>
                     <Header className={classes.header}>
@@ -132,6 +134,7 @@ class PlannedCourseRequestList extends React.Component {
                                     <AcceptPlannedCourseRequest
                                       id={id}
                                       courseid={courseid}
+                                      approver={approver}
                                     />
                                     <DeletePlannedCourseRequest id={id} />
                                   </ListItemSecondaryAction>
