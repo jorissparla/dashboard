@@ -121,6 +121,7 @@ class AddPlannedCourseRequest extends React.Component {
   render() {
     const { classes } = this.props;
     let defaultUser = "";
+    let submittedBy = "";
     return (
       <User>
         {({ data, loading }) => {
@@ -132,6 +133,7 @@ class AddPlannedCourseRequest extends React.Component {
             const { me } = data;
             console.log("Me", me);
             defaultUser = me.fullname;
+            submittedBy = me.email;
           }
           return (
             <Component
@@ -163,6 +165,7 @@ class AddPlannedCourseRequest extends React.Component {
                               <Formik
                                 initialValues={{
                                   course: courses ? courses[0].title : "",
+                                  trainer: courses ? courses[0].trainer : "A",
                                   course2: "",
                                   participants: defaultUser,
                                   startdate: format(
@@ -189,6 +192,7 @@ class AddPlannedCourseRequest extends React.Component {
                                     startdate,
                                     enddate,
                                     participants,
+                                    trainer,
                                     hours,
                                     details,
                                     type
@@ -201,8 +205,11 @@ class AddPlannedCourseRequest extends React.Component {
                                     startdate: format(startdate, "YYYY-MM-DD"),
                                     enddate: format(enddate, "YYYY-MM-DD"),
                                     hours,
+                                    trainer,
                                     details,
                                     participants,
+                                    submittedBy,
+
                                     type
                                     //  submittedBy: fullname
                                   };
@@ -286,6 +293,19 @@ class AddPlannedCourseRequest extends React.Component {
                                         {touched.hours && errors.hours && (
                                           <div>{errors.hours}</div>
                                         )}
+                                        <TextField
+                                          id="trainer"
+                                          label="trainer"
+                                          type="text"
+                                          onChange={handleChange}
+                                          onBlur={handleBlur}
+                                          name="trainer"
+                                          value={values.trainer}
+                                          className={classes.textField}
+                                          InputLabelProps={{
+                                            shrink: true
+                                          }}
+                                        />
                                       </div>
 
                                       <div>

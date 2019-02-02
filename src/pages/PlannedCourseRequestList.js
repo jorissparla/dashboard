@@ -43,6 +43,9 @@ const styles = theme => ({
 export const QUERY_PLANNEDCOURSEREQUESTS = gql`
   query QUERY_PLANNEDCOURSEREQUESTS {
     plannedcourserequests {
+      course {
+        id
+      }
       id
       startdate
       hours
@@ -98,6 +101,7 @@ class PlannedCourseRequestList extends React.Component {
                     <List>
                       {plannedcourserequests.map(
                         ({
+                          course,
                           id,
                           startdate,
                           hours,
@@ -105,6 +109,7 @@ class PlannedCourseRequestList extends React.Component {
                           course: { title },
                           students
                         }) => {
+                          const courseid = course.id;
                           const partipants = students
                             .map(st => st.fullname)
                             .join(";");
@@ -124,7 +129,10 @@ class PlannedCourseRequestList extends React.Component {
                                 />
                                 {enabled && (
                                   <ListItemSecondaryAction>
-                                    <AcceptPlannedCourseRequest id={id} />
+                                    <AcceptPlannedCourseRequest
+                                      id={id}
+                                      courseid={courseid}
+                                    />
                                     <DeletePlannedCourseRequest id={id} />
                                   </ListItemSecondaryAction>
                                 )}
