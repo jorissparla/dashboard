@@ -47,6 +47,7 @@ const QUERY_SINGLE_PLANNEDCOURSE = gql`
       hours
       updatedAt
       details
+
       course {
         id
         title
