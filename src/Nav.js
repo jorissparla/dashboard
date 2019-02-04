@@ -1,50 +1,51 @@
-import React from "react";
-import classNames from "classnames";
-import { withRouter } from "react-router";
-import { withStyles } from "@material-ui/core/styles";
-import Toolbar from "@material-ui/core/Toolbar";
-import AppBar from "@material-ui/core/AppBar";
-import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
-import Typography from "@material-ui/core/Typography";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import IconButton from "@material-ui/core/IconButton";
-import Avatar from "@material-ui/core/Avatar";
-import ActionHome from "@material-ui/icons/Home";
-import NewsIcon from "@material-ui/icons/Event";
-import PeopleIcon from "@material-ui/icons/People";
-import ChatIcon from "@material-ui/icons/Chat";
-import PageIcon from "@material-ui/icons/Pages";
-import LinkIcon from "@material-ui/icons/Link";
-import ApplicationIcon from "@material-ui/icons/Launch";
-import RequestListIcon from "@material-ui/icons/PlaylistAdd";
-import GoLiveIcon from "@material-ui/icons/FlightTakeoff";
-import ExtensionIcon from "@material-ui/icons/Extension";
-import FeedbackIcon from "@material-ui/icons/Feedback";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
-import MenuIcon from "@material-ui/icons/Menu";
-import Button from "@material-ui/core/Button";
-import Divider from "@material-ui/core/Divider";
-import Drawer from "@material-ui/core/Drawer";
-import MenuItem from "@material-ui/core/MenuItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import withAuth from "./utils/withAuth";
-import Signout from "./Signout";
-import User from "./User";
-import { List } from "@material-ui/core";
+import React from 'react';
+import classNames from 'classnames';
+import { withRouter } from 'react-router';
+import { withStyles } from '@material-ui/core/styles';
+import Toolbar from '@material-ui/core/Toolbar';
+import AppBar from '@material-ui/core/AppBar';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
+import Typography from '@material-ui/core/Typography';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import IconButton from '@material-ui/core/IconButton';
+import Avatar from '@material-ui/core/Avatar';
+import ActionHome from '@material-ui/icons/Home';
+import NewsIcon from '@material-ui/icons/Event';
+import PeopleIcon from '@material-ui/icons/People';
+import ChatIcon from '@material-ui/icons/Chat';
+import PageIcon from '@material-ui/icons/Pages';
+import LinkIcon from '@material-ui/icons/Link';
+import ApplicationIcon from '@material-ui/icons/Launch';
+import RequestListIcon from '@material-ui/icons/PlaylistAdd';
+import GoLiveIcon from '@material-ui/icons/FlightTakeoff';
+import ExtensionIcon from '@material-ui/icons/Extension';
+import FeedbackIcon from '@material-ui/icons/Feedback';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import MenuIcon from '@material-ui/icons/Menu';
+import Button from '@material-ui/core/Button';
+import Divider from '@material-ui/core/Divider';
+import Drawer from '@material-ui/core/Drawer';
+import MenuItem from '@material-ui/core/MenuItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import withAuth from './utils/withAuth';
+import Signout from './Signout';
+import User from './User';
+import { List } from '@material-ui/core';
+import UserMenu from './UserMenu';
 
 const drawerWidth = 340;
 
 const styles = theme => ({
   root: {
-    display: "flex",
+    display: 'flex',
     marginBottom: 70
   },
   appBar: {
-    transition: theme.transitions.create(["margin", "width"], {
+    transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
     })
@@ -52,7 +53,7 @@ const styles = theme => ({
   appBarShift: {
     width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: drawerWidth,
-    transition: theme.transitions.create(["margin", "width"], {
+    transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen
     })
@@ -62,7 +63,7 @@ const styles = theme => ({
     marginRight: 20
   },
   hide: {
-    display: "none"
+    display: 'none'
   },
   drawer: {
     width: drawerWidth,
@@ -72,23 +73,23 @@ const styles = theme => ({
     width: drawerWidth
   },
   drawerHeader: {
-    display: "flex",
-    alignItems: "center",
-    padding: "0 8px",
+    display: 'flex',
+    alignItems: 'center',
+    padding: '0 8px',
     ...theme.mixins.toolbar,
-    justifyContent: "flex-end"
+    justifyContent: 'flex-end'
   },
   content: {
     flexGrow: 1,
     padding: theme.spacing.unit * 3,
-    transition: theme.transitions.create("margin", {
+    transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
     }),
     marginLeft: -drawerWidth
   },
   contentShift: {
-    transition: theme.transitions.create("margin", {
+    transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen
     }),
@@ -96,7 +97,7 @@ const styles = theme => ({
   },
   heading: {
     fontSize: theme.typography.pxToRem(15),
-    flexBasis: "33.33%",
+    flexBasis: '33.33%',
     flexShrink: 0
   },
   secondaryHeading: {
@@ -104,14 +105,14 @@ const styles = theme => ({
     color: theme.palette.text.secondary
   },
   panelDetails: {
-    display: "flex",
-    flexDirection: "column",
+    display: 'flex',
+    flexDirection: 'column',
     margin: 0
   },
   toolBar: {
-    display: "flex",
-    alignContent: "space-between",
-    justifyContent: "space-between"
+    display: 'flex',
+    alignContent: 'space-between',
+    justifyContent: 'space-between'
   }
 });
 
@@ -149,9 +150,7 @@ function ExpandableMenuItem({ title, Icon, children, classes }) {
         </ListItemIcon>
         <Typography className={classes.secondaryHeading}>{title}</Typography>
       </ExpansionPanelSummary>
-      <ExpansionPanelDetails className={classes.panelDetails}>
-        {children}
-      </ExpansionPanelDetails>
+      <ExpansionPanelDetails className={classes.panelDetails}>{children}</ExpansionPanelDetails>
     </ExpansionPanel>
   );
 }
@@ -179,25 +178,16 @@ class Header extends React.Component {
 
     let isAdmin = false;
     if (user) {
-      validRole = user.role !== "Guest";
-      isAdmin = user.role === "Admin";
-      isChat = user.role === "Chat";
+      validRole = user.role !== 'Guest';
+      isAdmin = user.role === 'Admin';
+      isChat = user.role === 'Chat';
     }
 
     //console.log("AUTH", authenticated, validRole, user.role !== "Guest");
     return (
       <List>
-        <NavLink
-          title="Home"
-          Icon={ActionHome}
-          navigateTo="/"
-          history={history}
-        />
-        <ExpandableMenuItem
-          classes={classes}
-          title="Stats Graphs"
-          Icon={GoLiveIcon}
-        >
+        <NavLink title="Home" Icon={ActionHome} navigateTo="/" history={history} />
+        <ExpandableMenuItem classes={classes} title="Stats Graphs" Icon={GoLiveIcon}>
           <NavLink
             title="Logistics"
             Icon={ApplicationIcon}
@@ -224,24 +214,10 @@ class Header extends React.Component {
           />
         </ExpandableMenuItem>
         <Divider />
-        <ExpandableMenuItem
-          classes={classes}
-          title="Go Lives"
-          Icon={GoLiveIcon}
-        >
-          <NavLink
-            title="Go Lives"
-            Icon={GoLiveIcon}
-            navigateTo="/golives"
-            history={history}
-          />
+        <ExpandableMenuItem classes={classes} title="Go Lives" Icon={GoLiveIcon}>
+          <NavLink title="Go Lives" Icon={GoLiveIcon} navigateTo="/golives" history={history} />
         </ExpandableMenuItem>
-        <NavLink
-          title="MT Customers"
-          Icon={ExtensionIcon}
-          navigateTo="/tenant"
-          history={history}
-        />
+        <NavLink title="MT Customers" Icon={ExtensionIcon} navigateTo="/tenant" history={history} />
         <NavLink
           title="Customer Feedback"
           Icon={FeedbackIcon}
@@ -277,21 +253,11 @@ class Header extends React.Component {
             />
             <Divider />
             {(isAdmin || isChat) && (
-              <NavLink
-                title="Chat"
-                Icon={ChatIcon}
-                navigateTo="/chat"
-                history={history}
-              />
+              <NavLink title="Chat" Icon={ChatIcon} navigateTo="/chat" history={history} />
             )}
             <Divider />
             {authenticated && isAdmin && (
-              <NavLink
-                title="News"
-                Icon={NewsIcon}
-                navigateTo="/news"
-                history={history}
-              />
+              <NavLink title="News" Icon={NewsIcon} navigateTo="/news" history={history} />
             )}
             <Divider />
             <NavLink
@@ -300,12 +266,7 @@ class Header extends React.Component {
               navigateTo="/coursedashboard"
               history={history}
             />
-            <NavLink
-              title="Courses"
-              Icon={PageIcon}
-              navigateTo="/courses"
-              history={history}
-            />
+            <NavLink title="Courses" Icon={PageIcon} navigateTo="/courses" history={history} />
             {validRole && (
               <NavLink
                 title="Students"
@@ -336,11 +297,11 @@ class Header extends React.Component {
   };
   logOutLink = () => {
     const { history } = this.props;
-    history.push("/signout");
+    history.push('/signout');
   };
   logInLink = () => {
     const { history } = this.props;
-    history.push("/signin");
+    history.push('/signin');
     //window.location.href = location.href;
   };
   renderButtons() {
@@ -378,22 +339,19 @@ class Header extends React.Component {
   render() {
     const { classes, authenticated, theme } = this.props;
     const { open } = this.state;
-    let titleText = this.state.ipaddress ? this.state.ipaddress : "";
+    let titleText = this.state.ipaddress ? this.state.ipaddress : '';
     titleText =
-      titleText + process.env.NODE_ENV !== "production"
-        ? `(${process.env.NODE_ENV})`
-        : "";
+      titleText + process.env.NODE_ENV !== 'production' ? `(${process.env.NODE_ENV})` : '';
     const picture =
-      localStorage.getItem("picture") ||
-      "https://randomuser.me/api/portraits/men/20.jpg";
+      localStorage.getItem('picture') || 'https://randomuser.me/api/portraits/men/20.jpg';
     return (
       <User>
         {({ data, loading }) => {
           if (loading) {
-            return "loading...";
+            return 'loading...';
           }
 
-          console.log("🎈🎈🎈", data);
+          console.log('🎈🎈🎈', data);
           return (
             <React.Fragment>
               <div className={classes.root}>
@@ -408,37 +366,42 @@ class Header extends React.Component {
                       color="inherit"
                       aria-label="Open drawer"
                       onClick={this.toggleMenu}
-                      className={classNames(
-                        classes.menuButton,
-                        open && classes.hide
-                      )}
+                      className={classNames(classes.menuButton, open && classes.hide)}
                     >
                       <MenuIcon />
                     </IconButton>
-                    {authenticated && (
-                      <Button>
-                        <Avatar src={picture} />
-                      </Button>
-                    )}
                     {/*this.renderImage()*/}
-                    <Typography
-                      variant="h6"
-                      color="inherit"
-                      className={classes.grow}
-                    >
+                    <Typography variant="h6" color="inherit" className={classes.grow}>
                       Infor Support Dashboard {titleText}
                     </Typography>
-                    <Typography variant="h6" color="inherit" />
-
-                    {authenticated ? (
-                      <Button onClick={() => this.logOutLink()} color="inherit">
-                        Logout
-                      </Button>
-                    ) : (
-                      <Button onClick={() => this.logInLink()} color="inherit">
-                        Login
-                      </Button>
-                    )}
+                    <div>
+                      {authenticated && (
+                        <Button>
+                          <User>
+                            {({ loading, data }) => {
+                              if (loading) return 'loading';
+                              console.log('Pix', data);
+                              if (!data || !data.me) return null;
+                              const { id } = data.me;
+                              return (
+                                <>
+                                  <UserMenu id={id} picture={picture} />
+                                </>
+                              );
+                            }}
+                          </User>
+                        </Button>
+                      )}
+                      {authenticated ? (
+                        <Button onClick={() => this.logOutLink()} color="inherit">
+                          Logout
+                        </Button>
+                      ) : (
+                        <Button onClick={() => this.logInLink()} color="inherit">
+                          Login
+                        </Button>
+                      )}
+                    </div>
                   </Toolbar>
                 </AppBar>
                 <Drawer
@@ -450,11 +413,7 @@ class Header extends React.Component {
                 >
                   <div className={classes.drawerHeader}>
                     <IconButton onClick={() => this.toggleMenu()}>
-                      {theme.direction === "ltr" ? (
-                        <ChevronLeftIcon />
-                      ) : (
-                        <ChevronRightIcon />
-                      )}
+                      {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
                     </IconButton>
                   </div>
                   <Divider />
@@ -468,6 +427,4 @@ class Header extends React.Component {
     );
   }
 }
-export default withRouter(
-  withAuth(withStyles(styles, { withTheme: true })(Header))
-);
+export default withRouter(withAuth(withStyles(styles, { withTheme: true })(Header)));
