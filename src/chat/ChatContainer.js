@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from "react";
 import { withRouter } from "react-router";
-import { Card, OkCancelDialog } from "../common";
+import { Card } from "../common";
 import ChatAdd from "./ChatAdd";
 import Snackbar from "@material-ui/core/Snackbar";
 import gql from "graphql-tag";
@@ -80,9 +80,13 @@ const deleteChat = ({ render }) => (
   </Mutation>
 );
 
-const myRanges = ({ render }) => <Query query={ALL_RANGES}>{(data, loading) => render(data, loading)}</Query>;
+const myRanges = ({ render }) => (
+  <Query query={ALL_RANGES}>{(data, loading) => render(data, loading)}</Query>
+);
 
-const myChats = ({ render }) => <Query query={ALL_CHATS}>{data => render(data)}</Query>;
+const myChats = ({ render }) => (
+  <Query query={ALL_CHATS}>{data => render(data)}</Query>
+);
 
 const mapper = {
   myRanges,
@@ -123,29 +127,38 @@ class ChatContainer extends Component {
     return obj.FromDate;
   };
 
-  showDialog() {
-    if (!this.state.showDialog) {
-      return <div />;
-    }
-    return (
-      <OkCancelDialog
-        body={this.state.body}
-        open={this.state.showDialog}
-        title="update Database"
-        handleSubmit={this.handleSubmit.bind(this)}
-        handleCancel={this.handleCancel.bind(this)}
-      />
-    );
-  }
+  // showDialog() {
+  //   if (!this.state.showDialog) {
+  //     return <div />;
+  //   }
+  //   return (
+  //     <OkCancelDialog
+  //       body={this.state.body}
+  //       open={this.state.showDialog}
+  //       title="update Database"
+  //       handleSubmit={this.handleSubmit.bind(this)}
+  //       handleCancel={this.handleCancel.bind(this)}
+  //     />
+  //   );
+  // }
 
-  handleCancel() {
-    this.setState({ showDialog: false });
-  }
+  // handleCancel() {
+  //   this.setState({ showDialog: false });
+  // }
 
   render() {
     return (
       <MyContainer>
-        {({ loading, loading1, error, data, ranges, chats, addChat, ...props }) => {
+        {({
+          loading,
+          loading1,
+          error,
+          data,
+          ranges,
+          chats,
+          addChat,
+          ...props
+        }) => {
           if (loading || loading1) return <div>Loading</div>;
           console.log("data", addChat, ranges, chats);
 
