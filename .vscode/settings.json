@@ -3,11 +3,13 @@
   "editor.tabSize": 2,
   "editor.fontLigatures": true,
   "editor.fontFamily": "'Dank Mono'",
+  "editor.fontSize": 15,
   "workbench.colorCustomizations": {
     "titleBar.activeForeground": "#000",
     "titleBar.inactiveForeground": "#000000CC",
-    "titleBar.activeBackground": "#ea00ff",
+    "titleBar.activeBackground": "#0077ff",
     "titleBar.inactiveBackground": "#ea00ff"
   },
-  "workbench.colorTheme": "Dracula Soft"
+  "workbench.colorTheme": "Cobalt2",
+  "markdown.preview.fontSize": 15
 }
