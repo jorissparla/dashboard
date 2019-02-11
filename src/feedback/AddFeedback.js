@@ -6,7 +6,8 @@ import { Formik } from 'formik';
 import { TextField, Select, FormControl, InputLabel, MenuItem } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import format from 'date-fns/format';
+//import format from 'date-fns/format';
+import { format } from '../utils/format';
 import { withRouter } from 'react-router';
 
 const QUERY_SUPPORT_FOLKS = gql`
