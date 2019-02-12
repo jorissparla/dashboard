@@ -11,11 +11,12 @@ import PeopleIcon from '@material-ui/icons/People';
 import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
 import { blue, red } from '@material-ui/core/colors';
-import { format } from 'date-fns';
+import { format } from '../utils/format';
 import { withRouter } from 'react-router';
 import { Title, HeaderRow, HeaderLeft, HeaderRight } from '../styles';
 import withAuth from '../utils/withAuth';
 import EditStudentsOnCourse from './EditStudentsOnCourse';
+
 const styles = theme => ({
   root: {
     ...theme.mixins.gutters(),

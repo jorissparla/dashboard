@@ -31,7 +31,7 @@ const KudoListComponentNew = DynamicImport(() => import('./kudos/kudolistcompone
 const ResetPasswordForm = DynamicImport(() => import('./auth/ResetPasswordForm'));
 const RequestResetPassword = DynamicImport(() => import('./auth/RequestResetPassword'));
 
-const NewsListContainer = DynamicImport(() => import('./news/newslistcontainer'));
+const NewsListContainer = DynamicImport(() => import('./pages/newslistcontainer'));
 
 const NewsItemAddContainer = DynamicImport(() => import('./news/newsitemaddcontainer'));
 const RequestList = DynamicImport(() => import('./supportcard/RequestContainer'));

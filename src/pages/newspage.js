@@ -1,7 +1,8 @@
 import React from 'react';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
-import { format } from 'date-fns';
+//import { format } from 'date-fns';
+import { format } from '../utils/format';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
@@ -61,6 +62,7 @@ const styles = theme => ({
 });
 
 function MediaNewsCard({ news: { title, body, img, create_date }, classes }) {
+  console.log('create date', create_date);
   return (
     <Card className={classes.card}>
       <CardActionArea>
