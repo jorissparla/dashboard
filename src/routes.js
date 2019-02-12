@@ -5,7 +5,6 @@ import { withRouter } from 'react-router';
 import Signin from './auth/signin';
 import SigninWithPIN from './auth/SigninWithPIN';
 import Signout from './auth/signout';
-import UpdatePassword from './auth/resetpassword';
 import RequireAuth, { AuthRoute, EnhancedRoute } from './auth/require_auth';
 import TestLogin from './TestLogin';
 
@@ -23,7 +22,6 @@ import NewsPage from './pages/newspage';
 import User from './User';
 import UserPermissions from './UserPermissions';
 import CourseFileUpload from './courses/CourseFileUpload';
-const AGLTest = DynamicImport(() => import('./supportcard/Test'));
 //const CommentsList = DynamicImport(() => import("./feedback/commentList"));
 const FeedbackList = DynamicImport(() => import('./pages/feedbackList'));
 const AddFeedback = DynamicImport(() => import('./feedback/AddFeedback'));
@@ -33,14 +31,14 @@ const KudoListComponentNew = DynamicImport(() => import('./kudos/kudolistcompone
 const ResetPasswordForm = DynamicImport(() => import('./auth/ResetPasswordForm'));
 const RequestResetPassword = DynamicImport(() => import('./auth/RequestResetPassword'));
 
-const NewsListContainer = DynamicImport(() => import('./news/newslistcontainer'));
+const NewsListContainer = DynamicImport(() => import('./pages/newslistcontainer'));
 
 const NewsItemAddContainer = DynamicImport(() => import('./news/newsitemaddcontainer'));
 const RequestList = DynamicImport(() => import('./supportcard/RequestContainer'));
 const RequestEdit = DynamicImport(() => import('./supportcard/RequestEdit'));
 const AddSupportCardRequest = DynamicImport(() => import('./supportcard/Request'));
 const ImageConverter = DynamicImport(() => import('./utils/ConvertImages'));
-const CustomerCommentsPage = DynamicImport(() => import('./customers/pages/CustomerCommentsMain'));
+
 const AnniversaryList = DynamicImport(() => import('./awards/Anniversaries'));
 
 const ResolutionChart = DynamicImport(() => import('./charts/ResolutionChart'));
@@ -66,10 +64,9 @@ const RequestEditAdd = DynamicImport(() => import('./supportcard/Request'));
 const SupportCardEdit = DynamicImport(() => import('./supportcard/SupportCardEdit'));
 const SupportCardAdd = DynamicImport(() => import('./supportcard/SupportCardAdd'));
 const CourseView = DynamicImport(() => import('./pages/CourseView'));
-const AddCourseCard = DynamicImport(() => import('./courses/AddCourseCard'));
 const StudentListContainer = DynamicImport(() => import('./courses/StudentTableNew'));
 const StudentView = DynamicImport(() => import('./courses/StudentView'));
-const AddStudentsToCourse = DynamicImport(() => import('./courses/AddStudentsToCourse'));
+
 const AddPlannedCourseRequest = DynamicImport(() => import('./courses/AddPlannedCourseRequest'));
 const TenantList = DynamicImport(() => import('./pages/TenantList'));
 const DonutChart = DynamicImport(() => import('./charts/DonutChart'));
@@ -82,7 +79,6 @@ const NotFound = props => {
 
 class AppRoutes extends React.Component {
   render() {
-    console.log('✔️✔️✔️✔️✔️', this.props);
     const user = this.props.context;
     //const authenticated = this.props.context.authenticated();
 
@@ -93,7 +89,6 @@ class AppRoutes extends React.Component {
             return 'loading...';
           }
 
-          console.log('👴👴👴', data);
           return (
             <Switch>
               <Route exact path="/" component={DashBoardContainer} />
@@ -143,7 +138,6 @@ class AppRoutes extends React.Component {
                 path="/accounts"
                 component={AccountList}
               />
-              <Route exact path="/customercomments" component={CustomerCommentsPage} />
               <EnhancedRoute
                 auth="admin"
                 editors={['Admin', 'PO']}
@@ -161,7 +155,6 @@ class AppRoutes extends React.Component {
                 component={AddFeedback}
               />
               <Route exact path="/image_convert" component={ImageConverter} />
-              <Route exact path="/agltest" component={AGLTest} />
               <Route exact path="/anniversaries" component={AnniversaryList} />
               <AuthRoute
                 allowed={['Admin', 'PO', 'SU', 'Guest', 'Chat']}
@@ -271,7 +264,6 @@ class AppRoutes extends React.Component {
               <Route path="/signout" component={Signout} />
               <Route path="/confirmation/:token" component={ResetPasswordForm} />
               <Route path="/forgot" component={RequestResetPassword} />
-              <Route path="/reset/:token" component={UpdatePassword} />
               <Route path="/historyday" component={HistoryDayContainer} />
               <Route path="/historyall" component={HistoryDayAll} />
               <Route path="test/edit/:id" component={NewsItemContainer} />
@@ -293,18 +285,6 @@ class AppRoutes extends React.Component {
                 path="/courses/view/:id"
                 component={props => <CourseEdit {...props} view={true} />}
               />
-              <AuthRoute
-                allowed={['Admin', 'PO']}
-                user={user}
-                exact
-                path="/coursesxyz"
-                component={AddCourseCard}
-              />
-              <AuthRoute
-                allowed={['Admin', 'PO']}
-                user={user}
-                path="/courses/addstudents/:id"
-                component={AddStudentsToCourse}
               />
               <Route exact path="/chart" component={VSummaryChart} />
               <Route exact path="/donut" component={DonutChart} />

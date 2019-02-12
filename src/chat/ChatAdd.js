@@ -68,6 +68,7 @@ class ChatAdd extends React.Component {
     this.setState({ weeknr: this.props.ranges[2].Name });
   }
   handleSubmit = e => {
+    console.log(this.state);
     this.props.onSave(this.state);
   };
 

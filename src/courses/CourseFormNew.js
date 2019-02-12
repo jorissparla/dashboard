@@ -126,7 +126,8 @@ class CourseForm extends React.Component {
       type: 'Class Room Training',
       category: 'Product',
       description: '',
-      link: ''
+      link: '',
+      lastmodified: Date.now()
     }
   };
 
@@ -383,7 +384,9 @@ class CourseForm extends React.Component {
                       <Chip
                         label={
                           values.id
-                            ? `Last updated  ${distanceInWordsToNow(values.lastmodified)} ago`
+                            ? `Last updated  ${distanceInWordsToNow(
+                                parseInt(values.lastmodified)
+                              )} ago`
                             : 'not Saved yet'
                         }
                       />

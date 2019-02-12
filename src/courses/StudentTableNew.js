@@ -12,7 +12,8 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ArrowDownWard from '@material-ui/icons/ArrowDownward';
 import { Link } from 'react-router-dom';
 //@ts-check
-import format from 'date-fns/format';
+//import format from 'date-fns/format';
+import { format } from '../utils/format';
 import Avatar from '@material-ui/core/Avatar';
 import pink from '@material-ui/core/colors/pink';
 import Table from '@material-ui/core/Table';

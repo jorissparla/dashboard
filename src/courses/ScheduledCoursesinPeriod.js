@@ -8,7 +8,8 @@ import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
-import format from 'date-fns/format';
+//import format from 'date-fns/format';
+import { format } from '../utils/format';
 
 const HeaderColumn = ({ style, children }) => {
   const newStyle = _.extend({}, { fontSize: 18 }, style);

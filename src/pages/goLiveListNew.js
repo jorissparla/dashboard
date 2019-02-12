@@ -1,16 +1,17 @@
-import React from "react";
-import gql from "graphql-tag";
-import { graphql } from "react-apollo";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import Avatar from "@material-ui/core/Avatar";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import styled from "styled-components";
-import _ from "lodash";
-import { format } from "date-fns";
-import { withStyles } from "@material-ui/core/styles";
-const colors = ["#BA68C8", "#81D4FA", "#FF7043", "#8BC34A", "#ec407a", "#1da1f2", "#E57373"];
+import React from 'react';
+import gql from 'graphql-tag';
+import { graphql } from 'react-apollo';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Avatar from '@material-ui/core/Avatar';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import styled from 'styled-components';
+import _ from 'lodash';
+//import { format } from "date-fns";
+import { format } from '../utils/format';
+import { withStyles } from '@material-ui/core/styles';
+const colors = ['#BA68C8', '#81D4FA', '#FF7043', '#8BC34A', '#ec407a', '#1da1f2', '#E57373'];
 
 const styles = theme => ({
   root: {
@@ -18,16 +19,16 @@ const styles = theme => ({
     width: 500
   },
   color0: {
-    backgroundColor: "#1da1f2"
+    backgroundColor: '#1da1f2'
   },
   color1: {
-    backgroundColor: "#BA68C8"
+    backgroundColor: '#BA68C8'
   },
   color2: {
-    backgroundColor: "#81D4FA"
+    backgroundColor: '#81D4FA'
   },
   color3: {
-    backgroundColor: "#FF7043"
+    backgroundColor: '#FF7043'
   }
 });
 
@@ -75,21 +76,25 @@ const Right = styled.div`
   justify-content: flex-end;
 `;
 
-const dayPart = d => format(Date.parse(d), "DD");
-const monthPart = d => format(Date.parse(d), "MMMM");
+const dayPart = d => format(d, 'DD');
+const monthPart = d => format(d, 'MMMM');
 
-const GoLiveItem = ({ item, bg = "#ec407a", index, classes }) => {
+const GoLiveItem = ({ item, bg = '#ec407a', index, classes }) => {
   const { id, day, customername, customerid, region, version, comments } = item;
   const nr = index % 3;
   return (
     <ListItem
       key={id}
       onClick={() =>
-        window.open(`http://navigator.infor.com/n/incident_list.asp?ListType=CUSTOMERID&Value=${customerid}`)
+        window.open(
+          `http://navigator.infor.com/n/incident_list.asp?ListType=CUSTOMERID&Value=${customerid}`
+        )
       }
     >
       <ListItemAvatar>
-        <Avatar className={nr === 1 ? classes.color1 : nr === 2 ? classes.color2 : classes.color3}>{day}</Avatar>
+        <Avatar className={nr === 1 ? classes.color1 : nr === 2 ? classes.color2 : classes.color3}>
+          {day}
+        </Avatar>
       </ListItemAvatar>
       <ListItemText
         primary={
@@ -99,7 +104,7 @@ const GoLiveItem = ({ item, bg = "#ec407a", index, classes }) => {
             <Right>{version}</Right>
           </Div>
         }
-        secondary={comments.slice(0, 300) + "..."}
+        secondary={comments.slice(0, 300) + '...'}
       />
     </ListItem>
   );
@@ -138,12 +143,12 @@ const goLivesContainer = ({ data: { loading, golives }, classes }) => {
   const goLivesByMonth = _.chain(golives)
     .sortBy(o => Date.parse(o.date))
     .groupBy(function(g) {
-      return format(g.date, "MMMM");
+      return format(g.date, 'MMMM');
     })
     .map(o => _.map(o, i => _.merge({ day: dayPart(i.date), month: monthPart(i.date) }, i)))
     .value();
   return (
-    <List style={{ backgroundColor: "white" }}>
+    <List style={{ backgroundColor: 'white' }}>
       {goLivesByMonth.map((m, index) => (
         <div key={index}>
           <Title>{m[0].month}</Title>

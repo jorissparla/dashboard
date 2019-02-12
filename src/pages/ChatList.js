@@ -114,7 +114,7 @@ const RenderChat = ({ chat, onRemove }) => {
           </ListItemSecondaryAction>
         </ListItem>
 
-        <Divider inset={true} />
+        <Divider variant="inset" />
       </React.Fragment>
     );
   });
@@ -146,8 +146,7 @@ class ChatList extends Component {
                 <WideTitle variant="h4  " gutterBottom className={classes.typo}>
                   Chat
                   <Fab
-                    variant="fab"
-                    mini
+                    variant="round"
                     color="secondary"
                     aria-label="add"
                     className={classes.button}

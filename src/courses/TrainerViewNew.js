@@ -8,7 +8,8 @@ import TableRow from '@material-ui/core/TableRow';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import _ from 'lodash';
-import { format } from 'date-fns';
+//import { format } from 'date-fns';
+import { format } from '../utils/format';
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({

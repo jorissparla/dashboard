@@ -12,7 +12,8 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import SearchBar from '../common/SearchBar';
 import Chip from '@material-ui/core/Chip';
-import format from 'date-fns/format';
+//import format from 'date-fns/format';
+import { format } from '../utils/format';
 
 const ALL_TENANTS = gql`
   {

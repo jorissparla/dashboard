@@ -1,7 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import Button from '@material-ui/core/Button';
-import format from 'date-fns/format';
+//import format from 'date-fns/format';
+import { format } from '../utils/format';
+
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
@@ -107,7 +109,9 @@ class NewCard extends React.Component {
       console.log('Course', course);
     }
     const [lastPlannedCourse] = course.plannedcourses;
-    const pd = lastPlannedCourse ? format(lastPlannedCourse.startdate, 'ddd, DDMMMYYYY') : '';
+    const pd = lastPlannedCourse
+      ? format(parseInt(lastPlannedCourse.startdate), 'ddd, DDMMMYYYY')
+      : '';
     const acount = lastPlannedCourse ? lastPlannedCourse.studentcount : 0;
     return (
       <Card className={classes.card}>

@@ -5,9 +5,10 @@ import gql from 'graphql-tag';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
+
 import AddIcon from '@material-ui/icons/Add';
 import Typography from '@material-ui/core/Typography';
-import NewsList from './newslist';
+import NewsList from '../news/newslist';
 import withAuth from '../utils/withAuth';
 import { Fab } from '@material-ui/core';
 
@@ -55,11 +56,10 @@ class Test extends Component {
           return (
             <React.Fragment>
               <Paper className={classes.root}>
-                <Typography variant="display3" gutterBottom>
+                <Typography variant="h3" gutterBottom>
                   News
                 </Typography>
                 <Fab
-                  variant="fab"
                   color="secondary"
                   aria-label="add"
                   className={classes.button}

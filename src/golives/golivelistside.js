@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
-import { format } from 'date-fns';
+//import { format } from 'date-fns';
+import { format } from '../utils/format';
 import Spinner from '../utils/spinner';
 import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
