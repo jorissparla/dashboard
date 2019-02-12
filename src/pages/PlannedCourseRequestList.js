@@ -1,19 +1,20 @@
-import React from "react";
-import gql from "graphql-tag";
-import { withRouter } from "react-router";
-import { Query } from "react-apollo";
-import { withStyles } from "@material-ui/core/styles";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import Divider from "@material-ui/core/Divider";
-import { format } from "date-fns";
-import styled from "styled-components";
-import User from "../User";
-import AcceptPlannedCourseRequest from "../courses/AcceptPlannedCourseRequest";
-import DeletePlannedCourseRequest from "../courses/DeletePlannedCourseRequest";
-import { Button } from "@material-ui/core";
+import React from 'react';
+import gql from 'graphql-tag';
+import { withRouter } from 'react-router';
+import { Query } from 'react-apollo';
+import { withStyles } from '@material-ui/core/styles';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import Divider from '@material-ui/core/Divider';
+//import { format } from "date-fns";
+import { format } from '../utils/format';
+import styled from 'styled-components';
+import User from '../User';
+import AcceptPlannedCourseRequest from '../courses/AcceptPlannedCourseRequest';
+import DeletePlannedCourseRequest from '../courses/DeletePlannedCourseRequest';
+import { Button } from '@material-ui/core';
 
 const Header = styled.div`
   display: flex;
@@ -33,10 +34,10 @@ const styles = theme => ({
   },
   button: {
     margin: 12,
-    background: "#2196f3"
+    background: '#2196f3'
   },
   listItem: {
-    minWidth: "45vw"
+    minWidth: '45vw'
   }
 });
 
@@ -69,19 +70,18 @@ class PlannedCourseRequestList extends React.Component {
       <Query query={QUERY_PLANNEDCOURSEREQUESTS}>
         {({ data, loading }) => {
           if (loading) {
-            return "loading";
+            return 'loading';
           }
           const { plannedcourserequests } = data;
-          let approver = "";
+          let approver = '';
           return (
             <User>
               {({ data, loading }) => {
                 if (loading) {
-                  return "loading";
+                  return 'loading';
                 }
-                console.log(data);
                 if (data && data.me) {
-                  enabled = ["Admin", "PO"].some(item => item === data.me.role);
+                  enabled = ['Admin', 'PO'].some(item => item === data.me.role);
                   approver = data.me.email;
                 }
 
@@ -93,9 +93,7 @@ class PlannedCourseRequestList extends React.Component {
                         variant="contained"
                         color="secondary"
                         className={classes.button}
-                        onClick={() =>
-                          this.props.history.push("/addplannedcourserequest")
-                        }
+                        onClick={() => this.props.history.push('/addplannedcourserequest')}
                       >
                         Add
                       </Button>
@@ -112,10 +110,8 @@ class PlannedCourseRequestList extends React.Component {
                           students
                         }) => {
                           const courseid = course.id;
-                          const partipants = students
-                            .map(st => st.fullname)
-                            .join(";");
-                          const date = format(startdate, " ddd, DD MMM YYYY");
+                          const partipants = students.map(st => st.fullname).join(';');
+                          const date = format(startdate, ' ddd, DD MMM YYYY');
                           return (
                             <React.Fragment key={id}>
                               <ListItem key={id}>

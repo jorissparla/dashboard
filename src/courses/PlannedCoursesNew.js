@@ -1,33 +1,32 @@
-import React from "react";
-import gql from "graphql-tag";
-import { Query } from "react-apollo";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import EditIcon from "@material-ui/icons/Edit";
-import TrashIcon from "@material-ui/icons/Delete";
-import PeopleIcon from "@material-ui/icons/People";
-import Button from "@material-ui/core/Button";
-import { withStyles } from "@material-ui/core/styles";
-import { blue, red } from "@material-ui/core/colors";
-import { format } from "date-fns";
-import { withRouter } from "react-router";
-import { Title, HeaderRow, HeaderLeft, HeaderRight } from "../styles";
-import withAuth from "../utils/withAuth";
-import EditStudentsOnCourse from "./EditStudentsOnCourse";
+import React from 'react';
+import gql from 'graphql-tag';
+import { Query } from 'react-apollo';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import EditIcon from '@material-ui/icons/Edit';
+import PeopleIcon from '@material-ui/icons/People';
+import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core/styles';
+import { blue, red } from '@material-ui/core/colors';
+import { format } from 'date-fns';
+import { withRouter } from 'react-router';
+import { Title, HeaderRow, HeaderLeft, HeaderRight } from '../styles';
+import withAuth from '../utils/withAuth';
+import EditStudentsOnCourse from './EditStudentsOnCourse';
 const styles = theme => ({
   root: {
     ...theme.mixins.gutters(),
     paddingTop: theme.spacing.unit * 2,
     paddingBottom: theme.spacing.unit * 2,
     padding: theme.spacing.unit * 2,
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-    margin: "15px",
-    minWidth: "200px"
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    margin: '15px',
+    minWidth: '200px'
   },
   headerStyle: {
     fontSize: 18,
@@ -50,17 +49,17 @@ const styles = theme => ({
   },
   button2: {
     margin: 12,
-    backgroundColor: "black",
-    primaryColor1: "black"
+    backgroundColor: 'black',
+    primaryColor1: 'black'
   },
   buttonback: {
     margin: 12,
-    backgroundColor: "orange"
+    backgroundColor: 'orange'
   },
 
   iconStyle0: {
     width: 24,
-    color: "black"
+    color: 'black'
   },
   iconStyle: {
     width: 24,
@@ -102,7 +101,7 @@ export const QUERY_SCHEDULED_COURSES = gql`
 `;
 
 const fmtDate = val => {
-  return format(val, "ddd, DD MMM YYYY");
+  return format(val, 'ddd, DD MMM YYYY');
 };
 
 const HeaderColumn = ({ children, small }) => {
@@ -119,23 +118,20 @@ const RowColumn = ({ children, small }) => {
 
 class PlannedCoursesTableNew extends React.Component {
   state = {
-    selected: ""
+    selected: ''
   };
   render() {
     const { classes, authenticated } = this.props;
     const id = this.props.match.params.id;
     const { selected } = this.state;
-    console.log("Entering class PlannedCoursesTableNew", this.state);
     return (
       <Query query={QUERY_SCHEDULED_COURSES} variables={{ nid: id }}>
         {props => {
           if (props.loading) {
-            return "loading";
+            return 'loading';
           }
-          console.log("props", props);
-          if (!props.data) return "Loading...";
+          if (!props.data) return 'Loading...';
           const { course } = props.data;
-          console.log("plannedcourses", course);
           return (
             <React.Fragment>
               <HeaderRow>
@@ -149,9 +145,7 @@ class PlannedCoursesTableNew extends React.Component {
                     variant="contained"
                     color="secondary"
                     className={classes.buttonback}
-                    onClick={() =>
-                      this.props.history.push(`/courses/edit/${course.id}`)
-                    }
+                    onClick={() => this.props.history.push(`/courses/edit/${course.id}`)}
                   >
                     Back to Course
                   </Button>
@@ -162,11 +156,7 @@ class PlannedCoursesTableNew extends React.Component {
                     color="primary"
                     enabled={authenticated.toString()}
                     className={classes.button}
-                    onClick={() =>
-                      this.props.history.push(
-                        `/scheduledcourses/${course.id}/new`
-                      )
-                    }
+                    onClick={() => this.props.history.push(`/scheduledcourses/${course.id}/new`)}
                   >
                     New
                   </Button>
@@ -195,12 +185,11 @@ class PlannedCoursesTableNew extends React.Component {
                         <RowColumn small={true}>{plan.status}</RowColumn>
                         <RowColumn small={true}>{plan.hours}</RowColumn>
                         <RowColumn small={true}>
-                          {plan.studentcount}{" "}
+                          {plan.studentcount}{' '}
                           {
                             <PeopleIcon
                               title="Edit registration"
                               onClick={e => {
-                                console.log(selected, plan.id);
                                 this.setState({ selected: plan.id });
                                 /*  if (selected === plan.id) {
                                   this.setState({ selected: '' });
@@ -230,7 +219,7 @@ class PlannedCoursesTableNew extends React.Component {
                               id={plan.id}
                               initialValues={{ students: plan.students }}
                               onChange={state => {
-                                console.log("State", state);
+                                console.log('State', state);
                                 //this.setState({ selected: '' });
                               }}
                             />

@@ -141,7 +141,6 @@ function useToggle(initialState = false) {
 
 function ExpandableMenuItem({ title, Icon, children, classes }) {
   const [expanded, toggleExpanded] = useToggle(false);
-  console.log(children);
   return (
     <ExpansionPanel expanded={expanded} onChange={toggleExpanded}>
       <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
@@ -183,7 +182,6 @@ class Header extends React.Component {
       isChat = user.role === 'Chat';
     }
 
-    //console.log("AUTH", authenticated, validRole, user.role !== "Guest");
     return (
       <List>
         <NavLink title="Home" Icon={ActionHome} navigateTo="/" history={history} />
@@ -324,7 +322,6 @@ class Header extends React.Component {
     return (
       <User>
         {payload => {
-          console.log(payload);
           return <p>User</p>;
         }}
       </User>
@@ -351,7 +348,6 @@ class Header extends React.Component {
             return 'loading...';
           }
 
-          console.log('🎈🎈🎈', data);
           return (
             <React.Fragment>
               <div className={classes.root}>
@@ -380,7 +376,6 @@ class Header extends React.Component {
                           <User>
                             {({ loading, data }) => {
                               if (loading) return 'loading';
-                              console.log('Pix', data);
                               if (!data || !data.me) return null;
                               const { id } = data.me;
                               return (

@@ -92,7 +92,7 @@ class Signin extends React.Component {
         }}
         onSubmit={async (
           values,
-          { setSubmitting, setErrors /* setValues and other goodies */ }
+          { setSubmitting, setErrors, setFieldError /* setValues and other goodies */ }
         ) => {
           console.log({ values });
           const input = values;
@@ -102,6 +102,8 @@ class Signin extends React.Component {
             this.setLogin(user, token);
             window.location.reload();
             await this.props.history.push('/');
+          } else {
+            setFieldError('password', 'Invalid email or password');
           }
         }}
       >
@@ -146,7 +148,7 @@ class Signin extends React.Component {
                       color="primary"
                       className={classes.button}
                       type="submit"
-                      disabled={isSubmitting}
+                      // disabled={isSubmitting}
                     >
                       Login
                     </Button>

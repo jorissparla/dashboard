@@ -16,7 +16,8 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import DownIcon from '@material-ui/icons/ExpandMore';
 import FileFileDownload from '@material-ui/icons/CloudQueue';
 import Chip from '@material-ui/core/Chip';
-import format from 'date-fns/format';
+
+import { format } from '../utils/format';
 import _ from 'lodash';
 import SearchBar from '../common/SearchBar';
 import withAuth from '../utils/withAuth';
