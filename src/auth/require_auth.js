@@ -1,29 +1,40 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { withRouter, Redirect } from 'react-router';
-import { Route } from 'react-router-dom';
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { withRouter, Redirect } from "react-router";
+import { Route } from "react-router-dom";
 
-export const AuthRoute = ({ component: Component, allowed, user, xuser, ...rest }) => {
+export const AuthRoute = ({
+  component: Component,
+  allowed,
+  user,
+  xuser,
+  ...rest
+}) => {
   return (
     <Route
       {...rest}
       render={props => {
-        console.log('🙈🙈🙈🙈', props, { user }, { xuser });
+        console.log("🙈🙈🙈🙈", props, { user }, { xuser });
         if (!user) {
-          return <Redirect to={{ pathname: '/' }} />;
+          return <Redirect to={{ pathname: "/" }} />;
         }
         if (allowed.indexOf(user.role || []) >= 0) {
           return <Component {...props} user={user} />;
         } else {
-          console.log('not allowed user ', user.role);
-          return <Redirect to={{ pathname: '/' }} />;
+          console.log("not allowed user ", user.role);
+          return <Redirect to={{ pathname: "/" }} />;
         }
       }}
     />
   );
 };
 
-export const EnhancedRoute = ({ component: Component, editors = [], user, ...rest }) => {
+export const EnhancedRoute = ({
+  component: Component,
+  editors = [],
+  user,
+  ...rest
+}) => {
   let isEditor = false;
   if (user) {
     isEditor = editors.indexOf(user.role) !== -1;
@@ -32,7 +43,9 @@ export const EnhancedRoute = ({ component: Component, editors = [], user, ...res
     <Route
       {...rest}
       render={props => {
-        return <Component {...props} user={user} isEditor={isEditor} {...rest} />;
+        return (
+          <Component {...props} user={user} isEditor={isEditor} {...rest} />
+        );
       }}
     />
   );
@@ -42,13 +55,13 @@ export default function(ComposedComponent) {
   class Authentication extends Component {
     componentWillMount() {
       if (!this.props.authenticated) {
-        this.props.history.push('/');
+        this.props.history.push("/");
       }
     }
 
     componentWillUpdate(nextProps) {
       if (!nextProps.authenticated) {
-        this.props.history.push('/');
+        this.props.history.push("/");
       }
     }
 
