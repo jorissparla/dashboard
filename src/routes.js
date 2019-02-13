@@ -19,7 +19,7 @@ import PlannedCourses from "./courses/PlannedCoursesNew";
 import PlannedCourseRequestList from "./pages/PlannedCourseRequestList";
 import DashBoardContainer from "./pages/dashboardcontainer";
 import NewsPage from "./pages/newspage";
-import User, { withUser } from "./User";
+import User, { withUser, UserProfileComponent } from "./User";
 import UserPermissions from "./UserPermissions";
 import CourseFileUpload from "./courses/CourseFileUpload";
 //const CommentsList = DynamicImport(() => import("./feedback/commentList"));
@@ -105,11 +105,12 @@ const NotFound = props => {
   return <h2>Not Found</h2>;
 }; //);
 
-const TestUser = () => {
+const TestUser2 = () => {
   const res = withUser();
 
   return <div>{JSON.stringify(res)}</div>;
 };
+const TestUser = () => <UserProfileComponent />;
 
 class AppRoutes extends React.Component {
   render() {

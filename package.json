@@ -12,7 +12,12 @@
     "react-scripts": "^2.1.3",
     "react-testing-library": "^5.5.3",
     "source-map-explorer": "^1.6.0",
-    "webpack-bundle-analyzer": "^2.13.1"
+    "webpack-bundle-analyzer": "^2.13.1",
+    "graphql-code-generator": "^0.16.0",
+    "graphql-codegen-typescript-client": "0.16.1",
+    "graphql-codegen-typescript-common": "0.16.1",
+    "graphql-codegen-typescript-react-apollo": "0.16.1",
+    "graphql-codegen-typescript-graphql-files-modules": "0.16.1"
   },
   "dependencies": {
     "@material-ui/codemod": "^1.1.0",
@@ -83,7 +88,10 @@
     "eject": "react-scripts eject",
     "lint": "eslint src/**/*.js server.js",
     "testenv": "SET NODE_ENV=test",
-    "prodenv": "SET NODE_ENV=production"
+    "prodenv": "SET NODE_ENV=production",
+    "init": "gql-gen init",
+    "generate": "gql-gen --config codegen.yml",
+    "codegen": "gql-gen --config codegen.yml"
   },
   "browserslist": [
     ">0.2%",

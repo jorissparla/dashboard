@@ -1,0 +1,11 @@
+overwrite: true
+schema: "http://nlbavwixs.infor.com:4000"
+documents: "src/graphql/**/*.ts"
+generates:
+  ./src/generated/apolloComponents.tsx:
+    config:
+      noNamespaces: true
+    plugins:
+      - "typescript-common"
+      - "typescript-client"
+      - "typescript-react-apollo"
