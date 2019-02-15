@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import Icon from '@material-ui/core/Icon';
 import ViewIcon from '@material-ui/icons/Pageview';
@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { Papier, HR } from '../styles/index.js';
 import Divider from '@material-ui/core/Divider';
 import ReactMarkdown from 'react-markdown';
+import { ToggleFavorite } from '../supportcard/Favorite';
 
 const OtherButton = styled.a`
   display: flex;
@@ -30,6 +31,7 @@ const TitleWrapper = styled.div`
   display: flex;
   flex-direction: row;
   font-family: 'Montserrat', Roboto;
+  justify-content: space-between;
 `;
 const Title = styled.div`
   font-family: 'Montserrat', Roboto;
@@ -108,6 +110,10 @@ const SmallCard = ({
   editLink = '',
   viewLink = '',
   isNew = false,
+  isFavorite = false,
+  account_id = null,
+  supportcard_id = null,
+  onToggleFavorite = () => {},
   onAudit = () => console.log('onaudit'),
   onFollowLink = link => {
     console.log('onFollowLink');
@@ -123,6 +129,7 @@ const SmallCard = ({
             <NewIcon />
           </TitleIcon>
         )}
+        {account_id && <ToggleFavorite toggle={onToggleFavorite} isFavorite={isFavorite} />}
       </TitleWrapper>
       <HR />
       <StyledBody>
