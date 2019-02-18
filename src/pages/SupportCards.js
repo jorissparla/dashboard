@@ -15,6 +15,7 @@ import Button from '@material-ui/core/Button';
 // import Typography from '@material-ui/core/Typography';
 import NewRequestForm from '../supportcard/Request';
 import { addDays } from 'date-fns';
+import { format } from '../utils/format';
 import _ from 'lodash';
 import SearchBar from '../common/SearchBar';
 import withAuth from '../utils/withAuth';
@@ -164,7 +165,7 @@ const Composed = adopt({
   user: ({ render }) => <User>{render}</User>
 });
 
-export default function SupportCardContainer() {
+export default function SupportCardContainer(props) {
   return (
     <Composed>
       {({ supportcards, createAudit, favoriteCard, unfavoriteCard, user }) => {
@@ -179,6 +180,7 @@ export default function SupportCardContainer() {
             favoriteCard={favoriteCard}
             unfavoriteCard={unfavoriteCard}
             currentUser={currentUser}
+            {...props}
           />
         );
       }}
@@ -301,7 +303,13 @@ class SupportCards extends React.Component {
                 authenticated && isEditor ? `/supportcard/edit/${id}` : `/supportcard/view/${id}`;
               const viewLink = `/supportcard/view/${id}`;
 
-              const isNew = Date.parse(updatedAt) > addDays(new Date(), -7);
+              const isNew = false;
+              //    format(updatedAt, 'YYYYMMDD') > format(addDays(new Date(), -7), 'YYYYMMDD');
+              // console.log(
+              //   isNew,
+              //   format(updatedAt, 'YYYYMMDD'),
+              //   format(addDays(new Date(), -7), 'YYYYMMDD')
+              // );
               const supportcard_id = id;
               const account_id = currentUser ? currentUser.id : null;
               return (
