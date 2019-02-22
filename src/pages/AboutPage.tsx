@@ -122,7 +122,13 @@ function AboutPage(props: any) {
                   </Avatar>
                 }
               />
-              <video width="100%" height="300" controls className={classes.video}>
+              <video
+                width="100%"
+                height="300"
+                controls
+                className={classes.video}
+                onPlay={() => console.log('Playing')}
+              >
                 <source src={url} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
