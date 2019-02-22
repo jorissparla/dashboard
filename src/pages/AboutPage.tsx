@@ -2,21 +2,40 @@ import React, { useEffect, Suspense, useState } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
+import CardActions from '@material-ui/core/CardActions';
 import Avatar from '@material-ui/core/Avatar';
+import Badge from '@material-ui/core/Badge';
 import _ from 'lodash';
 import red from '@material-ui/core/colors/red';
 import gql from 'graphql-tag';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery, useMutation } from 'react-apollo-hooks';
 import { format } from '../utils/format';
 import SearchBar from '../common/SearchBar';
 
+const videoFragment = gql`
+  fragment VideoDetails on Video {
+    id
+    title
+    date
+    url
+    views
+  }
+`;
+
 const QUERY_ALL_VIDEOS = gql`
+  ${videoFragment}
   query QUERY_ALL_VIDEOS {
     videos {
-      id
-      title
-      date
-      url
+      ...VideoDetails
+    }
+  }
+`;
+
+const MUTATION_UPDATE_VIEW = gql`
+  ${videoFragment}
+  mutation MUTATION_UPDATE_VIEWS($id: ID!) {
+    increasevideonumberofviews(id: $id) {
+      ...VideoDetails
     }
   }
 `;
@@ -30,6 +49,9 @@ const styles: any = (theme: any) => ({
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between'
+  },
+  margin: {
+    margin: theme.spacing.unit * 2
   },
   main: {
     backgroundColor: '#efefef'
@@ -71,11 +93,12 @@ type videoTYpe = {
   title: string;
   date: string;
   url: string;
+  views: number;
 };
 
 function AboutPageContainer(props: any) {
   const { loading, data } = useQuery(QUERY_ALL_VIDEOS, { suspend: false });
-
+  const updateViews = useMutation(MUTATION_UPDATE_VIEW);
   useEffect(() => {
     document.title = 'Support DashBoard Instruction Videos';
     return () => {
@@ -89,7 +112,13 @@ function AboutPageContainer(props: any) {
     return <div>Error</div>;
   }
   const videos: videoTYpe[] = data.videos;
-  return <AboutPage videos={videos} classes={props.classes} />;
+  return (
+    <AboutPage
+      videos={videos}
+      classes={props.classes}
+      onView={(id: string) => updateViews({ variables: { id } })}
+    />
+  );
 }
 
 function AboutPage(props: any) {
@@ -108,7 +137,7 @@ function AboutPage(props: any) {
         hintText="Type searchterm and press enter..."
       />
       <div className={classes.container}>
-        {filteredVideos.map(({ id, title, date, url }) => {
+        {filteredVideos.map(({ id, title, date, url, views }) => {
           const formatteddate = format(date, 'MMMM, DD, YYYY');
           return (
             <Card className={classes.card} key={id}>
@@ -117,9 +146,11 @@ function AboutPage(props: any) {
                 title={title}
                 subheader={formatteddate}
                 avatar={
-                  <Avatar aria-label="Recipe" className={classes.avatar}>
-                    {title.slice(0, 1).toUpperCase()}
-                  </Avatar>
+                  <Badge className={classes.margin} badgeContent={views} color="primary">
+                    <Avatar aria-label="Recipe" className={classes.avatar}>
+                      {title.slice(0, 1).toUpperCase()}
+                    </Avatar>
+                  </Badge>
                 }
               />
               <video
@@ -127,7 +158,7 @@ function AboutPage(props: any) {
                 height="300"
                 controls
                 className={classes.video}
-                onPlay={() => console.log('Playing')}
+                onPlay={() => props.onView(id)}
               >
                 <source src={url} type="video/mp4" />
                 Your browser does not support the video tag.
