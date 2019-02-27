@@ -64,7 +64,6 @@ export const QUERY_ALL_SUPPORTCARDS = gql`
 `;
 
 const MUTATION_CREATE_AUDIT = gql`
-  ${suppCardFragment}
   mutation MUTATION_CREATE_AUDIT($input: InputAuditType) {
     createAudit(input: $input) {
       id
