@@ -81,6 +81,21 @@ export const PLANNEDCOURSE_DELETE_MUTATION = gql`
   }
 `;
 
+export const FRAGMENT_PLANNED_COURSE = gql`
+  fragment PlannedCourseDetails on PlannedCourseRequest {
+    id
+    startdate
+    enddate
+    trainer
+    hours
+    studentcount
+    details
+    students {
+      fullname
+    }
+  }
+`;
+
 export const QUERY_SCHEDULED_COURSES = gql`
   query QUERY_SCHEDULED_COURSES($nid: ID) {
     course(id: $nid) {

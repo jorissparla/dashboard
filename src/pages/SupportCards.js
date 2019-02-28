@@ -1,6 +1,6 @@
 import React from 'react';
 import gql from 'graphql-tag';
-import { graphql, compose } from 'react-apollo';
+import { graphql, compose, Query, Mutation } from 'react-apollo';
 import { SmallCard } from '../common/SmallCard';
 //import { SmallCard } from "./SupportCard";
 import Dialog from '@material-ui/core/Dialog';
@@ -15,13 +15,81 @@ import Button from '@material-ui/core/Button';
 // import Typography from '@material-ui/core/Typography';
 import NewRequestForm from '../supportcard/Request';
 import { addDays } from 'date-fns';
+import { format } from '../utils/format';
 import _ from 'lodash';
 import SearchBar from '../common/SearchBar';
 import withAuth from '../utils/withAuth';
 import AddCard from '../supportcard/AddCard';
 import CategoryTabs from '../supportcard/CategoryTabs';
+import { adopt } from 'react-adopt';
+import User from '../User';
+const cardColors = [
+  { back: '#7fbadb', front: '#000' },
+  { back: '#FFCC80', front: '#000' },
+  { back: 'papayawhip', front: '#000' },
+  { back: '#B9F6CA', front: '#000' },
+  { back: '#EDE7F6', front: '#000' },
+  { back: '#80D8FF', front: '#000' },
+  { back: '#b39ddb', front: '#000' },
+  { back: '#FFCCBC', front: '#000' },
+  { back: 'palevioletred', front: '#000' },
+  { back: '#E1F5FE', front: '#000' },
+  { back: '#607D8B', front: '#000' }
+];
 
-const styles = {
+const suppCardFragment = gql`
+  fragment SupportCardDetails on SupportCard {
+    id
+    title
+    description
+    link
+    created
+    updatedAt
+    isfavorite
+    category {
+      name
+      color
+      backgroundcolor
+    }
+  }
+`;
+
+export const QUERY_ALL_SUPPORTCARDS = gql`
+  ${suppCardFragment}
+  query QUERY_ALL_SUPPORTCARDS {
+    supportcards {
+      ...SupportCardDetails
+    }
+  }
+`;
+
+const MUTATION_CREATE_AUDIT = gql`
+  mutation MUTATION_CREATE_AUDIT($input: InputAuditType) {
+    createAudit(input: $input) {
+      id
+    }
+  }
+`;
+
+const MUTATION_FAVORITE_CARD = gql`
+  ${suppCardFragment}
+  mutation FAVORITESUPPORTCARD($input: inputWhereSupportCardFavorite) {
+    favoriteSupportCard(input: $input) {
+      ...SupportCardDetails
+    }
+  }
+`;
+
+const MUTATION_UNFAVORITE_CARD = gql`
+  ${suppCardFragment}
+  mutation UNFAVORITESUPPORTCARD($input: inputWhereSupportCardFavorite) {
+    unfavoriteSupportCard(input: $input) {
+      ...SupportCardDetails
+    }
+  }
+`;
+
+const styles = theme => ({
   card: {
     maxWidth: 320,
     padding: 10,
@@ -36,8 +104,11 @@ const styles = {
   },
   smallText: {
     fontSize: 12
+  },
+  button: {
+    height: '2rem'
   }
-};
+});
 
 String.prototype.includes2 = function(search, start) {
   if (typeof start !== 'number') {
@@ -55,20 +126,6 @@ const customContentStyle = {
   height: '100%'
 };
 
-const cardColors = [
-  { back: '#7fbadb', front: '#000' },
-  { back: '#FFCC80', front: '#000' },
-  { back: 'papayawhip', front: '#000' },
-  { back: '#B9F6CA', front: '#000' },
-  { back: '#EDE7F6', front: '#000' },
-  { back: '#80D8FF', front: '#000' },
-  { back: '#b39ddb', front: '#000' },
-  { back: '#FFCCBC', front: '#000' },
-  { back: 'palevioletred', front: '#000' },
-  { back: '#E1F5FE', front: '#000' },
-  { back: '#607D8B', front: '#000' }
-];
-
 const Div = styled.div`
   display: flex;
   justify-content: flex-start;
@@ -76,6 +133,7 @@ const Div = styled.div`
   margin: 10px;
   background: #eeeeee;
 `;
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
@@ -84,49 +142,53 @@ const Container = styled.div`
   background: #eeeeee;
 `;
 
-// function SupporCard(props) {
-//   const {
-//     color,
-//     classes,
-//     title,
-//     isNew,
-//     text,
-//     category,
-//     buttonText,
-//     link,
-//     canEdit,
-//     editLink,
-//     viewLink
-//   } = props;
-//   return (
-//     <Card className={classes.card} style={{ backgroundColor: color }}>
-//       <CardActionArea>
-//         <CardMedia className={classes.media}>
-//           <Typography gutterBottom variant="h6" component="h3">
-//             A {title}
-//           </Typography>
-//         </CardMedia>
-//         <CardContent>
-//           <Typography component="p" className={classes.smallText}>
-//             {text.slice(0, 200)}
-//           </Typography>
-//         </CardContent>
-//       </CardActionArea>
-//       <CardActions>
-//         <Button size="small" color="primary" variant="contained">
-//           View
-//         </Button>
-//         {category}
-//         <Button size="small" color="primary">
-//           {category}
-//         </Button>
-//       </CardActions>
-//     </Card>
-//   );
-// }
+const Composed = adopt({
+  supportcards: ({ render }) => <Query query={QUERY_ALL_SUPPORTCARDS}>{render}</Query>,
+  createAudit: ({ render }) => <Mutation mutation={MUTATION_CREATE_AUDIT}>{render}</Mutation>,
+  favoriteCard: ({ render }) => (
+    <Mutation
+      mutation={MUTATION_FAVORITE_CARD}
+      refetchQueries={[{ query: QUERY_ALL_SUPPORTCARDS }]}
+    >
+      {render}
+    </Mutation>
+  ),
+  unfavoriteCard: ({ render }) => (
+    <Mutation
+      mutation={MUTATION_UNFAVORITE_CARD}
+      refetchQueries={[{ query: QUERY_ALL_SUPPORTCARDS }]}
+    >
+      {render}
+    </Mutation>
+  ),
+  user: ({ render }) => <User>{render}</User>
+});
+
+export default function SupportCardContainer(props) {
+  return (
+    <Composed>
+      {({ supportcards, createAudit, favoriteCard, unfavoriteCard, user }) => {
+        const { data, loading } = supportcards;
+        if (loading) return 'Loading';
+        const currentUser = user.data.me;
+        console.log('Currentuser', user);
+        return (
+          <StyledSupportCards
+            supportcards={data.supportcards}
+            createAudit={createAudit}
+            favoriteCard={favoriteCard}
+            unfavoriteCard={unfavoriteCard}
+            currentUser={currentUser}
+            {...props}
+          />
+        );
+      }}
+    </Composed>
+  );
+}
 
 class SupportCards extends React.Component {
-  state = { searchText: '', selectedCategory: '', showRequest: false };
+  state = { searchText: '', selectedCategory: '', showRequest: false, showFavorites: false };
 
   setSearchText = value => this.setState({ searchText: value });
   setSelectedCategory = value => this.setState({ selectedCategory: value });
@@ -145,7 +207,11 @@ class SupportCards extends React.Component {
     const {
       authenticated,
       isEditor,
-      data: { loading, error, supportcards }
+      supportcards,
+      currentUser,
+      favoriteCard,
+      unfavoriteCard,
+      classes
     } = this.props;
     console.log('Auth', this.props);
     const actions = [
@@ -157,13 +223,8 @@ class SupportCards extends React.Component {
       </Button>
     ];
     const { searchText, selectedCategory } = this.state;
-    if (loading) {
-      return <p>Loading ...</p>;
-    }
-    if (error) {
-      return <p>{error.message}</p>;
-    }
-    const filteredCards = supportcards
+
+    let filteredCards = supportcards
       .filter(card => {
         const {
           category: { name },
@@ -180,6 +241,10 @@ class SupportCards extends React.Component {
         } = card;
         return _.includes(name.toUpperCase(), selectedCategory.toUpperCase());
       });
+    if (this.state.showFavorites) {
+      filteredCards = filteredCards.filter(card => card.isfavorite === true);
+    }
+
     return (
       <Container onDoubleClick={() => this.setState({ showRequest: true })}>
         <Dialog
@@ -196,7 +261,17 @@ class SupportCards extends React.Component {
             onSubmit={() => this.setState({ showRequest: false })}
           />
         </Dialog>
-        <CategoryTabs onChange={this.setSelectedCategory} onSave={v => console.log(v)} />
+        <Div>
+          <CategoryTabs onChange={this.setSelectedCategory} onSave={v => console.log(v)} />
+          <Button
+            color="primary"
+            className={classes.button}
+            variant="contained"
+            onClick={() => this.setState({ showFavorites: !this.state.showFavorites })}
+          >
+            Show {this.state.showFavorites ? `All` : `Favorites`}
+          </Button>
+        </Div>
         <SearchBar onChange={this.setSearchText} />
 
         <Div>
@@ -209,10 +284,7 @@ class SupportCards extends React.Component {
               background="papayawhip"
             />
           )}
-          {/* {filteredCards.map((card, index) => (
-            <ACard key={index} {...card} />
-          ))} */}
-          ;
+
           {filteredCards.map(
             (
               {
@@ -220,6 +292,7 @@ class SupportCards extends React.Component {
                 title,
                 description,
                 updatedAt,
+                isfavorite,
                 category: { name, color, backgroundcolor },
                 link
               },
@@ -229,35 +302,28 @@ class SupportCards extends React.Component {
                 authenticated && isEditor ? `/supportcard/edit/${id}` : `/supportcard/view/${id}`;
               const viewLink = `/supportcard/view/${id}`;
 
-              const isNew = Date.parse(updatedAt) > addDays(new Date(), -7);
-              /*  return (
-                <SupporCard
-                  color={backgroundcolor || cardColors[i % (cardColors.length - 1)].back}
-                  classes={classes}
-                  key={id}
-                  authenticated={authenticated}
-                  title={title}
-                  isNew={isNew}
-                  text={description}
-                  category={name}
-                  buttonText="📂"
-                  link={link}
-                  canEdit={authenticated && isEditor}
-                  editLink={`${vieweditLink}`}
-                  viewLink={viewLink}
-                  onAudit={v => this.createAudit(v, 'SupportCard', null)}
-                  onFollowLink={(v, link) => {
-                    this.createAudit(v, 'SupportCardLink', link);
-                    return link;
-                  }}
-                />
-              ); */
+              const isNew = false;
+              //    format(updatedAt, 'YYYYMMDD') > format(addDays(new Date(), -7), 'YYYYMMDD');
+              // console.log(
+              //   isNew,
+              //   format(updatedAt, 'YYYYMMDD'),
+              //   format(addDays(new Date(), -7), 'YYYYMMDD')
+              // );
+              const supportcard_id = id;
+              const account_id = currentUser ? currentUser.id : null;
               return (
                 <SmallCard
                   color={backgroundcolor || cardColors[i % (cardColors.length - 1)].back}
                   textcolor={color || cardColors[i % (cardColors.length - 1)].front}
                   key={id}
                   authenticated={authenticated}
+                  account_id={account_id}
+                  isFavorite={isfavorite}
+                  onToggleFavorite={() => {
+                    isfavorite
+                      ? unfavoriteCard({ variables: { input: { supportcard_id, account_id } } })
+                      : favoriteCard({ variables: { input: { supportcard_id, account_id } } });
+                  }}
                   title={title}
                   isNew={isNew}
                   text={description}
@@ -282,33 +348,4 @@ class SupportCards extends React.Component {
   }
 }
 
-const SupportCardQuery = gql`
-  query SupportCardQuery {
-    supportcards {
-      id
-      title
-      description
-      link
-      created
-      updatedAt
-      category {
-        name
-        color
-        backgroundcolor
-      }
-    }
-  }
-`;
-
-const createAudit = gql`
-  mutation createAudit($input: InputAuditType) {
-    createAudit(input: $input) {
-      id
-    }
-  }
-`;
-
-export default compose(
-  graphql(SupportCardQuery),
-  graphql(createAudit, { name: 'createAudit' })
-)(withAuth(withStyles(styles)(SupportCards)));
+const StyledSupportCards = withAuth(withStyles(styles)(SupportCards));

@@ -19,9 +19,10 @@ import PlannedCourses from './courses/PlannedCoursesNew';
 import PlannedCourseRequestList from './pages/PlannedCourseRequestList';
 import DashBoardContainer from './pages/dashboardcontainer';
 import NewsPage from './pages/newspage';
-import User from './User';
+import User, { withUser, UserProfileComponent } from './User';
 import UserPermissions from './UserPermissions';
 import CourseFileUpload from './courses/CourseFileUpload';
+import AboutPage from './pages/AboutPage';
 //const CommentsList = DynamicImport(() => import("./feedback/commentList"));
 const FeedbackList = DynamicImport(() => import('./pages/feedbackList'));
 const AddFeedback = DynamicImport(() => import('./feedback/AddFeedback'));
@@ -76,6 +77,13 @@ const NotFound = props => {
   //withDashBoardContext(props => {
   return <h2>Not Found</h2>;
 }; //);
+
+const TestUser2 = () => {
+  const res = withUser();
+
+  return <div>{JSON.stringify(res)}</div>;
+};
+const TestUser = () => <UserProfileComponent />;
 
 class AppRoutes extends React.Component {
   render() {
@@ -161,7 +169,7 @@ class AppRoutes extends React.Component {
                 user={user}
                 exact
                 path="/test"
-                component={ResolutionChart}
+                component={TestUser}
               />
               <EnhancedRoute
                 editors={['Admin', 'PO', 'SU']}
@@ -289,6 +297,7 @@ class AppRoutes extends React.Component {
               <Route exact path="/chart" component={VSummaryChart} />
               <Route exact path="/donut" component={DonutChart} />
               <Route exact path="/addplannedcourserequest" component={AddPlannedCourseRequest} />
+              <Route exact path="/about" component={AboutPage} />
               <Route component={NotFound} />
             </Switch>
           );

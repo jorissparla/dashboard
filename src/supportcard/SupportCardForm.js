@@ -14,12 +14,14 @@ import { withStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import ReactMarkdown from 'react-markdown';
+import User, { withUser } from '../User';
 
 const owners = [
   { id: 'Ricardo Exposito', name: 'Ricardo Exposito' },
   { id: 'Massimo Favaro', name: 'Massimo Favaro' },
   { id: 'Maribel Aguilella', name: 'Maribel Aguilella' },
-  { id: 'Joris Sparla', name: 'Joris Sparla' }
+  { id: 'Joris Sparla', name: 'Joris Sparla' },
+  { id: 'Luis Casanova', name: 'Luis Casanova' }
 ];
 
 const paperStyle = {
@@ -103,11 +105,16 @@ const SupportCardForm = props => {
   const readOnly = !authenticated;
   const [on, toggle] = React.useState(false);
   const updatedAt = supportcard ? supportcard.updatedAt : format(new Date(), 'YYYY-MM-DD');
-  console.log({ initialValues });
+  const currentUser = withUser();
+  console.log('blba', { initialValues }, currentUser);
+  let newInitialValues =
+    currentUser && !initialValues.owner
+      ? { ...initialValues, owner: currentUser.fullname }
+      : initialValues;
   return (
     <Paper style={paperStyle}>
       <Formik
-        initialValues={initialValues}
+        initialValues={newInitialValues}
         onSubmit={values => {
           console.log('Submitting value', values);
           onSave(values);
@@ -214,79 +221,7 @@ const SupportCardForm = props => {
                 margin="normal"
                 fullWidth
               />
-              {/*<Field
-        hintText="Enter Card Title"
-        floatingLabelText="Title"
-        name="title"
-        id="title"
-        fullWidth={true}
-        component={TextField}
-        underlineShow={true}
-        disabled={readOnly}
-        style={{
-          fontFamily: 'Didact Gothic',
-          fontSize: '40px',
-          color: '#039BE5',
-          fontWeight: 800
-        }}
-        />
-        <Field
-          hintText="Enter a description"
-          name="description"
-          floatingLabelText="Description"
-          textareaStyle={{
-            background: 'lightyellow',
-            border: '1px solid lightgray',
-            color: '#0099e7'
-          }}
-          id="description"
-          disabled={readOnly}
-          fullWidth={true}
-          multiLine={true}
-          rows={10}
-          component={TextField}
-          />
-        <Field
-          name="categoryname"
-          component={Select}
-          disabled={readOnly}
-          hintText="Status"
-          floatingLabelText="Category"
-          style={{ flex: 2, marginTop: '-5px' }}
-          underlineShow={true}
-          underlineStyle={{ borderColor: '#039BE5' }}
-          >
-          {categories.map(({ id, name }) => (
-            <MenuItem key={id} value={name} primaryText={name} />
-            ))}
-        </Field>
-        <Field
-          name="owner"
-          component={Select}
-          disabled={readOnly}
-          hintText="Owner"
-          floatingLabelText="Owner"
-          style={{ flex: 2, marginTop: '-5px', marginLeft: '10px' }}
-          underlineShow={true}
-          underlineStyle={{ borderColor: '#039BE5' }}
-          >
-          {owners.map(({ id, name }) => (
-            <MenuItem key={id} value={name} primaryText={name} />
-            ))}
-        </Field>
 
-        <Field
-          name="link"
-          hintText="Enter link to document"
-          floatingLabelText="link"
-          disabled={readOnly}
-          id="link"
-          fullWidth={true}
-          component={TextField}
-          underlineShow={true}
-          style={{ fontSize: 14 }}
-          onClick={() => (readOnly ? window.open(initialValues.link) : console.log('link'))}
-          /> */}
               <CardSection>
                 {!readOnly && (
                   <React.Fragment>
@@ -328,7 +263,10 @@ const SupportCardForm = props => {
                 >
                   Cancel
                 </Button>
-                <Chip style={{ margin: 4 }} label={`Last updated at ${updatedAt}`} />
+                <Chip
+                  style={{ margin: 4 }}
+                  label={`Last updated at ${format(updatedAt, 'ddd, DD MMM YYYY')}`}
+                />
               </CardSection>
             </form>
           );

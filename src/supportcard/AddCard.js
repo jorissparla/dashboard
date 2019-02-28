@@ -80,7 +80,7 @@ const AddCard = ({
     <StyledContainer>
       <StyledLink onClick={onClick} to={link || '/'}>
         <div className={classes.center}>
-          <Fab variant="fab" color="primary" aria-label="Add" className={classes.button}>
+          <Fab color="primary" aria-label="Add" className={classes.button}>
             <AddIcon />
           </Fab>
           <Title>{title}</Title>
