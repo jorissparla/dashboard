@@ -88,7 +88,7 @@ const styles: any = (theme: any) => ({
   }
 });
 
-type videoTYpe = {
+type videoType = {
   id: string;
   title: string;
   date: string;
@@ -111,7 +111,7 @@ function AboutPageContainer(props: any) {
   if (!(data && data.videos)) {
     return <div>Error</div>;
   }
-  const videos: videoTYpe[] = data.videos;
+  const videos: videoType[] = data.videos;
   return (
     <AboutPage
       videos={videos}
@@ -123,7 +123,7 @@ function AboutPageContainer(props: any) {
 
 function AboutPage(props: any) {
   const classes = props.classes;
-  const videos: videoTYpe[] = props.videos;
+  const videos: videoType[] = props.videos;
   const [searchText, setSearchText] = useState('');
 
   const filteredVideos = videos.filter(({ title }) =>
