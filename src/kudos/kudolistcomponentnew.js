@@ -72,7 +72,7 @@ class KudoListComponent extends Component {
     }
     return (
       <div>
-        <H3Styled>{`KUDOS (${kudos ? kudos.length : 0})`}</H3Styled>
+        <H3Styled>{`CSAT: Top Surveys (${kudos ? kudos.length : 0})`}</H3Styled>
         <Outer>{this.renderItems(kudos)}</Outer>
       </div>
     );
