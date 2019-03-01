@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { withRouter } from 'react-router';
 import { CardSection } from '../common';
 import Button from '@material-ui/core/Button';
@@ -8,6 +8,7 @@ import { TextField, Avatar } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import FileUploaderNew from '../courses/FileUploaderNew';
 
 const Left = styled.div`
   width: 10%;
@@ -45,8 +46,6 @@ const styles = theme => ({
   }
 });
 
-
-
 const NewsItem = ({
   initialValues: newsitem,
   onSave,
@@ -61,6 +60,7 @@ const NewsItem = ({
     e.preventDefault();
     onDelete(newsitem.id);
   };
+  const [imageFile, setImageFile] = useState(newsitem.img || '');
   return (
     <Formik
       className={classes.root}
@@ -103,15 +103,15 @@ const NewsItem = ({
             />
             <div style={{ display: 'flex', alignContent: 'center' }}>
               <Left>
-                <Avatar src={values.img} />
+                <Avatar src={imageFile} />
               </Left>
               <Right>
                 <TextField
                   name="img"
                   className={classes.textField}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.img}
+                  onChange={e => setImageFile(e.target.value)}
+                  value={imageFile}
+                  // value={values.img}
                   label="Copy the Image URL into the field"
                   fullWidth
                 />
@@ -147,6 +147,12 @@ const NewsItem = ({
                 Cancel
               </Button>
             </CardSection>
+            <FileUploaderNew
+              setFile={value => {
+                console.log('NewsItem:::', value);
+                setImageFile(value);
+              }}
+            />
           </Paper>
         </form>
       )}
