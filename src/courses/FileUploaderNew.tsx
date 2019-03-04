@@ -1,23 +1,23 @@
-import React, { Component, useReducer, useRef } from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import IconButton from '@material-ui/core/IconButton';
-import FolderOpen from '@material-ui/icons/FolderOpen';
-import FileUpload from '@material-ui/icons/FileCopy';
-import gql from 'graphql-tag';
-import { useQuery, useMutation } from 'react-apollo-hooks';
-import styled from 'styled-components';
-const PATH_PREFIX = '\\\\nlbavwdocsup1\\Training\\';
-const LINK_PREFIX = 'http://nlbavwdocsup1.infor.com:5001/';
+import React, { Component, useReducer, useRef } from "react";
+import { withStyles } from "@material-ui/core/styles";
+import Paper from "@material-ui/core/Paper";
+import Typography from "@material-ui/core/Typography";
+import TextField from "@material-ui/core/TextField";
+import IconButton from "@material-ui/core/IconButton";
+import FolderOpen from "@material-ui/icons/FolderOpen";
+import FileUpload from "@material-ui/icons/FileCopy";
+import gql from "graphql-tag";
+import { useQuery, useMutation } from "react-apollo-hooks";
+import styled from "styled-components";
+const PATH_PREFIX = "\\\\nlbavwdocsup1\\Training\\";
+const LINK_PREFIX = "http://nlbavwdocsup1.infor.com:5001/";
 const HTTP_LINK_PREFIX = `http://nlbavwixs.infor.com/images/news/`;
 
 const UploadButtonWrapper = styled.div`
   /* position: relative; */
   /* overflow: hidden; */
   /* display: inline-block; */
-  input[type='file'] {
+  input[type="file"] {
     font-size: 100px;
     position: absolute;
     left: 0;
@@ -32,17 +32,17 @@ const FileInput = styled.label`
   min-width: 64px;
   max-width: 164px;
   box-sizing: border-box;
-  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
-    box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
+    border 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   line-height: 1.75;
-  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   font-weight: 500;
   border-radius: 4px;
   letter-spacing: 0.02857em;
   text-transform: uppercase;
   color: #fff;
-  background-color: #2196f3;
-  input[type='file'] {
+  background-color: #524763;
+  input[type="file"] {
     font-size: 100px;
     position: absolute;
     left: 0;
@@ -69,11 +69,11 @@ const UPLOAD_MUTATION = gql`
 
 const styles: any = (theme: any) => ({
   root: {
-    width: '100%'
+    width: "100%"
   },
   container: {
-    display: 'flex',
-    flexWrap: 'wrap'
+    display: "flex",
+    flexWrap: "wrap"
   },
   textField: {
     marginLeft: theme.spacing.unit,
@@ -96,7 +96,7 @@ interface Props {
 }
 
 export const FileUploadComponent: React.FC<Props> = ({
-  link = '\\\\nlbavwixs.infor.com\\images\\news',
+  link = "\\\\nlbavwixs.infor.com\\images\\news",
   classes,
   readOnly,
   setFile = () => null
@@ -110,7 +110,6 @@ export const FileUploadComponent: React.FC<Props> = ({
         id="f1"
         type="file"
         multiple
-        required
         value=""
         ref={ref}
         onChange={async ({ target: { validity, files } }) => {
@@ -118,7 +117,7 @@ export const FileUploadComponent: React.FC<Props> = ({
 
           if (res.data) {
             const uploadedFile = res.data.multipleUpload[0].filename;
-            console.log('files', uploadedFile);
+            console.log("files", uploadedFile);
             setFile(HTTP_LINK_PREFIX + uploadedFile);
           }
         }}
