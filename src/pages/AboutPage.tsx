@@ -12,47 +12,7 @@ import { useQuery, useMutation } from 'react-apollo-hooks';
 import styled from 'styled-components';
 import { format } from '../utils/format';
 import SearchBar from '../common/SearchBar';
-
-const SELECTEDCOLOR = 'rgb(130, 216, 216)';
-
-const Block = styled('a')<{ selected?: boolean }>`
-  color: ${props => (props.selected ? 'black' : 'rgb(69, 69, 69)')};
-  display: inline-block;
-  text-transform: uppercase;
-  font-size: 1rem;
-  font-weight: 800;
-  margin-bottom: 5px;
-  margin-right: 5px;
-  margin-left: 5px;
-  background-color: ${props => (props.selected ? SELECTEDCOLOR : 'rgb(196, 196, 196)')};
-  border-radius: 3px;
-  padding: 5px 10px;
-  border-width: initial;
-  border-style: none;
-  border-color: initial;
-  border-image: initial;
-  transition: all 0.3s ease 0s;
-  :hover {
-    background-color: ${SELECTEDCOLOR};
-    color: black;
-    cursor: pointer;
-  }
-`;
-
-const List = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0px 0px 2rem;
-  padding: 0px;
-  list-style: none;
-`;
-
-const BrowseTitle = styled.h5`
-  margin-left: 10px;
-  text-transform: uppercase;
-  font-weight: 900;
-  font-size: 1.2rem;
-`;
+import { CategoryBar } from '../videos/CategoryList';
 
 const videoFragment = gql`
   fragment VideoDetails on Video {
@@ -168,37 +128,6 @@ function AboutPageContainer(props: any) {
   );
 }
 
-interface Props {
-  isSelected: string;
-  setSelected: Function;
-}
-
-const CategoryBar: React.FC<Props> = ({ isSelected, setSelected }) => {
-  const categories = ['Dashboard Instruction', 'Technical', 'Development', 'Other'];
-  return (
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100vh',
-        alignContent: 'flex-start',
-        width: '20%'
-      }}
-    >
-      <BrowseTitle>Browse by Topic</BrowseTitle>
-      <List>
-        {categories.map(category => (
-          <li className="li" key={category}>
-            <Block selected={category === isSelected} onClick={() => setSelected(category)}>
-              {category}
-            </Block>
-          </li>
-        ))}
-      </List>
-    </div>
-  );
-};
-
 function getRandomColor() {
   var letters = '0123456789ABCDEF';
   var color = '#';
@@ -212,7 +141,7 @@ function AboutPage(props: any) {
   const classes = props.classes;
   const videos: videoType[] = props.videos;
   const [searchText, setSearchText] = useState('');
-  const [isSelected, setSelected] = useState('Dashboard Instruction');
+  const [isSelected, setSelected] = useState('Dashboard Instruction'.toUpperCase());
 
   const filteredVideos = videos.filter(
     ({ title, category }) =>
