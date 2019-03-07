@@ -13,35 +13,7 @@ import styled from 'styled-components';
 import { format } from '../utils/format';
 import SearchBar from '../common/SearchBar';
 import { CategoryBar } from '../videos/CategoryList';
-
-const videoFragment = gql`
-  fragment VideoDetails on Video {
-    id
-    title
-    date
-    url
-    category
-    views
-  }
-`;
-
-const QUERY_ALL_VIDEOS = gql`
-  ${videoFragment}
-  query QUERY_ALL_VIDEOS {
-    videos {
-      ...VideoDetails
-    }
-  }
-`;
-
-const MUTATION_UPDATE_VIEW = gql`
-  ${videoFragment}
-  mutation MUTATION_UPDATE_VIEWS($id: ID!) {
-    increasevideonumberofviews(id: $id) {
-      ...VideoDetails
-    }
-  }
-`;
+import { QUERY_ALL_VIDEOS, MUTATION_UPDATE_VIEW } from '../videos/Queries';
 
 const styles: any = (theme: any) => ({
   card: {
