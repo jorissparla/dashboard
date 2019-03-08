@@ -1,13 +1,16 @@
+import { Button } from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import Badge from '@material-ui/core/Badge';
 import Card from '@material-ui/core/Card';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
 import CardHeader from '@material-ui/core/CardHeader';
 import red from '@material-ui/core/colors/red';
 import { withStyles } from '@material-ui/core/styles';
-import { withRouter } from 'react-router';
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-apollo-hooks';
+import { withRouter } from 'react-router';
 import SearchBar from '../common/SearchBar';
 import { format } from '../utils/format';
 import { CategoryBar } from '../videos/CategoryList';
@@ -133,7 +136,6 @@ function VideoPage(props: any) {
       _.includes(category.toUpperCase(), isSelected.toUpperCase())
   );
 
-  console.log('Videopage props', props);
   return (
     <div style={{ display: 'flex' }}>
       <CategoryBar isSelected={isSelected} setSelected={setSelected} />
@@ -144,6 +146,18 @@ function VideoPage(props: any) {
           hintText="Type searchterm and press enter..."
         />
         <div className={classes.container}>
+          {props.allowEdit && (
+            <div className={classes.card}>
+              <Fab
+                color="primary"
+                aria-label="Add"
+                className={classes.fab}
+                onClick={() => props.history.push('/addvideo')}
+              >
+                <AddIcon />
+              </Fab>
+            </div>
+          )}
           {filteredVideos.length === 0 ? (
             <h2>No Videos selected</h2>
           ) : (

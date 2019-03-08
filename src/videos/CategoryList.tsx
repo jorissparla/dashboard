@@ -74,8 +74,7 @@ export const CategoryBar: React.FC<Props> = ({ isSelected, setSelected }) => {
   if (loading) {
     return <div>Loading...</div>;
   }
-  console.log(isSelected);
-  const categories = data.videocategories;
+  const categories = data.videocategories || [];
   return (
     <div
       style={{
@@ -110,7 +109,6 @@ export const CategoryBarMultipleSelect: React.FC<Props> = ({ isSelected = 'NEW',
   if (loading) {
     return <div>Loading...</div>;
   }
-  console.log('isSelected', isSelected);
   const selectedArray = isSelected.split(';');
   const categories = data.videocategories;
   return (

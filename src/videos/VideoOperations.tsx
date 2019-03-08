@@ -78,7 +78,6 @@ const AddVideoPlain: React.FC<AddProps> = ({ history }) => {
   const addVideo = useMutation(MUTATION_ADD_VIDEO);
   async function handleSave(video: VideoType) {
     const result = await addVideo({ variables: { video } });
-    console.log(result);
   }
   return (
     <div>
@@ -103,7 +102,6 @@ interface EditProps {
 const EditVideoPlain: React.FC<EditProps> = ({ match, history }) => {
   let id;
   if (match && match.params) {
-    console.log(match.params);
     id = match.params.id;
   }
   if (!id) {
@@ -125,11 +123,9 @@ const EditVideoPlain: React.FC<EditProps> = ({ match, history }) => {
   const { video } = data;
   async function handleSave(video: VideoType) {
     const result = await updateVideo({ variables: { video } });
-    console.log(result);
   }
   async function handleDelete(video: VideoType) {
     const result = await deleteVideo({ variables: { video } });
-    console.log(result);
     history.push('/videos');
   }
   return (
@@ -204,11 +200,9 @@ const VideoForm: React.FC<VideoFormProps> = ({
   }
 
   function handleDelete() {
-    console.log('handleDelete');
     const values = { id: initialValues.id };
     onDelete(values);
   }
-  console.log('categories', categories);
   return (
     <Paper>
       <CardSection style={{ fontSize: '24px', fontFamily: 'Poppins' }}>{formTitle}</CardSection>
