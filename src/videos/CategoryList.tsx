@@ -102,7 +102,7 @@ export const CategoryBar: React.FC<Props> = ({ isSelected, setSelected }) => {
     </div>
   );
 };
-export const CategoryBarMultipleSelect: React.FC<Props> = ({ isSelected, setSelected }) => {
+export const CategoryBarMultipleSelect: React.FC<Props> = ({ isSelected = 'NEW', setSelected }) => {
   //const categories = ['Dashboard Instruction', 'Technical', 'Development', 'Other'];
   const { loading, data } = useQuery(QUERY_VIDEO_CATEGORIES, {
     suspend: false
@@ -110,6 +110,7 @@ export const CategoryBarMultipleSelect: React.FC<Props> = ({ isSelected, setSele
   if (loading) {
     return <div>Loading...</div>;
   }
+  console.log('isSelected', isSelected);
   const selectedArray = isSelected.split(';');
   const categories = data.videocategories;
   return (

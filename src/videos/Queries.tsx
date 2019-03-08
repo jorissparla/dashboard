@@ -19,6 +19,15 @@ export const QUERY_ALL_VIDEOS = gql`
   }
 `;
 
+export const QUERY_SINGLE_VIDEO = gql`
+  ${videoFragment}
+  query QUERY_SINGLE_VIDEO($id: ID!) {
+    video(id: $id) {
+      ...VideoDetails
+    }
+  }
+`;
+
 export const MUTATION_UPDATE_VIEW = gql`
   ${videoFragment}
   mutation MUTATION_UPDATE_VIEWS($id: ID!) {
@@ -34,5 +43,18 @@ export const MUTATION_ADD_VIDEO = gql`
     addvideo(video: $video) {
       ...VideoDetails
     }
+  }
+`;
+export const MUTATION_UPDATE_VIDEO = gql`
+  ${videoFragment}
+  mutation MUTATION_UPDATE_VIDEO($video: VideoUpdateType) {
+    updatevideo(video: $video) {
+      ...VideoDetails
+    }
+  }
+`;
+export const MUTATION_DELETE_VIDEO = gql`
+  mutation MUTATION_DELETE_VIDEO($video: VideoDeleteType) {
+    deletevideo(video: $video)
   }
 `;

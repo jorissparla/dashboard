@@ -1,11 +1,17 @@
-import * as React from 'react';
-import gql from 'graphql-tag';
-import { useQuery, useMutation } from 'react-apollo-hooks';
+import { Button, Paper, TextField, withStyles } from '@material-ui/core';
 import _ from 'lodash';
-import { Button, withStyles, FormControl, InputLabel, TextField, Paper } from '@material-ui/core';
+import * as React from 'react';
+import { useMutation, useQuery } from 'react-apollo-hooks';
 import { CardSection } from '../common';
+import { withRouter } from 'react-router';
 import { format } from '../utils/format';
 import { CategoryBarMultipleSelect } from './CategoryList';
+import {
+  MUTATION_UPDATE_VIDEO,
+  QUERY_SINGLE_VIDEO,
+  MUTATION_ADD_VIDEO,
+  MUTATION_DELETE_VIDEO
+} from './Queries';
 
 const styles: any = (theme: any) => ({
   root: {
@@ -44,6 +50,99 @@ const styles: any = (theme: any) => ({
   }
 });
 
+// Type declarations and defaultvalues
+type VideoType = {
+  id?: string;
+  title: string;
+  url: string;
+  date: string;
+  category: string;
+};
+
+const defaultInitialValue = {
+  id: '',
+  title: '',
+  url: '',
+  date: Date.now().toString(),
+  category: 'NEW'
+};
+
+interface AddProps {
+  match: any;
+  history: any;
+  location: any;
+}
+
+const AddVideoPlain: React.FC<AddProps> = () => {
+  const addVideo = useMutation(MUTATION_ADD_VIDEO);
+  async function handleSave(video: VideoType) {
+    const result = await addVideo({ variables: { video } });
+    console.log(result);
+  }
+  return (
+    <div>
+      <StyledVideoForm
+        formTitle="Add Video"
+        initialValues={defaultInitialValue}
+        onSave={(v: VideoType) => handleSave(v)}
+      />
+    </div>
+  );
+};
+
+export const AddVideo = withRouter(AddVideoPlain);
+
+interface EditProps {
+  match: any;
+  history: any;
+  location: any;
+}
+
+const EditVideoPlain: React.FC<EditProps> = ({ match, history }) => {
+  let id;
+  if (match && match.params) {
+    console.log(match.params);
+    id = match.params.id;
+  }
+  if (!id) {
+    return <div>Invalid video</div>;
+  }
+
+  const { data, loading } = useQuery(QUERY_SINGLE_VIDEO, {
+    suspend: false,
+    variables: { id }
+  });
+  const updateVideo = useMutation(MUTATION_UPDATE_VIDEO);
+  const deleteVideo = useMutation(MUTATION_DELETE_VIDEO);
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (!data) {
+    return <div>Invalid video</div>;
+  }
+  const { video } = data;
+  async function handleSave(video: VideoType) {
+    const result = await updateVideo({ variables: { video } });
+    console.log(result);
+  }
+  async function handleDelete(video: VideoType) {
+    const result = await deleteVideo({ variables: { video } });
+    console.log(result);
+    history.push('/about');
+  }
+  return (
+    <div>
+      <StyledVideoForm
+        formTitle="Edit Video"
+        initialValues={video}
+        onSave={(v: VideoType) => handleSave(v)}
+        onDelete={(v: VideoType) => handleDelete(v)}
+      />
+    </div>
+  );
+};
+export const EditVideo = withRouter(EditVideoPlain);
+
 export function useInput(defaultValue: string) {
   const [value, setValue] = React.useState(defaultValue);
   function onChange(e: any) {
@@ -52,7 +151,7 @@ export function useInput(defaultValue: string) {
   return { value, onChange };
 }
 
-interface Props {
+interface VideoFormProps {
   classes: any;
   initialValues: VideoType;
   formTitle: string;
@@ -60,22 +159,7 @@ interface Props {
   onDelete?: Function;
 }
 
-type VideoType = {
-  id?: string;
-  title: string;
-  url: string;
-  date: string;
-  categories: string;
-};
-
-const defaultInitialValue = {
-  id: '',
-  title: '',
-  url: '',
-  date: format(Date.now(), 'YYYY-MM-DD'),
-  categories: 'NEW'
-};
-const VideoForm: React.FC<Props> = ({
+const VideoForm: React.FC<VideoFormProps> = ({
   classes,
   initialValues = defaultInitialValue,
   formTitle = 'Add Video',
@@ -84,9 +168,10 @@ const VideoForm: React.FC<Props> = ({
 }) => {
   const title = useInput(initialValues.title);
   const url = useInput(initialValues.url);
-  const date = useInput(initialValues.date);
-  const [categories, setCategories] = React.useState(initialValues.categories);
-
+  const date = useInput(format(initialValues.date, 'YYYY-MM-DD'));
+  const [categories, setCategories] = React.useState(initialValues.category);
+  const id = initialValues.id;
+  console.log(date);
   function handleSetCategories(name: string) {
     let categoriesArray: string[] = categories.split(';');
     if (_.includes(categories, name)) {
@@ -95,14 +180,16 @@ const VideoForm: React.FC<Props> = ({
       setCategories([...categoriesArray, name].join(';'));
     }
   }
-
+  React.useEffect(() => {
+    //  handleSetCategories(categories);
+  }, []);
   function handleSubmit(e: any) {
     e.preventDefault();
     const values = {
       title: title.value,
       url: url.value,
       date: date.value,
-      categories
+      category: categories
     };
     if (initialValues.id) {
       onSave({ id: initialValues.id, ...values });
@@ -110,6 +197,12 @@ const VideoForm: React.FC<Props> = ({
       onSave(values);
     }
   }
+
+  function handleDelete() {
+    const values = { id: initialValues.id };
+    onDelete(values);
+  }
+  console.log('categories', categories);
   return (
     <Paper>
       <CardSection style={{ fontSize: '24px', fontFamily: 'Poppins' }}>{formTitle}</CardSection>
@@ -150,8 +243,8 @@ const VideoForm: React.FC<Props> = ({
           >
             Cancel
           </Button>
-          {onDelete && (
-            <Button className={classes.buttonDelete} onClick={() => null} variant="contained">
+          {id && (
+            <Button className={classes.buttonDelete} onClick={handleDelete} variant="contained">
               Delete
             </Button>
           )}
@@ -161,4 +254,5 @@ const VideoForm: React.FC<Props> = ({
   );
 };
 
-export default withStyles(styles)(VideoForm);
+const StyledVideoForm = withStyles(styles)(VideoForm);
+//export default StyledVideoForm;

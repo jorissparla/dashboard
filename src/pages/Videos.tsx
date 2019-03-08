@@ -73,7 +73,7 @@ type videoType = {
   views: number;
 };
 
-function AboutPageContainer(props: any) {
+function VideoContainer(props: any) {
   const { loading, data } = useQuery(QUERY_ALL_VIDEOS, {
     suspend: false
   });
@@ -90,6 +90,9 @@ function AboutPageContainer(props: any) {
   if (!(data && data.videos)) {
     return <div>Error</div>;
   }
+
+  console.log('videos page', props.user);
+
   const videos: videoType[] = data.videos;
   return (
     <AboutPage
@@ -173,4 +176,4 @@ function AboutPage(props: any) {
   );
 }
 
-export default withStyles(styles)(AboutPageContainer);
+export default withStyles(styles)(VideoContainer);

@@ -22,8 +22,8 @@ import NewsPage from './pages/newspage';
 import User, { withUser, UserProfileComponent } from './User';
 import UserPermissions from './UserPermissions';
 import CourseFileUpload from './courses/CourseFileUpload';
-import AboutPage from './pages/AboutPage';
-import AddVideo from './videos/AddVideo';
+import VideoPage from './pages/Videos';
+import { AddVideo, EditVideo } from './videos/VideoOperations';
 //const CommentsList = DynamicImport(() => import("./feedback/commentList"));
 const FeedbackList = DynamicImport(() => import('./pages/feedbackList'));
 const AddFeedback = DynamicImport(() => import('./feedback/AddFeedback'));
@@ -100,7 +100,6 @@ class AppRoutes extends React.Component {
 
           return (
             <Switch>
-              <Route exact path="/addvideo" component={AddVideo} />
               <Route exact path="/" component={DashBoardContainer} />
               <Route exact path="/newspage" component={NewsPage} />
               <EnhancedRoute
@@ -299,7 +298,21 @@ class AppRoutes extends React.Component {
               <Route exact path="/chart" component={VSummaryChart} />
               <Route exact path="/donut" component={DonutChart} />
               <Route exact path="/addplannedcourserequest" component={AddPlannedCourseRequest} />
-              <Route exact path="/about" component={AboutPage} />
+              <Route exact path="/about" component={VideoPage} user={user} />
+              <AuthRoute
+                allowed={['Admin', 'PO']}
+                user={user}
+                exact
+                path="/addvideo"
+                component={AddVideo}
+              />
+              <AuthRoute
+                allowed={['Admin', 'PO']}
+                user={user}
+                exact
+                path="/editvideo/:id"
+                component={EditVideo}
+              />
               <Route component={NotFound} />
             </Switch>
           );
