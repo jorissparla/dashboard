@@ -288,7 +288,7 @@ class Header extends React.Component {
                 );
               }}
             </Signout>
-            <NavLink title="Instruction Videos" navigateTo="/about" history={history} />
+            <NavLink title="Videos" navigateTo="/videos" history={history} />
           </React.Fragment>
         )}
       </List>

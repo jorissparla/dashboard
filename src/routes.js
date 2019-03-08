@@ -1,29 +1,28 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
 import { withRouter } from 'react-router';
-
+import { Route, Switch } from 'react-router-dom';
+import RequireAuth, { AuthRoute, EnhancedRoute } from './auth/require_auth';
 import Signin from './auth/signin';
 import SigninWithPIN from './auth/SigninWithPIN';
 import Signout from './auth/signout';
-import RequireAuth, { AuthRoute, EnhancedRoute } from './auth/require_auth';
-import TestLogin from './TestLogin';
-
-import { withDashBoardContext } from './Provider';
-import DynamicImport from './DynamicImport';
-import NewsItemContainer from './news/newsitemcontainer';
 import CourseAdd from './courses/CourseAdd';
 import CourseEdit from './courses/CourseEdit';
+import CourseFileUpload from './courses/CourseFileUpload';
 import PlannedCourseAdd from './courses/PlannedCourseAdd';
 import PlannedCourseEdit from './courses/PlannedCourseEdit';
 import PlannedCourses from './courses/PlannedCoursesNew';
-import PlannedCourseRequestList from './pages/PlannedCourseRequestList';
+import DynamicImport from './DynamicImport';
+import NewsItemContainer from './news/newsitemcontainer';
 import DashBoardContainer from './pages/dashboardcontainer';
 import NewsPage from './pages/newspage';
-import User, { withUser, UserProfileComponent } from './User';
-import UserPermissions from './UserPermissions';
-import CourseFileUpload from './courses/CourseFileUpload';
+import PlannedCourseRequestList from './pages/PlannedCourseRequestList';
 import VideoPage from './pages/Videos';
+import { withDashBoardContext } from './Provider';
+import TestLogin from './TestLogin';
+import User, { UserProfileComponent, withUser } from './User';
+import UserPermissions from './UserPermissions';
 import { AddVideo, EditVideo } from './videos/VideoOperations';
+
 //const CommentsList = DynamicImport(() => import("./feedback/commentList"));
 const FeedbackList = DynamicImport(() => import('./pages/feedbackList'));
 const AddFeedback = DynamicImport(() => import('./feedback/AddFeedback'));
@@ -299,6 +298,7 @@ class AppRoutes extends React.Component {
               <Route exact path="/donut" component={DonutChart} />
               <Route exact path="/addplannedcourserequest" component={AddPlannedCourseRequest} />
               <Route exact path="/about" component={VideoPage} user={user} />
+              <Route exact path="/videos" component={VideoPage} user={user} />
               <AuthRoute
                 allowed={['Admin', 'PO']}
                 user={user}
