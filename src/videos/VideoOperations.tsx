@@ -12,6 +12,7 @@ import {
   MUTATION_ADD_VIDEO,
   MUTATION_DELETE_VIDEO
 } from './Queries';
+import SafeDeleteButton from './SafeDeleteButton';
 
 const styles: any = (theme: any) => ({
   root: {
@@ -73,7 +74,7 @@ interface AddProps {
   location: any;
 }
 
-const AddVideoPlain: React.FC<AddProps> = () => {
+const AddVideoPlain: React.FC<AddProps> = ({ history }) => {
   const addVideo = useMutation(MUTATION_ADD_VIDEO);
   async function handleSave(video: VideoType) {
     const result = await addVideo({ variables: { video } });
@@ -85,6 +86,7 @@ const AddVideoPlain: React.FC<AddProps> = () => {
         formTitle="Add Video"
         initialValues={defaultInitialValue}
         onSave={(v: VideoType) => handleSave(v)}
+        onCancel={() => history.push('/videos')}
       />
     </div>
   );
@@ -137,6 +139,7 @@ const EditVideoPlain: React.FC<EditProps> = ({ match, history }) => {
         initialValues={video}
         onSave={(v: VideoType) => handleSave(v)}
         onDelete={(v: VideoType) => handleDelete(v)}
+        onCancel={() => history.push('/videos')}
       />
     </div>
   );
@@ -157,6 +160,7 @@ interface VideoFormProps {
   formTitle: string;
   onSave: Function;
   onDelete?: Function;
+  onCancel: Function;
 }
 
 const VideoForm: React.FC<VideoFormProps> = ({
@@ -164,7 +168,8 @@ const VideoForm: React.FC<VideoFormProps> = ({
   initialValues = defaultInitialValue,
   formTitle = 'Add Video',
   onSave = (values: any) => console.log('Values', values),
-  onDelete = () => null
+  onDelete = () => null,
+  onCancel
 }) => {
   const title = useInput(initialValues.title);
   const url = useInput(initialValues.url);
@@ -199,6 +204,7 @@ const VideoForm: React.FC<VideoFormProps> = ({
   }
 
   function handleDelete() {
+    console.log('handleDelete');
     const values = { id: initialValues.id };
     onDelete(values);
   }
@@ -237,16 +243,17 @@ const VideoForm: React.FC<VideoFormProps> = ({
           </Button>
           <Button
             className={classes.button}
-            onClick={() => null}
+            onClick={() => onCancel()}
             color="secondary"
             variant="contained"
           >
             Cancel
           </Button>
           {id && (
-            <Button className={classes.buttonDelete} onClick={handleDelete} variant="contained">
-              Delete
-            </Button>
+            <SafeDeleteButton
+              onDelete={handleDelete}
+              // onClick={handleDelete}
+            />
           )}
         </CardSection>
       </form>

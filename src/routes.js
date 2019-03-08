@@ -298,7 +298,7 @@ class AppRoutes extends React.Component {
               <Route exact path="/donut" component={DonutChart} />
               <Route exact path="/addplannedcourserequest" component={AddPlannedCourseRequest} />
               <Route exact path="/about" component={VideoPage} user={user} />
-              <Route exact path="/videos" component={VideoPage} user={user} />
+              <EnhancedRoute exact path="/videos" component={VideoPage} user={user} />
               <AuthRoute
                 allowed={['Admin', 'PO']}
                 user={user}

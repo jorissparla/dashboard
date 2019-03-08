@@ -1,19 +1,17 @@
-import React, { useEffect, Suspense, useState } from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardActions from '@material-ui/core/CardActions';
 import Avatar from '@material-ui/core/Avatar';
 import Badge from '@material-ui/core/Badge';
-import _ from 'lodash';
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
 import red from '@material-ui/core/colors/red';
-import gql from 'graphql-tag';
-import { useQuery, useMutation } from 'react-apollo-hooks';
-import styled from 'styled-components';
-import { format } from '../utils/format';
+import { withStyles } from '@material-ui/core/styles';
+import { withRouter } from 'react-router';
+import _ from 'lodash';
+import React, { useEffect, useState } from 'react';
+import { useMutation, useQuery } from 'react-apollo-hooks';
 import SearchBar from '../common/SearchBar';
+import { format } from '../utils/format';
 import { CategoryBar } from '../videos/CategoryList';
-import { QUERY_ALL_VIDEOS, MUTATION_UPDATE_VIEW } from '../videos/Queries';
+import { MUTATION_UPDATE_VIEW, QUERY_ALL_VIDEOS } from '../videos/Queries';
 
 const styles: any = (theme: any) => ({
   card: {
@@ -23,10 +21,14 @@ const styles: any = (theme: any) => ({
     padding: 5,
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    cursor: 'pointer'
   },
   margin: {
     margin: theme.spacing.unit * 2
+  },
+  button: {
+    width: '150px'
   },
   main: {
     backgroundColor: '#efefef',
@@ -91,14 +93,21 @@ function VideoContainer(props: any) {
     return <div>Error</div>;
   }
 
-  console.log('videos page', props.user);
+  let allowEdit = false;
+  if (props.user) {
+    if (props.user.role === 'Admin' || props.user.role === 'PO') {
+      allowEdit = true;
+    }
+  }
 
   const videos: videoType[] = data.videos;
   return (
-    <AboutPage
+    <VideoPage
       videos={videos}
       classes={props.classes}
       onView={(id: string) => updateViews({ variables: { id } })}
+      history={props.history}
+      allowEdit={allowEdit}
     />
   );
 }
@@ -112,7 +121,7 @@ function getRandomColor() {
   return color;
 }
 
-function AboutPage(props: any) {
+function VideoPage(props: any) {
   const classes = props.classes;
   const videos: videoType[] = props.videos;
   const [searchText, setSearchText] = useState('');
@@ -123,6 +132,8 @@ function AboutPage(props: any) {
       _.includes(title.toUpperCase(), searchText.toUpperCase()) &&
       _.includes(category.toUpperCase(), isSelected.toUpperCase())
   );
+
+  console.log('Videopage props', props);
   return (
     <div style={{ display: 'flex' }}>
       <CategoryBar isSelected={isSelected} setSelected={setSelected} />
@@ -139,7 +150,13 @@ function AboutPage(props: any) {
             filteredVideos.map(({ id, title, date, url, views }) => {
               const formatteddate = format(date, 'MMMM, DD, YYYY');
               return (
-                <Card className={classes.card} key={id}>
+                <Card
+                  className={classes.card}
+                  key={id}
+                  onClick={() => {
+                    props.allowEdit ? props.history.push(`/editvideo/${id}`) : null;
+                  }}
+                >
                   <CardHeader
                     titleTypographyProps={{ component: 'h2' }}
                     title={title}
@@ -176,4 +193,4 @@ function AboutPage(props: any) {
   );
 }
 
-export default withStyles(styles)(VideoContainer);
+export default withStyles(styles)(withRouter(VideoContainer));
