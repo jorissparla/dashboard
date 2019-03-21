@@ -236,13 +236,6 @@ class AppRoutes extends React.Component {
                 component={RequireAuth(NewsItemContainer)}
               />
               <AuthRoute
-                allowed={['Admin', 'PO', 'SU']}
-                user={user}
-                exact
-                path="/news/add"
-                component={RequireAuth(NewsItemAddContainer)}
-              />
-              <AuthRoute
                 allowed={['Admin', 'PO', 'SU', 'Chat']}
                 user={user}
                 exact
@@ -257,7 +250,7 @@ class AppRoutes extends React.Component {
                 component={RequireAuth(ChatContainer)}
               />
               <AuthRoute
-                allowed={['Admin', 'PO', 'SU']}
+                allowed={['Admin', 'PO', 'SU', 'Guest']}
                 user={user}
                 exact
                 path="/news/add"

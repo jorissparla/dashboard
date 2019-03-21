@@ -17,6 +17,8 @@ import PeopleIcon from '@material-ui/icons/People';
 import ChatIcon from '@material-ui/icons/Chat';
 import PageIcon from '@material-ui/icons/Pages';
 import LinkIcon from '@material-ui/icons/Link';
+import ShareIcon from '@material-ui/icons/Share';
+import CameraIcon from '@material-ui/icons/PhotoCamera';
 import ApplicationIcon from '@material-ui/icons/Launch';
 import RequestListIcon from '@material-ui/icons/PlaylistAdd';
 import GoLiveIcon from '@material-ui/icons/FlightTakeoff';
@@ -366,6 +368,13 @@ class Header extends React.Component {
                       className={classNames(classes.menuButton, open && classes.hide)}
                     >
                       <MenuIcon />
+                    </IconButton>
+                    <IconButton
+                      style={{ color: 'white' }}
+                      onClick={() => this.props.history.push('/news/add')}
+                    >
+                      Share
+                      <CameraIcon />
                     </IconButton>
                     {/*this.renderImage()*/}
                     <Typography variant="h6" color="inherit" className={classes.grow}>
