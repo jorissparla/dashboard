@@ -18,6 +18,7 @@ import Save from '@material-ui/icons/Save';
 import Undo from '@material-ui/icons/Undo';
 import Clear from '@material-ui/icons/Clear';
 import Button from '@material-ui/core/Button';
+import { format } from '../utils/format';
 
 const Left = styled.div`
   display: flex;
@@ -135,7 +136,7 @@ class FeedBackList extends Component {
         <ListItem key={index}>
           <Left>
             <Image image={image} fullname={fullname} />
-            <DateField>{createdAt.substr(0, 10)}</DateField>
+            <DateField>{format(createdAt, 'DD-MM-YYYY')}</DateField>
           </Left>
           <ListItemText
             primary={`${fullname} ( ${customername} )`}

@@ -22,6 +22,7 @@ import TestLogin from './TestLogin';
 import User, { UserProfileComponent, withUser } from './User';
 import UserPermissions from './UserPermissions';
 import { AddVideo, EditVideo } from './videos/VideoOperations';
+import StatsMain from './pages/StatsMain';
 
 //const CommentsList = DynamicImport(() => import("./feedback/commentList"));
 const FeedbackList = DynamicImport(() => import('./pages/feedbackList'));
@@ -99,6 +100,7 @@ class AppRoutes extends React.Component {
 
           return (
             <Switch>
+              <Route exact path="/statsmain" component={StatsMain} />
               <Route exact path="/" component={DashBoardContainer} />
               <Route exact path="/newspage" component={NewsPage} />
               <EnhancedRoute
