@@ -28,6 +28,7 @@ const OWNERS_QUERY = gql`
 `;
 
 interface OwnerProps {
+  initialValue: string;
   classes: any;
   onChange: Function;
 }
@@ -45,6 +46,7 @@ export const OwnersContainer: React.FC<OwnerProps> = (props: any) => {
   const owners = data.accounts;
   return (
     <OwnerList
+      initialValue={props.initialValue}
       owners={owners}
       classes={props.classes}
       onSelect={(v: string) => {
@@ -61,16 +63,18 @@ interface Props {
   classes?: any;
   onSelect: Function;
   owners: any;
+  initialValue: string;
 }
 
 const OwnerList: React.FC<Props> = ({ classes, onSelect, owners }) => {
-  const [selected, setSelected] = useState('');
-  console.log(owners);
+  const [selected, setSelected] = useState('Michel van Huenen');
+  console.log(selected);
   return (
     <FormControl className={classes.root}>
       <InputLabel htmlFor="owner">Support Analyst</InputLabel>
       <Select
         onChange={e => {
+          console.log('object');
           setSelected(e.target.value);
           onSelect(e.target.value);
         }}
