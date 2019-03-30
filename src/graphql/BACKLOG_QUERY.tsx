@@ -1,4 +1,4 @@
-import gql from 'graphql-tag';
+import gql from "graphql-tag";
 export const backlogFragment = gql`
   fragment backlogfragment on DWH {
     incident
@@ -6,6 +6,7 @@ export const backlogFragment = gql`
     owner
     customername
     summary
+    title
     status
     dayssincelastupdate
     daysSinceCreated
@@ -22,6 +23,7 @@ export const QUERY_BACKLOG = gql`
     owner
     customername
     summary
+    title
     status
     dayssincelastupdate
     daysSinceCreated
@@ -52,13 +54,7 @@ export const QUERY_BACKLOG = gql`
     ) {
       ...backlogfragment
     }
-    researching: backlog(
-      orderBy: DAYS_DESC
-      deployment: $deployment
-      status: "Researching"
-      since: 16
-      date: $date
-    ) {
+    researching: backlog(orderBy: DAYS_DESC, deployment: $deployment, status: "Researching", since: 16, date: $date) {
       ...backlogfragment
     }
     awaiting_infor: backlog(
@@ -81,13 +77,7 @@ export const QUERY_BACKLOG = gql`
       ...backlogfragment
     }
 
-    aging: backlog(
-      orderBy: DAYS_DESC
-      deployment: $deployment
-      severityname: MAJOR
-      aging: 90
-      date: $date
-    ) {
+    aging: backlog(orderBy: DAYS_DESC, deployment: $deployment, severityname: MAJOR, aging: 90, date: $date) {
       ...backlogfragment
     }
   }
