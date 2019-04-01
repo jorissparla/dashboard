@@ -1,28 +1,29 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
 import { withRouter } from 'react-router';
-
+import { Route, Switch } from 'react-router-dom';
+import RequireAuth, { AuthRoute, EnhancedRoute } from './auth/require_auth';
 import Signin from './auth/signin';
 import SigninWithPIN from './auth/SigninWithPIN';
 import Signout from './auth/signout';
-import RequireAuth, { AuthRoute, EnhancedRoute } from './auth/require_auth';
-import TestLogin from './TestLogin';
-
-import { withDashBoardContext } from './Provider';
-import DynamicImport from './DynamicImport';
-import NewsItemContainer from './news/newsitemcontainer';
 import CourseAdd from './courses/CourseAdd';
 import CourseEdit from './courses/CourseEdit';
+import CourseFileUpload from './courses/CourseFileUpload';
 import PlannedCourseAdd from './courses/PlannedCourseAdd';
 import PlannedCourseEdit from './courses/PlannedCourseEdit';
 import PlannedCourses from './courses/PlannedCoursesNew';
-import PlannedCourseRequestList from './pages/PlannedCourseRequestList';
+import DynamicImport from './DynamicImport';
+import NewsItemContainer from './news/newsitemcontainer';
 import DashBoardContainer from './pages/dashboardcontainer';
 import NewsPage from './pages/newspage';
-import User, { withUser, UserProfileComponent } from './User';
+import PlannedCourseRequestList from './pages/PlannedCourseRequestList';
+import VideoPage from './pages/Videos';
+import { withDashBoardContext } from './Provider';
+import TestLogin from './TestLogin';
+import User, { UserProfileComponent, withUser } from './User';
 import UserPermissions from './UserPermissions';
-import CourseFileUpload from './courses/CourseFileUpload';
-import AboutPage from './pages/AboutPage';
+import { AddVideo, EditVideo } from './videos/VideoOperations';
+import StatsMain from './pages/StatsMain';
+
 //const CommentsList = DynamicImport(() => import("./feedback/commentList"));
 const FeedbackList = DynamicImport(() => import('./pages/feedbackList'));
 const AddFeedback = DynamicImport(() => import('./feedback/AddFeedback'));
@@ -99,6 +100,7 @@ class AppRoutes extends React.Component {
 
           return (
             <Switch>
+              <Route exact path="/statsmain" component={StatsMain} />
               <Route exact path="/" component={DashBoardContainer} />
               <Route exact path="/newspage" component={NewsPage} />
               <EnhancedRoute
@@ -236,13 +238,6 @@ class AppRoutes extends React.Component {
                 component={RequireAuth(NewsItemContainer)}
               />
               <AuthRoute
-                allowed={['Admin', 'PO', 'SU']}
-                user={user}
-                exact
-                path="/news/add"
-                component={RequireAuth(NewsItemAddContainer)}
-              />
-              <AuthRoute
                 allowed={['Admin', 'PO', 'SU', 'Chat']}
                 user={user}
                 exact
@@ -257,7 +252,7 @@ class AppRoutes extends React.Component {
                 component={RequireAuth(ChatContainer)}
               />
               <AuthRoute
-                allowed={['Admin', 'PO', 'SU']}
+                allowed={['Admin', 'PO', 'SU', 'Guest']}
                 user={user}
                 exact
                 path="/news/add"
@@ -297,7 +292,22 @@ class AppRoutes extends React.Component {
               <Route exact path="/chart" component={VSummaryChart} />
               <Route exact path="/donut" component={DonutChart} />
               <Route exact path="/addplannedcourserequest" component={AddPlannedCourseRequest} />
-              <Route exact path="/about" component={AboutPage} />
+              <Route exact path="/about" component={VideoPage} user={user} />
+              <EnhancedRoute exact path="/videos" component={VideoPage} user={user} />
+              <AuthRoute
+                allowed={['Admin', 'PO']}
+                user={user}
+                exact
+                path="/addvideo"
+                component={AddVideo}
+              />
+              <AuthRoute
+                allowed={['Admin', 'PO']}
+                user={user}
+                exact
+                path="/editvideo/:id"
+                component={EditVideo}
+              />
               <Route component={NotFound} />
             </Switch>
           );

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { withRouter } from 'react-router';
 import { CardSection } from '../common';
 import Button from '@material-ui/core/Button';
@@ -8,6 +8,8 @@ import { TextField, Avatar } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import FileUploaderNew from '../courses/FileUploaderNew';
+import SafeDeleteButton from '../videos/SafeDeleteButton';
 
 const Left = styled.div`
   width: 10%;
@@ -42,10 +44,14 @@ const styles = theme => ({
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
     marginBottom: 20
+  },
+  textField2: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    marginBottom: 20,
+    width: '60vw'
   }
 });
-
-
 
 const NewsItem = ({
   initialValues: newsitem,
@@ -61,13 +67,16 @@ const NewsItem = ({
     e.preventDefault();
     onDelete(newsitem.id);
   };
+  const [imageFile, setImageFile] = useState(newsitem.img || '');
+  console.log('In newsitem', newsitem);
   return (
     <Formik
       className={classes.root}
       initialValues={newsitem}
       onSubmit={values => {
-        console.log(values);
-        onSave(values);
+        const res = { ...values, img: imageFile };
+        console.log('onSubmit', { ...values, img: imageFile });
+        onSave(res);
       }}
     >
       {({ values, handleChange, handleBlur, handleSubmit }) => (
@@ -103,17 +112,22 @@ const NewsItem = ({
             />
             <div style={{ display: 'flex', alignContent: 'center' }}>
               <Left>
-                <Avatar src={values.img} />
+                <Avatar src={imageFile} />
               </Left>
               <Right>
                 <TextField
                   name="img"
-                  className={classes.textField}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.img}
+                  className={classes.textField2}
+                  // onChange={e => setImageFile(e.target.value)}
+                  value={imageFile}
+                  // value={values.img}
                   label="Copy the Image URL into the field"
-                  fullWidth
+                />
+                <FileUploaderNew
+                  setFile={async value => {
+                    console.log('NewsItem:::', value);
+                    setImageFile(value);
+                  }}
                 />
               </Right>
             </div>
@@ -127,16 +141,8 @@ const NewsItem = ({
               >
                 Save
               </Button>
-              {onDelete && (
-                <Button
-                  className={classes.button}
-                  variant="contained"
-                  label="Delete"
-                  onClick={handleDelete}
-                >
-                  Delete
-                </Button>
-              )}
+              {onDelete && <SafeDeleteButton onDelete={handleDelete} />}
+
               <Button
                 className={classes.button}
                 variant="contained"

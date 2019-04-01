@@ -1,15 +1,15 @@
-import React from "react";
-import gql from "graphql-tag";
-import { Query } from "react-apollo";
-import { VictoryTheme, VictoryPie } from "victory";
-import { withStyles } from "@material-ui/core/styles";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import Component from "../common/component-component";
+import React from 'react';
+import gql from 'graphql-tag';
+import { Query } from 'react-apollo';
+import { VictoryTheme, VictoryPie } from 'victory';
+import { withStyles } from '@material-ui/core/styles';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormHelperText from '@material-ui/core/FormHelperText';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import Component from '../common/component-component';
 
 const INCIDENT_QUERY = gql`
   query accounts($firstName: String) {
@@ -34,8 +34,8 @@ const INCIDENT_QUERY = gql`
 
 const styles = theme => ({
   root: {
-    display: "flex",
-    flexWrap: "wrap"
+    display: 'flex',
+    flexWrap: 'wrap'
   },
   formControl: {
     margin: theme.spacing.unit,
@@ -46,13 +46,13 @@ const styles = theme => ({
   }
 });
 
-const colors = ["#BA68C8", "#81D4FA", "#FF7043", "#8BC34A", "#ec407a", "#1da1f2", "#E57373"];
+const colors = ['#BA68C8', '#81D4FA', '#FF7043', '#8BC34A', '#ec407a', '#1da1f2', '#E57373'];
 
 class DonutChart extends React.Component {
   state = {
     incidents: [],
-    firstname: "Eddy",
-    name: "hai"
+    firstname: 'Eddy',
+    name: 'hai'
   };
 
   handleChange = event => {
@@ -60,14 +60,14 @@ class DonutChart extends React.Component {
   };
   render() {
     const { classes } = this.props;
-    const navhttp = "http://navigator.infor.com/N/incident.asp?IncidentID=";
+    const navhttp = 'http://navigator.infor.com/N/incident.asp?IncidentID=';
     return (
-      <Component initialValue={{ firstname: "Eddy", incidents: [] }}>
+      <Component initialValue={{ firstname: 'Eddy', incidents: [] }}>
         {({ state, setState }) => {
           return (
-            <Query query={INCIDENT_QUERY} variables={{ firstName: state.firstname || "Eddy" }}>
+            <Query query={INCIDENT_QUERY} variables={{ firstName: state.firstname || 'Eddy' }}>
               {({ data, loading }) => {
-                if (loading) return "...Loading";
+                if (loading) return '...Loading';
                 const { accounts, supportfolks } = data;
                 const { stats } = accounts[0];
                 console.log(accounts, stats);
@@ -94,7 +94,7 @@ class DonutChart extends React.Component {
                       </Select>
                       <FormHelperText>Label + placeholder</FormHelperText>
                     </FormControl>
-                    <div style={{ width: "45%" }}>
+                    <div style={{ width: '45%' }}>
                       <VictoryPie
                         colorScale={colors}
                         width={600}
@@ -105,12 +105,12 @@ class DonutChart extends React.Component {
                         labels={d => `${d.x} (${d.y})`}
                         events={[
                           {
-                            target: "data",
+                            target: 'data',
                             eventHandlers: {
                               onClick: () => {
                                 return [
                                   {
-                                    target: "labels",
+                                    target: 'labels',
                                     mutation: props => {
                                       setState({ incidents: stats[props.index].incidents });
                                       return `<h1>${props.text}</h1>`;
@@ -126,7 +126,7 @@ class DonutChart extends React.Component {
                     <ul>
                       {state.incidents.map(inc => (
                         <li key={inc.IncidentID}>
-                          <a href={navhttp + inc.IncidentID} target="_blank">
+                          <a href={navhttp + inc.IncidentID}>
                             {inc.IncidentID}: {inc.summary}({inc.DaysUpdated})
                           </a>
                         </li>

@@ -1,4 +1,4 @@
-import gql from "graphql-tag";
+import gql from 'graphql-tag';
 export const CURRENT_USER_QUERY = gql`
   query CURRENT_USER_QUERY {
     me {
@@ -10,6 +10,15 @@ export const CURRENT_USER_QUERY = gql`
       permissions {
         permission
       }
+    }
+  }
+`;
+export const QUERY_VIDEO_CATEGORIES = gql`
+  query QUERY_VIDEO_CATEGORIES {
+    videocategories {
+      id
+      name: category
+      sequence
     }
   }
 `;

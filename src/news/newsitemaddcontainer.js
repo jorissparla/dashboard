@@ -1,14 +1,14 @@
-import React, { Component } from "react";
-import { withRouter } from "react-router";
-import NewsItem from "./newsitem";
-import gql from "graphql-tag";
-import * as R from "ramda";
-import { Mutation } from "react-apollo";
+import React, { Component } from 'react';
+import { withRouter } from 'react-router';
+import NewsItem from './newsitem';
+import gql from 'graphql-tag';
+import * as R from 'ramda';
+import { Mutation } from 'react-apollo';
 
 class NewsItemAddContainer extends Component {
   doSubmit = async values => {
     await this.props.createNews({ variables: { input: values } });
-    setTimeout(() => this.props.history.push("/news"), 500);
+    setTimeout(() => this.props.history.push('/news'), 500);
   };
   render() {
     return (
@@ -28,10 +28,10 @@ class NewsItemAddContainer extends Component {
           return (
             <NewsItem
               initialValues={{}}
-              title="New news item"
+              title="News to Share!"
               onSave={values => {
                 createNews({ variables: { input: values } });
-                setTimeout(() => this.props.history.push("/news"), 500);
+                setTimeout(() => this.props.history.push('/newspage'), 500);
               }}
             />
           );
