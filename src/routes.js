@@ -100,7 +100,7 @@ class AppRoutes extends React.Component {
 
           return (
             <Switch>
-              <Route exact path="/statsmain" component={StatsMain} />
+              <AuthRoute exact path="/statsmain" component={StatsMain} user={user} />
               <Route exact path="/" component={DashBoardContainer} />
               <Route exact path="/newspage" component={NewsPage} />
               <EnhancedRoute

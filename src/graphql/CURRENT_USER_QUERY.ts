@@ -13,12 +13,3 @@ export const CURRENT_USER_QUERY = gql`
     }
   }
 `;
-export const QUERY_VIDEO_CATEGORIES = gql`
-  query QUERY_VIDEO_CATEGORIES {
-    videocategories {
-      id
-      name: category
-      sequence
-    }
-  }
-`;

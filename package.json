@@ -3,6 +3,10 @@
   "version": "0.4.0",
   "private": true,
   "devDependencies": {
+    "@graphql-codegen/cli": "^1.0.6",
+    "@graphql-codegen/typescript": "^1.0.6",
+    "@graphql-codegen/typescript-operations": "^1.0.6",
+    "@graphql-codegen/typescript-react-apollo": "^1.0.6",
     "@types/apollo-upload-client": "^8.1.1",
     "@types/react-redux": "^7.0.1",
     "@types/react-router-dom": "^4.3.1",
@@ -96,7 +100,7 @@
     "prodenv": "SET NODE_ENV=production",
     "init": "gql-gen init",
     "generate": "gql-gen --config codegen.yml",
-    "codegen": "gql-gen --config codegen.yml"
+    "codegen": "graphql-codegen "
   },
   "browserslist": [
     ">0.2%",
