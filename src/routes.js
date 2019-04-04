@@ -22,8 +22,8 @@ import TestLogin from './TestLogin';
 import User, { UserProfileComponent, withUser } from './User';
 import UserPermissions from './UserPermissions';
 import { AddVideo, EditVideo } from './videos/VideoOperations';
-import StatsMain from './pages/StatsMain';
-
+const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
+//const StatsMain = React.lazy(() => import('./kudos/kudolistcomponentnew'));
 //const CommentsList = DynamicImport(() => import("./feedback/commentList"));
 const FeedbackList = DynamicImport(() => import('./pages/feedbackList'));
 const AddFeedback = DynamicImport(() => import('./feedback/AddFeedback'));

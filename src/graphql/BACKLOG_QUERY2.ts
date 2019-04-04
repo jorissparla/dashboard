@@ -105,7 +105,6 @@ export const QUERY_BACKLOG = gql`
       owner: $owner
       orderBy: CREATED_ASC
       deployment: "CLOUD"
-      severityname: MAJOR
       aging: 90
       date: $date
     ) {
@@ -188,14 +187,7 @@ export const QUERY_BACKLOG = gql`
       ...backlogfragment
     }
 
-    aging: backlog(
-      owner: $owner
-      orderBy: CREATED_ASC
-      deployment: "ALL"
-      severityname: MAJOR
-      aging: 90
-      date: $date
-    ) {
+    aging: backlog(owner: $owner, orderBy: CREATED_ASC, deployment: "ALL", aging: 90, date: $date) {
       ...backlogfragment
     }
   }
