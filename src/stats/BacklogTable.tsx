@@ -140,7 +140,9 @@ export const BacklogTable = ({ backlog, classes, title, description = title }: a
               <CustomTableCell className={classes.tableheader}>Incident</CustomTableCell>
               <CustomTableCell className={classes.tableheader}>Severity</CustomTableCell>
               <CustomTableCell className={classes.tableheadernarrow}>Esc</CustomTableCell>
-              <TableHeaderColumn
+              <CustomTableCell className={classes.tableheadernarrow}>Customer </CustomTableCell>
+              <CustomTableCell className={classes.tableheadernarrow}>Owner </CustomTableCell>
+              {/* <TableHeaderColumn
                 column="customer"
                 title="customer"
                 handleSortChange={handleSortChange}
@@ -153,7 +155,7 @@ export const BacklogTable = ({ backlog, classes, title, description = title }: a
                 title="owner"
                 handleSortChange={handleSortChange}
                 column="owner"
-              />
+              /> */}
               <CustomTableCell className={classes.tableheader}>Status</CustomTableCell>
               <CustomTableCell className={classes.tableheader}>Last Updated</CustomTableCell>
               <CustomTableCell className={classes.tableheader}>Age</CustomTableCell>
