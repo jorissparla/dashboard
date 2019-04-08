@@ -18,6 +18,14 @@ export const QUERY_BACKLOG = gql`
   }
   query QUERY_BACKLOG($date: String, $owner: String) {
     mostRecentUpdate
+    critical_cloud: backlog(
+      owner: $owner
+      orderBy: DAYS_DESC
+      severityname: CRITICAL
+      deployment: "CLOUD"
+    ) {
+      ...backlogfragment
+    }
     all_cloud: backlog(
       owner: $owner
       orderBy: DAYS_DESC
@@ -110,6 +118,19 @@ export const QUERY_BACKLOG = gql`
     ) {
       ...backlogfragment
     }
+    new_cloud: backlog(
+      owner: $owner
+      orderBy: CREATED_ASC
+      deployment: "CLOUD"
+      status: "New"
+      since: 2
+      date: $date
+    ) {
+      ...backlogfragment
+    }
+    critical: backlog(owner: $owner, orderBy: DAYS_DESC, severityname: CRITICAL) {
+      ...backlogfragment
+    }
     all: backlog(owner: $owner, orderBy: DAYS_DESC, statusFilter: BACKLOG) {
       ...backlogfragment
     }
@@ -188,6 +209,16 @@ export const QUERY_BACKLOG = gql`
     }
 
     aging: backlog(owner: $owner, orderBy: CREATED_ASC, deployment: "ALL", aging: 90, date: $date) {
+      ...backlogfragment
+    }
+    new: backlog(
+      owner: $owner
+      orderBy: CREATED_ASC
+      deployment: "ALL"
+      status: "New"
+      since: 2
+      date: $date
+    ) {
       ...backlogfragment
     }
   }

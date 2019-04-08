@@ -32,6 +32,10 @@ const TitleWrapper = styled.div`
   flex-direction: row;
   font-family: 'Montserrat', Roboto;
   justify-content: space-between;
+  :hover {
+    color: rgba(0, 0, 0, 0.7);
+    cursor: pointer;
+  }
 `;
 const Title = styled.div`
   font-family: 'Montserrat', Roboto;
@@ -113,6 +117,7 @@ const SmallCard = ({
   isFavorite = false,
   account_id = null,
   supportcard_id = null,
+  onTitleClick = () => null,
   onToggleFavorite = () => {},
   onAudit = () => console.log('onaudit'),
   onFollowLink = link => {
@@ -122,7 +127,7 @@ const SmallCard = ({
 }) => {
   return (
     <StyledPapier color={color}>
-      <TitleWrapper>
+      <TitleWrapper onClick={onTitleClick}>
         <Title>{title}</Title>
         {isNew && (
           <TitleIcon>

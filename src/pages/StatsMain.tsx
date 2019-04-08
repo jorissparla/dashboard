@@ -9,6 +9,7 @@ import { FlexCol } from '../styles';
 import { SelectionContext, SelectionProvider } from '../stats/SelectionContext';
 import { SelectionForm } from '../stats/SelectionForm';
 import { BacklogTable } from '../stats/BacklogTable';
+import Spinner from '../utils/spinner';
 
 const styles = (theme: any) => ({
   root: theme.mixins.gutters({
@@ -22,7 +23,9 @@ const styles = (theme: any) => ({
   }),
   tableheader: {
     fontFamily: 'Poppins',
-    fontSize: 18
+    fontSize: 18,
+    backgroundColor: 'rgb(0,0,0, 0.5)',
+    color: 'white'
   },
   tableheadernarrow: {
     fontFamily: 'Poppins',
@@ -100,22 +103,23 @@ const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
     suspend: false,
     variables: { date, owner, deployment: 'ALL' }
   });
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-  if (!(data && data.solution_proposed)) {
-    return <div>Error</div>;
-  }
+  // if (loading) {
+  //   return <div>Loading...</div>;
+  // }
+  // if (!(data && data.solution_proposed)) {
+  //   return <div>Error</div>;
+  // }
 
   const { classes, user } = props;
   const isAdmin = ['admin', 'PO'].some(u => u === user.role);
+  const mostRecentUpdate = data ? data.mostRecentUpdate : new Date().toLocaleTimeString();
   const handleEnable = () => {};
   return (
     <SelectionProvider>
       <div className={classes.root}>
         <SelectionForm
           classes={props.classes}
-          initialValue={{ owner, isCloud, lastUpdated: data.mostRecentUpdate, actionNeeded: true }}
+          initialValue={{ owner, isCloud, lastUpdated: mostRecentUpdate, actionNeeded: true }}
           valuesChanged={(a: string, b: boolean) => {
             console.log('a', a, b);
             if (a !== owner) {
@@ -126,13 +130,17 @@ const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
             }
           }}
         />
-        <StatsMain
-          classes={props.classes}
-          data={data}
-          onChange={(date: string) => setDate(date)}
-          isCloud={isCloud}
-          actionNeeded={false}
-        />
+        {loading ? (
+          <Spinner />
+        ) : (
+          <StatsMain
+            classes={props.classes}
+            data={data}
+            onChange={(date: string) => setDate(date)}
+            isCloud={isCloud}
+            actionNeeded={false}
+          />
+        )}
       </div>
     </SelectionProvider>
   );
@@ -158,6 +166,12 @@ const StatsMain: React.FC<Props> = ({ classes, onChange, data }) => {
     <>
       {isCloud && (
         <div>
+          <BacklogTable
+            classes={classes}
+            backlog={data.critical_cloud}
+            title="Critical"
+            description="All Incidents with a severity of 'Production Outage / Critical Application halted'"
+          />
           <BacklogTable
             classes={classes}
             backlog={data.on_hold_cloud}
@@ -213,6 +227,12 @@ const StatsMain: React.FC<Props> = ({ classes, onChange, data }) => {
             title="Aging"
             description="Incidents older than 90 days"
           />
+          <BacklogTable
+            classes={classes}
+            backlog={data.new_cloud}
+            title="New Incidents"
+            description="Incidents with status 'New' not updated for more than 2 days"
+          />
 
           <BacklogTable
             classes={classes}
@@ -224,6 +244,12 @@ const StatsMain: React.FC<Props> = ({ classes, onChange, data }) => {
       )}
       {!isCloud && (
         <div>
+          <BacklogTable
+            classes={classes}
+            backlog={data.critical}
+            title="Critical"
+            description="All Incidents with a severity of 'Production Outage / Critical Application halted'"
+          />
           <BacklogTable
             classes={classes}
             backlog={data.on_hold}
@@ -278,6 +304,12 @@ const StatsMain: React.FC<Props> = ({ classes, onChange, data }) => {
             backlog={data.aging}
             title="Aging"
             description="Incidents older than 90 days"
+          />
+          <BacklogTable
+            classes={classes}
+            backlog={data.new}
+            title="New Incidents"
+            description="Incidents with status 'New' not updated for more than 2 days"
           />
 
           <BacklogTable

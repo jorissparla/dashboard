@@ -65,7 +65,7 @@ const SupportCards = DynamicImport(() => import('./pages/SupportCards'));
 const RequestEditAdd = DynamicImport(() => import('./supportcard/Request'));
 const SupportCardEdit = DynamicImport(() => import('./supportcard/SupportCardEdit'));
 const SupportCardAdd = DynamicImport(() => import('./supportcard/SupportCardAdd'));
-const CourseView = DynamicImport(() => import('./pages/CourseView'));
+const CourseDashboard = DynamicImport(() => import('./pages/CourseDashboard'));
 const StudentListContainer = DynamicImport(() => import('./courses/StudentTableNew'));
 const StudentView = DynamicImport(() => import('./courses/StudentView'));
 
@@ -178,7 +178,7 @@ class AppRoutes extends React.Component {
                 user={user}
                 exact
                 path="/coursedashboard"
-                component={RequireAuth(CourseView)}
+                component={RequireAuth(CourseDashboard)}
               />
               <EnhancedRoute
                 editors={['Admin', 'PO']}
@@ -273,7 +273,7 @@ class AppRoutes extends React.Component {
               <Route exact path="/test/dashboard" component={DashBoardStatsNew} />
               <Route exact path="/test/dashboard/team/:team" component={DashBoardStatsNew} />
               <Route exact path="/courses" component={CourseList} user={user} />
-              <Route exact path="/courseview" component={CourseView} />
+              <Route exact path="/coursedashboard" component={CourseDashboard} />
               <Route exact path="/students" component={StudentListContainer} />
               <Route path="/students/:id" component={StudentView} />
               <AuthRoute
