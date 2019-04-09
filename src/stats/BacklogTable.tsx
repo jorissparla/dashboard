@@ -122,7 +122,6 @@ export const BacklogTable = ({ backlog, classes, title, description = title }: a
       setSorted({ name: column, direction: 'asc' });
     }
   }
-  console.log('render', mydata);
   return (
     <ExpansionPanel>
       <ExpansionPanelSummary className={classes.summary} expandIcon={<ExpandMoreIcon />}>
@@ -167,7 +166,7 @@ export const BacklogTable = ({ backlog, classes, title, description = title }: a
               <TableRow key={index} className={classes.row}>
                 <TableCell component="th" scope="row">
                   <a
-                    href={`http://navigator.infor.com/a/incident.asp?IncidentID=${row.incident}`}
+                    href={`http://navigator.infor.com/n/incident.asp?IncidentID=${row.incident}`}
                     target="_blank"
                   >
                     {row.incident}

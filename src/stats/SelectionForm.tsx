@@ -4,6 +4,7 @@ import { SelectionContext } from './SelectionContext';
 interface SelectionProps {
   classes: any;
   valuesChanged: any;
+  isValidSuperUser: boolean;
   initialValue: {
     isCloud: boolean;
     owner: string;
@@ -14,7 +15,8 @@ interface SelectionProps {
 export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
   classes,
   initialValue,
-  valuesChanged
+  valuesChanged,
+  isValidSuperUser
 }) => {
   const selectionContext = useContext(SelectionContext);
   const {
@@ -43,6 +45,7 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
       />
       <TextField
         value={ownerVal}
+        disabled={!isValidSuperUser}
         onChange={event => {
           setOwnerVal(event.target.value);
           setCriteriaChange(true);
@@ -54,21 +57,23 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
         }}
         placeholder="enter person"
       />
-      <FormLabel>Clear Owner / All Owners</FormLabel>
-      <Switch
-        checked={allOwners}
-        onChange={e => {
-          if (!allOwners) {
-            setOwnerVal('');
-          } else {
-            setOwnerVal(initialValue.owner);
-          }
-          toggleAllOwners(!allOwners);
-          setCriteriaChange(true);
-        }}
-        value={allOwners}
-        color="primary"
-      />
+      {isValidSuperUser && <FormLabel>Clear Owner / All Owners</FormLabel>}
+      {isValidSuperUser && (
+        <Switch
+          checked={allOwners}
+          onChange={e => {
+            if (!allOwners) {
+              setOwnerVal('');
+            } else {
+              setOwnerVal(initialValue.owner);
+            }
+            toggleAllOwners(!allOwners);
+            setCriteriaChange(true);
+          }}
+          value={allOwners}
+          color="primary"
+        />
+      )}
       <Button
         color="primary"
         className="button"

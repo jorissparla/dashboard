@@ -31,7 +31,7 @@ type CurrentUser = {
   location?: string;
   region?: string;
   role?: string;
-  permissions?: string[];
+  permissions?: { permission: string; ____typename: string }[];
 };
 
 interface UserProps {
@@ -74,7 +74,7 @@ export { CURRENT_USER_QUERY };
 export function withUser() {
   const result = useQuery(CURRENT_USER_QUERY, { suspend: false });
   if (result.loading) {
-    return <h1>loading";</h1>;
+    return null;
   }
   const data = result.data;
 

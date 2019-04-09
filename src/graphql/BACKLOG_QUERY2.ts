@@ -89,7 +89,7 @@ export const QUERY_BACKLOG = gql`
       deployment: "CLOUD"
       severityname: MAJOR
       since: 2
-      createdafter: "2019-02-25"
+      createdafter: "2019-03-01"
       date: $date
       statusFilter: BACKLOG
     ) {
@@ -101,7 +101,7 @@ export const QUERY_BACKLOG = gql`
       deployment: "CLOUD"
       severityname: MAJOR
       since: 2
-      createdafter: "2019-02-25"
+      createdafter: "2019-03-01"
       date: $date
       aging: 5
       statusFilter: BACKLOG
@@ -188,7 +188,7 @@ export const QUERY_BACKLOG = gql`
       deployment: "ALL"
       severityname: MAJOR
       since: 2
-      createdafter: "2019-02-25"
+      createdafter: "2019-03-01"
       date: $date
       statusFilter: BACKLOG
     ) {
@@ -200,7 +200,7 @@ export const QUERY_BACKLOG = gql`
       deployment: "ALL"
       severityname: MAJOR
       since: 2
-      createdafter: "2019-02-25"
+      createdafter: "2019-03-01"
       date: $date
       aging: 5
       statusFilter: BACKLOG

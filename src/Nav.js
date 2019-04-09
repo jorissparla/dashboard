@@ -12,12 +12,14 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import IconButton from '@material-ui/core/IconButton';
 import Avatar from '@material-ui/core/Avatar';
 import ActionHome from '@material-ui/icons/Home';
+import MyWorkList from '@material-ui/icons/EventNote';
 import NewsIcon from '@material-ui/icons/Event';
 import PeopleIcon from '@material-ui/icons/People';
 import ChatIcon from '@material-ui/icons/Chat';
 import PageIcon from '@material-ui/icons/Pages';
 import LinkIcon from '@material-ui/icons/Link';
 import ShareIcon from '@material-ui/icons/Share';
+import Person from '@material-ui/icons/PeopleOutline';
 import CameraIcon from '@material-ui/icons/PhotoCamera';
 import ApplicationIcon from '@material-ui/icons/Launch';
 import RequestListIcon from '@material-ui/icons/PlaylistAdd';
@@ -187,6 +189,10 @@ class Header extends React.Component {
     return (
       <List>
         <NavLink title="Home" Icon={ActionHome} navigateTo="/" history={history} />
+        {authenticated && isAdmin && (
+          <NavLink title="WorkList" Icon={MyWorkList} navigateTo="/mywork" history={history} />
+        )}
+        <NavLink title="Permissions" Icon={Person} navigateTo="/bla" history={history} />
         <ExpandableMenuItem classes={classes} title="Stats Graphs" Icon={GoLiveIcon}>
           <NavLink
             title="Logistics"

@@ -10,6 +10,7 @@ import { SelectionContext, SelectionProvider } from '../stats/SelectionContext';
 import { SelectionForm } from '../stats/SelectionForm';
 import { BacklogTable } from '../stats/BacklogTable';
 import Spinner from '../utils/spinner';
+import { withUser } from '../User';
 
 const styles = (theme: any) => ({
   root: theme.mixins.gutters({
@@ -99,6 +100,13 @@ const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
   const [isCloud, setisCloud] = useState(false);
   const [owner, setOwner] = useState(props.user.fullname);
 
+  const currentUser = withUser();
+  if (props.user.fullname === null || !currentUser) {
+    return <div>You need to be logged in to see this page</div>;
+  }
+
+  console.log('PROPS', currentUser);
+
   const { loading, data } = useQuery(QUERY_BACKLOG, {
     suspend: false,
     variables: { date, owner, deployment: 'ALL' }
@@ -111,13 +119,22 @@ const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
   // }
 
   const { classes, user } = props;
-  const isAdmin = ['admin', 'PO'].some(u => u === user.role);
+  let enableIt: boolean;
+  if (currentUser && currentUser.permissions) {
+    enableIt = currentUser.permissions.some(u => u.permission === 'STATS');
+  } else {
+    enableIt = false;
+  }
+
+  const isValidSuperUser = ['Admin', 'PO'].some(u => u === user.role) || enableIt;
+  console.log(isValidSuperUser, enableIt);
   const mostRecentUpdate = data ? data.mostRecentUpdate : new Date().toLocaleTimeString();
   const handleEnable = () => {};
   return (
     <SelectionProvider>
       <div className={classes.root}>
         <SelectionForm
+          isValidSuperUser={isValidSuperUser}
           classes={props.classes}
           initialValue={{ owner, isCloud, lastUpdated: mostRecentUpdate, actionNeeded: true }}
           valuesChanged={(a: string, b: boolean) => {
