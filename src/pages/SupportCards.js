@@ -2,6 +2,8 @@ import React from 'react';
 import gql from 'graphql-tag';
 import { graphql, compose, Query, Mutation } from 'react-apollo';
 import { SmallCard } from '../common/SmallCard';
+import NewCard from '../common/NewCard';
+
 //import { SmallCard } from "./SupportCard";
 import ReactMarkdown from 'react-markdown';
 import Dialog from '@material-ui/core/Dialog';
@@ -307,6 +309,7 @@ class SupportCards extends React.Component {
               const supportcard_id = id;
               const account_id = currentUser ? currentUser.id : null;
               return (
+                // <NewCard
                 <SmallCard
                   onTitleClick={() => this.togglePortal(description)}
                   color={backgroundcolor || cardColors[i % (cardColors.length - 1)].back}
@@ -315,6 +318,7 @@ class SupportCards extends React.Component {
                   authenticated={authenticated}
                   account_id={account_id}
                   isFavorite={isfavorite}
+                  updatedAt={updatedAt}
                   onToggleFavorite={() => {
                     isfavorite
                       ? unfavoriteCard({ variables: { input: { supportcard_id, account_id } } })

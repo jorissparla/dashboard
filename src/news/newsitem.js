@@ -8,7 +8,7 @@ import { TextField, Avatar } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
-import FileUploaderNew from '../courses/FileUploaderNew';
+import FileUploaderNew from '../common/FileUploaderNew';
 import SafeDeleteButton from '../videos/SafeDeleteButton';
 
 const Left = styled.div`
@@ -64,7 +64,7 @@ const NewsItem = ({
   classes
 }) => {
   const handleDelete = e => {
-    e.preventDefault();
+    console.log('Deleting item', e);
     onDelete(newsitem.id);
   };
   const [imageFile, setImageFile] = useState(newsitem.img || '');
