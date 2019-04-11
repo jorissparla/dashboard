@@ -1,25 +1,45 @@
-import * as React from 'react';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
-import { signoutUser } from '../actions';
-import { StaticContext } from 'react-router';
-import { DashBoardContext } from '../Provider';
+import * as React from "react";
+import { withRouter, RouteComponentProps } from "react-router-dom";
+import { StaticContext } from "react-router";
+import { DashBoardContext } from "../Provider";
+import gql from "graphql-tag";
+import { useQuery, useMutation } from "react-apollo-hooks";
+
+export const MUTATION_SIGNOUT = gql`
+  mutation MUTATION_SIGNOUT {
+    signout {
+      message
+    }
+  }
+`;
+
+const signoutUser = () => {
+  localStorage.removeItem("token");
+  localStorage.removeItem("name");
+  localStorage.removeItem("id");
+  localStorage.removeItem("role");
+  localStorage.setItem("email", "");
+  localStorage.setItem("picture", "");
+  localStorage.setItem("role", "");
+};
 
 interface Props {
   history: any;
 }
 
-export const Signout: React.FunctionComponent<RouteComponentProps<any, StaticContext, any>> = ({
-  history
-}) => {
+export const Signout: React.FunctionComponent<RouteComponentProps<any, StaticContext, any>> = ({ history }) => {
   let userCtx: any;
   userCtx = React.useContext(DashBoardContext);
+  const mutation = useMutation(MUTATION_SIGNOUT);
+  signoutUser();
+  mutation();
+  console.log("mutation done");
+  userCtx.clearUser();
   React.useEffect(() => {
-    signoutUser();
-    userCtx.clearUser();
     const h = setTimeout(() => {
-      window.location.reload();
-      history.replace('/');
-    }, 2000);
+      console.log("push2history");
+      history.push("/");
+    }, 500);
     return clearTimeout(h);
   }, []);
   return <div>Sorry to see you go...</div>;
