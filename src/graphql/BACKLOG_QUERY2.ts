@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import { StatusFilter } from './../../generated/apolloComponents';
 
 export const QUERY_BACKLOG = gql`
   # Write your query or mutation here
@@ -83,6 +84,15 @@ export const QUERY_BACKLOG = gql`
     ) {
       ...backlogfragment
     }
+    callbacks_cloud: backlog(
+      owner: $owner
+      orderBy: DAYS_DESC
+      deployment: "CLOUD"
+      status: "Awaiting Infor"
+      date: $date
+    ) {
+      ...backlogfragment
+    }
     major_impact_cloud: backlog(
       owner: $owner
       orderBy: DAYS_DESC
@@ -114,6 +124,17 @@ export const QUERY_BACKLOG = gql`
       orderBy: CREATED_ASC
       deployment: "CLOUD"
       aging: 90
+      date: $date
+      statusFilter: BACKLOG
+    ) {
+      ...backlogfragment
+    }
+    aging_dev_cloud: backlog(
+      owner: $owner
+      orderBy: CREATED_ASC
+      deployment: "CLOUD"
+      aging: 90
+      statusFilter: DEVELOPMENT
       date: $date
     ) {
       ...backlogfragment
@@ -182,6 +203,15 @@ export const QUERY_BACKLOG = gql`
     ) {
       ...backlogfragment
     }
+    callbacks: backlog(
+      owner: $owner
+      orderBy: DAYS_DESC
+      deployment: "ALL"
+      status: "Awaiting Infor"
+      date: $date
+    ) {
+      ...backlogfragment
+    }
     major_impact: backlog(
       owner: $owner
       orderBy: DAYS_DESC
@@ -208,7 +238,24 @@ export const QUERY_BACKLOG = gql`
       ...backlogfragment
     }
 
-    aging: backlog(owner: $owner, orderBy: CREATED_ASC, deployment: "ALL", aging: 90, date: $date) {
+    aging: backlog(
+      owner: $owner
+      orderBy: CREATED_ASC
+      deployment: "ALL"
+      aging: 90
+      date: $date
+      statusFilter: BACKLOG
+    ) {
+      ...backlogfragment
+    }
+    aging_dev: backlog(
+      owner: $owner
+      orderBy: CREATED_ASC
+      deployment: "ALL"
+      aging: 90
+      date: $date
+      statusFilter: DEVELOPMENT
+    ) {
       ...backlogfragment
     }
     new: backlog(

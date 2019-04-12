@@ -39,7 +39,7 @@ interface UserProps {
 }
 const User: FunctionComponent<UserProps> = (props: any) => {
   const { children } = props;
-  return <Query query={CURRENT_USER_QUERY}>{payload => children(payload)}</Query>;
+  return <Query query={CURRENT_USER_QUERY}>{(payload: any) => children(payload)}</Query>;
 };
 
 export const UserProfileComponent: FunctionComponent<any> = (props: any) => {
