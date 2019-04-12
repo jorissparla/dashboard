@@ -1,10 +1,9 @@
-import React, { Component } from 'react';
-import gql from 'graphql-tag';
-import { graphql } from 'react-apollo';
-//import { format } from 'date-fns';
-import { format } from '../utils/format';
-import styled from 'styled-components';
-import { Card } from './card';
+import React, { Component } from "react";
+import gql from "graphql-tag";
+import { graphql } from "react-apollo";
+import styled from "styled-components";
+import { Card } from "./card";
+import { FormattedDate } from "../utils/FormattedDate";
 
 const Outer = styled.div`
   display: flex;
@@ -12,10 +11,10 @@ const Outer = styled.div`
 `;
 
 const mapGender = g => {
-  if (g === 'M') {
-    return 'male';
+  if (g === "M") {
+    return "male";
   } else {
-    return 'female';
+    return "female";
   }
 };
 
@@ -25,23 +24,19 @@ const H3Styled = styled.h3`
   padding-left: 30px;
 `;
 
-const dateToDMYString = date => {
-  return format(date, 'DDMMMYYYY');
-};
-
 class KudoListComponent extends Component {
   renderItems(kudos) {
-    const { REACT_APP_SERVER = 'nlbavwixs' } = process.env;
+    const { REACT_APP_SERVER = "nlbavwixs" } = process.env;
     if (!kudos) return null;
     return kudos.map(({ ownerrep_name, customer_name, account, survey_date, pic }, index) => {
       const mgender = mapGender(account.gender);
       const img = pic ? `${pic}` : `http://${REACT_APP_SERVER}/images/${mgender}.png`;
       const initials = pic
-        ? ''
+        ? ""
         : ownerrep_name
-            .split(' ')
+            .split(" ")
             .map(name => name[0])
-            .join('')
+            .join("")
             .toUpperCase();
       return (
         <Card
@@ -50,7 +45,7 @@ class KudoListComponent extends Component {
           key={index}
           text={customer_name}
           title={ownerrep_name}
-          buttonText={dateToDMYString(survey_date)}
+          buttonText={FormattedDate(survey_date)}
           width="10%"
         />
       );
@@ -62,7 +57,7 @@ class KudoListComponent extends Component {
     const {
       data: { loading, kudos, error }
     } = this.props;
-    console.log('KudoListComponentNew', this.props, kudos);
+    console.log("KudoListComponentNew", this.props, kudos);
 
     if (loading) {
       return <div>Loading</div>;

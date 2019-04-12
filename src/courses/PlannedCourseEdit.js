@@ -1,20 +1,19 @@
-import React from 'react';
-import gql from 'graphql-tag';
-import { Query, Mutation } from 'react-apollo';
-import { adopt } from 'react-adopt';
-import _ from 'lodash';
-//import format from 'date-fns/format';
-import { format } from '../utils/format';
-import { withRouter } from 'react-router';
-import PlannedCourseFormNew from './PlannedCourseFormNew';
-import EditStudentsOnCourse from './EditStudentsOnCourse';
-import Button from '@material-ui/core/Button';
-import Snackbar from '@material-ui/core/Snackbar';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-import { ADD_PARTICIPANTS_TO_COURSE } from './EditStudentsOnCourse';
-import { QUERY_SCHEDULED_COURSES } from './PlannedCoursesNew';
-import { fromPromise } from 'apollo-link';
+import React from "react";
+import gql from "graphql-tag";
+import { Query, Mutation } from "react-apollo";
+import { adopt } from "react-adopt";
+import _ from "lodash";
+import { withRouter } from "react-router";
+import PlannedCourseFormNew from "./PlannedCourseFormNew";
+import EditStudentsOnCourse from "./EditStudentsOnCourse";
+import Button from "@material-ui/core/Button";
+import Snackbar from "@material-ui/core/Snackbar";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+import { ADD_PARTICIPANTS_TO_COURSE } from "./EditStudentsOnCourse";
+import { QUERY_SCHEDULED_COURSES } from "./PlannedCoursesNew";
+import { FormattedDate, FormattedDateNow } from "../utils/FormattedDate";
+
 const PLANNEDCOURSE_DELETE_MUTATION = gql`
   mutation PLANNEDCOURSE_DELETE_MUTATION($input: InputPlannedCourseType) {
     deletePlannedCourse(input: $input) {
@@ -61,12 +60,6 @@ const QUERY_SINGLE_PLANNEDCOURSE = gql`
   }
 `;
 
-const styles = theme => ({
-  close: {
-    padding: theme.spacing.unit / 2
-  }
-});
-
 const Composed = adopt({
   updatePlannedCourse: ({ render }) => (
     <Mutation
@@ -102,34 +95,34 @@ class PlannedCourseEdit extends React.Component {
     id2: this.props.match.params.id2,
     participants: [],
     open: false,
-    message: ''
+    message: ""
   };
   handleSave = async (values, updatePlannedCourse, updatePlannedCourseParticipants) => {
     const input = {
       ...values,
       id: this.state.id2,
-      updatedAt: format(Date.now(), 'YYYY-MM-DD')
+      updatedAt: FormattedDateNow()
     };
     const res = await updatePlannedCourse({ variables: { input } });
     const lop = res.data.updatePlannedCourse.course.students;
-    const participants = lop.map(p => p.fullname).join(';');
+    const participants = lop.map(p => p.fullname).join(";");
     const result = await updatePlannedCourseParticipants({
       variables: { participants, id: this.state.id2 }
     });
     console.log(result);
     if (result.data) {
-      this.setState({ open: true, message: 'Schedule Updated' });
+      this.setState({ open: true, message: "Schedule Updated" });
     } else {
-      this.setState({ open: true, message: 'An error has occurred' });
+      this.setState({ open: true, message: "An error has occurred" });
     }
   };
 
   handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
+    if (reason === "clickaway") {
       return;
     }
 
-    this.setState({ open: false, message: '' });
+    this.setState({ open: false, message: "" });
   };
 
   handleParticipants = participants => this.setState({ participants });
@@ -142,7 +135,7 @@ class PlannedCourseEdit extends React.Component {
       <Query query={QUERY_SINGLE_PLANNEDCOURSE} variables={{ id: id2 }}>
         {({ data, loading, error }) => {
           if (loading) {
-            return 'loading...';
+            return "loading...";
           }
           if (!data || !data.plannedcourse) {
             history.push(`/courses/edit/${id}`);
@@ -154,8 +147,8 @@ class PlannedCourseEdit extends React.Component {
           /*   if (students && this.state.participants.length === 0) {
             this.setState({ participants: students });
           } */
-          startdate = format(startdate, 'YYYY-MM-DD');
-          enddate = format(parseInt(enddate), 'YYYY-MM-DD');
+          startdate = FormattedDate(startdate);
+          enddate = FormattedDate(enddate);
           const dates = { startdate, enddate };
           //return <h1>pcEdut</h1>;
           return (
@@ -165,14 +158,14 @@ class PlannedCourseEdit extends React.Component {
                   <React.Fragment>
                     <Snackbar
                       anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'left'
+                        vertical: "bottom",
+                        horizontal: "left"
                       }}
                       open={this.state.open}
                       autoHideDuration={3000}
                       onClose={this.handleClose}
                       ContentProps={{
-                        'aria-describedby': 'message-id'
+                        "aria-describedby": "message-id"
                       }}
                       message={<span id="message-id">Data Submitted</span>}
                       action={[
@@ -203,24 +196,20 @@ class PlannedCourseEdit extends React.Component {
                       }}
                       onSave={async values => {
                         const input = _.pick(values, [
-                          'id',
-                          'courseid',
-                          'team',
-                          'startdate',
-                          'enddate',
-                          'link',
-                          'type',
-                          'hours',
-                          'status',
-                          'applicable',
-                          'details',
-                          'trainer'
+                          "id",
+                          "courseid",
+                          "team",
+                          "startdate",
+                          "enddate",
+                          "link",
+                          "type",
+                          "hours",
+                          "status",
+                          "applicable",
+                          "details",
+                          "trainer"
                         ]);
-                        this.handleSave(
-                          input,
-                          updatePlannedCourse,
-                          updatePlannedCourseParticipants
-                        );
+                        this.handleSave(input, updatePlannedCourse, updatePlannedCourseParticipants);
                       }}
                     />
                     <EditStudentsOnCourse

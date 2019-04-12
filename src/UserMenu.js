@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Avatar from "@material-ui/core/Avatar";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { withRouter } from "react-router";
 

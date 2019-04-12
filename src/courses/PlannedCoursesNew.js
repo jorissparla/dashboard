@@ -1,21 +1,21 @@
-import React from 'react';
-import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import EditIcon from '@material-ui/icons/Edit';
-import PeopleIcon from '@material-ui/icons/People';
-import Button from '@material-ui/core/Button';
-import { withStyles } from '@material-ui/core/styles';
-import { blue, red } from '@material-ui/core/colors';
-import { format } from '../utils/format';
-import { withRouter } from 'react-router';
-import { Title, HeaderRow, HeaderLeft, HeaderRight } from '../styles';
-import withAuth from '../utils/withAuth';
-import EditStudentsOnCourse from './EditStudentsOnCourse';
+import React from "react";
+import gql from "graphql-tag";
+import { Query } from "react-apollo";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import EditIcon from "@material-ui/icons/Edit";
+import PeopleIcon from "@material-ui/icons/People";
+import Button from "@material-ui/core/Button";
+import { withStyles } from "@material-ui/core/styles";
+import { blue, red } from "@material-ui/core/colors";
+import { LongFormattedDate } from "../utils/FormattedDate";
+import { withRouter } from "react-router";
+import { Title, HeaderRow, HeaderLeft, HeaderRight } from "../styles";
+import withAuth from "../utils/withAuth";
+import EditStudentsOnCourse from "./EditStudentsOnCourse";
 
 const styles = theme => ({
   root: {
@@ -23,11 +23,11 @@ const styles = theme => ({
     paddingTop: theme.spacing.unit * 2,
     paddingBottom: theme.spacing.unit * 2,
     padding: theme.spacing.unit * 2,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    margin: '15px',
-    minWidth: '200px'
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    margin: "15px",
+    minWidth: "200px"
   },
   headerStyle: {
     fontSize: 18,
@@ -50,17 +50,17 @@ const styles = theme => ({
   },
   button2: {
     margin: 12,
-    backgroundColor: 'black',
-    primaryColor1: 'black'
+    backgroundColor: "black",
+    primaryColor1: "black"
   },
   buttonback: {
     margin: 12,
-    backgroundColor: 'orange'
+    backgroundColor: "orange"
   },
 
   iconStyle0: {
     width: 24,
-    color: 'black'
+    color: "black"
   },
   iconStyle: {
     width: 24,
@@ -116,10 +116,6 @@ export const QUERY_SCHEDULED_COURSES = gql`
   }
 `;
 
-const fmtDate = val => {
-  return format(val, 'ddd, DD MMM YYYY');
-};
-
 const HeaderColumn = ({ children, small }) => {
   if (small) {
     return <TableCell style={styles.headerStyleSmall}>{children}</TableCell>;
@@ -134,7 +130,7 @@ const RowColumn = ({ children, small }) => {
 
 class PlannedCoursesTableNew extends React.Component {
   state = {
-    selected: ''
+    selected: ""
   };
   render() {
     const { classes, authenticated } = this.props;
@@ -144,9 +140,9 @@ class PlannedCoursesTableNew extends React.Component {
       <Query query={QUERY_SCHEDULED_COURSES} variables={{ nid: id }}>
         {props => {
           if (props.loading) {
-            return 'loading';
+            return "loading";
           }
-          if (!props.data) return 'Loading...';
+          if (!props.data) return "Loading...";
           const { course } = props.data;
           return (
             <React.Fragment>
@@ -195,13 +191,13 @@ class PlannedCoursesTableNew extends React.Component {
                   {course.plannedcourses.map((plan, index) => (
                     <React.Fragment key={index}>
                       <TableRow key={index}>
-                        <RowColumn>{fmtDate(plan.startdate)}</RowColumn>
-                        <RowColumn>{fmtDate(plan.enddate)}</RowColumn>
+                        <RowColumn>{LongFormattedDate(plan.startdate)}</RowColumn>
+                        <RowColumn>{LongFormattedDate(plan.enddate)}</RowColumn>
                         <RowColumn small={true}>{plan.trainer}</RowColumn>
                         <RowColumn small={true}>{plan.status}</RowColumn>
                         <RowColumn small={true}>{plan.hours}</RowColumn>
                         <RowColumn small={true}>
-                          {plan.studentcount}{' '}
+                          {plan.studentcount}{" "}
                           {
                             <PeopleIcon
                               title="Edit registration"
@@ -219,11 +215,7 @@ class PlannedCoursesTableNew extends React.Component {
                         </RowColumn>
                         <RowColumn small={true}>
                           <EditIcon
-                            onClick={() =>
-                              this.props.history.push(
-                                `/scheduledcourses/${course.id}/edit/${plan.id}`
-                              )
-                            }
+                            onClick={() => this.props.history.push(`/scheduledcourses/${course.id}/edit/${plan.id}`)}
                           />
                           {/* <TrashIcon onClick={() => console.log(plan.id)} /> */}
                         </RowColumn>
@@ -235,7 +227,7 @@ class PlannedCoursesTableNew extends React.Component {
                               id={plan.id}
                               initialValues={{ students: plan.students }}
                               onChange={state => {
-                                console.log('State', state);
+                                console.log("State", state);
                                 //this.setState({ selected: '' });
                               }}
                             />

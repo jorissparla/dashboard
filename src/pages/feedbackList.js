@@ -1,24 +1,24 @@
-import React, { Component } from 'react';
-import gql from 'graphql-tag';
-import { graphql, compose } from 'react-apollo';
-import Paper from '@material-ui/core/Paper';
-import { withRouter } from 'react-router';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import Divider from '@material-ui/core/Divider';
-import TextField from '@material-ui/core/TextField';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-import styled from 'styled-components';
-import { HeaderRow, HeaderLeft, HeaderRight, Title, Image } from '../styles';
-import Dialog from '@material-ui/core/Dialog';
-import Save from '@material-ui/icons/Save';
-import Undo from '@material-ui/icons/Undo';
-import Clear from '@material-ui/icons/Clear';
-import Button from '@material-ui/core/Button';
-import { format } from '../utils/format';
+import React, { Component } from "react";
+import gql from "graphql-tag";
+import { graphql, compose } from "react-apollo";
+import Paper from "@material-ui/core/Paper";
+import { withRouter } from "react-router";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import Divider from "@material-ui/core/Divider";
+import TextField from "@material-ui/core/TextField";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
+import styled from "styled-components";
+import { HeaderRow, HeaderLeft, HeaderRight, Title, Image } from "../styles";
+import Dialog from "@material-ui/core/Dialog";
+import Save from "@material-ui/icons/Save";
+import Undo from "@material-ui/icons/Undo";
+import Clear from "@material-ui/icons/Clear";
+import Button from "@material-ui/core/Button";
+import { FormattedDate } from "../utils/FormattedDate";
 
 const Left = styled.div`
   display: flex;
@@ -81,14 +81,14 @@ class FeedBackList extends Component {
   state = {
     index: null,
     currentid: null,
-    text: '',
-    orgtext: '',
+    text: "",
+    orgtext: "",
     open: false,
-    navid: '',
-    fullname: '',
-    image: '',
-    customername: '',
-    newtext: '',
+    navid: "",
+    fullname: "",
+    image: "",
+    customername: "",
+    newtext: "",
     createdAt: new Date()
   };
 
@@ -96,13 +96,13 @@ class FeedBackList extends Component {
     this.setState({
       currentid: null,
       index: null,
-      text: '',
-      orgtext: '',
-      navid: '',
-      fullname: '',
-      image: '',
-      customername: '',
-      newtext: '',
+      text: "",
+      orgtext: "",
+      navid: "",
+      fullname: "",
+      image: "",
+      customername: "",
+      newtext: "",
       createdAt: new Date()
     });
   };
@@ -125,18 +125,18 @@ class FeedBackList extends Component {
   };
 
   componentDidMount() {
-    console.log('mounting');
+    console.log("mounting");
   }
 
   renderListItem = (item, index) => {
     const { id, text, createdAt, customername, forConsultant } = item;
-    const { image, fullname } = forConsultant || { image: '', fullname: 'None' };
+    const { image, fullname } = forConsultant || { image: "", fullname: "None" };
     return (
       <React.Fragment key={index}>
         <ListItem key={index}>
           <Left>
             <Image image={image} fullname={fullname} />
-            <DateField>{format(createdAt, 'DD-MM-YYYY')}</DateField>
+            <DateField>{FormattedDate(createdAt)}</DateField>
           </Left>
           <ListItemText
             primary={`${fullname} ( ${customername} )`}
@@ -144,10 +144,10 @@ class FeedBackList extends Component {
               this.state.currentid === id ? (
                 <React.Fragment
                   style={{
-                    display: 'flex',
-                    justifyContent: 'center',
+                    display: "flex",
+                    justifyContent: "center",
                     marginRight: 2,
-                    color: '#40a5ed',
+                    color: "#40a5ed",
                     height: 100
                   }}
                 >
@@ -157,9 +157,9 @@ class FeedBackList extends Component {
                     multiLine={true}
                     rows={2}
                     style={{
-                      fontSize: '14px',
-                      border: ' 1px solid #40a5ed',
-                      textColor: 'white',
+                      fontSize: "14px",
+                      border: " 1px solid #40a5ed",
+                      textColor: "white",
                       marginTop: 0
                     }}
                     value={this.state.text}
@@ -198,27 +198,17 @@ class FeedBackList extends Component {
         </HeaderLeft>
         {isEditor && (
           <HeaderRight>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => this.props.history.push('/addfeedback')}
-            >
+            <Button variant="contained" color="primary" onClick={() => this.props.history.push("/addfeedback")}>
               New
             </Button>
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={() => this.props.history.push('/comments')}
-            >
+            <Button variant="contained" color="secondary" onClick={() => this.props.history.push("/comments")}>
               Surveys
             </Button>
           </HeaderRight>
         )}
       </HeaderRow>,
       <Paper key="555paper">
-        <List key="fblist">
-          {feedback ? feedback.map((item, index) => this.renderListItem(item, index)) : <div />}
-        </List>
+        <List key="fblist">{feedback ? feedback.map((item, index) => this.renderListItem(item, index)) : <div />}</List>
       </Paper>
     ];
   }
@@ -273,12 +263,7 @@ class FeedBackList extends Component {
       <Button key="okb" variant="contained" color="primary" onClick={this.saveEntry}>
         Ok
       </Button>,
-      <Button
-        key="canb"
-        variant="contained"
-        color="secondary"
-        onClick={() => this.setState({ open: false })}
-      >
+      <Button key="canb" variant="contained" color="secondary" onClick={() => this.setState({ open: false })}>
         Cancel
       </Button>
     ];
@@ -290,7 +275,7 @@ class FeedBackList extends Component {
         modal={false}
         open={this.state.open}
         onRequestClose={this.handleClose}
-        style={{ width: '900px' }}
+        style={{ width: "900px" }}
       >
         <Select
           id="person"
@@ -339,9 +324,9 @@ class FeedBackList extends Component {
 
 export default compose(
   graphql(ALL_FEEDBACK_QUERY),
-  graphql(updateFeedback, { name: 'updateFeedback' }),
-  graphql(deleteFeedback, { name: 'deleteFeedback' }),
-  graphql(createFeedback, { name: 'createFeedback' })
+  graphql(updateFeedback, { name: "updateFeedback" }),
+  graphql(deleteFeedback, { name: "deleteFeedback" }),
+  graphql(createFeedback, { name: "createFeedback" })
 )(withRouter(FeedBackList));
 
 export { ALL_FEEDBACK_QUERY };

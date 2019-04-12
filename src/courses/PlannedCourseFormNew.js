@@ -1,22 +1,23 @@
-import React from 'react';
-import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
-import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
-import Chip from '@material-ui/core/Chip';
-import Typography from '@material-ui/core/Typography';
-import { Formik } from 'formik';
-import { TextField, Select, FormControl, InputLabel, MenuItem } from '@material-ui/core';
-import Badge from '@material-ui/core/Badge';
-import { withStyles } from '@material-ui/core/styles';
-import { withRouter } from 'react-router';
-import * as yup from 'yup';
+import React from "react";
+import gql from "graphql-tag";
+import { Query } from "react-apollo";
+import Paper from "@material-ui/core/Paper";
+import Button from "@material-ui/core/Button";
+import Chip from "@material-ui/core/Chip";
+import Typography from "@material-ui/core/Typography";
+import { Formik } from "formik";
+import { TextField, Select, FormControl, InputLabel, MenuItem } from "@material-ui/core";
+import Badge from "@material-ui/core/Badge";
+import { withStyles } from "@material-ui/core/styles";
+import { withRouter } from "react-router";
+import * as yup from "yup";
 //import format from "date-fns/format";
-import { format, distanceInWordsToNow } from '../utils/format';
-import addHours from 'date-fns/add_hours';
+import { format, distanceInWordsToNow } from "../utils/format";
+import { FormattedDate, FormattedDateNextDay } from "../utils/FormattedDate";
+import addHours from "date-fns/add_hours";
 //import { distanceInWordsToNow } from "date-fns";
-import { adopt } from 'react-adopt';
-import { QUERY_PLANNED_COURSES } from './CourseFormNew';
+import { adopt } from "react-adopt";
+import { QUERY_PLANNED_COURSES } from "./CourseFormNew";
 
 const validationSchema = yup.object().shape({
   startdate: yup.string().required(),
@@ -29,12 +30,12 @@ const styles = theme => ({
     paddingTop: theme.spacing.unit * 2,
     paddingBottom: theme.spacing.unit * 2,
     padding: theme.spacing.unit * 2,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    margin: '15px',
-    minWidth: '200px',
-    backgroundColor: 'rgba(33, 150, 243, 0.22)'
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    margin: "15px",
+    minWidth: "200px",
+    backgroundColor: "rgba(33, 150, 243, 0.22)"
   },
   button2: {
     margin: theme.spacing.unit,
@@ -45,17 +46,17 @@ const styles = theme => ({
   },
   margin: {
     margin: theme.spacing.unit * 2,
-    color: 'black'
+    color: "black"
   },
   block: {
-    display: 'flex',
+    display: "flex",
     margin: 10,
-    alignItems: 'center'
+    alignItems: "center"
   },
   buttonDel: {
     margin: theme.spacing.unit,
-    color: '#FFF',
-    backgroundColor: '#000'
+    color: "#FFF",
+    backgroundColor: "#000"
   },
 
   textField: {
@@ -67,7 +68,7 @@ const styles = theme => ({
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
     marginBottom: 20,
-    width: '90%'
+    width: "90%"
   },
   hourField: {
     marginLeft: theme.spacing.unit,
@@ -76,7 +77,7 @@ const styles = theme => ({
     width: 50
   },
   error: {
-    color: '#f44336'
+    color: "#f44336"
   }
 });
 
@@ -114,10 +115,10 @@ const Composed = adopt({
 });
 
 const teams = [
-  { id: 1, name: 'Logistics' },
-  { id: 2, name: 'Finance' },
-  { id: 3, name: 'Tools' },
-  { id: 4, name: 'General' }
+  { id: 1, name: "Logistics" },
+  { id: 2, name: "Finance" },
+  { id: 3, name: "Tools" },
+  { id: 4, name: "General" }
 ];
 
 class PlannedCourseForm extends React.Component {
@@ -125,15 +126,15 @@ class PlannedCourseForm extends React.Component {
     initialValues: this.props.initialValues || {
       courseid: this.props.course.id,
       hours: 4,
-      trainer: 'LN Employee',
-      status: 'Released',
-      team: 'Logistics',
-      details: '',
-      type: 'Class Room Training',
-      category: 'Product',
-      startdate: format(addHours(Date.now(), 24), 'YYYY-MM-DD'),
-      enddate: format(addHours(Date.now(), 24), 'YYYY-MM-DD'),
-      updatedAt: ''
+      trainer: "LN Employee",
+      status: "Released",
+      team: "Logistics",
+      details: "",
+      type: "Class Room Training",
+      category: "Product",
+      startdate: FormattedDateNextDay(Date.now()),
+      enddate: FormattedDateNextDay(Date.now()),
+      updatedAt: ""
     }
   };
 
@@ -141,20 +142,15 @@ class PlannedCourseForm extends React.Component {
     const { classes, history, id } = this.props;
     return (
       <Composed id={id}>
-        {({
-          coursedata: { data, loading, error },
-          plannedcourses: { data: plannedcoursedata, loading: loading2 }
-        }) => {
+        {({ coursedata: { data, loading, error }, plannedcourses: { data: plannedcoursedata, loading: loading2 } }) => {
           if (loading || loading2) {
-            return 'Loading...';
+            return "Loading...";
           }
           const {
             course: { plannedcourses }
           } = plannedcoursedata;
           const { coursetypes, statuses, supportfolks } = data;
           const { course, id } = this.props;
-          // const nstartdate = format(addHours(Date.now(), 24), 'YYYY-MM-DD');
-          // const nenddate = format(addHours(Date.now(), 24), 'YYYY-MM-DD');
           return (
             <Formik
               initialValues={this.state.initialValues}
@@ -163,16 +159,7 @@ class PlannedCourseForm extends React.Component {
               }}
               validationSchema={validationSchema}
             >
-              {({
-                values,
-                handleChange,
-                handleBlur,
-                handleSubmit,
-                setFieldValue,
-                touched,
-                errors,
-                isSubmitting
-              }) => (
+              {({ values, handleChange, handleBlur, handleSubmit, setFieldValue, touched, errors, isSubmitting }) => (
                 <form onSubmit={handleSubmit}>
                   <Paper className={classes.root}>
                     <Typography variant="h5" gutterBottom>
@@ -229,15 +216,9 @@ class PlannedCourseForm extends React.Component {
                       />
                     </div>
 
-                    {touched.startdate && errors.startdate && (
-                      <div className={classes.error}>{errors.startdate}</div>
-                    )}
-                    {touched.enddate && errors.enddate && (
-                      <div className={classes.error}>{errors.enddate}</div>
-                    )}
-                    {touched.hours && errors.hours && (
-                      <div className={classes.error}>{errors.hours}</div>
-                    )}
+                    {touched.startdate && errors.startdate && <div className={classes.error}>{errors.startdate}</div>}
+                    {touched.enddate && errors.enddate && <div className={classes.error}>{errors.enddate}</div>}
+                    {touched.hours && errors.hours && <div className={classes.error}>{errors.hours}</div>}
 
                     <div className={classes.block}>
                       <FormControl className={classes.formControl}>
@@ -357,7 +338,7 @@ class PlannedCourseForm extends React.Component {
                         variant="contained"
                         color="secondary"
                         className={classes.button2}
-                        onClick={() => history.push('/courses')}
+                        onClick={() => history.push("/courses")}
                       >
                         Back to courses
                       </Button>
@@ -373,15 +354,11 @@ class PlannedCourseForm extends React.Component {
                           >
                             Delete Scheduled course
                           </Button>
-                          <Badge
-                            color="primary"
-                            badgeContent={plannedcourses.length}
-                            className={classes.margin}
-                          >
+                          <Badge color="primary" badgeContent={plannedcourses.length} className={classes.margin}>
                             <Button
                               variant="contained"
                               className={classes.button}
-                              onClick={() => history.push('/scheduledcourses/' + id)}
+                              onClick={() => history.push("/scheduledcourses/" + id)}
                             >
                               Scheduled Courses
                             </Button>
@@ -389,7 +366,7 @@ class PlannedCourseForm extends React.Component {
                           <Button
                             variant="contained"
                             className={classes.button2}
-                            onClick={() => history.push('/scheduledcourses/' + id + '/new')}
+                            onClick={() => history.push("/scheduledcourses/" + id + "/new")}
                           >
                             Schedule New Course
                           </Button>
@@ -399,7 +376,7 @@ class PlannedCourseForm extends React.Component {
                         label={
                           values.updatedAt
                             ? `Last updated  ${distanceInWordsToNow(values.updatedAt)} ago`
-                            : 'not Saved yet'
+                            : "not Saved yet"
                         }
                       />
                     </div>

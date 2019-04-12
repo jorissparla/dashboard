@@ -1,78 +1,78 @@
-import React from 'react';
-import { withRouter } from 'react-router';
-import Chip from '@material-ui/core/Chip';
-import Select from '@material-ui/core/Select';
-import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
-import MenuItem from '@material-ui/core/MenuItem';
+import React from "react";
+import { withRouter } from "react-router";
+import Chip from "@material-ui/core/Chip";
+import Select from "@material-ui/core/Select";
+import TextField from "@material-ui/core/TextField";
+import Paper from "@material-ui/core/Paper";
+import MenuItem from "@material-ui/core/MenuItem";
 //import { format } from 'date-fns';
-import { format } from '../utils/format';
-import { CardSection } from '../common';
-import { Formik } from 'formik';
-import Button from '@material-ui/core/Button';
-import { withStyles } from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
-import FormControl from '@material-ui/core/FormControl';
-import ReactMarkdown from 'react-markdown';
-import User, { withUser } from '../User';
+import { FormattedDateNow, LongFormattedDate } from "../utils/FormattedDate";
+import { CardSection } from "../common";
+import { Formik } from "formik";
+import Button from "@material-ui/core/Button";
+import { withStyles } from "@material-ui/core/styles";
+import InputLabel from "@material-ui/core/InputLabel";
+import FormControl from "@material-ui/core/FormControl";
+import ReactMarkdown from "react-markdown";
+import User, { withUser } from "../User";
 
 const owners = [
-  { id: 'Ricardo Exposito', name: 'Ricardo Exposito' },
-  { id: 'Massimo Favaro', name: 'Massimo Favaro' },
-  { id: 'Maribel Aguilella', name: 'Maribel Aguilella' },
-  { id: 'Joris Sparla', name: 'Joris Sparla' },
-  { id: 'Luis Casanova', name: 'Luis Casanova' }
+  { id: "Ricardo Exposito", name: "Ricardo Exposito" },
+  { id: "Massimo Favaro", name: "Massimo Favaro" },
+  { id: "Maribel Aguilella", name: "Maribel Aguilella" },
+  { id: "Joris Sparla", name: "Joris Sparla" },
+  { id: "Luis Casanova", name: "Luis Casanova" }
 ];
 
 const paperStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'space-between',
-  margin: '15px',
-  padding: '10px',
-  minWidth: '200px'
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-between",
+  margin: "15px",
+  padding: "10px",
+  minWidth: "200px"
 };
 
 const styles = theme => ({
   container: {
-    display: 'flex',
-    flexWrap: 'wrap'
+    display: "flex",
+    flexWrap: "wrap"
   },
   button: {
     margin: theme.spacing.unit
   },
   button2: {
     margin: theme.spacing.unit,
-    height: '40px',
-    backgroundColor: 'palevioletred'
+    height: "40px",
+    backgroundColor: "palevioletred"
   },
 
   buttonDel: {
     margin: theme.spacing.unit,
-    backgroundColor: '#000'
+    backgroundColor: "#000"
   },
 
   textField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
     width: 200,
-    height: '100%'
+    height: "100%"
   },
   titleField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
-    fontSize: '40px',
-    color: '#039BE5'
+    fontSize: "40px",
+    color: "#039BE5"
   },
   content: {
-    display: 'flex'
+    display: "flex"
   },
   contentField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
-    backgroundColor: '#eeeeee99',
+    backgroundColor: "#eeeeee99",
     fontSize: 40,
-    minHeight: '50vh'
+    minHeight: "50vh"
   },
   dense: {
     marginTop: 19
@@ -82,9 +82,9 @@ const styles = theme => ({
     minWidth: 120
   },
   markdown: {
-    width: '90vw',
-    height: '60vh',
-    overflow: 'scroll'
+    width: "90vw",
+    height: "60vh",
+    overflow: "scroll"
   },
   menu: {
     width: 200
@@ -94,7 +94,7 @@ const styles = theme => ({
 const SupportCardForm = props => {
   const {
     supportcard,
-    categories = [{ id: 1, category: 'Cloud' }, { id: 2, category: 'IXS' }],
+    categories = [{ id: 1, category: "Cloud" }, { id: 2, category: "IXS" }],
     initialValues,
     onSave,
     authenticated,
@@ -104,33 +104,21 @@ const SupportCardForm = props => {
   } = props;
   const readOnly = !authenticated;
   const [on, toggle] = React.useState(false);
-  const updatedAt = supportcard ? supportcard.updatedAt : format(new Date(), 'YYYY-MM-DD');
+  const updatedAt = supportcard ? supportcard.updatedAt : FormattedDateNow();
   const currentUser = withUser();
-  console.log('blba', { initialValues }, currentUser);
+  console.log("blba", { initialValues }, currentUser);
   let newInitialValues =
-    currentUser && !initialValues.owner
-      ? { ...initialValues, owner: currentUser.fullname }
-      : initialValues;
+    currentUser && !initialValues.owner ? { ...initialValues, owner: currentUser.fullname } : initialValues;
   return (
     <Paper style={paperStyle}>
       <Formik
         initialValues={newInitialValues}
         onSubmit={values => {
-          console.log('Submitting value', values);
+          console.log("Submitting value", values);
           onSave(values);
         }}
       >
-        {({
-          values,
-          touched,
-          errors,
-          dirty,
-          isSubmitting,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          handleReset
-        }) => {
+        {({ values, touched, errors, dirty, isSubmitting, handleChange, handleBlur, handleSubmit, handleReset }) => {
           return (
             <form onSubmit={handleSubmit}>
               <TextField
@@ -165,13 +153,8 @@ const SupportCardForm = props => {
                   </div>
                 )}
                 {!readOnly && (
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    className={classes.button2}
-                    onClick={() => toggle(!on)}
-                  >
-                    {on ? 'Preview' : 'Edit '}
+                  <Button variant="contained" color="primary" className={classes.button2} onClick={() => toggle(!on)}>
+                    {on ? "Preview" : "Edit "}
                   </Button>
                 )}
               </div>
@@ -182,8 +165,8 @@ const SupportCardForm = props => {
                   onChange={handleChange}
                   disabled={readOnly}
                   inputProps={{
-                    name: 'categoryname',
-                    id: 'category-simple'
+                    name: "categoryname",
+                    id: "category-simple"
                   }}
                 >
                   {categories.map(({ id, name }) => (
@@ -200,8 +183,8 @@ const SupportCardForm = props => {
                   onChange={handleChange}
                   disabled={readOnly}
                   inputProps={{
-                    name: 'owner',
-                    id: 'owner'
+                    name: "owner",
+                    id: "owner"
                   }}
                 >
                   {owners.map(({ id, name }) => (
@@ -225,12 +208,7 @@ const SupportCardForm = props => {
               <CardSection>
                 {!readOnly && (
                   <React.Fragment>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      className={classes.button}
-                      type="submit"
-                    >
+                    <Button variant="contained" color="primary" className={classes.button} type="submit">
                       Save
                     </Button>
                   </React.Fragment>
@@ -259,14 +237,11 @@ const SupportCardForm = props => {
                   variant="contained"
                   color="secondary"
                   className={classes.button}
-                  onClick={() => setTimeout(history.push('/supportcard'), 500)}
+                  onClick={() => setTimeout(history.push("/supportcard"), 500)}
                 >
                   Cancel
                 </Button>
-                <Chip
-                  style={{ margin: 4 }}
-                  label={`Last updated at ${format(updatedAt, 'ddd, DD MMM YYYY')}`}
-                />
+                <Chip style={{ margin: 4 }} label={`Last updated at ${LongFormattedDate(updatedAt)}`} />
               </CardSection>
             </form>
           );

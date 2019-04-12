@@ -1,20 +1,19 @@
-import React from 'react';
-import blue from '@material-ui/core/colors/blue';
-import Button from '@material-ui/core/Button';
-import AddIcon from '@material-ui/icons/Add';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
-import styled from 'styled-components';
-import { withStyles } from '@material-ui/core/styles';
-import { withRouter } from 'react-router';
-import { Fab } from '@material-ui/core';
+import React from "react";
+import blue from "@material-ui/core/colors/blue";
+import AddIcon from "@material-ui/icons/Add";
+import Card from "@material-ui/core/Card";
+import CardActionArea from "@material-ui/core/CardActionArea";
+import CardContent from "@material-ui/core/CardContent";
+import Typography from "@material-ui/core/Typography";
+import styled from "styled-components";
+import { withStyles } from "@material-ui/core/styles";
+import { withRouter } from "react-router";
+import { Fab } from "@material-ui/core";
 
 const styles = theme => ({
   container: {
-    display: 'flex',
-    flexWrap: 'wrap'
+    display: "flex",
+    flexWrap: "wrap"
   },
   card: {
     width: 320,
@@ -23,30 +22,30 @@ const styles = theme => ({
 
   media: {
     height: 120,
-    objectFit: 'cover',
+    objectFit: "cover",
     minWidth: 300
   },
   button: {
     margin: theme.spacing.unit,
-    alignContent: 'center',
-    display: 'flex'
+    alignContent: "center",
+    display: "flex"
   },
 
   buttonDel: {
     margin: theme.spacing.unit,
-    backgroundColor: '#000'
+    backgroundColor: "#000"
   },
 
   textField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
     width: 200,
-    height: '100%'
+    height: "100%"
   },
   center: {
-    alignContent: 'center',
-    display: 'flex',
-    flexDirection: 'column'
+    alignContent: "center",
+    display: "flex",
+    flexDirection: "column"
   }
 });
 const Title = styled.div`
@@ -59,10 +58,10 @@ const Title = styled.div`
 `;
 
 const AddCard = ({
-  link = 'courses/create',
-  title = 'Add  Course',
+  link = "courses/create",
+  title = "Add  Course",
   color = { blue },
-  background = 'papayawhip',
+  background = "papayawhip",
   classes,
   history
 }) => {
@@ -75,12 +74,7 @@ const AddCard = ({
           </Typography>
         </CardContent>
       </CardActionArea>
-      <Fab
-        color="primary"
-        aria-label="Add"
-        className={classes.button}
-        onClick={() => history.push(link)}
-      >
+      <Fab color="primary" aria-label="Add" className={classes.button} onClick={() => history.push(link)}>
         <AddIcon />
       </Fab>
     </Card>

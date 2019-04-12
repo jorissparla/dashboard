@@ -1,15 +1,14 @@
-import React from 'react';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
-import { Link } from 'react-router-dom';
-import _ from 'lodash';
-//import format from 'date-fns/format';
-import { format } from '../utils/format';
+import React from "react";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import gql from "graphql-tag";
+import { Query } from "react-apollo";
+import { Link } from "react-router-dom";
+import _ from "lodash";
+import { LongFormattedDate } from "../utils/FormattedDate";
 
 const HeaderColumn = ({ style, children }) => {
   const newStyle = _.extend({}, { fontSize: 18 }, style);
@@ -39,7 +38,7 @@ const ScheduledCoursesInPeriod = ({ startdate }) => {
     <Query query={COURSESINPERIOD} variables={{ startdate }}>
       {({ data, loading }) => {
         if (loading) {
-          return 'loading';
+          return "loading";
         }
         const { plannedcourses } = data;
         return (
@@ -68,7 +67,7 @@ const ScheduledCoursesInPeriod = ({ startdate }) => {
                     <Link to={`/courses/edit/${course.id}`}>View Course</Link>
                   </TableCell>
                   <TableCell style={{ width: 20 }}>{students.length}</TableCell>
-                  <TableCell>{format(startdate, 'ddd, DD-MMM-YYYY')}</TableCell>
+                  <TableCell>{LongFormattedDate(startdate)}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

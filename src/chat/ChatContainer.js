@@ -1,18 +1,16 @@
-import React, { Component, Fragment } from 'react';
-import { withRouter } from 'react-router';
-import { Card } from '../common';
-import ChatAdd from './ChatAdd';
-import Snackbar from '@material-ui/core/Snackbar';
-import gql from 'graphql-tag';
-//import format from 'date-fns/format';
-import { format } from '../utils/format';
-import { Mutation, Query } from 'react-apollo';
-import { adopt } from 'react-adopt';
-import * as R from 'ramda';
+import React, { Component, Fragment } from "react";
+import { withRouter } from "react-router";
+import { Card } from "../common";
+import ChatAdd from "./ChatAdd";
+import Snackbar from "@material-ui/core/Snackbar";
+import gql from "graphql-tag";
 
-import { SharedSnackbarConsumer } from '../SharedSnackbar.context';
+import { Mutation, Query } from "react-apollo";
+import { adopt } from "react-adopt";
+import * as R from "ramda";
+import { FormattedDate } from "../utils/FormattedDate";
 
-window.format = format;
+import { SharedSnackbarConsumer } from "../SharedSnackbar.context";
 
 const ADD_CHAT = gql`
   mutation createChat($input: ChatInputType) {
@@ -67,7 +65,7 @@ const addChat = ({ render }) => (
       const query = ALL_CHATS;
       const props = cache.readQuery({ query });
       const { chats } = props;
-      console.log('Chats', chats);
+      console.log("Chats", chats);
       cache.writeQuery({
         query,
         data: { chats: R.concat(chats, [createChat]) }
@@ -84,9 +82,7 @@ const deleteChat = ({ render }) => (
   </Mutation>
 );
 
-const myRanges = ({ render }) => (
-  <Query query={ALL_RANGES}>{(data, loading) => render(data, loading)}</Query>
-);
+const myRanges = ({ render }) => <Query query={ALL_RANGES}>{(data, loading) => render(data, loading)}</Query>;
 
 const myChats = ({ render }) => <Query query={ALL_CHATS}>{data => render(data)}</Query>;
 
@@ -114,14 +110,14 @@ const MyContainer = adopt(mapper, mapProps);
 class ChatContainer extends Component {
   state = {
     showDialog: false,
-    body: '',
+    body: "",
     values: {},
     showMessage: false,
-    err: ''
+    err: ""
   };
 
   doCancel = () => {
-    this.props.history.push('/chat');
+    this.props.history.push("/chat");
   };
 
   findWeekfromDate = (weeknr, ranges) => {
@@ -153,26 +149,19 @@ class ChatContainer extends Component {
       <MyContainer>
         {({ loading, loading1, error, data, ranges, chats, addChat, ...props }) => {
           if (loading || loading1) return <div>Loading</div>;
-          console.log('data', addChat, ranges, chats);
+          console.log("data", addChat, ranges, chats);
 
           const handleSubmitAdd = async values => {
             const { weeknr, team, nrchats, responseintime } = values;
             const fromDate = this.findWeekfromDate(weeknr, ranges);
 
             const percentage = (100 * responseintime) / nrchats;
-            console.log(
-              'percentage',
-              typeof fromDate,
-              fromDate,
-              format(parseInt(fromDate), 'YYYY-MM-DD'),
-              percentage
-            );
             const input = {
               weeknr,
               team,
               nrchats: parseInt(nrchats),
               responseintime: parseInt(responseintime),
-              fromDate: format(parseInt(fromDate), 'YYYY-MM-DD')
+              fromDate: FormattedDate(fromDate)
             };
             const result = await addChat({
               variables: {
@@ -180,7 +169,7 @@ class ChatContainer extends Component {
               }
             });
             // this.props.history.push("/chat");
-            console.log('result', result);
+            console.log("result", result);
           };
           return (
             <SharedSnackbarConsumer>
@@ -192,7 +181,7 @@ class ChatContainer extends Component {
                         ranges={ranges}
                         onSave={values => {
                           handleSubmitAdd(values);
-                          openSnackbar('Entry Added');
+                          openSnackbar("Entry Added");
                         }}
                         onCancel={this.doCancel}
                         entry={null}

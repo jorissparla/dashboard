@@ -1,19 +1,17 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import addDays from 'date-fns/add_days';
-//import format from 'date-fns/format';
-import { format } from '../utils/format';
-import _ from 'lodash';
-import { withStyles } from '@material-ui/core/styles';
-import TrainerViewNew from '../courses/TrainerViewNew';
-import StudentChip from '../courses/StudentChip';
-import StudentTableNew from '../courses/StudentTableNew';
-import ScheduledCoursesInPeriod from '../courses/ScheduledCoursesinPeriod';
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import { WeekAgo, HalfYearAgo, FormattedDateNow, StartOfYear, StartOfThisYear } from "../utils/FormattedDate";
+import _ from "lodash";
+import { withStyles } from "@material-ui/core/styles";
+import TrainerViewNew from "../courses/TrainerViewNew";
+import StudentChip from "../courses/StudentChip";
+import StudentTableNew from "../courses/StudentTableNew";
+import ScheduledCoursesInPeriod from "../courses/ScheduledCoursesinPeriod";
 
 const StudentChipList = styled.div`
   background-color: white;
@@ -56,11 +54,11 @@ const styles = theme => ({
   },
   button: {
     margin: 12,
-    background: '#2196f3'
+    background: "#2196f3"
   },
   tabStyle: {
-    backgroundColor: '#2196f3',
-    fontSize: '1rem'
+    backgroundColor: "#2196f3",
+    fontSize: "1rem"
   },
   textField: {
     margin: 10,
@@ -78,11 +76,11 @@ const styles = theme => ({
 
 class CourseView extends React.Component {
   state = {
-    startdate: format(addDays(new Date(), -7), 'YYYY-MM-DD'),
-    studentfilterstartdate: format(addDays(new Date(), -180), 'YYYY-MM-DD'),
-    studentfilterenddate: format(new Date(), 'YYYY-MM-DD'),
-    value: '',
-    activeTab: 'student',
+    startdate: WeekAgo(),
+    studentfilterstartdate: HalfYearAgo(),
+    studentfilterenddate: FormattedDateNow(),
+    value: "",
+    activeTab: "student",
     participants: { show: false, id: null, students: [] }
   };
 
@@ -102,18 +100,19 @@ class CourseView extends React.Component {
 
   setYear = year => {
     this.setState({
-      startdate: format(new Date(year, 0, 1), 'YYYY-MM-DD'),
-      studentfilterstartdate: format(new Date(year, 0, 1), 'YYYY-MM-DD'),
-      studentfilterenddate: format(new Date(year + 1, 0, 1), 'YYYY-MM-DD'),
-      enddate: format(new Date(year + 1, 0, 1), 'YYYY-MM-DD')
+      startdate: StartOfYear(year),
+      studentfilterstartdate: StartOfThisYear(),
+      studentfilterenddate: StartOfYear(year + 1),
+      enddate: StartOfYear(year + 1)
     });
+    console.log("setYear", this.state);
   };
   render() {
     const { classes } = this.props;
 
     const { activeTab } = this.state;
     const { role } = this.props.user;
-    const enabled = role === 'Admin' || role === 'PO';
+    const enabled = role === "Admin" || role === "PO";
     const currentYear = new Date().getFullYear();
 
     console.log(this.state);
@@ -129,7 +128,7 @@ class CourseView extends React.Component {
           <Tab label="Scheduled Course" value="scheduled" />
           <Tab label="By Trainer" value="trainer" />
         </Tabs>
-        {activeTab === 'student' && (
+        {activeTab === "student" && (
           <React.Fragment>
             <HeaderRow>
               <HeaderLeft>
@@ -142,18 +141,14 @@ class CourseView extends React.Component {
                   >
                     {currentYear - 1}
                   </Button>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => this.setYear(currentYear)}
-                  >
+                  <Button variant="contained" color="secondary" onClick={() => this.setYear(currentYear)}>
                     {currentYear}
                   </Button>
                   <div className={classes.text}>From</div>
                   <TextField
                     type="date"
                     variant="outlined"
-                    label="Enter StartDate Courses"
+                    // label="Enter StartDate Courses"
                     value={this.state.studentfilterstartdate}
                     name="studentfilterstartdate"
                     onChange={this.handleStudentFilterStartDateChange}
@@ -173,17 +168,14 @@ class CourseView extends React.Component {
               </HeaderLeft>
               <HeaderRight />
             </HeaderRow>
-            <StudentTableNew
-              startdate={this.state.studentfilterstartdate}
-              enddate={this.state.studentfilterenddate}
-            />
+            <StudentTableNew startdate={this.state.studentfilterstartdate} enddate={this.state.studentfilterenddate} />
           </React.Fragment>
         )}
-        {activeTab === 'scheduled' && (
+        {activeTab === "scheduled" && (
           <React.Fragment>
             <HeaderRow>
               <HeaderLeft>
-                {' '}
+                {" "}
                 <Title2>
                   <Button
                     variant="contained"
@@ -193,11 +185,7 @@ class CourseView extends React.Component {
                   >
                     {currentYear - 1}
                   </Button>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => this.setYear(currentYear)}
-                  >
+                  <Button variant="contained" color="secondary" onClick={() => this.setYear(currentYear)}>
                     {currentYear}
                   </Button>
                   <div className={classes.text}>Scheduled Training Starting</div>
@@ -212,7 +200,7 @@ class CourseView extends React.Component {
                 </Title2>
               </HeaderLeft>
               <HeaderRight>
-                <Button disabled={!enabled} color="primary" onClick={() => console.log('new')}>
+                <Button disabled={!enabled} color="primary" onClick={() => console.log("new")}>
                   New
                 </Button>
               </HeaderRight>
@@ -229,11 +217,11 @@ class CourseView extends React.Component {
             </StudentChipList>
           </React.Fragment>
         )}
-        {activeTab === 'trainer' && (
+        {activeTab === "trainer" && (
           <React.Fragment>
             <HeaderRow>
               <HeaderLeft>
-                {' '}
+                {" "}
                 <Title2>
                   <Button
                     variant="contained"
@@ -243,11 +231,7 @@ class CourseView extends React.Component {
                   >
                     {currentYear - 1}
                   </Button>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => this.setYear(currentYear)}
-                  >
+                  <Button variant="contained" color="secondary" onClick={() => this.setYear(currentYear)}>
                     {currentYear}
                   </Button>
                   <div className={classes.text}>From</div>
@@ -274,10 +258,7 @@ class CourseView extends React.Component {
               </HeaderLeft>
               <HeaderRight />
             </HeaderRow>
-            <TrainerViewNew
-              from={this.state.studentfilterstartdate}
-              to={this.state.studentfilterenddate}
-            />
+            <TrainerViewNew from={this.state.studentfilterstartdate} to={this.state.studentfilterenddate} />
           </React.Fragment>
         )}
       </React.Fragment>

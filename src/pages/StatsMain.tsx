@@ -1,32 +1,32 @@
-import { withStyles } from '@material-ui/core';
-import React, { useContext, useState } from 'react';
-import { useQuery } from 'react-apollo-hooks';
-import { QUERY_BACKLOG } from '../graphql/BACKLOG_QUERY2';
-import { BacklogTable } from '../stats/BacklogTable';
-import { SelectionContext, SelectionProvider } from '../stats/SelectionContext';
-import { SelectionForm } from '../stats/SelectionForm';
-import { withUser } from '../User';
-import { format } from '../utils/format';
-import Spinner from '../utils/spinner';
+import { withStyles } from "@material-ui/core";
+import React, { useContext, useState } from "react";
+import { useQuery } from "react-apollo-hooks";
+import { QUERY_BACKLOG } from "../graphql/BACKLOG_QUERY2";
+import { BacklogTable } from "../stats/BacklogTable";
+import { SelectionContext, SelectionProvider } from "../stats/SelectionContext";
+import { SelectionForm } from "../stats/SelectionForm";
+import { withUser } from "../User";
+import { FormattedDateNow } from "../utils/FormattedDate";
+import Spinner from "../utils/spinner";
 
 const styles = (theme: any) => ({
   root: theme.mixins.gutters({
     marginTop: theme.spacing.unit * 3,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignContent: 'flex-start',
-    top: '200px',
-    backgroundColor: 'rgba(0,0,0,0.1)'
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignContent: "flex-start",
+    top: "200px",
+    backgroundColor: "rgba(0,0,0,0.1)"
   }),
   tableheader: {
-    fontFamily: 'Poppins',
+    fontFamily: "Poppins",
     fontSize: 18,
-    backgroundColor: 'rgb(0,0,0, 0.5)',
-    color: 'white'
+    backgroundColor: "rgb(0,0,0, 0.5)",
+    color: "white"
   },
   tableheadernarrow: {
-    fontFamily: 'Poppins',
+    fontFamily: "Poppins",
     fontSize: 18,
     width: 20
   },
@@ -34,49 +34,49 @@ const styles = (theme: any) => ({
     width: 20
   },
   paper: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center'
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center"
   },
   paper2: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-start",
     margin: 15,
     padding: 10
   },
   summary: {
-    display: 'flex',
-    justifyContent: 'space-between'
+    display: "flex",
+    justifyContent: "space-between"
   },
   textfield: {
-    verticalAlign: 'center',
+    verticalAlign: "center",
     margin: 10
   },
   button: {
     margin: 10
   },
   spaceapart: {
-    display: 'flex',
-    width: '100%',
-    justifyContent: 'space-between',
+    display: "flex",
+    width: "100%",
+    justifyContent: "space-between",
     padding: 10
   },
   number: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    display: 'flex',
-    backgroundColor: 'black',
-    color: 'white',
+    alignItems: "center",
+    justifyContent: "center",
+    display: "flex",
+    backgroundColor: "black",
+    color: "white",
     fontSize: 18,
     margin: 2,
     width: 40,
     height: 40,
-    borderRadius: '50%'
+    borderRadius: "50%"
   },
   row: {
-    fontFamily: 'Poppins',
-    '&:nth-of-type(odd)': {
+    fontFamily: "Poppins",
+    "&:nth-of-type(odd)": {
       backgroundColor: theme.palette.background.default
     }
   }
@@ -93,7 +93,7 @@ type functionParms = {
 };
 
 const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
-  const [date, setDate] = useState(format(Date.now(), 'YYYY-MM-DD'));
+  const [date, setDate] = useState(FormattedDateNow());
   const [isCloud, setisCloud] = useState(false);
   const [owner, setOwner] = useState(props.user.fullname);
 
@@ -102,11 +102,11 @@ const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
     return <div>You need to be logged in to see this page</div>;
   }
 
-  console.log('PROPS', currentUser);
+  console.log("PROPS", currentUser);
 
   const { loading, data } = useQuery(QUERY_BACKLOG, {
     suspend: false,
-    variables: { date, owner, deployment: 'ALL' }
+    variables: { date, owner, deployment: "ALL" }
   });
   // if (loading) {
   //   return <div>Loading...</div>;
@@ -118,12 +118,12 @@ const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
   const { classes, user } = props;
   let enableIt: boolean;
   if (currentUser && currentUser.permissions) {
-    enableIt = currentUser.permissions.some(u => u.permission === 'STATS');
+    enableIt = currentUser.permissions.some(u => u.permission === "STATS");
   } else {
     enableIt = false;
   }
 
-  const isValidSuperUser = ['Admin', 'PO'].some(u => u === user.role) || enableIt;
+  const isValidSuperUser = ["Admin", "PO"].some(u => u === user.role) || enableIt;
   console.log(isValidSuperUser, enableIt);
   const mostRecentUpdate = data ? data.mostRecentUpdate : new Date().toLocaleTimeString();
   const handleEnable = () => {};
@@ -135,7 +135,7 @@ const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
           classes={props.classes}
           initialValue={{ owner, isCloud, lastUpdated: mostRecentUpdate, actionNeeded: true }}
           valuesChanged={(a: string, b: boolean) => {
-            console.log('a', a, b);
+            console.log("a", a, b);
             if (a !== owner) {
               setOwner(a);
             }
@@ -169,7 +169,7 @@ interface Props {
 }
 
 const StatsMain: React.FC<Props> = ({ classes, onChange, data }) => {
-  const [date, setDate] = useState(format(Date.now(), 'YYYY-MM-DD'));
+  const [date, setDate] = useState(FormattedDateNow());
   console.log(data);
   function handleChange(event: any) {
     setDate(event.target.value);
@@ -260,12 +260,7 @@ const StatsMain: React.FC<Props> = ({ classes, onChange, data }) => {
             description="Incidents with status 'New' not updated for more than 2 days"
           />
 
-          <BacklogTable
-            classes={classes}
-            backlog={data.all_cloud}
-            title="All"
-            description="All Support Backlog"
-          />
+          <BacklogTable classes={classes} backlog={data.all_cloud} title="All" description="All Support Backlog" />
         </div>
       )}
       {!isCloud && (
@@ -350,12 +345,7 @@ const StatsMain: React.FC<Props> = ({ classes, onChange, data }) => {
             description="Incidents with status 'New' not updated for more than 2 days"
           />
 
-          <BacklogTable
-            classes={classes}
-            backlog={data.all}
-            title="All"
-            description="All Support Backlog"
-          />
+          <BacklogTable classes={classes} backlog={data.all} title="All" description="All Support Backlog" />
         </div>
       )}
     </>

@@ -1,19 +1,19 @@
-import React, { Component } from 'react';
-import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
-import _ from 'lodash';
-import { withStyles } from '@material-ui/core/styles';
-import deepOrange from '@material-ui/core/colors/deepOrange';
-import deepPurple from '@material-ui/core/colors/deepPurple';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import SearchBar from '../common/SearchBar';
-import Chip from '@material-ui/core/Chip';
+import React, { Component } from "react";
+import gql from "graphql-tag";
+import { Query } from "react-apollo";
+import _ from "lodash";
+import { withStyles } from "@material-ui/core/styles";
+import deepOrange from "@material-ui/core/colors/deepOrange";
+import deepPurple from "@material-ui/core/colors/deepPurple";
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import SearchBar from "../common/SearchBar";
+import Chip from "@material-ui/core/Chip";
 //import format from 'date-fns/format';
-import { format } from '../utils/format';
+import { FormattedDate } from "../utils/FormattedDate";
 
 const ALL_TENANTS = gql`
   {
@@ -33,12 +33,12 @@ const ALL_TENANTS = gql`
 
 const styles = theme => ({
   root: {
-    width: '90vw',
-    margin: '10px',
+    width: "90vw",
+    margin: "10px",
     backgroundColor: theme.palette.background.paper
   },
   itemtitle: {
-    fontFamily: 'Raleway',
+    fontFamily: "Raleway",
     fontSize: 20,
     fontWeight: 800
   },
@@ -46,9 +46,9 @@ const styles = theme => ({
     minWidth: 275,
     margin: 10,
     width: 275,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between'
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between"
   },
   card2: {
     minWidth: 275,
@@ -62,47 +62,47 @@ const styles = theme => ({
     margin: 10
   },
   flex: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    background: '#eee'
+    display: "flex",
+    flexWrap: "wrap",
+    background: "#eee"
   },
   flex2: {
-    display: 'flex',
-    flexWrap: 'wrap'
+    display: "flex",
+    flexWrap: "wrap"
   },
   flexBot: {
-    display: 'flex',
-    justifySelf: 'flex-end'
+    display: "flex",
+    justifySelf: "flex-end"
   },
   bigAvatar: {
     width: 100,
     height: 50,
-    borderRadius: '50%',
-    justifyContent: 'center',
-    paddingTop: '15px',
+    borderRadius: "50%",
+    justifyContent: "center",
+    paddingTop: "15px",
     fontWeight: 800
   },
   orangeAvatar: {
     margin: 10,
-    color: '#fff',
+    color: "#fff",
     backgroundColor: deepOrange[500]
   },
   purpleAvatar: {
     margin: 10,
-    color: '#fff',
+    color: "#fff",
     backgroundColor: deepPurple[500]
   },
   blueAvatar: {
     margin: 10,
-    color: '#fff',
-    backgroundColor: '#81D4FA'
+    color: "#fff",
+    backgroundColor: "#81D4FA"
   }
 });
 
 const TenantCard = ({ classes, customer, tenants }) => {
-  const max = _.maxBy(tenants, t => format(t.lastupdated, 'YYYYMMDD')).lastupdated;
+  const max = _.maxBy(tenants, t => FormattedDate(t.lastupdated)).lastupdated;
   return (
-    <Card className={customer === 'Infor' ? classes.card2 : classes.card}>
+    <Card className={customer === "Infor" ? classes.card2 : classes.card}>
       <CardContent>
         <Typography gutterBottom variant="h5" component="h2">
           {customer}
@@ -121,14 +121,13 @@ const TenantCard = ({ classes, customer, tenants }) => {
           size="small"
           onClick={() =>
             window.open(
-              'http://navigator.infor.com/n/incident_list.asp?ListType=CUSTOMERID&Value=' +
-                tenants[0].customerid
+              "http://navigator.infor.com/n/incident_list.asp?ListType=CUSTOMERID&Value=" + tenants[0].customerid
             )
           }
         >
           Incidents
         </Button>
-        <Button variant="contained">{format(max, 'DDMMMYYYY')}</Button>
+        <Button variant="contained">{FormattedDate(max)}</Button>
       </CardActions>
     </Card>
   );
@@ -136,7 +135,7 @@ const TenantCard = ({ classes, customer, tenants }) => {
 
 const tenantsByCustomer = (tenants, searchText) =>
   _.chain(tenants)
-    .filter(o => o.customer.name !== 'Infor')
+    .filter(o => o.customer.name !== "Infor")
     .filter(
       t =>
         t.customer.name.toUpperCase().includes(searchText.toUpperCase()) ||
@@ -146,16 +145,16 @@ const tenantsByCustomer = (tenants, searchText) =>
 
     .value();
 
-const inforTenant = tenants => tenants.filter(o => o.customer.name === 'Infor');
+const inforTenant = tenants => tenants.filter(o => o.customer.name === "Infor");
 
 class TenantList extends Component {
-  state = { searchText: '' };
+  state = { searchText: "" };
 
   handleSearchChange = e => {
     this.setState({ searchText: e });
   };
   avatars = index => {
-    const ar = ['classes.orangeAvatar', 'classes.purpleAvatar', 'classes.blueAvatar'];
+    const ar = ["classes.orangeAvatar", "classes.purpleAvatar", "classes.blueAvatar"];
     return ar[index % 2];
   };
   render() {
@@ -165,27 +164,23 @@ class TenantList extends Component {
       <Query query={ALL_TENANTS}>
         {({ data, loading }) => {
           if (loading) {
-            return '...Loading';
+            return "...Loading";
           }
           const { tenants } = data;
           const filteredTenants = tenantsByCustomer(tenants, this.state.searchText);
-          const uniques = filteredTenants
-            .map(v => v.customer.name)
-            .filter((v, i, a) => a.indexOf(v) === i);
+          const uniques = filteredTenants.map(v => v.customer.name).filter((v, i, a) => a.indexOf(v) === i);
           console.log(uniques);
-          const max = _.maxBy(tenants, t => format(t.lastupdated, 'YYYYMMDD')).lastupdated;
+          const max = _.maxBy(tenants, t => FormattedDate(t.lastupdated)).lastupdated;
           return (
             <React.Fragment>
               <Typography gutterBottom variant="h5" component="h2">
-                {` Multitenant customers - last change (${format(max, 'DDMMMYYYY')})`}
+                {` Multitenant customers - last change (${FormattedDate(max)})`}
               </Typography>
               <SearchBar onChange={this.handleSearchChange} />
               <div className={classes.flex}>
                 {uniques.map((customer, index) => {
                   const sub = filteredTenants.filter(o => o.customer.name === customer);
-                  return (
-                    <TenantCard key={index} classes={classes} customer={customer} tenants={sub} />
-                  );
+                  return <TenantCard key={index} classes={classes} customer={customer} tenants={sub} />;
                 })}
                 <TenantCard classes={classes} customer="Infor" tenants={inforTenant(tenants)} />
               </div>

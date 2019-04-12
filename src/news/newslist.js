@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
-import Avatar from '@material-ui/core/Avatar';
-import ModeEdit from '@material-ui/icons/Edit';
-import Paper from '@material-ui/core/Paper';
+import React, { Component } from "react";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import Divider from "@material-ui/core/Divider";
+import Avatar from "@material-ui/core/Avatar";
+import ModeEdit from "@material-ui/icons/Edit";
+import Paper from "@material-ui/core/Paper";
 
-import styled from 'styled-components';
-import { ListItemSecondaryAction } from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
-import { format } from '../utils/format';
+import styled from "styled-components";
+import { ListItemSecondaryAction } from "@material-ui/core";
+import IconButton from "@material-ui/core/IconButton";
+import { LongFormattedDate } from "../utils/FormattedDate";
 
 const Left = styled.div`
   display: flex;
@@ -31,7 +31,7 @@ class NewsList extends Component {
           <ListItem>
             <Left>
               <Avatar src={img} />
-              <DateField>{format(expire_date, 'ddd, DD MMM')}</DateField>
+              <DateField>{LongFormattedDate(expire_date)}</DateField>
             </Left>
             <ListItemText primary={title} secondary={body} />
             <ListItemSecondaryAction onClick={() => this.props.onEdit(id)}>

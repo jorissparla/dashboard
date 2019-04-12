@@ -1,7 +1,7 @@
-import React from 'react';
-import './Spinner.css';
+import React from "react";
+import "./Spinner.css";
 
-const Spinner2 = () => {
+export const Spinner2 = () => {
   return (
     <div className="preloader-wrapper big active">
       <div className="spinner-layer spinner-blue-only">

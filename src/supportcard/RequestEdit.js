@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import gql from "graphql-tag";
-import {  Query, Mutation } from "react-apollo";
+import { Query, Mutation } from "react-apollo";
 import { withRouter } from "react-router-dom";
-import { format } from "date-fns";
+import { FormattedDateNow } from "../utils/FormattedDate";
 import RequestForm from "./RequestForm";
 import { ALL_REQUESTS_QUERY } from "./RequestContainer";
 
@@ -17,7 +17,7 @@ class RequestEdit extends Component {
       assigned,
       text,
       complete,
-      updatedAt: format(new Date(), "YYYY-MM-DD")
+      updatedAt: FormattedDateNow()
     };
     console.log(input);
     const result = await updateRequest({ variables: { input } });

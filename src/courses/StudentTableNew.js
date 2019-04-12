@@ -1,28 +1,27 @@
-import React, { Component } from 'react';
-import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
-import { withRouter } from 'react-router';
-import SearchBar from '../common/SearchBar';
-import Paper from '@material-ui/core/Paper';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import SortIcon from '@material-ui/icons/SwapVert';
-import IconButton from '@material-ui/core/IconButton';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import ArrowDownWard from '@material-ui/icons/ArrowDownward';
-import { Link } from 'react-router-dom';
+import React, { Component } from "react";
+import gql from "graphql-tag";
+import { Query } from "react-apollo";
+import { withRouter } from "react-router";
+import SearchBar from "../common/SearchBar";
+import Paper from "@material-ui/core/Paper";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import SortIcon from "@material-ui/icons/SwapVert";
+import IconButton from "@material-ui/core/IconButton";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
+import ArrowDownWard from "@material-ui/icons/ArrowDownward";
+import { Link } from "react-router-dom";
 //@ts-check
-//import format from 'date-fns/format';
-import { format } from '../utils/format';
-import Avatar from '@material-ui/core/Avatar';
-import pink from '@material-ui/core/colors/pink';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import _ from 'lodash';
-import styled from 'styled-components';
+import { StartOfThisYear, StartOfNextYear } from "../utils/FormattedDate";
+import Avatar from "@material-ui/core/Avatar";
+import pink from "@material-ui/core/colors/pink";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import _ from "lodash";
+import styled from "styled-components";
 //import Excel from "../utils/Excel";
 
 const QUERY_COURSEDATA = gql`
@@ -42,14 +41,14 @@ const QUERY_COURSEDATA = gql`
 const styles = {
   headerStyle: {
     fontSize: 48,
-    background: '#FAFAFA',
+    background: "#FAFAFA",
     fontWeight: 800,
-    textAlign: 'left',
-    color: '#000000'
+    textAlign: "left",
+    color: "#000000"
   },
   rowstyle: {
     fontSize: 16,
-    fontFamily: 'Roboto'
+    fontFamily: "Roboto"
   },
   avatarstyle: {
     width: 50
@@ -67,13 +66,13 @@ const TableHeaderColumn1 = ({ column, title, handleSortChange, sorted, link }) =
   <TableCell
     style={{
       fontSize: 16,
-      fontFamily: 'Roboto',
-      justifyContent: 'center',
-      textTransform: 'uppercase'
+      fontFamily: "Roboto",
+      justifyContent: "center",
+      textTransform: "uppercase"
     }}
     key={title}
   >
-    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
+    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center" }}>
       <SortedIcon onClick={() => handleSortChange(column)} color="secondary" />
       {title.toUpperCase()}
     </div>
@@ -91,15 +90,15 @@ const LinkColumn = ({ link, value, style }) => {
 };
 
 class StudentTables extends Component {
-  state = { searchText: '', sorting: { name: 'fullname', direction: 'asc' } };
+  state = { searchText: "", sorting: { name: "fullname", direction: "asc" } };
 
   handleSortChange = column => {
     let sorting = { ...this.state.sorting };
     if (sorting.name === column) {
-      sorting.direction = sorting.direction === 'asc' ? 'desc' : 'asc';
+      sorting.direction = sorting.direction === "asc" ? "desc" : "asc";
     } else {
       sorting.name = column;
-      sorting.direction = 'asc';
+      sorting.direction = "asc";
     }
 
     this.setState({
@@ -133,28 +132,28 @@ class StudentTables extends Component {
   render() {
     let { startdate, enddate } = this.props;
     if (!startdate) {
-      startdate = format(new Date(new Date().getFullYear(), 0, 1), 'YYYY-MM-DD');
+      startdate = StartOfThisYear();
     }
     if (!enddate) {
-      enddate = format(new Date(new Date().getFullYear() + 1, 0, 1), 'YYYY-MM-DD');
+      enddate = StartOfNextYear();
     }
     const { headerStyle, rowstyle, avatarstyle } = styles;
-    console.log('Startdate', startdate);
+    console.log("Startdate", startdate);
     return (
       <Paper style={{ margin: 20 }}>
         <SearchBar
           onChange={this.handleSearchChange}
           hintText="Search on name or team or location.."
           style={{
-            background: '#FAFAFA',
-            display: 'flex',
-            borderBottom: '1px solid rgba(0,0,0,0.12)'
+            background: "#FAFAFA",
+            display: "flex",
+            borderBottom: "1px solid rgba(0,0,0,0.12)"
           }}
         />
         <Query query={QUERY_COURSEDATA} variables={{ startdate, enddate }}>
           {({ data, loading, error }) => {
             if (loading) {
-              return 'loading';
+              return "loading";
             }
             const { coursedata } = data;
             let currentData = _.chain(coursedata)
@@ -172,28 +171,12 @@ class StudentTables extends Component {
                 <TableHead style={headerStyle}>
                   <TableRow>
                     <TableCell style={avatarstyle} />
-                    <TableHeaderColumn1
-                      column="fullname"
-                      title="name"
-                      handleSortChange={this.handleSortChange}
-                    />
-                    <TableHeaderColumn1
-                      column="team"
-                      title="Team"
-                      handleSortChange={this.handleSortChange}
-                    />
-                    <TableHeaderColumn1
-                      column="location"
-                      title="Location"
-                      handleSortChange={this.handleSortChange}
-                    />
+                    <TableHeaderColumn1 column="fullname" title="name" handleSortChange={this.handleSortChange} />
+                    <TableHeaderColumn1 column="team" title="Team" handleSortChange={this.handleSortChange} />
+                    <TableHeaderColumn1 column="location" title="Location" handleSortChange={this.handleSortChange} />
 
                     <TableCell># Courses</TableCell>
-                    <TableHeaderColumn1
-                      column="hours"
-                      title="#Hours"
-                      handleSortChange={this.handleSortChange}
-                    />
+                    <TableHeaderColumn1 column="hours" title="#Hours" handleSortChange={this.handleSortChange} />
                     <TableCell>
                       Courses
                       <ArrowDownWard />
@@ -209,17 +192,13 @@ class StudentTables extends Component {
                         ) : (
                           <Avatar color={pink} style={{ left: 8 }}>
                             {item.student
-                              .split(' ')
+                              .split(" ")
                               .map(n => n.slice(0, 1))
-                              .join('')}
+                              .join("")}
                           </Avatar>
                         )}
                       </TableCell>
-                      <LinkColumn
-                        link={`/students/${item.aid}`}
-                        style={rowstyle}
-                        value={item.student}
-                      />
+                      <LinkColumn link={`/students/${item.aid}`} style={rowstyle} value={item.student} />
                       <TableCell>{item.studentteam}</TableCell>
                       <TableCell>{item.location}</TableCell>
                       <TableCell>{item.count || 0}</TableCell>

@@ -1,7 +1,6 @@
-import * as React from 'react';
-import styled from 'styled-components';
-import { format } from '../utils/format';
-import { distanceInWords } from 'date-fns';
+import * as React from "react";
+import styled from "styled-components";
+import { FormattedDate, DistanceInWords } from "../utils/FormattedDate";
 
 const Container = styled.div`
   display: grid;
@@ -54,17 +53,17 @@ interface CardProps {
 }
 
 const NewCard: React.FC<CardProps> = ({
-  title = 'Procedure',
-  text = 'Papier Und KartonFabrik',
-  buttonText = 'Modify',
-  category = 'Cloud',
-  link = 'http://www.google.com',
+  title = "Procedure",
+  text = "Papier Und KartonFabrik",
+  buttonText = "Modify",
+  category = "Cloud",
+  link = "http://www.google.com",
   action = null,
-  color = '#FFFFF',
-  textcolor = '#000',
+  color = "#FFFFF",
+  textcolor = "#000",
   canEdit = false,
-  editLink = '',
-  viewLink = '',
+  editLink = "",
+  viewLink = "",
   isNew = false,
   isFavorite = false,
   account_id = null,
@@ -72,9 +71,9 @@ const NewCard: React.FC<CardProps> = ({
   updatedAt,
   onTitleClick = () => null,
   onToggleFavorite = () => {},
-  onAudit = () => console.log('onaudit'),
+  onAudit = () => console.log("onaudit"),
   onFollowLink = link => {
-    console.log('onFollowLink');
+    console.log("onFollowLink");
     return link;
   }
 }) => {
@@ -82,8 +81,8 @@ const NewCard: React.FC<CardProps> = ({
     <Container>
       <Picture src="/static/media/image1.4d33fe46.jpg" />
       <Description>{title}</Description>
-      <div>{format(updatedAt, 'YYYY-MMM-DD')}</div>
-      <div>{distanceInWords(Date.parse(updatedAt), new Date())}</div>
+      <div>{FormattedDate(updatedAt)}</div>
+      <div>{DistanceInWords(updatedAt)}</div>
     </Container>
   );
 };

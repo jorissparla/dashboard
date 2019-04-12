@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
-import gql from 'graphql-tag';
-import { graphql } from 'react-apollo';
-import { withRouter } from 'react-router';
-import styled from 'styled-components';
-import _ from 'lodash';
+import React, { Component } from "react";
+import gql from "graphql-tag";
+import { graphql } from "react-apollo";
+import { withRouter } from "react-router";
+import styled from "styled-components";
+import _ from "lodash";
 //import format from 'date-fns/format';
-import { format } from '../utils/format';
-import Card from '../courses/NewCard';
-import SearchBar from '../common/SearchBar';
-import AddCard from '../courses/AddCard';
-import withAuth from '../utils/withAuth';
+import { FormattedDate } from "../utils/FormattedDate";
+import Card from "../courses/NewCard";
+import SearchBar from "../common/SearchBar";
+import AddCard from "../courses/AddCard";
+import withAuth from "../utils/withAuth";
 const StyledContainer = styled.div`
   margin-top: 10px;
   display: flex;
@@ -17,11 +17,11 @@ const StyledContainer = styled.div`
   flex-wrap: wrap;
   justify-content: flex-start;
 
-  pointer-events: ${props => (props.readonly === true ? 'none' : 'all')};
+  pointer-events: ${props => (props.readonly === true ? "none" : "all")};
 `;
 
 class CourseList extends Component {
-  state = { searchText: '' };
+  state = { searchText: "" };
 
   handleSearchTextChange = val => {
     this.setState({ searchText: val });
@@ -30,9 +30,9 @@ class CourseList extends Component {
     const { user } = this.props;
     let validRole = false;
     if (user) {
-      validRole = user.role !== 'Guest';
+      validRole = user.role !== "Guest";
     }
-    console.log('CourseList', user);
+    console.log("CourseList", user);
     const { loading, error, courses } = this.props.data;
     if (loading) {
       return <p>Loading ...</p>;
@@ -47,29 +47,19 @@ class CourseList extends Component {
           course.title.toUpperCase().includes(this.state.searchText.toUpperCase()) ||
           course.team.toUpperCase().includes(this.state.searchText.toUpperCase())
       )
-      .orderBy(
-        o =>
-          o.plannedcourses[0] ? format(o.plannedcourses[0].startdate, 'YYYYMMDD') : o.lastmodified,
-        'desc'
-      )
+      .orderBy(o => (o.plannedcourses[0] ? FormattedDate(o.plannedcourses[0].startdate) : o.lastmodified), "desc")
       .value();
     return (
       <div>
         <SearchBar
-          style={{ display: 'flex' }}
+          style={{ display: "flex" }}
           onChange={this.handleSearchTextChange}
           hintText="Search for title or team...."
         />
         <StyledContainer readonly={Object.keys(user).length === 0}>
           {validRole && <AddCard />}
           {filteredCourses.map((course, i) => (
-            <Card
-              key={course.id}
-              course={course}
-              index={i}
-              count={course._studentsMeta.count}
-              validRole={validRole}
-            />
+            <Card key={course.id} course={course} index={i} count={course._studentsMeta.count} validRole={validRole} />
           ))}
         </StyledContainer>
       </div>

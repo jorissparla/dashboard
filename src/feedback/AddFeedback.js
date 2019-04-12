@@ -1,14 +1,14 @@
-import React from 'react';
-import gql from 'graphql-tag';
-import { Query, Mutation } from 'react-apollo';
-import Paper from '@material-ui/core/Paper';
-import { Formik } from 'formik';
-import { TextField, Select, FormControl, InputLabel, MenuItem } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
+import React from "react";
+import gql from "graphql-tag";
+import { Query, Mutation } from "react-apollo";
+import Paper from "@material-ui/core/Paper";
+import { Formik } from "formik";
+import { TextField, Select, FormControl, InputLabel, MenuItem } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
+import Button from "@material-ui/core/Button";
 //import format from 'date-fns/format';
-import { format } from '../utils/format';
-import { withRouter } from 'react-router';
+import { FormattedDateNow } from "../utils/FormattedDate";
+import { withRouter } from "react-router";
 
 const QUERY_SUPPORT_FOLKS = gql`
   query QUERY_SUPPORT_FOLKS {
@@ -50,11 +50,11 @@ const styles = theme => ({
     paddingTop: theme.spacing.unit * 2,
     paddingBottom: theme.spacing.unit * 2,
     padding: theme.spacing.unit * 2,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    margin: '15px',
-    minWidth: '200px'
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    margin: "15px",
+    minWidth: "200px"
   },
   button: {
     margin: theme.spacing.unit
@@ -62,7 +62,7 @@ const styles = theme => ({
 
   buttonDel: {
     margin: theme.spacing.unit,
-    backgroundColor: '#000'
+    backgroundColor: "#000"
   },
 
   textField: {
@@ -78,30 +78,25 @@ const AddFeedback = props => {
     <Query query={QUERY_SUPPORT_FOLKS}>
       {({ data, loading }) => {
         if (loading) {
-          return 'loading';
+          return "loading";
         }
         const { supportfolks } = data;
         return (
-          <Mutation
-            mutation={CREATE_FEEDBACK_MUTATION}
-            refetchQueries={[{ query: FEEDBACK_QUERY }]}
-          >
+          <Mutation mutation={CREATE_FEEDBACK_MUTATION} refetchQueries={[{ query: FEEDBACK_QUERY }]}>
             {createFeedback => {
               return (
                 <Formik
                   initialValues={{
-                    consultant: 'Joris Sparla',
-                    customername: '',
-                    createdAt: format(Date.now(), 'YYYY-MM-DD')
+                    consultant: "Joris Sparla",
+                    customername: "",
+                    createdAt: FormattedDateNow()
                   }}
                   onSubmit={async values => {
-                    const [{ navid }] = supportfolks.filter(
-                      person => (person.fullname = values.consultant)
-                    );
+                    const [{ navid }] = supportfolks.filter(person => (person.fullname = values.consultant));
                     await createFeedback({
                       variables: { input: { ...values, navid } }
                     });
-                    await history.push('feedback');
+                    await history.push("feedback");
                   }}
                 >
                   {({ values, handleChange, handleSubmit, handleBlur }) => (
@@ -121,8 +116,8 @@ const AddFeedback = props => {
                             value={values.consultant}
                             onChange={handleChange}
                             inputProps={{
-                              name: 'consultant',
-                              id: 'consultant-simple'
+                              name: "consultant",
+                              id: "consultant-simple"
                             }}
                           >
                             {supportfolks.map(({ id, navid, image, fullname }) => (
@@ -152,17 +147,12 @@ const AddFeedback = props => {
                         />
 
                         <div>
-                          <Button
-                            variant="contained"
-                            className={classes.button}
-                            color="primary"
-                            type="submit"
-                          >
+                          <Button variant="contained" className={classes.button} color="primary" type="submit">
                             Save
                           </Button>
                           <Button
                             variant="contained"
-                            onClick={() => history.push('feedback')}
+                            onClick={() => history.push("feedback")}
                             className={classes.button}
                             color="secondary"
                           >
