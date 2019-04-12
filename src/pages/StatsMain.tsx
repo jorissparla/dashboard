@@ -1,16 +1,13 @@
-import React, { useEffect, useState, useRef, useContext } from 'react';
-import { useMutation, useQuery } from 'react-apollo-hooks';
-import { withStyles, Portal } from '@material-ui/core';
-import { Formik } from 'formik';
-import { format } from '../utils/format';
-import OwnerList from '../stats/OwnerList';
+import { withStyles } from '@material-ui/core';
+import React, { useContext, useState } from 'react';
+import { useQuery } from 'react-apollo-hooks';
 import { QUERY_BACKLOG } from '../graphql/BACKLOG_QUERY2';
-import { FlexCol } from '../styles';
+import { BacklogTable } from '../stats/BacklogTable';
 import { SelectionContext, SelectionProvider } from '../stats/SelectionContext';
 import { SelectionForm } from '../stats/SelectionForm';
-import { BacklogTable } from '../stats/BacklogTable';
-import Spinner from '../utils/spinner';
 import { withUser } from '../User';
+import { format } from '../utils/format';
+import Spinner from '../utils/spinner';
 
 const styles = (theme: any) => ({
   root: theme.mixins.gutters({
@@ -223,6 +220,12 @@ const StatsMain: React.FC<Props> = ({ classes, onChange, data }) => {
             title="Awaiting Infor"
             description="Incidents with status 'Awaiting Infor' Last updated 3 days or more"
           />
+          <BacklogTable
+            classes={classes}
+            backlog={data.callbacks_cloud}
+            title="Callbacks/Awaiting Infor"
+            description="All callbacks and Incidents with status 'Awaiting Infor'"
+          />
 
           <BacklogTable
             classes={classes}
@@ -243,6 +246,12 @@ const StatsMain: React.FC<Props> = ({ classes, onChange, data }) => {
             backlog={data.aging_cloud}
             title="Aging"
             description="Incidents older than 90 days"
+          />
+          <BacklogTable
+            classes={classes}
+            backlog={data.aging_dev_cloud}
+            title="Aging- Development"
+            description="Incidents older than 90 days - Development Backlog"
           />
           <BacklogTable
             classes={classes}
@@ -301,7 +310,12 @@ const StatsMain: React.FC<Props> = ({ classes, onChange, data }) => {
             title="Awaiting Infor"
             description="Incidents with status 'Awaiting Infor' Last updated 3 days or more"
           />
-
+          <BacklogTable
+            classes={classes}
+            backlog={data.callbacks}
+            title="Callbacks/Awaiting Infor"
+            description="All callbacks and Incidents with status 'Awaiting Infor'"
+          />
           <BacklogTable
             classes={classes}
             backlog={data.major_impact}
@@ -319,8 +333,15 @@ const StatsMain: React.FC<Props> = ({ classes, onChange, data }) => {
           <BacklogTable
             classes={classes}
             backlog={data.aging}
-            title="Aging"
-            description="Incidents older than 90 days"
+            title="Aging- Support"
+            description="Incidents older than 90 day- Support Backlog"
+          />
+
+          <BacklogTable
+            classes={classes}
+            backlog={data.aging_dev}
+            title="Aging- Development"
+            description="Incidents older than 90 days - Development Backlog"
           />
           <BacklogTable
             classes={classes}
