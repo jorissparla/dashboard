@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import SharedSnackbar from "./SharedSnackbar";
+import React, { Component } from 'react';
+import SharedSnackbar from './SharedSnackbar';
 
-const SharedSnackbarContext = React.createContext();
+export const SharedSnackbarContext = React.createContext();
 
 export class SharedSnackbarProvider extends Component {
   constructor(props) {
@@ -9,7 +9,7 @@ export class SharedSnackbarProvider extends Component {
 
     this.state = {
       isOpen: false,
-      message: ""
+      message: ''
     };
   }
 
@@ -22,7 +22,7 @@ export class SharedSnackbarProvider extends Component {
 
   closeSnackbar = () => {
     this.setState({
-      message: "",
+      message: '',
       isOpen: false
     });
   };

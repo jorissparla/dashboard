@@ -163,6 +163,9 @@ export const QUERY_BACKLOG = gql`
     critical: backlog(owner: $owner, orderBy: DAYS_DESC, severityname: CRITICAL) {
       ...backlogfragment
     }
+    cloudops: backlog(owner: $owner, orderBy: DAYS_DESC, statusFilter: CLOUDOPS) {
+      ...backlogfragment
+    }
     all: backlog(owner: $owner, orderBy: DAYS_DESC, statusFilter: BACKLOG) {
       ...backlogfragment
     }

@@ -5,6 +5,8 @@ interface SelectionProps {
   classes: any;
   valuesChanged: any;
   isValidSuperUser: boolean;
+  onNavigateToParams: () => void;
+
   initialValue: {
     isCloud: boolean;
     owner: string;
@@ -16,7 +18,8 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
   classes,
   initialValue,
   valuesChanged,
-  isValidSuperUser
+  isValidSuperUser,
+  onNavigateToParams
 }) => {
   const selectionContext = useContext(SelectionContext);
   const {
@@ -100,8 +103,13 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
         {' '}
         last Updated: {initialValue.lastUpdated}
       </div>
-      {isValidSuperUser && false && (
-        <Button color="secondary" variant="contained" style={{ marginLeft: 60 }}>
+      {isValidSuperUser && (
+        <Button
+          color="secondary"
+          variant="contained"
+          style={{ marginLeft: 60 }}
+          onClick={onNavigateToParams}
+        >
           Parameters
         </Button>
       )}

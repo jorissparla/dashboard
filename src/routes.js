@@ -91,7 +91,6 @@ const TestUser = () => <UserProfileComponent />;
 class AppRoutes extends React.Component {
   render() {
     const user = this.props.context;
-    //const authenticated = this.props.context.authenticated();
 
     return (
       <User>
@@ -102,10 +101,28 @@ class AppRoutes extends React.Component {
 
           return (
             <Switch>
-              <AuthRoute exact path="/statsmain" component={StatsMain} user={user} />
+              <AuthRoute
+                exact
+                path="/statsmain"
+                component={StatsMain}
+                user={user}
+                history={this.props.history}
+              />
               <AuthRoute exact path="/profilepage" component={ProfilePage} user={user} />
-              <AuthRoute exact path="/mywork" component={StatsMain} user={user} />
-              <AuthRoute exact path="/myworkparams" component={Parameters} user={user} />
+              <AuthRoute
+                exact
+                path="/mywork"
+                component={StatsMain}
+                user={user}
+                history={this.props.history}
+              />
+              <AuthRoute
+                exact
+                path="/myworkparams"
+                component={Parameters}
+                user={user}
+                history={this.props.history}
+              />
               <Route exact path="/" component={DashBoardContainer} />
               <Route exact path="/newspage" component={NewsPage} />
               <EnhancedRoute

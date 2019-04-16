@@ -86,6 +86,7 @@ const styles = (theme: any) => ({
 interface ContainerProps {
   classes: any;
   user?: any;
+  history?: any;
 }
 
 type functionParms = {
@@ -124,9 +125,6 @@ const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
     return <div>You need to be logged in to see this page</div>;
   }
 
-  console.log('PROPS', currentUser);
-
-  console.log(getParams());
   const { loading, data } = useQuery(QUERY_BACKLOG, {
     suspend: false,
     variables: { date, owner, deployment: 'ALL', ...getParams() }
@@ -141,7 +139,6 @@ const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
   }
 
   const isValidSuperUser = ['Admin', 'PO'].some(u => u === user.role) || enableIt;
-  console.log(isValidSuperUser, enableIt);
   const mostRecentUpdate = data ? data.mostRecentUpdate : new Date().toLocaleTimeString();
   const handleEnable = () => {};
   return (
@@ -149,10 +146,10 @@ const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
       <div className={classes.root}>
         <SelectionForm
           isValidSuperUser={isValidSuperUser}
+          onNavigateToParams={() => props.history.push('/myworkparams')}
           classes={props.classes}
           initialValue={{ owner, isCloud, lastUpdated: mostRecentUpdate, actionNeeded: true }}
           valuesChanged={(a: string, b: boolean) => {
-            console.log('a', a, b);
             if (a !== owner) {
               setOwner(a);
             }
@@ -287,6 +284,12 @@ const StatsMain: React.FC<Props> = ({ classes, onChange, data }) => {
 
           <BacklogTable
             classes={classes}
+            backlog={data.cloudops}
+            title="All CloudOps"
+            description="All Incidents with a CloudOps Specific status (Task....)"
+          />
+          <BacklogTable
+            classes={classes}
             backlog={data.all_cloud}
             title="All"
             description="All Support Backlog"
@@ -374,6 +377,12 @@ const StatsMain: React.FC<Props> = ({ classes, onChange, data }) => {
             description={`Incidents with status 'New' not updated for more than  ${
               params['N_NEW']
             } days`}
+          />
+          <BacklogTable
+            classes={classes}
+            backlog={data.cloudops}
+            title="All CloudOps"
+            description="All Incidents with a CloudOps Specific status (Task....)"
           />
           <BacklogTable
             classes={classes}
