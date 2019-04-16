@@ -1,13 +1,14 @@
 import { withStyles } from '@material-ui/core';
 import React, { useContext, useState } from 'react';
 import { useQuery } from 'react-apollo-hooks';
-import { QUERY_BACKLOG } from '../graphql/BACKLOG_QUERY2';
+import { QUERY_BACKLOG } from '../stats/queries/BACKLOG_QUERY2';
 import { BacklogTable } from '../stats/BacklogTable';
 import { SelectionContext, SelectionProvider } from '../stats/SelectionContext';
 import { SelectionForm } from '../stats/SelectionForm';
 import { withUser } from '../User';
 import { format } from '../utils/format';
 import Spinner from '../utils/spinner';
+import { useLocalStorage } from '../utils/useLocalStorage';
 
 const styles = (theme: any) => ({
   root: theme.mixins.gutters({
@@ -92,6 +93,27 @@ type functionParms = {
   isCloud: boolean;
 };
 
+export function getParams() {
+  const [C_AWAITINGCUSTOMER] = useLocalStorage('C_AWAITINGCUSTOMER', 7);
+  const [C_AWAITINGINFOR] = useLocalStorage('C_AWAITINGINFOR', 1);
+  const [C_RESEARCHING] = useLocalStorage('C_RESEARCHING', 3);
+  const [C_NEW] = useLocalStorage('C_NEW', 1);
+  const [N_AWAITINGCUSTOMER] = useLocalStorage('N_AWAITINGCUSTOMER', 7);
+  const [N_RESEARCHING] = useLocalStorage('N_RESEARCHING', 1);
+  const [N_AWAITINGINFOR] = useLocalStorage('N_AWAITINGINFOR', 3);
+  const [N_NEW] = useLocalStorage('N_NEW', 1);
+  return {
+    C_AWAITINGCUSTOMER,
+    N_AWAITINGCUSTOMER,
+    C_RESEARCHING,
+    N_RESEARCHING,
+    C_AWAITINGINFOR,
+    N_AWAITINGINFOR,
+    C_NEW,
+    N_NEW
+  };
+}
+
 const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
   const [date, setDate] = useState(format(Date.now(), 'YYYY-MM-DD'));
   const [isCloud, setisCloud] = useState(false);
@@ -104,16 +126,11 @@ const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
 
   console.log('PROPS', currentUser);
 
+  console.log(getParams());
   const { loading, data } = useQuery(QUERY_BACKLOG, {
     suspend: false,
-    variables: { date, owner, deployment: 'ALL' }
+    variables: { date, owner, deployment: 'ALL', ...getParams() }
   });
-  // if (loading) {
-  //   return <div>Loading...</div>;
-  // }
-  // if (!(data && data.solution_proposed)) {
-  //   return <div>Error</div>;
-  // }
 
   const { classes, user } = props;
   let enableIt: boolean;
@@ -170,7 +187,7 @@ interface Props {
 
 const StatsMain: React.FC<Props> = ({ classes, onChange, data }) => {
   const [date, setDate] = useState(format(Date.now(), 'YYYY-MM-DD'));
-  console.log(data);
+  const params = getParams();
   function handleChange(event: any) {
     setDate(event.target.value);
     onChange(event.target.value);
@@ -204,21 +221,27 @@ const StatsMain: React.FC<Props> = ({ classes, onChange, data }) => {
             classes={classes}
             backlog={data.awaiting_customer_cloud}
             title="Awaiting customer"
-            description="All Incidents with a status of Awaiting Customer not updated for 3 days or more"
+            description={`All Incidents with a status of Awaiting Customer not updated for ${
+              params['C_AWAITINGCUSTOMER']
+            } days or more`}
           />
 
           <BacklogTable
             classes={classes}
             backlog={data.researching_cloud}
             title="Researching"
-            description="Incidents with status 'Researching' Last updated 7 days or more"
+            description={`Incidents with status 'Researching' Last updated  ${
+              params['C_RESEARCHING']
+            } days or more`}
           />
 
           <BacklogTable
             classes={classes}
             backlog={data.awaiting_infor_cloud}
             title="Awaiting Infor"
-            description="Incidents with status 'Awaiting Infor' Last updated 3 days or more"
+            description={`Incidents with status 'Awaiting Infor' Last updated  ${
+              params['C_AWAITINGINFOR']
+            } days or more`}
           />
           <BacklogTable
             classes={classes}
@@ -257,7 +280,9 @@ const StatsMain: React.FC<Props> = ({ classes, onChange, data }) => {
             classes={classes}
             backlog={data.new_cloud}
             title="New Incidents"
-            description="Incidents with status 'New' not updated for more than 2 days"
+            description={`Incidents with status 'New' not updated for more than  ${
+              params['C_NEW']
+            } days`}
           />
 
           <BacklogTable
@@ -282,33 +307,35 @@ const StatsMain: React.FC<Props> = ({ classes, onChange, data }) => {
             title="On Hold"
             description="All Incidents with a status of On Hold By Customer with no or an Expired Action date"
           />
-
           <BacklogTable
             classes={classes}
             backlog={data.solution_proposed}
             title="Solution Proposed"
             description="All Incidents with a status of Solution Proposed not updated for 30 days or more"
           />
-
           <BacklogTable
             classes={classes}
             backlog={data.awaiting_customer}
             title="Awaiting customer"
-            description="All Incidents with a status of Awaiting Customer not updated for 7 days or more"
+            description={`All Incidents with a status of Awaiting Customer not updated for ${
+              params['N_AWAITINGCUSTOMER']
+            } days or more`}
           />
-
           <BacklogTable
             classes={classes}
             backlog={data.researching}
             title="Researching"
-            description="Incidents with status 'Researching' Last updated 7 days or more"
+            description={`Incidents with status 'Researching' Last updated  ${
+              params['N_RESEARCHING']
+            } days or more`}
           />
-
           <BacklogTable
             classes={classes}
             backlog={data.awaiting_infor}
             title="Awaiting Infor"
-            description="Incidents with status 'Awaiting Infor' Last updated 3 days or more"
+            description={`Incidents with status 'Awaiting Infor' Last updated  ${
+              params['N_AWAITINGINFOR']
+            } days or more`}
           />
           <BacklogTable
             classes={classes}
@@ -322,21 +349,18 @@ const StatsMain: React.FC<Props> = ({ classes, onChange, data }) => {
             title="Major Impact"
             description="Incidents with severity 'Major Impact' Last updated 2 days or more"
           />
-
           <BacklogTable
             classes={classes}
             backlog={data.major_impact2}
             title="Major Impact"
             description="Incidents with severity 'Major Impact' Last updated 2 days or more Not resolved in 5 days"
           />
-
           <BacklogTable
             classes={classes}
             backlog={data.aging}
             title="Aging- Support"
             description="Incidents older than 90 day- Support Backlog"
           />
-
           <BacklogTable
             classes={classes}
             backlog={data.aging_dev}
@@ -347,9 +371,10 @@ const StatsMain: React.FC<Props> = ({ classes, onChange, data }) => {
             classes={classes}
             backlog={data.new}
             title="New Incidents"
-            description="Incidents with status 'New' not updated for more than 2 days"
+            description={`Incidents with status 'New' not updated for more than  ${
+              params['N_NEW']
+            } days`}
           />
-
           <BacklogTable
             classes={classes}
             backlog={data.all}

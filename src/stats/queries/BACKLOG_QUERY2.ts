@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { StatusFilter } from './../../generated/apolloComponents';
+import { StatusFilter } from '../../../generated/apolloComponents';
 
 export const QUERY_BACKLOG = gql`
   # Write your query or mutation here
@@ -17,7 +17,18 @@ export const QUERY_BACKLOG = gql`
     Deployment
     severityname
   }
-  query QUERY_BACKLOG($date: String, $owner: String) {
+  query QUERY_BACKLOG(
+    $date: String
+    $owner: String
+    $C_AWAITINGCUSTOMER: Int
+    $N_AWAITINGCUSTOMER: Int
+    $C_RESEARCHING: Int
+    $N_RESEARCHING: Int
+    $C_AWAITINGINFOR: Int
+    $N_AWAITINGINFOR: Int
+    $C_NEW: Int
+    $N_NEW: Int
+  ) {
     mostRecentUpdate
     critical_cloud: backlog(
       owner: $owner
@@ -59,7 +70,7 @@ export const QUERY_BACKLOG = gql`
       orderBy: DAYS_DESC
       deployment: "CLOUD"
       status: "Awaiting Customer"
-      since: 3
+      since: $C_AWAITINGCUSTOMER
       date: $date
     ) {
       ...backlogfragment
@@ -69,7 +80,7 @@ export const QUERY_BACKLOG = gql`
       orderBy: DAYS_DESC
       deployment: "CLOUD"
       status: "Researching"
-      since: 7
+      since: $C_RESEARCHING
       date: $date
     ) {
       ...backlogfragment
@@ -79,7 +90,7 @@ export const QUERY_BACKLOG = gql`
       orderBy: DAYS_DESC
       deployment: "CLOUD"
       status: "Awaiting Infor"
-      since: 3
+      since: $C_AWAITINGINFOR
       date: $date
     ) {
       ...backlogfragment
@@ -144,7 +155,7 @@ export const QUERY_BACKLOG = gql`
       orderBy: CREATED_ASC
       deployment: "CLOUD"
       status: "New"
-      since: 2
+      since: $C_NEW
       date: $date
     ) {
       ...backlogfragment
@@ -178,7 +189,7 @@ export const QUERY_BACKLOG = gql`
       orderBy: DAYS_DESC
       deployment: "ALL"
       status: "Awaiting Customer"
-      since: 7
+      since: $N_AWAITINGCUSTOMER
       date: $date
     ) {
       ...backlogfragment
@@ -188,7 +199,7 @@ export const QUERY_BACKLOG = gql`
       orderBy: DAYS_DESC
       deployment: "ALL"
       status: "Researching"
-      since: 16
+      since: $N_RESEARCHING
       date: $date
     ) {
       ...backlogfragment
@@ -198,7 +209,7 @@ export const QUERY_BACKLOG = gql`
       orderBy: DAYS_DESC
       deployment: "ALL"
       status: "Awaiting Infor"
-      since: 3
+      since: $N_AWAITINGINFOR
       date: $date
     ) {
       ...backlogfragment
@@ -263,7 +274,7 @@ export const QUERY_BACKLOG = gql`
       orderBy: CREATED_ASC
       deployment: "ALL"
       status: "New"
-      since: 2
+      since: $N_NEW
       date: $date
     ) {
       ...backlogfragment

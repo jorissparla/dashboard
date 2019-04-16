@@ -16,13 +16,14 @@ import NewsItemContainer from './news/newsitemcontainer';
 import DashBoardContainer from './pages/dashboardcontainer';
 import NewsPage from './pages/newspage';
 import PlannedCourseRequestList from './pages/PlannedCourseRequestList';
+import ProfilePage from './pages/ProfilePage';
 import VideoPage from './pages/Videos';
 import { withDashBoardContext } from './Provider';
+import { Parameters } from './stats/Parameters';
 import TestLogin from './TestLogin';
 import User, { UserProfileComponent, withUser } from './User';
 import UserPermissions from './UserPermissions';
 import { AddVideo, EditVideo } from './videos/VideoOperations';
-import ProfilePage from './pages/ProfilePage';
 const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
 //const StatsMain = React.lazy(() => import('./kudos/kudolistcomponentnew'));
 //const CommentsList = DynamicImport(() => import("./feedback/commentList"));
@@ -104,6 +105,7 @@ class AppRoutes extends React.Component {
               <AuthRoute exact path="/statsmain" component={StatsMain} user={user} />
               <AuthRoute exact path="/profilepage" component={ProfilePage} user={user} />
               <AuthRoute exact path="/mywork" component={StatsMain} user={user} />
+              <AuthRoute exact path="/myworkparams" component={Parameters} user={user} />
               <Route exact path="/" component={DashBoardContainer} />
               <Route exact path="/newspage" component={NewsPage} />
               <EnhancedRoute
