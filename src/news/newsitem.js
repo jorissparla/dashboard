@@ -124,6 +124,8 @@ const NewsItem = ({
                   label="Copy the Image URL into the field"
                 />
                 <FileUploaderNew
+                  link={`\\\\nlbavwixs.infor.com\\images\\news`}
+                  httpLinkPrefix={`http://nlbavwixs.infor.com/images/news/`}
                   setFile={async value => {
                     console.log('NewsItem:::', value);
                     setImageFile(value);

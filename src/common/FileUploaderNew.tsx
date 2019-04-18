@@ -124,6 +124,7 @@ export const FileUploadComponent: React.FC<Props> = ({
           }
         }}
       />
+      File
     </FileInput>
   );
 };

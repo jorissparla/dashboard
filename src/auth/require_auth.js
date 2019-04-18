@@ -12,6 +12,8 @@ export const AuthRoute = ({ component: Component, allowed, user, xuser, ...rest 
         if (!user) {
           return <Redirect to={{ pathname: '/' }} />;
         }
+        console.log('allowed', allowed, user);
+        console.dir(user);
         if (!allowed || allowed.indexOf(user.role || []) >= 0) {
           return <Component {...props} user={user} />;
         } else {
