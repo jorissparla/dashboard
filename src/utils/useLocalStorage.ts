@@ -1,9 +1,17 @@
 import { useState } from 'react';
 import { ToString } from 'yargs';
 
-export function useLocalStorage(key: string, initialValue: string | number) {
+export function useLocalStorage(key: string, initialValue: string | number, clean?: boolean) {
   // State to store our value
   // Pass initial state function to useState so logic is only executed once
+
+  if (clean) {
+    if (clean === true) {
+      console.log('clean');
+      window.localStorage.removeItem(key);
+    }
+  }
+
   const [storedValue, setStoredValue] = useState(() => {
     try {
       // Get from local storage by key

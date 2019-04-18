@@ -56,7 +56,9 @@ export const SideBarMenu: React.FC<Props> = ({ classes, history, user, toggleMen
       {authenticated && (
         <ToggledNavLink title="WorkList" Icon={MyWorkList} navigateTo="/mywork" history={history} />
       )}
-      <ToggledNavLink title="Permissions" Icon={Person} navigateTo="/bla" history={history} />
+      {isAdmin && (
+        <ToggledNavLink title="Permissions" Icon={Person} navigateTo="/bla" history={history} />
+      )}
       <ExpandableMenuItem classes={classes} title="Stats Graphs" Icon={GoLiveIcon}>
         <ToggledNavLink
           title="Logistics"

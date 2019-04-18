@@ -94,15 +94,15 @@ type functionParms = {
   isCloud: boolean;
 };
 
-export function getParams() {
-  const [C_AWAITINGCUSTOMER] = useLocalStorage('C_AWAITINGCUSTOMER', 7);
-  const [C_AWAITINGINFOR] = useLocalStorage('C_AWAITINGINFOR', 1);
-  const [C_RESEARCHING] = useLocalStorage('C_RESEARCHING', 3);
-  const [C_NEW] = useLocalStorage('C_NEW', 1);
-  const [N_AWAITINGCUSTOMER] = useLocalStorage('N_AWAITINGCUSTOMER', 7);
-  const [N_RESEARCHING] = useLocalStorage('N_RESEARCHING', 1);
-  const [N_AWAITINGINFOR] = useLocalStorage('N_AWAITINGINFOR', 3);
-  const [N_NEW] = useLocalStorage('N_NEW', 1);
+export function getParams(clean = false) {
+  const [C_AWAITINGCUSTOMER] = useLocalStorage('C_AWAITINGCUSTOMER', 7, clean);
+  const [C_AWAITINGINFOR] = useLocalStorage('C_AWAITINGINFOR', 1, clean);
+  const [C_RESEARCHING] = useLocalStorage('C_RESEARCHING', 3, clean);
+  const [C_NEW] = useLocalStorage('C_NEW', 1, clean);
+  const [N_AWAITINGCUSTOMER] = useLocalStorage('N_AWAITINGCUSTOMER', 7, clean);
+  const [N_RESEARCHING] = useLocalStorage('N_RESEARCHING', 1, clean);
+  const [N_AWAITINGINFOR] = useLocalStorage('N_AWAITINGINFOR', 2, clean);
+  const [N_NEW] = useLocalStorage('N_NEW', 1, clean);
   return {
     C_AWAITINGCUSTOMER,
     N_AWAITINGCUSTOMER,
@@ -121,24 +121,23 @@ const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
   const [owner, setOwner] = useState(props.user.fullname);
 
   const currentUser = withUser();
+  const { classes, user } = props;
   if (props.user.fullname === null || !currentUser) {
     return <div>You need to be logged in to see this page</div>;
   }
-
-  const { loading, data } = useQuery(QUERY_BACKLOG, {
-    suspend: false,
-    variables: { date, owner, deployment: 'ALL', ...getParams() }
-  });
-
-  const { classes, user } = props;
   let enableIt: boolean;
   if (currentUser && currentUser.permissions) {
     enableIt = currentUser.permissions.some(u => u.permission === 'STATS');
   } else {
     enableIt = false;
   }
-
   const isValidSuperUser = ['Admin', 'PO'].some(u => u === user.role) || enableIt;
+  console.log('isValidSuperUser', isValidSuperUser);
+  const { loading, data } = useQuery(QUERY_BACKLOG, {
+    suspend: false,
+    variables: { date, owner, deployment: 'ALL', ...getParams(!isValidSuperUser) }
+  });
+
   const mostRecentUpdate = data ? data.mostRecentUpdate : new Date().toLocaleTimeString();
   const handleEnable = () => {};
   return (
