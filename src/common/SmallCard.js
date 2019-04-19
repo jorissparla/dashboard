@@ -9,6 +9,8 @@ import { Papier, HR } from '../styles/index.js';
 import Divider from '@material-ui/core/Divider';
 import ReactMarkdown from 'react-markdown';
 import { ToggleFavorite } from '../supportcard/Favorite';
+import NumberOfViews from '../pages/NumberOfViews';
+import { format } from '../utils/format';
 
 const OtherButton = styled.a`
   display: flex;
@@ -91,6 +93,11 @@ const StyledLink = styled(Link)`
   }
 `;
 
+const DateWrapper = styled.div`
+  font-size: 10px;
+  font-style: italic;
+`;
+
 const StyledPapier = styled(Papier)`
   display: flex;
   justify-content: space-between;
@@ -117,6 +124,7 @@ const SmallCard = ({
   isFavorite = false,
   account_id = null,
   supportcard_id = null,
+  updatedAt = null,
   onTitleClick = () => null,
   onToggleFavorite = () => {},
   onAudit = () => console.log('onaudit'),
@@ -136,6 +144,7 @@ const SmallCard = ({
         )}
         {account_id && <ToggleFavorite toggle={onToggleFavorite} isFavorite={isFavorite} />}
       </TitleWrapper>
+      <DateWrapper>last updated: {format(updatedAt, 'ddd DD MMM YYYY, hh:mm')}</DateWrapper>
       <HR />
       <StyledBody>
         <ReactMarkdown source={text.slice(0, 200).concat('...')} />
@@ -163,6 +172,7 @@ const SmallCard = ({
         >
           {buttonText.toUpperCase()}
         </OtherButton>
+        <NumberOfViews linkid={supportcard_id} />
       </BottomStyle>
     </StyledPapier>
   );

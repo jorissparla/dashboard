@@ -27,6 +27,7 @@ import CategoryTabs from '../supportcard/CategoryTabs';
 import { adopt } from 'react-adopt';
 import User from '../User';
 import Modal from '../ModalWrapper';
+import Spinner from '../utils/spinner';
 const cardColors = [
   { back: '#7fbadb', front: '#000' },
   { back: '#FFCC80', front: '#000' },
@@ -173,7 +174,7 @@ export default function SupportCardContainer(props) {
     <Composed>
       {({ supportcards, createAudit, favoriteCard, unfavoriteCard, user }) => {
         const { data, loading } = supportcards;
-        if (loading) return 'Loading';
+        if (loading) return <Spinner />;
         const currentUser = user.data.me;
         console.log('Currentuser', user);
         return (
@@ -325,6 +326,7 @@ class SupportCards extends React.Component {
                       : favoriteCard({ variables: { input: { supportcard_id, account_id } } });
                   }}
                   title={title}
+                  supportcard_id={id}
                   isNew={isNew}
                   text={description}
                   category={name}
