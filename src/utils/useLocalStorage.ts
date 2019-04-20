@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { ToString } from 'yargs';
+import { useState } from "react";
 
 export function useLocalStorage(key: string, initialValue: string | number, clean?: boolean) {
   // State to store our value
@@ -7,7 +6,7 @@ export function useLocalStorage(key: string, initialValue: string | number, clea
 
   if (clean) {
     if (clean === true) {
-      console.log('clean');
+      console.log("clean");
       window.localStorage.removeItem(key);
     }
   }
@@ -35,11 +34,7 @@ export function useLocalStorage(key: string, initialValue: string | number, clea
       // Allow value to be a function so we have same API as useState
 
       const valueToStore =
-        value instanceof Function
-          ? value(storedValue)
-          : typeof value === 'string'
-          ? parseInt(value)
-          : value;
+        value instanceof Function ? value(storedValue) : typeof value === "string" ? parseInt(value) : value;
       // Save state
       setStoredValue(valueToStore);
       // Save to local storage
