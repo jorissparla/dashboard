@@ -1,6 +1,15 @@
 import React, { useContext, useState } from 'react';
-import { Paper, TextField, Switch, FormLabel, Button } from '@material-ui/core';
-import { SelectionContext } from './SelectionContext';
+import {
+  Paper,
+  TextField,
+  Switch,
+  FormLabel,
+  Button,
+  FormControlLabel,
+  FormGroup,
+  Checkbox
+} from '@material-ui/core';
+import { SelectionContext } from '../globalState/SelectionContext';
 interface SelectionProps {
   classes: any;
   valuesChanged: any;
@@ -28,12 +37,28 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
     setisCloud,
 
     actionNeeded,
-    setActionNeeded
+    setActionNeeded,
+    products,
+    setProducts
   } = selectionContext;
   setOwner(initialValue.owner);
   const [ownerVal, setOwnerVal] = useState(initialValue.owner);
   const [criteriaChange, setCriteriaChange] = React.useState(false);
   const [allOwners, toggleAllOwners] = React.useState(false);
+  console.log(products);
+  function toggleSet(value: string) {
+    console.log(products.indexOf(value));
+    if (products.indexOf(value) >= 0) {
+      console.log(products.indexOf(value));
+      setProducts(products.filter((prod: string) => prod !== value));
+    } else {
+      setProducts(products.concat(value));
+    }
+  }
+
+  function getValue(value: string) {
+    return products.indexOf(value) >= 0;
+  }
   return (
     <Paper className={classes.paper2}>
       <FormLabel>Cloud</FormLabel>
@@ -99,6 +124,42 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
         value={actionNeeded}
         color="secondary"
       />
+      <FormGroup row style={{ marginLeft: 50, border: '1px solid #ccc', padding: 5 }}>
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={getValue('LN')}
+              onChange={() => toggleSet('LN')}
+              value="LN"
+              color="primary"
+            />
+          }
+          label="LN"
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={getValue('PLM')}
+              onChange={() => toggleSet('PLM')}
+              value="PLM"
+              color="secondary"
+            />
+          }
+          label="PLM"
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={getValue('Protean')}
+              onChange={() => toggleSet('Protean')}
+              value="Protean"
+              color="secondary"
+            />
+          }
+          label="Protean"
+        />
+      </FormGroup>
+
       <div style={{ position: 'relative', right: '-40px' }}>
         {' '}
         last Updated: {initialValue.lastUpdated}

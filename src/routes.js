@@ -18,7 +18,7 @@ import NewsPage from './pages/newspage';
 import PlannedCourseRequestList from './pages/PlannedCourseRequestList';
 import ProfilePage from './pages/ProfilePage';
 import VideoPage from './pages/Videos';
-import { withDashBoardContext } from './Provider';
+import { withDashBoardContext } from './globalState/Provider';
 import { Parameters } from './stats/Parameters';
 import TestLogin from './TestLogin';
 import User, { UserProfileComponent, withUser } from './User';

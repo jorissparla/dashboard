@@ -11,7 +11,7 @@ export const SelectionContext = React.createContext(initialContext);
 
 export const SelectionProvider: React.FC<Props> = ({ children }) => {
   const [owner, setOwner] = React.useState('');
-
+  const [products, setProducts] = React.useState(['LN']);
   const [isCloud, setisCloud] = React.useState(false);
 
   const [actionNeeded, setActionNeeded] = React.useState(true);
@@ -23,7 +23,9 @@ export const SelectionProvider: React.FC<Props> = ({ children }) => {
         isCloud,
         setisCloud,
         actionNeeded,
-        setActionNeeded
+        setActionNeeded,
+        products,
+        setProducts
       }}
     >
       {children}

@@ -3,7 +3,7 @@ import React, { useContext, useState } from 'react';
 import { useQuery } from 'react-apollo-hooks';
 import { QUERY_BACKLOG } from '../stats/queries/BACKLOG_QUERY2';
 import { BacklogTable } from '../stats/BacklogTable';
-import { SelectionContext, SelectionProvider } from '../stats/SelectionContext';
+import { SelectionContext } from '../globalState/SelectionContext';
 import { SelectionForm } from '../stats/SelectionForm';
 import { withUser } from '../User';
 import { format } from '../utils/format';
@@ -131,45 +131,44 @@ const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
   } else {
     enableIt = false;
   }
+  const { products } = useContext(SelectionContext);
   const isValidSuperUser = ['Admin', 'PO'].some(u => u === user.role) || enableIt;
   console.log('isValidSuperUser', isValidSuperUser);
   const { loading, data } = useQuery(QUERY_BACKLOG, {
     suspend: false,
-    variables: { date, owner, deployment: 'ALL', ...getParams(!isValidSuperUser) }
+    variables: { date, owner, products, deployment: 'ALL', ...getParams(!isValidSuperUser) }
   });
 
   const mostRecentUpdate = data ? data.mostRecentUpdate : new Date().toLocaleTimeString();
   const handleEnable = () => {};
   return (
-    <SelectionProvider>
-      <div className={classes.root}>
-        <SelectionForm
-          isValidSuperUser={isValidSuperUser}
-          onNavigateToParams={() => props.history.push('/myworkparams')}
+    <div className={classes.root}>
+      <SelectionForm
+        isValidSuperUser={isValidSuperUser}
+        onNavigateToParams={() => props.history.push('/myworkparams')}
+        classes={props.classes}
+        initialValue={{ owner, isCloud, lastUpdated: mostRecentUpdate, actionNeeded: true }}
+        valuesChanged={(a: string, b: boolean) => {
+          if (a !== owner) {
+            setOwner(a);
+          }
+          if (b !== isCloud) {
+            setisCloud(b);
+          }
+        }}
+      />
+      {loading ? (
+        <Spinner />
+      ) : (
+        <StatsMain
           classes={props.classes}
-          initialValue={{ owner, isCloud, lastUpdated: mostRecentUpdate, actionNeeded: true }}
-          valuesChanged={(a: string, b: boolean) => {
-            if (a !== owner) {
-              setOwner(a);
-            }
-            if (b !== isCloud) {
-              setisCloud(b);
-            }
-          }}
+          data={data}
+          onChange={(date: string) => setDate(date)}
+          isCloud={isCloud}
+          actionNeeded={false}
         />
-        {loading ? (
-          <Spinner />
-        ) : (
-          <StatsMain
-            classes={props.classes}
-            data={data}
-            onChange={(date: string) => setDate(date)}
-            isCloud={isCloud}
-            actionNeeded={false}
-          />
-        )}
-      </div>
-    </SelectionProvider>
+      )}
+    </div>
   );
 };
 

@@ -20,6 +20,7 @@ export const QUERY_BACKLOG = gql`
   query QUERY_BACKLOG(
     $date: String
     $owner: String
+    $products: [String]
     $C_AWAITINGCUSTOMER: Int
     $N_AWAITINGCUSTOMER: Int
     $C_RESEARCHING: Int
@@ -35,6 +36,7 @@ export const QUERY_BACKLOG = gql`
       orderBy: DAYS_DESC
       severityname: CRITICAL
       deployment: "CLOUD"
+      productFilters: $products
     ) {
       ...backlogfragment
     }
@@ -43,6 +45,7 @@ export const QUERY_BACKLOG = gql`
       orderBy: DAYS_DESC
       deployment: "CLOUD"
       statusFilter: BACKLOG
+      productFilters: $products
     ) {
       ...backlogfragment
     }
@@ -52,6 +55,7 @@ export const QUERY_BACKLOG = gql`
       status: "On Hold By Customer"
       action_date: $date
       deployment: "CLOUD"
+      productFilters: $products
     ) {
       ...backlogfragment
     }
@@ -62,6 +66,7 @@ export const QUERY_BACKLOG = gql`
       status: "Solution Proposed"
       since: 30
       date: $date
+      productFilters: $products
     ) {
       ...backlogfragment
     }
@@ -72,6 +77,7 @@ export const QUERY_BACKLOG = gql`
       status: "Awaiting Customer"
       since: $C_AWAITINGCUSTOMER
       date: $date
+      productFilters: $products
     ) {
       ...backlogfragment
     }
@@ -82,6 +88,7 @@ export const QUERY_BACKLOG = gql`
       status: "Researching"
       since: $C_RESEARCHING
       date: $date
+      productFilters: $products
     ) {
       ...backlogfragment
     }
@@ -92,6 +99,7 @@ export const QUERY_BACKLOG = gql`
       status: "Awaiting Infor"
       since: $C_AWAITINGINFOR
       date: $date
+      productFilters: $products
     ) {
       ...backlogfragment
     }
@@ -101,6 +109,7 @@ export const QUERY_BACKLOG = gql`
       deployment: "CLOUD"
       status: "Awaiting Infor"
       date: $date
+      productFilters: $products
     ) {
       ...backlogfragment
     }
@@ -112,6 +121,7 @@ export const QUERY_BACKLOG = gql`
       since: 2
       createdafter: "2019-03-01"
       date: $date
+      productFilters: $products
       statusFilter: BACKLOG
     ) {
       ...backlogfragment
@@ -124,6 +134,7 @@ export const QUERY_BACKLOG = gql`
       since: 2
       createdafter: "2019-03-01"
       date: $date
+      productFilters: $products
       aging: 5
       statusFilter: BACKLOG
     ) {
@@ -136,6 +147,7 @@ export const QUERY_BACKLOG = gql`
       deployment: "CLOUD"
       aging: 90
       date: $date
+      productFilters: $products
       statusFilter: BACKLOG
     ) {
       ...backlogfragment
@@ -147,6 +159,7 @@ export const QUERY_BACKLOG = gql`
       aging: 90
       statusFilter: DEVELOPMENT
       date: $date
+      productFilters: $products
     ) {
       ...backlogfragment
     }
@@ -157,16 +170,32 @@ export const QUERY_BACKLOG = gql`
       status: "New"
       since: $C_NEW
       date: $date
+      productFilters: $products
     ) {
       ...backlogfragment
     }
-    critical: backlog(owner: $owner, orderBy: DAYS_DESC, severityname: CRITICAL) {
+    critical: backlog(
+      owner: $owner
+      orderBy: DAYS_DESC
+      severityname: CRITICAL
+      productFilters: $products
+    ) {
       ...backlogfragment
     }
-    cloudops: backlog(owner: $owner, orderBy: DAYS_DESC, statusFilter: CLOUDOPS) {
+    cloudops: backlog(
+      owner: $owner
+      orderBy: DAYS_DESC
+      statusFilter: CLOUDOPS
+      productFilters: $products
+    ) {
       ...backlogfragment
     }
-    all: backlog(owner: $owner, orderBy: DAYS_DESC, statusFilter: BACKLOG) {
+    all: backlog(
+      owner: $owner
+      orderBy: DAYS_DESC
+      statusFilter: BACKLOG
+      productFilters: $products
+    ) {
       ...backlogfragment
     }
     on_hold: backlog(
@@ -174,6 +203,7 @@ export const QUERY_BACKLOG = gql`
       orderBy: DAYS_DESC
       status: "On Hold By Customer"
       action_date: $date
+      productFilters: $products
     ) {
       ...backlogfragment
     }
@@ -184,6 +214,7 @@ export const QUERY_BACKLOG = gql`
       status: "Solution Proposed"
       since: 30
       date: $date
+      productFilters: $products
     ) {
       ...backlogfragment
     }
@@ -194,6 +225,7 @@ export const QUERY_BACKLOG = gql`
       status: "Awaiting Customer"
       since: $N_AWAITINGCUSTOMER
       date: $date
+      productFilters: $products
     ) {
       ...backlogfragment
     }
@@ -204,6 +236,7 @@ export const QUERY_BACKLOG = gql`
       status: "Researching"
       since: $N_RESEARCHING
       date: $date
+      productFilters: $products
     ) {
       ...backlogfragment
     }
@@ -214,6 +247,7 @@ export const QUERY_BACKLOG = gql`
       status: "Awaiting Infor"
       since: $N_AWAITINGINFOR
       date: $date
+      productFilters: $products
     ) {
       ...backlogfragment
     }
@@ -223,6 +257,7 @@ export const QUERY_BACKLOG = gql`
       deployment: "ALL"
       status: "Awaiting Infor"
       date: $date
+      productFilters: $products
     ) {
       ...backlogfragment
     }
@@ -235,6 +270,7 @@ export const QUERY_BACKLOG = gql`
       createdafter: "2019-03-01"
       date: $date
       statusFilter: BACKLOG
+      productFilters: $products
     ) {
       ...backlogfragment
     }
@@ -248,6 +284,7 @@ export const QUERY_BACKLOG = gql`
       date: $date
       aging: 5
       statusFilter: BACKLOG
+      productFilters: $products
     ) {
       ...backlogfragment
     }
@@ -259,6 +296,7 @@ export const QUERY_BACKLOG = gql`
       aging: 90
       date: $date
       statusFilter: BACKLOG
+      productFilters: $products
     ) {
       ...backlogfragment
     }
@@ -269,6 +307,7 @@ export const QUERY_BACKLOG = gql`
       aging: 90
       date: $date
       statusFilter: DEVELOPMENT
+      productFilters: $products
     ) {
       ...backlogfragment
     }
@@ -279,6 +318,7 @@ export const QUERY_BACKLOG = gql`
       status: "New"
       since: $N_NEW
       date: $date
+      productFilters: $products
     ) {
       ...backlogfragment
     }

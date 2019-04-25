@@ -2,7 +2,7 @@ import React from 'react';
 import { useMutation } from 'react-apollo-hooks';
 import FileUploader from '../common/FileUploaderNew';
 import { UPDATE_PROFILE_PIC_MUTATION } from '../graphql/UPDATE_PROFILE_PIC';
-import { DashBoardContext } from '../Provider';
+import { DashBoardContext } from '../globalState/Provider';
 
 interface ProfilePageProps {
   user: { fullname: string; email: string; image: string };
