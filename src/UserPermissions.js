@@ -12,7 +12,7 @@ import Divider from '@material-ui/core/Divider';
 import { withStyles } from '@material-ui/core/styles';
 import deepOrange from '@material-ui/core/colors/deepOrange';
 import UserSearchList from './UserSearchList';
-import { SharedSnackbarConsumer } from './SharedSnackbar.context';
+import { SharedSnackbarConsumer } from './globalState/SharedSnackbar.context';
 
 import User from './User';
 
@@ -105,11 +105,10 @@ class UpdatePermissions extends React.Component {
         where: { id },
         data: { permissions: newPermissions }
       }
-    }).then(
-      () =>
-        hasPermission
-          ? openSnackbar(`Permission ${perm} was removed`)
-          : openSnackbar(`Permission ${perm} was added`)
+    }).then(() =>
+      hasPermission
+        ? openSnackbar(`Permission ${perm} was removed`)
+        : openSnackbar(`Permission ${perm} was added`)
     );
   };
   render() {

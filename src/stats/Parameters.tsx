@@ -2,12 +2,7 @@ import * as React from 'react';
 import { Paper, withStyles, createStyles, Button } from '@material-ui/core';
 import TextField, { TextFieldProps } from '@material-ui/core/TextField';
 import { useLocalStorage } from '../utils/useLocalStorage';
-import {
-  SharedSnackbarProvider,
-  SharedSnackbarContext,
-  SharedSnackbarConsumer
-} from '../SharedSnackbar.context';
-import { func } from 'prop-types';
+import { SharedSnackbarContext } from '../globalState/SharedSnackbar.context';
 
 const styles = createStyles({
   root: {

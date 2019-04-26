@@ -21,7 +21,7 @@ import ApolloClient from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { createUploadLink } from 'apollo-upload-client';
 import ContextProvider from './globalState';
-import { SharedSnackbarProvider } from './SharedSnackbar.context';
+// import { SharedSnackbarProvider } from './globalState/SharedSnackbar.context';
 
 const {
   REACT_APP_PORT_GRAPHQL = 55555,
@@ -70,14 +70,16 @@ const Main = () => (
     <ApolloHooksProvider client={client}>
       <Provider store={store}>
         <MuiThemeProvider theme={muiTheme}>
-          <BrowserRouter>
-            <SharedSnackbarProvider>
-              <ContextProvider>
+          <ContextProvider>
+            <BrowserRouter>
+              {/* <SharedSnackbarProvider> */}
+              <>
                 <App />
                 <AppRoutes />
-              </ContextProvider>
-            </SharedSnackbarProvider>
-          </BrowserRouter>
+              </>
+              {/* </SharedSnackbarProvider> */}
+            </BrowserRouter>
+          </ContextProvider>
         </MuiThemeProvider>
       </Provider>
     </ApolloHooksProvider>

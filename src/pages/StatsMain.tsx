@@ -95,11 +95,11 @@ type functionParms = {
 };
 
 export function getParams(clean = false) {
-  const [C_AWAITINGCUSTOMER] = useLocalStorage('C_AWAITINGCUSTOMER', 7, clean);
+  const [C_AWAITINGCUSTOMER] = useLocalStorage('C_AWAITINGCUSTOMER', 6, clean);
   const [C_AWAITINGINFOR] = useLocalStorage('C_AWAITINGINFOR', 1, clean);
   const [C_RESEARCHING] = useLocalStorage('C_RESEARCHING', 3, clean);
   const [C_NEW] = useLocalStorage('C_NEW', 1, clean);
-  const [N_AWAITINGCUSTOMER] = useLocalStorage('N_AWAITINGCUSTOMER', 7, clean);
+  const [N_AWAITINGCUSTOMER] = useLocalStorage('N_AWAITINGCUSTOMER', 6, clean);
   const [N_RESEARCHING] = useLocalStorage('N_RESEARCHING', 1, clean);
   const [N_AWAITINGINFOR] = useLocalStorage('N_AWAITINGINFOR', 2, clean);
   const [N_NEW] = useLocalStorage('N_NEW', 1, clean);
@@ -216,9 +216,9 @@ const StatsMain: React.FC<Props> = ({ classes, onChange, data }) => {
             classes={classes}
             backlog={data.awaiting_customer_cloud}
             title="Awaiting customer"
-            description={`All Incidents with a status of Awaiting Customer not updated for ${
+            description={`All Incidents with a status of Awaiting Customer not updated for more than  ${
               params['C_AWAITINGCUSTOMER']
-            } days or more`}
+            } days `}
           />
 
           <BacklogTable
@@ -318,9 +318,9 @@ const StatsMain: React.FC<Props> = ({ classes, onChange, data }) => {
             classes={classes}
             backlog={data.awaiting_customer}
             title="Awaiting customer"
-            description={`All Incidents with a status of Awaiting Customer not updated for ${
+            description={`All Incidents with a status of Awaiting Customer not updated for more than ${
               params['N_AWAITINGCUSTOMER']
-            } days or more`}
+            } days `}
           />
           <BacklogTable
             classes={classes}
