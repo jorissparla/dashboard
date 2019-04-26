@@ -2,7 +2,10 @@ import React from 'react';
 import gql from 'graphql-tag';
 import { graphql, compose, Query, Mutation } from 'react-apollo';
 import { SmallCard } from '../common/SmallCard';
+import NewCard from '../common/NewCard';
+
 //import { SmallCard } from "./SupportCard";
+import ReactMarkdown from 'react-markdown';
 import Dialog from '@material-ui/core/Dialog';
 import styled from 'styled-components';
 import { withStyles } from '@material-ui/core/styles';
@@ -23,6 +26,8 @@ import AddCard from '../supportcard/AddCard';
 import CategoryTabs from '../supportcard/CategoryTabs';
 import { adopt } from 'react-adopt';
 import User from '../User';
+import Modal from '../ModalWrapper';
+import Spinner from '../utils/spinner';
 const cardColors = [
   { back: '#7fbadb', front: '#000' },
   { back: '#FFCC80', front: '#000' },
@@ -169,7 +174,7 @@ export default function SupportCardContainer(props) {
     <Composed>
       {({ supportcards, createAudit, favoriteCard, unfavoriteCard, user }) => {
         const { data, loading } = supportcards;
-        if (loading) return 'Loading';
+        if (loading) return <Spinner />;
         const currentUser = user.data.me;
         console.log('Currentuser', user);
         return (
@@ -188,7 +193,14 @@ export default function SupportCardContainer(props) {
 }
 
 class SupportCards extends React.Component {
-  state = { searchText: '', selectedCategory: '', showRequest: false, showFavorites: false };
+  state = {
+    searchText: '',
+    selectedCategory: '',
+    showRequest: false,
+    showFavorites: false,
+    portalText: '### Where can I find release Notes documents',
+    showPortal: false
+  };
 
   setSearchText = value => this.setState({ searchText: value });
   setSelectedCategory = value => this.setState({ selectedCategory: value });
@@ -201,6 +213,11 @@ class SupportCards extends React.Component {
     const linkid = splitAr.slice(3, 4)[0];
     const input = { page, linkid, username: this.props.user.fullname, type };
     this.props.createAudit({ variables: { input } }).then(res => console.log('RES::', res));
+  };
+
+  togglePortal = text => {
+    console.log('toggle', text);
+    this.setState({ portalText: text, showPortal: true });
   };
 
   render() {
@@ -224,26 +241,7 @@ class SupportCards extends React.Component {
     ];
     const { searchText, selectedCategory } = this.state;
 
-    let filteredCards = supportcards
-      .filter(card => {
-        const {
-          category: { name },
-          title
-        } = card;
-        return (
-          _.includes(name.toUpperCase(), searchText.toUpperCase()) ||
-          _.includes(title.toUpperCase(), searchText.toUpperCase())
-        );
-      })
-      .filter(card => {
-        const {
-          category: { name }
-        } = card;
-        return _.includes(name.toUpperCase(), selectedCategory.toUpperCase());
-      });
-    if (this.state.showFavorites) {
-      filteredCards = filteredCards.filter(card => card.isfavorite === true);
-    }
+    let filteredCards = this.doFilter(supportcards, searchText, selectedCategory);
 
     return (
       <Container onDoubleClick={() => this.setState({ showRequest: true })}>
@@ -312,19 +310,23 @@ class SupportCards extends React.Component {
               const supportcard_id = id;
               const account_id = currentUser ? currentUser.id : null;
               return (
+                // <NewCard
                 <SmallCard
+                  onTitleClick={() => this.togglePortal(description)}
                   color={backgroundcolor || cardColors[i % (cardColors.length - 1)].back}
                   textcolor={color || cardColors[i % (cardColors.length - 1)].front}
                   key={id}
                   authenticated={authenticated}
                   account_id={account_id}
                   isFavorite={isfavorite}
+                  updatedAt={updatedAt}
                   onToggleFavorite={() => {
                     isfavorite
                       ? unfavoriteCard({ variables: { input: { supportcard_id, account_id } } })
                       : favoriteCard({ variables: { input: { supportcard_id, account_id } } });
                   }}
                   title={title}
+                  supportcard_id={id}
                   isNew={isNew}
                   text={description}
                   category={name}
@@ -343,8 +345,38 @@ class SupportCards extends React.Component {
             }
           )}
         </Div>
+        <Modal
+          on={this.state.showPortal}
+          toggle={() => this.setState({ showPortal: !this.state.showPortal })}
+        >
+          <ReactMarkdown>{this.state.portalText}</ReactMarkdown>
+        </Modal>
       </Container>
     );
+  }
+
+  doFilter(supportcards, searchText, selectedCategory) {
+    let filteredCards = supportcards
+      .filter(card => {
+        const {
+          category: { name },
+          title
+        } = card;
+        return (
+          _.includes(name.toUpperCase(), searchText.toUpperCase()) ||
+          _.includes(title.toUpperCase(), searchText.toUpperCase())
+        );
+      })
+      .filter(card => {
+        const {
+          category: { name }
+        } = card;
+        return _.includes(name.toUpperCase(), selectedCategory.toUpperCase());
+      });
+    if (this.state.showFavorites) {
+      filteredCards = filteredCards.filter(card => card.isfavorite === true);
+    }
+    return filteredCards;
   }
 }
 

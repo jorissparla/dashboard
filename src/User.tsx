@@ -1,11 +1,8 @@
-import React, { useEffect, FunctionComponent } from "react";
-import gql from "graphql-tag";
-import { Query } from "react-apollo";
-import { useQuery } from "react-apollo-hooks";
-import {
-  CurrentUserQueryComponent,
-  CurrentUserQueryMe
-} from "./generated/apolloComponents";
+import React, { useEffect, FunctionComponent } from 'react';
+import gql from 'graphql-tag';
+import { Query } from 'react-apollo';
+import { useQuery } from 'react-apollo-hooks';
+import { CurrentUserQueryComponent, CurrentUserQueryMe } from './generated/apolloComponents.old';
 
 const CURRENT_USER_QUERY = gql`
   query CURRENT_USER_QUERY {
@@ -34,7 +31,7 @@ type CurrentUser = {
   location?: string;
   region?: string;
   role?: string;
-  permissions?: string[];
+  permissions?: { permission: string; ____typename: string }[];
 };
 
 interface UserProps {
@@ -42,9 +39,7 @@ interface UserProps {
 }
 const User: FunctionComponent<UserProps> = (props: any) => {
   const { children } = props;
-  return (
-    <Query query={CURRENT_USER_QUERY}>{payload => children(payload)}</Query>
-  );
+  return <Query query={CURRENT_USER_QUERY}>{(payload: any) => children(payload)}</Query>;
 };
 
 export const UserProfileComponent: FunctionComponent<any> = (props: any) => {
@@ -52,19 +47,19 @@ export const UserProfileComponent: FunctionComponent<any> = (props: any) => {
     <CurrentUserQueryComponent>
       {({ data, loading }) => {
         if (loading) {
-          return "Loading";
+          return 'Loading';
         }
         if (!data) {
-          return "Error";
+          return 'Error';
         }
         if (!data.me) {
-          return "Error";
+          return 'Error';
         }
         const me: CurrentUserQueryMe = data.me;
         return (
           <div>
             <h1>Hallo {me.fullname}</h1>
-            <img src={me.image || ""} />
+            <img src={me.image || ''} />
           </div>
         );
       }}
@@ -79,7 +74,7 @@ export { CURRENT_USER_QUERY };
 export function withUser() {
   const result = useQuery(CURRENT_USER_QUERY, { suspend: false });
   if (result.loading) {
-    return <h1>loading";</h1>;
+    return null;
   }
   const data = result.data;
 

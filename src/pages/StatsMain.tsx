@@ -1,50 +1,33 @@
-import React, { useEffect, useState } from "react";
-import { useMutation, useQuery } from "react-apollo-hooks";
-import { Paper, Typography, withStyles, TextField, Portal } from "@material-ui/core";
-import { Formik } from "formik";
-import { format } from "../utils/format";
-import OwnerList from "../stats/OwnerList";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
-import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import { QUERY_BACKLOG } from "../graphql/BACKLOG_QUERY";
-
-// const QUERY_BACKLOG = gql`
-//   query QUERY_BACKLOG($date: String, $owner: String, $statusFilter: STATUSFILTER) {
-//     backlog(date: $date, owner: $owner, statusFilter: $statusFilter, orderBy: DAYS_DESC) {
-//       escalated
-//       date
-//       owner
-//       incident
-//       incidentcreated
-//       customername
-//       summary
-//       status
-//       dayssincelastupdate
-//     }
-//   }
-// `;
+import { withStyles } from '@material-ui/core';
+import React, { useContext, useState } from 'react';
+import { useQuery } from 'react-apollo-hooks';
+import { QUERY_BACKLOG } from '../stats/queries/BACKLOG_QUERY2';
+import { BacklogTable } from '../stats/BacklogTable';
+import { SelectionContext } from '../globalState/SelectionContext';
+import { SelectionForm } from '../stats/SelectionForm';
+import { withUser } from '../User';
+import { format } from '../utils/format';
+import Spinner from '../utils/spinner';
+import { useLocalStorage } from '../utils/useLocalStorage';
 
 const styles = (theme: any) => ({
   root: theme.mixins.gutters({
     marginTop: theme.spacing.unit * 3,
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    top: "200px"
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignContent: 'flex-start',
+    top: '200px',
+    backgroundColor: 'rgba(0,0,0,0.1)'
   }),
   tableheader: {
-    fontFamily: "Poppins",
-    fontSize: 18
+    fontFamily: 'Poppins',
+    fontSize: 18,
+    backgroundColor: 'rgb(0,0,0, 0.5)',
+    color: 'white'
   },
   tableheadernarrow: {
-    fontFamily: "Poppins",
+    fontFamily: 'Poppins',
     fontSize: 18,
     width: 20
   },
@@ -52,33 +35,49 @@ const styles = (theme: any) => ({
     width: 20
   },
   paper: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center"
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  paper2: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    margin: 15,
+    padding: 10
   },
   summary: {
-    display: "flex",
-    justifyContent: "space-between"
+    display: 'flex',
+    justifyContent: 'space-between'
   },
   textfield: {
-    verticalAlign: "center",
+    verticalAlign: 'center',
     margin: 10
   },
+  button: {
+    margin: 10
+  },
+  spaceapart: {
+    display: 'flex',
+    width: '100%',
+    justifyContent: 'space-between',
+    padding: 10
+  },
   number: {
-    alignItems: "center",
-    justifyContent: "center",
-    display: "flex",
-    backgroundColor: "black",
-    color: "white",
+    alignItems: 'center',
+    justifyContent: 'center',
+    display: 'flex',
+    backgroundColor: 'black',
+    color: 'white',
     fontSize: 18,
     margin: 2,
     width: 40,
     height: 40,
-    borderRadius: "50%"
+    borderRadius: '50%'
   },
   row: {
-    fontFamily: "Poppins",
-    "&:nth-of-type(odd)": {
+    fontFamily: 'Poppins',
+    '&:nth-of-type(odd)': {
       backgroundColor: theme.palette.background.default
     }
   }
@@ -86,124 +85,312 @@ const styles = (theme: any) => ({
 
 interface ContainerProps {
   classes: any;
+  user?: any;
+  history?: any;
+}
+
+type functionParms = {
+  owner: string;
+  isCloud: boolean;
+};
+
+export function getParams(clean = false) {
+  const [C_AWAITINGCUSTOMER] = useLocalStorage('C_AWAITINGCUSTOMER', 6, clean);
+  const [C_AWAITINGINFOR] = useLocalStorage('C_AWAITINGINFOR', 1, clean);
+  const [C_RESEARCHING] = useLocalStorage('C_RESEARCHING', 3, clean);
+  const [C_NEW] = useLocalStorage('C_NEW', 1, clean);
+  const [N_AWAITINGCUSTOMER] = useLocalStorage('N_AWAITINGCUSTOMER', 6, clean);
+  const [N_RESEARCHING] = useLocalStorage('N_RESEARCHING', 1, clean);
+  const [N_AWAITINGINFOR] = useLocalStorage('N_AWAITINGINFOR', 2, clean);
+  const [N_NEW] = useLocalStorage('N_NEW', 1, clean);
+  return {
+    C_AWAITINGCUSTOMER,
+    N_AWAITINGCUSTOMER,
+    C_RESEARCHING,
+    N_RESEARCHING,
+    C_AWAITINGINFOR,
+    N_AWAITINGINFOR,
+    C_NEW,
+    N_NEW
+  };
 }
 
 const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
-  const [date, setDate] = useState(format(Date.now(), "YYYY-MM-DD"));
-  const [owner, setOwner] = useState("Michel van Huenen");
-  const [value, setValue] = useState("Michel van Huenen");
-  const [statusFilter, setStatusFilter] = useState("BACKLOG");
+  const [date, setDate] = useState(format(Date.now(), 'YYYY-MM-DD'));
+  const [isCloud, setisCloud] = useState(false);
+  const [owner, setOwner] = useState(props.user.fullname);
+
+  const currentUser = withUser();
+  const { classes, user } = props;
+  if (props.user.fullname === null || !currentUser) {
+    return <div>You need to be logged in to see this page</div>;
+  }
+  let enableIt: boolean;
+  if (currentUser && currentUser.permissions) {
+    enableIt = currentUser.permissions.some(u => u.permission === 'STATS');
+  } else {
+    enableIt = false;
+  }
+  const { products } = useContext(SelectionContext);
+  const isValidSuperUser = ['Admin', 'PO'].some(u => u === user.role) || enableIt;
+  console.log('isValidSuperUser', isValidSuperUser);
   const { loading, data } = useQuery(QUERY_BACKLOG, {
     suspend: false,
-    variables: { date, deployment: "ALL" }
+    variables: { date, owner, products, deployment: 'ALL', ...getParams(!isValidSuperUser) }
   });
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-  if (!(data && data.solution_proposed)) {
-    return <div>Error</div>;
-  }
 
+  const mostRecentUpdate = data ? data.mostRecentUpdate : new Date().toLocaleTimeString();
+  const handleEnable = () => {};
   return (
-    <StatsMain
-      classes={props.classes}
-      data={data}
-      onChange={(date: string) => setDate(date)}
-      onOwnerChange={(owner: string) => setOwner(owner)}
-    />
+    <div className={classes.root}>
+      <SelectionForm
+        isValidSuperUser={isValidSuperUser}
+        onNavigateToParams={() => props.history.push('/myworkparams')}
+        classes={props.classes}
+        initialValue={{ owner, isCloud, lastUpdated: mostRecentUpdate, actionNeeded: true }}
+        valuesChanged={(a: string, b: boolean) => {
+          if (a !== owner) {
+            setOwner(a);
+          }
+          if (b !== isCloud) {
+            setisCloud(b);
+          }
+        }}
+      />
+      {loading ? (
+        <Spinner />
+      ) : (
+        <StatsMain
+          classes={props.classes}
+          data={data}
+          onChange={(date: string) => setDate(date)}
+          isCloud={isCloud}
+          actionNeeded={false}
+        />
+      )}
+    </div>
   );
 };
 
 interface Props {
   classes: any;
   onChange: Function;
-  onOwnerChange: Function;
   data: any;
+  isCloud: boolean;
+  actionNeeded: boolean;
 }
 
-const StatsMain: React.FC<Props> = ({ classes, onChange, onOwnerChange, data }) => {
-  const [date, setDate] = useState(format(Date.now(), "YYYY-MM-DD"));
-  const [owner, setOwner] = useState("Michel van Huenen");
-  const [value, setValue] = useState("SP");
-
+const StatsMain: React.FC<Props> = ({ classes, onChange, data }) => {
+  const [date, setDate] = useState(format(Date.now(), 'YYYY-MM-DD'));
+  const params = getParams();
   function handleChange(event: any) {
     setDate(event.target.value);
     onChange(event.target.value);
   }
+  const { isCloud } = useContext(SelectionContext);
   return (
-    <div className={classes.root}>
-      {data.mostRecentUpdate}
-      <Paper className={classes.paper}>
-        <TextField className={classes.textfield} id="date" value={date} onChange={handleChange} type="date" />
-      </Paper>
-      <div className={classes.root}>
-        <BacklogTable classes={classes} backlog={data.on_hold} title="On Hold" />
-        <BacklogTable classes={classes} backlog={data.solution_proposed} title="Solution Proposed" />
-        <BacklogTable classes={classes} backlog={data.awaiting_customer} title="Awaiting customer" />
-        <BacklogTable classes={classes} backlog={data.researching} title="Researching" />
-        <BacklogTable classes={classes} backlog={data.awaiting_infor} title="Awaiting Infor" />
-        <BacklogTable classes={classes} backlog={data.major_impact} title="Major Impact" />
-      </div>
-    </div>
-  );
-};
+    <>
+      {isCloud && (
+        <div>
+          <BacklogTable
+            classes={classes}
+            backlog={data.critical_cloud}
+            title="Critical"
+            description="All Incidents with a severity of 'Production Outage / Critical Application halted'"
+          />
+          <BacklogTable
+            classes={classes}
+            backlog={data.on_hold_cloud}
+            title="On Hold"
+            description="All Incidents with a status of On Hold By Customer with no or an Expired Action date"
+          />
 
-const CustomTableCell = withStyles(theme => ({
-  head: {
-    backgroundColor: "rgb(0,0,0, 0.5)",
-    color: theme.palette.common.white
-  },
-  body: {
-    fontSize: "1rem"
-  }
-}))(TableCell);
+          <BacklogTable
+            classes={classes}
+            backlog={data.solution_proposed_cloud}
+            title="Solution Proposed"
+            description="All Incidents with a status of Solution Proposed not updated for 30 days or more"
+          />
 
-const BacklogTable = ({ backlog, classes, title }: any) => {
-  //
-  return (
-    <ExpansionPanel>
-      <ExpansionPanelSummary className={classes.summary} expandIcon={<ExpandMoreIcon />}>
-        <Typography variant="h6" className={classes.heading}>
-          {title}({backlog.length})
-        </Typography>
-      </ExpansionPanelSummary>
-      <ExpansionPanelDetails>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow className={classes.row}>
-              <CustomTableCell className={classes.tableheader}>Incident</CustomTableCell>
-              <CustomTableCell className={classes.tableheader}>Severity</CustomTableCell>
-              <CustomTableCell className={classes.tableheadernarrow}>Esc</CustomTableCell>
-              <CustomTableCell className={classes.tableheader}>Customer</CustomTableCell>
-              <CustomTableCell className={classes.tableheader}>Owner </CustomTableCell>
-              <CustomTableCell className={classes.tableheader}>Status</CustomTableCell>
-              <CustomTableCell className={classes.tableheader}>Last Updated</CustomTableCell>
-              <CustomTableCell className={classes.tableheader}>Age</CustomTableCell>
-              <CustomTableCell className={classes.tableheader}>Summary</CustomTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {backlog.map((row: any, index: number) => (
-              <TableRow key={index} className={classes.row}>
-                <TableCell component="th" scope="row">
-                  <a href={`http://navigator.infor.com/a/incident.asp?IncidentID=${row.incident}`} target="_blank">
-                    {row.incident}
-                  </a>
-                </TableCell>
-                <TableCell>{row.severityname}</TableCell>
-                <TableCell className={classes.tableheadernarrow}>{row.escalated ? "Yes" : ""}</TableCell>
-                <TableCell>{row.customername}</TableCell>
-                <TableCell>{row.owner}</TableCell>
-                <TableCell>{row.status}</TableCell>
-                <TableCell>{row.dayssincelastupdate}</TableCell>
-                <TableCell>{row.daysSinceCreated}</TableCell>
-                <TableCell>{row.title}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </ExpansionPanelDetails>
-    </ExpansionPanel>
+          <BacklogTable
+            classes={classes}
+            backlog={data.awaiting_customer_cloud}
+            title="Awaiting customer"
+            description={`All Incidents with a status of Awaiting Customer not updated for more than  ${
+              params['C_AWAITINGCUSTOMER']
+            } days `}
+          />
+
+          <BacklogTable
+            classes={classes}
+            backlog={data.researching_cloud}
+            title="Researching"
+            description={`Incidents with status 'Researching' Last updated  ${
+              params['C_RESEARCHING']
+            } days or more`}
+          />
+
+          <BacklogTable
+            classes={classes}
+            backlog={data.awaiting_infor_cloud}
+            title="Awaiting Infor"
+            description={`Incidents with status 'Awaiting Infor' Last updated  ${
+              params['C_AWAITINGINFOR']
+            } days or more`}
+          />
+          <BacklogTable
+            classes={classes}
+            backlog={data.callbacks_cloud}
+            title="Callbacks/Awaiting Infor"
+            description="All callbacks and Incidents with status 'Awaiting Infor'"
+          />
+
+          <BacklogTable
+            classes={classes}
+            backlog={data.major_impact_cloud}
+            title="Major Impact"
+            description="Incidents with severity 'Major Impact' Last updated 2 days or more"
+          />
+
+          <BacklogTable
+            classes={classes}
+            backlog={data.major_impact_cloud2}
+            title="Major Impact"
+            description="Incidents with severity 'Major Impact' Last updated 2 days or more Not resolved in 5 days"
+          />
+
+          <BacklogTable
+            classes={classes}
+            backlog={data.aging_cloud}
+            title="Aging"
+            description="Incidents older than 90 days"
+          />
+          <BacklogTable
+            classes={classes}
+            backlog={data.aging_dev_cloud}
+            title="Aging- Development"
+            description="Incidents older than 90 days - Development Backlog"
+          />
+          <BacklogTable
+            classes={classes}
+            backlog={data.new_cloud}
+            title="New Incidents"
+            description={`Incidents with status 'New' not updated for more than  ${
+              params['C_NEW']
+            } days`}
+          />
+
+          <BacklogTable
+            classes={classes}
+            backlog={data.cloudops}
+            title="All CloudOps"
+            description="All Incidents with a CloudOps Specific status (Task....)"
+          />
+          <BacklogTable
+            classes={classes}
+            backlog={data.all_cloud}
+            title="All"
+            description="All Support Backlog"
+          />
+        </div>
+      )}
+      {!isCloud && (
+        <div>
+          <BacklogTable
+            classes={classes}
+            backlog={data.critical}
+            title="Critical"
+            description="All Incidents with a severity of 'Production Outage / Critical Application halted'"
+          />
+          <BacklogTable
+            classes={classes}
+            backlog={data.on_hold}
+            title="On Hold"
+            description="All Incidents with a status of On Hold By Customer with no or an Expired Action date"
+          />
+          <BacklogTable
+            classes={classes}
+            backlog={data.solution_proposed}
+            title="Solution Proposed"
+            description="All Incidents with a status of Solution Proposed not updated for 30 days or more"
+          />
+          <BacklogTable
+            classes={classes}
+            backlog={data.awaiting_customer}
+            title="Awaiting customer"
+            description={`All Incidents with a status of Awaiting Customer not updated for more than ${
+              params['N_AWAITINGCUSTOMER']
+            } days `}
+          />
+          <BacklogTable
+            classes={classes}
+            backlog={data.researching}
+            title="Researching"
+            description={`Incidents with status 'Researching' Last updated  ${
+              params['N_RESEARCHING']
+            } days or more`}
+          />
+          <BacklogTable
+            classes={classes}
+            backlog={data.awaiting_infor}
+            title="Awaiting Infor"
+            description={`Incidents with status 'Awaiting Infor' Last updated  ${
+              params['N_AWAITINGINFOR']
+            } days or more`}
+          />
+          <BacklogTable
+            classes={classes}
+            backlog={data.callbacks}
+            title="Callbacks/Awaiting Infor"
+            description="All callbacks and Incidents with status 'Awaiting Infor'"
+          />
+          <BacklogTable
+            classes={classes}
+            backlog={data.major_impact}
+            title="Major Impact"
+            description="Incidents with severity 'Major Impact' Last updated 2 days or more"
+          />
+          <BacklogTable
+            classes={classes}
+            backlog={data.major_impact2}
+            title="Major Impact"
+            description="Incidents with severity 'Major Impact' Last updated 2 days or more Not resolved in 5 days"
+          />
+          <BacklogTable
+            classes={classes}
+            backlog={data.aging}
+            title="Aging- Support"
+            description="Incidents older than 90 day- Support Backlog"
+          />
+          <BacklogTable
+            classes={classes}
+            backlog={data.aging_dev}
+            title="Aging- Development"
+            description="Incidents older than 90 days - Development Backlog"
+          />
+          <BacklogTable
+            classes={classes}
+            backlog={data.new}
+            title="New Incidents"
+            description={`Incidents with status 'New' not updated for more than  ${
+              params['N_NEW']
+            } days`}
+          />
+          <BacklogTable
+            classes={classes}
+            backlog={data.cloudops}
+            title="All CloudOps"
+            description="All Incidents with a CloudOps Specific status (Task....)"
+          />
+          <BacklogTable
+            classes={classes}
+            backlog={data.all}
+            title="All"
+            description="All Support Backlog"
+          />
+        </div>
+      )}
+    </>
   );
 };
 

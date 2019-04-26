@@ -4,7 +4,7 @@ import React from 'react';
 import { withRouter } from 'react-router';
 import SupportCardForm from './SupportCardForm';
 import withAuth from '../utils/withAuth';
-import { SharedSnackbarConsumer } from '../SharedSnackbar.context';
+import { SharedSnackbarConsumer } from '../globalState/SharedSnackbar.context';
 
 class SupportCardEdit extends React.Component {
   constructor(props) {

@@ -13,15 +13,15 @@ import { createMuiTheme } from '@material-ui/core/styles';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import blue from '@material-ui/core/colors/blue';
 import { AUTH_USER } from './actions';
-import App from './Nav';
+import App from './Navigation/Nav';
 import './index.css';
 import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
 import { ApolloProvider } from 'react-apollo';
 import ApolloClient from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { createUploadLink } from 'apollo-upload-client';
-import ContextProvider from './Provider';
-import { SharedSnackbarProvider } from './SharedSnackbar.context';
+import ContextProvider from './globalState';
+// import { SharedSnackbarProvider } from './globalState/SharedSnackbar.context';
 
 const {
   REACT_APP_PORT_GRAPHQL = 55555,
@@ -70,14 +70,16 @@ const Main = () => (
     <ApolloHooksProvider client={client}>
       <Provider store={store}>
         <MuiThemeProvider theme={muiTheme}>
-          <BrowserRouter>
-            <SharedSnackbarProvider>
-              <ContextProvider>
+          <ContextProvider>
+            <BrowserRouter>
+              {/* <SharedSnackbarProvider> */}
+              <>
                 <App />
                 <AppRoutes />
-              </ContextProvider>
-            </SharedSnackbarProvider>
-          </BrowserRouter>
+              </>
+              {/* </SharedSnackbarProvider> */}
+            </BrowserRouter>
+          </ContextProvider>
         </MuiThemeProvider>
       </Provider>
     </ApolloHooksProvider>

@@ -97,10 +97,11 @@ class Signin extends React.Component {
           console.log({ values });
           const input = values;
           const result = await this.props.data({ variables: { input } });
+          console.log('result signin', result);
           if (!result.data.signinUser.error) {
             const { token, user } = result.data.signinUser;
             this.setLogin(user, token);
-            window.location.reload();
+            // window.location.reload();
             await this.props.history.push('/');
           } else {
             setFieldError('password', 'Invalid email or password');

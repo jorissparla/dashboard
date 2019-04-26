@@ -3,7 +3,7 @@ import ClearIcon from '@material-ui/icons/Clear';
 
 import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
-import { SharedSnackbarConsumer } from '../SharedSnackbar.context';
+import { SharedSnackbarConsumer } from '../globalState/SharedSnackbar.context';
 
 import { ALL_CHATS_QUERY } from '../pages/ChatList';
 const DELETE_CHAT_MUTATION = gql`

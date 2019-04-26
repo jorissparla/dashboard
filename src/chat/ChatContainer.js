@@ -10,7 +10,7 @@ import { Mutation, Query } from 'react-apollo';
 import { adopt } from 'react-adopt';
 import * as R from 'ramda';
 
-import { SharedSnackbarConsumer } from '../SharedSnackbar.context';
+import { SharedSnackbarConsumer } from '../globalState/SharedSnackbar.context';
 
 window.format = format;
 
