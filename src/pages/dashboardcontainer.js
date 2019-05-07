@@ -28,8 +28,8 @@ class DashBoardContainer extends Component {
       <DashBoardStats data1={['Tools']} team="Tools" region={this.region} />,
       <HistoryDayAll region={this.region} />,
       <CourseList />,
-      <KudoList />,
-      <DashBoard region={this.region} />,
+      // <KudoList />,
+      // <DashBoard region={this.region} />,
 
       <SupportCards region={this.region} />,
       <FeedbackList />,

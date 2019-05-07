@@ -24,6 +24,7 @@ import TestLogin from './TestLogin';
 import User, { UserProfileComponent, withUser } from './User';
 import UserPermissions from './UserPermissions';
 import { AddVideo, EditVideo } from './videos/VideoOperations';
+import { Surveys } from './pages/Surveys';
 const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
 //const StatsMain = React.lazy(() => import('./kudos/kudolistcomponentnew'));
 //const CommentsList = DynamicImport(() => import("./feedback/commentList"));
@@ -260,6 +261,7 @@ function AppRoutes(props) {
       <Route path="/golivelistside" component={GoLiveListSide} />
       <Route path="/golives" component={GoLiveListNew} />
       <Route path="/kudos" component={KudoListComponentNew} />
+      <Route path="/surveys" component={Surveys} />
       <Route path="/signin" component={Signin} />
       <Route path="/signinPIN" component={SigninWithPIN} />
       <Route path="/signout" component={Signout} />
