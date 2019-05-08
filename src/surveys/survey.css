@@ -10,7 +10,7 @@
   grid-template-columns: 5fr 3fr 3fr 3fr;
   /* grid-template-columns: 1fr 1fr; */
   grid-template-rows: 1fr 4fr 1fr;
-  background: #ccc;
+  /* background: #ccc; */
   grid-column-gap: 2px;
 }
 

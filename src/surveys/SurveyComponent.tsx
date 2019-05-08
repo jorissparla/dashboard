@@ -56,7 +56,7 @@ export const SurveyComponent: React.FC<Props> = ({
 }) => {
   const pct = Math.round((100 * responded) / sent);
   return (
-    <div style={{ background: '#ccc', color: '#333' }}>
+    <div style={{ background: '#fff', color: '#333', height: '250px' }}>
       <h1>Quick Satisfaction survey Results</h1>
 
       <div className="flex">

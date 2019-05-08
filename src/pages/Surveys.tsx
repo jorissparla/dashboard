@@ -3,6 +3,7 @@ import { useQuery } from 'react-apollo-hooks';
 import gql from 'graphql-tag';
 import { SurveyComponent } from '../surveys/SurveyComponent';
 import Spinner from '../utils/spinner';
+import SurveyComments from '../surveys/SurveyComments';
 
 const QUERY_SURVEY_RATIOS = gql`
   query QUERY_SURVEY_RATIOS {
@@ -57,6 +58,7 @@ export const Surveys: React.FC<Props> = () => {
           pct_uncategorized
         }}
       />
+      <SurveyComments />
     </div>
   );
 };
