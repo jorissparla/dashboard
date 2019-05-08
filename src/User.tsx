@@ -66,7 +66,7 @@ export const UserProfileComponent: FunctionComponent<any> = (props: any) => {
     </CurrentUserQueryComponent>
   );
 };
-
+// comment
 export default User;
 
 export { CURRENT_USER_QUERY };
