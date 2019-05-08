@@ -31,7 +31,7 @@ export const SurveyTable: React.FC<Props> = ({ surveys }) => {
           <TableCell>Incident</TableCell>
           <TableCell>Customer</TableCell>
           <TableCell>Comment</TableCell>
-          <TableCell>Date</TableCell>
+          <TableCell>Date Submitted</TableCell>
         </TableRow>
       </TableHead>
       {surveys.map(survey => (
