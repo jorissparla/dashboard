@@ -1,0 +1,130 @@
+.App {
+  font-family: Ubuntu;
+  text-align: center;
+}
+
+.top-row1 {
+  /* padding: 10px; */
+  display: grid;
+
+  grid-template-columns: 5fr 3fr 3fr 3fr;
+  /* grid-template-columns: 1fr 1fr; */
+  grid-template-rows: 1fr 4fr 1fr;
+  /* background: #ccc; */
+  grid-column-gap: 2px;
+}
+
+.box {
+  background: #ddd;
+  padding: 10px;
+  height: 150px;
+  min-width: 450px;
+  border-radius: 4px;
+  box-shadow: 1px 1px 1px #bbb;
+  display: grid;
+  grid-template-columns: 2fr 2fr;
+}
+.box2 {
+  padding: 10px;
+  background: #ddd;
+  min-width: 350px;
+  height: 150px;
+  /* display: flex; */
+  border-radius: 4px;
+  box-shadow: 1px 1px 1px #bbb;
+  display: grid;
+  grid-template-columns: 1fr 8fr 8fr;
+  justify-content: space-around;
+  text-align: center;
+  vertical-align: center;
+}
+
+.box3 {
+  padding: 10px;
+  background: #ddd;
+  min-width: 350px;
+  height: 150px;
+  /* display: flex; */
+  border-radius: 4px;
+  box-shadow: 1px 1px 1px #bbb;
+  display: grid;
+  grid-template-columns: 1fr 8fr 8fr;
+  justify-content: space-around;
+  text-align: center;
+  vertical-align: center;
+}
+
+.large {
+  font-size: 32px;
+}
+.large2 {
+  font-size: 32px;
+  grid-column: 2;
+}
+
+#perc {
+  display: flex;
+  justify-self: center;
+  align-content: center;
+  background: grey;
+  width: 300px;
+  height: 80%;
+  padding: 1px;
+  grid-column: 1 / span 2;
+  grid-row: 3;
+}
+
+#perc_in {
+  width: 50%;
+  font-size: 20px;
+  background: rgb(16, 180, 79);
+}
+.sat {
+  grid-column: 1 / span 3;
+  font-size: 20px;
+}
+.sat0 {
+  font-size: 20px;
+}
+.red-box {
+  background: red;
+  height: 32px;
+  width: 32px;
+  grid-column: 1;
+  grid-row: 2;
+}
+.red-box2 {
+  background: red;
+  height: 32px;
+  width: 32px;
+  grid-column: 1;
+  grid-row: 3;
+}
+.green-box {
+  background: green;
+  height: 32px;
+  width: 32px;
+  grid-column: 1;
+  grid-row: 3;
+}
+.green-box2 {
+  background: green;
+  height: 32px;
+  width: 32px;
+  grid-column: 1;
+  grid-row: 2;
+}
+.flex {
+  display: flex;
+  width: 100vw;
+  grid-template-columns: 450px 350px 350px 350px 100px;
+  align-content: flex-start;
+  justify-content: flex-start;
+  color: #333;
+  padding-left: 10px;
+}
+.double {
+  grid-column: 2 / span 3;
+  text-align: left;
+  margin-left: 20px;
+}
