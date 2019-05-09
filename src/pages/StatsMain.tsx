@@ -1,33 +1,33 @@
-import { withStyles } from "@material-ui/core";
-import React, { useContext, useState } from "react";
-import { useQuery } from "react-apollo-hooks";
-import { QUERY_BACKLOG } from "../stats/queries/BACKLOG_QUERY2";
-import { BacklogTable } from "../stats/BacklogTable";
-import { SelectionContext } from "../globalState/SelectionContext";
-import { SelectionForm } from "../stats/SelectionForm";
-import { withUser } from "../User";
-import { format } from "../utils/format";
-import Spinner from "../utils/spinner";
-import { useLocalStorage } from "../utils/useLocalStorage";
+import { withStyles } from '@material-ui/core';
+import React, { useContext, useState } from 'react';
+import { useQuery } from 'react-apollo-hooks';
+import { QUERY_BACKLOG } from '../stats/queries/BACKLOG_QUERY2';
+import { BacklogTable } from '../stats/BacklogTable';
+import { SelectionContext } from '../globalState/SelectionContext';
+import { SelectionForm } from '../stats/SelectionForm';
+import { withUser } from '../User';
+import { format } from '../utils/format';
+import Spinner from '../utils/spinner';
+import { useLocalStorage } from '../utils/useLocalStorage';
 
 const styles = (theme: any) => ({
   root: theme.mixins.gutters({
     marginTop: theme.spacing.unit * 3,
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignContent: "flex-start",
-    top: "200px",
-    backgroundColor: "rgba(0,0,0,0.1)"
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignContent: 'flex-start',
+    top: '200px',
+    backgroundColor: 'rgba(0,0,0,0.1)'
   }),
   tableheader: {
-    fontFamily: "Poppins",
+    fontFamily: 'Poppins',
     fontSize: 18,
-    backgroundColor: "rgb(0,0,0, 0.5)",
-    color: "white"
+    backgroundColor: 'rgb(0,0,0, 0.5)',
+    color: 'white'
   },
   tableheadernarrow: {
-    fontFamily: "Poppins",
+    fontFamily: 'Poppins',
     fontSize: 18,
     width: 20
   },
@@ -35,49 +35,49 @@ const styles = (theme: any) => ({
     width: 20
   },
   paper: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center"
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   paper2: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-start",
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
     margin: 15,
     padding: 10
   },
   summary: {
-    display: "flex",
-    justifyContent: "space-between"
+    display: 'flex',
+    justifyContent: 'space-between'
   },
   textfield: {
-    verticalAlign: "center",
+    verticalAlign: 'center',
     margin: 10
   },
   button: {
     margin: 10
   },
   spaceapart: {
-    display: "flex",
-    width: "100%",
-    justifyContent: "space-between",
+    display: 'flex',
+    width: '100%',
+    justifyContent: 'space-between',
     padding: 10
   },
   number: {
-    alignItems: "center",
-    justifyContent: "center",
-    display: "flex",
-    backgroundColor: "black",
-    color: "white",
+    alignItems: 'center',
+    justifyContent: 'center',
+    display: 'flex',
+    backgroundColor: 'black',
+    color: 'white',
     fontSize: 18,
     margin: 2,
     width: 40,
     height: 40,
-    borderRadius: "50%"
+    borderRadius: '50%'
   },
   row: {
-    fontFamily: "Poppins",
-    "&:nth-of-type(odd)": {
+    fontFamily: 'Poppins',
+    '&:nth-of-type(odd)': {
       backgroundColor: theme.palette.background.default
     }
   }
@@ -105,14 +105,14 @@ export function getParams(clean = false) {
   //   C_NEW: 1,
   //   N_NEW: 1
   // };
-  const [C_AWAITINGCUSTOMER] = useLocalStorage("C_AWAITINGCUSTOMER", 6, clean);
-  const [C_AWAITINGINFOR] = useLocalStorage("C_AWAITINGINFOR", 1, clean);
-  const [C_RESEARCHING] = useLocalStorage("C_RESEARCHING", 3, clean);
-  const [C_NEW] = useLocalStorage("C_NEW", 1, clean);
-  const [N_AWAITINGCUSTOMER] = useLocalStorage("N_AWAITINGCUSTOMER", 6, clean);
-  const [N_RESEARCHING] = useLocalStorage("N_RESEARCHING", 1, clean);
-  const [N_AWAITINGINFOR] = useLocalStorage("N_AWAITINGINFOR", 2, clean);
-  const [N_NEW] = useLocalStorage("N_NEW", 1, clean);
+  const [C_AWAITINGCUSTOMER] = useLocalStorage('C_AWAITINGCUSTOMER', 6, clean);
+  const [C_AWAITINGINFOR] = useLocalStorage('C_AWAITINGINFOR', 1, clean);
+  const [C_RESEARCHING] = useLocalStorage('C_RESEARCHING', 3, clean);
+  const [C_NEW] = useLocalStorage('C_NEW', 1, clean);
+  const [N_AWAITINGCUSTOMER] = useLocalStorage('N_AWAITINGCUSTOMER', 6, clean);
+  const [N_RESEARCHING] = useLocalStorage('N_RESEARCHING', 1, clean);
+  const [N_AWAITINGINFOR] = useLocalStorage('N_AWAITINGINFOR', 2, clean);
+  const [N_NEW] = useLocalStorage('N_NEW', 1, clean);
   return {
     C_AWAITINGCUSTOMER,
     N_AWAITINGCUSTOMER,
@@ -134,11 +134,11 @@ type backlogParams = {
 const useBacklog = ({ date, owner, products, isValidSuperUser }: backlogParams) => {
   const { loading, data } = useQuery(QUERY_BACKLOG, {
     suspend: false,
-    variables: { date, owner, products, deployment: "ALL", ...getParams(!isValidSuperUser) }
+    variables: { date, owner, products, deployment: 'ALL', ...getParams(!isValidSuperUser) }
   });
   if (loading) return null;
   if (!data) return null;
-  console.log("DATA", data);
+  console.log('DATA', data);
   return data;
 };
 
@@ -149,22 +149,24 @@ const useBacklogAndCurrentUser = ({ date, owner, products, isValidSuperUser }: b
 };
 
 const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
-  const [date, setDate] = useState(format(Date.now(), "YYYY-MM-DD"));
+  const [date, setDate] = useState(format(Date.now(), 'YYYY-MM-DD'));
   const [isCloud, setisCloud] = useState(false);
   const [owner, setOwner] = useState(props.user.fullname);
   const { products } = useContext(SelectionContext);
   const { classes, user } = props;
 
-  const isValidSuperUser = ["Admin", "PO"].some(u => u === user.role);
+  const isValidSuperUser = ['Admin', 'PO'].some(u => u === user.role);
   const [currentUser, data] = useBacklogAndCurrentUser({ date, owner, products, isValidSuperUser });
   // const currentUser = props.user;
-  console.log("currentUser", currentUser);
+  console.log('currentUser', currentUser);
   if (props.user.fullname === null || !currentUser) {
     return <div>You need to be logged in to see this page</div>;
   }
   let enableIt: boolean;
   if (currentUser && currentUser.permissions) {
-    enableIt = currentUser.permissions.some((u: { permission: string }): any => u.permission === "STATS");
+    enableIt = currentUser.permissions.some(
+      (u: { permission: string }): any => u.permission === 'STATS'
+    );
   } else {
     enableIt = false;
   }
@@ -172,8 +174,8 @@ const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
   return (
     <div className={classes.root}>
       <SelectionForm
-        isValidSuperUser={isValidSuperUser}
-        onNavigateToParams={() => props.history.push("/myworkparams")}
+        isValidSuperUser={isValidSuperUser || enableIt}
+        onNavigateToParams={() => props.history.push('/myworkparams')}
         classes={props.classes}
         initialValue={{ owner, isCloud, lastUpdated: mostRecentUpdate, actionNeeded: true }}
         valuesChanged={(a: string, b: boolean) => {
@@ -208,7 +210,7 @@ interface Props {
 }
 
 const StatsMain: React.FC<Props> = ({ classes, data }) => {
-  const [date, setDate] = useState(format(Date.now(), "YYYY-MM-DD"));
+  const [date, setDate] = useState(format(Date.now(), 'YYYY-MM-DD'));
   const params = getParams();
 
   const { isCloud } = useContext(SelectionContext);
@@ -241,7 +243,7 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
             backlog={data.awaiting_customer_cloud}
             title="Awaiting customer"
             description={`All Incidents with a status of Awaiting Customer not updated for more than  ${
-              params["C_AWAITINGCUSTOMER"]
+              params['C_AWAITINGCUSTOMER']
             } days `}
           />
 
@@ -249,7 +251,9 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
             classes={classes}
             backlog={data.researching_cloud}
             title="Researching"
-            description={`Incidents with status 'Researching' Last updated  ${params["C_RESEARCHING"]} days or more`}
+            description={`Incidents with status 'Researching' Last updated  ${
+              params['C_RESEARCHING']
+            } days or more`}
           />
 
           <BacklogTable
@@ -257,7 +261,7 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
             backlog={data.awaiting_infor_cloud}
             title="Awaiting Infor"
             description={`Incidents with status 'Awaiting Infor' Last updated  ${
-              params["C_AWAITINGINFOR"]
+              params['C_AWAITINGINFOR']
             } days or more`}
           />
           <BacklogTable
@@ -297,7 +301,9 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
             classes={classes}
             backlog={data.new_cloud}
             title="New Incidents"
-            description={`Incidents with status 'New' not updated for more than  ${params["C_NEW"]} days`}
+            description={`Incidents with status 'New' not updated for more than  ${
+              params['C_NEW']
+            } days`}
           />
 
           <BacklogTable
@@ -306,7 +312,12 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
             title="All CloudOps"
             description="All Incidents with a CloudOps Specific status (Task....)"
           />
-          <BacklogTable classes={classes} backlog={data.all_cloud} title="All" description="All Support Backlog" />
+          <BacklogTable
+            classes={classes}
+            backlog={data.all_cloud}
+            title="All"
+            description="All Support Backlog"
+          />
         </div>
       )}
       {!isCloud && (
@@ -334,21 +345,23 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
             backlog={data.awaiting_customer}
             title="Awaiting customer"
             description={`All Incidents with a status of Awaiting Customer not updated for more than ${
-              params["N_AWAITINGCUSTOMER"]
+              params['N_AWAITINGCUSTOMER']
             } days `}
           />
           <BacklogTable
             classes={classes}
             backlog={data.researching}
             title="Researching"
-            description={`Incidents with status 'Researching' Last updated  ${params["N_RESEARCHING"]} days or more`}
+            description={`Incidents with status 'Researching' Last updated  ${
+              params['N_RESEARCHING']
+            } days or more`}
           />
           <BacklogTable
             classes={classes}
             backlog={data.awaiting_infor}
             title="Awaiting Infor"
             description={`Incidents with status 'Awaiting Infor' Last updated  ${
-              params["N_AWAITINGINFOR"]
+              params['N_AWAITINGINFOR']
             } days or more`}
           />
           <BacklogTable
@@ -385,7 +398,9 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
             classes={classes}
             backlog={data.new}
             title="New Incidents"
-            description={`Incidents with status 'New' not updated for more than  ${params["N_NEW"]} days`}
+            description={`Incidents with status 'New' not updated for more than  ${
+              params['N_NEW']
+            } days`}
           />
           <BacklogTable
             classes={classes}
@@ -393,7 +408,12 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
             title="All CloudOps"
             description="All Incidents with a CloudOps Specific status (Task....)"
           />
-          <BacklogTable classes={classes} backlog={data.all} title="All" description="All Support Backlog" />
+          <BacklogTable
+            classes={classes}
+            backlog={data.all}
+            title="All"
+            description="All Support Backlog"
+          />
         </div>
       )}
     </>
