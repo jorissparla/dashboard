@@ -30,7 +30,7 @@ export const SurveyTable: React.FC<Props> = ({ surveys }) => {
           <TableCell>User</TableCell>
           <TableCell>Incident</TableCell>
           <TableCell>Customer</TableCell>
-          <TableCell>Comment</TableCell>
+          <TableCell>Comment?</TableCell>
           <TableCell>Date Submitted</TableCell>
         </TableRow>
       </TableHead>

@@ -110,7 +110,7 @@ export function getParams(clean = false) {
   const [C_RESEARCHING] = useLocalStorage('C_RESEARCHING', 3, clean);
   const [C_NEW] = useLocalStorage('C_NEW', 1, clean);
   const [N_AWAITINGCUSTOMER] = useLocalStorage('N_AWAITINGCUSTOMER', 6, clean);
-  const [N_RESEARCHING] = useLocalStorage('N_RESEARCHING', 1, clean);
+  const [N_RESEARCHING] = useLocalStorage('N_RESEARCHING', 10, clean);
   const [N_AWAITINGINFOR] = useLocalStorage('N_AWAITINGINFOR', 2, clean);
   const [N_NEW] = useLocalStorage('N_NEW', 1, clean);
   return {
