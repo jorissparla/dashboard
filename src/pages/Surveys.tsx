@@ -1,9 +1,9 @@
-import * as React from 'react';
-import { useQuery } from 'react-apollo-hooks';
-import gql from 'graphql-tag';
-import { SurveyComponent } from '../surveys/SurveyComponent';
-import Spinner from '../utils/spinner';
-import SurveyComments from '../surveys/SurveyComments';
+import * as React from "react";
+import { useQuery } from "react-apollo-hooks";
+import gql from "graphql-tag";
+import { SurveyComponent } from "../surveys/SurveyComponent";
+import Spinner from "../utils/spinner";
+import SurveyComments from "../surveys/SurveyComments";
 
 const QUERY_SURVEY_RATIOS = gql`
   query QUERY_SURVEY_RATIOS {
@@ -23,7 +23,7 @@ const QUERY_SURVEY_RATIOS = gql`
 `;
 interface Props {}
 export const Surveys: React.FC<Props> = () => {
-  const { data, loading } = useQuery(QUERY_SURVEY_RATIOS);
+  const { data, loading } = useQuery(QUERY_SURVEY_RATIOS, { suspend: false });
   console.log(data);
   if (loading) {
     return <Spinner />;
