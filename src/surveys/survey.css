@@ -27,7 +27,7 @@
 .box2 {
   padding: 10px;
   background: #ddd;
-  min-width: 350px;
+  min-width: 450px;
   height: 150px;
   /* display: flex; */
   border-radius: 4px;
@@ -42,7 +42,7 @@
 .box3 {
   padding: 10px;
   background: #ddd;
-  min-width: 350px;
+  min-width: 450px;
   height: 150px;
   /* display: flex; */
   border-radius: 4px;
@@ -117,7 +117,7 @@
 .flex {
   display: flex;
   width: 100vw;
-  grid-template-columns: 450px 350px 350px 350px 100px;
+  grid-template-columns: 450px 450px 450px;
   align-content: flex-start;
   justify-content: flex-start;
   color: #333;

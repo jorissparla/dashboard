@@ -4,6 +4,7 @@ import DynamicImport from '../DynamicImport';
 import Anniversaries from '../awards/Anniversaries';
 import FeedbackList from './feedbackList';
 import CourseList from './CourseList';
+import { Surveys } from './Surveys';
 
 const DashBoard = DynamicImport(() => import('../dashboard'));
 const DashBoardStats = DynamicImport(() => import('./DashBoardStatsNew'));
@@ -28,6 +29,7 @@ class DashBoardContainer extends Component {
       <DashBoardStats data1={['Tools']} team="Tools" region={this.region} />,
       <HistoryDayAll region={this.region} />,
       <CourseList />,
+      <Surveys />,
       // <KudoList />,
       // <DashBoard region={this.region} />,
 
@@ -51,7 +53,7 @@ class DashBoardContainer extends Component {
       this.setState({ index: 0, sel: sel });
     }
 
-    this.timerID = setInterval(this.myTimer, 60000); //,this.props.refreshInterval || 60000);
+    this.timerID = setInterval(this.myTimer, 10000); //,this.props.refreshInterval || 60000);
   }
 
   myTimer = () => {

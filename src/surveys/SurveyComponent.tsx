@@ -90,16 +90,18 @@ export const SurveyComponent: React.FC<Props> = ({
             <div>Comments({pct_feedback_comments}%)</div>
           </div>
         </div>
-        <div className="top-row1">
-          <div className="box3">
-            <div className="sat">Unsatisfied Feedback</div>
-            <div className="red-box" />
-            <div className="red-box2" />
-            <div className="large2">{dissatisfied_feedback}</div>
-            <div className="large2">{uncategorized}</div>
-            <div>Uncategorized({pct_uncategorized}%)</div>
+        {false && (
+          <div className="top-row1">
+            <div className="box3">
+              <div className="sat">Unsatisfied Feedback</div>
+              <div className="red-box" />
+              <div className="red-box2" />
+              <div className="large2">{dissatisfied_feedback}</div>
+              <div className="large2">{uncategorized}</div>
+              <div>Uncategorized({pct_uncategorized}%)</div>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
