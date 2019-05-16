@@ -97,9 +97,10 @@ export const Parameters: React.FC<Props> = props => {
         <Parameter
           param="N_SOLUTIONPROPOSED"
           initial={30}
-          label="Solutio Proposed"
+          label="Solution Proposed"
           keyUp={handleKeyUp}
         />
+        <Parameter param="N_AGING" initial={90} label="Aging" keyUp={handleKeyUp} />
       </div>
       <div style={{ margin: 5, display: 'flex' }}>
         <Button

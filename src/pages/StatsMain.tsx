@@ -114,6 +114,7 @@ export function useParams(clean = false) {
   const [N_AWAITINGINFOR] = useLocalStorage('N_AWAITINGINFOR', 2, clean);
   const [N_NEW] = useLocalStorage('N_NEW', 1, clean);
   const [N_SOLUTIONPROPOSED] = useLocalStorage('N_SOLUTIONPROPOSED', 30, clean);
+  const [N_AGING] = useLocalStorage('N_AGING', 90, clean);
   return {
     C_AWAITINGCUSTOMER,
     N_AWAITINGCUSTOMER,
@@ -123,7 +124,8 @@ export function useParams(clean = false) {
     N_AWAITINGINFOR,
     C_NEW,
     N_NEW,
-    N_SOLUTIONPROPOSED
+    N_SOLUTIONPROPOSED,
+    N_AGING
   };
 }
 
@@ -292,7 +294,7 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
             classes={classes}
             backlog={data.aging_cloud}
             title="Aging"
-            description="Incidents older than 90 days"
+            description={`Incidents older than ${params['N_AGING']}  days`}
           />
           <BacklogTable
             classes={classes}
@@ -391,7 +393,7 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
             classes={classes}
             backlog={data.aging}
             title="Aging- Support"
-            description="Incidents older than 90 day- Support Backlog"
+            description={`Incidents older than ${params['N_AGING']}  days`}
           />
           <BacklogTable
             classes={classes}

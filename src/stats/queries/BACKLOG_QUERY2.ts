@@ -30,6 +30,7 @@ export const QUERY_BACKLOG = gql`
     $C_NEW: Int
     $N_NEW: Int
     $N_SOLUTIONPROPOSED: Int
+    $N_AGING: Int
   ) {
     mostRecentUpdate
     critical_cloud: backlog(
@@ -146,7 +147,7 @@ export const QUERY_BACKLOG = gql`
       owner: $owner
       orderBy: CREATED_ASC
       deployment: "CLOUD"
-      aging: 90
+      aging: $N_AGING
       date: $date
       productFilters: $products
       statusFilter: BACKLOG
@@ -303,7 +304,7 @@ export const QUERY_BACKLOG = gql`
       owner: $owner
       orderBy: CREATED_ASC
       deployment: "ALL"
-      aging: 90
+      aging: $N_AGING
       date: $date
       statusFilter: BACKLOG
       productFilters: $products
