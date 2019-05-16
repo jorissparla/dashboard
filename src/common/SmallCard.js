@@ -48,7 +48,7 @@ const Title2 = styled.div`
   flex-grow: 0;
   margin: 5px;
   width: 80%;
-  color: #2f2e2e;
+  color: ${props => (props.textcolor ? props.textcolor : "#2f2e2e")};
 `;
 
 const TitleIcon = styled.div`
@@ -109,6 +109,7 @@ const StyledPapier = styled(Papier)`
   color: ${props => (props.textcolor ? props.textcolor : "black")};
   background-color: ${props => (props.color ? props.color : "lightblue")};
   border-radius: 14px;
+  background-image: ${props => `linear-gradient(to bottom right, ${props.color || "black"}, white)`};
 `;
 
 const SmallCard = ({
@@ -137,10 +138,11 @@ const SmallCard = ({
     return link;
   }
 }) => {
+  console.log("textcolor", textcolor);
   return (
     <StyledPapier color={color}>
       <TitleWrapper onClick={onTitleClick}>
-        <Title2>{title}</Title2>
+        <Title2 textcolor={textcolor}>{title}</Title2>
         {isNew && (
           <TitleIcon>
             <NewIcon />
