@@ -1,16 +1,16 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import Icon from '@material-ui/core/Icon';
-import ViewIcon from '@material-ui/icons/Pageview';
-import ModeEdit from '@material-ui/icons/Edit';
-import NewIcon from '@material-ui/icons/NewReleases';
-import { Link } from 'react-router-dom';
-import { Papier, HR } from '../styles/index.js';
-import Divider from '@material-ui/core/Divider';
-import ReactMarkdown from 'react-markdown';
-import { ToggleFavorite } from '../supportcard/Favorite';
-import NumberOfViews from '../pages/NumberOfViews';
-import { format } from '../utils/format';
+import React, { useState } from "react";
+import styled from "styled-components";
+import Icon from "@material-ui/core/Icon";
+import ViewIcon from "@material-ui/icons/Pageview";
+import ModeEdit from "@material-ui/icons/Edit";
+import NewIcon from "@material-ui/icons/NewReleases";
+import { Link } from "react-router-dom";
+import { Papier, HR } from "../styles/index.js";
+import Divider from "@material-ui/core/Divider";
+import ReactMarkdown from "react-markdown";
+import { ToggleFavorite } from "../supportcard/Favorite";
+import NumberOfViews from "../pages/NumberOfViews";
+import { format } from "../utils/format";
 
 const OtherButton = styled.a`
   display: flex;
@@ -24,7 +24,7 @@ const Text = styled.div`
   padding-left: 3px;
   cursor: pointer;
   font-weight: 900;
-  color: ${props => (props.textcolor ? props.textcolor : 'black')};
+  color: ${props => (props.textcolor ? props.textcolor : "black")};
 `;
 const Cat = styled.div`
   font-weight: 800;
@@ -32,7 +32,7 @@ const Cat = styled.div`
 const TitleWrapper = styled.div`
   display: flex;
   flex-direction: row;
-  font-family: 'Montserrat', Roboto;
+  font-family: "Montserrat", Roboto;
   justify-content: space-between;
   :hover {
     color: rgba(0, 0, 0, 0.7);
@@ -40,7 +40,7 @@ const TitleWrapper = styled.div`
   }
 `;
 const Title = styled.div`
-  font-family: 'Montserrat', Roboto;
+  font-family: "Montserrat", Roboto;
   font-size: 16px;
   font-weight: bold;
   padding: 2px;
@@ -104,22 +104,23 @@ const StyledPapier = styled(Papier)`
   font-family: Montserrat;
   width: 18%;
   min-width: 200px;
-  color: ${props => (props.textcolor ? props.textcolor : 'black')};
-  background-color: ${props => (props.color ? props.color : 'lightblue')};
+  color: ${props => (props.textcolor ? props.textcolor : "black")};
+  background-color: ${props => (props.color ? props.color : "lightblue")};
 `;
 
 const SmallCard = ({
-  title = 'Procedure',
-  text = 'Papier Und KartonFabrik',
-  buttonText = 'Modify',
-  category = 'Cloud',
-  link = 'http://www.google.com',
+  title = "Procedure",
+  text = "Papier Und KartonFabrik",
+  buttonText = "Modify",
+  category = "Cloud",
+  link = "http://www.google.com",
   action = null,
-  color = '#FFFFF',
-  textcolor = '#000',
+  color = "#FFFFF",
+  textcolor = "#000",
   canEdit = false,
-  editLink = '',
-  viewLink = '',
+  editLink = "",
+  accessed = 0,
+  viewLink = "",
   isNew = false,
   isFavorite = false,
   account_id = null,
@@ -127,9 +128,9 @@ const SmallCard = ({
   updatedAt = null,
   onTitleClick = () => null,
   onToggleFavorite = () => {},
-  onAudit = () => console.log('onaudit'),
+  onAudit = () => console.log("onaudit"),
   onFollowLink = link => {
-    console.log('onFollowLink');
+    console.log("onFollowLink");
     return link;
   }
 }) => {
@@ -144,10 +145,10 @@ const SmallCard = ({
         )}
         {account_id && <ToggleFavorite toggle={onToggleFavorite} isFavorite={isFavorite} />}
       </TitleWrapper>
-      <DateWrapper>last updated: {format(updatedAt, 'ddd DD MMM YYYY, hh:mm')}</DateWrapper>
+      <DateWrapper>last updated: {format(updatedAt, "ddd DD MMM YYYY, hh:mm")}</DateWrapper>
       <HR />
       <StyledBody>
-        <ReactMarkdown source={text.slice(0, 200).concat('...')} />
+        <ReactMarkdown source={text.slice(0, 200).concat("...")} />
       </StyledBody>
       <Divider />
       <BottomStyle>
@@ -156,7 +157,7 @@ const SmallCard = ({
           <Icon>{canEdit === true ? <ModeEdit /> : <ViewIcon />}</Icon>
         </StyledLink>
         {canEdit && (
-          <StyledLink to={viewLink} onClick={e => onAudit(viewLink, 'SupportCard')}>
+          <StyledLink to={viewLink} onClick={e => onAudit(viewLink, "SupportCard")}>
             <Icon>
               <ViewIcon />
             </Icon>
@@ -164,15 +165,10 @@ const SmallCard = ({
         )}
         <Cat>{category}</Cat>
 
-        <OtherButton
-          primary={true}
-          target="_blank_"
-          href={link}
-          onClick={() => onFollowLink(viewLink, link)}
-        >
+        <OtherButton primary={true} target="_blank_" href={link} onClick={() => onFollowLink(viewLink, link)}>
           {buttonText.toUpperCase()}
         </OtherButton>
-        <NumberOfViews linkid={supportcard_id} />
+        <NumberOfViews linkid={supportcard_id} accessed={accessed} />
       </BottomStyle>
     </StyledPapier>
   );

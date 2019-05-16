@@ -1,6 +1,6 @@
-import * as React from 'react';
-import styled from 'styled-components';
-import './survey.css';
+import * as React from "react";
+import styled from "styled-components";
+import "./survey.css";
 
 const Percentage = styled.div<{ percentage: any }>`
   display: flex;
@@ -56,7 +56,7 @@ export const SurveyComponent: React.FC<Props> = ({
 }) => {
   const pct = Math.round((100 * responded) / sent);
   return (
-    <div style={{ background: '#fff', color: '#333', height: '250px' }}>
+    <div style={{ background: "#fff", color: "#333", height: "250px" }}>
       <h1>Quick Satisfaction survey Results</h1>
 
       <div className="flex">
