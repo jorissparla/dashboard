@@ -11,7 +11,6 @@ import ReactMarkdown from "react-markdown";
 import { ToggleFavorite } from "../supportcard/Favorite";
 import NumberOfViews from "../pages/NumberOfViews";
 import { format } from "../utils/format";
-import { Block, Title } from "../elements/Block";
 
 const OtherButton = styled.a`
   display: flex;
@@ -40,7 +39,7 @@ const TitleWrapper = styled.div`
     cursor: pointer;
   }
 `;
-const Title2 = styled.div`
+const Title = styled.div`
   font-family: "Montserrat", Roboto;
   font-size: 16px;
   font-weight: bold;
@@ -48,7 +47,6 @@ const Title2 = styled.div`
   flex-grow: 0;
   margin: 5px;
   width: 80%;
-  color: #2f2e2e;
 `;
 
 const TitleIcon = styled.div`
@@ -108,7 +106,6 @@ const StyledPapier = styled(Papier)`
   min-width: 200px;
   color: ${props => (props.textcolor ? props.textcolor : "black")};
   background-color: ${props => (props.color ? props.color : "lightblue")};
-  border-radius: 14px;
 `;
 
 const SmallCard = ({
@@ -140,7 +137,7 @@ const SmallCard = ({
   return (
     <StyledPapier color={color}>
       <TitleWrapper onClick={onTitleClick}>
-        <Title2>{title}</Title2>
+        <Title>{title}</Title>
         {isNew && (
           <TitleIcon>
             <NewIcon />
@@ -150,9 +147,9 @@ const SmallCard = ({
       </TitleWrapper>
       <DateWrapper>last updated: {format(updatedAt, "ddd DD MMM YYYY, hh:mm")}</DateWrapper>
       <HR />
-      <div style={{ width: "25%" }}>
-        <Block selected={true}>{category}</Block>
-      </div>
+      <StyledBody>
+        <ReactMarkdown source={text.slice(0, 200).concat("...")} />
+      </StyledBody>
       <Divider />
       <BottomStyle>
         <StyledLink to={editLink} onClick={e => onAudit(editLink)}>
@@ -166,6 +163,7 @@ const SmallCard = ({
             </Icon>
           </StyledLink>
         )}
+        <Cat>{category}</Cat>
 
         <OtherButton primary={true} target="_blank_" href={link} onClick={() => onFollowLink(viewLink, link)}>
           {buttonText.toUpperCase()}
