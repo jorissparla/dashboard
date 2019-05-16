@@ -21,7 +21,7 @@ import VideoPage from './pages/Videos';
 import { withDashBoardContext } from './globalState/Provider';
 import { Parameters } from './stats/Parameters';
 import TestLogin from './TestLogin';
-import User, { UserProfileComponent, withUser } from './User';
+import User, { UserProfileComponent, useUser } from './User';
 import UserPermissions from './UserPermissions';
 import { AddVideo, EditVideo } from './videos/VideoOperations';
 import { Surveys } from './pages/Surveys';
@@ -83,7 +83,7 @@ const NotFound = props => {
 }; //);
 
 const TestUser2 = () => {
-  const res = withUser();
+  const res = useUser();
 
   return <div>{JSON.stringify(res)}</div>;
 };

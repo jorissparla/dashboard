@@ -5,7 +5,7 @@ import { QUERY_BACKLOG } from '../stats/queries/BACKLOG_QUERY2';
 import { BacklogTable } from '../stats/BacklogTable';
 import { SelectionContext } from '../globalState/SelectionContext';
 import { SelectionForm } from '../stats/SelectionForm';
-import { withUser } from '../User';
+import { useUser } from '../User';
 import { format } from '../utils/format';
 import Spinner from '../utils/spinner';
 import { useLocalStorage } from '../utils/useLocalStorage';
@@ -94,7 +94,7 @@ type functionParms = {
   isCloud: boolean;
 };
 
-export function getParams(clean = false) {
+export function useParams(clean = false) {
   // return {
   //   C_AWAITINGCUSTOMER: 6,
   //   N_AWAITINGCUSTOMER: 6,
@@ -113,6 +113,7 @@ export function getParams(clean = false) {
   const [N_RESEARCHING] = useLocalStorage('N_RESEARCHING', 10, clean);
   const [N_AWAITINGINFOR] = useLocalStorage('N_AWAITINGINFOR', 2, clean);
   const [N_NEW] = useLocalStorage('N_NEW', 1, clean);
+  const [N_SOLUTIONPROPOSED] = useLocalStorage('N_SOLUTIONPROPOSED', 30, clean);
   return {
     C_AWAITINGCUSTOMER,
     N_AWAITINGCUSTOMER,
@@ -121,7 +122,8 @@ export function getParams(clean = false) {
     C_AWAITINGINFOR,
     N_AWAITINGINFOR,
     C_NEW,
-    N_NEW
+    N_NEW,
+    N_SOLUTIONPROPOSED
   };
 }
 
@@ -134,16 +136,15 @@ type backlogParams = {
 const useBacklog = ({ date, owner, products, isValidSuperUser }: backlogParams) => {
   const { loading, data } = useQuery(QUERY_BACKLOG, {
     suspend: false,
-    variables: { date, owner, products, deployment: 'ALL', ...getParams(!isValidSuperUser) }
+    variables: { date, owner, products, deployment: 'ALL', ...useParams(!isValidSuperUser) }
   });
   if (loading) return null;
   if (!data) return null;
-  console.log('DATA', data);
   return data;
 };
 
 const useBacklogAndCurrentUser = ({ date, owner, products, isValidSuperUser }: backlogParams) => {
-  const currentUser = withUser();
+  const currentUser = useUser();
   const currentBacklog = useBacklog({ date, owner, products, isValidSuperUser });
   return [currentUser, currentBacklog];
 };
@@ -211,7 +212,7 @@ interface Props {
 
 const StatsMain: React.FC<Props> = ({ classes, data }) => {
   const [date, setDate] = useState(format(Date.now(), 'YYYY-MM-DD'));
-  const params = getParams();
+  const params = useParams();
 
   const { isCloud } = useContext(SelectionContext);
   return (
@@ -235,7 +236,9 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
             classes={classes}
             backlog={data.solution_proposed_cloud}
             title="Solution Proposed"
-            description="All Incidents with a status of Solution Proposed not updated for 30 days or more"
+            description={`All Incidents with a status of Solution Proposed not updated for ${
+              params['N_SOLUTIONPROPOSED']
+            } days or more`}
           />
 
           <BacklogTable
@@ -338,7 +341,9 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
             classes={classes}
             backlog={data.solution_proposed}
             title="Solution Proposed"
-            description="All Incidents with a status of Solution Proposed not updated for 30 days or more"
+            description={`All Incidents with a status of Solution Proposed not updated for ${
+              params['N_SOLUTIONPROPOSED']
+            } days or more`}
           />
           <BacklogTable
             classes={classes}
@@ -407,6 +412,12 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
             backlog={data.cloudops}
             title="All CloudOps"
             description="All Incidents with a CloudOps Specific status (Task....)"
+          />
+          <BacklogTable
+            classes={classes}
+            backlog={data.infor}
+            title="Infor"
+            description="All Support Backlog logged on Infor Account"
           />
           <BacklogTable
             classes={classes}

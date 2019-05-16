@@ -168,7 +168,9 @@ function VideoPage(props: any) {
                   className={classes.card}
                   key={id}
                   onClick={() => {
-                    props.allowEdit ? props.history.push(`/editvideo/${id}`) : null;
+                    if (props.allowEdit) {
+                      props.history.push(`/editvideo/${id}`);
+                    } else return null;
                   }}
                 >
                   <CardHeader

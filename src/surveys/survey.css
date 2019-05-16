@@ -5,6 +5,7 @@
 
 .top-row1 {
   /* padding: 10px; */
+  width: 100vw;
   display: grid;
 
   grid-template-columns: 5fr 3fr 3fr 3fr;
@@ -27,7 +28,7 @@
 .box2 {
   padding: 10px;
   background: #ddd;
-  min-width: 450px;
+  min-width: 350px;
   height: 150px;
   /* display: flex; */
   border-radius: 4px;
@@ -42,7 +43,7 @@
 .box3 {
   padding: 10px;
   background: #ddd;
-  min-width: 450px;
+  min-width: 350px;
   height: 150px;
   /* display: flex; */
   border-radius: 4px;

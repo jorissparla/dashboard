@@ -2,7 +2,7 @@ import React, { useEffect, FunctionComponent } from 'react';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
 import { useQuery } from 'react-apollo-hooks';
-import { CurrentUserQueryComponent, CurrentUserQueryMe } from './generated/apolloComponents.old';
+import { CurrentUserQueryComponent, CurrentUserQueryMe } from './generated/apolloComponents';
 
 const CURRENT_USER_QUERY = gql`
   query CURRENT_USER_QUERY {
@@ -71,7 +71,7 @@ export default User;
 
 export { CURRENT_USER_QUERY };
 
-export function withUser() {
+export function useUser() {
   const result = useQuery(CURRENT_USER_QUERY, { suspend: false });
   if (result.loading) {
     return null;

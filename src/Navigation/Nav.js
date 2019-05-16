@@ -15,7 +15,7 @@ import { withRouter } from 'react-router';
 import withAuth from '../utils/withAuth';
 import { AuthenticationSection } from './AuthSection';
 import { SideBarMenu } from './SideBarMenu';
-import { withUser } from '../User';
+import { useUser } from '../User';
 
 const drawerWidth = 340;
 
@@ -102,7 +102,7 @@ const Header = props => {
     setOpen(!open);
   }
   const { classes, authenticated, theme, history, user } = props;
-  const currentUser = withUser();
+  const currentUser = useUser();
   console.log('Nav', user, currentUser);
   let titleText = ''; // this.state.ipaddress ? this.state.ipaddress : "";
   titleText = titleText + process.env.NODE_ENV !== 'production' ? `(${process.env.NODE_ENV})` : '';

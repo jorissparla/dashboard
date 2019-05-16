@@ -5,7 +5,7 @@ interface Props {
 }
 
 let initialContext: any;
-initialContext: null;
+initialContext = null;
 
 export const SelectionContext = React.createContext(initialContext);
 

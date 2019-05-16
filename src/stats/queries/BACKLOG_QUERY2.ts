@@ -29,6 +29,7 @@ export const QUERY_BACKLOG = gql`
     $N_AWAITINGINFOR: Int
     $C_NEW: Int
     $N_NEW: Int
+    $N_SOLUTIONPROPOSED: Int
   ) {
     mostRecentUpdate
     critical_cloud: backlog(
@@ -64,7 +65,7 @@ export const QUERY_BACKLOG = gql`
       orderBy: DAYS_DESC
       deployment: "CLOUD"
       status: "Solution Proposed"
-      since: 30
+      since: $N_SOLUTIONPROPOSED
       date: $date
       productFilters: $products
     ) {
@@ -198,6 +199,15 @@ export const QUERY_BACKLOG = gql`
     ) {
       ...backlogfragment
     }
+    infor: backlog(
+      owner: $owner
+      orderBy: DAYS_DESC
+      statusFilter: BACKLOG
+      customer: "Infor"
+      productFilters: $products
+    ) {
+      ...backlogfragment
+    }
     on_hold: backlog(
       owner: $owner
       orderBy: DAYS_DESC
@@ -212,7 +222,7 @@ export const QUERY_BACKLOG = gql`
       orderBy: DAYS_DESC
       deployment: "ALL"
       status: "Solution Proposed"
-      since: 30
+      since: $N_SOLUTIONPROPOSED
       date: $date
       productFilters: $products
     ) {

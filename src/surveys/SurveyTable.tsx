@@ -22,6 +22,7 @@ const imgStyle = {
 };
 
 export const SurveyTable: React.FC<Props> = ({ surveys }) => {
+  console.log('surveys', surveys);
   return (
     <Table style={{ background: 'white' }}>
       <TableHead>
@@ -37,13 +38,13 @@ export const SurveyTable: React.FC<Props> = ({ surveys }) => {
       {surveys.map(survey => (
         <TableRow>
           <TableCell>
-            {survey.account.image ? (
+            {survey.account && survey.account.image ? (
               <Avatar src={survey.account.image} style={imgStyle} />
             ) : (
-              <Avatar style={imgStyle}>{initials(survey.account.fullname)}</Avatar>
+              <Avatar style={imgStyle}>{initials(survey.owner)}</Avatar>
             )}
           </TableCell>
-          <TableCell>{survey.account.fullname}</TableCell>
+          <TableCell>{survey.owner}</TableCell>
           <TableCell>{survey.case_id}</TableCell>
           <TableCell>{survey.company_name}</TableCell>
           <TableCell>{survey.contact_comments}</TableCell>

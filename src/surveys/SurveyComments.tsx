@@ -11,6 +11,7 @@ const QUERY_SURVEY_COMMENTS = gql`
       case_id
       company_name
       public_comment
+      owner
       contact_comments
       satisfied_with_service
       date_submitted
