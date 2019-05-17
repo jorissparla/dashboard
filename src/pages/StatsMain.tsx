@@ -9,6 +9,7 @@ import { useUser } from '../User';
 import { format } from '../utils/format';
 import Spinner from '../utils/spinner';
 import { useLocalStorage } from '../utils/useLocalStorage';
+import { ListFavoritePersons } from '../stats/FavoritesPersons';
 
 const styles = (theme: any) => ({
   root: theme.mixins.gutters({
@@ -190,6 +191,7 @@ const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
           }
         }}
       />
+      {/* <ListFavoritePersons /> */}
       {!data ? (
         <Spinner />
       ) : (

@@ -35,22 +35,24 @@ export const SurveyTable: React.FC<Props> = ({ surveys }) => {
           <TableCell>Date Submitted</TableCell>
         </TableRow>
       </TableHead>
-      {surveys.map(survey => (
-        <TableRow>
-          <TableCell>
-            {survey.account && survey.account.image ? (
-              <Avatar src={survey.account.image} style={imgStyle} />
-            ) : (
-              <Avatar style={imgStyle}>{initials(survey.owner)}</Avatar>
-            )}
-          </TableCell>
-          <TableCell>{survey.owner}</TableCell>
-          <TableCell>{survey.case_id}</TableCell>
-          <TableCell>{survey.company_name}</TableCell>
-          <TableCell>{survey.contact_comments}</TableCell>
-          <TableCell>{format(survey.date_submitted, 'dddd, DD MMMM YYYY')}</TableCell>
-        </TableRow>
-      ))}
+      <TableBody>
+        {surveys.map((survey, index) => (
+          <TableRow key={index}>
+            <TableCell>
+              {survey.account && survey.account.image ? (
+                <Avatar src={survey.account.image} style={imgStyle} />
+              ) : (
+                <Avatar style={imgStyle}>{initials(survey.owner)}</Avatar>
+              )}
+            </TableCell>
+            <TableCell>{survey.owner}</TableCell>
+            <TableCell>{survey.case_id}</TableCell>
+            <TableCell>{survey.company_name}</TableCell>
+            <TableCell>{survey.contact_comments}</TableCell>
+            <TableCell>{format(survey.date_submitted, 'dddd, DD MMMM YYYY')}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
     </Table>
   );
 };

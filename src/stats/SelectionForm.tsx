@@ -10,6 +10,7 @@ import {
   Checkbox
 } from '@material-ui/core';
 import { SelectionContext } from '../globalState/SelectionContext';
+import { doAddPersonToLocalStorage } from './FavoritesPersons';
 interface SelectionProps {
   classes: any;
   valuesChanged: any;
@@ -35,26 +36,36 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
     setOwner,
     isCloud,
     setisCloud,
-
+    owner,
     actionNeeded,
     setActionNeeded,
     products,
     setProducts
   } = selectionContext;
-  setOwner(initialValue.owner);
-  const [ownerVal, setOwnerVal] = useState(initialValue.owner);
+  const [ownerVal, setOwnerVal] = useState('');
   const [criteriaChange, setCriteriaChange] = React.useState(false);
   const [allOwners, toggleAllOwners] = React.useState(false);
-  console.log(products);
   function toggleSet(value: string) {
-    console.log(products.indexOf(value));
     if (products.indexOf(value) >= 0) {
-      console.log(products.indexOf(value));
       setProducts(products.filter((prod: string) => prod !== value));
     } else {
       setProducts(products.concat(value));
     }
   }
+
+  React.useEffect(() => {
+    setOwner(initialValue.owner);
+    console.log('Load', owner, initialValue);
+    setOwnerVal(initialValue.owner);
+  }, []);
+
+  React.useEffect(() => {
+    console.log('ownerChange', owner);
+    setOwnerVal(owner);
+    setCriteriaChange(true);
+  }, [owner]);
+
+  React.useEffect(() => {});
 
   function getValue(value: string) {
     return products.indexOf(value) >= 0;
@@ -74,6 +85,11 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
       <TextField
         value={ownerVal}
         disabled={!isValidSuperUser}
+        onMouseDown={e => {
+          if (e.nativeEvent.which === 3) {
+            //  doAddPersonToLocalStorage(ownerVal);
+          }
+        }}
         onChange={event => {
           setOwnerVal(event.target.value);
           setCriteriaChange(true);
