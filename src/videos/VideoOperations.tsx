@@ -126,6 +126,7 @@ const EditVideoPlain: React.FC<EditProps> = ({ match, history }) => {
   const { video } = data;
   async function handleSave(video: VideoType) {
     const result = await updateVideo({ variables: { video } });
+    history.push('/videos');
   }
   async function handleDelete(video: VideoType) {
     const result = await deleteVideo({ variables: { video } });

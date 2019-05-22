@@ -156,7 +156,7 @@ const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
   const [date, setDate] = useState(format(Date.now(), 'YYYY-MM-DD'));
   const [isCloud, setisCloud] = useState(false);
   const [owner, setOwner] = useState(props.user.fullname);
-  const { products } = useContext(SelectionContext);
+  const { products, persons } = useContext(SelectionContext);
   const { classes, user } = props;
 
   const isValidSuperUser = ['Admin', 'PO'].some(u => u === user.role);
@@ -191,7 +191,7 @@ const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
           }
         }}
       />
-      {/* <ListFavoritePersons /> */}
+      <ListFavoritePersons persons={persons} />
       {!data ? (
         <Spinner />
       ) : (

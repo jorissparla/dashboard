@@ -10,7 +10,7 @@ import {
   Checkbox
 } from '@material-ui/core';
 import { SelectionContext } from '../globalState/SelectionContext';
-import { doAddPersonToLocalStorage } from './FavoritesPersons';
+
 interface SelectionProps {
   classes: any;
   valuesChanged: any;
@@ -40,11 +40,32 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
     actionNeeded,
     setActionNeeded,
     products,
-    setProducts
+    setProducts,
+    setPersons,
+    persons
   } = selectionContext;
   const [ownerVal, setOwnerVal] = useState('');
   const [criteriaChange, setCriteriaChange] = React.useState(false);
   const [allOwners, toggleAllOwners] = React.useState(false);
+
+  const doAddPersonToLocalStorage = (newPerson: string) => {
+    const item = window.localStorage.getItem('persons');
+    let persons: any = [];
+    if (!item || item.length === 0) {
+      persons = [];
+    } else {
+      persons = JSON.parse(item);
+      console.log('do', item, persons, typeof persons);
+    }
+    persons = persons
+      .filter((person: any) => newPerson !== person.name)
+      .concat({ name: newPerson });
+
+    window.localStorage.setItem('persons', JSON.stringify(persons));
+    setPersons(persons);
+    return persons;
+  };
+
   function toggleSet(value: string) {
     if (products.indexOf(value) >= 0) {
       setProducts(products.filter((prod: string) => prod !== value));
@@ -87,7 +108,7 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
         disabled={!isValidSuperUser}
         onMouseDown={e => {
           if (e.nativeEvent.which === 3) {
-            //  doAddPersonToLocalStorage(ownerVal);
+            doAddPersonToLocalStorage(ownerVal);
           }
         }}
         onChange={event => {
