@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import DynamicImport from '../DynamicImport';
 
 import Anniversaries from '../awards/Anniversaries';
-import FeedbackList from './feedbackList';
+// import FeedbackList from './feedbackList';
 import CourseList from './CourseList';
 import { Surveys } from './Surveys';
 
@@ -34,7 +34,7 @@ class DashBoardContainer extends Component {
       // <DashBoard region={this.region} />,
 
       <SupportCards region={this.region} />,
-      <FeedbackList />,
+      // <FeedbackList />,
       <Anniversaries />
     ]
   };
@@ -88,9 +88,9 @@ class DashBoardContainer extends Component {
     switch (index) {
       case 10:
         return <Anniversaries />;
-      case 9:
-        return <FeedbackList />;
-      case 8:
+      // case 9:
+      //   return <FeedbackList />;
+      case (8, 9):
         return <SupportCards region={region} />;
       case 7:
         return <NewsPage region={region} />;
