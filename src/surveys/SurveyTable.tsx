@@ -6,6 +6,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Avatar from '@material-ui/core/Avatar';
+// import { Rating } from 'material-ui-rating';
 import { initials } from '../utils/misc';
 import { format } from './../utils/format';
 
@@ -32,6 +33,7 @@ export const SurveyTable: React.FC<Props> = ({ surveys }) => {
           <TableCell>Incident</TableCell>
           <TableCell>Customer</TableCell>
           <TableCell>Comment?</TableCell>
+          <TableCell>Rating</TableCell>
           <TableCell>Date Submitted</TableCell>
         </TableRow>
       </TableHead>
@@ -49,6 +51,7 @@ export const SurveyTable: React.FC<Props> = ({ surveys }) => {
             <TableCell>{survey.case_id}</TableCell>
             <TableCell>{survey.company_name}</TableCell>
             <TableCell>{survey.contact_comments}</TableCell>
+            <TableCell>{survey.rating ? survey.rating : 5}</TableCell>
             <TableCell>{format(survey.date_submitted, 'dddd, DD MMMM YYYY')}</TableCell>
           </TableRow>
         ))}

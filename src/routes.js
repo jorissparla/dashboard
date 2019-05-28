@@ -110,7 +110,7 @@ function AppRoutes(props) {
         user={user}
         history={props.history}
       />
-      <Route exact path="/" component={DashBoardContainer} />
+      <Route exact path="/" component={DashBoardContainer} user={user} />
       <Route exact path="/newspage" component={NewsPage} />
       <EnhancedRoute
         auth="admin"
@@ -122,7 +122,7 @@ function AppRoutes(props) {
       />
       <Route exact path="/tenant" component={TenantList} />
       />
-      <Route exact path="/region/:region" component={DashBoardContainer} />
+      <Route exact path="/region/:region" component={DashBoardContainer} user={user} />
       <Route exact path="/team/:team" component={DashBoardStatsNew} />
       <Route exact path="/team/:team/region/:region" component={DashBoardStats} />
       <Route exact path="/fileupload" component={CourseFileUpload} />

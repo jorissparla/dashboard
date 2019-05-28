@@ -46,10 +46,10 @@ const ScheduledCoursesInPeriod = ({ startdate }) => {
           <Table ref="id_table">
             <TableHead>
               <TableRow>
-                <HeaderColumn>TITLE</HeaderColumn>
-                <HeaderColumn style={{ width: 300 }}>DESCRIPTION</HeaderColumn>
+                <HeaderColumn style={{ width: 200 }}>TITLE</HeaderColumn>
+                <HeaderColumn style={{ width: 600 }}>DESCRIPTION</HeaderColumn>
                 <HeaderColumn style={{ width: 90 }}>STATUS</HeaderColumn>
-                <HeaderColumn>ID</HeaderColumn>
+                <HeaderColumn style={{ width: 90 }}>ID</HeaderColumn>
                 <HeaderColumn style={{ width: 20 }}>
                   <span role="img" aria-label="people">
                     👤

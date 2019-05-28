@@ -14,6 +14,8 @@ import TrainerViewNew from '../courses/TrainerViewNew';
 import StudentChip from '../courses/StudentChip';
 import StudentTableNew from '../courses/StudentTableNew';
 import ScheduledCoursesInPeriod from '../courses/ScheduledCoursesinPeriod';
+// import { useUser } from '../User';
+import { DashBoardContext } from './../globalState/Provider';
 
 const StudentChipList = styled.div`
   background-color: white;
@@ -82,12 +84,17 @@ class CourseView extends React.Component {
     studentfilterstartdate: format(addDays(new Date(), -180), 'YYYY-MM-DD'),
     studentfilterenddate: format(new Date(), 'YYYY-MM-DD'),
     value: '',
-    activeTab: 'student',
+    activeTab: this.props.start ? this.props.start : 'student',
     participants: { show: false, id: null, students: [] }
   };
 
   componentDidCatch(error) {
     //alert(JSON.stringify(error));
+  }
+
+  componentDidMount() {
+    // const context = React.useContext(DashBoardContext);
+    // console.log('context', context.getUser(), context.role);
   }
   handleStartDateChange = ({ target: { value } }) => {
     console.log(value);
@@ -110,9 +117,10 @@ class CourseView extends React.Component {
   };
   render() {
     const { classes } = this.props;
-
+    const user = this.props.user;
     const { activeTab } = this.state;
-    const { role } = this.props.user;
+    // const { role = 'Admin' } = user; //this.props.user;
+    const role = 'Admin';
     const enabled = role === 'Admin' || role === 'PO';
     const currentYear = new Date().getFullYear();
 

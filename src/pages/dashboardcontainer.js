@@ -5,7 +5,8 @@ import Anniversaries from '../awards/Anniversaries';
 // import FeedbackList from './feedbackList';
 import CourseList from './CourseList';
 import { Surveys } from './Surveys';
-
+import CourseDashboard from './CourseDashboard';
+// const CourseDash
 const DashBoard = DynamicImport(() => import('../dashboard'));
 const DashBoardStats = DynamicImport(() => import('./DashBoardStatsNew'));
 const GoLives = DynamicImport(() => import('./goLiveListNew'));
@@ -21,6 +22,7 @@ class DashBoardContainer extends Component {
     sel: null,
     region: 'EMEA',
     components: [
+      <CourseDashboard start="scheduled" user={this.props.user} />,
       <NewsPage region={this.region} />,
       <GoLives region={this.region} />,
       <DashBoardStats data1={['Logistics']} team="Logistics" region={this.region} />,
@@ -48,6 +50,7 @@ class DashBoardContainer extends Component {
     clearInterval(this.timerID);
   }
   componentDidMount() {
+    console.log('Container', this.props);
     const sel = parseInt(this.props.match.params.id, 2);
     if (sel) {
       this.setState({ index: 0, sel: sel });

@@ -15,6 +15,7 @@ const QUERY_SURVEY_COMMENTS = gql`
       contact_comments
       satisfied_with_service
       date_submitted
+      rating
       account {
         fullname
         image
