@@ -6,7 +6,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Avatar from '@material-ui/core/Avatar';
-// import { Rating } from 'material-ui-rating';
+// import Rating from 'material-ui-rating';
 import { initials } from '../utils/misc';
 import { format } from './../utils/format';
 
@@ -22,19 +22,26 @@ const imgStyle = {
   color: 'white'
 };
 
+const TableCell1 = ({ children }: any) => (
+  <TableCell style={{ fontSize: '1.2rem', color: '#111111', fontFamily: 'Poppins' }}>
+    {children}
+  </TableCell>
+);
+
 export const SurveyTable: React.FC<Props> = ({ surveys }) => {
   console.log('surveys', surveys);
   return (
     <Table style={{ background: 'white' }}>
       <TableHead>
         <TableRow>
-          <TableCell>Img</TableCell>
-          <TableCell>User</TableCell>
-          <TableCell>Incident</TableCell>
-          <TableCell>Customer</TableCell>
-          <TableCell>Comment?</TableCell>
-          <TableCell>Rating</TableCell>
-          <TableCell>Date Submitted</TableCell>
+          {/* style={{ backgroundColor: '#524763', color: 'white' }}> */}
+          <TableCell1>Img</TableCell1>
+          <TableCell1>Analyst</TableCell1>
+          <TableCell1>Incident</TableCell1>
+          <TableCell1>Customer</TableCell1>
+          <TableCell1>Comment?</TableCell1>
+          {/* <TableCell1>Rating</TableCell1> */}
+          <TableCell1>Date Submitted</TableCell1>
         </TableRow>
       </TableHead>
       <TableBody>
@@ -51,7 +58,10 @@ export const SurveyTable: React.FC<Props> = ({ surveys }) => {
             <TableCell>{survey.case_id}</TableCell>
             <TableCell>{survey.company_name}</TableCell>
             <TableCell>{survey.contact_comments}</TableCell>
-            <TableCell>{survey.rating ? survey.rating : 5}</TableCell>
+            {/* <TableCell style={{ width: 200, display: 'flex' }}>
+              <Rating value={survey.rating ? survey.rating : 5} max={5} readOnly={true} />
+              {/* {survey.rating ? survey.rating : 5} */}
+            {/* </TableCell> */}
             <TableCell>{format(survey.date_submitted, 'dddd, DD MMMM YYYY')}</TableCell>
           </TableRow>
         ))}

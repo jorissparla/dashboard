@@ -138,7 +138,7 @@ export const SurveyComponent: React.FC<Props> = ({
 }) => {
   const pct = Math.round((100 * responded) / sent);
   return (
-    <div style={{ background: '#fff', color: '#333', height: '250px' }}>
+    <div style={{ background: '#fff', color: '#333', height: '250px', marginLeft: 10 }}>
       <h1>Quick Satisfaction survey Results</h1>
 
       <Container id="x">
@@ -176,8 +176,8 @@ interface RRProps {
 const ResponseRate: React.FC<RRProps> = ({ sent, responded, pct }) => (
   <StyledPapier width="30%" backgroundColor="#ddd;">
     <TitlesRow>
-      <div>Sent</div>
-      <div>Responded</div>
+      <div style={{ paddingRight: 10 }}>Sent</div>
+      <div style={{ paddingLeft: 10 }}>Responded</div>
     </TitlesRow>
     <ResultsRow>
       <div>{sent}</div>
