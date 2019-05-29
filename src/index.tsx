@@ -12,6 +12,7 @@ import AppRoutes from './routes';
 import { createMuiTheme } from '@material-ui/core/styles';
 import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
 import blue from '@material-ui/core/colors/blue';
+import purple from '@material-ui/core/colors/purple';
 import { AUTH_USER } from './actions';
 import App from './Navigation/Nav';
 import './index.css';
@@ -61,7 +62,9 @@ const muiTheme = createMuiTheme({
     useNextVariants: true
   },
   palette: {
-    primary: blue
+    primary: {
+      main: '#524763'
+    }
   }
 });
 

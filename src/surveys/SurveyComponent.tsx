@@ -180,8 +180,8 @@ const ResponseRate: React.FC<RRProps> = ({ sent, responded, pct }) => (
       <div style={{ paddingLeft: 10 }}>Responded</div>
     </TitlesRow>
     <ResultsRow>
-      <div>{sent}</div>
-      <div>{responded}</div>
+      <div style={{ paddingRight: 10 }}>{sent}</div>
+      <div style={{ paddingLeft: 10 }}>{responded}</div>
     </ResultsRow>
     <BottomBar>
       <PercentageComponent percentage={pct} />
