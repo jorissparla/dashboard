@@ -25,6 +25,7 @@ const COURSESINPERIOD = gql`
       students {
         fullname
       }
+      trainer
       course {
         id
         title
@@ -49,6 +50,7 @@ const ScheduledCoursesInPeriod = ({ startdate }) => {
                 <HeaderColumn style={{ width: 200 }}>TITLE</HeaderColumn>
                 <HeaderColumn style={{ width: 600 }}>DESCRIPTION</HeaderColumn>
                 <HeaderColumn style={{ width: 90 }}>STATUS</HeaderColumn>
+                <HeaderColumn style={{ width: 90 }}>TRAINER</HeaderColumn>
                 <HeaderColumn style={{ width: 90 }}>ID</HeaderColumn>
                 <HeaderColumn style={{ width: 20 }}>
                   <span role="img" aria-label="people">
@@ -59,11 +61,12 @@ const ScheduledCoursesInPeriod = ({ startdate }) => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {plannedcourses.map(({ course, id, status, students, startdate }) => (
+              {plannedcourses.map(({ course, id, status, students, trainer, startdate }) => (
                 <TableRow key={id}>
                   <TableCell>{course.title}</TableCell>
                   <TableCell style={{ width: 300 }}>{course.description}</TableCell>
                   <TableCell style={{ width: 90 }}>{status}</TableCell>
+                  <TableCell style={{ width: 90 }}>{trainer}</TableCell>
                   <TableCell>
                     <Link to={`/courses/edit/${course.id}`}>View Course</Link>
                   </TableCell>
