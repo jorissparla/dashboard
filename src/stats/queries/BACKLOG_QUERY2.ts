@@ -51,6 +51,15 @@ export const QUERY_BACKLOG = gql`
     ) {
       ...backlogfragment
     }
+    all_active_cloud: backlog(
+      owner: $owner
+      orderBy: DAYS_DESC
+      deployment: "CLOUD"
+      statusFilter: ACTIVE
+      productFilters: $products
+    ) {
+      ...backlogfragment
+    }
     on_hold_cloud: backlog(
       owner: $owner
       orderBy: DAYS_DESC
@@ -188,6 +197,14 @@ export const QUERY_BACKLOG = gql`
       owner: $owner
       orderBy: DAYS_DESC
       statusFilter: CLOUDOPS
+      productFilters: $products
+    ) {
+      ...backlogfragment
+    }
+    active: backlog(
+      owner: $owner
+      orderBy: DAYS_DESC
+      statusFilter: ACTIVE
       productFilters: $products
     ) {
       ...backlogfragment

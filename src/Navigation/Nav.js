@@ -16,6 +16,8 @@ import withAuth from '../utils/withAuth';
 import { AuthenticationSection } from './AuthSection';
 import { SideBarMenu } from './SideBarMenu';
 import { useUser } from '../User';
+import { ThemeContext } from 'globalState/ThemeContext';
+import { ThemeProvider } from '@material-ui/core/styles';
 
 const drawerWidth = 340;
 
@@ -47,7 +49,7 @@ const styles = theme => ({
   },
   drawer: {
     width: drawerWidth,
-    flexShrink: 0
+    flexShrink: 0.2
   },
   drawerPaper: {
     width: drawerWidth
@@ -98,6 +100,8 @@ const styles = theme => ({
 
 const Header = props => {
   const [open, setOpen] = useState(false);
+  const context = React.useContext(ThemeContext);
+  console.log({ context });
   function toggleMenu() {
     setOpen(!open);
   }
@@ -107,6 +111,7 @@ const Header = props => {
   let titleText = ''; // this.state.ipaddress ? this.state.ipaddress : "";
   titleText = titleText + process.env.NODE_ENV !== 'production' ? `(${process.env.NODE_ENV})` : '';
   return (
+    // <ThemeProvider theme={context.theme}>
     <React.Fragment>
       <div className={classes.root}>
         <AppBar
@@ -147,10 +152,17 @@ const Header = props => {
             </IconButton>
           </div>
           <Divider />
-          <SideBarMenu classes={classes} toggleMenu={toggleMenu} history={history} user={user} />
+          <SideBarMenu
+            classes={classes}
+            toggleMenu={toggleMenu}
+            history={history}
+            user={user}
+            open={open}
+          />
         </Drawer>
       </div>
     </React.Fragment>
+    // </ThemeProvider>
   );
 };
 

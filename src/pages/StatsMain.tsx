@@ -425,6 +425,12 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
           />
           <BacklogTable
             classes={classes}
+            backlog={data.active}
+            title="Active"
+            description="All Active Support Backlog"
+          />
+          <BacklogTable
+            classes={classes}
             backlog={data.all}
             title="All"
             description="All Support Backlog"

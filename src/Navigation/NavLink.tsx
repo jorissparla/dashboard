@@ -9,6 +9,7 @@ interface NavLinkProps {
   navigateTo: string;
   history: any;
   toggleMenu: () => null;
+  open?: boolean;
 }
 
 export const NavLink: React.FC<NavLinkProps> = ({
@@ -16,7 +17,8 @@ export const NavLink: React.FC<NavLinkProps> = ({
   Icon,
   navigateTo,
   history,
-  toggleMenu
+  toggleMenu,
+  open = true
 }) => (
   <MenuItem
     onClick={() => {
@@ -33,6 +35,6 @@ export const NavLink: React.FC<NavLinkProps> = ({
         <Icon />
       </ListItemIcon>
     )}
-    <ListItemText>{title}</ListItemText>
+    {open && <ListItemText>{title}</ListItemText>}
   </MenuItem>
 );

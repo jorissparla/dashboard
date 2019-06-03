@@ -33,9 +33,10 @@ interface Props {
   authenticated?: boolean;
   user: any;
   toggleMenu: () => void;
+  open: boolean;
 }
 
-export const SideBarMenu: React.FC<Props> = ({ classes, history, user, toggleMenu }) => {
+export const SideBarMenu: React.FC<Props> = ({ classes, history, user, toggleMenu, open }) => {
   let validRole = false;
   let isChat = false;
 
@@ -49,7 +50,7 @@ export const SideBarMenu: React.FC<Props> = ({ classes, history, user, toggleMen
   }
   // const ToggledNavLink = this.ToggledNavLink;
   function ToggledNavLink(props: any) {
-    return <NavLink {...props} toggleMenu={toggleMenu} history={history} />;
+    return <NavLink {...props} toggleMenu={toggleMenu} history={history} open={open} />;
   }
   return (
     <List>
