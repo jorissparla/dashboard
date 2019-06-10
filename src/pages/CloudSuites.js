@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Block } from "../elements/Block";
+import { But } from "../elements/MyButton";
 
 const Container = styled.div`
   display: flex;
@@ -74,6 +75,9 @@ export default function CloudSuites() {
               LN ERP
             </Block>
           </P>
+        </Padded>
+        <Padded>
+          <But>contacts</But>
         </Padded>
       </Article>
       <Article>
