@@ -61,7 +61,10 @@ export default function CloudSuites() {
       <Article>
         <Padded>
           <H1>Cloudsuite Automotive</H1>
-          <H2>Subtitel</H2>
+          <H2>
+            Meets the needs of automotive suppliers, it gives deep, proven capabilities in key areas such as product and
+            program management, supply chain and procurement, manufacturing production, quality, and global finance.
+          </H2>
         </Padded>
         <Image>
           <Img src="https://nlbavwixs.infor.com/images/infor/Automotive2.jpg" alt="CloudSuite" />
@@ -82,8 +85,8 @@ export default function CloudSuites() {
       </Article>
       <Article>
         <Padded>
-          <H1>CloudSuite Industrial Machinery</H1>
-          <H2>Subtitel</H2>
+          <H1>CloudSuite Industrial Enterprise</H1>
+          <H2>Boost performance and efficiency in areas that are essential to manufacturing organizations</H2>
         </Padded>
         <Image>
           <Img src="https://nlbavwixs.infor.com/images/infor/Industrial.jpg" alt="CloudSuite" />
