@@ -2,9 +2,16 @@ import * as React from "react";
 import styled from "styled-components";
 
 const SELECTEDCOLOR = "rgb(130, 216, 216)";
-const HOVERCOLOR = "#524763)";
+const HOVERCOLOR = "#524763";
 
-export const Block = styled("a")<{ selected?: boolean }>`
+function getBGColor(props: any) {
+  if (props.selected && props.outline) {
+    return HOVERCOLOR;
+  }
+  return SELECTEDCOLOR;
+}
+
+export const Block = styled("a")<{ selected?: boolean; outline?: boolean }>`
   font-family: Poppins;
   color: ${props => (props.selected ? "black" : "rgb(69, 69, 69)")};
   display: inline-block;
@@ -14,6 +21,7 @@ export const Block = styled("a")<{ selected?: boolean }>`
   margin-bottom: 5px;
   margin-right: 5px;
   margin-left: 5px;
+  background-color: ${props => getBGColor(props)};
   background-color: ${props => (props.selected ? SELECTEDCOLOR : "rgb(196, 196, 196)")};
   border-radius: 3px;
   padding: 5px 10px;
