@@ -14,7 +14,10 @@ const BadgeWrapper = styled.span`
   font-size: 1.2rem;
 `;
 export default function Badge({ children, isVisible = false }) {
-  const props = useSpring({ opacity: isVisible ? 1 : 0 }, { config: config.slow });
+  const props = useSpring(
+    { opacity: isVisible ? 1 : 0, transform: isVisible ? 'scale(1.0)' : 'scale(0.2)' },
+    { config: config.slow }
+  );
   return (
     <animated.div style={props}>
       <BadgeWrapper>{children}</BadgeWrapper>
