@@ -1,7 +1,8 @@
-import React from "react";
-import styled from "styled-components";
-import { Block } from "../elements/Block";
-import { But } from "../elements/MyButton";
+import React from 'react';
+import styled from 'styled-components';
+// import {mu} from 'react-apollo-hooks'
+import { Block } from '../elements/Block';
+import { But } from '../elements/MyButton';
 
 const Container = styled.div`
   display: flex;
@@ -43,7 +44,7 @@ const Padded = styled.div`
 const H1 = styled.h1`
   font-size: 1.25rem;
   margin: 0.5rem 0;
-  font-family: "Roboto Slab", sans-serif;
+  font-family: 'Roboto Slab', sans-serif;
 `;
 
 const H2 = styled.h2`
@@ -62,8 +63,9 @@ export default function CloudSuites() {
         <Padded>
           <H1>Cloudsuite Automotive</H1>
           <H2>
-            Meets the needs of automotive suppliers, it gives deep, proven capabilities in key areas such as product and
-            program management, supply chain and procurement, manufacturing production, quality, and global finance.
+            Meets the needs of automotive suppliers, it gives deep, proven capabilities in key areas
+            such as product and program management, supply chain and procurement, manufacturing
+            production, quality, and global finance.
           </H2>
         </Padded>
         <Image>
@@ -86,7 +88,10 @@ export default function CloudSuites() {
       <Article>
         <Padded>
           <H1>CloudSuite Industrial Enterprise</H1>
-          <H2>Boost performance and efficiency in areas that are essential to manufacturing organizations</H2>
+          <H2>
+            Boost performance and efficiency in areas that are essential to manufacturing
+            organizations
+          </H2>
         </Padded>
         <Image>
           <Img src="https://nlbavwixs.infor.com/images/infor/Industrial.jpg" alt="CloudSuite" />
