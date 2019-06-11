@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import styled from 'styled-components';
-import Portal from './Portal';
+import React, { Component } from "react";
+import styled from "styled-components";
+import Portal from "./Portal";
 
 export default class Modal extends Component {
   render() {
-    console.log('MODALWRAPPER');
+    console.log("MODALWRAPPER");
     const { children, toggle, on } = this.props;
     return (
       <Portal>
@@ -24,7 +24,7 @@ export default class Modal extends Component {
 
 const ModalWrapper = styled.div`
   position: absolute;
-  top: 0;
+  top: 5rem;
   left: 0;
   width: 100vw;
   height: 100vh;
