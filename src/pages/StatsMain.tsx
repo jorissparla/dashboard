@@ -116,6 +116,7 @@ export function useParams(clean = false) {
   const [N_NEW] = useLocalStorage('N_NEW', 1, clean);
   const [N_SOLUTIONPROPOSED] = useLocalStorage('N_SOLUTIONPROPOSED', 30, clean);
   const [N_AGING] = useLocalStorage('N_AGING', 90, clean);
+  const [N_MAJORIMPACT] = useLocalStorage('N_MAJORIMPACT', 2, clean);
   return {
     C_AWAITINGCUSTOMER,
     N_AWAITINGCUSTOMER,
@@ -126,7 +127,8 @@ export function useParams(clean = false) {
     C_NEW,
     N_NEW,
     N_SOLUTIONPROPOSED,
-    N_AGING
+    N_AGING,
+    N_MAJORIMPACT
   };
 }
 
@@ -383,13 +385,17 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
             classes={classes}
             backlog={data.major_impact}
             title="Major Impact"
-            description="Incidents with severity 'Major Impact' Last updated 2 days or more"
+            description={`Incidents with severity 'Major Impact' Last updated ${
+              params['N_MAJORIMPACT']
+            } days or more`}
           />
           <BacklogTable
             classes={classes}
             backlog={data.major_impact2}
             title="Major Impact"
-            description="Incidents with severity 'Major Impact' Last updated 2 days or more Not resolved in 5 days"
+            description={`Incidents with severity 'Major Impact' Last updated ${
+              params['N_MAJORIMPACT']
+            } days or more Not resolved in 5 days`}
           />
           <BacklogTable
             classes={classes}

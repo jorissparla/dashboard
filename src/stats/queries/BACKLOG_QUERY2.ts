@@ -31,6 +31,7 @@ export const QUERY_BACKLOG = gql`
     $N_NEW: Int
     $N_SOLUTIONPROPOSED: Int
     $N_AGING: Int
+    $N_MAJORIMPACT: Int
   ) {
     mostRecentUpdate
     critical_cloud: backlog(
@@ -294,7 +295,7 @@ export const QUERY_BACKLOG = gql`
       orderBy: DAYS_DESC
       deployment: "ALL"
       severityname: MAJOR
-      since: 2
+      since: $N_MAJORIMPACT
       createdafter: "2019-03-01"
       date: $date
       statusFilter: BACKLOG
@@ -307,7 +308,7 @@ export const QUERY_BACKLOG = gql`
       orderBy: DAYS_DESC
       deployment: "ALL"
       severityname: MAJOR
-      since: 2
+      since: $N_MAJORIMPACT
       createdafter: "2019-03-01"
       date: $date
       aging: 5
