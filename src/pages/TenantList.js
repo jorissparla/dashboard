@@ -137,6 +137,15 @@ const Header = styled.div`
   display: flex;
 `;
 
+const H2 = styled.h2`
+  letter-spacing: 0.2rem;
+  font-size: 1.3rem;
+  color: rgba(0, 0, 0, 0.87);
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  font-weight: 400;
+  line-height: 1.33;
+`;
+
 const TenantCard = ({ classes, customer, tenants, live, role = 'Guest' }) => {
   const [isLive, setLive] = React.useState(live);
   const max = _.maxBy(tenants, t => format(t.lastupdated, 'YYYYMMDD')).lastupdated;
@@ -146,9 +155,9 @@ const TenantCard = ({ classes, customer, tenants, live, role = 'Guest' }) => {
     <Card className={customer === 'Infor' ? classes.card2 : classes.card}>
       <CardContent>
         <Header>
-          <Typography gutterBottom variant="h5" component="h2">
-            {customer}
-          </Typography>
+          {/* <Typography gutterBottom variant="h5" component="H2"> */}
+          <H2>{customer}</H2>
+          {/* </Typography> */}
           <FavoriteBadge isVisible={isLive}>Live</FavoriteBadge>
         </Header>
         <Typography className={classes.pos} color="textSecondary">
@@ -188,7 +197,7 @@ const TenantCard = ({ classes, customer, tenants, live, role = 'Guest' }) => {
                   });
                 }}
                 value="checkedB"
-                color="secondary"
+                color="primary"
                 inputProps={{ 'aria-label': 'primary checkbox' }}
               />
             )}
