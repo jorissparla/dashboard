@@ -115,6 +115,9 @@ const styles = theme => ({
   },
   main: {
     display: 'flex'
+  },
+  spaceFooter: {
+    justifyContent: 'space-between'
   }
 });
 
@@ -169,7 +172,7 @@ const TenantCard = ({ classes, customer, tenants, live, role = 'Guest' }) => {
           ))}
         </div>
       </CardContent>
-      <CardActions>
+      <CardActions className={classes.spaceFooter}>
         <Button
           size="small"
           onClick={() =>
@@ -197,7 +200,7 @@ const TenantCard = ({ classes, customer, tenants, live, role = 'Guest' }) => {
                   });
                 }}
                 value="checkedB"
-                color="primary"
+                color="secondary"
                 inputProps={{ 'aria-label': 'primary checkbox' }}
               />
             )}
