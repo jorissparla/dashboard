@@ -1,26 +1,27 @@
-import React from 'react';
-import { adopt } from 'react-adopt';
+import React from "react";
+import { adopt } from "react-adopt";
 
-import { Query, Mutation } from 'react-apollo';
-import gql from 'graphql-tag';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-import Typography from '@material-ui/core/Typography';
-import Avatar from '@material-ui/core/Avatar';
-import Divider from '@material-ui/core/Divider';
-import { withStyles } from '@material-ui/core/styles';
-import deepOrange from '@material-ui/core/colors/deepOrange';
-import UserSearchList from './UserSearchList';
-import { SharedSnackbarConsumer } from './globalState/SharedSnackbar.context';
+import { Query, Mutation } from "react-apollo";
+import gql from "graphql-tag";
+import FormGroup from "@material-ui/core/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
+import Typography from "@material-ui/core/Typography";
+import Avatar from "@material-ui/core/Avatar";
+import Divider from "@material-ui/core/Divider";
+import { withStyles } from "@material-ui/core/styles";
+import deepOrange from "@material-ui/core/colors/deepOrange";
+import UserSearchList from "./UserSearchList";
+import { SharedSnackbarConsumer } from "./globalState/SharedSnackbar.context";
 
-import User from './User';
+import User from "./User";
+import { hasPermission } from "./utils/hasPermission";
 
 const styles = theme => ({
   root: {
     flexGrow: 1,
     marginBottom: 10,
-    background: '#eee'
+    background: "#eee"
   },
   paper: {
     margin: 10,
@@ -28,14 +29,14 @@ const styles = theme => ({
   },
   avatar: {
     margin: 10,
-    color: '#fff',
+    color: "#fff",
     backgroundColor: deepOrange[500]
   },
   name: {
     marginLeft: 10,
     marginRight: 10,
-    alignContent: 'center',
-    alignSelf: 'center',
+    alignContent: "center",
+    alignSelf: "center",
     width: 250
   },
   button: {
@@ -45,15 +46,8 @@ const styles = theme => ({
   }
 });
 
-function hasPermission(permission, permissionsAr) {
-  return permissionsAr.filter(p => p === permission).length > 0;
-}
-
 const PERMISSIONS_MUTATION = gql`
-  mutation PERMISSIONS_MUTATION(
-    $where: WhereAccountInput
-    $data: UpdateAccountDataPermissionsInput
-  ) {
+  mutation PERMISSIONS_MUTATION($where: WhereAccountInput, $data: UpdateAccountDataPermissionsInput) {
     updatePermissions(where: $where, data: $data) {
       id
       permissions {
@@ -89,26 +83,15 @@ const Composed = adopt({
 });
 
 class UpdatePermissions extends React.Component {
-  handlePermChange = (
-    id,
-    currentPermissions,
-    hasPermission,
-    perm,
-    updatePermissions,
-    openSnackbar
-  ) => {
-    const newPermissions = hasPermission
-      ? currentPermissions.filter(p => p !== perm)
-      : [...currentPermissions, perm];
+  handlePermChange = (id, currentPermissions, hasPermission, perm, updatePermissions, openSnackbar) => {
+    const newPermissions = hasPermission ? currentPermissions.filter(p => p !== perm) : [...currentPermissions, perm];
     updatePermissions({
       variables: {
         where: { id },
         data: { permissions: newPermissions }
       }
     }).then(() =>
-      hasPermission
-        ? openSnackbar(`Permission ${perm} was removed`)
-        : openSnackbar(`Permission ${perm} was added`)
+      hasPermission ? openSnackbar(`Permission ${perm} was removed`) : openSnackbar(`Permission ${perm} was added`)
     );
   };
   render() {
@@ -126,12 +109,12 @@ class UpdatePermissions extends React.Component {
           message: { openSnackbar }
         }) => {
           if (loading || alsoloading) {
-            return 'Loading';
+            return "Loading";
           }
           const { me } = data;
           const permissionsAr = me.permissions.map(p => p.permission);
-          if (!hasPermission('ADMIN', permissionsAr)) {
-            return 'No permission';
+          if (!hasPermission("ADMIN", permissionsAr)) {
+            return "No permission";
           }
           return (
             <div>

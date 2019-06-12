@@ -1,15 +1,47 @@
 import React, { useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-apollo-hooks";
+
 import gql from "graphql-tag";
 import styled from "styled-components";
 import _ from "lodash";
+import Tooltip from "@material-ui/core/Tooltip";
 // import {mu} from 'react-apollo-hooks'
 import { Block } from "../elements/Block";
+import { ModalBackdrop, ModalWindow } from "../elements/Modal";
 import { But } from "../elements/MyButton";
 import Spinner from "utils/spinner";
-import Modal from "../ModalWrapper";
+import { useUser } from "User";
+import { hasPermissionEx } from "utils/hasPermission";
+
+const ProductFragment = gql`
+  fragment ProductDetails on CloudSuiteProduct {
+    id
+    name
+    description
+    type
+  }
+`;
+
+const SuitesFragment = gql`
+  fragment SuiteDetails on CloudSuite {
+    id
+    name
+    description
+    imageURL
+    products {
+      product {
+        id
+        name
+        type
+        description
+      }
+      type
+    }
+  }
+`;
 
 const QUERY_PRODUCTS_SUITES = gql`
+  ${SuitesFragment}
   query QUERY_PRODUCTS_SUITES {
     products: cloudsuiteproducts {
       id
@@ -18,21 +50,33 @@ const QUERY_PRODUCTS_SUITES = gql`
       type
     }
     suites: cloudsuites {
+      ...SuiteDetails
+    }
+  }
+`;
+const QUERY_PRODUCTS_SINGLE_SUITE = gql`
+  ${SuitesFragment}
+  query QUERY_PRODUCTS_SINGLE_SUITE($id: ID!) {
+    products: cloudsuiteproducts {
       id
       name
       description
-      imageURL
-      products {
-        product {
-          id
-          name
-        }
-        type
-      }
+      type
+    }
+    suite: cloudsuite(id: $id) {
+      ...SuiteDetails
     }
   }
 `;
 
+const MUTATION_ADD_PRODUCT_TO_SUITE = gql`
+  ${SuitesFragment}
+  mutation MUTATION_ADD_PRODUCT_TO_SUITE($input: InputAddProductToSuite) {
+    addproducttosuite(input: $input) {
+      ...SuiteDetails
+    }
+  }
+`;
 const Container = styled.div`
   display: flex;
   margin-top: 5rem;
@@ -96,15 +140,21 @@ const P = styled.p`
   font-size: 1.25rem;
   margin: 0;
 `;
-export default function CloudSuites() {
+export default function CloudSuites({ history }) {
   const [showModal, toggleShow] = useState(false);
   const { loading, data } = useQuery(QUERY_PRODUCTS_SUITES, {
     suspend: false
   });
+
+  const user = useUser();
+
+  const permissions = user ? user.permissions || [] : [];
+
+  const validAdmin = hasPermissionEx("ADMIN", permissions);
   useEffect(() => {
     // setProducts(data.products);
   }, [loading]);
-
+  console.log("object 👏👏", history, permissions, validAdmin);
   if (loading || !data) return <Spinner />;
   const { products, suites } = data;
   return (
@@ -126,31 +176,20 @@ export default function CloudSuites() {
               <Padded>
                 <P>
                   {suite.products.map(prod => (
-                    <Block key={prod.product.id} selected={prod.type === "included"}>
-                      {prod.product.name}
-                    </Block>
+                    <Tooltip title={prod.product.description}>
+                      <Block key={prod.product.id} selected={prod.product.type.toLowerCase() === "core"}>
+                        {prod.product.name}
+                      </Block>
+                    </Tooltip>
                   ))}
                 </P>
               </Padded>
               <Footer>
-                <Modal
-                  on={showModal}
-                  toggle={() => {
-                    toggleShow(!showModal);
-                  }}
-                >
-                  Edit Products for {suite.name}({availableprods.length})
-                  <P>
-                    {availableprods.map(prod => (
-                      <Block key={prod.id} selected={prod.type === "included"}>
-                        {prod.name}
-                      </Block>
-                    ))}
-                  </P>
-                </Modal>
-                <But optional onClick={() => toggleShow(true)}>
-                  Edit
-                </But>
+                {validAdmin && (
+                  <But optional onClick={() => history.push("/cloudsuite/" + suite.id)}>
+                    Products
+                  </But>
+                )}
                 <But secondary>contacts</But>
               </Footer>
             </Article>
@@ -160,3 +199,64 @@ export default function CloudSuites() {
     </div>
   );
 }
+
+export const CloudSuitePage = ({
+  history,
+  match: {
+    params: { id }
+  }
+}) => {
+  console.log("Params", id);
+  const { loading, data } = useQuery(QUERY_PRODUCTS_SINGLE_SUITE, { variables: { id }, suspend: false });
+  const addMutation = useMutation(MUTATION_ADD_PRODUCT_TO_SUITE);
+  console.log(data);
+  if (loading) return <Spinner />;
+  const { products, suite } = data;
+
+  let prods = suite.products.map(prod => prod.product.name).join("-");
+  let availableprods = products.filter(prod => !_.includes(prods, prod.name));
+  console.log("suite", suite.name, prods, availableprods);
+  return (
+    <Article>
+      <Header>
+        <But secondary onClick={() => history.push("/cloudsuites/")}>
+          Back to Suites
+        </But>
+        <H1>Edit products for {suite.name}</H1>
+        <H2>{suite.description}</H2>
+      </Header>
+      <Image>
+        <Img src={suite.imageURL} alt="CloudSuite" />
+      </Image>
+      <Padded>
+        <P>
+          {suite.products.map(prod => (
+            <Block key={prod.product.id} selected={prod.product.type.toLowerCase() === "core"}>
+              {prod.product.name}
+            </Block>
+          ))}
+        </P>
+      </Padded>
+      <hr />
+      <Footer>
+        <H2>Available Products</H2>
+        <P>
+          {availableprods.map(prod => (
+            <Block
+              key={prod.id}
+              selected={prod.type.toLowerCase() === "core"}
+              onClick={async () => {
+                const input = { csuiteid: suite.id, productid: prod.id, type: prod.type };
+                console.log("adding", suite.id, prod.id, prod.type);
+                const result = await addMutation({ variables: { input } });
+                console.log("results", result);
+              }}
+            >
+              {prod.name}
+            </Block>
+          ))}
+        </P>
+      </Footer>
+    </Article>
+  );
+};

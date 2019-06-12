@@ -18,14 +18,14 @@ import NewsPage from "./pages/newspage";
 import PlannedCourseRequestList from "./pages/PlannedCourseRequestList";
 import ProfilePage from "./pages/ProfilePage";
 import VideoPage from "./pages/Videos";
-import { withDashBoardContext } from "./globalState/Provider";
+import { withDashBoardContext, DashBoardContext } from "./globalState/Provider";
 import { Parameters } from "./stats/Parameters";
 import TestLogin from "./TestLogin";
 import User, { UserProfileComponent, useUser } from "./User";
 import UserPermissions from "./UserPermissions";
 import { AddVideo, EditVideo } from "./videos/VideoOperations";
 import { Surveys } from "./pages/Surveys";
-import CloudSuites from "./pages/CloudSuites";
+import CloudSuites, { CloudSuitePage } from "./pages/CloudSuites";
 const StatsMain = DynamicImport(() => import("./pages/StatsMain"));
 //const StatsMain = React.lazy(() => import('./kudos/kudolistcomponentnew'));
 //const CommentsList = DynamicImport(() => import("./feedback/commentList"));
@@ -92,6 +92,8 @@ const TestUser = () => <UserProfileComponent />;
 
 function AppRoutes(props) {
   const user = props.context;
+  const obj = React.useContext(DashBoardContext);
+  console.log("😂😂😂😂", props.context, obj.getUser());
 
   return (
     <Switch>
@@ -101,7 +103,8 @@ function AppRoutes(props) {
       <AuthRoute exact path="/myworkparams" component={Parameters} user={user} history={props.history} />
       <Route exact path="/" component={DashBoardContainer} user={user} />
       <Route exact path="/newspage" component={NewsPage} />
-      <Route exact path="/cloudsuite" component={CloudSuites} />
+      <Route exact path="/cloudsuites" component={CloudSuites} history={props.history} user={user} />
+      <Route exact path="/cloudsuite/:id" component={CloudSuitePage} history={props.history} user={user} />
       <EnhancedRoute
         auth="admin"
         editors={["Admin", "PO"]}

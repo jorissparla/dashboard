@@ -32,7 +32,7 @@ export const Block = styled("a")<{ selected?: boolean; outline?: boolean }>`
   transition: all 0.2s ease 0s;
   :hover {
     background-color: ${HOVERCOLOR};
-    color: black;
+    color: ${props => (props.selected ? "white" : "rgb(69, 69, 69)")};
     cursor: pointer;
   }
 `;
