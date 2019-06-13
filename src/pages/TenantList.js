@@ -125,13 +125,10 @@ const Article = styled.article`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
-  border-radius: 5px;
+  box-shadow: 2px 2px 8px 10px rgba(0, 0, 0, 0.26);
+  margin: 1px;
   background: white;
-  margin: 1rem;
   padding: 1rem;
-
-  min-width: 400px;
 `;
 const Main = styled.div`
   /* position: fixed;
@@ -367,7 +364,7 @@ const TenantList = props => {
               }}
             >
               <Article>
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", letterSpacing: "0.2rem" }}>
                   <Typography
                     gutterBottom
                     variant="h5"
@@ -377,7 +374,9 @@ const TenantList = props => {
                       // alert("ha");
                     }}
                   >
-                    {` Multitenant customers - last change (${format(max, "DDMMMYYYY")})`}
+                    <span style={{ letterSpacing: "0.2rem", textTransform: "uppercase" }}>
+                      {` Multitenant customers - last change -${format(max, "DD MMM YYYY")}`}
+                    </span>
                   </Typography>
                   <Button variant="contained" onClick={() => Toggle(!on)}>
                     Filter
