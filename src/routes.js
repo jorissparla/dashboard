@@ -26,7 +26,9 @@ import UserPermissions from "./UserPermissions";
 import { AddVideo, EditVideo } from "./videos/VideoOperations";
 import { Surveys } from "./pages/Surveys";
 import CloudSuites, { CloudSuitePage } from "./pages/CloudSuites";
+import PriorityDashboard from "./stats/PriorityDashboard";
 const StatsMain = DynamicImport(() => import("./pages/StatsMain"));
+
 //const StatsMain = React.lazy(() => import('./kudos/kudolistcomponentnew'));
 //const CommentsList = DynamicImport(() => import("./feedback/commentList"));
 const FeedbackList = DynamicImport(() => import("./pages/feedbackList"));
@@ -104,6 +106,7 @@ function AppRoutes(props) {
       <Route exact path="/" component={DashBoardContainer} user={user} />
       <Route exact path="/newspage" component={NewsPage} />
       <Route exact path="/cloudsuites" component={CloudSuites} history={props.history} user={user} />
+      <Route exact path="/priority" component={PriorityDashboard} history={props.history} user={user} />
       <Route exact path="/cloudsuite/:id" component={CloudSuitePage} history={props.history} user={user} />
       <EnhancedRoute
         auth="admin"
