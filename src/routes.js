@@ -95,7 +95,6 @@ const TestUser = () => <UserProfileComponent />;
 function AppRoutes(props) {
   const user = props.context;
   const obj = React.useContext(DashBoardContext);
-  console.log("😂😂😂😂", props.context, obj.getUser());
 
   return (
     <Switch>
@@ -239,7 +238,8 @@ function AppRoutes(props) {
       <Route path="/golivelistside" component={GoLiveListSide} />
       <Route path="/golives" component={GoLiveListNew} />
       <Route path="/kudos" component={KudoListComponentNew} />
-      <Route path="/surveys" component={Surveys} />
+      <Route exact path="/surveys/:id" component={Surveys} />
+      <Route exact path="/surveys" component={Surveys} />
       <Route path="/signin" component={Signin} />
       <Route path="/signinPIN" component={SigninWithPIN} />
       <Route path="/signout" component={Signout} />

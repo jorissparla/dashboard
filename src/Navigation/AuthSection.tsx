@@ -24,7 +24,6 @@ export const AuthenticationSection: React.FC<Props> = (props: any) => {
         if (!data || !data.me) {
           authenticated = false;
         }
-        console.log("AUTH", authenticated, data.me);
         if (authenticated || data.me) {
           const { id, image } = data.me;
           return (

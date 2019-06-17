@@ -1,37 +1,35 @@
-import * as React from 'react';
-import { Typography, withStyles } from '@material-ui/core';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Avatar from '@material-ui/core/Avatar';
+import * as React from "react";
+import { Typography, withStyles } from "@material-ui/core";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Avatar from "@material-ui/core/Avatar";
 // import Rating from 'material-ui-rating';
-import { initials } from '../utils/misc';
-import { format } from './../utils/format';
+import { initials } from "../utils/misc";
+import { format } from "./../utils/format";
 
 interface Props {
   surveys: any[];
 }
 
 const imgStyle = {
-  width: '48px',
-  height: '48px',
-  borderRadius: '50%',
-  background: 'orange',
-  color: 'white'
+  width: "48px",
+  height: "48px",
+  borderRadius: "50%",
+  background: "#1da1f2",
+  color: "white"
 };
 
 const TableCell1 = ({ children }: any) => (
-  <TableCell style={{ fontSize: '1.2rem', color: '#111111', fontFamily: 'Poppins' }}>
-    {children}
-  </TableCell>
+  <TableCell style={{ fontSize: "1.2rem", color: "#111111", fontFamily: "Poppins" }}>{children}</TableCell>
 );
 
 export const SurveyTable: React.FC<Props> = ({ surveys }) => {
-  console.log('surveys', surveys);
+  console.log("surveys", surveys);
   return (
-    <Table style={{ background: 'white' }}>
+    <Table style={{ background: "white" }}>
       <TableHead>
         <TableRow>
           {/* style={{ backgroundColor: '#524763', color: 'white' }}> */}
@@ -62,7 +60,7 @@ export const SurveyTable: React.FC<Props> = ({ surveys }) => {
               <Rating value={survey.rating ? survey.rating : 5} max={5} readOnly={true} />
               {/* {survey.rating ? survey.rating : 5} */}
             {/* </TableCell> */}
-            <TableCell>{format(survey.date_submitted, 'dddd, DD MMMM YYYY')}</TableCell>
+            <TableCell>{format(survey.date_submitted, "dddd, DD MMMM YYYY")}</TableCell>
           </TableRow>
         ))}
       </TableBody>
