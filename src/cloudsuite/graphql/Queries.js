@@ -59,6 +59,7 @@ export const ProductFragment = gql`
     description
     type
     contacts {
+      id
       contacttype
       organisation
       value
