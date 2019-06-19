@@ -4,13 +4,12 @@ import Portal from "./Portal";
 
 export default class Modal extends Component {
   render() {
-    console.log("MODALWRAPPER");
-    const { children, toggle, on } = this.props;
+    const { children, toggle, on, height = 100 } = this.props;
     return (
       <Portal>
         {on && (
           <ModalWrapper>
-            <ModalCard>
+            <ModalCard height={height}>
               <CloseButton onClick={toggle}>&times;</CloseButton>
               <div>{children}</div>
             </ModalCard>
@@ -24,10 +23,10 @@ export default class Modal extends Component {
 
 const ModalWrapper = styled.div`
   position: absolute;
-  top: 5rem;
+  top: ${props => `${props.top}rem`};
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height:100vh
   display: flex;
   justify-content: center;
   align-items: center;
@@ -37,7 +36,7 @@ const ModalWrapper = styled.div`
 const ModalCard = styled.div`
   top: 10vh;
   width: 90vw;
-  height: 90vh;
+  height: ${props => `${props.height}%`};
   position: relative;
   background: white;
   border-radius: 5px;

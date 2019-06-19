@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-apollo-hooks";
 
-import gql from "graphql-tag";
-import styled from "styled-components";
 import _ from "lodash";
 import Tooltip from "@material-ui/core/Tooltip";
 // import {mu} from 'react-apollo-hooks'
@@ -12,134 +10,13 @@ import { But } from "../elements/MyButton";
 import Spinner from "utils/spinner";
 import { useUser } from "User";
 import { hasPermissionEx } from "utils/hasPermission";
+import { Container, Article, Header, H1, H2, Image, Img, Padded, P, Footer } from "../cloudsuite/Styles";
+import {
+  QUERY_PRODUCTS_SUITES,
+  QUERY_PRODUCTS_SINGLE_SUITE,
+  MUTATION_ADD_PRODUCT_TO_SUITE
+} from "../cloudsuite/graphql/Queries";
 
-const ProductFragment = gql`
-  fragment ProductDetails on CloudSuiteProduct {
-    id
-    name
-    description
-    type
-  }
-`;
-
-const SuitesFragment = gql`
-  fragment SuiteDetails on CloudSuite {
-    id
-    name
-    description
-    imageURL
-    products {
-      product {
-        id
-        name
-        type
-        description
-      }
-      type
-    }
-  }
-`;
-
-const QUERY_PRODUCTS_SUITES = gql`
-  ${SuitesFragment}
-  query QUERY_PRODUCTS_SUITES {
-    products: cloudsuiteproducts {
-      id
-      name
-      description
-      type
-    }
-    suites: cloudsuites {
-      ...SuiteDetails
-    }
-  }
-`;
-const QUERY_PRODUCTS_SINGLE_SUITE = gql`
-  ${SuitesFragment}
-  query QUERY_PRODUCTS_SINGLE_SUITE($id: ID!) {
-    products: cloudsuiteproducts {
-      id
-      name
-      description
-      type
-    }
-    suite: cloudsuite(id: $id) {
-      ...SuiteDetails
-    }
-  }
-`;
-
-const MUTATION_ADD_PRODUCT_TO_SUITE = gql`
-  ${SuitesFragment}
-  mutation MUTATION_ADD_PRODUCT_TO_SUITE($input: InputAddProductToSuite) {
-    addproducttosuite(input: $input) {
-      ...SuiteDetails
-    }
-  }
-`;
-const Container = styled.div`
-  display: flex;
-  margin-top: 5rem;
-  @media (max-width: 500px) {
-    background: palevioletred;
-    flex-direction: column;
-  }
-`;
-
-const Article = styled.article`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
-  border-radius: 5px;
-  background: white;
-  margin: 1rem;
-
-  min-width: 400px;
-`;
-
-const Image = styled.div`
-  width: 100%;
-  height: 14rem;
-  .img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-`;
-
-const Img = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-`;
-const Padded = styled.div`
-  padding: 1rem;
-`;
-
-const Footer = styled.div`
-  padding: 1rem;
-  align-items: flex-end;
-`;
-const H1 = styled.h1`
-  font-size: 1.25rem;
-  margin: 0.5rem 0;
-  font-family: "Roboto Slab", sans-serif;
-`;
-
-const Header = styled(Padded)`
-  height: 120px;
-`;
-
-const H2 = styled.h2`
-  font-size: 1rem;
-  color: #808080;
-  margin: 0.5rem 0;
-`;
-const P = styled.p`
-  font-size: 1.25rem;
-  margin: 0;
-`;
 export default function CloudSuites({ history }) {
   const [showModal, toggleShow] = useState(false);
   const { loading, data } = useQuery(QUERY_PRODUCTS_SUITES, {
@@ -177,7 +54,11 @@ export default function CloudSuites({ history }) {
                 <P>
                   {suite.products.map(prod => (
                     <Tooltip title={prod.product.description}>
-                      <Block key={prod.product.id} selected={prod.product.type.toLowerCase() === "core"}>
+                      <Block
+                        key={prod.product.id}
+                        selected={prod.product.type.toLowerCase() === "core"}
+                        onClick={() => history.push(`/cloudsuites/product/${prod.product.id}`)}
+                      >
                         {prod.product.name}
                       </Block>
                     </Tooltip>
