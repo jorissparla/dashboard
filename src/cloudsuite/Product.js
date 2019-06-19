@@ -18,6 +18,19 @@ const Thead = styled.thead`
   letter-spacing: 0.2rem;
 `;
 
+const TD = styled.td`
+  border-bottom-color: rgba(0, 0, 0, 0.3);
+  border-bottom-style: solid;
+  border-top-style: solid;
+  padding: 3px;
+`;
+
+const TR = styled.tr`
+  :nth-child(even) {
+    background-color: #f2f2f2;
+  }
+`;
+
 const DeleteButton = styled.button`
   background: transparent;
   font-size: 18px;
@@ -105,15 +118,16 @@ function Product({ match, history, classes }) {
           <table>
             <Thead>
               <tr>
-                <td>type</td>
-                <td>name</td>
-                <td>organisation</td>
+                <TD>type</TD>
+                <TD>name</TD>
+                <TD>organisation</TD>
+                <TD> </TD>
               </tr>
             </Thead>
             <tbody>
               {contacts.map(({ contacttype, value, organisation, id }) => {
                 return (
-                  <tr>
+                  <TR>
                     <td>{contacttype}</td>
                     <td>{value}</td>
                     <td>{organisation}</td>
@@ -130,7 +144,7 @@ function Product({ match, history, classes }) {
                         &times;
                       </DeleteButton>
                     </td>
-                  </tr>
+                  </TR>
                 );
               })}
             </tbody>
