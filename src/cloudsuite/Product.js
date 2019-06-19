@@ -3,7 +3,7 @@ import { Container, Article, H1, H2, Header } from "./Styles";
 import { withRouter } from "react-router";
 import { useMutation, useQuery } from "react-apollo-hooks";
 import styled from "styled-components";
-import { QUERY_SINGLE_PRODUCT, MUTATION_ADD_PRODUCT_CONTACT } from "./graphql/Queries";
+import { QUERY_SINGLE_PRODUCT, MUTATION_ADD_PRODUCT_CONTACT, MUTATION_REMOVE_PRODUCT_CONTACT } from "./graphql/Queries";
 import Spinner from "utils/spinner";
 import { Button } from "@material-ui/core";
 import Fab from "@material-ui/core/Fab";
@@ -74,10 +74,11 @@ function Product({ match, history, classes }) {
     addContact({ variables: { input } });
     console.log("input", input);
   }
-
+  const productid = id;
   console.log(id);
   const { loading, data } = useQuery(QUERY_SINGLE_PRODUCT, { suspend: false, variables: { id } });
   const addContact = useMutation(MUTATION_ADD_PRODUCT_CONTACT);
+  const removeContact = useMutation(MUTATION_REMOVE_PRODUCT_CONTACT);
   if (loading) return <Spinner />;
   if (!data) return <div>No data</div>;
   const { cloudsuiteproduct } = data;
@@ -110,14 +111,24 @@ function Product({ match, history, classes }) {
               </tr>
             </Thead>
             <tbody>
-              {contacts.map(({ contacttype, value, organisation }) => {
+              {contacts.map(({ contacttype, value, organisation, id }) => {
                 return (
                   <tr>
                     <td>{contacttype}</td>
                     <td>{value}</td>
                     <td>{organisation}</td>
                     <td>
-                      <DeleteButton>&times;</DeleteButton>
+                      <DeleteButton
+                        onClick={async () => {
+                          const input = {
+                            id,
+                            productid
+                          };
+                          await removeContact({ variables: { input } });
+                        }}
+                      >
+                        &times;
+                      </DeleteButton>
                     </td>
                   </tr>
                 );

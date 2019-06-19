@@ -83,3 +83,12 @@ export const MUTATION_ADD_PRODUCT_CONTACT = gql`
     }
   }
 `;
+
+export const MUTATION_REMOVE_PRODUCT_CONTACT = gql`
+  ${ProductFragment}
+  mutation MUTATION_REMOVE_PRODUCT_CONTACT($input: InputRemoveContactFromProduct) {
+    removecontactfromproduct(input: $input) {
+      ...ProductDetails
+    }
+  }
+`;
