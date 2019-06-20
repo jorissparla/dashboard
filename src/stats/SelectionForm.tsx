@@ -1,15 +1,6 @@
-import React, { useContext, useState } from 'react';
-import {
-  Paper,
-  TextField,
-  Switch,
-  FormLabel,
-  Button,
-  FormControlLabel,
-  FormGroup,
-  Checkbox
-} from '@material-ui/core';
-import { SelectionContext } from '../globalState/SelectionContext';
+import React, { useContext, useState } from "react";
+import { Paper, TextField, Switch, FormLabel, Button, FormControlLabel, FormGroup, Checkbox } from "@material-ui/core";
+import { SelectionContext } from "../globalState/SelectionContext";
 
 interface SelectionProps {
   classes: any;
@@ -44,24 +35,22 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
     setPersons,
     persons
   } = selectionContext;
-  const [ownerVal, setOwnerVal] = useState('');
+  const [ownerVal, setOwnerVal] = useState("");
   const [criteriaChange, setCriteriaChange] = React.useState(false);
   const [allOwners, toggleAllOwners] = React.useState(false);
 
   const doAddPersonToLocalStorage = (newPerson: string) => {
-    const item = window.localStorage.getItem('persons');
+    const item = window.localStorage.getItem("persons");
     let persons: any = [];
     if (!item || item.length === 0) {
       persons = [];
     } else {
       persons = JSON.parse(item);
-      console.log('do', item, persons, typeof persons);
+      console.log("do", item, persons, typeof persons);
     }
-    persons = persons
-      .filter((person: any) => newPerson !== person.name)
-      .concat({ name: newPerson });
+    persons = persons.filter((person: any) => newPerson !== person.name).concat({ name: newPerson });
 
-    window.localStorage.setItem('persons', JSON.stringify(persons));
+    window.localStorage.setItem("persons", JSON.stringify(persons));
     setPersons(persons);
     return persons;
   };
@@ -76,12 +65,12 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
 
   React.useEffect(() => {
     setOwner(initialValue.owner);
-    console.log('Load', owner, initialValue);
+    console.log("Load", owner, initialValue);
     setOwnerVal(initialValue.owner);
   }, []);
 
   React.useEffect(() => {
-    console.log('ownerChange', owner);
+    console.log("ownerChange", owner);
     setOwnerVal(owner);
     setCriteriaChange(true);
   }, [owner]);
@@ -128,7 +117,7 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
           checked={allOwners}
           onChange={e => {
             if (!allOwners) {
-              setOwnerVal('');
+              setOwnerVal("");
             } else {
               setOwnerVal(initialValue.owner);
             }
@@ -161,53 +150,44 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
         value={actionNeeded}
         color="secondary"
       />
-      <FormGroup row style={{ marginLeft: 50, border: '1px solid #ccc', padding: 5 }}>
+      <FormGroup row style={{ marginLeft: 50, border: "1px solid #ccc", padding: 5 }}>
         <FormControlLabel
-          control={
-            <Checkbox
-              checked={getValue('LN')}
-              onChange={() => toggleSet('LN')}
-              value="LN"
-              color="primary"
-            />
-          }
+          control={<Checkbox checked={getValue("LN")} onChange={() => toggleSet("LN")} value="LN" color="primary" />}
           label="LN"
         />
         <FormControlLabel
           control={
-            <Checkbox
-              checked={getValue('PLM')}
-              onChange={() => toggleSet('PLM')}
-              value="PLM"
-              color="secondary"
-            />
+            <Checkbox checked={getValue("PLM")} onChange={() => toggleSet("PLM")} value="PLM" color="secondary" />
           }
           label="PLM"
         />
         <FormControlLabel
           control={
             <Checkbox
-              checked={getValue('Protean')}
-              onChange={() => toggleSet('Protean')}
+              checked={getValue("Protean")}
+              onChange={() => toggleSet("Protean")}
               value="Protean"
               color="secondary"
             />
           }
           label="Protean"
         />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={getValue("InforOS")}
+              onChange={() => toggleSet("InforOS")}
+              value="InforOS"
+              color="secondary"
+            />
+          }
+          label="InforOS"
+        />
       </FormGroup>
 
-      <div style={{ position: 'relative', right: '-40px' }}>
-        {' '}
-        last Updated: {initialValue.lastUpdated}
-      </div>
+      <div style={{ position: "relative", right: "-40px" }}> last Updated: {initialValue.lastUpdated}</div>
       {isValidSuperUser && (
-        <Button
-          color="secondary"
-          variant="contained"
-          style={{ marginLeft: 60 }}
-          onClick={onNavigateToParams}
-        >
+        <Button color="secondary" variant="contained" style={{ marginLeft: 60 }} onClick={onNavigateToParams}>
           Parameters
         </Button>
       )}
