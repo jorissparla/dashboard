@@ -1,16 +1,22 @@
-import React from "react";
-import { Container, Article, H1, H2, Header } from "./Styles";
-import { withRouter } from "react-router";
-import { useMutation, useQuery } from "react-apollo-hooks";
-import styled from "styled-components";
-import { QUERY_SINGLE_PRODUCT, MUTATION_ADD_PRODUCT_CONTACT, MUTATION_REMOVE_PRODUCT_CONTACT } from "./graphql/Queries";
-import Spinner from "utils/spinner";
-import { Button } from "@material-ui/core";
-import Fab from "@material-ui/core/Fab";
-import { withStyles } from "@material-ui/core/styles";
-import AddIcon from "@material-ui/icons/Add";
-import Modal from "../ModalWrapper";
-import { Input, Form, Error } from "../styles";
+import React from 'react';
+import { Container, Article, H1, H2, Header } from './Styles';
+import { withRouter } from 'react-router';
+import { useMutation, useQuery } from 'react-apollo-hooks';
+import styled from 'styled-components';
+import {
+  QUERY_SINGLE_PRODUCT,
+  MUTATION_ADD_PRODUCT_CONTACT,
+  MUTATION_REMOVE_PRODUCT_CONTACT
+} from './graphql/Queries';
+import Spinner from 'utils/spinner';
+import { Button, TextField } from '@material-ui/core';
+import Fab from '@material-ui/core/Fab';
+import { withStyles } from '@material-ui/core/styles';
+import AddIcon from '@material-ui/icons/Add';
+import Modal from '../ModalWrapper';
+import { Input, Form, Error } from '../styles';
+import ReactMarkdown from 'react-markdown';
+import { react } from 'babel-types';
 
 const Thead = styled.thead`
   font-weight: 800;
@@ -48,7 +54,36 @@ const styles = theme => ({
     margin: theme.spacing.unit
   },
   input: {
-    display: "none"
+    display: 'none'
+  },
+  contentField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    backgroundColor: '#eeeeee99',
+    fontSize: 40,
+    minHeight: '50vh'
+  },
+  dense: {
+    marginTop: 19
+  },
+  formControl: {
+    margin: theme.spacing.unit,
+    minWidth: 120
+  },
+  markdown: {
+    width: '90vw',
+    height: '50vh'
+  },
+  content: {
+    display: 'flex',
+    marginLeft: '2rem',
+    borderTop: 'solid 1px #ddd',
+    borderBottom: 'solid 1px #ddd'
+  },
+  button2: {
+    margin: theme.spacing.unit,
+    height: '40px',
+    backgroundColor: 'palevioletred'
   }
 });
 
@@ -59,17 +94,34 @@ function useInput(defaultValue) {
     setValue(e.target.value);
   }
   function clear() {
-    setValue("");
+    setValue('');
   }
-  return { value, onChange, clear };
+
+  return { value, onChange, clear, setValue };
+}
+
+function useProduct(id) {
+  const { loading, data } = useQuery(QUERY_SINGLE_PRODUCT, { suspend: false, variables: { id } });
+  const defaults = { cloudsuiteproduct: { name: '', description: '', contacts: [], content: '' } };
+  if (loading) return defaults;
+  else return data;
 }
 
 function Product({ match, history, classes }) {
   const id = match.params.id;
   const [isModal, toggle] = React.useState(false);
-  const contact = useInput("");
-  const value = useInput("");
-  const organisation = useInput("Support");
+  const [on, setOn] = React.useState(false);
+  const contact = useInput('');
+  const value = useInput('');
+  const contentValue = useInput('');
+  const organisation = useInput('Support');
+  const readOnly = false;
+  let content = null;
+
+  React.useEffect(() => {
+    console.log('render');
+    contentValue.setValue(content);
+  });
 
   function clearInputValues() {
     organisation.clear();
@@ -85,7 +137,7 @@ function Product({ match, history, classes }) {
       value: value.value
     };
     addContact({ variables: { input } });
-    console.log("input", input);
+    console.log('input', input);
   }
   const productid = id;
   console.log(id);
@@ -93,24 +145,55 @@ function Product({ match, history, classes }) {
   const addContact = useMutation(MUTATION_ADD_PRODUCT_CONTACT);
   const removeContact = useMutation(MUTATION_REMOVE_PRODUCT_CONTACT);
   if (loading) return <Spinner />;
-  if (!data) return <div>No data</div>;
+  // const data = useProduct(id);
   const { cloudsuiteproduct } = data;
   const { name, description, contacts } = cloudsuiteproduct;
+  content = cloudsuiteproduct.content;
+  //setContentValue(content);
   console.log(data);
 
   return (
     <div>
       <Article>
         <Header>
-          <Button color="primary" variant="contained" onClick={() => history.push("/cloudsuites")}>
+          <Button color="primary" variant="contained" onClick={() => history.push('/cloudsuites')}>
             Back to Suites
           </Button>
           <H1>{name}</H1>
           <H2>{description}</H2>
         </Header>
+        <div className={classes.content}>
+          {!readOnly && on && (
+            <TextField
+              id="content"
+              label="content"
+              className={classes.contentField}
+              {...contentValue}
+              margin="normal"
+              fullWidth
+              multiline
+              rows={25}
+            />
+          )}
+          {!on && (
+            <div className={classes.markdown}>
+              <ReactMarkdown source={contentValue.value} />
+            </div>
+          )}
+          {!readOnly && (
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.button2}
+              onClick={() => setOn(!on)}
+            >
+              {on ? 'Preview' : 'Edit '}
+            </Button>
+          )}
+        </div>
         <Header>
           <H1>
-            Contacts{" "}
+            Contacts{' '}
             <Fab size="small" color="secondary" aria-label="Add" onClick={() => toggle(!isModal)}>
               <AddIcon />
             </Fab>
@@ -127,7 +210,7 @@ function Product({ match, history, classes }) {
             <tbody>
               {contacts.map(({ contacttype, value, organisation, id }) => {
                 return (
-                  <TR>
+                  <TR key={id}>
                     <td>{contacttype}</td>
                     <td>{value}</td>
                     <td>{organisation}</td>
@@ -171,7 +254,12 @@ function Product({ match, history, classes }) {
               >
                 Save
               </Button>
-              <Button color="secondary" variant="contained" className={classes.button} onClick={() => toggle(!isModal)}>
+              <Button
+                color="secondary"
+                variant="contained"
+                className={classes.button}
+                onClick={() => toggle(!isModal)}
+              >
                 Cancel
               </Button>
             </Header>
