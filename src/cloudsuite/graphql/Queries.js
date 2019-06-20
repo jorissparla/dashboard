@@ -1,4 +1,4 @@
-import gql from 'graphql-tag';
+import gql from "graphql-tag";
 const SuitesFragment = gql`
   fragment SuiteDetails on CloudSuite {
     id

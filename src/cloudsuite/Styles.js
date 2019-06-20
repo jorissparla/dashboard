@@ -15,7 +15,7 @@ export const Article = styled.article`
   border-radius: 5px;
   background: white;
   margin: 1rem;
-
+  height: 80vh;
   min-width: 400px;
   padding-bottom: 2rem;
 `;
