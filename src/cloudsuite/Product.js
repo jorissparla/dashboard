@@ -1,20 +1,25 @@
-import React from "react";
-import { Container, Article, H1, H2, Header } from "./Styles";
-import { withRouter } from "react-router";
-import { useMutation, useQuery } from "react-apollo-hooks";
-import styled from "styled-components";
-import { QUERY_SINGLE_PRODUCT, MUTATION_ADD_PRODUCT_CONTACT, MUTATION_REMOVE_PRODUCT_CONTACT } from "./graphql/Queries";
-import Spinner from "utils/spinner";
-import { Button, TextField } from "@material-ui/core";
-import Fab from "@material-ui/core/Fab";
-import { withStyles } from "@material-ui/core/styles";
-import AddIcon from "@material-ui/icons/Add";
-import EditIcon from "@material-ui/icons/Edit";
-import Modal from "../ModalWrapper";
-import { Input, Form, Error } from "../styles";
+import React from 'react';
+import { Container, Article, H1, H2, Header } from './Styles';
+import { withRouter } from 'react-router';
+import { useMutation, useQuery } from 'react-apollo-hooks';
+import styled from 'styled-components';
+import {
+  QUERY_SINGLE_PRODUCT,
+  MUTATION_ADD_PRODUCT_CONTACT,
+  MUTATION_REMOVE_PRODUCT_CONTACT
+} from './graphql/Queries';
+import Spinner from 'utils/spinner';
+import { Button, TextField } from '@material-ui/core';
+import Fab from '@material-ui/core/Fab';
+import { withStyles } from '@material-ui/core/styles';
+import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/Edit';
+import SaveIcon from '@material-ui/icons/Save';
+import Modal from '../ModalWrapper';
+import { Input, Form, Error } from '../styles';
 
-import useInput from "../hooks/useInput";
-import ProductForm from "./ProductForm";
+import useInput from '../hooks/useInput';
+import ProductForm from './ProductForm';
 const Thead = styled.thead`
   font-weight: 800;
   text-transform: uppercase;
@@ -56,18 +61,19 @@ const styles = theme => ({
     margin: theme.spacing.unit
   },
   editField: {
-    display: "block",
-    width: "800px"
+    display: 'block',
+    width: '800px',
+    backgroundColor: 'lightyellow'
   },
   input: {
-    display: "none"
+    display: 'none'
   },
   contentField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
-    backgroundColor: "#eeeeee99",
+    backgroundColor: '#eeeeee99',
     fontSize: 40,
-    maxHeight: "30vh"
+    maxHeight: '30vh'
   },
   dense: {
     marginTop: 19
@@ -77,25 +83,42 @@ const styles = theme => ({
     minWidth: 120
   },
   markdown: {
-    width: "90vw",
-    maxHeight: "30vh"
+    width: '90vw',
+    maxHeight: '30vh'
   },
   content: {
-    display: "flex",
-    marginLeft: "2rem",
-    borderTop: "solid 1px #ddd",
-    borderBottom: "solid 1px #ddd"
+    display: 'flex',
+    marginLeft: '2rem',
+    borderTop: 'solid 1px #ddd',
+    borderBottom: 'solid 1px #ddd'
+  },
+  content2: {
+    display: 'flex',
+    flexDirection: 'column',
+    marginLeft: '2rem'
   },
   button2: {
     margin: theme.spacing.unit,
-    height: "40px",
-    backgroundColor: "palevioletred"
+    height: '40px',
+    backgroundColor: 'palevioletred'
+  },
+  button3: {
+    margin: theme.spacing.unit,
+    height: '40px'
   }
 });
 
+const SpanWrapper = styled.span`
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  display: flex;
+  padding: 2px;
+`;
+
 function useProduct(id) {
   const { loading, data } = useQuery(QUERY_SINGLE_PRODUCT, { suspend: false, variables: { id } });
-  const defaults = { cloudsuiteproduct: { name: "", description: "", contacts: [], content: "" } };
+  const defaults = { cloudsuiteproduct: { name: '', description: '', contacts: [], content: '' } };
   if (loading) return defaults;
   else return data;
 }
@@ -104,15 +127,15 @@ function Product({ match, history, classes }) {
   const id = match.params.id;
   const [isModal, toggle] = React.useState(false);
   const [isEditable, setEditable] = React.useState(false);
-  const contact = useInput("");
-  const value = useInput("");
-  const contentValue = useInput("");
-  const organisation = useInput("Support");
+  const contact = useInput('');
+  const value = useInput('');
+  const contentValue = useInput('');
+  const organisation = useInput('Support');
 
   let content = null;
 
   React.useEffect(() => {
-    console.log("render");
+    console.log('render');
     contentValue.setValue(content);
   });
 
@@ -130,7 +153,7 @@ function Product({ match, history, classes }) {
       value: value.value
     };
     addContact({ variables: { input } });
-    console.log("input", input);
+    console.log('input', input);
   }
   const productid = id;
   console.log(id);
@@ -149,17 +172,42 @@ function Product({ match, history, classes }) {
       <Article>
         <Header>
           <OverThePage>
-            <Button color="primary" variant="contained" onClick={() => history.push("/cloudsuites")}>
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={() => history.push('/cloudsuites')}
+            >
               Back to Suites
             </Button>
-            <span>
-              Edit <EditIcon onClick={() => setEditable(!isEditable)} />
-            </span>
+            {isEditable ? (
+              <SpanWrapper>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className={classes.button3}
+                  onClick={() => setEditable(!isEditable)}
+                >
+                  Save
+                </Button>
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  className={classes.button3}
+                  onClick={() => setEditable(!isEditable)}
+                >
+                  Cancel
+                </Button>
+              </SpanWrapper>
+            ) : (
+              <span>
+                Edit <EditIcon onClick={() => setEditable(!isEditable)} />
+              </span>
+            )}
           </OverThePage>
           <ProductForm product={cloudsuiteproduct} classes={classes} isEditable={isEditable} />
 
           <H1>
-            Contacts{" "}
+            Contacts{' '}
             <Fab size="small" color="secondary" aria-label="Add" onClick={() => toggle(!isModal)}>
               <AddIcon />
             </Fab>
@@ -220,7 +268,12 @@ function Product({ match, history, classes }) {
               >
                 Save
               </Button>
-              <Button color="secondary" variant="contained" className={classes.button} onClick={() => toggle(!isModal)}>
+              <Button
+                color="secondary"
+                variant="contained"
+                className={classes.button}
+                onClick={() => toggle(!isModal)}
+              >
                 Cancel
               </Button>
             </Header>

@@ -1,9 +1,9 @@
-import React from "react";
-import ReactMarkdown from "react-markdown";
-import { Button, TextField } from "@material-ui/core";
+import React from 'react';
+import ReactMarkdown from 'react-markdown';
+import { Button, TextField } from '@material-ui/core';
 
-import useInput from "../hooks/useInput";
-import { Container, Article, H1, H2, Header } from "./Styles";
+import useInput from '../hooks/useInput';
+import { Container, Article, H1, H2, Header } from './Styles';
 const readOnly = false;
 
 export default function ProductForm({ classes, product, onSave, isEditable }) {
@@ -14,36 +14,38 @@ export default function ProductForm({ classes, product, onSave, isEditable }) {
   const content = useInput(product.content);
   return (
     <>
-      {isEditable ? (
-        <TextField
-          fullWidth
-          margin="normal"
-          InputLabelProps={{
-            shrink: true
-          }}
-          className={classes.editField}
-          id="name"
-          {...name}
-          placeholder="name"
-        />
-      ) : (
-        <H1>{name.value}</H1>
-      )}
-      {isEditable ? (
-        <TextField
-          fullWidth
-          margin="normal"
-          InputLabelProps={{
-            shrink: true
-          }}
-          className={classes.editField}
-          id="description"
-          {...description}
-          placeholder="description"
-        />
-      ) : (
-        <H2>{description.value}</H2>
-      )}
+      <div className={classes.content2}>
+        {isEditable ? (
+          <TextField
+            fullWidth
+            margin="normal"
+            InputLabelProps={{
+              shrink: true
+            }}
+            className={classes.editField}
+            id="name"
+            {...name}
+            placeholder="name"
+          />
+        ) : (
+          <H1>{name.value}</H1>
+        )}
+        {isEditable ? (
+          <TextField
+            fullWidth
+            margin="normal"
+            InputLabelProps={{
+              shrink: true
+            }}
+            className={classes.editField}
+            id="description"
+            {...description}
+            placeholder="description"
+          />
+        ) : (
+          <H2>{description.value}</H2>
+        )}
+      </div>
       <div className={classes.content}>
         {!readOnly && on && (
           <TextField
@@ -63,8 +65,13 @@ export default function ProductForm({ classes, product, onSave, isEditable }) {
           </div>
         )}
         {!readOnly && (
-          <Button variant="contained" color="primary" className={classes.button2} onClick={() => setOn(!on)}>
-            {on ? "Preview" : "Markdown "}
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.button2}
+            onClick={() => setOn(!on)}
+          >
+            {on ? 'Preview' : 'Markdown '}
           </Button>
         )}
       </div>
