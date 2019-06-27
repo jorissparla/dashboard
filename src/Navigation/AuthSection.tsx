@@ -1,8 +1,8 @@
-import { Button } from "@material-ui/core";
-import * as React from "react";
-import { withRouter } from "react-router";
-import User from "../User";
-import UserMenu from "../UserMenu";
+import { Button } from '@material-ui/core';
+import * as React from 'react';
+import { withRouter } from 'react-router';
+import User from '../User';
+import UserMenu from '../UserMenu';
 
 interface Props {
   history: any;
@@ -24,7 +24,7 @@ export const AuthenticationSection: React.FC<Props> = (props: any) => {
         if (!data || !data.me) {
           authenticated = false;
         }
-        if (authenticated || data.me) {
+        if (authenticated && data.me) {
           const { id, image } = data.me;
           return (
             <div>
@@ -35,14 +35,14 @@ export const AuthenticationSection: React.FC<Props> = (props: any) => {
                   </>
                 </Button>
               )}
-              <Button onClick={() => history.push("/signout")} color="inherit">
+              <Button onClick={() => history.push('/signout')} color="inherit">
                 Logout
               </Button>
             </div>
           );
         } else {
           return (
-            <Button onClick={() => history.push("/signin")} color="inherit">
+            <Button onClick={() => history.push('/signin')} color="inherit">
               Login
             </Button>
           );

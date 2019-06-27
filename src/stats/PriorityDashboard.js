@@ -123,7 +123,11 @@ export default function PriorityDashboard() {
   const sev1 = all
     .filter(item => item.severity === 4)
     .map(item => {
-      const { image } = accounts.find(account => account.fullname === item.owner);
+      const account = accounts.find(account => account.fullname === item.owner);
+      let image;
+      if (account) {
+        image = account.image || '';
+      }
       return { ...item, image };
     });
   console.log(sev1);
