@@ -1,25 +1,21 @@
-import React from 'react';
-import { Container, Article, H1, H2, Header } from './Styles';
-import { withRouter } from 'react-router';
-import { useMutation, useQuery } from 'react-apollo-hooks';
-import styled from 'styled-components';
-import {
-  QUERY_SINGLE_PRODUCT,
-  MUTATION_ADD_PRODUCT_CONTACT,
-  MUTATION_REMOVE_PRODUCT_CONTACT
-} from './graphql/Queries';
-import Spinner from 'utils/spinner';
-import { Button, TextField } from '@material-ui/core';
-import Fab from '@material-ui/core/Fab';
+import { Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
-import SaveIcon from '@material-ui/icons/Save';
-import Modal from '../ModalWrapper';
-import { Input, Form, Error } from '../styles';
-
+import React from 'react';
+import { useMutation, useQuery } from 'react-apollo-hooks';
+import { withRouter } from 'react-router';
+import styled from 'styled-components';
+import Spinner from 'utils/spinner';
 import useInput from '../hooks/useInput';
+import {
+  MUTATION_ADD_PRODUCT_CONTACT,
+  MUTATION_REMOVE_PRODUCT_CONTACT,
+  QUERY_SINGLE_PRODUCT
+} from './graphql/Queries';
 import ProductForm from './ProductForm';
+import ContactForm from './ContactForm';
+import { Article, H1, Header } from './Styles';
+
 const Thead = styled.thead`
   font-weight: 800;
   text-transform: uppercase;
@@ -125,7 +121,6 @@ function useProduct(id) {
 
 function Product({ match, history, classes }) {
   const id = match.params.id;
-  const [isModal, toggle] = React.useState(false);
   const [isEditable, setEditable] = React.useState(false);
   const contact = useInput('');
   const value = useInput('');
@@ -204,81 +199,12 @@ function Product({ match, history, classes }) {
               </span>
             )}
           </OverThePage>
+          <H1>Information </H1>
           <ProductForm product={cloudsuiteproduct} classes={classes} isEditable={isEditable} />
 
-          <H1>
-            Contacts{' '}
-            <Fab size="small" color="secondary" aria-label="Add" onClick={() => toggle(!isModal)}>
-              <AddIcon />
-            </Fab>
-          </H1>
-          <table>
-            <Thead>
-              <tr>
-                <TD>type</TD>
-                <TD>name</TD>
-                <TD>organisation</TD>
-                <TD> </TD>
-              </tr>
-            </Thead>
-            <tbody>
-              {contacts.map(({ contacttype, value, organisation, id }) => {
-                return (
-                  <TR key={id}>
-                    <td>{contacttype}</td>
-                    <td>{value}</td>
-                    <td>{organisation}</td>
-                    <td>
-                      <DeleteButton
-                        onClick={async () => {
-                          const input = {
-                            id,
-                            productid
-                          };
-                          await removeContact({ variables: { input } });
-                        }}
-                      >
-                        &times;
-                      </DeleteButton>
-                    </td>
-                  </TR>
-                );
-              })}
-            </tbody>
-          </table>
+          <H1>Contacts </H1>
+          <ContactForm />
         </Header>
-        <Modal on={isModal} toggle={() => toggle(!isModal)} height={50} top={10}>
-          <div>
-            <H1>Add Contact</H1>
-            <Header>
-              <Input placeholder="type" {...contact} />
-              <Input placeholder="value" {...value} />
-              <Input placeholder="organisation" {...organisation} />
-            </Header>
-            <Header>
-              <Button
-                color="primary"
-                variant="contained"
-                className={classes.button}
-                onClick={() => {
-                  saveInput();
-                  clearInputValues();
-                  toggle(!isModal);
-                }}
-              >
-                Save
-              </Button>
-              <Button
-                color="secondary"
-                variant="contained"
-                className={classes.button}
-                onClick={() => toggle(!isModal)}
-              >
-                Cancel
-              </Button>
-            </Header>
-          </div>
-        </Modal>
       </Article>
     </div>
   );

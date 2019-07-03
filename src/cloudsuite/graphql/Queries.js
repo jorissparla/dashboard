@@ -1,4 +1,4 @@
-import gql from "graphql-tag";
+import gql from 'graphql-tag';
 const SuitesFragment = gql`
   fragment SuiteDetails on CloudSuite {
     id
@@ -59,6 +59,7 @@ export const ProductFragment = gql`
     description
     type
     content
+    contactinfo
     contacts {
       id
       contacttype
