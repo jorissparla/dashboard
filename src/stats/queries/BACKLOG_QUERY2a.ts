@@ -1,6 +1,12 @@
 import gql from "graphql-tag";
 import { StatusFilter } from "../../../generated/apolloComponents";
 
+export const QUERY_LAST_UPDATED = gql`
+  {
+    mostRecentUpdate
+  }
+`;
+
 export const QUERY_BACKLOG = gql`
   # Write your query or mutation here
   fragment backlogfragment on DWH {
@@ -16,10 +22,9 @@ export const QUERY_BACKLOG = gql`
     escalated
     Deployment
     severityname
+    service_restored_date
   }
   query QUERY_BACKLOG(
-    $date: String
-    $owner: String
     $products: [String]
     $C_AWAITINGCUSTOMER: Int
     $N_AWAITINGCUSTOMER: Int
@@ -34,119 +39,66 @@ export const QUERY_BACKLOG = gql`
     $N_MAJORIMPACT: Int
   ) {
     mostRecentUpdate
-    critical_cloud: backlog(
-      owner: $owner
-      orderBy: DAYS_DESC
-      severityname: CRITICAL
-      deployment: "CLOUD"
-      productFilters: $products
-    ) {
+    critical_cloud: backlog(orderBy: DAYS_DESC, severityname: CRITICAL, deployment: "CLOUD") {
       ...backlogfragment
     }
-    all_cloud: backlog(
-      owner: $owner
-      orderBy: DAYS_DESC
-      deployment: "CLOUD"
-      statusFilter: BACKLOG
-      productFilters: $products
-    ) {
+    all_cloud: backlog(orderBy: DAYS_DESC, deployment: "CLOUD", statusFilter: BACKLOG) {
       ...backlogfragment
     }
-    all_active_cloud: backlog(
-      owner: $owner
-      orderBy: DAYS_DESC
-      deployment: "CLOUD"
-      statusFilter: ACTIVE
-      productFilters: $products
-    ) {
+    all_active_cloud: backlog(orderBy: DAYS_DESC, deployment: "CLOUD", statusFilter: ACTIVE) {
       ...backlogfragment
     }
-    on_hold_cloud: backlog(
-      owner: $owner
-      orderBy: DAYS_DESC
-      status: "On Hold By Customer"
-      action_date: $date
-      deployment: "CLOUD"
-      productFilters: $products
-    ) {
+    on_hold_cloud: backlog(orderBy: DAYS_DESC, status: "On Hold By Customer", deployment: "CLOUD") {
       ...backlogfragment
     }
     solution_proposed_cloud: backlog(
-      owner: $owner
       orderBy: DAYS_DESC
       deployment: "CLOUD"
       status: "Solution Proposed"
       since: $N_SOLUTIONPROPOSED
-      date: $date
-      productFilters: $products
     ) {
       ...backlogfragment
     }
     awaiting_customer_cloud: backlog(
-      owner: $owner
       orderBy: DAYS_DESC
       deployment: "CLOUD"
       status: "Awaiting Customer"
       since: $C_AWAITINGCUSTOMER
-      date: $date
-      productFilters: $products
     ) {
       ...backlogfragment
     }
-    researching_cloud: backlog(
-      owner: $owner
-      orderBy: DAYS_DESC
-      deployment: "CLOUD"
-      status: "Researching"
-      since: $C_RESEARCHING
-      date: $date
-      productFilters: $products
-    ) {
+    researching_cloud: backlog(orderBy: DAYS_DESC, deployment: "CLOUD", status: "Researching", since: $C_RESEARCHING) {
       ...backlogfragment
     }
     awaiting_infor_cloud: backlog(
-      owner: $owner
       orderBy: DAYS_DESC
       deployment: "CLOUD"
       status: "Awaiting Infor"
       since: $C_AWAITINGINFOR
-      date: $date
-      productFilters: $products
     ) {
       ...backlogfragment
     }
-    callbacks_cloud: backlog(
-      owner: $owner
-      orderBy: DAYS_DESC
-      deployment: "CLOUD"
-      status: "Awaiting Infor"
-      date: $date
-      productFilters: $products
-    ) {
+    callbacks_cloud: backlog(orderBy: DAYS_DESC, deployment: "CLOUD", status: "Awaiting Infor") {
       ...backlogfragment
     }
     major_impact_cloud: backlog(
-      owner: $owner
       orderBy: DAYS_DESC
       deployment: "CLOUD"
       severityname: MAJOR
       since: 2
       createdafter: "2019-03-01"
-      date: $date
-      productFilters: $products
+
       statusFilter: BACKLOG
     ) {
       ...backlogfragment
     }
     major_impact_cloud2: backlog(
-      owner: $owner
       orderBy: DAYS_DESC
       deployment: "CLOUD"
       severityname: MAJOR
       since: 2
       createdafter: "2019-03-01"
-      date: $date
-      productFilters: $products
+
       aging: 5
       statusFilter: BACKLOG
     ) {
@@ -154,181 +106,106 @@ export const QUERY_BACKLOG = gql`
     }
 
     aging_cloud: backlog(
-      owner: $owner
       orderBy: CREATED_ASC
       deployment: "CLOUD"
       aging: $N_AGING
-      date: $date
-      productFilters: $products
+
       statusFilter: BACKLOG
     ) {
       ...backlogfragment
     }
-    aging_dev_cloud: backlog(
-      owner: $owner
-      orderBy: CREATED_ASC
-      deployment: "CLOUD"
-      aging: 90
-      statusFilter: DEVELOPMENT
-      date: $date
-      productFilters: $products
-    ) {
+    aging_dev_cloud: backlog(orderBy: CREATED_ASC, deployment: "CLOUD", aging: 90, statusFilter: DEVELOPMENT) {
       ...backlogfragment
     }
-    new_cloud: backlog(
-      owner: $owner
-      orderBy: CREATED_ASC
-      deployment: "CLOUD"
-      status: "New"
-      since: $C_NEW
-      date: $date
-      productFilters: $products
-    ) {
+    new_cloud: backlog(orderBy: CREATED_ASC, deployment: "CLOUD", status: "New", since: $C_NEW) {
       ...backlogfragment
     }
-    critical: backlog(owner: $owner, orderBy: DAYS_DESC, severityname: CRITICAL, productFilters: $products) {
+    critical: backlog(orderBy: DAYS_DESC, severityname: CRITICAL, productFilters: $products) {
       ...backlogfragment
     }
-    cloudops: backlog(owner: $owner, orderBy: DAYS_DESC, statusFilter: CLOUDOPS, productFilters: $products) {
+    cloudops: backlog(orderBy: DAYS_DESC, statusFilter: CLOUDOPS, productFilters: $products) {
       ...backlogfragment
     }
-    active: backlog(owner: $owner, orderBy: DAYS_DESC, statusFilter: ACTIVE, productFilters: $products) {
+    active: backlog(orderBy: DAYS_DESC, statusFilter: ACTIVE, productFilters: $products) {
       ...backlogfragment
     }
-    all: backlog(owner: $owner, orderBy: DAYS_DESC, statusFilter: BACKLOG, productFilters: $products) {
+    all: backlog(orderBy: DAYS_DESC, statusFilter: BACKLOG, productFilters: $products) {
       ...backlogfragment
     }
-    infor: backlog(
-      owner: $owner
-      orderBy: DAYS_DESC
-      statusFilter: BACKLOG
-      customer: "Infor"
-      productFilters: $products
-    ) {
+    infor: backlog(orderBy: DAYS_DESC, statusFilter: BACKLOG, customer: "Infor") {
       ...backlogfragment
     }
-    on_hold: backlog(
-      owner: $owner
-      orderBy: DAYS_DESC
-      status: "On Hold By Customer"
-      action_date: $date
-      productFilters: $products
-    ) {
+    on_hold: backlog(orderBy: DAYS_DESC, status: "On Hold By Customer") {
       ...backlogfragment
     }
     solution_proposed: backlog(
-      owner: $owner
       orderBy: DAYS_DESC
       deployment: "ALL"
       status: "Solution Proposed"
       since: $N_SOLUTIONPROPOSED
-      date: $date
-      productFilters: $products
     ) {
       ...backlogfragment
     }
     awaiting_customer: backlog(
-      owner: $owner
       orderBy: DAYS_DESC
       deployment: "ALL"
       status: "Awaiting Customer"
       since: $N_AWAITINGCUSTOMER
-      date: $date
-      productFilters: $products
     ) {
       ...backlogfragment
     }
-    researching: backlog(
-      owner: $owner
-      orderBy: DAYS_DESC
-      deployment: "ALL"
-      status: "Researching"
-      since: $N_RESEARCHING
-      date: $date
-      productFilters: $products
-    ) {
+    researching: backlog(orderBy: DAYS_DESC, deployment: "ALL", status: "Researching", since: $N_RESEARCHING) {
       ...backlogfragment
     }
-    awaiting_infor: backlog(
-      owner: $owner
-      orderBy: DAYS_DESC
-      deployment: "ALL"
-      status: "Awaiting Infor"
-      since: $N_AWAITINGINFOR
-      date: $date
-      productFilters: $products
-    ) {
+    awaiting_infor: backlog(orderBy: DAYS_DESC, deployment: "ALL", status: "Awaiting Infor", since: $N_AWAITINGINFOR) {
       ...backlogfragment
     }
-    callbacks: backlog(
-      owner: $owner
-      orderBy: DAYS_DESC
-      deployment: "ALL"
-      status: "Awaiting Infor"
-      date: $date
-      productFilters: $products
-    ) {
+    callbacks: backlog(orderBy: DAYS_DESC, deployment: "ALL", status: "Awaiting Infor") {
       ...backlogfragment
     }
     major_impact: backlog(
-      owner: $owner
       orderBy: DAYS_DESC
       deployment: "ALL"
       severityname: MAJOR
       since: $N_MAJORIMPACT
       createdafter: "2019-03-01"
-      date: $date
+
       statusFilter: BACKLOG
-      productFilters: $products
     ) {
       ...backlogfragment
     }
     major_impact2: backlog(
-      owner: $owner
       orderBy: DAYS_DESC
       deployment: "ALL"
       severityname: MAJOR
       since: $N_MAJORIMPACT
       createdafter: "2019-03-01"
-      date: $date
+
       aging: 5
       statusFilter: BACKLOG
-      productFilters: $products
     ) {
       ...backlogfragment
     }
 
     aging: backlog(
-      owner: $owner
       orderBy: CREATED_ASC
       deployment: "ALL"
       aging: $N_AGING
-      date: $date
+
       statusFilter: BACKLOG
-      productFilters: $products
     ) {
       ...backlogfragment
     }
     aging_dev: backlog(
-      owner: $owner
       orderBy: CREATED_ASC
       deployment: "ALL"
       aging: 90
-      date: $date
+
       statusFilter: DEVELOPMENT
-      productFilters: $products
     ) {
       ...backlogfragment
     }
-    new: backlog(
-      owner: $owner
-      orderBy: CREATED_ASC
-      deployment: "ALL"
-      status: "New"
-      since: $N_NEW
-      date: $date
-      productFilters: $products
-    ) {
+    new: backlog(orderBy: CREATED_ASC, deployment: "ALL", status: "New", since: $N_NEW) {
       ...backlogfragment
     }
   }
