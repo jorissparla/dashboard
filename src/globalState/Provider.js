@@ -11,6 +11,18 @@ export default class DashBoardContextProvider extends React.Component {
     image: localStorage.getItem('picture'),
     role: localStorage.getItem('role'),
     fullname: localStorage.getItem('name'),
+    getUser: () => {
+      const { email, picture, role, fullname, image } = this.state;
+      return {
+        user: {
+          email,
+          picture,
+          role,
+          fullname,
+          image
+        }
+      };
+    },
     setUser: (id, email, image, picture, fullname, role, token) => {
       this.setState({ id, email, image, picture, fullname, role });
       localStorage.setItem('id', id);

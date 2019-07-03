@@ -94,6 +94,14 @@ export const Parameters: React.FC<Props> = props => {
         <Parameter param="N_AWAITINGINFOR" initial={1} label="Awaiting Infor" keyUp={handleKeyUp} />
         <Parameter param="N_RESEARCHING" initial={3} label="Researching" keyUp={handleKeyUp} />
         <Parameter param="N_NEW" initial={1} label="New" keyUp={handleKeyUp} />
+        <Parameter param="N_MAJORIMPACT" initial={2} label="Major Impact" keyUp={handleKeyUp} />
+        <Parameter
+          param="N_SOLUTIONPROPOSED"
+          initial={30}
+          label="Solution Proposed"
+          keyUp={handleKeyUp}
+        />
+        <Parameter param="N_AGING" initial={90} label="Aging" keyUp={handleKeyUp} />
       </div>
       <div style={{ margin: 5, display: 'flex' }}>
         <Button

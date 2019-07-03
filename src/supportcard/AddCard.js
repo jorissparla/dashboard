@@ -1,39 +1,42 @@
-import React from 'react';
-import Paper from '@material-ui/core/Paper';
-import blue from '@material-ui/core/colors/blue';
-import Button from '@material-ui/core/Button';
-import AddIcon from '@material-ui/icons/Add';
-import styled from 'styled-components';
-import { Link } from 'react-router-dom';
-import { withStyles } from '@material-ui/core/styles';
-import { Fab } from '@material-ui/core';
+import React from "react";
+import Paper from "@material-ui/core/Paper";
+import blue from "@material-ui/core/colors/blue";
+import Button from "@material-ui/core/Button";
+import AddIcon from "@material-ui/icons/Add";
+import styled from "styled-components";
+import { Link } from "react-router-dom";
+import { withStyles } from "@material-ui/core/styles";
+import { Fab } from "@material-ui/core";
 
 const styles = theme => ({
   container: {
-    display: 'flex',
-    flexWrap: 'wrap'
+    display: "flex",
+    flexWrap: "wrap"
+  },
+  round: {
+    borderRadius: "14px"
   },
   button: {
     margin: theme.spacing.unit,
-    alignContent: 'center',
-    display: 'flex'
+    alignContent: "center",
+    display: "flex"
   },
 
   buttonDel: {
     margin: theme.spacing.unit,
-    backgroundColor: '#000'
+    backgroundColor: "#000"
   },
 
   textField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
     width: 200,
-    height: '100%'
+    height: "100%"
   },
   center: {
-    alignContent: 'center',
-    display: 'flex',
-    flexDirection: 'column'
+    alignContent: "center",
+    display: "flex",
+    flexDirection: "column"
   }
 });
 
@@ -47,6 +50,7 @@ const StyledContainer = styled(Paper)`
   height: 200px;
   margin: 5px;
   background-color: ${props => props.background};
+  border-radius: 14px;
 `;
 
 const Title = styled.div`
@@ -69,16 +73,16 @@ const StyledLink = styled(Link)`
 `;
 
 const AddCard = ({
-  link = 'courses/create',
-  title = 'Add  Course',
+  link = "courses/create",
+  title = "Add  Course",
   color = blue,
-  background = 'papayawhip',
+  background = "papayawhip",
   onClick,
   classes
 }) => {
   return (
-    <StyledContainer>
-      <StyledLink onClick={onClick} to={link || '/'}>
+    <StyledContainer className={classes.round}>
+      <StyledLink onClick={onClick} to={link || "/"}>
         <div className={classes.center}>
           <Fab color="primary" aria-label="Add" className={classes.button}>
             <AddIcon />

@@ -14,7 +14,7 @@ import { withStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import ReactMarkdown from 'react-markdown';
-import User, { withUser } from '../User';
+import User, { useUser } from '../User';
 
 const owners = [
   { id: 'Ricardo Exposito', name: 'Ricardo Exposito' },
@@ -105,7 +105,7 @@ const SupportCardForm = props => {
   const readOnly = !authenticated;
   const [on, toggle] = React.useState(false);
   const updatedAt = supportcard ? supportcard.updatedAt : format(new Date(), 'YYYY-MM-DD');
-  const currentUser = withUser();
+  const currentUser = useUser();
   console.log('blba', { initialValues }, currentUser);
   let newInitialValues =
     currentUser && !initialValues.owner

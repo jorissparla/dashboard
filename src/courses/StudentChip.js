@@ -15,3 +15,15 @@ const StudentChip = ({ id, fullname, image, handleClick }) => (
 );
 
 export default StudentChip;
+
+export const RegularChip = ({ name, handleClick, handleDelete }) => (
+  <Chip
+    label={name}
+    onDelete={handleDelete}
+    onClick={handleClick}
+    style={{
+      margin: 2
+    }}
+    color="primary"
+  />
+);

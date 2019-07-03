@@ -111,6 +111,9 @@ export const BacklogTable = ({ backlog, classes, title, description = title }: a
     }
   });
 
+  if (!backlog) {
+    return <div>No data </div>;
+  }
   if (actionNeeded && backlog.length === 0) {
     return <div />;
   }

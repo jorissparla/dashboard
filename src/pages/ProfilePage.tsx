@@ -12,9 +12,9 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user }) => {
   let userCtx: any;
   userCtx = React.useContext(DashBoardContext);
   console.log(userCtx);
-  if (!user) {
-    return <h1>Not logged in </h1>;
-  }
+  // if (!user) {
+  //   return <h1>Not logged in </h1>;
+  // }
   const email = user.email;
   const fullname = user.fullname;
   const mutation = useMutation(UPDATE_PROFILE_PIC_MUTATION);

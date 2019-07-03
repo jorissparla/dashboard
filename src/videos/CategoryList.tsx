@@ -1,35 +1,8 @@
-import * as React from 'react';
-import gql from 'graphql-tag';
-import { useQuery, useMutation } from 'react-apollo-hooks';
-import styled from 'styled-components';
-
-const SELECTEDCOLOR = 'rgb(130, 216, 216)';
-const HOVERCOLOR = '#524763)';
-
-const Block = styled('a')<{ selected?: boolean }>`
-  font-family: Poppins;
-  color: ${props => (props.selected ? 'black' : 'rgb(69, 69, 69)')};
-  display: inline-block;
-  text-transform: uppercase;
-  font-size: 1rem;
-  font-weight: 800;
-  margin-bottom: 5px;
-  margin-right: 5px;
-  margin-left: 5px;
-  background-color: ${props => (props.selected ? SELECTEDCOLOR : 'rgb(196, 196, 196)')};
-  border-radius: 3px;
-  padding: 5px 10px;
-  border-width: initial;
-  border-style: none;
-  border-color: initial;
-  border-image: initial;
-  transition: all 0.2s ease 0s;
-  :hover {
-    background-color: ${HOVERCOLOR};
-    color: black;
-    cursor: pointer;
-  }
-`;
+import * as React from "react";
+import gql from "graphql-tag";
+import { useQuery, useMutation } from "react-apollo-hooks";
+import styled from "styled-components";
+import { Block } from "../elements/Block";
 
 const List = styled.div`
   display: flex;
@@ -78,11 +51,11 @@ export const CategoryBar: React.FC<Props> = ({ isSelected, setSelected }) => {
   return (
     <div
       style={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100vh',
-        alignContent: 'flex-start',
-        width: '20%'
+        display: "flex",
+        flexDirection: "column",
+        height: "100vh",
+        alignContent: "flex-start",
+        width: "20%"
       }}
     >
       <BrowseTitle>Browse by Topic</BrowseTitle>
@@ -101,7 +74,7 @@ export const CategoryBar: React.FC<Props> = ({ isSelected, setSelected }) => {
     </div>
   );
 };
-export const CategoryBarMultipleSelect: React.FC<Props> = ({ isSelected = 'NEW', setSelected }) => {
+export const CategoryBarMultipleSelect: React.FC<Props> = ({ isSelected = "NEW", setSelected }) => {
   //const categories = ['Dashboard Instruction', 'Technical', 'Development', 'Other'];
   const { loading, data } = useQuery(QUERY_VIDEO_CATEGORIES, {
     suspend: false
@@ -109,14 +82,14 @@ export const CategoryBarMultipleSelect: React.FC<Props> = ({ isSelected = 'NEW',
   if (loading) {
     return <div>Loading...</div>;
   }
-  const selectedArray = isSelected.split(';');
+  const selectedArray = isSelected.split(";");
   const categories = data.videocategories;
   return (
     <div
       style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignContent: 'flex-start'
+        display: "flex",
+        flexDirection: "column",
+        alignContent: "flex-start"
       }}
     >
       <BrowseTitle>Topics</BrowseTitle>

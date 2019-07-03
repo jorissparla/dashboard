@@ -105,15 +105,18 @@ const EditVideoPlain: React.FC<EditProps> = ({ match, history }) => {
     id = match.params.id;
   }
   if (!id) {
-    return <div>Invalid video</div>;
+    id = '';
   }
-
   const { data, loading } = useQuery(QUERY_SINGLE_VIDEO, {
     suspend: false,
     variables: { id }
   });
+
   const updateVideo = useMutation(MUTATION_UPDATE_VIDEO);
   const deleteVideo = useMutation(MUTATION_DELETE_VIDEO);
+  if (!id) {
+    return <div>Invalid video</div>;
+  }
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -123,6 +126,7 @@ const EditVideoPlain: React.FC<EditProps> = ({ match, history }) => {
   const { video } = data;
   async function handleSave(video: VideoType) {
     const result = await updateVideo({ variables: { video } });
+    history.push('/videos');
   }
   async function handleDelete(video: VideoType) {
     const result = await deleteVideo({ variables: { video } });
@@ -156,7 +160,7 @@ interface VideoFormProps {
   formTitle: string;
   onSave: Function;
   onDelete?: Function;
-  onCancel: Function;
+  onCancel?: Function;
 }
 
 const VideoForm: React.FC<VideoFormProps> = ({
@@ -165,7 +169,7 @@ const VideoForm: React.FC<VideoFormProps> = ({
   formTitle = 'Add Video',
   onSave = (values: any) => console.log('Values', values),
   onDelete = () => null,
-  onCancel
+  onCancel = () => null
 }) => {
   const title = useInput(initialValues.title);
   const url = useInput(initialValues.url);

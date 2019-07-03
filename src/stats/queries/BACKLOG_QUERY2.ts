@@ -29,6 +29,9 @@ export const QUERY_BACKLOG = gql`
     $N_AWAITINGINFOR: Int
     $C_NEW: Int
     $N_NEW: Int
+    $N_SOLUTIONPROPOSED: Int
+    $N_AGING: Int
+    $N_MAJORIMPACT: Int
   ) {
     mostRecentUpdate
     critical_cloud: backlog(
@@ -49,6 +52,15 @@ export const QUERY_BACKLOG = gql`
     ) {
       ...backlogfragment
     }
+    all_active_cloud: backlog(
+      owner: $owner
+      orderBy: DAYS_DESC
+      deployment: "CLOUD"
+      statusFilter: ACTIVE
+      productFilters: $products
+    ) {
+      ...backlogfragment
+    }
     on_hold_cloud: backlog(
       owner: $owner
       orderBy: DAYS_DESC
@@ -64,7 +76,7 @@ export const QUERY_BACKLOG = gql`
       orderBy: DAYS_DESC
       deployment: "CLOUD"
       status: "Solution Proposed"
-      since: 30
+      since: $N_SOLUTIONPROPOSED
       date: $date
       productFilters: $products
     ) {
@@ -145,7 +157,7 @@ export const QUERY_BACKLOG = gql`
       owner: $owner
       orderBy: CREATED_ASC
       deployment: "CLOUD"
-      aging: 90
+      aging: $N_AGING
       date: $date
       productFilters: $products
       statusFilter: BACKLOG
@@ -190,10 +202,27 @@ export const QUERY_BACKLOG = gql`
     ) {
       ...backlogfragment
     }
+    active: backlog(
+      owner: $owner
+      orderBy: DAYS_DESC
+      statusFilter: ACTIVE
+      productFilters: $products
+    ) {
+      ...backlogfragment
+    }
     all: backlog(
       owner: $owner
       orderBy: DAYS_DESC
       statusFilter: BACKLOG
+      productFilters: $products
+    ) {
+      ...backlogfragment
+    }
+    infor: backlog(
+      owner: $owner
+      orderBy: DAYS_DESC
+      statusFilter: BACKLOG
+      customer: "Infor"
       productFilters: $products
     ) {
       ...backlogfragment
@@ -212,7 +241,7 @@ export const QUERY_BACKLOG = gql`
       orderBy: DAYS_DESC
       deployment: "ALL"
       status: "Solution Proposed"
-      since: 30
+      since: $N_SOLUTIONPROPOSED
       date: $date
       productFilters: $products
     ) {
@@ -266,7 +295,7 @@ export const QUERY_BACKLOG = gql`
       orderBy: DAYS_DESC
       deployment: "ALL"
       severityname: MAJOR
-      since: 2
+      since: $N_MAJORIMPACT
       createdafter: "2019-03-01"
       date: $date
       statusFilter: BACKLOG
@@ -279,7 +308,7 @@ export const QUERY_BACKLOG = gql`
       orderBy: DAYS_DESC
       deployment: "ALL"
       severityname: MAJOR
-      since: 2
+      since: $N_MAJORIMPACT
       createdafter: "2019-03-01"
       date: $date
       aging: 5
@@ -293,7 +322,7 @@ export const QUERY_BACKLOG = gql`
       owner: $owner
       orderBy: CREATED_ASC
       deployment: "ALL"
-      aging: 90
+      aging: $N_AGING
       date: $date
       statusFilter: BACKLOG
       productFilters: $products
@@ -321,6 +350,39 @@ export const QUERY_BACKLOG = gql`
       productFilters: $products
     ) {
       ...backlogfragment
+    }
+  }
+`;
+export const QUERY_PRIORITY_BACKLOG = gql`
+  # Write your query or mutation here
+  fragment backlogfragment on DWH {
+    incident
+    incidentcreated
+    owner
+    customername
+    summary
+    title
+    status
+    dayssincelastupdate
+    daysSinceCreated
+    escalated
+    Deployment
+    severity
+    severityname
+    lastupdated
+  }
+  query QUERY_PRIORITY_BACKLOG($products: [String]) {
+    mostRecentUpdate
+
+    active: backlog(orderBy: DAYS_DESC, statusFilter: ACTIVE, productFilters: $products) {
+      ...backlogfragment
+    }
+    all: backlog(orderBy: DAYS_DESC, statusFilter: BACKLOG, productFilters: $products) {
+      ...backlogfragment
+    }
+    accounts {
+      fullname
+      image
     }
   }
 `;

@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import DynamicImport from '../DynamicImport';
 
 import Anniversaries from '../awards/Anniversaries';
-import FeedbackList from './feedbackList';
+// import FeedbackList from './feedbackList';
 import CourseList from './CourseList';
-
+import { Surveys } from './Surveys';
+import CourseDashboard from './CourseDashboard';
+// const CourseDash
 const DashBoard = DynamicImport(() => import('../dashboard'));
 const DashBoardStats = DynamicImport(() => import('./DashBoardStatsNew'));
 const GoLives = DynamicImport(() => import('./goLiveListNew'));
@@ -20,6 +22,7 @@ class DashBoardContainer extends Component {
     sel: null,
     region: 'EMEA',
     components: [
+      <CourseDashboard start="scheduled" user={this.props.user} />,
       <NewsPage region={this.region} />,
       <GoLives region={this.region} />,
       <DashBoardStats data1={['Logistics']} team="Logistics" region={this.region} />,
@@ -28,11 +31,12 @@ class DashBoardContainer extends Component {
       <DashBoardStats data1={['Tools']} team="Tools" region={this.region} />,
       <HistoryDayAll region={this.region} />,
       <CourseList />,
+      <Surveys />,
       // <KudoList />,
       // <DashBoard region={this.region} />,
 
       <SupportCards region={this.region} />,
-      <FeedbackList />,
+      // <FeedbackList />,
       <Anniversaries />
     ]
   };
@@ -46,6 +50,7 @@ class DashBoardContainer extends Component {
     clearInterval(this.timerID);
   }
   componentDidMount() {
+    console.log('Container', this.props);
     const sel = parseInt(this.props.match.params.id, 2);
     if (sel) {
       this.setState({ index: 0, sel: sel });
@@ -86,9 +91,9 @@ class DashBoardContainer extends Component {
     switch (index) {
       case 10:
         return <Anniversaries />;
-      case 9:
-        return <FeedbackList />;
-      case 8:
+      // case 9:
+      //   return <FeedbackList />;
+      case (8, 9):
         return <SupportCards region={region} />;
       case 7:
         return <NewsPage region={region} />;

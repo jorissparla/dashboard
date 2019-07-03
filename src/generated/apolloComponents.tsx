@@ -1,3 +1,7 @@
+import gql from 'graphql-tag';
+import * as React from 'react';
+import * as ReactApollo from 'react-apollo';
+
 export type Maybe<T> = T | null;
 
 export interface PaginationInput {
@@ -433,31 +437,31 @@ export interface WhereMoreAccountInput {
 }
 
 export enum Statusfilter {
-  Support = "SUPPORT",
-  Development = "DEVELOPMENT",
-  All = "ALL",
-  Backlog = "BACKLOG"
+  Support = 'SUPPORT',
+  Development = 'DEVELOPMENT',
+  All = 'ALL',
+  Backlog = 'BACKLOG'
 }
 
 export enum BackLogOrderBy {
-  OwnerAsc = "OWNER_ASC",
-  StatusAsc = "STATUS_ASC",
-  CustomerAsc = "CUSTOMER_ASC",
-  DaysAsc = "DAYS_ASC",
-  DaysDesc = "DAYS_DESC",
-  CreatedAsc = "CREATED_ASC",
-  CreatedDesc = "CREATED_DESC"
+  OwnerAsc = 'OWNER_ASC',
+  StatusAsc = 'STATUS_ASC',
+  CustomerAsc = 'CUSTOMER_ASC',
+  DaysAsc = 'DAYS_ASC',
+  DaysDesc = 'DAYS_DESC',
+  CreatedAsc = 'CREATED_ASC',
+  CreatedDesc = 'CREATED_DESC'
 }
 
 export enum _ModelMutationType {
-  Created = "CREATED",
-  Updated = "UPDATED",
-  Deleted = "DELETED"
+  Created = 'CREATED',
+  Updated = 'UPDATED',
+  Deleted = 'DELETED'
 }
 
 export enum DeploymentType {
-  Onprem = "ONPREM",
-  Cloud = "CLOUD"
+  Onprem = 'ONPREM',
+  Cloud = 'CLOUD'
 }
 
 export type Upload = any;
@@ -469,13 +473,13 @@ export type Upload = any;
 export type CurrentUserQueryVariables = {};
 
 export type CurrentUserQueryQuery = {
-  __typename?: "Query";
+  __typename?: 'Query';
 
   me: Maybe<CurrentUserQueryMe>;
 };
 
 export type CurrentUserQueryMe = {
-  __typename?: "Account";
+  __typename?: 'Account';
 
   id: string;
 
@@ -491,15 +495,10 @@ export type CurrentUserQueryMe = {
 };
 
 export type CurrentUserQueryPermissions = {
-  __typename?: "Permission";
+  __typename?: 'Permission';
 
   permission: string;
 };
-
-import * as ReactApollo from "react-apollo";
-import * as React from "react";
-
-import gql from "graphql-tag";
 
 // ====================================================
 // Components
@@ -520,15 +519,13 @@ export const CurrentUserQueryDocument = gql`
   }
 `;
 export class CurrentUserQueryComponent extends React.Component<
-  Partial<
-    ReactApollo.QueryProps<CurrentUserQueryQuery, CurrentUserQueryVariables>
-  >
+  Partial<ReactApollo.QueryProps<CurrentUserQueryQuery, CurrentUserQueryVariables>>
 > {
   render() {
     return (
       <ReactApollo.Query<CurrentUserQueryQuery, CurrentUserQueryVariables>
         query={CurrentUserQueryDocument}
-        {...(this as any)["props"] as any}
+        {...(this as any)['props'] as any}
       />
     );
   }
