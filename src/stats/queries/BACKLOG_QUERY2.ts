@@ -1,5 +1,5 @@
-import gql from "graphql-tag";
-import { StatusFilter } from "../../../generated/apolloComponents";
+import gql from 'graphql-tag';
+import { StatusFilter } from '../../../generated/apolloComponents';
 
 export const QUERY_BACKLOG = gql`
   # Write your query or mutation here
@@ -16,6 +16,7 @@ export const QUERY_BACKLOG = gql`
     escalated
     Deployment
     severityname
+    service_restored_date
   }
   query QUERY_BACKLOG(
     $date: String
@@ -186,16 +187,36 @@ export const QUERY_BACKLOG = gql`
     ) {
       ...backlogfragment
     }
-    critical: backlog(owner: $owner, orderBy: DAYS_DESC, severityname: CRITICAL, productFilters: $products) {
+    critical: backlog(
+      owner: $owner
+      orderBy: DAYS_DESC
+      severityname: CRITICAL
+      productFilters: $products
+    ) {
       ...backlogfragment
     }
-    cloudops: backlog(owner: $owner, orderBy: DAYS_DESC, statusFilter: CLOUDOPS, productFilters: $products) {
+    cloudops: backlog(
+      owner: $owner
+      orderBy: DAYS_DESC
+      statusFilter: CLOUDOPS
+      productFilters: $products
+    ) {
       ...backlogfragment
     }
-    active: backlog(owner: $owner, orderBy: DAYS_DESC, statusFilter: ACTIVE, productFilters: $products) {
+    active: backlog(
+      owner: $owner
+      orderBy: DAYS_DESC
+      statusFilter: ACTIVE
+      productFilters: $products
+    ) {
       ...backlogfragment
     }
-    all: backlog(owner: $owner, orderBy: DAYS_DESC, statusFilter: BACKLOG, productFilters: $products) {
+    all: backlog(
+      owner: $owner
+      orderBy: DAYS_DESC
+      statusFilter: BACKLOG
+      productFilters: $products
+    ) {
       ...backlogfragment
     }
     infor: backlog(

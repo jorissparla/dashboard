@@ -164,7 +164,7 @@ const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
   const isValidSuperUser = ['Admin', 'PO'].some(u => u === user.role);
   const [currentUser, data] = useBacklogAndCurrentUser({ date, owner, products, isValidSuperUser });
   // const currentUser = props.user;
-  console.log('currentUser', currentUser);
+  console.log('currentUser', data);
   if (props.user.fullname === null || !currentUser) {
     return <div>You need to be logged in to see this page</div>;
   }
@@ -388,6 +388,7 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
             description={`Incidents with severity 'Major Impact' Last updated ${
               params['N_MAJORIMPACT']
             } days or more`}
+            includeservicerestored={true}
           />
           <BacklogTable
             classes={classes}
@@ -396,6 +397,7 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
             description={`Incidents with severity 'Major Impact' Last updated ${
               params['N_MAJORIMPACT']
             } days or more Not resolved in 5 days`}
+            includeservicerestored={true}
           />
           <BacklogTable
             classes={classes}

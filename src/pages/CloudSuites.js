@@ -21,12 +21,12 @@ import {
   Padded,
   P,
   Footer
-} from '../Cloudsuite/Styles';
+} from '../cloudsuite/Styles';
 import {
   QUERY_PRODUCTS_SUITES,
   QUERY_PRODUCTS_SINGLE_SUITE,
   MUTATION_ADD_PRODUCT_TO_SUITE
-} from '../Cloudsuite/graphql/Queries';
+} from '../cloudsuite/graphql/Queries';
 
 export default function CloudSuites({ history }) {
   const [showModal, toggleShow] = useState(false);
