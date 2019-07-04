@@ -19,13 +19,31 @@ const Spinner2 = () => {
   );
 };
 
-const Spinner = () => (
-  <div className="spinner">
-    <div className="rect1" />
-    <div className="rect2" />
-    <div className="rect3" />
-    <div className="rect4" />
-    <div className="rect5" />
-  </div>
-);
+const texts = ['Just a few seconds more...', 'working on it...', 'Almost there..'];
+
+const Spinner = () => {
+  const [counter, setCounter] = React.useState(0);
+  const [msg, setMsg] = React.useState(texts[0]);
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      setCounter(prev => counter + 1);
+      setMsg(texts[counter % 3]);
+    }, 1000);
+  });
+
+  return (
+    <>
+      <div className="spinner">
+        <div className="rect1" />
+        <div className="rect2" />
+        <div className="rect3" />
+        <div className="rect4" />
+        <div className="rect5" />
+      </div>
+      {/* <div className="largeheader fade-in">
+        {msg} {counter}
+      </div> */}
+    </>
+  );
+};
 export default Spinner;

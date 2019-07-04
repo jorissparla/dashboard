@@ -4,12 +4,14 @@ import { useQuery } from 'react-apollo-hooks';
 import { QUERY_BACKLOG } from '../stats/queries/BACKLOG_QUERY2';
 import { BacklogTable } from '../stats/BacklogTable';
 import { SelectionContext } from '../globalState/SelectionContext';
-import { SelectionForm } from '../stats/SelectionForm';
+// import { SelectionForm } from '../stats/SelectionForm';
+
 import { useUser } from '../User';
 import { format } from '../utils/format';
 import Spinner from '../utils/spinner';
 import { useLocalStorage } from '../utils/useLocalStorage';
 import { ListFavoritePersons } from '../stats/FavoritesPersons';
+const SelectionForm = React.lazy(() => import('../stats/SelectionForm'));
 
 const styles = (theme: any) => ({
   root: theme.mixins.gutters({
@@ -140,7 +142,7 @@ type backlogParams = {
 };
 const useBacklog = ({ date, owner, products, isValidSuperUser }: backlogParams) => {
   const { loading, data } = useQuery(QUERY_BACKLOG, {
-    suspend: false,
+    suspend: true,
     variables: { date, owner, products, deployment: 'ALL', ...useParams(!isValidSuperUser) }
   });
   if (loading) return null;
