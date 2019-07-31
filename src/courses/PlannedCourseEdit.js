@@ -154,8 +154,8 @@ class PlannedCourseEdit extends React.Component {
           /*   if (students && this.state.participants.length === 0) {
             this.setState({ participants: students });
           } */
-          startdate = format(startdate, 'YYYY-MM-DD');
-          enddate = format(parseInt(enddate), 'YYYY-MM-DD');
+          startdate = format(Date.parse(startdate), 'YYYY-MM-DD');
+          enddate = format(Date.parse(enddate), 'YYYY-MM-DD');
           const dates = { startdate, enddate };
           //return <h1>pcEdut</h1>;
           return (

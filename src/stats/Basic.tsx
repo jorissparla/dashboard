@@ -4,7 +4,7 @@ import { useQuery } from 'react-apollo-hooks';
 import gql from 'graphql-tag';
 import Spinner from '../utils/spinner';
 import { BacklogTable } from './BacklogTable';
-import { useParams } from 'pages/StatsMain';
+import { useParams } from '../pages/StatsMain';
 
 export const styles = (theme: any) => ({
   root: theme.mixins.gutters({

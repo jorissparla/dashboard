@@ -13,6 +13,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { blue, red } from '@material-ui/core/colors';
 import { format } from '../utils/format';
 import { withRouter } from 'react-router';
+import { LongFormattedDate } from './../utils/FormattedDate';
 import { Title, HeaderRow, HeaderLeft, HeaderRight } from '../styles';
 import withAuth from '../utils/withAuth';
 import EditStudentsOnCourse from './EditStudentsOnCourse';
@@ -118,7 +119,7 @@ export const QUERY_SCHEDULED_COURSES = gql`
 
 const fmtDate = val => {
   console.log(val, format(Date.parse(val), 'ddd, DD MMM YYYY'));
-  return format(Date.parse(val), 'ddd, DD MMM YYYY');
+  return LongFormattedDate(val);
 };
 
 const HeaderColumn = ({ children, small }) => {

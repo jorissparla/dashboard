@@ -110,7 +110,7 @@ class NewCard extends React.Component {
     }
     const [lastPlannedCourse] = course.plannedcourses;
     const pd = lastPlannedCourse
-      ? format(parseInt(lastPlannedCourse.startdate), 'ddd, DDMMMYYYY')
+      ? format(parseInt(Date.parse(lastPlannedCourse.startdate)), 'ddd, DDMMMYYYY')
       : '';
     const acount = lastPlannedCourse ? lastPlannedCourse.studentcount : 0;
     return (
