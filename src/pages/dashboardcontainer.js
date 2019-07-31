@@ -6,6 +6,8 @@ import Anniversaries from '../awards/Anniversaries';
 import CourseList from './CourseList';
 import { Surveys } from './Surveys';
 import CourseDashboard from './CourseDashboard';
+import PriorityDashboard from 'stats/PriorityDashboard';
+
 // const CourseDash
 const DashBoard = DynamicImport(() => import('../dashboard'));
 const DashBoardStats = DynamicImport(() => import('./DashBoardStatsNew'));
@@ -22,6 +24,7 @@ class DashBoardContainer extends Component {
     sel: null,
     region: 'EMEA',
     components: [
+      <PriorityDashboard user={this.props.user} />,
       <CourseDashboard start="scheduled" user={this.props.user} />,
       <NewsPage region={this.region} />,
       <GoLives region={this.region} />,

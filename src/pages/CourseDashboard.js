@@ -95,6 +95,7 @@ class CourseView extends React.Component {
   componentDidMount() {
     // const context = React.useContext(DashBoardContext);
     // console.log('context', context.getUser(), context.role);
+    console.log(this.state);
   }
   handleStartDateChange = ({ target: { value } }) => {
     console.log(value);

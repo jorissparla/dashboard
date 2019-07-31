@@ -71,7 +71,7 @@ const ScheduledCoursesInPeriod = ({ startdate }) => {
                     <Link to={`/courses/edit/${course.id}`}>View Course</Link>
                   </TableCell>
                   <TableCell style={{ width: 20 }}>{students.length}</TableCell>
-                  <TableCell>{format(startdate, 'ddd, DD-MMM-YYYY')}</TableCell>
+                  <TableCell>{format(Date.parse(startdate), 'ddd, DD-MMM-YYYY')}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
