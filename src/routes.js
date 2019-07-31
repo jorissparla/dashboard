@@ -30,6 +30,7 @@ import CloudSuites, { CloudSuitePage } from './pages/CloudSuites';
 import PriorityDashboard from './stats/PriorityDashboard';
 import Product from './cloudsuite/Product';
 import { StatsPage } from './pages/StatsPage2';
+import Basic from 'stats/Basic';
 const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
 
 //const StatsMain = React.lazy(() => import('./kudos/kudolistcomponentnew'));
@@ -108,6 +109,7 @@ function AppRoutes(props) {
         user={user}
         history={props.history}
       />
+      <AuthRoute exact path="/statstest" component={Basic} user={user} history={props.history} />
       <AuthRoute exact path="/profilepage" component={ProfilePage} user={user} />
       <AuthRoute exact path="/mywork" component={StatsMain} user={user} history={props.history} />
       <AuthRoute

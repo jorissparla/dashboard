@@ -83,7 +83,7 @@ const Main = () => (
               {/* <SharedSnackbarProvider> */}
               <>
                 <App />
-                <React.Suspense fallback={<Spinner />}>
+                <React.Suspense fallback={<Spinner loadingMessage="Loading data" />}>
                   <AppRoutes />
                 </React.Suspense>
               </>

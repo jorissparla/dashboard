@@ -13,7 +13,7 @@ import { useLocalStorage } from '../utils/useLocalStorage';
 import { ListFavoritePersons } from '../stats/FavoritesPersons';
 const SelectionForm = React.lazy(() => import('../stats/SelectionForm'));
 
-const styles = (theme: any) => ({
+export const styles = (theme: any) => ({
   root: theme.mixins.gutters({
     marginTop: theme.spacing.unit * 3,
     display: 'flex',

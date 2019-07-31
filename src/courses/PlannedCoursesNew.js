@@ -117,7 +117,8 @@ export const QUERY_SCHEDULED_COURSES = gql`
 `;
 
 const fmtDate = val => {
-  return format(val, 'ddd, DD MMM YYYY');
+  console.log(val, format(Date.parse(val), 'ddd, DD MMM YYYY'));
+  return format(Date.parse(val), 'ddd, DD MMM YYYY');
 };
 
 const HeaderColumn = ({ children, small }) => {
