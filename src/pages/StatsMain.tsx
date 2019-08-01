@@ -166,7 +166,7 @@ const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
   const isValidSuperUser = ['Admin', 'PO'].some(u => u === user.role);
   const [currentUser, data] = useBacklogAndCurrentUser({ date, owner, products, isValidSuperUser });
   // const currentUser = props.user;
-  console.log('currentUser', data);
+  // console.log('currentUser', data);
   if (props.user.fullname === null || !currentUser) {
     return <div>You need to be logged in to see this page</div>;
   }
@@ -221,7 +221,11 @@ interface Props {
 const StatsMain: React.FC<Props> = ({ classes, data }) => {
   const [date, setDate] = useState(format(Date.now(), 'YYYY-MM-DD'));
   const params = useParams();
-
+  const sev12notrestored = [
+    ...data.critical.filter((item: any) => !item.service_restored_date),
+    ...data.sev2.filter((item: any) => !item.service_restored_date)
+  ];
+  console.log('critical', sev12notrestored);
   const { isCloud } = useContext(SelectionContext);
   return (
     <>
@@ -333,6 +337,12 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
       )}
       {!isCloud && (
         <div>
+          <BacklogTable
+            classes={classes}
+            backlog={sev12notrestored}
+            title="Critical/Major Not restored"
+            description="All Incidents with a severity of 'Production Outage / Major Impact' without a restored date"
+          />
           <BacklogTable
             classes={classes}
             backlog={data.critical}

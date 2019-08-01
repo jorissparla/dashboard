@@ -39,6 +39,14 @@ export const QUERY_BACKLOG = gql`
     ) {
       ...backlogfragment
     }
+    sev2: backlog(
+      owner: $owner
+      orderBy: DAYS_DESC
+      severityname: MAJOR
+      productFilters: $products
+    ) {
+      ...backlogfragment
+    }
     cloudops: backlog(
       owner: $owner
       orderBy: DAYS_DESC
