@@ -223,7 +223,9 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
   const params = useParams();
   const sev12notrestored = [
     ...data.critical.filter((item: any) => !item.service_restored_date),
-    ...data.sev2.filter((item: any) => !item.service_restored_date)
+    ...data.sev2.filter(
+      (item: any) => !item.service_restored_date && item.status !== 'Solution Proposed'
+    )
   ];
   console.log('critical', sev12notrestored);
   const { isCloud } = useContext(SelectionContext);
