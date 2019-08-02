@@ -64,7 +64,7 @@ export default function CloudSuites({ history }) {
               <Padded>
                 <P>
                   {suite.products.map(prod => (
-                    <Tooltip title={prod.product.description}>
+                    <Tooltip title={prod.product.description} key={prod.product.id}>
                       <Block
                         key={prod.product.id}
                         selected={prod.product.type.toLowerCase() === 'core'}

@@ -1,10 +1,12 @@
 import React from 'react';
 import { withRouter } from 'react-router';
 import { Route, Switch } from 'react-router-dom';
+import Basic from 'stats/Basic';
 import RequireAuth, { AuthRoute, EnhancedRoute } from './auth/require_auth';
 import Signin from './auth/signin';
 import SigninWithPIN from './auth/SigninWithPIN';
 import Signout from './auth/signout';
+import Product from './cloudsuite/Product';
 import CourseAdd from './courses/CourseAdd';
 import CourseEdit from './courses/CourseEdit';
 import CourseFileUpload from './courses/CourseFileUpload';
@@ -12,25 +14,24 @@ import PlannedCourseAdd from './courses/PlannedCourseAdd';
 import PlannedCourseEdit from './courses/PlannedCourseEdit';
 import PlannedCourses from './courses/PlannedCoursesNew';
 import DynamicImport from './DynamicImport';
+import { DashBoardContext, withDashBoardContext } from './globalState/Provider';
 import NewsItemContainer from './news/newsitemcontainer';
+import CloudSuites, { CloudSuitePage } from './pages/CloudSuites';
 import DashBoardContainer from './pages/dashboardcontainer';
 import NewsPage from './pages/newspage';
 import PlannedCourseRequestList from './pages/PlannedCourseRequestList';
 import ProfilePage from './pages/ProfilePage';
+import { StatsPage } from './pages/StatsPage2';
+import { Surveys } from './pages/Surveys';
+import { UserActivity } from './pages/testActivity';
 import VideoPage from './pages/Videos';
-import { withDashBoardContext, DashBoardContext } from './globalState/Provider';
 import { Parameters } from './stats/Parameters';
+import PriorityDashboard from './stats/PriorityDashboard';
 import TestLogin from './TestLogin';
-import User, { UserProfileComponent, useUser } from './User';
+import { UserProfileComponent, useUser } from './User';
 import UserPermissions from './UserPermissions';
 import { AddVideo, EditVideo } from './videos/VideoOperations';
-import { Surveys } from './pages/Surveys';
-import CloudSuites, { CloudSuitePage } from './pages/CloudSuites';
 
-import PriorityDashboard from './stats/PriorityDashboard';
-import Product from './cloudsuite/Product';
-import { StatsPage } from './pages/StatsPage2';
-import Basic from 'stats/Basic';
 const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
 
 //const StatsMain = React.lazy(() => import('./kudos/kudolistcomponentnew'));
@@ -121,6 +122,7 @@ function AppRoutes(props) {
       />
       <Route exact path="/" component={DashBoardContainer} user={user} />
       <Route exact path="/newspage" component={NewsPage} />
+      <Route exact path="/actie" component={UserActivity} />
       <Route
         exact
         path="/cloudsuites"

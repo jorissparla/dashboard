@@ -20,6 +20,10 @@ import { ApolloProvider } from 'react-apollo';
 import ApolloClient from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { createUploadLink } from 'apollo-upload-client';
+import { WebSocketLink } from 'apollo-link-ws';
+import { HttpLink } from 'apollo-link-http';
+import { split } from 'apollo-link';
+import { getMainDefinition } from 'apollo-utilities';
 import ContextProvider from './globalState';
 import { main } from './styles/globalstyles';
 import Spinner from 'utils/spinner';
@@ -38,10 +42,30 @@ const Global = createGlobalStyle`
 
 const prefix = REACT_APP_HTTP.trim();
 let uri = `${REACT_APP_GRAPHQLSERVER}:${REACT_APP_PORT_GRAPHQL}`;
+const wsLink = new WebSocketLink({
+  uri: `ws://${uri}`, // use wss for a secure endpoint
+  options: {
+    reconnect: true
+  }
+});
 uri = prefix === 'https' ? 'https://' + uri : 'http://' + uri;
+const httpLink = createUploadLink({ uri, credentials: 'include' });
+interface Definintion {
+  kind: string;
+  operation?: string;
+}
+const link = split(
+  ({ query }) => {
+    const { kind, operation }: Definintion = getMainDefinition(query);
+    return kind === 'OperationDefinition' && operation === 'subscription';
+  },
+  wsLink,
+  httpLink
+);
+
 //`${REACT_APP_HTTP}://${REACT_APP_GRAPHQLSERVER}:${REACT_APP_PORT_GRAPHQL}/${REACT_APP_GRAPHQL_PATH}`;
 const client = new ApolloClient({
-  link: createUploadLink({ uri, credentials: 'include' }),
+  link,
   cache: new InMemoryCache()
 });
 
