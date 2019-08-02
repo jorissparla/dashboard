@@ -103,6 +103,12 @@ export const SideBarMenu: React.FC<Props> = ({ classes, history, user, toggleMen
         navigateTo="/tenant"
         history={history}
       />
+      <ToggledNavLink
+        title="CloudSuites"
+        Icon={ExtensionIcon}
+        navigateTo="/cloudsuites"
+        history={history}
+      />
       {/* <ToggledNavLink
         title="Customer Feedback"
         Icon={FeedbackIcon}

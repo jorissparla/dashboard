@@ -78,7 +78,7 @@ export default function CloudSuites({ history }) {
               </Padded>
               <Footer>
                 {validAdmin && (
-                  <But optional onClick={() => history.push('/cloudsuite/' + suite.id)}>
+                  <But optional onClick={() => console.log({ suite })}>
                     Products
                   </But>
                 )}

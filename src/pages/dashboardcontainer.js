@@ -8,6 +8,8 @@ import { Surveys } from './Surveys';
 import CourseDashboard from './CourseDashboard';
 import PriorityDashboard from 'stats/PriorityDashboard';
 
+import CloudSuites from './CloudSuites';
+
 // const CourseDash
 const DashBoard = DynamicImport(() => import('../dashboard'));
 const DashBoardStats = DynamicImport(() => import('./DashBoardStatsNew'));
@@ -24,6 +26,7 @@ class DashBoardContainer extends Component {
     sel: null,
     region: 'EMEA',
     components: [
+      <CloudSuites user={this.props.user} />,
       <PriorityDashboard user={this.props.user} />,
       <CourseDashboard start="scheduled" user={this.props.user} />,
       <NewsPage region={this.region} />,

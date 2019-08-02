@@ -83,6 +83,7 @@ const QUERY_ALL_COURSES = gql`
       id
       team
       title
+      documentnr
 
       description
       link

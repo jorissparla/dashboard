@@ -19,6 +19,7 @@ const QUERY_SINGLE_COURSE_WITHDATA = gql`
       status
       type
       category
+      documentnr
       startdate
       enddate
       hours

@@ -70,6 +70,14 @@ const styles = theme => ({
     marginRight: theme.spacing.unit,
     marginBottom: 20,
     width: 50
+  },
+  docnumberfield: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    marginLeft: 20,
+    // marginBottom: -18,
+    width: 200,
+    marginTop: 10
   }
 });
 
@@ -126,6 +134,7 @@ class CourseForm extends React.Component {
       type: 'Class Room Training',
       category: 'Product',
       description: '',
+      documentnr: '',
       link: '',
       lastmodified: Date.now()
     }
@@ -309,6 +318,20 @@ class CourseForm extends React.Component {
                             </MenuItem>
                           ))}
                         </Select>
+                      </FormControl>
+                      <FormControl className={classes.formControl}>
+                        <InputLabel shrink htmlFor="category">
+                          Document number
+                        </InputLabel>
+                        <TextField
+                          name="documentnr"
+                          disabled={view}
+                          className={classes.docnumberfield}
+                          // label="Document Number"
+                          value={values.documentnr}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                        />
                       </FormControl>
                     </div>
                     <div className={classes.block}>
