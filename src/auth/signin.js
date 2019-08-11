@@ -10,7 +10,7 @@ import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
-const MUTATION_SIGNIN = gql`
+export const MUTATION_SIGNIN = gql`
   mutation signinUser($input: AUTH_PROVIDER_EMAIL) {
     signinUser(input: $input) {
       token
