@@ -1,16 +1,14 @@
 import { withStyles } from '@material-ui/core';
 import React, { useContext, useState } from 'react';
 import { useQuery } from 'react-apollo-hooks';
-import { QUERY_BACKLOG } from '../stats/queries/BACKLOG_QUERY2';
-import { BacklogTable } from '../stats/BacklogTable';
 import { SelectionContext } from '../globalState/SelectionContext';
-// import { SelectionForm } from '../stats/SelectionForm';
-
-import { useUser } from '../User';
+import { BacklogTable } from '../stats/BacklogTable';
+import { ListFavoritePersons } from '../stats/FavoritesPersons';
+import { QUERY_BACKLOG } from '../stats/queries/BACKLOG_QUERY2';
 import { format } from '../utils/format';
 import Spinner from '../utils/spinner';
 import { useLocalStorage } from '../utils/useLocalStorage';
-import { ListFavoritePersons } from '../stats/FavoritesPersons';
+import { UserContext } from './../globalState/UserProvider';
 const SelectionForm = React.lazy(() => import('../stats/SelectionForm'));
 
 export const styles = (theme: any) => ({
@@ -140,41 +138,37 @@ type backlogParams = {
   products: string[];
   isValidSuperUser: boolean;
 };
-const useBacklog = ({ date, owner, products, isValidSuperUser }: backlogParams) => {
+
+const StatsMainContainerWrapper: React.FC<ContainerProps> = (props: any) => {
+  const { user } = React.useContext(UserContext);
+  if (!user || user.fullname === null) {
+    return <div>You need to be logged in to see this page</div>;
+  } else {
+    return <StatsMainContainer {...props} />;
+  }
+};
+
+const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
+  const { user } = React.useContext(UserContext);
+  const [date] = useState(format(Date.now(), 'YYYY-MM-DD'));
+  const [isCloud, setisCloud] = useState(false);
+  const [owner, setOwner] = useState(props.user.fullname);
+  const { products, persons } = useContext(SelectionContext);
+  const { classes } = props;
+
+  const isValidSuperUser = ['Admin', 'PO'].some(u => (user ? u === user.role : false));
   const { loading, data } = useQuery(QUERY_BACKLOG, {
     suspend: true,
     variables: { date, owner, products, deployment: 'ALL', ...useParams(!isValidSuperUser) }
   });
   if (loading) return null;
   if (!data) return null;
-  return data;
-};
-
-const useBacklogAndCurrentUser = ({ date, owner, products, isValidSuperUser }: backlogParams) => {
-  const currentUser = useUser();
-  const currentBacklog = useBacklog({ date, owner, products, isValidSuperUser });
-  return [currentUser, currentBacklog];
-};
-
-const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
-  const [date ] = useState(format(Date.now(), 'YYYY-MM-DD'));
-  const [isCloud, setisCloud] = useState(false);
-  const [owner, setOwner] = useState(props.user.fullname);
-  const { products, persons } = useContext(SelectionContext);
-  const { classes, user } = props;
-
-  const isValidSuperUser = ['Admin', 'PO'].some(u => u === user.role);
-  const [currentUser, data] = useBacklogAndCurrentUser({ date, owner, products, isValidSuperUser });
+  //const data = getBacklog({ date, owner, products, isValidSuperUser });
   // const currentUser = props.user;
   // console.log('currentUser', data);
-  if (props.user.fullname === null || !currentUser) {
-    return <div>You need to be logged in to see this page</div>;
-  }
   let enableIt: boolean;
-  if (currentUser && currentUser.permissions) {
-    enableIt = currentUser.permissions.some(
-      (u: { permission: string }): any => u.permission === 'STATS'
-    );
+  if (user && user.permissions) {
+    enableIt = user.permissions.some((u: { permission: string }): any => u.permission === 'STATS');
   } else {
     enableIt = false;
   }
@@ -462,4 +456,4 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
   );
 };
 
-export default withStyles(styles)(StatsMainContainer);
+export default withStyles(styles)(StatsMainContainerWrapper);

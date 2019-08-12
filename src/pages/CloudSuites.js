@@ -1,6 +1,6 @@
 import Tooltip from '@material-ui/core/Tooltip';
 import _ from 'lodash';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useMutation, useQuery } from 'react-apollo-hooks';
 import { useUser } from 'User';
 import { hasPermissionEx } from 'utils/hasPermission';
@@ -41,12 +41,12 @@ export default function CloudSuites({ history }) {
   }, [loading]);
   // console.log('object 👏👏', history, permissions, validAdmin);
   if (loading || !data) return <Spinner />;
-  const { products, suites } = data;
+  const { suites } = data;
   return (
     <div>
       <Container>
         {suites.map(suite => {
-          let prods = suite.products.map(prod => prod.product.name).join('-');
+          //let prods = suite.products.map(prod => prod.product.name).join('-');
           //          let availableprods = products.filter(prod => !_.includes(prods, prod.name));
           // console.log('suite', suite.name, prods, availableprods);
           return (

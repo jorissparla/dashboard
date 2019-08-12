@@ -1,4 +1,11 @@
-import { Divider, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, List, ListItemIcon } from '@material-ui/core';
+import {
+  Divider,
+  ExpansionPanel,
+  ExpansionPanelDetails,
+  ExpansionPanelSummary,
+  List,
+  ListItemIcon
+} from '@material-ui/core';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import ChatIcon from '@material-ui/icons/Chat';
@@ -15,6 +22,7 @@ import PeopleIcon from '@material-ui/icons/People';
 import Person from '@material-ui/icons/PeopleOutline';
 import RequestListIcon from '@material-ui/icons/PlaylistAdd';
 import SurveysIcon from '@material-ui/icons/Whatshot';
+import { UserContext } from 'globalState/UserProvider';
 import React, { useState } from 'react';
 import Signout from '../Signout';
 import { NavLink } from './NavLink';
@@ -23,14 +31,14 @@ interface Props {
   classes: any;
   history: any;
   authenticated?: boolean;
-  user: any;
   toggleMenu: () => void;
   open: boolean;
 }
 
-export const SideBarMenu: React.FC<Props> = ({ classes, history, user, toggleMenu, open }) => {
+export const SideBarMenu: React.FC<Props> = ({ classes, history, toggleMenu, open }) => {
   let validRole = false;
   let isChat = false;
+  const { user, logout } = React.useContext(UserContext);
 
   let isAdmin = false;
   let authenticated = false;
@@ -158,21 +166,16 @@ export const SideBarMenu: React.FC<Props> = ({ classes, history, user, toggleMen
               history={history}
             />
           )}
-          <Signout>
-            {(signout: any) => {
-              return (
-                <MenuItem
-                  onClick={() => {
-                    // TODO: replace this
-                    // openSnackbar('Signing out');
-                    signout();
-                  }}
-                >
-                  Signout
-                </MenuItem>
-              );
+          <MenuItem
+            onClick={() => {
+              // TODO: replace this
+              // openSnackbar('Signing out');
+              logout();
+              history.push('/');
             }}
-          </Signout>
+          >
+            Signout
+          </MenuItem>
           <ToggledNavLink title="Videos" navigateTo="/videos" history={history} />
         </React.Fragment>
       )}

@@ -4,6 +4,7 @@ import { useMutation } from 'react-apollo-hooks';
 import { StaticContext } from 'react-router';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import { DashBoardContext } from '../globalState/Provider';
+import { UserContext } from 'globalState/UserProvider';
 
 export const MUTATION_SIGNOUT = gql`
   mutation MUTATION_SIGNOUT {
@@ -31,12 +32,8 @@ export const Signout: React.FunctionComponent<RouteComponentProps<any, StaticCon
   history
 }) => {
   let userCtx: any;
-  userCtx = React.useContext(DashBoardContext);
-  const mutation = useMutation(MUTATION_SIGNOUT);
-  signoutUser();
-  mutation();
-  console.log('mutation done');
-  userCtx.clearUser();
+  const { user, logout } = React.useContext(UserContext);
+  logout();
   React.useEffect(() => {
     const h = setTimeout(() => {
       console.log('push2history');

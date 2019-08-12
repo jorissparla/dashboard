@@ -6,7 +6,6 @@ export function useLocalStorage(key: string, initialValue: string | number | any
 
   if (clean) {
     if (clean === true) {
-      console.log('clean');
       window.localStorage.removeItem(key);
     }
   }

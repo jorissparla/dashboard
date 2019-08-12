@@ -14,7 +14,8 @@ import PlannedCourseAdd from './courses/PlannedCourseAdd';
 import PlannedCourseEdit from './courses/PlannedCourseEdit';
 import PlannedCourses from './courses/PlannedCoursesNew';
 import DynamicImport from './DynamicImport';
-import { DashBoardContext, withDashBoardContext } from './globalState/Provider';
+import { withDashBoardContext } from './globalState/Provider';
+import { UserContext } from './globalState/UserProvider';
 import NewsItemContainer from './news/newsitemcontainer';
 import CloudSuites, { CloudSuitePage } from './pages/CloudSuites';
 import DashBoardContainer from './pages/dashboardcontainer';
@@ -28,7 +29,7 @@ import VideoPage from './pages/Videos';
 import { Parameters } from './stats/Parameters';
 import PriorityDashboard from './stats/PriorityDashboard';
 import TestLogin from './TestLogin';
-import { UserProfileComponent, useUser } from './User';
+import { UserProfileComponent } from './User';
 import UserPermissions from './UserPermissions';
 import { AddVideo, EditVideo } from './videos/VideoOperations';
 
@@ -93,8 +94,8 @@ const NotFound = props => {
 const TestUser = () => <UserProfileComponent />;
 
 function AppRoutes(props) {
-  const user = props.context;
-  const obj = React.useContext(DashBoardContext);
+  //  const user = props.context;
+  const { user } = React.useContext(UserContext);
 
   return (
     <Switch>
