@@ -148,7 +148,7 @@ class CourseForm extends React.Component {
             return 'Loading...';
           }
 
-          const { coursetypes, coursecategories, statuses, locations, supportfolks } = data;
+          const { coursetypes, coursecategories, statuses,  supportfolks } = data;
           const { title } = this.state.initialValues;
           return (
             <Formik

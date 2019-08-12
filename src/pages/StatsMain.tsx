@@ -157,7 +157,7 @@ const useBacklogAndCurrentUser = ({ date, owner, products, isValidSuperUser }: b
 };
 
 const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
-  const [date, setDate] = useState(format(Date.now(), 'YYYY-MM-DD'));
+  const [date ] = useState(format(Date.now(), 'YYYY-MM-DD'));
   const [isCloud, setisCloud] = useState(false);
   const [owner, setOwner] = useState(props.user.fullname);
   const { products, persons } = useContext(SelectionContext);
@@ -219,7 +219,6 @@ interface Props {
 }
 
 const StatsMain: React.FC<Props> = ({ classes, data }) => {
-  const [date, setDate] = useState(format(Date.now(), 'YYYY-MM-DD'));
   const params = useParams();
   const sev12notrestored = [
     ...data.critical.filter((item: any) => !item.service_restored_date),

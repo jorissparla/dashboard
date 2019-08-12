@@ -1,11 +1,4 @@
-import {
-  Divider,
-  ExpansionPanel,
-  ExpansionPanelDetails,
-  ExpansionPanelSummary,
-  List,
-  ListItemIcon
-} from '@material-ui/core';
+import { Divider, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, List, ListItemIcon } from '@material-ui/core';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import ChatIcon from '@material-ui/icons/Chat';
@@ -13,7 +6,6 @@ import NewsIcon from '@material-ui/icons/Event';
 import MyWorkList from '@material-ui/icons/EventNote';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExtensionIcon from '@material-ui/icons/Extension';
-import FeedbackIcon from '@material-ui/icons/Feedback';
 import GoLiveIcon from '@material-ui/icons/FlightTakeoff';
 import ActionHome from '@material-ui/icons/Home';
 import ApplicationIcon from '@material-ui/icons/Launch';
@@ -21,8 +13,8 @@ import LinkIcon from '@material-ui/icons/Link';
 import PageIcon from '@material-ui/icons/Pages';
 import PeopleIcon from '@material-ui/icons/People';
 import Person from '@material-ui/icons/PeopleOutline';
-import SurveysIcon from '@material-ui/icons/Whatshot';
 import RequestListIcon from '@material-ui/icons/PlaylistAdd';
+import SurveysIcon from '@material-ui/icons/Whatshot';
 import React, { useState } from 'react';
 import Signout from '../Signout';
 import { NavLink } from './NavLink';
