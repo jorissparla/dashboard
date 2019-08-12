@@ -54,7 +54,7 @@ const ImageConverter = DynamicImport(() => import('./utils/ConvertImages'));
 
 const AnniversaryList = DynamicImport(() => import('./awards/Anniversaries'));
 
-const ResolutionChart = DynamicImport(() => import('./charts/ResolutionChart'));
+//const ResolutionChart = DynamicImport(() => import('./charts/ResolutionChart'));
 
 const CommentsList = DynamicImport(() => import('./feedback/commentList'));
 const CourseList = DynamicImport(() => import('./pages/CourseList'));
@@ -90,11 +90,6 @@ const NotFound = props => {
   return <h2>Not Found</h2>;
 }; //);
 
-const TestUser2 = () => {
-  const res = useUser();
-
-  return <div>{JSON.stringify(res)}</div>;
-};
 const TestUser = () => <UserProfileComponent />;
 
 function AppRoutes(props) {

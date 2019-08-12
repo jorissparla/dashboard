@@ -1,9 +1,9 @@
-import * as React from 'react';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
-import { StaticContext } from 'react-router';
-import { DashBoardContext } from '../globalState/Provider';
 import gql from 'graphql-tag';
-import { useQuery, useMutation } from 'react-apollo-hooks';
+import * as React from 'react';
+import { useMutation } from 'react-apollo-hooks';
+import { StaticContext } from 'react-router';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
+import { DashBoardContext } from '../globalState/Provider';
 
 export const MUTATION_SIGNOUT = gql`
   mutation MUTATION_SIGNOUT {
@@ -43,7 +43,7 @@ export const Signout: React.FunctionComponent<RouteComponentProps<any, StaticCon
       history.push('/');
     }, 500);
     return clearTimeout(h);
-  }, []);
+  }, [history]);
   return <div>Sorry to see you go...</div>;
 };
 

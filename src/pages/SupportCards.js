@@ -1,33 +1,30 @@
-import React from "react";
-import gql from "graphql-tag";
-import { graphql, compose, Query, Mutation } from "react-apollo";
-import { SmallCard } from "../common/SmallCard";
-import NewCard from "../common/NewCard";
-
-//import { SmallCard } from "./SupportCard";
-import ReactMarkdown from "react-markdown";
-import Dialog from "@material-ui/core/Dialog";
-import styled from "styled-components";
-import { withStyles } from "@material-ui/core/styles";
 // import Card from '@material-ui/core/Card';
 // import CardActionArea from '@material-ui/core/CardActionArea';
 // import CardActions from '@material-ui/core/CardActions';
 // import CardContent from '@material-ui/core/CardContent';
 // import CardMedia from '@material-ui/core/CardMedia';
 import Button from "@material-ui/core/Button";
-// import Typography from '@material-ui/core/Typography';
-import NewRequestForm from "../supportcard/Request";
-import { addDays } from "date-fns";
-import { format } from "../utils/format";
+import Dialog from "@material-ui/core/Dialog";
+import { withStyles } from "@material-ui/core/styles";
+import gql from "graphql-tag";
 import _ from "lodash";
+import React from "react";
+import { adopt } from "react-adopt";
+import { Mutation, Query } from "react-apollo";
+//import { SmallCard } from "./SupportCard";
+import ReactMarkdown from "react-markdown";
+import styled from "styled-components";
 import SearchBar from "../common/SearchBar";
-import withAuth from "../utils/withAuth";
+import { SmallCard } from "../common/SmallCard";
+import Modal from "../ModalWrapper";
 import AddCard from "../supportcard/AddCard";
 import CategoryTabs from "../supportcard/CategoryTabs";
-import { adopt } from "react-adopt";
+// import Typography from '@material-ui/core/Typography';
+import NewRequestForm from "../supportcard/Request";
 import User from "../User";
-import Modal from "../ModalWrapper";
 import Spinner from "../utils/spinner";
+import withAuth from "../utils/withAuth";
+
 const cardColors = [
   { back: "#7fbadb", front: "#000" },
   { back: "#FFCC80", front: "#000" },

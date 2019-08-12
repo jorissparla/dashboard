@@ -1,19 +1,15 @@
-import React from 'react';
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import gql from 'graphql-tag';
-import { Query, graphql } from 'react-apollo';
-import styled from 'styled-components';
-import Avatar from '@material-ui/core/Avatar';
 import { withStyles } from '@material-ui/core/styles';
-import { withRouter } from 'react-router';
-import { Fab } from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
+import gql from 'graphql-tag';
+import React from 'react';
+import { Query } from 'react-apollo';
+import { StyledInitials, WideTitle } from '../styles';
 import { format } from '../utils/format';
-import { WideTitle, StyledInitials } from '../styles';
 
 const styles = theme => ({
   root: {

@@ -7,15 +7,15 @@ import { withRouter } from 'react-router';
 import styled from 'styled-components';
 import Spinner from 'utils/spinner';
 import useInput from '../hooks/useInput';
+import ContactForm from './ContactForm';
 import {
   MUTATION_ADD_PRODUCT_CONTACT,
   MUTATION_REMOVE_PRODUCT_CONTACT,
   QUERY_SINGLE_PRODUCT
 } from './graphql/Queries';
 import ProductForm from './ProductForm';
-import ContactForm from './ContactForm';
 import { Article, H1, Header } from './Styles';
-
+/*
 const Thead = styled.thead`
   font-weight: 800;
   text-transform: uppercase;
@@ -46,7 +46,7 @@ const DeleteButton = styled.button`
     color: darkred;
   }
 `;
-
+*/
 const OverThePage = styled.div`
   display: flex;
   justify-content: space-between;
@@ -112,13 +112,6 @@ const SpanWrapper = styled.span`
   padding: 2px;
 `;
 
-function useProduct(id) {
-  const { loading, data } = useQuery(QUERY_SINGLE_PRODUCT, { suspend: false, variables: { id } });
-  const defaults = { cloudsuiteproduct: { name: '', description: '', contacts: [], content: '' } };
-  if (loading) return defaults;
-  else return data;
-}
-
 function Product({ match, history, classes }) {
   const id = match.params.id;
   const [isEditable, setEditable] = React.useState(false);
@@ -134,32 +127,14 @@ function Product({ match, history, classes }) {
     contentValue.setValue(content);
   });
 
-  function clearInputValues() {
-    organisation.clear();
-    contact.clear();
-    value.clear();
-  }
-
-  async function saveInput() {
-    const input = {
-      productid: id,
-      contacttype: contact.value,
-      organisation: organisation.value,
-      value: value.value
-    };
-    addContact({ variables: { input } });
-    console.log('input', input);
-  }
-  const productid = id;
-  console.log(id);
   const { loading, data } = useQuery(QUERY_SINGLE_PRODUCT, { suspend: false, variables: { id } });
   const addContact = useMutation(MUTATION_ADD_PRODUCT_CONTACT);
-  const removeContact = useMutation(MUTATION_REMOVE_PRODUCT_CONTACT);
+  //  const removeContact = useMutation(MUTATION_REMOVE_PRODUCT_CONTACT);
   if (loading) return <Spinner />;
   // const data = useProduct(id);
   console.log(data);
   const { cloudsuiteproduct } = data;
-  const { contacts } = cloudsuiteproduct;
+  //const { contacts } = cloudsuiteproduct;
   //setContentValue(content);
 
   return (

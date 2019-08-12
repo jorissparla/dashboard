@@ -1,35 +1,32 @@
+import Tooltip from '@material-ui/core/Tooltip';
+import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { useMutation, useQuery } from 'react-apollo-hooks';
-
-import _ from 'lodash';
-import Tooltip from '@material-ui/core/Tooltip';
-// import {mu} from 'react-apollo-hooks'
-import { Block } from '../elements/Block';
-import { ModalBackdrop, ModalWindow } from '../elements/Modal';
-import { But } from '../elements/MyButton';
-import Spinner from 'utils/spinner';
 import { useUser } from 'User';
 import { hasPermissionEx } from 'utils/hasPermission';
+import Spinner from 'utils/spinner';
 import {
-  Container,
+  MUTATION_ADD_PRODUCT_TO_SUITE,
+  QUERY_PRODUCTS_SINGLE_SUITE,
+  QUERY_PRODUCTS_SUITES
+} from '../cloudsuite/graphql/Queries';
+import {
   Article,
-  Header,
+  Container,
+  Footer,
   H1,
   H2,
+  Header,
   Image,
   Img,
-  Padded,
   P,
-  Footer
+  Padded
 } from '../cloudsuite/Styles';
-import {
-  QUERY_PRODUCTS_SUITES,
-  QUERY_PRODUCTS_SINGLE_SUITE,
-  MUTATION_ADD_PRODUCT_TO_SUITE
-} from '../cloudsuite/graphql/Queries';
+// import {mu} from 'react-apollo-hooks'
+import { Block } from '../elements/Block';
+import { But } from '../elements/MyButton';
 
 export default function CloudSuites({ history }) {
-  const [showModal, toggleShow] = useState(false);
   const { loading, data } = useQuery(QUERY_PRODUCTS_SUITES, {
     suspend: false
   });
@@ -42,7 +39,7 @@ export default function CloudSuites({ history }) {
   useEffect(() => {
     // setProducts(data.products);
   }, [loading]);
-  console.log('object 👏👏', history, permissions, validAdmin);
+  // console.log('object 👏👏', history, permissions, validAdmin);
   if (loading || !data) return <Spinner />;
   const { products, suites } = data;
   return (
@@ -50,8 +47,8 @@ export default function CloudSuites({ history }) {
       <Container>
         {suites.map(suite => {
           let prods = suite.products.map(prod => prod.product.name).join('-');
-          let availableprods = products.filter(prod => !_.includes(prods, prod.name));
-          console.log('suite', suite.name, prods, availableprods);
+          //          let availableprods = products.filter(prod => !_.includes(prods, prod.name));
+          // console.log('suite', suite.name, prods, availableprods);
           return (
             <Article key={suite.id}>
               <Header>

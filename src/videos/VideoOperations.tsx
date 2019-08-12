@@ -77,7 +77,7 @@ interface AddProps {
 const AddVideoPlain: React.FC<AddProps> = ({ history }) => {
   const addVideo = useMutation(MUTATION_ADD_VIDEO);
   async function handleSave(video: VideoType) {
-    const result = await addVideo({ variables: { video } });
+    await addVideo({ variables: { video } });
   }
   return (
     <div>
@@ -125,11 +125,11 @@ const EditVideoPlain: React.FC<EditProps> = ({ match, history }) => {
   }
   const { video } = data;
   async function handleSave(video: VideoType) {
-    const result = await updateVideo({ variables: { video } });
+    await updateVideo({ variables: { video } });
     history.push('/videos');
   }
   async function handleDelete(video: VideoType) {
-    const result = await deleteVideo({ variables: { video } });
+    await deleteVideo({ variables: { video } });
     history.push('/videos');
   }
   return (

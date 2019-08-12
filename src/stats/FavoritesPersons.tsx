@@ -1,10 +1,6 @@
 import * as React from 'react';
-import styled from 'styled-components';
-import StudentChip, { RegularChip } from '../courses/StudentChip';
-import { useLocalStorage } from '../utils/useLocalStorage';
-import { SelectionContext } from '../globalState/SelectionContext';
 import { Block } from '../elements/Block';
-import useTimeout from '../hooks/useSetTimeout';
+import { SelectionContext } from '../globalState/SelectionContext';
 
 interface Props {
   persons: string[];

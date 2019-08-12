@@ -1,24 +1,23 @@
-import React from 'react';
-import gql from 'graphql-tag';
-import { Query, Mutation } from 'react-apollo';
-import { withRouter } from 'react-router';
-import { Formik } from 'formik';
+import { FormControl, FormHelperText, NativeSelect } from '@material-ui/core';
+import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import addHours from 'date-fns/add_hours';
+import { Formik } from 'formik';
+import gql from 'graphql-tag';
+import _ from 'lodash';
+import React from 'react';
+import { Mutation, Query } from 'react-apollo';
+import { withRouter } from 'react-router';
+import * as yup from 'yup';
+import Component from '../common/component-component';
+import { QUERY_PLANNEDCOURSEREQUESTS } from '../pages/PlannedCourseRequestList';
+import User from '../User';
 //import format from "date-fns/format";
 import { format } from '../utils/format';
-import addHours from 'date-fns/add_hours';
-import Component from '../common/component-component';
-import { StyledMultiple, StyledSimple, StyledSelect } from './StyledDropdowns';
-import * as yup from 'yup';
-import User from '../User';
-import _ from 'lodash';
-import { NativeSelect, FormControl, FormHelperText } from '@material-ui/core';
-import { QUERY_PLANNEDCOURSEREQUESTS } from '../pages/PlannedCourseRequestList';
-import { QUERY_SCHEDULED_COURSES } from './PlannedCoursesNew';
+import { StyledMultiple, StyledSelect } from './StyledDropdowns';
 
 const validationSchema = yup.object().shape({
   course: yup.string().required(),

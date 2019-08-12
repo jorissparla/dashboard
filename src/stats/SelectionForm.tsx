@@ -35,7 +35,7 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
   const {
     setOwner,
     isCloud,
-    setisCloud,
+    //    setisCloud,
     owner,
     actionNeeded,
     setActionNeeded,

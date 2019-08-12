@@ -1,15 +1,15 @@
-import React from "react";
+import React from 'react';
 
-import styled from "styled-components";
+import styled from 'styled-components';
 
-export const niceblue = "#40a5ed";
-export const babyblue = "#ecf6fd";
-export const twitterblue = "#1da1f2";
+export const niceblue = '#40a5ed';
+export const babyblue = '#ecf6fd';
+export const twitterblue = '#1da1f2';
 
-const COLOR_PRIMARY = "#524763";
-const COLOR_PRIMARY_OFF = "#524777";
-const COLOR_SECONDARY = "#1da1f2";
-const COLOR_SECONDARY_OFF = "#40a5ed";
+// const COLOR_PRIMARY = "#524763";
+// const COLOR_PRIMARY_OFF = "#524777";
+// const COLOR_SECONDARY = "#1da1f2";
+// const COLOR_SECONDARY_OFF = "#40a5ed";
 
 export const But = styled.button`
   font: inherit;

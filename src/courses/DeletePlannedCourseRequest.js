@@ -1,19 +1,18 @@
-import React, { useState } from 'react';
-import ClearIcon from '@material-ui/icons/Clear';
-import Check from '@material-ui/icons/CheckCircleOutline';
-import TextField from '@material-ui/core/TextField';
+import { Button } from '@material-ui/core';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { adopt } from 'react-adopt';
-
+import TextField from '@material-ui/core/TextField';
+import ClearIcon from '@material-ui/icons/Clear';
 import gql from 'graphql-tag';
+import React, { useState } from 'react';
+import { adopt } from 'react-adopt';
 import { Mutation } from 'react-apollo';
 import { SharedSnackbarConsumer } from '../globalState/SharedSnackbar.context';
 import { QUERY_PLANNEDCOURSEREQUESTS } from '../pages/PlannedCourseRequestList';
-import { Button } from '@material-ui/core';
+
 
 const CONVERT_TO_PLANNED_COURSE_MUTATION = gql`
   mutation CONVERT_TO_PLANNED_COURSE_MUTATION($input: PlannedCourseRequestInput) {

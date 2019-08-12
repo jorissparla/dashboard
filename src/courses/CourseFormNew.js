@@ -1,17 +1,17 @@
-import React from 'react';
-import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
-import Paper from '@material-ui/core/Paper';
+import { FormControl, InputLabel, MenuItem, Select, TextField } from '@material-ui/core';
+import Badge from '@material-ui/core/Badge';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
-import Typography from '@material-ui/core/Typography';
-import { Formik } from 'formik';
-import { TextField, Select, FormControl, InputLabel, MenuItem } from '@material-ui/core';
+import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
-import Badge from '@material-ui/core/Badge';
+import Typography from '@material-ui/core/Typography';
+import { distanceInWordsToNow } from 'date-fns';
+import { Formik } from 'formik';
+import gql from 'graphql-tag';
+import React from 'react';
+import { Query } from 'react-apollo';
 import { withRouter } from 'react-router';
 import * as yup from 'yup';
-import { distanceInWordsToNow } from 'date-fns';
 
 const validationSchema = yup.object().shape({
   title: yup.string().required(),
@@ -72,8 +72,6 @@ const styles = theme => ({
     width: 50
   },
   docnumberfield: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
     marginLeft: 20,
     // marginBottom: -18,
     width: 200,

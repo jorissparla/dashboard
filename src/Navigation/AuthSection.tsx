@@ -1,6 +1,5 @@
 import { Button } from '@material-ui/core';
 import * as React from 'react';
-import { withRouter } from 'react-router';
 import User from '../User';
 import UserMenu from '../UserMenu';
 

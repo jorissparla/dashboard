@@ -1,15 +1,14 @@
-import React from 'react';
-import blue from '@material-ui/core/colors/blue';
-import Button from '@material-ui/core/Button';
-import AddIcon from '@material-ui/icons/Add';
+import { Fab } from '@material-ui/core';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
-import styled from 'styled-components';
+import blue from '@material-ui/core/colors/blue';
 import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import AddIcon from '@material-ui/icons/Add';
+import React from 'react';
 import { withRouter } from 'react-router';
-import { Fab } from '@material-ui/core';
+import styled from 'styled-components';
 
 const styles = theme => ({
   container: {
