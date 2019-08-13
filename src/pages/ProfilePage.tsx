@@ -1,5 +1,5 @@
 import React from 'react';
-import { useMutation } from 'react-apollo-hooks';
+import { useMutation } from 'react-apollo';
 import FileUploader from '../common/FileUploaderNew';
 import { UPDATE_PROFILE_PIC_MUTATION } from '../graphql/UPDATE_PROFILE_PIC';
 import { DashBoardContext } from '../globalState/Provider';
@@ -17,7 +17,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user }) => {
   // }
   const email = user.email;
   const fullname = user.fullname;
-  const mutation = useMutation(UPDATE_PROFILE_PIC_MUTATION);
+  const [mutation] = useMutation(UPDATE_PROFILE_PIC_MUTATION);
   const [image, setImage] = React.useState(user.image);
   React.useEffect(() => {
     const result = mutation({

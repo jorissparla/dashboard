@@ -15,7 +15,6 @@ import { createGlobalStyle } from 'styled-components';
 import { AUTH_USER } from './actions';
 import App from './Navigation/Nav';
 import './index.css';
-import { ApolloProvider as ApolloHooksProvider } from 'react-apollo-hooks';
 import { ApolloProvider } from 'react-apollo';
 import ApolloClient from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
@@ -86,9 +85,6 @@ if (token) {
 }
 
 const muiTheme = createMuiTheme({
-  typography: {
-    useNextVariants: true
-  },
   palette: {
     primary: {
       main: '#524763'
@@ -99,28 +95,26 @@ const muiTheme = createMuiTheme({
 const Main = () => (
   <ApolloProvider client={client}>
     <Global />
-    <ApolloHooksProvider client={client}>
-      <Provider store={store}>
-        <MuiThemeProvider theme={muiTheme}>
-          <ContextProvider>
-            <BrowserRouter>
-              {/* <SharedSnackbarProvider> */}
-              <>
-                <App />
-                <React.Suspense fallback={<Spinner loadingMessage="Loading data" />}>
-                  <AppRoutes />
-                </React.Suspense>
-              </>
-              {/* </SharedSnackbarProvider> */}
-            </BrowserRouter>
-          </ContextProvider>
-        </MuiThemeProvider>
-      </Provider>
-    </ApolloHooksProvider>
+    <Provider store={store}>
+      <MuiThemeProvider theme={muiTheme}>
+        <ContextProvider>
+          <BrowserRouter>
+            {/* <SharedSnackbarProvider> */}
+            <>
+              <App />
+              <React.Suspense fallback={<Spinner loadingMessage="Loading data" />}>
+                <AppRoutes />
+              </React.Suspense>
+            </>
+            {/* </SharedSnackbarProvider> */}
+          </BrowserRouter>
+        </ContextProvider>
+      </MuiThemeProvider>
+    </Provider>
   </ApolloProvider>
 );
 
 ReactDOM.render(<Main />, document.getElementById('root'));
 
-export { Main , client};
+export { Main, client };
 //registerServiceWorker();

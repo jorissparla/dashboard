@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from 'react-apollo';
 import styled from 'styled-components';
 import _ from 'lodash';
 import Spinner from '../utils/spinner';
@@ -111,7 +111,6 @@ const Image = ({ image, fullname, size = 32 }) => {
 
 export default function PriorityDashboard() {
   const { loading, data } = useQuery(QUERY_PRIORITY_BACKLOG, {
-    suspend: false,
     variables: { products: ['LN'] }
   });
   if (loading) {

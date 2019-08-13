@@ -2,7 +2,7 @@ import { Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import EditIcon from '@material-ui/icons/Edit';
 import React from 'react';
-import { useMutation, useQuery } from 'react-apollo-hooks';
+import { useMutation, useQuery } from 'react-apollo';
 import { withRouter } from 'react-router';
 import styled from 'styled-components';
 import Spinner from 'utils/spinner';
@@ -127,7 +127,7 @@ function Product({ match, history, classes }) {
     contentValue.setValue(content);
   });
 
-  const { loading, data } = useQuery(QUERY_SINGLE_PRODUCT, { suspend: false, variables: { id } });
+  const { loading, data } = useQuery(QUERY_SINGLE_PRODUCT, { variables: { id } });
   const addContact = useMutation(MUTATION_ADD_PRODUCT_CONTACT);
   //  const removeContact = useMutation(MUTATION_REMOVE_PRODUCT_CONTACT);
   if (loading) return <Spinner />;

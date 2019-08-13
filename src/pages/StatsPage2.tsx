@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { withStyles } from '@material-ui/core';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from 'react-apollo';
 import { QUERY_BACKLOG, QUERY_LAST_UPDATED } from '../stats/queries/BACKLOG_QUERY2a';
 import Spinner from 'utils/spinner';
 import { SelectionForm } from './../stats/SelectionForm';

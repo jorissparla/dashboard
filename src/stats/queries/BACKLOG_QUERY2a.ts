@@ -1,5 +1,4 @@
-import gql from "graphql-tag";
-import { StatusFilter } from "../../../generated/apolloComponents";
+import gql from 'graphql-tag';
 
 export const QUERY_LAST_UPDATED = gql`
   {
@@ -67,7 +66,12 @@ export const QUERY_BACKLOG = gql`
     ) {
       ...backlogfragment
     }
-    researching_cloud: backlog(orderBy: DAYS_DESC, deployment: "CLOUD", status: "Researching", since: $C_RESEARCHING) {
+    researching_cloud: backlog(
+      orderBy: DAYS_DESC
+      deployment: "CLOUD"
+      status: "Researching"
+      since: $C_RESEARCHING
+    ) {
       ...backlogfragment
     }
     awaiting_infor_cloud: backlog(
@@ -114,7 +118,12 @@ export const QUERY_BACKLOG = gql`
     ) {
       ...backlogfragment
     }
-    aging_dev_cloud: backlog(orderBy: CREATED_ASC, deployment: "CLOUD", aging: 90, statusFilter: DEVELOPMENT) {
+    aging_dev_cloud: backlog(
+      orderBy: CREATED_ASC
+      deployment: "CLOUD"
+      aging: 90
+      statusFilter: DEVELOPMENT
+    ) {
       ...backlogfragment
     }
     new_cloud: backlog(orderBy: CREATED_ASC, deployment: "CLOUD", status: "New", since: $C_NEW) {
@@ -154,10 +163,20 @@ export const QUERY_BACKLOG = gql`
     ) {
       ...backlogfragment
     }
-    researching: backlog(orderBy: DAYS_DESC, deployment: "ALL", status: "Researching", since: $N_RESEARCHING) {
+    researching: backlog(
+      orderBy: DAYS_DESC
+      deployment: "ALL"
+      status: "Researching"
+      since: $N_RESEARCHING
+    ) {
       ...backlogfragment
     }
-    awaiting_infor: backlog(orderBy: DAYS_DESC, deployment: "ALL", status: "Awaiting Infor", since: $N_AWAITINGINFOR) {
+    awaiting_infor: backlog(
+      orderBy: DAYS_DESC
+      deployment: "ALL"
+      status: "Awaiting Infor"
+      since: $N_AWAITINGINFOR
+    ) {
       ...backlogfragment
     }
     callbacks: backlog(orderBy: DAYS_DESC, deployment: "ALL", status: "Awaiting Infor") {

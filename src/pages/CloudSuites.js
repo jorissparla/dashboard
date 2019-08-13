@@ -1,7 +1,7 @@
 import Tooltip from '@material-ui/core/Tooltip';
 import _ from 'lodash';
 import React, { useEffect } from 'react';
-import { useMutation, useQuery } from 'react-apollo-hooks';
+import { useMutation, useQuery } from 'react-apollo';
 import { useUser } from 'User';
 import { hasPermissionEx } from 'utils/hasPermission';
 import Spinner from 'utils/spinner';
@@ -22,14 +22,11 @@ import {
   P,
   Padded
 } from '../cloudsuite/Styles';
-// import {mu} from 'react-apollo-hooks'
 import { Block } from '../elements/Block';
 import { But } from '../elements/MyButton';
 
 export default function CloudSuites({ history }) {
-  const { loading, data } = useQuery(QUERY_PRODUCTS_SUITES, {
-    suspend: false
-  });
+  const { loading, data } = useQuery(QUERY_PRODUCTS_SUITES, {});
 
   const user = useUser();
 
@@ -97,10 +94,9 @@ export const CloudSuitePage = ({
 }) => {
   console.log('Params', id);
   const { loading, data } = useQuery(QUERY_PRODUCTS_SINGLE_SUITE, {
-    variables: { id },
-    suspend: false
+    variables: { id }
   });
-  const addMutation = useMutation(MUTATION_ADD_PRODUCT_TO_SUITE);
+  const [addMutation] = useMutation(MUTATION_ADD_PRODUCT_TO_SUITE);
   console.log(data);
   if (loading) return <Spinner />;
   const { products, suite } = data;

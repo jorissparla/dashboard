@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { withStyles } from '@material-ui/core';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from 'react-apollo';
 import gql from 'graphql-tag';
 import Spinner from '../utils/spinner';
 import { BacklogTable } from './BacklogTable';

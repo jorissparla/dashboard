@@ -67,7 +67,6 @@ const addChat = ({ render }) => (
       const query = ALL_CHATS;
       const props = cache.readQuery({ query });
       const { chats } = props;
-      console.log('Chats', chats);
       cache.writeQuery({
         query,
         data: { chats: R.concat(chats, [createChat]) }
@@ -153,20 +152,12 @@ class ChatContainer extends Component {
       <MyContainer>
         {({ loading, loading1, error, data, ranges, chats, addChat, ...props }) => {
           if (loading || loading1) return <div>Loading</div>;
-          console.log('data', addChat, ranges, chats);
 
           const handleSubmitAdd = async values => {
             const { weeknr, team, nrchats, responseintime } = values;
             const fromDate = this.findWeekfromDate(weeknr, ranges);
 
             const percentage = (100 * responseintime) / nrchats;
-            console.log(
-              'percentage',
-              typeof fromDate,
-              fromDate,
-              format(parseInt(fromDate), 'YYYY-MM-DD'),
-              percentage
-            );
             const input = {
               weeknr,
               team,
@@ -180,7 +171,6 @@ class ChatContainer extends Component {
               }
             });
             // this.props.history.push("/chat");
-            console.log('result', result);
           };
           return (
             <SharedSnackbarConsumer>

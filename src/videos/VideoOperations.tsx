@@ -1,7 +1,7 @@
 import { Button, Paper, TextField, withStyles } from '@material-ui/core';
 import _ from 'lodash';
 import * as React from 'react';
-import { useMutation, useQuery } from 'react-apollo-hooks';
+import { useMutation, useQuery } from 'react-apollo';
 import { CardSection } from '../common';
 import { withRouter } from 'react-router';
 import { format } from '../utils/format';
@@ -75,7 +75,7 @@ interface AddProps {
 }
 
 const AddVideoPlain: React.FC<AddProps> = ({ history }) => {
-  const addVideo = useMutation(MUTATION_ADD_VIDEO);
+  const [addVideo] = useMutation(MUTATION_ADD_VIDEO);
   async function handleSave(video: VideoType) {
     await addVideo({ variables: { video } });
   }
@@ -108,12 +108,11 @@ const EditVideoPlain: React.FC<EditProps> = ({ match, history }) => {
     id = '';
   }
   const { data, loading } = useQuery(QUERY_SINGLE_VIDEO, {
-    suspend: false,
     variables: { id }
   });
 
-  const updateVideo = useMutation(MUTATION_UPDATE_VIDEO);
-  const deleteVideo = useMutation(MUTATION_DELETE_VIDEO);
+  const [updateVideo] = useMutation(MUTATION_UPDATE_VIDEO);
+  const [deleteVideo] = useMutation(MUTATION_DELETE_VIDEO);
   if (!id) {
     return <div>Invalid video</div>;
   }

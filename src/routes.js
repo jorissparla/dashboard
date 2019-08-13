@@ -36,9 +36,6 @@ import { AddVideo, EditVideo } from './videos/VideoOperations';
 const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
 
 //const StatsMain = React.lazy(() => import('./kudos/kudolistcomponentnew'));
-//const CommentsList = DynamicImport(() => import("./feedback/commentList"));
-const FeedbackList = DynamicImport(() => import('./pages/feedbackList'));
-const AddFeedback = DynamicImport(() => import('./feedback/AddFeedback'));
 
 const Award = DynamicImport(() => import('./awards/award'));
 const KudoListComponentNew = DynamicImport(() => import('./kudos/kudolistcomponentnew'));
@@ -57,7 +54,6 @@ const AnniversaryList = DynamicImport(() => import('./awards/Anniversaries'));
 
 //const ResolutionChart = DynamicImport(() => import('./charts/ResolutionChart'));
 
-const CommentsList = DynamicImport(() => import('./feedback/commentList'));
 const CourseList = DynamicImport(() => import('./pages/CourseList'));
 
 const AccountList = DynamicImport(() => import('./Account/AccountList'));
@@ -172,7 +168,6 @@ function AppRoutes(props) {
       <Route exact path="/scheduledcourses/:id/edit/:id2" component={PlannedCourseEdit} />
       <Route exact path="/courses/create" component={CourseAdd} />
       <Route exact path="/testlogin" component={TestLogin} />
-      <Route exact path="/comments" component={CommentsList} />
       <Route exact path="/smallcard" component={SmallCard} />
       <AuthRoute
         auth="admin"
@@ -181,22 +176,6 @@ function AppRoutes(props) {
         exact
         path="/accounts"
         component={AccountList}
-      />
-      <EnhancedRoute
-        auth="admin"
-        editors={['Admin', 'PO']}
-        user={user}
-        exact
-        path="/feedback"
-        component={FeedbackList}
-      />
-      <EnhancedRoute
-        auth="admin"
-        editors={['Admin', 'PO']}
-        user={user}
-        exact
-        path="/addfeedback"
-        component={AddFeedback}
       />
       <Route exact path="/image_convert" component={ImageConverter} />
       <Route exact path="/anniversaries" component={AnniversaryList} />

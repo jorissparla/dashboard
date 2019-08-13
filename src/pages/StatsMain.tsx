@@ -1,6 +1,6 @@
 import { withStyles } from '@material-ui/core';
 import React, { useContext, useState } from 'react';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from 'react-apollo';
 import { SelectionContext } from '../globalState/SelectionContext';
 import { BacklogTable } from '../stats/BacklogTable';
 import { ListFavoritePersons } from '../stats/FavoritesPersons';
@@ -158,7 +158,6 @@ const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
 
   const isValidSuperUser = ['Admin', 'PO'].some(u => (user ? u === user.role : false));
   const { loading, data } = useQuery(QUERY_BACKLOG, {
-    suspend: true,
     variables: { date, owner, products, deployment: 'ALL', ...useParams(!isValidSuperUser) }
   });
   if (loading) return null;

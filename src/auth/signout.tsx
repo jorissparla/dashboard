@@ -1,10 +1,8 @@
+import { UserContext } from 'globalState/UserProvider';
 import gql from 'graphql-tag';
 import * as React from 'react';
-import { useMutation } from 'react-apollo-hooks';
 import { StaticContext } from 'react-router';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import { DashBoardContext } from '../globalState/Provider';
-import { UserContext } from 'globalState/UserProvider';
 
 export const MUTATION_SIGNOUT = gql`
   mutation MUTATION_SIGNOUT {

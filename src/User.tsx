@@ -1,8 +1,8 @@
-import React, { useEffect, FunctionComponent } from 'react';
+import { UserContext } from 'globalState/UserProvider';
 import gql from 'graphql-tag';
+import React, { FunctionComponent } from 'react';
 import { Query } from 'react-apollo';
-import { useQuery } from 'react-apollo-hooks';
-import { CurrentUserQueryComponent, CurrentUserQueryMe } from './generated/apolloComponents';
+import { useQuery } from 'react-apollo';
 
 const CURRENT_USER_QUERY = gql`
   query CURRENT_USER_QUERY {
@@ -43,27 +43,15 @@ const User: FunctionComponent<UserProps> = (props: any) => {
 };
 
 export const UserProfileComponent: FunctionComponent<any> = (props: any) => {
+  const { user: me } = React.useContext(UserContext);
+  if (!me) {
+    return <div>No user, loading...</div>;
+  }
   return (
-    <CurrentUserQueryComponent>
-      {({ data, loading }) => {
-        if (loading) {
-          return 'Loading';
-        }
-        if (!data) {
-          return 'Error';
-        }
-        if (!data.me) {
-          return 'Error';
-        }
-        const me: CurrentUserQueryMe = data.me;
-        return (
-          <div>
-            <h1>Hallo {me.fullname}</h1>
-            <img src={me.image || ''} />
-          </div>
-        );
-      }}
-    </CurrentUserQueryComponent>
+    <div>
+      <h1>Hallo {me.fullname}</h1>
+      <img src={me.image || ''} />
+    </div>
   );
 };
 // comment
@@ -72,7 +60,7 @@ export default User;
 export { CURRENT_USER_QUERY };
 
 export function useUser() {
-  const result = useQuery(CURRENT_USER_QUERY, { suspend: false });
+  const result = useQuery(CURRENT_USER_QUERY);
   if (result.loading) {
     return null;
   }

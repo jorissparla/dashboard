@@ -1,10 +1,10 @@
-import * as React from "react";
-import { useQuery } from "react-apollo-hooks";
-import gql from "graphql-tag";
-import { withRouter } from "react-router";
-import { SurveyComponent } from "../surveys/SurveyComponent";
-import Spinner from "../utils/spinner";
-import SurveyComments from "../surveys/SurveyComments";
+import * as React from 'react';
+import { useQuery } from 'react-apollo';
+import gql from 'graphql-tag';
+import { withRouter } from 'react-router';
+import { SurveyComponent } from '../surveys/SurveyComponent';
+import Spinner from '../utils/spinner';
+import SurveyComments from '../surveys/SurveyComments';
 
 const QUERY_SURVEY_RATIOS = gql`
   query QUERY_SURVEY_RATIOS($region: String) {
@@ -24,10 +24,12 @@ const QUERY_SURVEY_RATIOS = gql`
 `;
 
 const SurveysInner = props => {
-  let region = props.match.params.id || "EMEA";
-  console.log("🗑🗑", region, props.match.params.id);
+  let region = props.match.params.id || 'EMEA';
+  console.log('🗑🗑', region, props.match.params.id);
 
-  const { data, loading } = useQuery(QUERY_SURVEY_RATIOS, { suspend: false, variables: { region } });
+  const { data, loading } = useQuery(QUERY_SURVEY_RATIOS, {
+    variables: { region }
+  });
   console.log(data);
   if (loading) {
     return <Spinner />;

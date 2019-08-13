@@ -7,7 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import FolderOpen from '@material-ui/icons/FolderOpen';
 import FileUpload from '@material-ui/icons/FileCopy';
 import gql from 'graphql-tag';
-import { useQuery, useMutation } from 'react-apollo-hooks';
+import { useQuery, useMutation } from 'react-apollo';
 import styled from 'styled-components';
 const PATH_PREFIX = '\\\\nlbavwixs.infor.com\\images\\news\\';
 const LINK_PREFIX = 'http://nlbavwdocsup1.infor.com:5001/';
@@ -103,7 +103,7 @@ export const FileUploadComponent: React.FC<Props> = ({
   readOnly,
   setFile = () => null
 }) => {
-  const uploadFileMutation = useMutation(UPLOAD_MUTATION);
+  const [uploadFileMutation, { data }] = useMutation(UPLOAD_MUTATION);
   const ref = useRef(null);
   return (
     <FileInput htmlFor="f1">
@@ -117,8 +117,8 @@ export const FileUploadComponent: React.FC<Props> = ({
         onChange={async ({ target: { validity, files } }) => {
           const res = await uploadFileMutation({ variables: { files, folder: link } });
 
-          if (res.data) {
-            const uploadedFile = res.data.multipleUpload[0].filename;
+          if (data) {
+            const uploadedFile = data.multipleUpload[0].filename;
             console.log('files', uploadedFile);
             setFile(httpLinkPrefix + uploadedFile);
           }

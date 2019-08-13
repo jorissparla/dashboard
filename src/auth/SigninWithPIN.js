@@ -1,20 +1,65 @@
-import React from "react";
-import { withRouter } from "react-router";
-import { Button, Input, Form, Error } from "../styles";
-import gql from "graphql-tag";
-import { graphql, compose } from "react-apollo";
+import React, { useState } from 'react';
+import { withRouter } from 'react-router';
+import { Button, Input, Form, Error } from '../styles';
+import gql from 'graphql-tag';
+//import { graphql, compose } from 'react-apollo';
 
 const isRequired = value => (value ? true : false);
 const isValidemail = value =>
   value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? false : true;
 
-class Signin extends React.Component {
+const Signin = () => {
+  const [state, setState] = useState({
+    email: '',
+    PIN: '',
+    error: '',
+    emailError: '',
+    PINError: ''
+  });
+
+  function onChange(e) {
+    setState({ [e.target.name]: e.target.value });
+  }
+
+  function validate() {
+    let isError = false;
+    const errors = {
+      emailError: '',
+      PINError: '',
+      submitError: ''
+    };
+    const { email, PIN } = this.state;
+
+    if (!isValidemail(email)) {
+      isError = true;
+      errors.emailError = 'Invalid email address';
+      this.setState({
+        ...this.state,
+        ...errors
+      });
+    }
+
+    if (!isRequired(PIN)) {
+      isError = true;
+      errors.PINError = 'Password cannot be empty';
+      this.setState({
+        ...this.state,
+        ...errors
+      });
+    }
+    return isError;
+  }
+
+  return <div>To be reimplemented</div>;
+};
+/*
+class Signin2 extends React.Component {
   state = {
-    email: "",
-    PIN: "",
-    error: "",
-    emailError: "",
-    PINError: ""
+    email: '',
+    PIN: '',
+    error: '',
+    emailError: '',
+    PINError: ''
   };
 
   onChange = ({ target: { name, value } }) => {
@@ -26,15 +71,15 @@ class Signin extends React.Component {
   validate = () => {
     let isError = false;
     const errors = {
-      emailError: "",
-      PINError: "",
-      submitError: ""
+      emailError: '',
+      PINError: '',
+      submitError: ''
     };
     const { email, PIN } = this.state;
 
     if (!isValidemail(email)) {
       isError = true;
-      errors.emailError = "Invalid email address";
+      errors.emailError = 'Invalid email address';
       this.setState({
         ...this.state,
         ...errors
@@ -43,7 +88,7 @@ class Signin extends React.Component {
 
     if (!isRequired(PIN)) {
       isError = true;
-      errors.PINError = "Password cannot be empty";
+      errors.PINError = 'Password cannot be empty';
       this.setState({
         ...this.state,
         ...errors
@@ -58,18 +103,18 @@ class Signin extends React.Component {
   _onSubmit = async e => {
     e.preventDefault();
     const errors = {
-      emailError: "",
-      PINError: "",
-      submitError: ""
+      emailError: '',
+      PINError: '',
+      submitError: ''
     };
     const { email, PIN } = this.state;
     const err = this.validate();
     if (!err) {
       const result = await this.props.signinUser({ email, PIN });
       if (!result.error) {
-        this.props.history.push("/");
+        this.props.history.push('/');
       } else {
-        errors.submitError = "invalid email or PIN";
+        errors.submitError = 'invalid email or PIN';
         this.setState({
           ...this.state,
           ...errors
@@ -86,7 +131,7 @@ class Signin extends React.Component {
   renderAlert = () => {
     //const { errorMessage } = this.props;
 
-    const error = [this.state.emailError, this.state.PINError, this.state.submitError].join(" ");
+    const error = [this.state.emailError, this.state.PINError, this.state.submitError].join(' ');
 
     //|| errorMessage;
     if (this.state.emailError || this.state.PINError || this.state.submitError) {
@@ -94,9 +139,9 @@ class Signin extends React.Component {
     }
   };
   render() {
-    console.log("Props", this.props);
+    console.log('Props', this.props);
     return (
-      <Form style={{ width: "400px" }}>
+      <Form style={{ width: '400px' }}>
         <Input
           name="email"
           placeholder="Email"
@@ -131,6 +176,7 @@ class Signin extends React.Component {
   }
 }
 
+*/
 const generateTempPIN = gql`
   mutation generateTempPIN($email: String!) {
     generateTempPIN(email: $email) {
@@ -142,4 +188,5 @@ const generateTempPIN = gql`
   }
 `;
 
-export default compose(graphql(generateTempPIN, { name: "generateTempPIN" }))(withRouter(Signin));
+//export default compose(graphql(generateTempPIN, { name: 'generateTempPIN' }))(withRouter(Signin));
+export default withRouter(Signin);

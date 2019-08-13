@@ -1,5 +1,4 @@
 import gql from 'graphql-tag';
-import { StatusFilter } from '../../../generated/apolloComponents';
 
 export const QUERY_BACKLOG = gql`
   # Write your query or mutation here

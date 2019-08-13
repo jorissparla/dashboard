@@ -1,8 +1,8 @@
-import * as React from "react";
-import { useQuery } from "react-apollo-hooks";
-import gql from "graphql-tag";
-import Spinner from "../utils/spinner";
-import { SurveyTable } from "./SurveyTable";
+import * as React from 'react';
+import { useQuery } from 'react-apollo';
+import gql from 'graphql-tag';
+import Spinner from '../utils/spinner';
+import { SurveyTable } from './SurveyTable';
 
 const QUERY_SURVEY_COMMENTS = gql`
   query QUERY_SURVEY_COMMENTS($region: String) {
@@ -29,11 +29,13 @@ interface UCProps {
 }
 
 const useComments = ({ region }: UCProps) => {
-  console.log("😜😜😜😜", region);
-  const { loading, data } = useQuery(QUERY_SURVEY_COMMENTS, { suspend: false, variables: { region } });
+  console.log('😜😜😜😜', region);
+  const { loading, data } = useQuery(QUERY_SURVEY_COMMENTS, {
+    variables: { region }
+  });
   if (loading) return null;
   if (!data) return null;
-  console.log("DATA", data);
+  console.log('DATA', data);
   return data;
 };
 
@@ -44,7 +46,7 @@ interface Props {
 const SurveyComments: React.FC<Props> = ({ region }) => {
   const data = useComments({ region });
   if (!data) return <Spinner />;
-  console.log("SurveyComments data", data.surveys);
+  console.log('SurveyComments data', data.surveys);
   return (
     <div>
       <SurveyTable surveys={data.surveys} />
