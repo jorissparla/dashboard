@@ -1,44 +1,8 @@
 import React from 'react';
 import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
+import { Query, useQuery } from 'react-apollo';
 import SummaryChart from './NewSummaryChart';
 import shortid from 'shortid';
-
-class SummaryChartContainer extends React.Component {
-  render() {
-
-    const value = !this.props.value ? 'supportBacklog' : this.props.value;
-    const title = !this.props.title ? value : this.props.title;
-    const type = !this.props.type ? 'column' : this.props.type;
-    const team = this.props.team || 'Logistics';
-    //  const summary = summaries; // .reverse()
-    const color = this.props.color;
-    return (
-      <Query query={QUERY_SUMMARY_DATA} variables={{ team }}>
-        {({ data, loading }) => {
-          if (loading) return <div>Loading....</div>;
-          if (data && data.summaries) {
-            const summary = data.summaries;
-            return (
-              <SummaryChart
-                id={shortid.generate()}
-                data={summary}
-                title={title}
-                type={type}
-                xvalue="weekNr"
-                value={value}
-                color={color}
-                team={team}
-              />
-            );
-          } else {
-            return 'no data returned';
-          }
-        }}
-      </Query>
-    );
-  }
-}
 
 const QUERY_SUMMARY_DATA = gql`
   query summaries($team: String) {
@@ -56,6 +20,33 @@ const QUERY_SUMMARY_DATA = gql`
     }
   }
 `;
+const SummaryChartContainer = props => {
+  const { data, loading } = useQuery(QUERY_SUMMARY_DATA, { variables: { team } });
+  const value = !props.value ? 'supportBacklog' : props.value;
+  const title = !props.title ? value : props.title;
+  const type = !props.type ? 'column' : props.type;
+  const team = props.team || 'Logistics';
+  //  const summary = summaries; // .reverse()
+  const color = props.color;
+  if (loading) return <div>Loading....</div>;
+  if (data && data.summaries) {
+    const summary = data.summaries;
+    return (
+      <SummaryChart
+        id={shortid.generate()}
+        data={summary}
+        title={title}
+        type={type}
+        xvalue="weekNr"
+        value={value}
+        color={color}
+        team={team}
+      />
+    );
+  } else {
+    return 'no data returned';
+  }
+};
 
 /* export default graphql(querySummaries, {
   options: props => ({

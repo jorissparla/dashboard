@@ -10,6 +10,6 @@
     "titleBar.activeBackground": "#0077ff",
     "titleBar.inactiveBackground": "#ea00ff"
   },
-  "workbench.colorTheme": "Dracula",
+  "workbench.colorTheme": "Noctis",
   "markdown.preview.fontSize": 15
 }

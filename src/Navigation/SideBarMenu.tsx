@@ -150,6 +150,12 @@ export const SideBarMenu: React.FC<Props> = ({ classes, history, toggleMenu, ope
           {authenticated && isAdmin && (
             <ToggledNavLink title="News" Icon={NewsIcon} navigateTo="/news" history={history} />
           )}
+          <ToggledNavLink
+            title="NewsPage"
+            Icon={NewsIcon}
+            navigateTo="/newspage"
+            history={history}
+          />
           <Divider />
           <ToggledNavLink
             title="Courses Dashboard"

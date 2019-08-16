@@ -51,7 +51,6 @@ export default function ProductForm({ classes, product, onSave, isEditable }) {
           <TextField
             id="content"
             label="content"
-            className={classes.contentField}
             {...content}
             margin="normal"
             fullWidth

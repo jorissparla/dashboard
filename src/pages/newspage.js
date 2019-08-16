@@ -1,17 +1,17 @@
-import React from 'react';
-import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
-//import { format } from 'date-fns';
-import { format } from '../utils/format';
-import { withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
+import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
+import gql from 'graphql-tag';
+import React from 'react';
+import { useQuery } from 'react-apollo';
 import { CardSection } from '../common';
+//import { format } from 'date-fns';
+import { format } from '../utils/format';
 const QUERY_NEWSITEMS = gql`
   query news {
     news {
@@ -86,33 +86,28 @@ function MediaNewsCard({ news: { title, body, img, create_date }, classes }) {
 
 const NewsPage = props => {
   const { classes } = props;
+  const { loading, data } = useQuery(QUERY_NEWSITEMS);
+  if (loading) {
+    return 'loading...';
+  }
+  if (!data || !data.news) {
+    return 'Cannot connect to server, please contact the administrator';
+  }
+  const { news } = data;
   return (
-    <Query query={QUERY_NEWSITEMS}>
-      {({ data, loading }) => {
-        if (loading) {
-          return 'loading...';
-        }
-        if (!data || !data.news) {
-          return 'Cannot connect to server, please contact the administrator';
-        }
-        const { news } = data;
-        return (
-          <>
-            {' '}
-            <CardSection>
-              <Typography variant="h4" gutterBottom>
-                #ProudToWorkInSupport
-              </Typography>
-            </CardSection>
-            <div className={classes.root}>
-              {news.map(item => (
-                <MediaNewsCard news={item} key={item.id} classes={classes} />
-              ))}
-            </div>
-          </>
-        );
-      }}
-    </Query>
+    <>
+      {' '}
+      <CardSection>
+        <Typography variant="h4" gutterBottom>
+          #ProudToWorkInSupport
+        </Typography>
+      </CardSection>
+      <div className={classes.root}>
+        {news.map(item => (
+          <MediaNewsCard news={item} key={item.id} classes={classes} />
+        ))}
+      </div>
+    </>
   );
 };
 
