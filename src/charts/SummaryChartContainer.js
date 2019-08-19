@@ -21,11 +21,12 @@ const QUERY_SUMMARY_DATA = gql`
   }
 `;
 const SummaryChartContainer = props => {
-  const { data, loading } = useQuery(QUERY_SUMMARY_DATA, { variables: { team } });
   const value = !props.value ? 'supportBacklog' : props.value;
   const title = !props.title ? value : props.title;
   const type = !props.type ? 'column' : props.type;
   const team = props.team || 'Logistics';
+  const { data, loading } = useQuery(QUERY_SUMMARY_DATA, { variables: { team } });
+  console.log('TEAM', team);
   //  const summary = summaries; // .reverse()
   const color = props.color;
   if (loading) return <div>Loading....</div>;

@@ -19,7 +19,9 @@ const DashBoardStats = props => {
   const teams = ['Logistics', 'Finance', 'Tools'];
 
   const team = props.match ? props.match.params.team : props.team;
-  //console.log(` RETURNS TEAM: ${team} , PROPS:  ${props.team}, PARAMS: ${props.match}`);
+  // console.log(
+  //   ` RETURNS TEAM: ${team} , PROPS:  ${props.team}, PARAMS: ${JSON.stringify(props.match)}`
+  // );
   //const { data, team } = props;
   console.log('Rendering');
   return (
