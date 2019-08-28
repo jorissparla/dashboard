@@ -1,3 +1,4 @@
+import TenantLogs from 'pages/TenantLogs';
 import React from 'react';
 import { withRouter } from 'react-router';
 import { Route, Switch } from 'react-router-dom';
@@ -95,6 +96,7 @@ function AppRoutes(props) {
 
   return (
     <Switch>
+      <Route exact path="/tenantlogs" component={TenantLogs} />
       <AuthRoute
         exact
         path="/statsmain"
