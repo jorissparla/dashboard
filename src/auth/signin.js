@@ -29,7 +29,7 @@ export const MUTATION_SIGNIN = gql`
 
 const styles = theme => ({
   button: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     width: 150,
     marginRight: 50
   },
@@ -37,14 +37,14 @@ const styles = theme => ({
     display: 'none'
   },
   textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
     width: 300
   },
   root: {
     ...theme.mixins.gutters(),
-    paddingTop: theme.spacing.unit * 2,
-    paddingBottom: theme.spacing.unit * 2,
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
     margin: '100px 300px 100px 300px',
     width: '700px',
     backgroundColor: '#eef'

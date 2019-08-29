@@ -85,9 +85,9 @@ const QUERY_SINGLE_COURSE_WITHDATA = gql`
 const styles = theme => ({
   root: {
     ...theme.mixins.gutters(),
-    paddingTop: theme.spacing.unit * 2,
-    paddingBottom: theme.spacing.unit * 2,
-    padding: theme.spacing.unit * 2,
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+    padding: theme.spacing(2),
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
@@ -96,17 +96,17 @@ const styles = theme => ({
     minWidth: '200px'
   },
   button: {
-    margin: theme.spacing.unit
+    margin: theme.spacing(1)
   },
 
   buttonDel: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     backgroundColor: '#000'
   },
 
   textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
     marginBottom: 20
   }
 });

@@ -26,9 +26,9 @@ const validationSchema = yup.object().shape({
 const styles = theme => ({
   root: {
     ...theme.mixins.gutters(),
-    paddingTop: theme.spacing.unit * 2,
-    paddingBottom: theme.spacing.unit * 2,
-    padding: theme.spacing.unit * 2,
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+    padding: theme.spacing(2),
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
@@ -37,14 +37,14 @@ const styles = theme => ({
     backgroundColor: 'rgba(33, 150, 243, 0.22)'
   },
   button2: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     maxWidth: 200
   },
   button: {
     width: 200
   },
   margin: {
-    margin: theme.spacing.unit * 2,
+    margin: theme.spacing(2),
     color: 'black'
   },
   block: {
@@ -53,25 +53,25 @@ const styles = theme => ({
     alignItems: 'center'
   },
   buttonDel: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     color: '#FFF',
     backgroundColor: '#000'
   },
 
   textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
     marginBottom: 20
   },
   titleField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
     marginBottom: 20,
     width: '90%'
   },
   hourField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
     marginBottom: 20,
     width: 50
   },

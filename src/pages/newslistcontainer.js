@@ -12,11 +12,11 @@ import withAuth from '../utils/withAuth';
 
 const styles = theme => ({
   button: {
-    margin: theme.spacing.unit
+    margin: theme.spacing(1)
   },
 
   root: theme.mixins.gutters({
-    marginTop: theme.spacing.unit * 3
+    marginTop: theme.spacing(3)
   })
 });
 

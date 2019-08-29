@@ -309,7 +309,7 @@ const styles = theme => ({
     marginBottom: 10
   },
   button: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     width: 150,
     marginRight: 50
   },
@@ -320,7 +320,7 @@ const styles = theme => ({
   paper: {
     position: 'relative',
     zIndex: 1,
-    marginTop: theme.spacing.unit,
+    marginTop: theme.spacing(1),
     left: 0,
     right: 0
   },
@@ -329,13 +329,13 @@ const styles = theme => ({
     margin: 10
   },
   chip: {
-    margin: `${theme.spacing.unit / 2}px ${theme.spacing.unit / 4}px`
+    margin: `${theme.spacing(0.5)}px ${theme.spacing(0.25)}px`
   },
   inputRoot: {
     flexWrap: 'wrap'
   },
   divider: {
-    height: theme.spacing.unit * 2
+    height: theme.spacing(2)
   }
 });
 

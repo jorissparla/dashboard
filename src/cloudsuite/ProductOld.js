@@ -54,7 +54,7 @@ const OverThePage = styled.div`
 
 const styles = theme => ({
   button: {
-    margin: theme.spacing.unit
+    margin: theme.spacing(1)
   },
   editField: {
     display: 'block',
@@ -65,8 +65,8 @@ const styles = theme => ({
     display: 'none'
   },
   contentField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
     backgroundColor: '#eeeeee99',
     fontSize: 40,
     maxHeight: '30vh'
@@ -75,7 +75,7 @@ const styles = theme => ({
     marginTop: 19
   },
   formControl: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     minWidth: 120
   },
   markdown: {
@@ -98,12 +98,12 @@ const styles = theme => ({
     marginLeft: '2rem'
   },
   button2: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     height: '40px',
     backgroundColor: 'palevioletred'
   },
   button3: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     height: '40px'
   }
 });

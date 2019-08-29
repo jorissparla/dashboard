@@ -26,19 +26,19 @@ const styles = theme => ({
     minWidth: 300
   },
   button: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     alignContent: 'center',
     display: 'flex'
   },
 
   buttonDel: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     backgroundColor: '#000'
   },
 
   textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
     width: 200,
     height: '100%'
   },

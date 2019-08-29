@@ -9,6 +9,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import { format } from 'utils/format';
+import { addHours } from 'date-fns';
 
 const TableHeaderCell = withStyles(theme => ({
   head: {
@@ -49,8 +50,12 @@ export default function TenantLogs() {
         </TableHead>
         <TableBody>
           {tenantlogs.map(log => (
-            <TableRow>
-              <TableCell>{format(log.date, 'YYYY MMMM DD, ddd HH:mm')}</TableCell>
+            <TableRow key={log.id}>
+              <TableCell>
+                {/* {console.log(addHours(parseInt(log.date, -2)))} */}
+                {format(addHours(parseInt(log.date), -2), 'YYYY MMMM DD, dddd - HH:mm')}
+                {/* {format(log.date, 'hh:mm:ss')} */}
+              </TableCell>
               <TableCell>{log.log}</TableCell>
             </TableRow>
           ))}

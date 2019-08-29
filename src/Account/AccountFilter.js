@@ -15,23 +15,23 @@ import PropTypes from "prop-types";
 const styles = theme => ({
   root: {
     ...theme.mixins.gutters(),
-    paddingTop: theme.spacing.unit * 2,
-    paddingBottom: theme.spacing.unit * 2
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2)
   },
   container: {
     display: "flex",
     flexWrap: "wrap"
   },
   textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
     width: 200
   },
   menu: {
     width: 200
   },
   button: {
-    margin: theme.spacing.unit
+    margin: theme.spacing(1)
   },
   input: {
     display: "none"

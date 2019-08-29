@@ -71,7 +71,7 @@ const styles = theme => ({
     margin: 10
   },
   chip: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     marginBottom: 2
   },
   avatar: {
@@ -255,7 +255,13 @@ const FilterForm = ({ setSearchText, flip }) => {
 
   // console.log(fields);
   return (
-    <>
+    <form
+      onSubmit={e => {
+        e.preventDefault();
+        setAllFields();
+        console.log('xxx');
+      }}
+    >
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <h1>Filter</h1> <CloseButton onClick={() => flip()}>&times;</CloseButton>
       </div>
@@ -291,6 +297,7 @@ const FilterForm = ({ setSearchText, flip }) => {
         variant="contained"
         color="primary"
         onClick={() => setAllFields()}
+        // type="submit"
       >
         Filter
       </Button>
@@ -302,7 +309,7 @@ const FilterForm = ({ setSearchText, flip }) => {
       >
         Clear
       </Button>
-    </>
+    </form>
   );
 };
 
@@ -340,13 +347,14 @@ const TenantList = props => {
   const { setFields, fields, clearFields } = useContext(FilterFieldContext);
   const { classes } = props;
   const [searchText, setSearchText] = useState('');
-  const [on, Toggle] = useState(false);
+  const [showFilterDialog, toggleShowFilterDialog] = useState(false);
+  const [showLogs, setShowLogs] = useState(false);
   const { x } = useSpring({
-    x: on ? 15 : 0,
+    x: showFilterDialog ? 15 : 0,
     config: config.wobbly
   });
 
-  const flip = () => Toggle(!on);
+  const flip = () => toggleShowFilterDialog(!showFilterDialog);
   return (
     <Query query={ALL_TENANTS}>
       {({ data, loading }) => {
@@ -392,20 +400,22 @@ const TenantList = props => {
                     letterSpacing: '0.2rem'
                   }}
                 >
-                  <Typography
-                    gutterBottom
-                    variant="h5"
-                    component="h2"
-                    onClick={() => {
-                      // Toggle(!on);
-                      // alert("ha");
-                    }}
-                  >
+                  <Typography gutterBottom variant="h5" component="h2">
                     <span style={{ letterSpacing: '0.2rem', textTransform: 'uppercase' }}>
                       {` Multitenant customers - last change -${format(max, 'DD MMM YYYY')}`}
                     </span>
                   </Typography>
-                  <Button variant="contained" onClick={() => Toggle(!on)}>
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => toggleShowFilterDialog(!showFilterDialog)}
+                  >
+                    Logs
+                  </Button>
+                  <Button
+                    variant="contained"
+                    onClick={() => toggleShowFilterDialog(!showFilterDialog)}
+                  >
                     Filter
                   </Button>
                 </div>

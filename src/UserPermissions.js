@@ -40,7 +40,7 @@ const styles = theme => ({
     width: 250
   },
   button: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     width: 150,
     marginRight: 50
   }

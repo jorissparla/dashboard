@@ -38,28 +38,28 @@ const useStyles = makeStyles(theme => ({
     flexWrap: 'wrap'
   },
   button: {
-    margin: theme.spacing.unit
+    margin: theme.spacing(1)
   },
   button2: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     height: '40px',
     backgroundColor: 'palevioletred'
   },
 
   buttonDel: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     backgroundColor: '#000'
   },
 
   textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
     width: 200,
     height: '100%'
   },
   titleField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
     fontSize: '40px',
     color: '#039BE5'
   },
@@ -67,8 +67,8 @@ const useStyles = makeStyles(theme => ({
     display: 'flex'
   },
   contentField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
     backgroundColor: '#eeeeee99',
     fontSize: 40,
     minHeight: '50vh'
@@ -77,7 +77,7 @@ const useStyles = makeStyles(theme => ({
     marginTop: 19
   },
   formControl: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     minWidth: 120
   },
   markdown: {
