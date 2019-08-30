@@ -1,26 +1,28 @@
-import React, { useEffect, useState, useContext } from 'react';
-import gql from 'graphql-tag';
-import { Query, Mutation } from 'react-apollo';
-import _ from 'lodash';
-import { withStyles } from '@material-ui/core/styles';
-import deepOrange from '@material-ui/core/colors/deepOrange';
-import deepPurple from '@material-ui/core/colors/deepPurple';
+import Button from '@material-ui/core/Button';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import SearchBar from '../common/SearchBar';
 import Chip from '@material-ui/core/Chip';
-import TextField from '@material-ui/core/TextField';
+import deepOrange from '@material-ui/core/colors/deepOrange';
+import deepPurple from '@material-ui/core/colors/deepPurple';
+import { withStyles } from '@material-ui/core/styles';
 import Switch from '@material-ui/core/Switch';
-//import format from 'date-fns/format';
-import { format } from '../utils/format';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
+import gql from 'graphql-tag';
+import _ from 'lodash';
+import Modal from 'ModalWrapper';
+import React, { useContext, useState } from 'react';
+import { Mutation, Query, useQuery } from 'react-apollo';
+import { animated, config, useSpring } from 'react-spring';
 import styled from 'styled-components';
-import { useSpring, animated, config } from 'react-spring';
-import { FilterFieldContext } from '../globalState/FilterContext';
 import FavoriteBadge from '../elements/Badge';
+import { FilterFieldContext } from '../globalState/FilterContext';
+//import format from 'date-fns/format';
+import { distanceInWordsToNow, format } from '../utils/format';
 import { DashBoardContext } from './../globalState/Provider';
+import TenantLogs from './TenantLogs';
+import Spinner from 'utils/spinner';
 
 const ALL_TENANTS = gql`
   query q {
@@ -35,6 +37,15 @@ const ALL_TENANTS = gql`
       }
       lastupdated
       live
+    }
+    updatestatus(name: "TenantList") {
+      id
+      updatedAt
+    }
+    tenantlogs {
+      id
+      date
+      log
     }
   }
 `;
@@ -64,7 +75,9 @@ const styles = theme => ({
     width: 325,
     display: 'flex',
     flexDirection: 'column',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    backgroundImage: 'linear-gradient(to right bottom, rgb(128, 216, 255), white)',
+    borderRadius: 14
   },
   card2: {
     minWidth: 275,
@@ -158,8 +171,21 @@ const H2 = styled.h2`
   line-height: 1.33;
 `;
 
-const TenantCard = ({ classes, customer, tenants, live, role = 'Guest' }) => {
-  const [isLive, setLive] = React.useState(live);
+export const TextSpan = styled.span`
+  padding-top: 2px;
+  margin-left: 10px;
+  margin-right: 10px;
+`;
+
+const TenantCard = ({
+  classes,
+  customer,
+  tenants,
+  live = false,
+  role = 'Guest',
+  onStatusChange = () => console.log('change')
+}) => {
+  const [isLive, setLive] = React.useState(live || false);
   const max = _.maxBy(tenants, t => format(t.lastupdated, 'YYYYMMDD')).lastupdated;
 
   //console.log(dbctx);
@@ -205,7 +231,8 @@ const TenantCard = ({ classes, customer, tenants, live, role = 'Guest' }) => {
                     const input = { live: 1 - prev, number: tenants[0].customerid };
                     // console.log(input);
                     mutate({ variables: { input } });
-                    return 1 - prev;
+                    onStatusChange();
+                    return prev === 1 ? false : true;
                   });
                 }}
                 value="checkedB"
@@ -259,7 +286,6 @@ const FilterForm = ({ setSearchText, flip }) => {
       onSubmit={e => {
         e.preventDefault();
         setAllFields();
-        console.log('xxx');
       }}
     >
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -349,141 +375,157 @@ const TenantList = props => {
   const [searchText, setSearchText] = useState('');
   const [showFilterDialog, toggleShowFilterDialog] = useState(false);
   const [showLogs, setShowLogs] = useState(false);
+  const [counter, setCounter] = useState(0);
   const { x } = useSpring({
     x: showFilterDialog ? 15 : 0,
     config: config.wobbly
   });
-
   const flip = () => toggleShowFilterDialog(!showFilterDialog);
+  const { data, loading } = useQuery(ALL_TENANTS);
+  if (loading) {
+    return <Spinner />;
+  }
+  const { tenants, updatestatus, tenantlogs } = data;
+  const { updatedAt } = updatestatus;
+  let tenantcustomersWithFarm = _.countBy(
+    tenants.map(({ farm, tenant }) => ({ farm, tenant })),
+    'farm'
+  );
+  const totalTenants = Object.entries(tenantcustomersWithFarm).reduce(
+    (count, item) => count + item[1],
+    0
+  );
+  const filteredTenants = tenantsByCustomer2(tenants, fields, flip);
+  // console.log("filterTenants", filteredTenants);
+  const uniqueCustomers = filteredTenants
+    .map(({ farm, customer: { name } }) => name)
+    .filter((ten, i, all) => all.indexOf(ten) === i);
+  const listOfCustomerAndFarm = tenants
+    .filter(item => item.customerid !== null)
+    .map(({ customerid, farm }) => ({ customerid, farm }));
+  const custFarms = _.countBy(_.uniqWith(listOfCustomerAndFarm, _.isEqual), 'farm');
+  const liveCustomers = _.uniqWith(
+    tenants.map(t => ({ customer: t.customer.name, live: t.live })),
+    _.isEqual
+  ).filter(t => t.live === 1);
+  const totalCustomers = Object.entries(custFarms).reduce((count, item) => count + item[1], 0);
+  const max = _.maxBy(tenants, t => format(t.lastupdated, 'YYYYMMDD')).lastupdated;
+  const nrOfLiveCustomers = uniqueCustomers.filter(t => t.live).length;
   return (
-    <Query query={ALL_TENANTS}>
-      {({ data, loading }) => {
-        if (loading) {
-          return '...Loading';
-        }
-        const { tenants } = data;
-        let tenantcustomersWithFarm = _.countBy(
-          tenants.map(({ farm, tenant }) => ({ farm, tenant })),
-          'farm'
-        );
-        const totalTenants = Object.entries(tenantcustomersWithFarm).reduce(
-          (count, item) => count + item[1],
-          0
-        );
-        const filteredTenants = tenantsByCustomer2(tenants, fields, flip);
-        // console.log("filterTenants", filteredTenants);
-        const uniques = filteredTenants
-          .map(({ farm, customer: { name } }) => name)
-          .filter((ten, i, all) => all.indexOf(ten) === i);
-        const ar = tenants
-          .filter(item => item.customerid !== null)
-          .map(({ customerid, farm }) => ({ customerid, farm }));
-        const custFarms = _.countBy(_.uniqWith(ar, _.isEqual), 'farm');
-        console.log(custFarms);
-        const totalCustomers = Object.entries(custFarms).reduce(
-          (count, item) => count + item[1],
-          0
-        );
-        const max = _.maxBy(tenants, t => format(t.lastupdated, 'YYYYMMDD')).lastupdated;
-        return (
-          <Main>
-            <animated.div
-              style={{
-                width: x.interpolate(x => `${100 - x}vw`)
-              }}
-            >
-              <Article>
-                <div
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    letterSpacing: '0.2rem'
-                  }}
-                >
-                  <Typography gutterBottom variant="h5" component="h2">
-                    <span style={{ letterSpacing: '0.2rem', textTransform: 'uppercase' }}>
-                      {` Multitenant customers - last change -${format(max, 'DD MMM YYYY')}`}
-                    </span>
-                  </Typography>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => toggleShowFilterDialog(!showFilterDialog)}
-                  >
-                    Logs
-                  </Button>
-                  <Button
-                    variant="contained"
-                    onClick={() => toggleShowFilterDialog(!showFilterDialog)}
-                  >
-                    Filter
-                  </Button>
-                </div>
-                <div
-                  style={{
-                    display: 'flex',
-                    marginBottom: 2,
-                    marginTop: 10,
-                    letterSpacing: '0.2rem'
-                  }}
-                >
-                  TENANTS: ({totalTenants})
-                  {Object.entries(tenantcustomersWithFarm).map(item => {
-                    console.log(item[0]);
-                    const text = `${item[0]} : ${item[1]}`;
-                    return (
-                      <FavoriteBadge isVisible={true} color="#40a5ed" style={{ margin: 3 }}>
-                        {text}
-                      </FavoriteBadge>
-                    );
-                  })}
-                  CUSTOMERS:({totalCustomers})
-                  {Object.entries(custFarms).map(item => {
-                    console.log(item[0]);
-                    const text = `${item[0]} : ${item[1]}`;
-                    return (
-                      <FavoriteBadge isVisible={true} color="purple" style={{ margin: 3 }}>
-                        {text}
-                      </FavoriteBadge>
-                    );
-                  })}
-                </div>
-              </Article>
+    <Main>
+      <animated.div
+        style={{
+          width: x.interpolate(x => `${100 - x}vw`)
+        }}
+      >
+        <Article>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              letterSpacing: '0.2rem'
+            }}
+          >
+            <Typography gutterBottom variant="h5" component="h2">
+              <span style={{ letterSpacing: '0.2rem', textTransform: 'uppercase' }}>
+                {/* {` Multitenant customers - last change -${format(max, 'DD MMM YYYY')}`} */}
+                {` Multitenant customers `}
+              </span>
+              <Chip
+                label={
+                  updatedAt
+                    ? `Last check:  ${distanceInWordsToNow(
+                        updatedAt
+                      )} ago,  Last change made ${format(max, 'DD MMM YYYY')} `
+                    : 'not Saved yet'
+                }
+                style={{
+                  marginRight: 10
+                }}
+              />
+              <Button
+                variant="contained"
+                style={{
+                  color: 'white',
+                  backgroundColor: 'black'
+                }}
+                onClick={() => setShowLogs(!showLogs)}
+              >
+                Logs
+              </Button>
+            </Typography>
+            <Button variant="contained" onClick={() => toggleShowFilterDialog(!showFilterDialog)}>
+              Filter
+            </Button>
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              marginBottom: 2,
+              marginTop: 10,
+              letterSpacing: '0.2rem'
+            }}
+          >
+            <TextSpan>TENANTS: ({totalTenants})</TextSpan>
+            {Object.entries(tenantcustomersWithFarm).map(item => {
+              // console.log(item[0]);
+              const text = `${item[0]} : ${item[1]}`;
+              return (
+                <FavoriteBadge key={text} isVisible={true} color="#40a5ed" style={{ margin: 3 }}>
+                  {text}
+                </FavoriteBadge>
+              );
+            })}
+            <TextSpan>CUSTOMERS:({totalCustomers})</TextSpan>
+            {Object.entries(custFarms).map(item => {
+              const text = `${item[0]} : ${item[1]}`;
+              return (
+                <FavoriteBadge key={text} isVisible={true} color="purple" style={{ margin: 3 }}>
+                  {text}
+                </FavoriteBadge>
+              );
+            })}
+            <TextSpan>LIVE: ({liveCustomers.length})</TextSpan>
+          </div>
+        </Article>
 
-              <div className={classes.flex}>
-                {uniques.map((customer, index) => {
-                  const sub = filteredTenants.filter(o => o.customer.name === customer);
-                  return (
-                    <TenantCard
-                      key={index}
-                      classes={classes}
-                      customer={customer}
-                      tenants={sub}
-                      role={role}
-                      live={sub && sub.length >= 0 ? sub[0].live : 0}
-                    />
-                  );
-                })}
-                <TenantCard classes={classes} customer="Infor" tenants={inforTenant(tenants)} />
-              </div>
-            </animated.div>
-            <animated.div
-              style={{
-                width: x.interpolate(x => `${x}vw`),
-                display: 'flex',
-                padding: x.interpolate(x => `${x}px`),
-                flexDirection: 'column',
-                boxShadow:
-                  '0px 1px 3px 0px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 2px 1px -1px rgba(0,0,0,0.12)'
-              }}
-            >
-              {/* <SearchBar onChange={e => setSearchText(e)} /> */}
-              <FilterForm setSearchText={setSearchText} flip={flip} />
-            </animated.div>
-          </Main>
-        );
-      }}
-    </Query>
+        <div className={classes.flex}>
+          {uniqueCustomers.map((customer, index) => {
+            const sub = filteredTenants.filter(o => o.customer.name === customer);
+
+            const liveCust = sub[0].live === 1 ? true : false;
+            return (
+              <TenantCard
+                key={index}
+                classes={classes}
+                customer={customer}
+                tenants={sub}
+                role={role}
+                live={liveCust}
+                onStatusChange={() => setCounter(counter + 1)}
+              />
+            );
+          })}
+          <TenantCard classes={classes} customer="Infor" tenants={inforTenant(tenants)} />
+        </div>
+      </animated.div>
+      <animated.div
+        style={{
+          width: x.interpolate(x => `${x}vw`),
+          display: 'flex',
+          padding: x.interpolate(x => `${x}px`),
+          flexDirection: 'column',
+          boxShadow:
+            '0px 1px 3px 0px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 2px 1px -1px rgba(0,0,0,0.12)'
+        }}
+      >
+        {/* <SearchBar onChange={e => setSearchText(e)} /> */}
+        <FilterForm setSearchText={setSearchText} flip={flip} />
+      </animated.div>
+      <Modal on={showLogs} toggle={() => setShowLogs(!showLogs)} height={80}>
+        <TenantLogs tenantlogs={tenantlogs} />
+      </Modal>
+    </Main>
   );
 };
 
