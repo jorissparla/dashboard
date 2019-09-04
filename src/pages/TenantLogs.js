@@ -79,7 +79,8 @@ export default function TenantLogs({ tenantlogs }) {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          padding: 5
+          padding: 5,
+          marginRight: 20
         }}
       >
         <Typography variant="h6">

@@ -50,12 +50,21 @@ const ModalCard = styled.div`
 
 const CloseButton = styled.button`
   position: absolute;
-  top: 0;
+  top: -8px;
   right: 0;
   background: transparent;
   font-size: 48px;
   font-weight: 100;
+  text-align: center;
+  justify-content: center;
   border: none;
+  width: 57px;
+  height: 57px;
+  :hover {
+    cursor: pointer;
+    background: lightgrey;
+    border-radius: 50%;
+  }
 `;
 
 const Background = styled.div`

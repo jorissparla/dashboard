@@ -13,16 +13,17 @@ import gql from 'graphql-tag';
 import _ from 'lodash';
 import Modal from 'ModalWrapper';
 import React, { useContext, useState } from 'react';
-import { Mutation, Query, useQuery } from 'react-apollo';
+import { Mutation, useQuery } from 'react-apollo';
 import { animated, config, useSpring } from 'react-spring';
 import styled from 'styled-components';
+import Spinner from 'utils/spinner';
 import FavoriteBadge from '../elements/Badge';
 import { FilterFieldContext } from '../globalState/FilterContext';
 //import format from 'date-fns/format';
 import { distanceInWordsToNow, format } from '../utils/format';
 import { DashBoardContext } from './../globalState/Provider';
 import TenantLogs from './TenantLogs';
-import Spinner from 'utils/spinner';
+import SearchBar from 'common/SearchBar';
 
 const ALL_TENANTS = gql`
   query q {
@@ -53,7 +54,16 @@ const ALL_TENANTS = gql`
 const MUTATION_MARK_LIVE = gql`
   mutation MUTATION_MARK_LIVE($input: CustomerStatusInput) {
     markLive(input: $input) {
+      id
+      farm
       name
+      version
+      customerid
+      customer {
+        name
+      }
+      lastupdated
+      live
     }
   }
 `;
@@ -181,14 +191,13 @@ const TenantCard = ({
   classes,
   customer,
   tenants,
-  live = false,
+  live,
   role = 'Guest',
   onStatusChange = () => console.log('change')
 }) => {
-  const [isLive, setLive] = React.useState(live || false);
+  const [isLive, setLive] = React.useState(live);
   const max = _.maxBy(tenants, t => format(t.lastupdated, 'YYYYMMDD')).lastupdated;
-
-  //console.log(dbctx);
+  if (customer === 'Azteka Consulting GmbH') console.log(customer, { isLive }, live);
   return (
     <Card className={customer === 'Infor' ? classes.card2 : classes.card}>
       <CardContent>
@@ -196,7 +205,7 @@ const TenantCard = ({
           {/* <Typography gutterBottom variant="h5" component="H2"> */}
           <H2>{customer}</H2>
           {/* </Typography> */}
-          <FavoriteBadge isVisible={isLive}>Live</FavoriteBadge>
+          <FavoriteBadge isVisible={live}>Live</FavoriteBadge>
         </Header>
         <Typography className={classes.pos} color="textSecondary">
           {tenants.length > 0 && tenants[0].farm}
@@ -224,7 +233,7 @@ const TenantCard = ({
           <Mutation mutation={MUTATION_MARK_LIVE}>
             {mutate => (
               <Switch
-                checked={isLive}
+                checked={live}
                 onChange={() => {
                   // console.log("change" + tenants[0].customerid);
                   setLive(prev => {
@@ -376,6 +385,8 @@ const TenantList = props => {
   const [showFilterDialog, toggleShowFilterDialog] = useState(false);
   const [showLogs, setShowLogs] = useState(false);
   const [counter, setCounter] = useState(0);
+
+  console.log({ counter });
   const { x } = useSpring({
     x: showFilterDialog ? 15 : 0,
     config: config.wobbly
@@ -454,6 +465,10 @@ const TenantList = props => {
                 Logs
               </Button>
             </Typography>
+            {/* <SearchBar
+              hintText="Filter on Farm, Tenant or Version"
+              onChange={val => console.log(val)}
+            ></SearchBar> */}
             <Button variant="contained" onClick={() => toggleShowFilterDialog(!showFilterDialog)}>
               Filter
             </Button>
@@ -492,8 +507,8 @@ const TenantList = props => {
         <div className={classes.flex}>
           {uniqueCustomers.map((customer, index) => {
             const sub = filteredTenants.filter(o => o.customer.name === customer);
-
             const liveCust = sub[0].live === 1 ? true : false;
+            if (customer === 'Azteka Consulting GmbH') console.log('👍', customer, liveCust, sub);
             return (
               <TenantCard
                 key={index}
