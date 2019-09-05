@@ -238,14 +238,14 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
             description="All Incidents with a status of On Hold By Customer with no or an Expired Action date"
           />
 
-          <BacklogTable
+          {/* <BacklogTable
             classes={classes}
             backlog={data.solution_proposed_cloud}
             title="Solution Proposed"
             description={`All Incidents with a status of Solution Proposed not updated for ${
               params['N_SOLUTIONPROPOSED']
             } days or more`}
-          />
+          /> */}
 
           <BacklogTable
             classes={classes}
@@ -349,14 +349,14 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
             title="On Hold"
             description="All Incidents with a status of On Hold By Customer with no or an Expired Action date"
           />
-          <BacklogTable
+          {/* <BacklogTable
             classes={classes}
             backlog={data.solution_proposed}
             title="Solution Proposed"
             description={`All Incidents with a status of Solution Proposed not updated for ${
               params['N_SOLUTIONPROPOSED']
             } days or more`}
-          />
+          /> */}
           <BacklogTable
             classes={classes}
             backlog={data.awaiting_customer}
