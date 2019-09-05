@@ -1,8 +1,8 @@
-import { TenantLogsWithData } from 'pages/TenantLogs';
 import React from 'react';
 import { withRouter } from 'react-router';
 import { Route, Switch } from 'react-router-dom';
 import Basic from 'stats/Basic';
+import { TenantLogsWithData } from 'tenants/TenantLogs';
 import RequireAuth, { AuthRoute, EnhancedRoute } from './auth/require_auth';
 import Signin from './auth/signin';
 import SigninWithPIN from './auth/SigninWithPIN';
@@ -29,6 +29,7 @@ import { UserActivity } from './pages/testActivity';
 import VideoPage from './pages/Videos';
 import { Parameters } from './stats/Parameters';
 import PriorityDashboard from './stats/PriorityDashboard';
+import Details from './tenants/details/index';
 import TestLogin from './TestLogin';
 import { UserProfileComponent } from './User';
 import UserPermissions from './UserPermissions';
@@ -79,7 +80,7 @@ const StudentListContainer = DynamicImport(() => import('./courses/StudentTableN
 const StudentView = DynamicImport(() => import('./courses/StudentView'));
 
 const AddPlannedCourseRequest = DynamicImport(() => import('./courses/AddPlannedCourseRequest'));
-const TenantList = DynamicImport(() => import('./pages/TenantList'));
+const TenantPage = DynamicImport(() => import('./pages/TenantPage'));
 const DonutChart = DynamicImport(() => import('./charts/DonutChart'));
 const VSummaryChart = DynamicImport(() => import('./charts/VSummaryChart'));
 
@@ -97,6 +98,7 @@ function AppRoutes(props) {
   return (
     <Switch>
       <Route exact path="/tenantlogs" component={TenantLogsWithData} />
+      <Route exact path="/details/:id" component={Details} />
       <AuthRoute
         exact
         path="/statsmain"
@@ -153,7 +155,7 @@ function AppRoutes(props) {
         path="/supportcard"
         component={SupportCards}
       />
-      <Route exact path="/tenant" component={TenantList} />
+      <Route exact path="/tenant" component={TenantPage} />
       />
       <Route exact path="/region/:region" component={DashBoardContainer} user={user} />
       <Route exact path="/team/:team" component={DashBoardStatsNew} />
