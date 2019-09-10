@@ -32,6 +32,8 @@ export const H2 = styled.h2`
   font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
   font-weight: 400;
   line-height: 1.33;
+  font-size: 1rem;
+  font-family: 'Poppins';
 `;
 export const TextSpan = styled.span`
   padding-top: 2px;

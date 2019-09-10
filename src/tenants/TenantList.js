@@ -36,14 +36,17 @@ const styles = theme => ({
     fontWeight: 800
   },
   card: {
-    minWidth: 275,
+    minWidth: 350,
     margin: 10,
-    width: 325,
+    width: 355,
+    // height: 350,
     display: 'flex',
     flexDirection: 'column',
+
     justifyContent: 'space-between',
-    backgroundImage: 'linear-gradient(to right bottom, rgb(128, 216, 255), white)',
-    borderRadius: 14
+    // backgroundImage: 'linear-gradient(to right bottom, rgb(128, 216, 255), white)',
+    backgroundImage: 'linear-gradient(to right bottom,rgba(29, 161, 242, 0.4), white)',
+    borderRadius: 4
   },
   card2: {
     minWidth: 275,
@@ -51,7 +54,46 @@ const styles = theme => ({
   },
   chip: {
     margin: theme.spacing(1),
-    marginBottom: 2
+    marginBottom: 2,
+    // background: 'white',
+    // border: '1px solid black',
+    borderRadius: 5,
+    // color: 'black',
+    width: 137,
+    border: '1px solid rgb(117, 117, 117)',
+    color: 'rgb(117, 117, 117)',
+    background: 'transparent'
+  },
+  live: {
+    background: 'rgb(46, 202, 19)',
+    border: '5px solid rgba(46, 202, 19, 1)'
+  },
+  description: {
+    paddingBottom: 2,
+    maxHeight: 50,
+    overflow: 'hidden'
+  },
+  header: {
+    fontWeight: 500,
+    fontSize: '18px',
+    letterSpacing: '-0.06px',
+    lineHeight: '24px',
+    minHeight: 60,
+    padding: 0
+  },
+  filterButton: {
+    marginLeft: 'auto'
+  },
+  notlive: {
+    background: 'transparent',
+    border: '5px solid rgba(46, 202, 19, 1)'
+  },
+  tags: {
+    padding: theme.spacing(0, 1, 1, 1),
+    marginBottom: 2,
+    '& > * + *': {
+      marginLeft: theme.spacing(1)
+    }
   },
   avatar: {
     margin: 10
@@ -278,12 +320,14 @@ const TenantList = props => {
           {uniqueCustomers.map((customer, index) => {
             const sub = filteredTenants.filter(o => o.customer.name === customer);
             const liveCust = sub[0].live === 1 ? true : false;
+            const customerid = sub[0].customerid;
             if (customer === 'Azteka Consulting GmbH') console.log('👍', customer, liveCust, sub);
             return (
               <TenantCard
                 key={index}
                 classes={classes}
                 customer={customer}
+                customerid={customerid}
                 tenants={sub}
                 role={role}
                 live={liveCust}

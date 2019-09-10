@@ -9,6 +9,7 @@ export const ALL_TENANTS = gql`
       customerid
       customer {
         name
+        number
       }
       lastupdated
       live
@@ -21,6 +22,22 @@ export const ALL_TENANTS = gql`
       id
       date
       log
+    }
+  }
+`;
+
+export const QUERY_TENANT_DETAIL = gql`
+  query QUERY_TENANT_DETAIL($input: TenantCustomerDetailsWhereInput) {
+    tenantcustomerdetail(input: $input) {
+      id
+      customer {
+        name
+      }
+      customerid
+      golivedate
+      golivecomments
+      csm
+      pm
     }
   }
 `;

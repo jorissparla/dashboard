@@ -26,6 +26,7 @@ import { getMainDefinition } from 'apollo-utilities';
 import ContextProvider from './globalState';
 import { main } from './styles/globalstyles';
 import Spinner from 'utils/spinner';
+import { palette } from '@material-ui/system';
 // import { SharedSnackbarProvider } from './globalState/SharedSnackbar.context';
 
 const {
@@ -88,6 +89,34 @@ const muiTheme = createMuiTheme({
   palette: {
     primary: {
       main: '#524763'
+    }
+  },
+  typography: {
+    h4: {
+      // color: palette.text.primary,
+      fontWeight: 500,
+      fontSize: '18px',
+      letterSpacing: '-0.06px',
+      lineHeight: '24px'
+    },
+    h5: {
+      // color: palette.text.primary,
+      fontWeight: 500,
+      fontSize: '16px',
+      letterSpacing: '-0.05px',
+      lineHeight: '20px'
+    },
+    body2: {
+      // color: palette.text.secondary,
+      fontSize: '12px',
+      letterSpacing: '-0.04px',
+      lineHeight: '18px'
+    },
+    subtitle2: {
+      fontWeight: 400,
+      fontSize: '14px',
+      letterSpacing: '-0.05px',
+      lineHeight: '21px'
     }
   }
 });

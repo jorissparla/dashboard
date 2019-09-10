@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/styles';
 import { Grid, Button } from '@material-ui/core';
 import FilterListIcon from '@material-ui/icons/FilterList';
 
-import { Filter } from './components';
+import { Filter } from '../details/components';
 
 const useStyles = makeStyles(theme => ({
   root: {
