@@ -18,7 +18,7 @@ import { FilterFieldContext } from '../globalState/FilterContext';
 import { distanceInWordsToNow, format } from '../utils/format';
 import { DashBoardContext } from '../globalState/Provider';
 import TenantLogs from './TenantLogs';
-import { ALL_TENANTS } from './TenantQueries';
+import { ALL_TENANTS, QUERY_ALL_TENANT_DETAILS } from './TenantQueries';
 import { Main, Article, TextSpan } from './TenantStyledElements';
 import { TenantCard } from './TenantCard';
 import TenantCustomerDetailsForm from './TenantCustomerDetailsForm';
@@ -38,7 +38,7 @@ const styles = theme => ({
   card: {
     minWidth: 350,
     margin: 10,
-    width: 355,
+    width: 380,
     // height: 350,
     display: 'flex',
     flexDirection: 'column',
@@ -89,7 +89,9 @@ const styles = theme => ({
     border: '5px solid rgba(46, 202, 19, 1)'
   },
   tags: {
-    padding: theme.spacing(0, 1, 1, 1),
+    paddingTop: 2,
+    paddingBottom: 10,
+
     marginBottom: 2,
     '& > * + *': {
       marginLeft: theme.spacing(1)
@@ -291,10 +293,13 @@ const TenantList = props => {
   };
 
   const { data, loading } = useQuery(ALL_TENANTS);
-  if (loading) {
+  const { data: details, loading: detailsloading } = useQuery(QUERY_ALL_TENANT_DETAILS);
+
+  if (loading || detailsloading) {
     return <Spinner />;
   }
   const { tenants, updatestatus, tenantlogs } = data;
+  const { tenantcustomerdetails } = details;
   const { updatedAt } = updatestatus;
   const filteredTenants = tenantsByCustomer2(tenants, fields, flip);
   // console.log("filterTenants", filteredTenants);
@@ -321,6 +326,10 @@ const TenantList = props => {
             const sub = filteredTenants.filter(o => o.customer.name === customer);
             const liveCust = sub[0].live === 1 ? true : false;
             const customerid = sub[0].customerid;
+            const tenantdetails = tenantcustomerdetails.filter(d => d.customerid === customerid);
+            if (tenantdetails.length) {
+            } else {
+            }
             if (customer === 'Azteka Consulting GmbH') console.log('👍', customer, liveCust, sub);
             return (
               <TenantCard
@@ -329,6 +338,7 @@ const TenantList = props => {
                 customer={customer}
                 customerid={customerid}
                 tenants={sub}
+                tenantdetails={tenantdetails.length > 0 ? tenantdetails[0] : null}
                 role={role}
                 live={liveCust}
                 onStatusChange={() => setCounter(counter + 1)}

@@ -13,11 +13,11 @@ const useStyles = makeStyles(theme => ({
     flexShrink: 0,
     borderRadius: theme.shape.borderRadius,
     lineHeight: '10px',
-    fontSize: '10px',
+    fontSize: '10.5px',
     height: 20,
     minWidth: 20,
     whiteSpace: 'nowrap',
-    padding: theme.spacing(0.5, 1),
+    padding: theme.spacing(0.5, 0.3),
     paddingBottom: 2
   },
   rounded: {

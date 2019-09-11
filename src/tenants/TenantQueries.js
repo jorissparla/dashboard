@@ -38,6 +38,40 @@ export const QUERY_TENANT_DETAIL = gql`
       golivecomments
       csm
       pm
+      info
+    }
+  }
+`;
+export const QUERY_ALL_TENANT_DETAILS = gql`
+  query QUERY_ALL_TENANT_DETAILS {
+    tenantcustomerdetails {
+      id
+      customer {
+        name
+      }
+      customerid
+      golivedate
+      golivecomments
+      csm
+      pm
+      info
+    }
+  }
+`;
+
+export const MUTATION_UPDATE_DETAIL = gql`
+  mutation updateTenantCustomerDetails($input: TenantCustomerDetailsInput) {
+    updateTenantCustomerDetails(input: $input) {
+      id
+      customer {
+        name
+      }
+      customerid
+      golivedate
+      golivecomments
+      csm
+      pm
+      info
     }
   }
 `;
