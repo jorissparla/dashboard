@@ -50,16 +50,16 @@ ValueLabelComponent.propTypes = {
 const marks = [
   {
     value: 0,
-    label: 'Stable'
+    label: 'NORMAL'
   },
   {
     value: 50,
-    label: 'Watch'
+    label: 'WATCH'
   },
 
   {
     value: 100,
-    label: 'Hot'
+    label: 'ALERT'
   }
 ];
 
@@ -93,11 +93,11 @@ const TemperatureSlider = withStyles({
   }
 })(Slider);
 
-export default function CustomizedSlider(initialValue = 'Stable', onChange) {
+export default function CustomizedSlider({ initialValue = 'Stable', onChange }) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   React.useEffect(() => {
-    const temp = find(m => m.label === initialValue);
+    const temp = marks.find(m => m.label === initialValue);
     setValue(temp.value);
   }, []);
   const handleChange = (_, v) => {
@@ -108,7 +108,7 @@ export default function CustomizedSlider(initialValue = 'Stable', onChange) {
     onChange(temp.label);
   };
   return (
-    <Paper className={classes.root}>
+    <div className={classes.root}>
       <Typography gutterBottom>Customer Temperature</Typography>
       <TemperatureSlider
         onChange={handleChange}
@@ -118,6 +118,6 @@ export default function CustomizedSlider(initialValue = 'Stable', onChange) {
         marks={marks}
         value={value}
       />
-    </Paper>
+    </div>
   );
 }

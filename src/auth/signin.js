@@ -21,6 +21,9 @@ export const MUTATION_SIGNIN = gql`
         email
         role
         image
+        permissions {
+          permission
+        }
       }
       error
     }

@@ -13,17 +13,23 @@ interface User {
   permissions: { permission: string }[];
 }
 
+enum Empty {
+  empty
+}
+
 interface UserContextType {
   user: User | null;
-  login: (email: string, password: string) => any;
-  logout: () => any;
+  login: (email: string, password: string) => void;
+  logout: () => void;
   isAuthenticated: boolean;
+  hasPermissions: (user: User, roles: string[]) => boolean;
 }
 export const UserContext = React.createContext<UserContextType>({
   user: null,
   login: () => null,
   logout: () => null,
-  isAuthenticated: false
+  isAuthenticated: false,
+  hasPermissions: () => false
 });
 
 //test
@@ -43,6 +49,15 @@ export const UserContextProvider: React.FC<{ children: any }> = ({ children }) =
   }, []);
   function isAuthenticated() {
     return user ? true : false;
+  }
+  function hasPermissions(user: User, roles: string[]): boolean {
+    if (!user) return false;
+    const permissions = user.permissions;
+    if (!user.permissions) return false;
+    const found = user.permissions.filter(u => roles.includes(u.permission));
+    if (found.length > 0) {
+      return true;
+    } else return false;
   }
   async function login(email: string, password: string) {
     client
@@ -65,7 +80,9 @@ export const UserContextProvider: React.FC<{ children: any }> = ({ children }) =
     });
   }
   return (
-    <UserContext.Provider value={{ user, login, logout, isAuthenticated: isAuthenticated() }}>
+    <UserContext.Provider
+      value={{ user, login, logout, isAuthenticated: isAuthenticated(), hasPermissions }}
+    >
       {children}
     </UserContext.Provider>
   );

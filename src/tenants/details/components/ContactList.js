@@ -1,25 +1,22 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import PerfectScrollbar from 'react-perfect-scrollbar';
-import { makeStyles } from '@material-ui/styles';
 import {
-  Card,
   Button,
-  CardHeader,
+  Card,
   CardActions,
-  Grid,
   CardContent,
+  CardHeader,
   Checkbox,
   Divider,
+  Grid,
   Table,
-  TableHead,
   TableBody,
-  TableRow,
   TableCell,
-  Modal,
-  Backdrop
+  TableHead,
+  TableRow
 } from '@material-ui/core';
+import { makeStyles } from '@material-ui/styles';
+import PropTypes from 'prop-types';
+import React from 'react';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 
 const useStyles = makeStyles(theme => ({
   root: {

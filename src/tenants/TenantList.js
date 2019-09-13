@@ -23,6 +23,7 @@ import { Main, Article, TextSpan } from './TenantStyledElements';
 import { TenantCard } from './TenantCard';
 import TenantCustomerDetailsForm from './TenantCustomerDetailsForm';
 import FancyFilter from './new/FancyFilter';
+import Loader from './../utils/Loader';
 
 const styles = theme => ({
   root: {
@@ -68,6 +69,19 @@ const styles = theme => ({
     background: 'rgb(46, 202, 19)',
     border: '5px solid rgba(46, 202, 19, 1)'
   },
+  '@keyframes blinker': {
+    from: { opacity: 1 },
+    to: { opacity: 0 }
+  },
+  watch: {
+    background: 'rgb(251, 140, 0) !important',
+    border: '10px solid rgb(251, 140, 0) !important'
+  },
+  alert: {
+    background: 'rgb(229, 57, 53) !important',
+    border: '10px solid rgb(229, 57, 53) !important'
+  },
+
   description: {
     paddingBottom: 2,
     maxHeight: 50,
@@ -298,6 +312,10 @@ const TenantList = props => {
   if (loading || detailsloading) {
     return <Spinner />;
   }
+
+  // if (loading || detailsloading) {
+  //   return <Loader loading={loading} />;
+  // }
   const { tenants, updatestatus, tenantlogs } = data;
   const { tenantcustomerdetails } = details;
   const { updatedAt } = updatestatus;
@@ -308,6 +326,7 @@ const TenantList = props => {
     .filter((ten, i, all) => all.indexOf(ten) === i);
   return (
     <Main>
+      <Loader loading={loading} />
       <animated.div
         style={{
           width: x.interpolate(x => `${100 - x}vw`)

@@ -101,7 +101,7 @@ export const FileUploadComponent: React.FC<Props> = ({
   link = PATH_PREFIX,
   classes,
   readOnly,
-  setFile = () => null
+  setFile
 }) => {
   const [uploadFileMutation, { data }] = useMutation(UPLOAD_MUTATION);
   const ref = useRef(null);

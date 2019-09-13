@@ -39,6 +39,7 @@ export const QUERY_TENANT_DETAIL = gql`
       csm
       pm
       info
+      temperature
     }
   }
 `;
@@ -55,6 +56,7 @@ export const QUERY_ALL_TENANT_DETAILS = gql`
       csm
       pm
       info
+      temperature
     }
   }
 `;
@@ -72,6 +74,7 @@ export const MUTATION_UPDATE_DETAIL = gql`
       csm
       pm
       info
+      temperature
     }
   }
 `;

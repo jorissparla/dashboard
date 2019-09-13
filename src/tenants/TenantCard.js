@@ -26,6 +26,9 @@ import EditTenantDetails from './details/components/EditTenant';
 import { Header, H2 } from './TenantStyledElements';
 import Spinner from 'utils/spinner';
 import EditIcon from '@material-ui/icons/Edit';
+import clsx from 'clsx';
+import classNames from 'classnames';
+import { UserContext } from 'globalState/UserProvider';
 export const TenantCard = ({
   classes,
   customer,
@@ -39,7 +42,13 @@ export const TenantCard = ({
 }) => {
   const [isLive, setLive] = React.useState(live);
   const [isOpen, setisOpened] = React.useState(false);
+  const userContext = React.useContext(UserContext);
+  const { user, login, hasPermissions } = userContext;
 
+  const isTenantEditor = hasPermissions(user, ['TENANTEDIT', 'ADMIN']);
+  const isAdmin = hasPermissions(user, ['ADMIN']);
+  console.log(isTenantEditor);
+  // debugger;
   // const { data, loading } = useQuery(QUERY_TENANT_DETAIL, { variables: { input: { customerid } } });
   // if (loading) {
   //   return <Spinner />;
@@ -58,18 +67,24 @@ export const TenantCard = ({
       golivecomments: '',
       csm: '',
       pm: '',
-      info: ''
+      info: '',
+      temperature: 'NORMAL'
     };
   }
-  // console.log(customer, tenantcustomerdetail);
   let golivedate = tenantcustomerdetail.golivedate;
   if (golivedate && golivedate !== '1568419200000' && golivedate !== '0') {
     golivedate = format(tenantcustomerdetail.golivedate, 'MMM, DD, YYYY');
   } else golivedate = 'Date is not known';
-
+  const temp = tenantcustomerdetail.temperature;
   const max = _.maxBy(tenants, t => format(t.lastupdated, 'YYYYMMDD')).lastupdated;
   const max2 = distanceInWordsToNow(max);
   if (customer === 'Azteka Consulting GmbH') console.log(customer, { isLive }, live);
+  const avaclass = classNames({
+    [classes.alert]: temp === 'ALERT' ? true : false,
+    [classes.watch]: temp === 'WATCH' ? true : false,
+    [classes.live]: live,
+    [classes.notlive]: !live
+  });
   return (
     <>
       <Card className={customer === 'Infor' ? classes.card2 : classes.card}>
@@ -82,7 +97,8 @@ export const TenantCard = ({
           <CardHeader
             className={classes.header}
             avatar={
-              <Avatar className={live ? classes.live : classes.notlive} alt="Author">
+              // <Avatar className={live ? classes.live : classes.notlive} alt="Author">
+              <Avatar className={avaclass} alt="Author" title={temp}>
                 {live ? 'Live' : ''}
               </Avatar>
             }
@@ -155,12 +171,12 @@ export const TenantCard = ({
             <ListIcon className={classes.filterButton} />
             Incidents
           </Button>
-          {role === 'Admin' && (
+          {isTenantEditor && (
             <Button variant="outlined" color="primary" onClick={() => setisOpened(true)}>
               Edit
             </Button>
           )}
-          {role === 'Admin' && (
+          {isAdmin && (
             <Mutation mutation={MUTATION_MARK_LIVE}>
               {mutate => (
                 <Switch

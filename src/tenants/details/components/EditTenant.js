@@ -18,6 +18,7 @@ import { useMutation } from 'react-apollo';
 // import SuccessSnackbar from './SuccessSnackbar';
 import { MUTATION_UPDATE_DETAIL } from './../../TenantQueries';
 import { format } from 'utils/format';
+import TemperatureSlider from './TemperatureSlider';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -40,12 +41,13 @@ const EditTenantDetails = props => {
   const classes = useStyles();
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [values, setValues] = useState({
-    csm: profile.csm,
-    pm: profile.pm,
+    csm: profile.csm || '',
+    pm: profile.pm || '',
     customerid: profile.customerid,
     golivedate: format(profile.golivedate, 'YYYY-MM-DD'),
     golivecomments: profile.golivecomments,
-    info: profile.info
+    info: profile.info,
+    temperature: profile.temperature
   });
 
   const [updateTenantDetailsMutation] = useMutation(MUTATION_UPDATE_DETAIL);
@@ -68,6 +70,9 @@ const EditTenantDetails = props => {
     // setOpenSnackbar(true);
   };
 
+  const handleTemperatureChange = value => {
+    setValues({ ...values, temperature: value });
+  };
   const handleSnackbarClose = () => {
     setOpenSnackbar(false);
   };
@@ -140,6 +145,12 @@ const EditTenantDetails = props => {
                 variant="outlined"
               />
             </Grid> */}
+            <Grid item md={9} xs={12}>
+              <TemperatureSlider
+                initialValue={profile.temperature}
+                onChange={handleTemperatureChange}
+              />
+            </Grid>
           </Grid>
         </CardContent>
         <Divider />
