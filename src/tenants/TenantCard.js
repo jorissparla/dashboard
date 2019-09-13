@@ -47,12 +47,7 @@ export const TenantCard = ({
 
   const isTenantEditor = hasPermissions(user, ['TENANTEDIT', 'ADMIN']);
   const isAdmin = hasPermissions(user, ['ADMIN']);
-  console.log(isTenantEditor);
-  // debugger;
-  // const { data, loading } = useQuery(QUERY_TENANT_DETAIL, { variables: { input: { customerid } } });
-  // if (loading) {
-  //   return <Spinner />;
-  // }
+
   let tenantcustomerdetail;
   if (customer !== 'Infor' && tenantdetails) {
     tenantcustomerdetail = tenantdetails;
@@ -127,9 +122,13 @@ export const TenantCard = ({
           </Typography>
           <div className={classes.description}>
             <Typography color="textSecondary" variant="subtitle2">
-              {tenantcustomerdetail.golivecomments
-                ? tenantcustomerdetail.golivecomments
-                : 'Information about the customer will be shown here'}
+              {tenantcustomerdetail.golivecomments.trim() ? (
+                tenantcustomerdetail.golivecomments
+              ) : (
+                <span className={classes.descriptionblank}>
+                  Customer Information will be shown here
+                </span>
+              )}
             </Typography>
           </div>
           <div className={classes.tags}>
@@ -138,7 +137,6 @@ export const TenantCard = ({
               if (customer === 'Infor') {
                 shortname = name;
               } else shortname = name.split('_')[1];
-              console.log(name);
               const color = shortname.endsWith('PRD')
                 ? 'rgba(46, 202, 19, 1)'
                 : shortname.endsWith('TRN')
@@ -149,13 +147,13 @@ export const TenantCard = ({
           </div>
           <Divider />
           <Grid alignItems="center" container justify="space-between" spacing={3}>
-            <Grid item>
+            <Grid item className={classes.csm}>
               <Typography variant="h5">PM</Typography>
               <Typography variant="body2">
                 {tenantcustomerdetail.pm ? tenantcustomerdetail.pm : 'PM not entered'}
               </Typography>
             </Grid>
-            <Grid item>
+            <Grid item className={classes.csm}>
               <Typography variant="h5">CSM</Typography>
               <Typography variant="body2">
                 {' '}

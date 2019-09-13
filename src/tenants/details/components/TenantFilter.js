@@ -139,6 +139,7 @@ const Filter = props => {
     onFilter && onFilter(values);
   };
 
+  const customerStatusOptions = ['', 'NORMAL', 'WATCH', 'ALERT'];
   return (
     <Drawer
       anchor="right"
@@ -221,6 +222,28 @@ const Filter = props => {
                     value={values.farmName}
                     variant="outlined"
                   />
+                </div>
+                <div className={classes.formGroup}>
+                  <TextField
+                    className={classes.field}
+                    fullWidth
+                    label="Customer Temperature"
+                    margin="dense"
+                    name="temperature"
+                    onChange={event => handleFieldChange(event, 'temperature', event.target.value)}
+                    select
+                    // eslint-disable-next-line react/jsx-sort-props
+                    SelectProps={{ native: true }}
+                    value={values.temperature}
+                    variant="outlined"
+                  >
+                    <option disabled value="" />
+                    {customerStatusOptions.map(option => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </TextField>
                 </div>
               </div>
             </div>

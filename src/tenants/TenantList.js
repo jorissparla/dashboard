@@ -7,7 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import _ from 'lodash';
 import Modal from 'ModalWrapper';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useQuery } from 'react-apollo';
 import { animated, config, useSpring } from 'react-spring';
 import styled from 'styled-components';
@@ -37,7 +37,7 @@ const styles = theme => ({
     fontWeight: 800
   },
   card: {
-    minWidth: 350,
+    minWidth: 390,
     margin: 10,
     width: 380,
     // height: 350,
@@ -86,6 +86,12 @@ const styles = theme => ({
     paddingBottom: 2,
     maxHeight: 50,
     overflow: 'hidden'
+  },
+  descriptionblank: {
+    paddingBottom: 2,
+    maxHeight: 50,
+    overflow: 'hidden',
+    color: 'transparent'
   },
   header: {
     fontWeight: 500,
@@ -155,6 +161,9 @@ const styles = theme => ({
   },
   spaceFooter: {
     justifyContent: 'space-between'
+  },
+  csm: {
+    maxWidth: 120
   }
 });
 
@@ -259,18 +268,24 @@ const tenantsByCustomer = (tenants, searchText) =>
     .sortBy(o => o.customer.name)
 
     .value();
-const tenantsByCustomer2 = (tenants, fields) => {
-  // console.log("tenantsByCustomer2", fields);
+const filterTenantsByCustomerFarmVersion = (tenants, fields, details) => {
+  // console.log("filterTenantsByCustomerFarmVersion", fields);
   // const { customer = '', farm = '', version = '' } = fields;
   const {
     customerName = '',
     farmName = '',
     tenantVersion = '',
     tenantName = '',
-    isLive = false
+    isLive = false,
+    temperature
   } = fields;
   // console.log({ customer });
-  return _.chain(tenants)
+  let filteredCustomerNames = null;
+  if (temperature && details) {
+    filteredCustomerNames = details.filter(detail => detail.temperature === temperature);
+  }
+  console.log({ filteredCustomerNames });
+  const retValue = _.chain(tenants)
     .filter(o => o.customer.name !== 'Infor')
 
     .filter(t => t.customer.name.toUpperCase().includes(customerName.toUpperCase()))
@@ -280,6 +295,11 @@ const tenantsByCustomer2 = (tenants, fields) => {
     .filter(t => (isLive ? t.live === 1 : true))
     .sortBy(o => o.customer.name)
     .value();
+  if (temperature && details) {
+    return retValue.filter(t =>
+      filteredCustomerNames.find(cn => cn.customer.name === t.customer.name)
+    );
+  } else return retValue;
 };
 
 const inforTenant = tenants => tenants.filter(o => o.customer.name === 'Infor');
@@ -294,6 +314,7 @@ const TenantList = props => {
   const [showLogs, setShowLogs] = useState(false);
   const [isShowingDetails, toggleShowDetails] = useState(false);
   const [counter, setCounter] = useState(0);
+  const happyPress = useKeyPress('C');
 
   console.log({ counter });
   const { x } = useSpring({
@@ -306,6 +327,14 @@ const TenantList = props => {
     setFields(values);
   };
 
+  if (happyPress) {
+    console.log('👍👍👍👍👍');
+    // clearFields();
+  }
+
+  useEffect(() => {
+    clearFields();
+  }, [happyPress]);
   const { data, loading } = useQuery(ALL_TENANTS);
   const { data: details, loading: detailsloading } = useQuery(QUERY_ALL_TENANT_DETAILS);
 
@@ -319,13 +348,21 @@ const TenantList = props => {
   const { tenants, updatestatus, tenantlogs } = data;
   const { tenantcustomerdetails } = details;
   const { updatedAt } = updatestatus;
-  const filteredTenants = tenantsByCustomer2(tenants, fields, flip);
+  const filteredTenants = filterTenantsByCustomerFarmVersion(
+    tenants,
+    fields,
+    details.tenantcustomerdetails
+  );
   // console.log("filterTenants", filteredTenants);
   const uniqueCustomers = filteredTenants
     .map(({ farm, customer: { name } }) => name)
     .filter((ten, i, all) => all.indexOf(ten) === i);
   return (
-    <Main>
+    <Main
+      onKeyDown={e => {
+        console.log(e, e.keyCode);
+      }}
+    >
       <Loader loading={loading} />
       <animated.div
         style={{
@@ -340,7 +377,12 @@ const TenantList = props => {
           tenants={tenants}
         />
 
-        <div className={classes.flex}>
+        <div
+          className={classes.flex}
+          onKeyDown={e => {
+            console.log(e, e.keyCode);
+          }}
+        >
           {uniqueCustomers.map((customer, index) => {
             const sub = filteredTenants.filter(o => o.customer.name === customer);
             const liveCust = sub[0].live === 1 ? true : false;
@@ -403,7 +445,7 @@ export const TenantListHeader = ({
     tenants.map(({ farm, tenant }) => ({ farm, tenant })),
     'farm'
   );
-  // const filteredTenants = tenantsByCustomer2(tenants, fields, flip);
+  // const filteredTenants = filterTenantsByCustomerFarmVersion(tenants, fields, flip);
   // console.log("filterTenants", filteredTenants);
   const uniqueCustomers = tenants
     .map(({ farm, customer: { name } }) => name)
@@ -499,5 +541,37 @@ export const TenantListHeader = ({
     </Article>
   );
 };
+
+function useKeyPress(targetKey) {
+  // State for keeping track of whether key is pressed
+  const [keyPressed, setKeyPressed] = useState(false);
+
+  // If pressed key is our target key then set to true
+  function downHandler({ key }) {
+    if (key === targetKey) {
+      setKeyPressed(true);
+    }
+  }
+
+  // If released key is our target key then set to false
+  const upHandler = ({ key }) => {
+    if (key === targetKey) {
+      setKeyPressed(false);
+    }
+  };
+
+  // Add event listeners
+  useEffect(() => {
+    window.addEventListener('keydown', downHandler);
+    window.addEventListener('keyup', upHandler);
+    // Remove event listeners on cleanup
+    return () => {
+      window.removeEventListener('keydown', downHandler);
+      window.removeEventListener('keyup', upHandler);
+    };
+  }, []); // Empty array ensures that effect is only run on mount and unmount
+
+  return keyPressed;
+}
 
 export default withStyles(styles)(TenantList);

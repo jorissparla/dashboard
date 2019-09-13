@@ -160,7 +160,7 @@ const Filter = props => {
     onFilter && onFilter(values);
   };
 
-  const paymentStatusOptions = ['Pending', 'Canceled', 'Completed', 'Rejected'];
+  const customerStatus = ['NORMAL', 'WATCH', 'ALERT'];
   const customerAgeOption = ['18 - 30', '30 - 45', '50 - 60', '60+'];
 
   return (
