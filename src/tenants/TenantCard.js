@@ -85,6 +85,22 @@ export const TenantCard = ({
     [classes.live]: live,
     [classes.notlive]: !live
   });
+
+  const indexObj = {
+    PRD: 1,
+    TRN: 2,
+    TST: 3,
+    DEV: 4,
+    DEM: 5
+  };
+  const tags = tenants
+    .map(t => {
+      const postfix = t.name.split('_')[1];
+      const index = indexObj[postfix] || 999;
+      return { index, ...t };
+    })
+    .sort((a, b) => (a.index > b.index ? 1 : -1));
+
   return (
     <>
       <Card className={customer === 'Infor' ? classes.card2 : classes.card}>
@@ -117,23 +133,18 @@ export const TenantCard = ({
             </Typography>
           </div>
           <div className={classes.tags}>
-            {tenants.map(({ id, name, version }) => {
-              const shortname = name.split('_')[1];
-              const color =
-                shortname === 'PRD'
-                  ? 'rgba(46, 202, 19, 1)'
-                  : shortname === 'TRN'
-                  ? '#1da1f2'
-                  : 'rgba(0,0,0,0.5)';
-              return (
-                // <Chip
-                //   key={id}
-                //   label={`${shortname}:${version}`}
-                //   className={classes.chip}
-                //   color="primary"
-                // />
-                <Label key={id} color={color}>{`${shortname}:${version}`}</Label>
-              );
+            {tags.map(({ id, name, version }) => {
+              let shortname = '';
+              if (customer === 'Infor') {
+                shortname = name;
+              } else shortname = name.split('_')[1];
+              console.log(name);
+              const color = shortname.endsWith('PRD')
+                ? 'rgba(46, 202, 19, 1)'
+                : shortname.endsWith('TRN')
+                ? '#1da1f2'
+                : 'rgba(0,0,0,0.5)';
+              return <Label key={id} color={color}>{`${shortname}:${version}`}</Label>;
             })}
           </div>
           <Divider />
