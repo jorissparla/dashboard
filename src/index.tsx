@@ -42,8 +42,9 @@ const Global = createGlobalStyle`
 
 const prefix = REACT_APP_HTTP.trim();
 let uri = `${REACT_APP_GRAPHQLSERVER}:${REACT_APP_PORT_GRAPHQL}`;
+const wsuri = prefix === 'https' ? 'wss://' + uri : 'ws://' + uri;
 const wsLink = new WebSocketLink({
-  uri: `ws://${uri}`, // use wss for a secure endpoint
+  uri: wsuri, // use wss for a secure endpoint
   options: {
     reconnect: true
   }
