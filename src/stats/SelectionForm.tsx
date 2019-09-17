@@ -214,6 +214,17 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
           }
           label="InforOS"
         />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={getValue('Xpert')}
+              onChange={() => toggleSet('Xpert')}
+              value="Xpert"
+              color="secondary"
+            />
+          }
+          label="Xpert"
+        />
       </FormGroup>
 
       <div style={{ position: 'relative', right: '-40px' }}>

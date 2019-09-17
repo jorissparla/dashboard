@@ -43,7 +43,7 @@ export const UserContextProvider: React.FC<{ children: any }> = ({ children }) =
         setUser(null);
       } else {
         setUser(result.data.me);
-        console.log('LOgged In successfully');
+        console.log('LOgged In successfully, ', result.data.me);
       }
     });
   }, []);
