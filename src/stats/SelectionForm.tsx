@@ -15,6 +15,7 @@ interface SelectionProps {
   classes: any;
   valuesChanged: any;
   isValidSuperUser: boolean;
+  isXpertOrSwan: boolean;
   onNavigateToParams: () => void;
 
   initialValue: {
@@ -29,6 +30,7 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
   initialValue,
   valuesChanged,
   isValidSuperUser,
+  isXpertOrSwan,
   onNavigateToParams
 }) => {
   const selectionContext = useContext(SelectionContext);
@@ -214,17 +216,32 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
           }
           label="InforOS"
         />
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={getValue('Xpert')}
-              onChange={() => toggleSet('Xpert')}
-              value="Xpert"
-              color="secondary"
-            />
-          }
-          label="Xpert"
-        />
+        {isXpertOrSwan && (
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={getValue('Xpert')}
+                onChange={() => toggleSet('Xpert')}
+                value="Xpert"
+                color="secondary"
+              />
+            }
+            label="Xpert"
+          />
+        )}
+        {isXpertOrSwan && (
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={getValue('Swan')}
+                onChange={() => toggleSet('Swan')}
+                value="Swan"
+                color="secondary"
+              />
+            }
+            label="Swan"
+          />
+        )}
       </FormGroup>
 
       <div style={{ position: 'relative', right: '-40px' }}>

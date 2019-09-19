@@ -164,10 +164,16 @@ const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
   if (!data) return null;
   //const data = getBacklog({ date, owner, products, isValidSuperUser });
   // const currentUser = props.user;
-  console.log('currentUser', data, products);
+  // console.log('currentUser', dauserta, products);
   let enableIt: boolean;
+  let isXpertOrSwan = false;
   if (user && user.permissions) {
     enableIt = user.permissions.some((u: { permission: string }): any => u.permission === 'STATS');
+    if (user.team) {
+      isXpertOrSwan = ['Xpert', 'Swan'].some(
+        item => item.toLowerCase() === user.team.toLowerCase()
+      );
+    }
   } else {
     enableIt = false;
   }
@@ -176,6 +182,7 @@ const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
     <div className={classes.root}>
       <SelectionForm
         isValidSuperUser={isValidSuperUser || enableIt}
+        isXpertOrSwan={isValidSuperUser || isXpertOrSwan}
         onNavigateToParams={() => props.history.push('/myworkparams')}
         classes={props.classes}
         initialValue={{ owner, isCloud, lastUpdated: mostRecentUpdate, actionNeeded: true }}

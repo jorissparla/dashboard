@@ -10,6 +10,7 @@ interface User {
   email: string;
   image: string;
   role: string;
+  team: string;
   permissions: { permission: string }[];
 }
 

@@ -62,6 +62,7 @@ const DataPage: React.FC<{ mostRecentUpdate: string; classes: any }> = ({
           lastUpdated: mostRecentUpdate
         }}
         isValidSuperUser={true}
+        isXpertOrSwan={false}
         valuesChanged={() => null}
         classes={classes}
       />
