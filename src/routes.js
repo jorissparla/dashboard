@@ -34,6 +34,7 @@ import TestLogin from './TestLogin';
 import { UserProfileComponent } from './User';
 import UserPermissions from './UserPermissions';
 import { AddVideo, EditVideo } from './videos/VideoOperations';
+import CustomerFollow from './customerfollow';
 
 const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
 
@@ -97,6 +98,7 @@ function AppRoutes(props) {
 
   return (
     <Switch>
+      <Route exact path="/customers" component={CustomerFollow} />
       <Route exact path="/tenantlogs" component={TenantLogsWithData} />
       <Route exact path="/details/:id" component={Details} />
       <AuthRoute
