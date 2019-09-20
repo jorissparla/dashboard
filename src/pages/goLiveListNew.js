@@ -110,27 +110,6 @@ const GoLiveItem = ({ item, bg = '#ec407a', index, classes }) => {
   );
 };
 
-/* <ListItem
-      key={id}
-      leftAvatar={
-        <Avatar backgroundColor={bg} color="white">
-          {day}
-        </Avatar>
-      }
-      primaryText={
-        <Div>
-          <Span>{`${customername.toUpperCase()}`}</Span>
-          <Mid>{`${region}`}</Mid>
-          <Right>{version}</Right>
-        </Div>
-      }
-      secondaryText={<p>{comments}</p>}
-      secondaryTextLines={2}
-      onClick={() =>
-        window.open(`http://navigator.infor.com/n/incident_list.asp?ListType=CUSTOMERID&Value=${customerid}`)
-      }
-    /> */
-
 const RenderMonthItems = ({ items, classes }) =>
   items.map((item, index) => (
     <GoLiveItem key={index} item={item} bg={colors[index % 6]} index={index} classes={classes} />

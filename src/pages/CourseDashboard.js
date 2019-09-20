@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
 
 import Tabs from '@material-ui/core/Tabs';
@@ -16,6 +16,8 @@ import StudentTableNew from '../courses/StudentTableNew';
 import ScheduledCoursesInPeriod from '../courses/ScheduledCoursesinPeriod';
 // import { useUser } from '../User';
 import { DashBoardContext } from './../globalState/Provider';
+import useInput from 'hooks/useInput';
+import { UserContext } from 'globalState/UserProvider';
 
 const StudentChipList = styled.div`
   background-color: white;
@@ -78,218 +80,195 @@ const styles = theme => ({
   }
 });
 
-class CourseView extends React.Component {
-  state = {
-    startdate: format(addDays(new Date(), -7), 'YYYY-MM-DD'),
-    studentfilterstartdate: format(addDays(new Date(), -180), 'YYYY-MM-DD'),
-    studentfilterenddate: format(new Date(), 'YYYY-MM-DD'),
-    value: '',
-    activeTab: this.props.start ? this.props.start : 'student',
-    participants: { show: false, id: null, students: [] }
-  };
+const CourseView = props => {
+  const [startdate, setStartDate] = useState(format(addDays(new Date(), -7), 'YYYY-MM-DD'));
+  const [studentfilterstartdate, setStudentFiterStartDate] = useState(
+    format(addDays(new Date(), -180), 'YYYY-MM-DD')
+  );
+  const [studentfilterenddate, setStudentFilterEndDate] = useState(
+    format(addDays(new Date(), -7), 'YYYY-MM-DD')
+  );
+  const [activeTab, setActiveTab] = React.useState(props.start || 'student');
+  const [participants, setParticipants] = useState({ show: false, id: null, students: [] });
+  const [currentYear, setCurrentYear] = React.useState(new Date().getFullYear());
+  const { classes } = props;
+  const { user } = useContext(UserContext);
+  // const user = props.user;
+  // state = {
+  //   startdate: format(addDays(new Date(), -7), 'YYYY-MM-DD'),
+  //   studentfilterstartdate: format(addDays(new Date(), -180), 'YYYY-MM-DD'),
+  //   studentfilterenddate: format(new Date(), 'YYYY-MM-DD'),
+  //   value: '',
+  //   activeTab: props.start ? props.start : 'student',
+  //   participants: { show: false, id: null, students: [] }
+  // };
 
-  componentDidCatch(error) {
-    //alert(JSON.stringify(error));
-  }
-
-  componentDidMount() {
-    // const context = React.useContext(DashBoardContext);
-    // console.log('context', context.getUser(), context.role);
-  }
-  handleStartDateChange = ({ target: { value } }) => {
+  function handleStartDateChange({ target: { value } }) {
     console.log(value);
-    this.setState({ startdate: value });
-  };
-  handleStudentFilterStartDateChange = ({ target: { value } }) => {
-    this.setState({ studentfilterstartdate: value });
-  };
-  handleStudentFilterEndDateChange = ({ target: { value } }) => {
-    this.setState({ studentfilterenddate: value });
-  };
-
-  setYear = year => {
-    this.setState({
-      startdate: format(new Date(year, 0, 1), 'YYYY-MM-DD'),
-      studentfilterstartdate: format(new Date(year, 0, 1), 'YYYY-MM-DD'),
-      studentfilterenddate: format(new Date(year + 1, 0, 1), 'YYYY-MM-DD'),
-      enddate: format(new Date(year + 1, 0, 1), 'YYYY-MM-DD')
-    });
-  };
-  render() {
-    const { classes } = this.props;
-    const user = this.props.user;
-    const { activeTab } = this.state;
-    // const { role = 'Admin' } = user; //this.props.user;
-    const role = 'Admin';
-    const enabled = role === 'Admin' || role === 'PO';
-    const currentYear = new Date().getFullYear();
-
-    console.log(this.state);
-    return (
-      <React.Fragment>
-        <Tabs
-          value={this.state.activeTab}
-          onChange={(event, value) => {
-            this.setState({ activeTab: value });
-          }}
-        >
-          <Tab label="Training By Student" value="student" />
-          <Tab label="Scheduled Course" value="scheduled" />
-          <Tab label="By Trainer" value="trainer" />
-        </Tabs>
-        {activeTab === 'student' && (
-          <React.Fragment>
-            <HeaderRow>
-              <HeaderLeft>
-                <Title2>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    className={classes.button}
-                    onClick={() => this.setYear(currentYear - 1)}
-                  >
-                    {currentYear - 1}
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => this.setYear(currentYear)}
-                  >
-                    {currentYear}
-                  </Button>
-                  <div className={classes.text}>From</div>
-                  <TextField
-                    type="date"
-                    variant="outlined"
-                    label="Enter StartDate Courses"
-                    value={this.state.studentfilterstartdate}
-                    name="studentfilterstartdate"
-                    onChange={this.handleStudentFilterStartDateChange}
-                    className={classes.textField}
-                  />
-                  <div className={classes.text}>To</div>
-                  <TextField
-                    type="date"
-                    variant="outlined"
-                    label="Enter End Date Courses"
-                    value={this.state.studentfilterenddate}
-                    name="studentfilterenddate"
-                    onChange={this.handleStudentFilterEndDateChange}
-                    className={classes.textField}
-                  />
-                </Title2>
-              </HeaderLeft>
-              <HeaderRight />
-            </HeaderRow>
-            <StudentTableNew
-              startdate={this.state.studentfilterstartdate}
-              enddate={this.state.studentfilterenddate}
-            />
-          </React.Fragment>
-        )}
-        {activeTab === 'scheduled' && (
-          <React.Fragment>
-            <HeaderRow>
-              <HeaderLeft>
-                {' '}
-                <Title2>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    className={classes.button}
-                    onClick={() => this.setYear(currentYear - 1)}
-                  >
-                    {currentYear - 1}
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => this.setYear(currentYear)}
-                  >
-                    {currentYear}
-                  </Button>
-                  <div className={classes.text}>Scheduled Training Starting</div>
-                  <TextField
-                    variant="outlined"
-                    type="date"
-                    label="Enter StartDate Course"
-                    value={this.state.startdate}
-                    onChange={(e, value) => this.handleStartDateChange(e, value)}
-                    className={classes.textField}
-                  />
-                </Title2>
-              </HeaderLeft>
-              <HeaderRight>
-                <Button disabled={!enabled} color="primary" onClick={() => console.log('new')}>
-                  New
-                </Button>
-              </HeaderRight>
-            </HeaderRow>
-            <div>
-              <ScheduledCoursesInPeriod startdate={this.state.startdate} />
-            </div>
-            <StudentChipList>
-              {this.state.participants &&
-                this.state.participants.students &&
-                this.state.participants.students.map(s => (
-                  <StudentChip key={s.id} id={s.id} fullname={s.fullname} image={s.image} />
-                ))}
-            </StudentChipList>
-          </React.Fragment>
-        )}
-        {activeTab === 'trainer' && (
-          <React.Fragment>
-            <HeaderRow>
-              <HeaderLeft>
-                {' '}
-                <Title2>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    className={classes.button}
-                    onClick={() => this.setYear(currentYear - 1)}
-                  >
-                    {currentYear - 1}
-                  </Button>
-                  <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => this.setYear(currentYear)}
-                  >
-                    {currentYear}
-                  </Button>
-                  <div className={classes.text}>From</div>
-                  <TextField
-                    type="date"
-                    variant="outlined"
-                    label="Enter StartDate Courses"
-                    value={this.state.studentfilterstartdate}
-                    name="studentfilterstartdate"
-                    onChange={this.handleStudentFilterStartDateChange}
-                    className={classes.textField}
-                  />
-                  to
-                  <TextField
-                    type="date"
-                    variant="outlined"
-                    label="Enter End Date Courses"
-                    value={this.state.studentfilterenddate}
-                    name="studentfilterenddate"
-                    onChange={this.handleStudentFilterEndDateChange}
-                    className={classes.textField}
-                  />
-                </Title2>
-              </HeaderLeft>
-              <HeaderRight />
-            </HeaderRow>
-            <TrainerViewNew
-              from={this.state.studentfilterstartdate}
-              to={this.state.studentfilterenddate}
-            />
-          </React.Fragment>
-        )}
-      </React.Fragment>
-    );
+    setStartDate(value);
   }
-}
+  function handleStudentFilterStartDateChange({ target: { value } }) {
+    setStudentFiterStartDate(value);
+  }
+  function handleStudentFilterEndDateChange({ target: { value } }) {
+    setStudentFilterEndDate(value);
+  }
+
+  function setYear(year) {
+    setCurrentYear(year);
+    setStartDate(format(new Date(year, 0, 1), 'YYYY-MM-DD'));
+    setStudentFiterStartDate(format(new Date(year, 0, 1), 'YYYY-MM-DD'));
+    setStudentFilterEndDate(format(new Date(year + 1, 0, 1), 'YYYY-MM-DD'));
+    enddate: format(new Date(year + 1, 0, 1), 'YYYY-MM-DD');
+  }
+  // const { role = 'Admin' } = user; //props.user;
+  const role = 'Admin';
+  const enabled = role === 'Admin' || role === 'PO';
+
+  return (
+    <React.Fragment>
+      <Tabs
+        value={activeTab}
+        onChange={(event, value) => {
+          setActiveTab(value);
+        }}
+      >
+        <Tab label="Training By Student" value="student" />
+        <Tab label="Scheduled Course" value="scheduled" />
+        <Tab label="By Trainer" value="trainer" />
+      </Tabs>
+      {activeTab === 'student' && (
+        <React.Fragment>
+          <HeaderRow>
+            <HeaderLeft>
+              <Title2>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className={classes.button}
+                  onClick={() => setYear(currentYear - 1)}
+                >
+                  {currentYear - 1}
+                </Button>
+                <Button variant="contained" color="secondary" onClick={() => setYear(currentYear)}>
+                  {currentYear}
+                </Button>
+                <div className={classes.text}>From</div>
+                <TextField
+                  type="date"
+                  variant="outlined"
+                  label="Enter StartDate Courses"
+                  value={studentfilterstartdate}
+                  name="studentfilterstartdate"
+                  onChange={handleStudentFilterStartDateChange}
+                  className={classes.textField}
+                />
+                <div className={classes.text}>To</div>
+                <TextField
+                  type="date"
+                  variant="outlined"
+                  label="Enter End Date Courses"
+                  value={studentfilterenddate}
+                  name="studentfilterenddate"
+                  onChange={handleStudentFilterEndDateChange}
+                  className={classes.textField}
+                />
+              </Title2>
+            </HeaderLeft>
+            <HeaderRight />
+          </HeaderRow>
+          <StudentTableNew startdate={studentfilterstartdate} enddate={studentfilterenddate} />
+        </React.Fragment>
+      )}
+      {activeTab === 'scheduled' && (
+        <React.Fragment>
+          <HeaderRow>
+            <HeaderLeft>
+              {' '}
+              <Title2>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className={classes.button}
+                  onClick={() => setYear(currentYear - 1)}
+                >
+                  {currentYear - 1}
+                </Button>
+                <Button variant="contained" color="secondary" onClick={() => setYear(currentYear)}>
+                  {currentYear}
+                </Button>
+                <div className={classes.text}>Scheduled Training Starting</div>
+                <TextField
+                  variant="outlined"
+                  type="date"
+                  label="Enter StartDate Course"
+                  value={startdate}
+                  onChange={(e, value) => handleStartDateChange(e, value)}
+                  className={classes.textField}
+                />
+              </Title2>
+            </HeaderLeft>
+            <HeaderRight>
+              <Button disabled={!enabled} color="primary" onClick={() => console.log('new')}>
+                New
+              </Button>
+            </HeaderRight>
+          </HeaderRow>
+          <div>{<ScheduledCoursesInPeriod startdate={startdate} />}</div>
+          <StudentChipList>
+            {participants &&
+              participants.students &&
+              participants.students.map(s => (
+                <StudentChip key={s.id} id={s.id} fullname={s.fullname} image={s.image} />
+              ))}
+          </StudentChipList>
+        </React.Fragment>
+      )}
+      {activeTab === 'trainer' && (
+        <React.Fragment>
+          <HeaderRow>
+            <HeaderLeft>
+              {' '}
+              <Title2>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className={classes.button}
+                  onClick={() => setYear(currentYear - 1)}
+                >
+                  {currentYear - 1}
+                </Button>
+                <Button variant="contained" color="secondary" onClick={() => setYear(currentYear)}>
+                  {currentYear}
+                </Button>
+                <div className={classes.text}>From</div>
+                <TextField
+                  type="date"
+                  variant="outlined"
+                  label="Enter StartDate Courses"
+                  value={studentfilterstartdate}
+                  name="studentfilterstartdate"
+                  onChange={handleStudentFilterStartDateChange}
+                  className={classes.textField}
+                />
+                to
+                <TextField
+                  type="date"
+                  variant="outlined"
+                  label="Enter End Date Courses"
+                  value={studentfilterenddate}
+                  name="studentfilterenddate"
+                  onChange={handleStudentFilterEndDateChange}
+                  className={classes.textField}
+                />
+              </Title2>
+            </HeaderLeft>
+            <HeaderRight />
+          </HeaderRow>
+          <TrainerViewNew from={studentfilterstartdate} to={studentfilterenddate} />
+        </React.Fragment>
+      )}
+    </React.Fragment>
+  );
+};
 export default withStyles(styles)(CourseView);

@@ -48,9 +48,9 @@ const PD = styled.div`
 const styles = theme => ({
   root: {
     ...theme.mixins.gutters(),
-    paddingTop: theme.spacing.unit * 2,
-    paddingBottom: theme.spacing.unit * 2,
-    padding: theme.spacing.unit * 2,
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+    padding: theme.spacing(2),
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
@@ -62,7 +62,7 @@ const styles = theme => ({
     margin: 10
   },
   button: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     width: 200
   },
   media: {
@@ -110,7 +110,7 @@ class NewCard extends React.Component {
     }
     const [lastPlannedCourse] = course.plannedcourses;
     const pd = lastPlannedCourse
-      ? format(parseInt(lastPlannedCourse.startdate), 'ddd, DDMMMYYYY')
+      ? format(parseInt(Date.parse(lastPlannedCourse.startdate)), 'ddd, DDMMMYYYY')
       : '';
     const acount = lastPlannedCourse ? lastPlannedCourse.studentcount : 0;
     return (

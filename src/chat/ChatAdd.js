@@ -14,18 +14,18 @@ const styles = theme => ({
     flexWrap: 'wrap'
   },
   formControl: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     minWidth: 120
   },
   selectEmpty: {
-    marginTop: theme.spacing.unit * 2
+    marginTop: theme.spacing(2)
   },
   button: {
-    margin: theme.spacing.unit
+    margin: theme.spacing(1)
   },
   TextFieldStyle: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
     width: 150
   },
   buttonStyle: {

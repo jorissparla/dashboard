@@ -13,6 +13,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { blue, red } from '@material-ui/core/colors';
 import { format } from '../utils/format';
 import { withRouter } from 'react-router';
+import { LongFormattedDate } from './../utils/FormattedDate';
 import { Title, HeaderRow, HeaderLeft, HeaderRight } from '../styles';
 import withAuth from '../utils/withAuth';
 import EditStudentsOnCourse from './EditStudentsOnCourse';
@@ -20,9 +21,9 @@ import EditStudentsOnCourse from './EditStudentsOnCourse';
 const styles = theme => ({
   root: {
     ...theme.mixins.gutters(),
-    paddingTop: theme.spacing.unit * 2,
-    paddingBottom: theme.spacing.unit * 2,
-    padding: theme.spacing.unit * 2,
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+    padding: theme.spacing(2),
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
@@ -117,7 +118,8 @@ export const QUERY_SCHEDULED_COURSES = gql`
 `;
 
 const fmtDate = val => {
-  return format(val, 'ddd, DD MMM YYYY');
+  console.log(val, format(Date.parse(val), 'ddd, DD MMM YYYY'));
+  return LongFormattedDate(val);
 };
 
 const HeaderColumn = ({ children, small }) => {

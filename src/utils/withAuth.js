@@ -1,7 +1,17 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { UserContext } from 'globalState/UserProvider';
 
 export default function(ComposedComponent) {
+  const Authentication = props => {
+    const { user, isAuthenticated } = React.useContext(UserContext);
+    return <ComposedComponent {...props} authenticated={isAuthenticated || false} user={user} />;
+  };
+
+  return Authentication;
+}
+
+function a(ComposedComponent) {
   class Authentication extends Component {
     render() {
       return (

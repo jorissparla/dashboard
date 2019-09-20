@@ -1,9 +1,9 @@
+import { Button, TextField } from '@material-ui/core';
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Button, TextField } from '@material-ui/core';
-
 import useInput from '../hooks/useInput';
-import { Container, Article, H1, H2, Header } from './Styles';
+import { H1, H2 } from './Styles';
+
 const readOnly = false;
 
 export default function ProductForm({ classes, product, onSave, isEditable }) {
@@ -51,7 +51,6 @@ export default function ProductForm({ classes, product, onSave, isEditable }) {
           <TextField
             id="content"
             label="content"
-            className={classes.contentField}
             {...content}
             margin="normal"
             fullWidth

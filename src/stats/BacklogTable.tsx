@@ -12,6 +12,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import { SelectionContext } from '../globalState/SelectionContext';
 import SortIcon from '@material-ui/icons/SwapVert';
 import _ from 'lodash';
+import { format } from './../utils/format';
 
 const CustomTableCell = withStyles(theme => ({
   head: {
@@ -79,7 +80,13 @@ const STHC = withStyles(theme => ({
 
 type sortType = 'desc' | 'asc';
 
-export const BacklogTable = ({ backlog, classes, title, description = title }: any) => {
+export const BacklogTable = ({
+  backlog,
+  classes,
+  title,
+  description = title,
+  includeservicerestored = false
+}: any) => {
   //
 
   const initialValue = { name: '', direction: '' };
@@ -117,7 +124,6 @@ export const BacklogTable = ({ backlog, classes, title, description = title }: a
   if (actionNeeded && backlog.length === 0) {
     return <div />;
   }
-
   function handleSortChange(column: string) {
     if (sorted.name === column) {
       setSorted({ ...sorted, direction: sorted.direction === 'asc' ? 'desc' : 'asc' });
@@ -158,6 +164,12 @@ export const BacklogTable = ({ backlog, classes, title, description = title }: a
                 handleSortChange={handleSortChange}
                 column="owner"
               /> */}
+              {includeservicerestored && (
+                <>
+                  <CustomTableCell className={classes.tableheader}>Created</CustomTableCell>
+                  <CustomTableCell className={classes.tableheader}>Restored?</CustomTableCell>
+                </>
+              )}
               <CustomTableCell className={classes.tableheader}>Status</CustomTableCell>
               <CustomTableCell className={classes.tableheader}>Last Updated</CustomTableCell>
               <CustomTableCell className={classes.tableheader}>Age</CustomTableCell>
@@ -181,6 +193,18 @@ export const BacklogTable = ({ backlog, classes, title, description = title }: a
                 </TableCell>
                 <TableCell>{row.customername}</TableCell>
                 <TableCell>{row.owner}</TableCell>
+                {includeservicerestored && (
+                  <>
+                    <TableCell>
+                      {row.incidentcreated ? format(row.incidentcreated, 'YYYY-MM-DD') : ''}
+                    </TableCell>
+                    <TableCell>
+                      {row.service_restored_date
+                        ? format(row.service_restored_date, 'YYYY-MM-DD')
+                        : ''}
+                    </TableCell>
+                  </>
+                )}
                 <TableCell>{row.status}</TableCell>
                 <TableCell>{row.dayssincelastupdate}</TableCell>
                 <TableCell>{row.daysSinceCreated}</TableCell>

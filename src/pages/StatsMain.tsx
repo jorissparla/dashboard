@@ -1,19 +1,19 @@
 import { withStyles } from '@material-ui/core';
 import React, { useContext, useState } from 'react';
-import { useQuery } from 'react-apollo-hooks';
-import { QUERY_BACKLOG } from '../stats/queries/BACKLOG_QUERY2';
-import { BacklogTable } from '../stats/BacklogTable';
+import { useQuery } from 'react-apollo';
 import { SelectionContext } from '../globalState/SelectionContext';
-import { SelectionForm } from '../stats/SelectionForm';
-import { useUser } from '../User';
+import { BacklogTable } from '../stats/BacklogTable';
+import { ListFavoritePersons } from '../stats/FavoritesPersons';
+import { QUERY_BACKLOG } from '../stats/queries/BACKLOG_QUERY2';
 import { format } from '../utils/format';
 import Spinner from '../utils/spinner';
 import { useLocalStorage } from '../utils/useLocalStorage';
-import { ListFavoritePersons } from '../stats/FavoritesPersons';
+import { UserContext } from './../globalState/UserProvider';
+const SelectionForm = React.lazy(() => import('../stats/SelectionForm'));
 
-const styles = (theme: any) => ({
+export const styles = (theme: any) => ({
   root: theme.mixins.gutters({
-    marginTop: theme.spacing.unit * 3,
+    marginTop: theme.spacing(3),
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'center',
@@ -138,41 +138,42 @@ type backlogParams = {
   products: string[];
   isValidSuperUser: boolean;
 };
-const useBacklog = ({ date, owner, products, isValidSuperUser }: backlogParams) => {
+
+const StatsMainContainerWrapper: React.FC<ContainerProps> = (props: any) => {
+  const { user } = React.useContext(UserContext);
+  if (!user || user.fullname === null) {
+    return <div>You need to be logged in to see this page</div>;
+  } else {
+    return <StatsMainContainer {...props} />;
+  }
+};
+
+const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
+  const { user } = React.useContext(UserContext);
+  const [date] = useState(format(Date.now(), 'YYYY-MM-DD'));
+  const [isCloud, setisCloud] = useState(false);
+  const [owner, setOwner] = useState(props.user.fullname);
+  const { products, persons } = useContext(SelectionContext);
+  const { classes } = props;
+
+  const isValidSuperUser = ['Admin', 'PO'].some(u => (user ? u === user.role : false));
   const { loading, data } = useQuery(QUERY_BACKLOG, {
-    suspend: false,
     variables: { date, owner, products, deployment: 'ALL', ...useParams(!isValidSuperUser) }
   });
   if (loading) return null;
   if (!data) return null;
-  return data;
-};
-
-const useBacklogAndCurrentUser = ({ date, owner, products, isValidSuperUser }: backlogParams) => {
-  const currentUser = useUser();
-  const currentBacklog = useBacklog({ date, owner, products, isValidSuperUser });
-  return [currentUser, currentBacklog];
-};
-
-const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
-  const [date, setDate] = useState(format(Date.now(), 'YYYY-MM-DD'));
-  const [isCloud, setisCloud] = useState(false);
-  const [owner, setOwner] = useState(props.user.fullname);
-  const { products, persons } = useContext(SelectionContext);
-  const { classes, user } = props;
-
-  const isValidSuperUser = ['Admin', 'PO'].some(u => u === user.role);
-  const [currentUser, data] = useBacklogAndCurrentUser({ date, owner, products, isValidSuperUser });
+  //const data = getBacklog({ date, owner, products, isValidSuperUser });
   // const currentUser = props.user;
-  console.log('currentUser', currentUser);
-  if (props.user.fullname === null || !currentUser) {
-    return <div>You need to be logged in to see this page</div>;
-  }
+  // console.log('currentUser', dauserta, products);
   let enableIt: boolean;
-  if (currentUser && currentUser.permissions) {
-    enableIt = currentUser.permissions.some(
-      (u: { permission: string }): any => u.permission === 'STATS'
-    );
+  let isXpertOrSwan = false;
+  if (user && user.permissions) {
+    enableIt = user.permissions.some((u: { permission: string }): any => u.permission === 'STATS');
+    if (user.team) {
+      isXpertOrSwan = ['Xpert', 'Swan'].some(
+        item => item.toLowerCase() === user.team.toLowerCase()
+      );
+    }
   } else {
     enableIt = false;
   }
@@ -181,6 +182,7 @@ const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
     <div className={classes.root}>
       <SelectionForm
         isValidSuperUser={isValidSuperUser || enableIt}
+        isXpertOrSwan={isValidSuperUser || isXpertOrSwan}
         onNavigateToParams={() => props.history.push('/myworkparams')}
         classes={props.classes}
         initialValue={{ owner, isCloud, lastUpdated: mostRecentUpdate, actionNeeded: true }}
@@ -217,9 +219,14 @@ interface Props {
 }
 
 const StatsMain: React.FC<Props> = ({ classes, data }) => {
-  const [date, setDate] = useState(format(Date.now(), 'YYYY-MM-DD'));
   const params = useParams();
-
+  const sev12notrestored = [
+    ...data.critical.filter((item: any) => !item.service_restored_date),
+    ...data.sev2.filter(
+      (item: any) => !item.service_restored_date && item.status !== 'Solution Proposed'
+    )
+  ];
+  console.log('critical', sev12notrestored);
   const { isCloud } = useContext(SelectionContext);
   return (
     <>
@@ -238,40 +245,34 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
             description="All Incidents with a status of On Hold By Customer with no or an Expired Action date"
           />
 
-          <BacklogTable
+          {/* <BacklogTable
             classes={classes}
             backlog={data.solution_proposed_cloud}
             title="Solution Proposed"
             description={`All Incidents with a status of Solution Proposed not updated for ${
               params['N_SOLUTIONPROPOSED']
             } days or more`}
-          />
+          /> */}
 
           <BacklogTable
             classes={classes}
             backlog={data.awaiting_customer_cloud}
             title="Awaiting customer"
-            description={`All Incidents with a status of Awaiting Customer not updated for more than  ${
-              params['C_AWAITINGCUSTOMER']
-            } days `}
+            description={`All Incidents with a status of Awaiting Customer not updated for more than  ${params['C_AWAITINGCUSTOMER']} days `}
           />
 
           <BacklogTable
             classes={classes}
             backlog={data.researching_cloud}
             title="Researching"
-            description={`Incidents with status 'Researching' Last updated  ${
-              params['C_RESEARCHING']
-            } days or more`}
+            description={`Incidents with status 'Researching' Last updated  ${params['C_RESEARCHING']} days or more`}
           />
 
           <BacklogTable
             classes={classes}
             backlog={data.awaiting_infor_cloud}
             title="Awaiting Infor"
-            description={`Incidents with status 'Awaiting Infor' Last updated  ${
-              params['C_AWAITINGINFOR']
-            } days or more`}
+            description={`Incidents with status 'Awaiting Infor' Last updated  ${params['C_AWAITINGINFOR']} days or more`}
           />
           <BacklogTable
             classes={classes}
@@ -310,9 +311,7 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
             classes={classes}
             backlog={data.new_cloud}
             title="New Incidents"
-            description={`Incidents with status 'New' not updated for more than  ${
-              params['C_NEW']
-            } days`}
+            description={`Incidents with status 'New' not updated for more than  ${params['C_NEW']} days`}
           />
 
           <BacklogTable
@@ -333,6 +332,12 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
         <div>
           <BacklogTable
             classes={classes}
+            backlog={sev12notrestored}
+            title="Critical/Major Not restored"
+            description="All Incidents with a severity of 'Production Outage / Major Impact' without a restored date"
+          />
+          <BacklogTable
+            classes={classes}
             backlog={data.critical}
             title="Critical"
             description="All Incidents with a severity of 'Production Outage / Critical Application halted'"
@@ -343,37 +348,31 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
             title="On Hold"
             description="All Incidents with a status of On Hold By Customer with no or an Expired Action date"
           />
-          <BacklogTable
+          {/* <BacklogTable
             classes={classes}
             backlog={data.solution_proposed}
             title="Solution Proposed"
             description={`All Incidents with a status of Solution Proposed not updated for ${
               params['N_SOLUTIONPROPOSED']
             } days or more`}
-          />
+          /> */}
           <BacklogTable
             classes={classes}
             backlog={data.awaiting_customer}
             title="Awaiting customer"
-            description={`All Incidents with a status of Awaiting Customer not updated for more than ${
-              params['N_AWAITINGCUSTOMER']
-            } days `}
+            description={`All Incidents with a status of Awaiting Customer not updated for more than ${params['N_AWAITINGCUSTOMER']} days `}
           />
           <BacklogTable
             classes={classes}
             backlog={data.researching}
             title="Researching"
-            description={`Incidents with status 'Researching' Last updated  ${
-              params['N_RESEARCHING']
-            } days or more`}
+            description={`Incidents with status 'Researching' Last updated  ${params['N_RESEARCHING']} days or more`}
           />
           <BacklogTable
             classes={classes}
             backlog={data.awaiting_infor}
             title="Awaiting Infor"
-            description={`Incidents with status 'Awaiting Infor' Last updated  ${
-              params['N_AWAITINGINFOR']
-            } days or more`}
+            description={`Incidents with status 'Awaiting Infor' Last updated  ${params['N_AWAITINGINFOR']} days or more`}
           />
           <BacklogTable
             classes={classes}
@@ -385,17 +384,15 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
             classes={classes}
             backlog={data.major_impact}
             title="Major Impact"
-            description={`Incidents with severity 'Major Impact' Last updated ${
-              params['N_MAJORIMPACT']
-            } days or more`}
+            description={`Incidents with severity 'Major Impact' Last updated ${params['N_MAJORIMPACT']} days or more`}
+            includeservicerestored={true}
           />
           <BacklogTable
             classes={classes}
             backlog={data.major_impact2}
             title="Major Impact"
-            description={`Incidents with severity 'Major Impact' Last updated ${
-              params['N_MAJORIMPACT']
-            } days or more Not resolved in 5 days`}
+            description={`Incidents with severity 'Major Impact' Last updated ${params['N_MAJORIMPACT']} days or more Not resolved in 5 days`}
+            includeservicerestored={true}
           />
           <BacklogTable
             classes={classes}
@@ -413,9 +410,7 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
             classes={classes}
             backlog={data.new}
             title="New Incidents"
-            description={`Incidents with status 'New' not updated for more than  ${
-              params['N_NEW']
-            } days`}
+            description={`Incidents with status 'New' not updated for more than  ${params['N_NEW']} days`}
           />
           <BacklogTable
             classes={classes}
@@ -447,4 +442,4 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
   );
 };
 
-export default withStyles(styles)(StatsMainContainer);
+export default withStyles(styles)(StatsMainContainerWrapper);

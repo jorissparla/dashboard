@@ -1,20 +1,18 @@
-import React from 'react';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import Snackbar from '@material-ui/core/Snackbar';
+import CloseIcon from '@material-ui/icons/Close';
 import gql from 'graphql-tag';
-import { Query, Mutation } from 'react-apollo';
-import { adopt } from 'react-adopt';
 import _ from 'lodash';
+import React from 'react';
+import { adopt } from 'react-adopt';
+import { Mutation, Query } from 'react-apollo';
+import { withRouter } from 'react-router';
 //import format from 'date-fns/format';
 import { format } from '../utils/format';
-import { withRouter } from 'react-router';
+import EditStudentsOnCourse, { ADD_PARTICIPANTS_TO_COURSE } from './EditStudentsOnCourse';
 import PlannedCourseFormNew from './PlannedCourseFormNew';
-import EditStudentsOnCourse from './EditStudentsOnCourse';
-import Button from '@material-ui/core/Button';
-import Snackbar from '@material-ui/core/Snackbar';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-import { ADD_PARTICIPANTS_TO_COURSE } from './EditStudentsOnCourse';
 import { QUERY_SCHEDULED_COURSES } from './PlannedCoursesNew';
-import { fromPromise } from 'apollo-link';
 const PLANNEDCOURSE_DELETE_MUTATION = gql`
   mutation PLANNEDCOURSE_DELETE_MUTATION($input: InputPlannedCourseType) {
     deletePlannedCourse(input: $input) {
@@ -61,11 +59,11 @@ const QUERY_SINGLE_PLANNEDCOURSE = gql`
   }
 `;
 
-const styles = theme => ({
+/* const styles = theme => ({
   close: {
     padding: theme.spacing.unit / 2
   }
-});
+}); */
 
 const Composed = adopt({
   updatePlannedCourse: ({ render }) => (
@@ -154,8 +152,8 @@ class PlannedCourseEdit extends React.Component {
           /*   if (students && this.state.participants.length === 0) {
             this.setState({ participants: students });
           } */
-          startdate = format(startdate, 'YYYY-MM-DD');
-          enddate = format(parseInt(enddate), 'YYYY-MM-DD');
+          startdate = format(Date.parse(startdate), 'YYYY-MM-DD');
+          enddate = format(Date.parse(enddate), 'YYYY-MM-DD');
           const dates = { startdate, enddate };
           //return <h1>pcEdut</h1>;
           return (

@@ -26,17 +26,17 @@ const styles = theme => ({
     flexWrap: 'wrap'
   },
   button: {
-    margin: theme.spacing.unit
+    margin: theme.spacing(1)
   },
 
   buttonDel: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     backgroundColor: '#000'
   },
 
   textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
     width: 200,
     height: '100%',
     marginBottom: 20
@@ -51,7 +51,7 @@ const styles = theme => ({
     marginTop: 19
   },
   formControl: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     minWidth: 250
   },
   menu: {

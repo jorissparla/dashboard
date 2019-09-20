@@ -40,6 +40,7 @@ const QUERY_SINGLE_COURSE = gql`
       category
       startdate
       enddate
+      documentnr
       hours
       lastmodified
     }
@@ -104,7 +105,8 @@ class CourseEdit extends React.Component {
                         'hours',
                         'status',
                         'applicable',
-                        'trainer'
+                        'trainer',
+                        'documentnr'
                       ]);
                       this.handleSave(input, updateCourse);
                     }}

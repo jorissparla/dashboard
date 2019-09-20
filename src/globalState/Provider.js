@@ -1,4 +1,8 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { client } from '../index';
+import { MUTATION_SIGNIN } from './../auth/signin';
+import { MUTATION_SIGNOUT } from './../auth/signout';
+import { CURRENT_USER_QUERY } from './../graphql/CURRENT_USER_QUERY';
 
 export const DashBoardContext = React.createContext({
   name: 'Joris'
@@ -6,6 +10,7 @@ export const DashBoardContext = React.createContext({
 
 export default class DashBoardContextProvider extends React.Component {
   state = {
+    user: {},
     email: localStorage.getItem('email'),
     picture: localStorage.getItem('picture'),
     image: localStorage.getItem('picture'),
@@ -48,6 +53,36 @@ export default class DashBoardContextProvider extends React.Component {
     },
     authenticated: () => (this.state.email ? true : false)
   };
+  async login(email, password) {
+    client
+      .mutate({ mutation: MUTATION_SIGNIN, variables: { input: { email, password } } })
+      .then(result => {
+        if (this.result.signinUser.user) {
+          this.setUser(id, email, image, image, fullname, role);
+        }
+        const { id, email, image, fullname, role } = result.data.signinUser.user;
+        return result;
+      });
+  }
+  async logout() {
+    client.mutate({ mutation: MUTATION_SIGNOUT }).then(result => {
+      if (result) {
+        this.clearUser();
+      }
+    });
+  }
+  componentDidMount() {
+    client.query({ query: CURRENT_USER_QUERY }).then(result => {
+      console.log('Provider CDM', result);
+      if (!result.data.me) {
+        this.state.clearUser();
+      } else {
+        const { id, email, image, fullname, role } = result.data.me;
+        this.state.setUser(id, email, image, image, fullname, role);
+        console.log('LOgged In successfully');
+      }
+    });
+  }
   render() {
     return (
       <DashBoardContext.Provider value={this.state}>

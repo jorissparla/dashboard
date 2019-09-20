@@ -82,7 +82,7 @@ const NewCard: React.FC<CardProps> = ({
     <Container>
       <Picture src="/static/media/image1.4d33fe46.jpg" />
       <Description>{title}</Description>
-      <div>{format(updatedAt, 'YYYY-MMM-DD')}</div>
+      <div>{format(Date.parse(updatedAt), 'YYYY-MMM-DD')}</div>
       <div>{distanceInWords(Date.parse(updatedAt), new Date())}</div>
     </Container>
   );

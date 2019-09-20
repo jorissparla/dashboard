@@ -1,6 +1,6 @@
-import React, { Component } from "react";
-import styled from "styled-components";
-import Portal from "./Portal";
+import React, { Component } from 'react';
+import styled from 'styled-components';
+import Portal from './Portal';
 
 export default class Modal extends Component {
   render() {
@@ -26,7 +26,7 @@ const ModalWrapper = styled.div`
   top: ${props => `${props.top}rem`};
   left: 0;
   width: 100vw;
-  height:100vh
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -50,12 +50,21 @@ const ModalCard = styled.div`
 
 const CloseButton = styled.button`
   position: absolute;
-  top: 0;
+  top: -8px;
   right: 0;
   background: transparent;
   font-size: 48px;
   font-weight: 100;
+  text-align: center;
+  justify-content: center;
   border: none;
+  width: 57px;
+  height: 57px;
+  :hover {
+    cursor: pointer;
+    background: lightgrey;
+    border-radius: 50%;
+  }
 `;
 
 const Background = styled.div`

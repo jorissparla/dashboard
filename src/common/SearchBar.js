@@ -9,12 +9,13 @@ export default ({
   hintText = 'Search..',
   defaultValue = '',
   searchOnEnter = false,
+  width = '100%',
   style = { display: 'flex', marginBottom: 10, alignItems: 'center' },
   shade = true
 }) => {
   const [val, setVal] = useState(defaultValue || '');
   return (
-    <Paper style={style}>
+    <Paper style={{ ...style, width }}>
       <FontIcon style={{ margin: '10px' }}>
         <ActionSearch />
       </FontIcon>

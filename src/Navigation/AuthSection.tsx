@@ -1,8 +1,8 @@
 import { Button } from '@material-ui/core';
 import * as React from 'react';
-import { withRouter } from 'react-router';
 import User from '../User';
 import UserMenu from '../UserMenu';
+import { UserContext } from './../globalState/UserProvider';
 
 interface Props {
   history: any;
@@ -14,7 +14,7 @@ interface LoadingOrData {
   history: any;
 }
 
-export const AuthenticationSection: React.FC<Props> = (props: any) => {
+/*export const AuthenticationSection: React.FC<Props> = (props: any) => {
   let authenticated = true;
   const history = props.history;
   return (
@@ -50,4 +50,39 @@ export const AuthenticationSection: React.FC<Props> = (props: any) => {
       }}
     </User>
   );
+};
+*/
+export const AuthenticationSection: React.FC<Props> = (props: any) => {
+  const userContext = React.useContext(UserContext);
+
+  let { logout, user, isAuthenticated } = userContext;
+  const history = props.history;
+  if (isAuthenticated) {
+    return (
+      <div>
+        {user && (
+          <Button>
+            <>
+              <UserMenu id={user.id} picture={user.image} />
+            </>
+          </Button>
+        )}
+        <Button
+          onClick={() => {
+            logout();
+            history.push('/signout');
+          }}
+          color="inherit"
+        >
+          Logout
+        </Button>
+      </div>
+    );
+  } else {
+    return (
+      <Button onClick={() => history.push('/signin')} color="inherit">
+        Login
+      </Button>
+    );
+  }
 };

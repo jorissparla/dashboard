@@ -1,9 +1,9 @@
 import React, { useContext, useState } from 'react';
-import { useQuery } from 'react-apollo-hooks';
+import { useQuery } from 'react-apollo';
 import styled from 'styled-components';
 import _ from 'lodash';
 import Spinner from '../utils/spinner';
-import { QUERY_PRIORITY_BACKLOG } from './queries/BACKLOG_QUERY2';
+import { QUERY_PRIORITY_BACKLOG } from './queries/BACKLOG_QUERY2a';
 import { StyledInitials } from 'styles';
 import { format } from './../utils/format';
 
@@ -111,7 +111,6 @@ const Image = ({ image, fullname, size = 32 }) => {
 
 export default function PriorityDashboard() {
   const { loading, data } = useQuery(QUERY_PRIORITY_BACKLOG, {
-    suspend: false,
     variables: { products: ['LN'] }
   });
   if (loading) {
@@ -119,7 +118,16 @@ export default function PriorityDashboard() {
   }
   const { all, active, mostRecentUpdate, accounts } = data;
   const escalated = active.filter(item => item.escalated !== 0);
-  const sev2 = active.filter(item => item.severity === 3);
+  const sev2 = active
+    .filter(item => item.severity === 3)
+    .map(item => {
+      const account = accounts.find(account => account.fullname === item.owner);
+      let image;
+      if (account) {
+        image = account.image || '';
+      }
+      return { ...item, image };
+    });
   const sev1 = all
     .filter(item => item.severity === 4)
     .map(item => {
@@ -161,6 +169,38 @@ export default function PriorityDashboard() {
         {sev1.map(item => {
           return (
             <Box2 key={item.incident} color="#313348">
+              <Vertical>
+                <Image image={item.image} fullname={item.owner} size={96} />
+
+                <span style={{ color: 'white', paddingTop: 5 }}>{item.owner}</span>
+              </Vertical>
+              <Vertical>
+                <span style={{ color: 'white', paddingTop: 5, fontSize: '0.8rem' }}>
+                  {item.title}
+                </span>
+                <RedText>{item.customername}</RedText>
+                <span
+                  style={{ color: 'white', paddingTop: 5, letterSpacing: '0.3em', fontWeight: 100 }}
+                >
+                  INCIDENT {item.incident}
+                </span>
+                <span
+                  style={{ color: 'white', paddingTop: 5, letterSpacing: '0.3em', fontWeight: 100 }}
+                >
+                  Status: {item.status}
+                </span>
+                <span style={{ color: 'white', paddingTop: 5, fontSize: '0.8rem' }}>
+                  Last updated: {format(item.lastupdated, 'ddd, DD-MMM-YYYY hh:mm')}
+                </span>
+              </Vertical>
+            </Box2>
+          );
+        })}
+      </Container>
+      <Container>
+        {sev2.map(item => {
+          return (
+            <Box2 key={item.incident} color="#fb8c00">
               <Vertical>
                 <Image image={item.image} fullname={item.owner} size={96} />
 

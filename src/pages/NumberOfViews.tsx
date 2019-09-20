@@ -1,19 +1,19 @@
-import * as React from "react";
-import IconButton from "@material-ui/core/IconButton";
-import Badge from "@material-ui/core/Badge";
-import { withStyles, createStyles } from "@material-ui/core/styles";
-import ViewIcon from "@material-ui/icons/ViewComfy";
-import Tooltip from "@material-ui/core/Tooltip";
-import { useQuery, useMutation } from "react-apollo-hooks";
-import { AUDIT_QUERY } from "../supportcard/queries/AUDIT_QUERY";
+import Badge from '@material-ui/core/Badge';
+import IconButton from '@material-ui/core/IconButton';
+import { withStyles } from '@material-ui/core/styles';
+import Tooltip from '@material-ui/core/Tooltip';
+import ViewIcon from '@material-ui/icons/ViewComfy';
+import * as React from 'react';
 
 const styles = (theme: any) => ({
   badge: {
-    top: "50%",
+    top: '50%',
     right: -3,
-    backgroundColor: "black",
+    backgroundColor: 'black',
     // The border color match the background color.
-    border: `1px solid ${theme.palette.type === "light" ? theme.palette.grey[200] : theme.palette.grey[900]}`
+    border: `1px solid ${
+      theme.palette.type === 'light' ? theme.palette.grey[200] : theme.palette.grey[900]
+    }`
   },
   icon: {
     marginRight: 10
@@ -47,7 +47,12 @@ const NumberOfViews: React.FC<Props> = ({ classes, linkid, accessed = 0 }) => {
   return (
     <Tooltip title="Number of Views">
       <IconButton aria-label="Cart" className={classes.icon}>
-        <Badge badgeContent={accessed.toString()} color="secondary" max={999} classes={{ badge: classes.badge }}>
+        <Badge
+          badgeContent={accessed.toString()}
+          color="secondary"
+          max={999}
+          classes={{ badge: classes.badge }}
+        >
           <ViewIcon />
         </Badge>
       </IconButton>

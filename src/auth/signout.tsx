@@ -1,9 +1,8 @@
-import * as React from 'react';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
-import { StaticContext } from 'react-router';
-import { DashBoardContext } from '../globalState/Provider';
+import { UserContext } from 'globalState/UserProvider';
 import gql from 'graphql-tag';
-import { useQuery, useMutation } from 'react-apollo-hooks';
+import * as React from 'react';
+import { StaticContext } from 'react-router';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 
 export const MUTATION_SIGNOUT = gql`
   mutation MUTATION_SIGNOUT {
@@ -31,19 +30,15 @@ export const Signout: React.FunctionComponent<RouteComponentProps<any, StaticCon
   history
 }) => {
   let userCtx: any;
-  userCtx = React.useContext(DashBoardContext);
-  const mutation = useMutation(MUTATION_SIGNOUT);
-  signoutUser();
-  mutation();
-  console.log('mutation done');
-  userCtx.clearUser();
+  const { user, logout } = React.useContext(UserContext);
+  logout();
   React.useEffect(() => {
     const h = setTimeout(() => {
       console.log('push2history');
       history.push('/');
     }, 500);
     return clearTimeout(h);
-  }, []);
+  }, [history]);
   return <div>Sorry to see you go...</div>;
 };
 

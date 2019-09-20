@@ -13,7 +13,6 @@ import NewsIcon from '@material-ui/icons/Event';
 import MyWorkList from '@material-ui/icons/EventNote';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ExtensionIcon from '@material-ui/icons/Extension';
-import FeedbackIcon from '@material-ui/icons/Feedback';
 import GoLiveIcon from '@material-ui/icons/FlightTakeoff';
 import ActionHome from '@material-ui/icons/Home';
 import ApplicationIcon from '@material-ui/icons/Launch';
@@ -21,8 +20,9 @@ import LinkIcon from '@material-ui/icons/Link';
 import PageIcon from '@material-ui/icons/Pages';
 import PeopleIcon from '@material-ui/icons/People';
 import Person from '@material-ui/icons/PeopleOutline';
-import SurveysIcon from '@material-ui/icons/Whatshot';
 import RequestListIcon from '@material-ui/icons/PlaylistAdd';
+import SurveysIcon from '@material-ui/icons/Whatshot';
+import { UserContext } from 'globalState/UserProvider';
 import React, { useState } from 'react';
 import Signout from '../Signout';
 import { NavLink } from './NavLink';
@@ -31,14 +31,14 @@ interface Props {
   classes: any;
   history: any;
   authenticated?: boolean;
-  user: any;
   toggleMenu: () => void;
   open: boolean;
 }
 
-export const SideBarMenu: React.FC<Props> = ({ classes, history, user, toggleMenu, open }) => {
+export const SideBarMenu: React.FC<Props> = ({ classes, history, toggleMenu, open }) => {
   let validRole = false;
   let isChat = false;
+  const { user, logout } = React.useContext(UserContext);
 
   let isAdmin = false;
   let authenticated = false;
@@ -103,6 +103,12 @@ export const SideBarMenu: React.FC<Props> = ({ classes, history, user, toggleMen
         navigateTo="/tenant"
         history={history}
       />
+      <ToggledNavLink
+        title="CloudSuites"
+        Icon={ExtensionIcon}
+        navigateTo="/cloudsuites"
+        history={history}
+      />
       {/* <ToggledNavLink
         title="Customer Feedback"
         Icon={FeedbackIcon}
@@ -144,6 +150,12 @@ export const SideBarMenu: React.FC<Props> = ({ classes, history, user, toggleMen
           {authenticated && isAdmin && (
             <ToggledNavLink title="News" Icon={NewsIcon} navigateTo="/news" history={history} />
           )}
+          <ToggledNavLink
+            title="NewsPage"
+            Icon={NewsIcon}
+            navigateTo="/newspage"
+            history={history}
+          />
           <Divider />
           <ToggledNavLink
             title="Courses Dashboard"
@@ -160,21 +172,16 @@ export const SideBarMenu: React.FC<Props> = ({ classes, history, user, toggleMen
               history={history}
             />
           )}
-          <Signout>
-            {(signout: any) => {
-              return (
-                <MenuItem
-                  onClick={() => {
-                    // TODO: replace this
-                    // openSnackbar('Signing out');
-                    signout();
-                  }}
-                >
-                  Signout
-                </MenuItem>
-              );
+          <MenuItem
+            onClick={() => {
+              // TODO: replace this
+              // openSnackbar('Signing out');
+              logout();
+              history.push('/');
             }}
-          </Signout>
+          >
+            Signout
+          </MenuItem>
           <ToggledNavLink title="Videos" navigateTo="/videos" history={history} />
         </React.Fragment>
       )}

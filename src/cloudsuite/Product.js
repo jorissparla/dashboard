@@ -1,213 +1,217 @@
-import { Button } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
-import EditIcon from '@material-ui/icons/Edit';
+import { Button, TextField } from '@material-ui/core';
+import Chip from '@material-ui/core/Chip';
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import Paper from '@material-ui/core/Paper';
+import Select from '@material-ui/core/Select';
+import { makeStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import { Formik } from 'formik';
 import React from 'react';
-import { useMutation, useQuery } from 'react-apollo-hooks';
+import { useQuery } from 'react-apollo';
+import ReactMarkdown from 'react-markdown';
 import { withRouter } from 'react-router';
-import styled from 'styled-components';
 import Spinner from 'utils/spinner';
+import { CardSection } from '../common';
 import useInput from '../hooks/useInput';
-import {
-  MUTATION_ADD_PRODUCT_CONTACT,
-  MUTATION_REMOVE_PRODUCT_CONTACT,
-  QUERY_SINGLE_PRODUCT
-} from './graphql/Queries';
-import ProductForm from './ProductForm';
-import ContactForm from './ContactForm';
-import { Article, H1, Header } from './Styles';
+import { useUser } from '../User';
+//import { format } from 'date-fns';
+import { format } from '../utils/format';
+import { QUERY_SINGLE_PRODUCT } from './graphql/Queries';
 
-const Thead = styled.thead`
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.2rem;
-`;
+const paperStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  justifyContent: 'space-between',
+  margin: '15px',
+  padding: '10px',
+  minWidth: '200px'
+};
 
-const TD = styled.td`
-  border-bottom-color: rgba(0, 0, 0, 0.3);
-  border-bottom-style: solid;
-  border-top-style: solid;
-  padding: 3px;
-`;
-
-const TR = styled.tr`
-  :nth-child(even) {
-    background-color: #f2f2f2;
-  }
-`;
-
-const DeleteButton = styled.button`
-  background: transparent;
-  font-size: 18px;
-  font-weight: 600;
-  border: none;
-  :hover {
-    cursor: pointer;
-    font-weight: 900;
-    color: darkred;
-  }
-`;
-
-const OverThePage = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
+  root: {
+    padding: theme.spacing(3, 2)
+  },
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap'
+  },
   button: {
-    margin: theme.spacing.unit
+    margin: theme.spacing(1)
   },
-  editField: {
-    display: 'block',
-    width: '800px',
-    backgroundColor: 'lightyellow'
+  button2: {
+    margin: theme.spacing(1),
+    height: '40px',
+    backgroundColor: 'palevioletred'
   },
-  input: {
-    display: 'none'
+
+  buttonDel: {
+    margin: theme.spacing(1),
+    backgroundColor: '#000'
+  },
+
+  textField: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    width: 200,
+    height: '100%'
+  },
+  titleField: {
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    fontSize: '40px',
+    color: '#039BE5'
+  },
+  content: {
+    display: 'flex'
   },
   contentField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
     backgroundColor: '#eeeeee99',
     fontSize: 40,
-    maxHeight: '30vh'
+    minHeight: '50vh'
   },
   dense: {
     marginTop: 19
   },
   formControl: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     minWidth: 120
   },
   markdown: {
     width: '90vw',
-    maxHeight: '30vh'
+    height: '60vh',
+    overflow: 'scroll'
   },
-  content: {
-    display: 'flex',
-    marginLeft: '2rem',
-    borderTop: 'solid 1px #ddd',
-    borderBottom: 'solid 1px #ddd'
-  },
-  content2: {
-    display: 'flex',
-    flexDirection: 'column',
-    marginLeft: '2rem'
-  },
-  button2: {
-    margin: theme.spacing.unit,
-    height: '40px',
-    backgroundColor: 'palevioletred'
-  },
-  button3: {
-    margin: theme.spacing.unit,
-    height: '40px'
+  menu: {
+    width: 200
   }
-});
+}));
 
-const SpanWrapper = styled.span`
-  justify-content: center;
-  text-align: center;
-  align-items: center;
-  display: flex;
-  padding: 2px;
-`;
-
-function useProduct(id) {
-  const { loading, data } = useQuery(QUERY_SINGLE_PRODUCT, { suspend: false, variables: { id } });
-  const defaults = { cloudsuiteproduct: { name: '', description: '', contacts: [], content: '' } };
-  if (loading) return defaults;
-  else return data;
-}
-
-function Product({ match, history, classes }) {
+function Product({ match, history }) {
+  const classes = useStyles();
   const id = match.params.id;
   const [isEditable, setEditable] = React.useState(false);
-  const contact = useInput('');
-  const value = useInput('');
-  const contentValue = useInput('');
-  const organisation = useInput('Support');
 
-  let content = null;
-
-  React.useEffect(() => {
-    console.log('render');
-    contentValue.setValue(content);
-  });
-
-  function clearInputValues() {
-    organisation.clear();
-    contact.clear();
-    value.clear();
-  }
-
-  async function saveInput() {
-    const input = {
-      productid: id,
-      contacttype: contact.value,
-      organisation: organisation.value,
-      value: value.value
-    };
-    addContact({ variables: { input } });
-    console.log('input', input);
-  }
-  const productid = id;
-  console.log(id);
-  const { loading, data } = useQuery(QUERY_SINGLE_PRODUCT, { suspend: false, variables: { id } });
-  const addContact = useMutation(MUTATION_ADD_PRODUCT_CONTACT);
-  const removeContact = useMutation(MUTATION_REMOVE_PRODUCT_CONTACT);
+  const { loading, data } = useQuery(QUERY_SINGLE_PRODUCT, { variables: { id } });
   if (loading) return <Spinner />;
-  // const data = useProduct(id);
   console.log(data);
-  const { cloudsuiteproduct } = data;
-  const { contacts } = cloudsuiteproduct;
-  //setContentValue(content);
+  const {
+    cloudsuiteproduct: { name, description, content: contentVal }
+  } = data;
 
   return (
-    <div>
-      <Article>
-        <Header>
-          <OverThePage>
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={() => history.push('/cloudsuites')}
-            >
-              Back to Suites
-            </Button>
-            {isEditable ? (
-              <SpanWrapper>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  className={classes.button3}
-                  onClick={() => setEditable(!isEditable)}
-                >
-                  Save
-                </Button>
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  className={classes.button3}
-                  onClick={() => setEditable(!isEditable)}
-                >
-                  Cancel
-                </Button>
-              </SpanWrapper>
-            ) : (
-              <span>
-                Edit <EditIcon onClick={() => setEditable(!isEditable)} />
-              </span>
-            )}
-          </OverThePage>
-          <H1>Information </H1>
-          <ProductForm product={cloudsuiteproduct} classes={classes} isEditable={isEditable} />
-
-          <H1>Contacts </H1>
-          <ContactForm />
-        </Header>
-      </Article>
-    </div>
+    <ProductForm product={data.cloudsuiteproduct} history={history} classes={classes}></ProductForm>
   );
 }
 
-export default withRouter(withStyles(styles)(Product));
+export default withRouter(Product);
+
+const ProductForm = props => {
+  const {
+    product,
+    onSave = () => console.log('dave'),
+    authenticated = true,
+    onDelete = () => console.log('delke'),
+    history,
+    classes
+  } = props;
+  const readOnly = !authenticated;
+  const [on, toggle] = React.useState(false);
+  //const updatedAt = supportcard ? supportcard.updatedAt : format(new Date(), 'YYYY-MM-DD');
+  //const currentUser = useUser();
+  return (
+    <Paper style={paperStyle}>
+      <Formik
+        initialValues={{ ...product }}
+        onSubmit={values => {
+          console.log('Submitting value', values);
+          onSave(values);
+        }}
+      >
+        {({ values, handleChange, handleBlur, handleSubmit }) => {
+          return (
+            <form onSubmit={handleSubmit}>
+              <TextField
+                id="title"
+                label="Title"
+                className={classes.titleField}
+                value={values.name}
+                onChange={handleChange}
+                onBlur={handleBlur}
+                margin="normal"
+                disabled={readOnly}
+                fullWidth
+              />
+              <div className={classes.content}>
+                {!readOnly && on && (
+                  <TextField
+                    id="description"
+                    label="Description"
+                    className={classes.contentField}
+                    value={values.description}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    margin="normal"
+                    fullWidth
+                    multiline
+                    rows={25}
+                  />
+                )}
+                {!on && (
+                  <div className={classes.markdown}>
+                    <ReactMarkdown source={values.description} />
+                  </div>
+                )}
+                {!readOnly && (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    className={classes.button2}
+                    onClick={() => toggle(!on)}
+                  >
+                    {on ? 'Preview' : 'Edit '}
+                  </Button>
+                )}
+              </div>
+              <CardSection>
+                {!readOnly && (
+                  <React.Fragment>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      className={classes.button}
+                      type="submit"
+                    >
+                      Save
+                    </Button>
+                  </React.Fragment>
+                )}
+                {!readOnly && product && (
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    className={classes.buttonDel}
+                    onClick={() => onDelete()}
+                  >
+                    Delete
+                  </Button>
+                )}
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  className={classes.button}
+                  onClick={() => setTimeout(history.push('/supportcard'), 500)}
+                >
+                  Cancel
+                </Button>
+              </CardSection>
+            </form>
+          );
+        }}
+      </Formik>
+    </Paper>
+  );
+};

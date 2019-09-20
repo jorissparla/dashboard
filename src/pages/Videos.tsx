@@ -9,7 +9,7 @@ import red from '@material-ui/core/colors/red';
 import { withStyles } from '@material-ui/core/styles';
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { useMutation, useQuery } from 'react-apollo-hooks';
+import { useMutation, useQuery } from 'react-apollo';
 import { withRouter } from 'react-router';
 import SearchBar from '../common/SearchBar';
 import { format } from '../utils/format';
@@ -79,10 +79,8 @@ type videoType = {
 };
 
 function VideoContainer(props: any) {
-  const { loading, data } = useQuery(QUERY_ALL_VIDEOS, {
-    suspend: false
-  });
-  const updateViews = useMutation(MUTATION_UPDATE_VIEW);
+  const { loading, data } = useQuery(QUERY_ALL_VIDEOS);
+  const [updateViews] = useMutation(MUTATION_UPDATE_VIEW);
   useEffect(() => {
     document.title = 'Support DashBoard Instruction Videos';
     return () => {

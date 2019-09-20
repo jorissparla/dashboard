@@ -3,7 +3,9 @@ import DashBoardProvider from './Provider';
 import { SelectionProvider } from './SelectionContext';
 import { SharedSnackbarProvider } from './SharedSnackbar.context';
 import { FilterFieldProvider } from './FilterContext';
+import { UserContextProvider } from './UserProvider';
 import { ThemeContextProvider } from './ThemeContext';
+import { UserContext } from './UserProvider';
 function ProviderComposer({ contexts, children }) {
   return contexts.reduceRight(
     (kids, parent) =>
@@ -19,6 +21,7 @@ export default function ContextProvider({ children }) {
     <ProviderComposer
       contexts={[
         <DashBoardProvider />,
+        <UserContextProvider />,
         <SelectionProvider />,
         <SharedSnackbarProvider />,
         <FilterFieldProvider />,

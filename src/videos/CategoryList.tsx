@@ -1,8 +1,8 @@
-import * as React from "react";
-import gql from "graphql-tag";
-import { useQuery, useMutation } from "react-apollo-hooks";
-import styled from "styled-components";
-import { Block } from "../elements/Block";
+import gql from 'graphql-tag';
+import * as React from 'react';
+import { useQuery } from 'react-apollo';
+import styled from 'styled-components';
+import { Block } from '../elements/Block';
 
 const List = styled.div`
   display: flex;
@@ -41,9 +41,7 @@ type CategoryType = {
 };
 export const CategoryBar: React.FC<Props> = ({ isSelected, setSelected }) => {
   //const categories = ['Dashboard Instruction', 'Technical', 'Development', 'Other'];
-  const { loading, data } = useQuery(QUERY_VIDEO_CATEGORIES, {
-    suspend: false
-  });
+  const { loading, data } = useQuery(QUERY_VIDEO_CATEGORIES, {});
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -51,11 +49,11 @@ export const CategoryBar: React.FC<Props> = ({ isSelected, setSelected }) => {
   return (
     <div
       style={{
-        display: "flex",
-        flexDirection: "column",
-        height: "100vh",
-        alignContent: "flex-start",
-        width: "20%"
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100vh',
+        alignContent: 'flex-start',
+        width: '20%'
       }}
     >
       <BrowseTitle>Browse by Topic</BrowseTitle>
@@ -74,22 +72,20 @@ export const CategoryBar: React.FC<Props> = ({ isSelected, setSelected }) => {
     </div>
   );
 };
-export const CategoryBarMultipleSelect: React.FC<Props> = ({ isSelected = "NEW", setSelected }) => {
+export const CategoryBarMultipleSelect: React.FC<Props> = ({ isSelected = 'NEW', setSelected }) => {
   //const categories = ['Dashboard Instruction', 'Technical', 'Development', 'Other'];
-  const { loading, data } = useQuery(QUERY_VIDEO_CATEGORIES, {
-    suspend: false
-  });
+  const { loading, data } = useQuery(QUERY_VIDEO_CATEGORIES, {});
   if (loading) {
     return <div>Loading...</div>;
   }
-  const selectedArray = isSelected.split(";");
+  const selectedArray = isSelected.split(';');
   const categories = data.videocategories;
   return (
     <div
       style={{
-        display: "flex",
-        flexDirection: "column",
-        alignContent: "flex-start"
+        display: 'flex',
+        flexDirection: 'column',
+        alignContent: 'flex-start'
       }}
     >
       <BrowseTitle>Topics</BrowseTitle>

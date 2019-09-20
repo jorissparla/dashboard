@@ -1,17 +1,17 @@
-import React from 'react';
-import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
-import Paper from '@material-ui/core/Paper';
+import { FormControl, InputLabel, MenuItem, Select, TextField } from '@material-ui/core';
+import Badge from '@material-ui/core/Badge';
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
-import Typography from '@material-ui/core/Typography';
-import { Formik } from 'formik';
-import { TextField, Select, FormControl, InputLabel, MenuItem } from '@material-ui/core';
+import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
-import Badge from '@material-ui/core/Badge';
+import Typography from '@material-ui/core/Typography';
+import { distanceInWordsToNow } from 'date-fns';
+import { Formik } from 'formik';
+import gql from 'graphql-tag';
+import React from 'react';
+import { Query } from 'react-apollo';
 import { withRouter } from 'react-router';
 import * as yup from 'yup';
-import { distanceInWordsToNow } from 'date-fns';
 
 const validationSchema = yup.object().shape({
   title: yup.string().required(),
@@ -21,9 +21,9 @@ const validationSchema = yup.object().shape({
 const styles = theme => ({
   root: {
     ...theme.mixins.gutters(),
-    paddingTop: theme.spacing.unit * 2,
-    paddingBottom: theme.spacing.unit * 2,
-    padding: theme.spacing.unit * 2,
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
+    padding: theme.spacing(2),
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
@@ -32,14 +32,14 @@ const styles = theme => ({
     backgroundColor: 'rgba(219, 112, 147, 0.2);'
   },
   margin: {
-    margin: theme.spacing.unit * 2,
+    margin: theme.spacing(2),
     color: 'black'
   },
   button: {
     width: 200
   },
   button2: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     width: 200
   },
 
@@ -49,27 +49,33 @@ const styles = theme => ({
     alignItems: 'center'
   },
   buttonDel: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     color: '#FFF',
     backgroundColor: '#000'
   },
 
   textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
     marginBottom: 20
   },
   titleField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
     marginBottom: 20,
     width: '90%'
   },
   hourField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing(1),
+    marginRight: theme.spacing(1),
     marginBottom: 20,
     width: 50
+  },
+  docnumberfield: {
+    marginLeft: 20,
+    // marginBottom: -18,
+    width: 200,
+    marginTop: 10
   }
 });
 
@@ -126,6 +132,7 @@ class CourseForm extends React.Component {
       type: 'Class Room Training',
       category: 'Product',
       description: '',
+      documentnr: '',
       link: '',
       lastmodified: Date.now()
     }
@@ -141,7 +148,7 @@ class CourseForm extends React.Component {
             return 'Loading...';
           }
 
-          const { coursetypes, coursecategories, statuses, locations, supportfolks } = data;
+          const { coursetypes, coursecategories, statuses,  supportfolks } = data;
           const { title } = this.state.initialValues;
           return (
             <Formik
@@ -309,6 +316,20 @@ class CourseForm extends React.Component {
                             </MenuItem>
                           ))}
                         </Select>
+                      </FormControl>
+                      <FormControl className={classes.formControl}>
+                        <InputLabel shrink htmlFor="category">
+                          Document number
+                        </InputLabel>
+                        <TextField
+                          name="documentnr"
+                          disabled={view}
+                          className={classes.docnumberfield}
+                          // label="Document Number"
+                          value={values.documentnr}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                        />
                       </FormControl>
                     </div>
                     <div className={classes.block}>
