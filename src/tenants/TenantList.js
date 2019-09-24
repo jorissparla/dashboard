@@ -277,12 +277,17 @@ const filterTenantsByCustomerFarmVersion = (tenants, fields, details) => {
     tenantVersion = '',
     tenantName = '',
     isLive = false,
-    temperature
+    temperature = '',
+    csm = '',
+    pm = ''
   } = fields;
-  // console.log({ customer });
+  console.log({ csm }, details, temperature);
   let filteredCustomerNames = null;
-  if (temperature && details) {
-    filteredCustomerNames = details.filter(detail => detail.temperature === temperature);
+  if (details) {
+    filteredCustomerNames = details
+      .filter(detail => detail.temperature.toUpperCase().includes(temperature.toUpperCase()))
+      .filter(detail => detail.csm.toUpperCase().includes(csm.toUpperCase()))
+      .filter(detail => detail.pm.toUpperCase().includes(pm.toUpperCase()));
   }
   console.log({ filteredCustomerNames });
   const retValue = _.chain(tenants)
@@ -295,7 +300,8 @@ const filterTenantsByCustomerFarmVersion = (tenants, fields, details) => {
     .filter(t => (isLive ? t.live === 1 : true))
     .sortBy(o => o.customer.name)
     .value();
-  if (temperature && details) {
+
+  if (details) {
     return retValue.filter(t =>
       filteredCustomerNames.find(cn => cn.customer.name === t.customer.name)
     );
