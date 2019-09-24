@@ -76,7 +76,16 @@ export default function CloudSuites({ history }) {
                     Products
                   </But>
                 )}
-                <But secondary>contacts</But>
+                <But
+                  secondary
+                  onClick={() =>
+                    window.open(
+                      'http://development.home.infor.com/pmprojects/Lists/Product%20Contacts%20List/All%20Contacts.aspx?mkt_tok=eyJpIjoiTldJMFlqRTJOamczWXpWbSIsInQiOiJaTjRzakE1VDI2ZFFha1d3eHFSdFdCKzRvSkFGUk5iaFNnQW1mZ3U4dHNXNllvZmJ0UlR1MnVTTk1raHZLXC9JRHFNV1g4a3lIU3JiXC9VYVwvT2k5V2thSU41TUtSSWhHRHVMbTNMY2lqSzJjK1ZHem9iTythRzd5cGwwSTA1Q1g0QSJ9'
+                    )
+                  }
+                >
+                  contacts
+                </But>
               </Footer>
             </Article>
           );
