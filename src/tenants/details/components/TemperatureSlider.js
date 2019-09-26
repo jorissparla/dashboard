@@ -93,13 +93,14 @@ const TemperatureSlider = withStyles({
   }
 })(Slider);
 
-export default function CustomizedSlider({ initialValue = 'Stable', onChange }) {
+export default function CustomizedSlider({ initialValue = 'NORMAL', onChange }) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
   React.useEffect(() => {
     const temp = marks.find(m => m.label === initialValue);
-    setValue(temp.value);
+    setValue(temp ? initialValue : temp.value);
   }, []);
+  console.log(value);
   const handleChange = (_, v) => {
     setValue(v);
     console.log(v);
@@ -116,7 +117,7 @@ export default function CustomizedSlider({ initialValue = 'Stable', onChange }) 
         step={null}
         aria-label="pretto slider"
         marks={marks}
-        value={value}
+        defaultValue={value}
       />
     </div>
   );
