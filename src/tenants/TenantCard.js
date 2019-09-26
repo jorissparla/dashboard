@@ -96,6 +96,9 @@ export const TenantCard = ({
     })
     .sort((a, b) => (a.index > b.index ? 1 : -1));
 
+  const baseTenantId =
+    tenants && tenants.length && tenants.length > 0 ? tenants[0].name.split('_')[0] : '';
+  // console.log(customer, tenants[0]);
   return (
     <>
       <Card className={customer === 'Infor' ? classes.card2 : classes.card}>
@@ -119,6 +122,7 @@ export const TenantCard = ({
           />
           <Typography className={classes.pos} color="textSecondary">
             {tenants.length > 0 && tenants[0].farm}
+            <span className={classes.box}>{baseTenantId}</span>
           </Typography>
           <div className={classes.description}>
             <Typography color="textSecondary" variant="subtitle2">

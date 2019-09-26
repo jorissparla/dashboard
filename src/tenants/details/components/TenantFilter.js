@@ -93,6 +93,7 @@ const Filter = props => {
 
   const handleClear = () => {
     setValues({ ...initialValues });
+    // console.log()
   };
 
   const handleFieldChange = (event, field, value) => {

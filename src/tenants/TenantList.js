@@ -36,6 +36,28 @@ const styles = theme => ({
     fontSize: 20,
     fontWeight: 800
   },
+  box: {
+    marginLeft: 20,
+    color: ' rgb(57, 73, 171)',
+    border: 'none',
+    height: '20px',
+    display: 'inline-flex',
+    padding: '4px 8px',
+    flexGrow: '0',
+    fontSize: '10px',
+    minWidth: '20px',
+    alignItems: 'center',
+    letterSpacing: '0.2rem',
+    flexShrink: '0',
+    lineHeight: '10px',
+    whiteSpace: 'nowrap',
+    borderRadius: '4px',
+    justifyContent: 'center'
+  },
+  pos: {
+    display: 'flex',
+    justifyContent: 'space-between'
+  },
   card: {
     minWidth: 390,
     margin: 10,
