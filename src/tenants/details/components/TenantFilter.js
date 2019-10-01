@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/styles';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
+import { usePersistentState } from '../../../hooks';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -89,7 +90,7 @@ const Filter = props => {
   };
 
   const [expandCustomer, setExpandCustomer] = useState(true);
-  const [values, setValues] = useState({ ...initialValues });
+  const [values, setValues] = usePersistentState('filters', { ...initialValues });
 
   const handleClear = () => {
     setValues({ ...initialValues });

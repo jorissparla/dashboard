@@ -3,40 +3,40 @@
 // import CardActions from '@material-ui/core/CardActions';
 // import CardContent from '@material-ui/core/CardContent';
 // import CardMedia from '@material-ui/core/CardMedia';
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import { withStyles } from "@material-ui/core/styles";
-import gql from "graphql-tag";
-import _ from "lodash";
-import React from "react";
-import { adopt } from "react-adopt";
-import { Mutation, Query } from "react-apollo";
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import { withStyles } from '@material-ui/core/styles';
+import gql from 'graphql-tag';
+import _ from 'lodash';
+import React from 'react';
+import { adopt } from 'react-adopt';
+import { Mutation, Query } from 'react-apollo';
 //import { SmallCard } from "./SupportCard";
-import ReactMarkdown from "react-markdown";
-import styled from "styled-components";
-import SearchBar from "../common/SearchBar";
-import { SmallCard } from "../common/SmallCard";
-import Modal from "../ModalWrapper";
-import AddCard from "../supportcard/AddCard";
-import CategoryTabs from "../supportcard/CategoryTabs";
+import ReactMarkdown from 'react-markdown';
+import styled from 'styled-components';
+import SearchBar from '../common/SearchBar';
+import { SmallCard } from '../common/SmallCard';
+import Modal from '../ModalWrapper';
+import AddCard from '../supportcard/AddCard';
+import CategoryTabs from '../supportcard/CategoryTabs';
 // import Typography from '@material-ui/core/Typography';
-import NewRequestForm from "../supportcard/Request";
-import User from "../User";
-import Spinner from "../utils/spinner";
-import withAuth from "../utils/withAuth";
+import NewRequestForm from '../supportcard/Request';
+import User from '../User';
+import Spinner from '../utils/spinner';
+import withAuth from '../utils/withAuth';
 
 const cardColors = [
-  { back: "#7fbadb", front: "#000" },
-  { back: "#FFCC80", front: "#000" },
-  { back: "papayawhip", front: "#000" },
-  { back: "#B9F6CA", front: "#000" },
-  { back: "#EDE7F6", front: "#000" },
-  { back: "#80D8FF", front: "#000" },
-  { back: "#b39ddb", front: "#000" },
-  { back: "#FFCCBC", front: "#000" },
-  { back: "palevioletred", front: "#000" },
-  { back: "#E1F5FE", front: "#000" },
-  { back: "#607D8B", front: "#000" }
+  { back: '#7fbadb', front: '#000' },
+  { back: '#FFCC80', front: '#000' },
+  { back: 'papayawhip', front: '#000' },
+  { back: '#B9F6CA', front: '#000' },
+  { back: '#EDE7F6', front: '#000' },
+  { back: '#80D8FF', front: '#000' },
+  { back: '#b39ddb', front: '#000' },
+  { back: '#FFCCBC', front: '#000' },
+  { back: 'palevioletred', front: '#000' },
+  { back: '#E1F5FE', front: '#000' },
+  { back: '#607D8B', front: '#000' }
 ];
 
 const suppCardFragment = gql`
@@ -98,9 +98,9 @@ const styles = theme => ({
     padding: 10,
     height: 250,
     margin: 10,
-    display: "flex",
-    flexDirection: "column",
-    alignContent: "space-between"
+    display: 'flex',
+    flexDirection: 'column',
+    alignContent: 'space-between'
   },
   media: {
     height: 100
@@ -109,12 +109,12 @@ const styles = theme => ({
     fontSize: 12
   },
   button: {
-    height: "2rem"
+    height: '2rem'
   }
 });
 
 String.prototype.includes2 = function(search, start) {
-  if (typeof start !== "number") {
+  if (typeof start !== 'number') {
     start = 0;
   }
 
@@ -126,7 +126,7 @@ String.prototype.includes2 = function(search, start) {
 };
 
 const customContentStyle = {
-  height: "100%"
+  height: '100%'
 };
 
 const Div = styled.div`
@@ -149,12 +149,18 @@ const Composed = adopt({
   supportcards: ({ render }) => <Query query={QUERY_ALL_SUPPORTCARDS}>{render}</Query>,
   createAudit: ({ render }) => <Mutation mutation={MUTATION_CREATE_AUDIT}>{render}</Mutation>,
   favoriteCard: ({ render }) => (
-    <Mutation mutation={MUTATION_FAVORITE_CARD} refetchQueries={[{ query: QUERY_ALL_SUPPORTCARDS }]}>
+    <Mutation
+      mutation={MUTATION_FAVORITE_CARD}
+      refetchQueries={[{ query: QUERY_ALL_SUPPORTCARDS }]}
+    >
       {render}
     </Mutation>
   ),
   unfavoriteCard: ({ render }) => (
-    <Mutation mutation={MUTATION_UNFAVORITE_CARD} refetchQueries={[{ query: QUERY_ALL_SUPPORTCARDS }]}>
+    <Mutation
+      mutation={MUTATION_UNFAVORITE_CARD}
+      refetchQueries={[{ query: QUERY_ALL_SUPPORTCARDS }]}
+    >
       {render}
     </Mutation>
   ),
@@ -168,7 +174,7 @@ export default function SupportCardContainer(props) {
         const { data, loading } = supportcards;
         if (loading) return <Spinner />;
         const currentUser = user.data.me;
-        console.log("Currentuser", user);
+        console.log('Currentuser', user);
         return (
           <StyledSupportCards
             supportcards={data.supportcards}
@@ -186,11 +192,11 @@ export default function SupportCardContainer(props) {
 
 class SupportCards extends React.Component {
   state = {
-    searchText: "",
-    selectedCategory: "",
+    searchText: '',
+    selectedCategory: '',
     showRequest: false,
     showFavorites: false,
-    portalText: "### Where can I find release Notes documents",
+    portalText: '### Where can I find release Notes documents',
     showPortal: false
   };
 
@@ -199,22 +205,30 @@ class SupportCards extends React.Component {
 
   handleClose = () => this.setState({ showRequest: false });
 
-  createAudit = (e, type = "SupporCard", link) => {
-    const splitAr = e.split("/");
-    const page = splitAr.slice(0, 3).join("/");
+  createAudit = (e, type = 'SupporCard', link) => {
+    const splitAr = e.split('/');
+    const page = splitAr.slice(0, 3).join('/');
     const linkid = splitAr.slice(3, 4)[0];
-    const input = { page, linkid, username: this.props.user.fullname, type };
-    this.props.createAudit({ variables: { input } }).then(res => console.log("RES::", res));
+    const input = { page, linkid, username: this.props.user ? this.props.user.fullname : '', type };
+    this.props.createAudit({ variables: { input } }).then(res => console.log('RES::', res));
   };
 
   togglePortal = text => {
-    console.log("toggle", text);
+    console.log('toggle', text);
     this.setState({ portalText: text, showPortal: true });
   };
 
   render() {
-    const { authenticated, isEditor, supportcards, currentUser, favoriteCard, unfavoriteCard, classes } = this.props;
-    console.log("Auth", this.props);
+    const {
+      authenticated,
+      isEditor,
+      supportcards,
+      currentUser,
+      favoriteCard,
+      unfavoriteCard,
+      classes
+    } = this.props;
+    console.log('Auth', this.props);
     const actions = [
       <Button variant="contained" color="secondary" onClick={this.handleClose}>
         Cancel
@@ -238,7 +252,10 @@ class SupportCards extends React.Component {
           onRequestClose={() => this.setState({ showRequest: false })}
           autoScrollBodyContent={false}
         >
-          <NewRequestForm user={this.props.user} onSubmit={() => this.setState({ showRequest: false })} />
+          <NewRequestForm
+            user={this.props.user}
+            onSubmit={() => this.setState({ showRequest: false })}
+          />
         </Dialog>
         <Div>
           <CategoryTabs onChange={this.setSelectedCategory} onSave={v => console.log(v)} />
@@ -257,7 +274,11 @@ class SupportCards extends React.Component {
           {authenticated && isEditor ? (
             <AddCard link="/supportcard/add" title="Add a New Card" background="papayawhip" />
           ) : (
-            <AddCard link="supportcard/request" title="Request a new Support Card" background="papayawhip" />
+            <AddCard
+              link="supportcard/request"
+              title="Request a new Support Card"
+              background="papayawhip"
+            />
           )}
 
           {filteredCards.map(
@@ -274,7 +295,8 @@ class SupportCards extends React.Component {
               },
               i
             ) => {
-              const vieweditLink = authenticated && isEditor ? `/supportcard/edit/${id}` : `/supportcard/view/${id}`;
+              const vieweditLink =
+                authenticated && isEditor ? `/supportcard/edit/${id}` : `/supportcard/view/${id}`;
               const viewLink = `/supportcard/view/${id}`;
 
               const isNew = false;
@@ -313,9 +335,9 @@ class SupportCards extends React.Component {
                   canEdit={authenticated && isEditor}
                   editLink={`${vieweditLink}`}
                   viewLink={viewLink}
-                  onAudit={v => this.createAudit(v, "SupportCard", null)}
+                  onAudit={v => this.createAudit(v, 'SupportCard', null)}
                   onFollowLink={(v, link) => {
-                    this.createAudit(v, "SupportCardLink", link);
+                    this.createAudit(v, 'SupportCardLink', link);
                     return link;
                   }}
                 />
@@ -323,7 +345,10 @@ class SupportCards extends React.Component {
             }
           )}
         </Div>
-        <Modal on={this.state.showPortal} toggle={() => this.setState({ showPortal: !this.state.showPortal })}>
+        <Modal
+          on={this.state.showPortal}
+          toggle={() => this.setState({ showPortal: !this.state.showPortal })}
+        >
           <ReactMarkdown>{this.state.portalText}</ReactMarkdown>
         </Modal>
       </Container>

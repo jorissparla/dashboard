@@ -8,6 +8,7 @@ import DeveloperPin from '@material-ui/icons/DeveloperMode';
 import ReprodPin from '@material-ui/icons/Build';
 import SatPin from '@material-ui/icons/ThumbUp';
 import AllPin from '@material-ui/icons/ClearAll';
+import FlagIcon from '@material-ui/icons/Flag';
 
 const IconMapper = label => {
   switch (label) {
@@ -17,6 +18,8 @@ const IconMapper = label => {
       return <DeveloperPin />;
     case 'Reproduction':
       return <ReprodPin />;
+    case 'Localizations':
+      return <FlagIcon />;
     case 'CustomerSat':
       return <SatPin />;
 
