@@ -242,6 +242,19 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
             label="Swan"
           />
         )}
+        {isXpertOrSwan && (
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={getValue('AutoConnect')}
+                onChange={() => toggleSet('AutoConnect')}
+                value="AutoConnect"
+                color="secondary"
+              />
+            }
+            label="AutoConnect"
+          />
+        )}
       </FormGroup>
 
       <div style={{ position: 'relative', right: '-40px' }}>
