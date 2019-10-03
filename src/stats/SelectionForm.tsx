@@ -101,6 +101,7 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
   function getValue(value: string) {
     return products.indexOf(value) >= 0;
   }
+  console.log('loading .....');
   return (
     <Paper className={classes.paper2}>
       {/* <FormLabel>Cloud</FormLabel>

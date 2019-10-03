@@ -166,6 +166,7 @@ const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
   // const currentUser = props.user;
   // console.log('currentUser', dauserta, products);
   let enableIt: boolean;
+  enableIt = false;
   let isXpertOrSwan = false;
   if (user && user.permissions) {
     enableIt = user.permissions.some((u: { permission: string }): any => u.permission === 'STATS');
@@ -175,14 +176,14 @@ const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
       );
     }
   } else {
-    enableIt = false;
+    // enableIt = false;
   }
   const mostRecentUpdate = data ? data.mostRecentUpdate : new Date().toLocaleTimeString();
   return (
     <div className={classes.root}>
       <SelectionForm
         isValidSuperUser={isValidSuperUser || enableIt}
-        isXpertOrSwan={isValidSuperUser || isXpertOrSwan}
+        isXpertOrSwan={isValidSuperUser || isXpertOrSwan || enableIt}
         onNavigateToParams={() => props.history.push('/myworkparams')}
         classes={props.classes}
         initialValue={{ owner, isCloud, lastUpdated: mostRecentUpdate, actionNeeded: true }}
@@ -226,10 +227,18 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
       (item: any) => !item.service_restored_date && item.status !== 'Solution Proposed'
     )
   ];
-  console.log('critical', sev12notrestored);
+  const [loading, setLoading] = useState(true);
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 2000);
+    return () => {};
+  }, []);
+  const sev1notrestored = data.critical.filter((item: any) => !item.service_restored_date);
+  console.log('critical', sev1notrestored);
   const { isCloud } = useContext(SelectionContext);
   return (
     <>
+      {loading && <Spinner />}
       {isCloud && (
         <div>
           <BacklogTable
@@ -338,7 +347,7 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
           />
           <BacklogTable
             classes={classes}
-            backlog={data.critical}
+            backlog={data.sev1notrestored}
             title="Critical"
             description="All Incidents with a severity of 'Production Outage / Critical Application halted'"
           />

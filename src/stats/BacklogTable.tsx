@@ -119,7 +119,7 @@ export const BacklogTable = ({
   });
 
   if (!backlog) {
-    return <div>No data </div>;
+    return <div></div>;
   }
   if (actionNeeded && backlog.length === 0) {
     return <div />;
