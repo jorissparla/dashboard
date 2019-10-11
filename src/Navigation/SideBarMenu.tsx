@@ -6,6 +6,7 @@ import {
   List,
   ListItemIcon
 } from '@material-ui/core';
+import XpertIcon from '@material-ui/icons/Commute';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 import ChatIcon from '@material-ui/icons/Chat';
@@ -87,16 +88,15 @@ export const SideBarMenu: React.FC<Props> = ({ classes, history, toggleMenu, ope
           navigateTo="/historyall"
           history={history}
         />
-      </ExpandableMenuItem>
-      <Divider />
-      <ExpandableMenuItem classes={classes} title="Go Lives" Icon={GoLiveIcon}>
         <ToggledNavLink
-          title="Go Lives"
-          Icon={GoLiveIcon}
-          navigateTo="/golives"
+          title="Backlog Xpert"
+          Icon={XpertIcon}
+          navigateTo="/historyother"
           history={history}
         />
       </ExpandableMenuItem>
+      <Divider />
+      <ToggledNavLink title="Go Lives" Icon={GoLiveIcon} navigateTo="/golives" history={history} />
       <ToggledNavLink
         title="MT Customers"
         Icon={ExtensionIcon}

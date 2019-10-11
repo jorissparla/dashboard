@@ -63,6 +63,7 @@ const styles = theme => ({
     ...theme.mixins.toolbar,
     justifyContent: 'flex-end'
   },
+  sidebar: {},
   content: {
     flexGrow: 1,
     padding: theme.spacing(3),

@@ -234,6 +234,10 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
     return () => {};
   }, []);
   const sev1notrestored = data.critical.filter((item: any) => !item.service_restored_date);
+  const multitenant = data.multitenant
+    .filter((item: any) => item.Tenant === 'Multi-Tenant' && item.release !== '10.5')
+    .sort((a: any, b: any) => (a.customer > b.customer ? 1 : -1));
+  console.log('MT', { multitenant });
   console.log('critical', sev1notrestored);
   const { isCloud } = useContext(SelectionContext);
   return (
@@ -247,6 +251,7 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
             title="Critical"
             description="All Incidents with a severity of 'Production Outage / Critical Application halted'"
           />
+
           <BacklogTable
             classes={classes}
             backlog={data.on_hold_cloud}
@@ -344,6 +349,12 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
             backlog={sev12notrestored}
             title="Critical/Major Not restored"
             description="All Incidents with a severity of 'Production Outage / Major Impact' without a restored date"
+          />
+          <BacklogTable
+            classes={classes}
+            backlog={multitenant}
+            title="Multitenant"
+            description="All Incidents open for our MT customers"
           />
           <BacklogTable
             classes={classes}

@@ -35,6 +35,7 @@ import { UserProfileComponent } from './User';
 import UserPermissions from './UserPermissions';
 import { AddVideo, EditVideo } from './videos/VideoOperations';
 import CustomerFollow from './customerfollow';
+import OtherTeamsChartContainer from './charts/OtherTeamChartsContainer';
 
 const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
 
@@ -290,6 +291,7 @@ function AppRoutes(props) {
       <Route path="/forgot" component={RequestResetPassword} />
       <Route path="/historyday" component={HistoryDayContainer} />
       <Route path="/historyall" component={HistoryDayAll} />
+      <Route path="/historyother" component={OtherTeamsChartContainer} />
       <Route path="test/edit/:id" component={NewsItemContainer} />
       <Route exact path="/test/dashboard" component={DashBoardStatsNew} />
       <Route exact path="/test/dashboard/team/:team" component={DashBoardStatsNew} />

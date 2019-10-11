@@ -5,7 +5,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import gql from 'graphql-tag';
-import { Query, useQuery } from 'react-apollo';
+import { useQuery } from 'react-apollo';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
 //import format from 'date-fns/format';

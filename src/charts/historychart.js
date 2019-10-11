@@ -48,6 +48,9 @@ const config = {
 var arColors = [];
 arColors['LN'] = '#ffa726';
 arColors['Tools'] = '#90caf9';
+arColors['xpert'] = '#90caf9';
+arColors['auto'] = '#01579b';
+arColors['plm'] = 'var(--mediumpurp)';
 arColors['Logistics'] = '#c62828';
 arColors['Finance'] = '#01579b';
 
@@ -57,7 +60,7 @@ const renderSummary = (config, xval, val, title, color, type, asummary) => {
   const summary = asummary.slice().reverse();
   const range = summary.map(item => item[val]);
   // const filteredSummary = summary.map(item => [].concat(item[xval], item[val]));
-  console.log('Range', title, val, range);
+  console.log('Range', title, { val }, range);
   color = arColors[val];
   if (color) {
     config.plotOptions.area.color = color;

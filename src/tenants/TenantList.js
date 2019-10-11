@@ -342,8 +342,16 @@ const TenantList = props => {
   const [showLogs, setShowLogs] = useState(false);
   const [isShowingDetails, toggleShowDetails] = useState(false);
   const [counter, setCounter] = useState(0);
-  const happyPress = useKeyPress('C');
+  const keysPressed = useMultiKeyPress();
+  const happyPress = areKeysPressed(['Shift', 'C'], keysPressed); //false; //useKeyPress('C');
 
+  function areKeysPressed(keys = [], keysPressed = []) {
+    const required = new Set(keys);
+    for (var elem of keysPressed) {
+      required.delete(elem);
+    }
+    return required.size === 0;
+  }
   console.log({ counter });
   const { x } = useSpring({
     x: showFilterDialog ? 15 : 0,
@@ -354,7 +362,7 @@ const TenantList = props => {
   const applyFilter = values => {
     setFields(values);
   };
-
+  console.log({ happyPress });
   if (happyPress) {
     console.log('👍👍👍👍👍');
     // clearFields();
@@ -388,7 +396,7 @@ const TenantList = props => {
   return (
     <Main
       onKeyDown={e => {
-        console.log(e, e.keyCode);
+        // console.log(e, e.keyCode);
       }}
     >
       <Loader loading={loading} />
@@ -569,6 +577,30 @@ export const TenantListHeader = ({
     </Article>
   );
 };
+
+function useMultiKeyPress() {
+  const [keysPressed, setKeyPressed] = useState(new Set([]));
+
+  function downHandler({ key }) {
+    setKeyPressed(keysPressed.add(key));
+  }
+
+  const upHandler = ({ key }) => {
+    keysPressed.delete(key);
+    setKeyPressed(keysPressed);
+  };
+
+  useEffect(() => {
+    window.addEventListener('keydown', downHandler);
+    window.addEventListener('keyup', upHandler);
+    return () => {
+      window.removeEventListener('keydown', downHandler);
+      window.removeEventListener('keyup', upHandler);
+    };
+  }, []); // Empty array ensures that effect is only run on mount and unmount
+
+  return keysPressed;
+}
 
 function useKeyPress(targetKey) {
   // State for keeping track of whether key is pressed

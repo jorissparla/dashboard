@@ -132,7 +132,7 @@ export const BacklogTable = ({
     }
   }
   return (
-    <ExpansionPanel>
+    <ExpansionPanel TransitionProps={{ unmountOnExit: true }}>
       <ExpansionPanelSummary className={classes.summary} expandIcon={<ExpandMoreIcon />}>
         <div className={classes.spaceapart}>
           <Typography variant="h6" className={classes.heading}>
