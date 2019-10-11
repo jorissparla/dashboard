@@ -34,7 +34,7 @@ const OtherTeamChartsContainer = ({ color = '#ffb74d' }) => {
   if (loading) return <Spinner />;
   console.log(data);
   if (!data) return <div>No data</div>;
-  const historyXpert = transform(data.Xpert, 'xpert').filter(o => o.odate > '20190930');
+  const historyXpert = transform(data.Xpert, 'xpert').filter(o => o.odate > '20191001');
   console.log(historyXpert.filter(o => o.odate > '20190930'));
   const historyAuto = transform(data.AutoConnect, 'auto');
   const historyPLM = transform(data.PLM, 'plm');
