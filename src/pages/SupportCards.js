@@ -10,7 +10,7 @@ import gql from 'graphql-tag';
 import _ from 'lodash';
 import React from 'react';
 import { adopt } from 'react-adopt';
-import { Mutation, Query } from 'react-apollo';
+import { Mutation, Query, useMutation, useQuery } from 'react-apollo';
 //import { SmallCard } from "./SupportCard";
 import ReactMarkdown from 'react-markdown';
 import styled from 'styled-components';
@@ -24,6 +24,10 @@ import NewRequestForm from '../supportcard/Request';
 import User from '../User';
 import Spinner from '../utils/spinner';
 import withAuth from '../utils/withAuth';
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { UserContextProvider } from 'globalState/UserProvider';
+import { UserContext } from './../globalState/UserProvider';
 
 const cardColors = [
   { back: '#7fbadb', front: '#000' },
@@ -168,21 +172,22 @@ const Composed = adopt({
 });
 
 export default function SupportCardContainer(props) {
+  const { text = '' } = props;
   return (
     <Composed>
       {({ supportcards, createAudit, favoriteCard, unfavoriteCard, user }) => {
         const { data, loading } = supportcards;
         if (loading) return <Spinner />;
-        const currentUser = user.data.me;
-        console.log('Currentuser', user);
+        console.log('🎉🎉', user);
         return (
           <StyledSupportCards
             supportcards={data.supportcards}
             createAudit={createAudit}
             favoriteCard={favoriteCard}
             unfavoriteCard={unfavoriteCard}
-            currentUser={currentUser}
+            currentUser={user}
             {...props}
+            filter={text}
           />
         );
       }}
@@ -190,172 +195,49 @@ export default function SupportCardContainer(props) {
   );
 }
 
-class SupportCards extends React.Component {
-  state = {
-    searchText: '',
-    selectedCategory: '',
-    showRequest: false,
-    showFavorites: false,
-    portalText: '### Where can I find release Notes documents',
-    showPortal: false
-  };
+const SupportCards = props => {
+  const [searchText, setSearchText] = useState(props.filter || '');
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [showFavorites, setShowFavorites] = useState(false);
+  const [showPortal, setShowPortal] = useState(false);
+  const [showRequest, setShowRequest] = useState(false);
+  const [portalText, setPortalText] = useState('### Where can I find release Notes documents');
 
-  setSearchText = value => this.setState({ searchText: value });
-  setSelectedCategory = value => this.setState({ selectedCategory: value });
+  const handleClose = () => setShowRequest(false);
 
-  handleClose = () => this.setState({ showRequest: false });
-
-  createAudit = (e, type = 'SupporCard', link) => {
+  const createAudit = (e, type = 'SupporCard', link) => {
     const splitAr = e.split('/');
     const page = splitAr.slice(0, 3).join('/');
     const linkid = splitAr.slice(3, 4)[0];
-    const input = { page, linkid, username: this.props.user ? this.props.user.fullname : '', type };
-    this.props.createAudit({ variables: { input } }).then(res => console.log('RES::', res));
+    const input = { page, linkid, username: props.user ? props.user.fullname : '', type };
+    props.createAudit({ variables: { input } }).then(res => console.log('RES::', res));
   };
 
-  togglePortal = text => {
+  const togglePortal = text => {
     console.log('toggle', text);
-    this.setState({ portalText: text, showPortal: true });
+    setPortalText(text);
+    setShowPortal(true);
   };
 
-  render() {
-    const {
-      authenticated,
-      isEditor,
-      supportcards,
-      currentUser,
-      favoriteCard,
-      unfavoriteCard,
-      classes
-    } = this.props;
-    console.log('Auth', this.props);
-    const actions = [
-      <Button variant="contained" color="secondary" onClick={this.handleClose}>
-        Cancel
-      </Button>,
-      <Button variant="contained" color="primary" onClick={this.handleClose}>
-        Submit
-      </Button>
-    ];
-    const { searchText, selectedCategory } = this.state;
-
-    let filteredCards = this.doFilter(supportcards, searchText, selectedCategory);
-
-    return (
-      <Container onDoubleClick={() => this.setState({ showRequest: true })}>
-        <Dialog
-          title="Add Request"
-          actions={actions}
-          modal={true}
-          open={this.state.showRequest}
-          contentStyle={customContentStyle}
-          onRequestClose={() => this.setState({ showRequest: false })}
-          autoScrollBodyContent={false}
-        >
-          <NewRequestForm
-            user={this.props.user}
-            onSubmit={() => this.setState({ showRequest: false })}
-          />
-        </Dialog>
-        <Div>
-          <CategoryTabs onChange={this.setSelectedCategory} onSave={v => console.log(v)} />
-          <Button
-            color="primary"
-            className={classes.button}
-            variant="contained"
-            onClick={() => this.setState({ showFavorites: !this.state.showFavorites })}
-          >
-            Show {this.state.showFavorites ? `All` : `Favorites`}
-          </Button>
-        </Div>
-        <SearchBar onChange={this.setSearchText} />
-
-        <Div>
-          {authenticated && isEditor ? (
-            <AddCard link="/supportcard/add" title="Add a New Card" background="papayawhip" />
-          ) : (
-            <AddCard
-              link="supportcard/request"
-              title="Request a new Support Card"
-              background="papayawhip"
-            />
-          )}
-
-          {filteredCards.map(
-            (
-              {
-                id,
-                title,
-                description,
-                updatedAt,
-                isfavorite,
-                accessed,
-                category: { name, color, backgroundcolor },
-                link
-              },
-              i
-            ) => {
-              const vieweditLink =
-                authenticated && isEditor ? `/supportcard/edit/${id}` : `/supportcard/view/${id}`;
-              const viewLink = `/supportcard/view/${id}`;
-
-              const isNew = false;
-              //    format(updatedAt, 'YYYYMMDD') > format(addDays(new Date(), -7), 'YYYYMMDD');
-              // console.log(
-              //   isNew,
-              //   format(updatedAt, 'YYYYMMDD'),
-              //   format(addDays(new Date(), -7), 'YYYYMMDD')
-              // );
-              const supportcard_id = id;
-              const account_id = currentUser ? currentUser.id : null;
-              return (
-                // <NewCard
-                <SmallCard
-                  onTitleClick={() => this.togglePortal(description)}
-                  color={backgroundcolor || cardColors[i % (cardColors.length - 1)].back}
-                  textcolor={color || cardColors[i % (cardColors.length - 1)].front}
-                  key={id}
-                  authenticated={authenticated}
-                  account_id={account_id}
-                  isFavorite={isfavorite}
-                  updatedAt={updatedAt}
-                  accessed={accessed}
-                  onToggleFavorite={() => {
-                    isfavorite
-                      ? unfavoriteCard({ variables: { input: { supportcard_id, account_id } } })
-                      : favoriteCard({ variables: { input: { supportcard_id, account_id } } });
-                  }}
-                  title={title}
-                  supportcard_id={id}
-                  isNew={isNew}
-                  text={description}
-                  category={name}
-                  buttonText="📂"
-                  link={link}
-                  canEdit={authenticated && isEditor}
-                  editLink={`${vieweditLink}`}
-                  viewLink={viewLink}
-                  onAudit={v => this.createAudit(v, 'SupportCard', null)}
-                  onFollowLink={(v, link) => {
-                    this.createAudit(v, 'SupportCardLink', link);
-                    return link;
-                  }}
-                />
-              );
-            }
-          )}
-        </Div>
-        <Modal
-          on={this.state.showPortal}
-          toggle={() => this.setState({ showPortal: !this.state.showPortal })}
-        >
-          <ReactMarkdown>{this.state.portalText}</ReactMarkdown>
-        </Modal>
-      </Container>
-    );
-  }
-
-  doFilter(supportcards, searchText, selectedCategory) {
+  const {
+    authenticated,
+    isEditor,
+    supportcards,
+    currentUser,
+    favoriteCard,
+    unfavoriteCard,
+    classes
+  } = props;
+  console.log('Auth', props);
+  const actions = [
+    <Button variant="contained" color="secondary" onClick={handleClose}>
+      Cancel
+    </Button>,
+    <Button variant="contained" color="primary" onClick={handleClose}>
+      Submit
+    </Button>
+  ];
+  const doFilter = (supportcards, searchText, selectedCategory) => {
     let filteredCards = supportcards
       .filter(card => {
         const {
@@ -373,11 +255,113 @@ class SupportCards extends React.Component {
         } = card;
         return _.includes(name.toUpperCase(), selectedCategory.toUpperCase());
       });
-    if (this.state.showFavorites) {
+    if (showFavorites) {
       filteredCards = filteredCards.filter(card => card.isfavorite === true);
     }
     return filteredCards;
-  }
-}
+  };
+  let filteredCards = doFilter(supportcards, searchText, selectedCategory);
+
+  return (
+    <Container onDoubleClick={() => setShowRequest(true)}>
+      <Dialog
+        title="Add Request"
+        actions={actions}
+        modal={true}
+        open={showRequest}
+        contentStyle={customContentStyle}
+        onRequestClose={() => setShowRequest(false)}
+        autoScrollBodyContent={false}
+      >
+        <NewRequestForm user={props.user} onSubmit={() => setShowRequest(false)} />
+      </Dialog>
+      <Div>
+        <CategoryTabs onChange={value => setSelectedCategory(value)} onSave={v => console.log(v)} />
+        <Button
+          color="primary"
+          className={classes.button}
+          variant="contained"
+          onClick={() => setShowFavorites(!showFavorites)}
+        >
+          Show {showFavorites ? `All` : `Favorites`}
+        </Button>
+      </Div>
+      <SearchBar onChange={value => setSearchText(value)} />
+
+      <Div>
+        {authenticated && isEditor ? (
+          <AddCard link="/supportcard/add" title="Add a New Card" background="papayawhip" />
+        ) : (
+          <AddCard
+            link="supportcard/request"
+            title="Request a new Support Card"
+            background="papayawhip"
+          />
+        )}
+
+        {filteredCards.map(
+          (
+            {
+              id,
+              title,
+              description,
+              updatedAt,
+              isfavorite,
+              accessed,
+              category: { name, color, backgroundcolor },
+              link
+            },
+            i
+          ) => {
+            const vieweditLink =
+              authenticated && isEditor ? `/supportcard/edit/${id}` : `/supportcard/view/${id}`;
+            const viewLink = `/supportcard/view/${id}`;
+
+            const isNew = false;
+
+            const supportcard_id = id;
+            const account_id = currentUser ? currentUser.id : null;
+            return (
+              <SmallCard
+                onTitleClick={() => togglePortal(description)}
+                color={backgroundcolor || cardColors[i % (cardColors.length - 1)].back}
+                textcolor={color || cardColors[i % (cardColors.length - 1)].front}
+                key={id}
+                authenticated={authenticated}
+                account_id={account_id}
+                isFavorite={isfavorite}
+                updatedAt={updatedAt}
+                accessed={accessed}
+                onToggleFavorite={() => {
+                  isfavorite
+                    ? unfavoriteCard({ variables: { input: { supportcard_id, account_id } } })
+                    : favoriteCard({ variables: { input: { supportcard_id, account_id } } });
+                }}
+                title={title}
+                supportcard_id={id}
+                isNew={isNew}
+                text={description}
+                category={name}
+                buttonText="📂"
+                link={link}
+                canEdit={authenticated && isEditor}
+                editLink={`${vieweditLink}`}
+                viewLink={viewLink}
+                onAudit={v => createAudit(v, 'SupportCard', null)}
+                onFollowLink={(v, link) => {
+                  createAudit(v, 'SupportCardLink', link);
+                  return link;
+                }}
+              />
+            );
+          }
+        )}
+      </Div>
+      <Modal on={showPortal} toggle={() => setShowPortal(!showPortal)}>
+        <ReactMarkdown>{portalText}</ReactMarkdown>
+      </Modal>
+    </Container>
+  );
+};
 
 const StyledSupportCards = withAuth(withStyles(styles)(SupportCards));

@@ -220,6 +220,12 @@ function AppRoutes(props) {
         path="/supportcard/request/:id"
         component={RequireAuth(RequestEdit)}
       />
+      <EnhancedRoute
+        editors={['Admin', 'PO']}
+        user={user}
+        path="/supportcard/filter/:text"
+        component={SupportCards}
+      />
       <Route path="award" component={Award} />
       <EnhancedRoute
         editors={['Admin', 'PO']}

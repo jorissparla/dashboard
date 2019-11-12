@@ -96,8 +96,8 @@ const styles = theme => ({
     to: { opacity: 0 }
   },
   watch: {
-    background: 'rgb(251, 140, 0) !important',
-    border: '10px solid rgb(251, 140, 0) !important'
+    background: 'rgb(251, 221, 0) !important',
+    border: '10px solid rgb(251, 221, 0) !important'
   },
   alert: {
     background: 'rgb(229, 57, 53) !important',
