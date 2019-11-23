@@ -61,7 +61,7 @@
       "xm_date_since": "2020-01-01T00:00:00",
       "xm_end_date": "2023-06-30T00:00:00",
       "solutions": "Customer can benefit from the existing solutions. And new fixes when they are Severity 1 and Severity 2 incidents.",
-      "defects": "Support will ONLY create a Defect for Severity 1 and 2 Incidents.\nFor other severities, Support ill NOT create a Defect. If you find a program issue which is still not reported to Development, the customer must find another way to solve their problem.\n- Propose workarounds.\n- Propose they work with Services to design a customer modification or to find other ways of working.\n- Remind them they should consider an upgrade/update of their software.\n",
+      "defects": "✔ Support will ONLY create a Defect for Severity 1 and 2 Incidents.\n ❌For other severities, Support will NOT create a Defect. If you find a program issue which is still not reported to Development, the customer must find another way to solve their problem.\n- Propose workarounds.\n- Propose they work with Services to design a customer modification or to find other ways of working.\n- Remind them they should consider an upgrade/update of their software.\n",
       "data_corruption": "Severity 1 and 2 Incidents that cause Data corruption can be logged as a Defect.\nFor other severities, we cannot deliver a fix, and we will not correct the data, we will need to refer the customer to Services",
       "portingset": "Yes",
       "communication": "Your version is under Extended maintenance till 30th June 2023 which includes many of the benefits of Mainstream Maintenance. Please, note it does not include updates and fixes, except as necessary to help resolve Severity 1 and 2 Incidents. If you would ike to have more information, please note KB article 1946498 “Infor Baan/LN Product Lifecycle Policy” contains detailed information."
@@ -435,7 +435,7 @@
       "mm_ended": "Since the Product Lifecycle policy was published back in March 2018.",
       "xm_end_date": "2021-06-30T00:00:00",
       "solutions": "Customer can only benefit from the existing solutions.\n",
-      "defects": "Support will NOT create a Defect (regardless of the priority).\nIf you find a program issue which is still not reported to Development, the customer must find another way to solve their problem.\n- Propose workarounds.\n- Propose they work with Services to design a customer modification or to find other ways of working.\n- Remind them they should consider an upgrade/update of their software.\n",
+      "defects": "❌Support will NOT create a Defect (regardless of the priority).\nIf you find a program issue which is still not reported to Development, the customer must find another way to solve their problem.\n- Propose workarounds.\n- Propose they work with Services to design a customer modification or to find other ways of working.\n- Remind them they should consider an upgrade/update of their software.\n",
       "data_corruption": "What happens if they find an issue that generates Data corruption? We cannot deliver a fix. But will we correct the wrong data? No, refer them to Services",
       "portingset": "Pre-existing",
       "communication": "Your version is under Extended maintenance till 30th June 2021. However, our system shows that you are not entitled for extended maintenance. Please, contact your Suscription Services Manager should you require Extended maintenance. If you would ike to have more information, please note KB article 1946498 “Infor Baan/LN Product Lifecycle Policy” contains detailed information."

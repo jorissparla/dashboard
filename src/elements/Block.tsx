@@ -1,8 +1,8 @@
-import * as React from "react";
-import styled from "styled-components";
+import * as React from 'react';
+import styled from 'styled-components';
 
-const SELECTEDCOLOR = "rgb(130, 216, 216)";
-const HOVERCOLOR = "#524763";
+const SELECTEDCOLOR = 'rgb(130, 216, 216)';
+const HOVERCOLOR = '#524763';
 
 function getBGColor(props: any) {
   if (props.selected && props.outline) {
@@ -11,9 +11,9 @@ function getBGColor(props: any) {
   return SELECTEDCOLOR;
 }
 
-export const Block = styled("a")<{ selected?: boolean; outline?: boolean }>`
+export const Block = styled('a')<{ selected?: boolean; outline?: boolean }>`
   font-family: Poppins;
-  color: ${props => (props.selected ? "black" : "rgb(69, 69, 69)")};
+  color: ${props => (props.selected ? 'black' : 'rgb(69, 69, 69)')};
   display: inline-block;
   text-transform: uppercase;
   font-size: 1rem;
@@ -22,7 +22,7 @@ export const Block = styled("a")<{ selected?: boolean; outline?: boolean }>`
   margin-right: 5px;
   margin-left: 5px;
   background-color: ${props => getBGColor(props)};
-  background-color: ${props => (props.selected ? SELECTEDCOLOR : "rgb(196, 196, 196)")};
+  background-color: ${props => (props.selected ? SELECTEDCOLOR : 'rgb(196, 196, 196)')};
   border-radius: 3px;
   padding: 5px 10px;
   border-width: initial;
@@ -32,7 +32,31 @@ export const Block = styled("a")<{ selected?: boolean; outline?: boolean }>`
   transition: all 0.2s ease 0s;
   :hover {
     background-color: ${HOVERCOLOR};
-    color: ${props => (props.selected ? "white" : "rgb(69, 69, 69)")};
+    color: ${props => (props.selected ? 'white' : 'white')}; // "rgb(69, 69, 69)")};
+    cursor: pointer;
+  }
+`;
+export const BlockButton = styled('a')<{ background?: string; color?: string }>`
+  font-family: Poppins;
+  color: ${props => (props.color ? props.color : 'white')};
+  display: inline-block;
+  text-transform: uppercase;
+  font-size: 1rem;
+  font-weight: 800;
+  margin-bottom: 5px;
+  margin-right: 5px;
+  margin-left: 5px;
+  background-color: ${props => (props.background ? props.background : SELECTEDCOLOR)};
+  border-radius: 3px;
+  padding: 5px 10px;
+  border-width: initial;
+  border-style: none;
+  border-color: initial;
+  border-image: initial;
+  transition: all 0.2s ease 0s;
+  :hover {
+    background-color: ${HOVERCOLOR};
+    color: ${props => (props.background ? 'white' : 'white')}; // "rgb(69, 69, 69)")};
     cursor: pointer;
   }
 `;

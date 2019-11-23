@@ -4,15 +4,22 @@ import Select from '@material-ui/core/Select';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-import * as React from 'react';
+import React from 'react';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import Grid from '@material-ui/core/Grid';
 import Chip from '@material-ui/core/Chip';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import { useQuery } from 'react-apollo';
 import EditIcon from '@material-ui/icons/Edit';
+import { MessageCircle } from 'react-feather';
+import { Modal, Backdrop } from '@material-ui/core';
 import { maint } from './maintenance.json';
+import EditWizardDetails from './../wizard/EditWizardDetails';
+import VersionSelect from './../wizard/VersionSelector';
+import gql from 'graphql-tag';
+import { ALL_MAINTENANCE_QUERY } from './../wizard/Queries';
 
 const TextOrTypography = ({ edit = false, children = '' }) => {
   const [value, setValue] = React.useState(children);
@@ -43,6 +50,9 @@ const useStyles = makeStyles(theme => ({
   paper: {
     padding: 10,
     marginTop: 10
+  },
+  grid: {
+    minHeight: 150
   },
   left: {
     gridColumn: 1
@@ -89,7 +99,15 @@ const RootContextProvider = ({ children }) => {
   const [activeVersion, setActiveVersion] = React.useState(maint[0]);
   const [checksRequired, setChecksRequired] = React.useState(false);
   const [validMaintenance, toggleValidMaintenance] = React.useState(true);
+  const { data, loading } = useQuery(ALL_MAINTENANCE_QUERY);
 
+  React.useEffect(() => {
+    setActiveVersion(data && data.allMaintenance ? data.allMaintenance[0] : maint[0]);
+    console.log('here');
+  }, [data]);
+
+  if (loading || !data) return <div />;
+  console.log({ data });
   function setVersionByName(name, valid) {
     let found = maint.filter(o => o.version === name);
     console.log(found, found.length);
@@ -142,7 +160,7 @@ const MaintenanceInformation = () => {
     <Paper className={classes.paper}>
       <Typography variant="h6">Maintenance Information</Typography>
       <Grid container spacing={2} justify="center">
-        <Grid item xs={4}>
+        <Grid item xs={3}>
           <FormControlLabel
             control={
               <Switch
@@ -154,19 +172,31 @@ const MaintenanceInformation = () => {
                 inputProps={{ 'aria-label': 'primary checkbox' }}
               />
             }
-            label="Customer has Valid Maintenance"
+            label={
+              validMaintenance ? (
+                <div style={{ color: 'green' }}>Valid Maintenance 👍</div>
+              ) : (
+                <div style={{ color: 'red' }}>Not Valid Maintenance 👎</div>
+              )
+            }
           />
+          <Typography>How to check if customer has valid maintenance</Typography>
         </Grid>
-        <Grid item xs={4}>
-          <Typography>
-            <strong> XM started:</strong>
-            {activeVersion.xm_date_since.slice(0, 10)}
-          </Typography>
+        <Grid item xs={3}>
+          <strong>
+            {' '}
+            If Customers wanted to have Extended Maintenance they were able to contract it since…
+          </strong>
+          <Typography>{activeVersion.xm_date_since.slice(0, 10)}</Typography>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={3}>
+          <strong> Extended maintenance ended/will end</strong>
+          <Typography>{activeVersion.xm_end_date.slice(0, 10)}</Typography>
+        </Grid>
+        <Grid item xs={3}>
           <Typography>
-            <strong> XM ended:</strong>
-            {activeVersion.xm_end_date.slice(0, 10)}
+            Customers should be aware that after this date, they will only be able to benefit from
+            Pre-existing solutions, no new Defects can be logged
           </Typography>
         </Grid>
       </Grid>
@@ -174,26 +204,57 @@ const MaintenanceInformation = () => {
   );
 };
 
-const Field = ({ name, label, edit = false }) => {
+const Field = ({ name, label, edit = false, Icon }) => {
   const classes = useStyles();
   const { activeVersion } = React.useContext(RootContext);
+  const [isOpen, setisOpened] = React.useState(false);
   const [value, setValue] = React.useState(activeVersion[name]);
   const [editable, toggleEdit] = React.useState(edit);
   function handleChange(e) {
     setValue(e.target.value);
   }
 
+  React.useEffect(() => {
+    console.log('refresh', name, value, activeVersion);
+    setValue(activeVersion[name]);
+  }, [activeVersion]);
   return (
     <Paper className={classes.paper}>
-      <Grid container xs={12} direction="row" justify="space-between" alignItems="center">
+      <Grid
+        container
+        xs={12}
+        direction="row"
+        justify="space-between"
+        alignItems="flex-start"
+        // className={classes.grid}
+      >
         <Grid item xs={6}>
-          <Typography variant="h6">{label}</Typography>
+          <Typography variant="h6">
+            {Icon ? <Icon color="#73398d"></Icon> : <div />}
+            {label}
+          </Typography>
         </Grid>
-        <Grid item xs={6} alignItems="flex-end">
-          <Button variant="contained" onClick={() => toggleEdit(!editable)}>
-            <EditIcon />
-          </Button>
+        <Grid item xs={6} alignItems="flex-end" justify="flex-end" style={{ display: 'flex' }}>
+          <EditIcon color="primary" fontSize="small" onClick={() => setisOpened(true)} />
         </Grid>
+        <Modal
+          onClose={() => setisOpened(false)}
+          open={isOpen}
+          BackdropComponent={Backdrop}
+          BackdropProps={{
+            timeout: 500
+          }}
+        >
+          <div>
+            <EditWizardDetails
+              onClose={() => setisOpened(false)}
+              name={name}
+              label={label}
+              value={value}
+            />
+          </div>
+          {/* </Grid> */}
+        </Modal>
       </Grid>
       {editable ? (
         <TextField
@@ -224,7 +285,7 @@ export default () => {
         </Paper>
         <MaintenanceInformation />
         <Grid container xs={12} spacing={3}>
-          <Grid item xs={4}>
+          <Grid item xs={2}>
             <Field name="solutions" label="Provide Solutions" />
           </Grid>
           <Grid item xs={4}>
@@ -233,47 +294,14 @@ export default () => {
           <Grid item xs={4}>
             <Field name="data_corruption" label="Fix data corruption" />
           </Grid>
-          <Grid item xs={4}>
+          <Grid item xs={2}>
             <Field name="portingset" label="Access to new Portingsets" />
           </Grid>
-          <Grid item xs={4}>
-            <Field name="communication" label="Communication" />
+          <Grid item xs={6} alignContent="flex-start">
+            <Field name="communication" label="Communication" Icon={MessageCircle} />
           </Grid>
         </Grid>
       </div>
     </RootContextProvider>
-  );
-};
-
-const VersionSelect = ({ versions = [''], onChange = () => {} }) => {
-  const ctx = React.useContext(RootContext);
-  const [version, setVersion] = React.useState(versions[0]);
-  const handleChange = event => {
-    setVersion(event.target.value);
-    ctx.setVersionByName(event.target.value, ctx.validMaintenance);
-  };
-
-  return (
-    <Grid container spacing={2} justify="flex-start">
-      <Grid item xs={12}>
-        <Typography variant="h6">Version Information</Typography>
-      </Grid>
-      <Grid item xs={4}>
-        <InputLabel id="demo-simple-select-label">LN/Baan version</InputLabel>
-        <Select id="demo-simple-select" value={version} onChange={handleChange}>
-          {versions.map((value, index) => (
-            <MenuItem key={index} value={value}>
-              {value}
-            </MenuItem>
-          ))}
-        </Select>
-      </Grid>
-      <Grid item xs={4} alignContent="center">
-        <Typography>
-          <strong>Release Date:</strong> {ctx.activeVersion.date.slice(0, 10)}
-        </Typography>
-        <Chip label={`${ctx.activeVersion.nryears} years old`} />
-      </Grid>
-    </Grid>
   );
 };

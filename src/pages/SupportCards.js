@@ -7,10 +7,11 @@ import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import { withStyles } from '@material-ui/core/styles';
 import gql from 'graphql-tag';
+import { usePersistentState } from 'hooks';
 import _ from 'lodash';
-import React from 'react';
+import React, { useState } from 'react';
 import { adopt } from 'react-adopt';
-import { Mutation, Query, useMutation, useQuery } from 'react-apollo';
+import { Mutation, Query } from 'react-apollo';
 //import { SmallCard } from "./SupportCard";
 import ReactMarkdown from 'react-markdown';
 import styled from 'styled-components';
@@ -19,15 +20,13 @@ import { SmallCard } from '../common/SmallCard';
 import Modal from '../ModalWrapper';
 import AddCard from '../supportcard/AddCard';
 import CategoryTabs from '../supportcard/CategoryTabs';
+import { CategoryTabsNew } from '../supportcard/CategoryTabsNew';
+import { ProductsTab } from '../supportcard/ProductsTabsNew';
 // import Typography from '@material-ui/core/Typography';
 import NewRequestForm from '../supportcard/Request';
 import User from '../User';
 import Spinner from '../utils/spinner';
 import withAuth from '../utils/withAuth';
-import { useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { UserContextProvider } from 'globalState/UserProvider';
-import { UserContext } from './../globalState/UserProvider';
 
 const cardColors = [
   { back: '#7fbadb', front: '#000' },
@@ -53,6 +52,7 @@ const suppCardFragment = gql`
     updatedAt
     isfavorite
     accessed
+    product
     category {
       name
       color
@@ -140,6 +140,15 @@ const Div = styled.div`
   margin: 10px;
   background: #eeeeee;
 `;
+const Div2 = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin: 10px;
+  background: #eeeeee;
+  width: 90vw;
+  margin: 0px 10 0px 10px;
+`;
 
 const Container = styled.div`
   display: flex;
@@ -198,6 +207,7 @@ export default function SupportCardContainer(props) {
 const SupportCards = props => {
   const [searchText, setSearchText] = useState(props.filter || '');
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedProduct, setSelectedProduct] = usePersistentState('supp_card_product', 'LN');
   const [showFavorites, setShowFavorites] = useState(false);
   const [showPortal, setShowPortal] = useState(false);
   const [showRequest, setShowRequest] = useState(false);
@@ -249,11 +259,14 @@ const SupportCards = props => {
           _.includes(title.toUpperCase(), searchText.toUpperCase())
         );
       })
+      .filter(card => _.includes(card.product.toUpperCase(), selectedProduct.toUpperCase()))
       .filter(card => {
         const {
           category: { name }
         } = card;
-        return _.includes(name.toUpperCase(), selectedCategory.toUpperCase());
+        return selectedCategory !== ''
+          ? _.includes(selectedCategory.toUpperCase(), name.toUpperCase())
+          : true;
       });
     if (showFavorites) {
       filteredCards = filteredCards.filter(card => card.isfavorite === true);
@@ -276,6 +289,13 @@ const SupportCards = props => {
         <NewRequestForm user={props.user} onSubmit={() => setShowRequest(false)} />
       </Dialog>
       <Div>
+        {/* <Div2>
+          <CategoryTabsNew
+            onChange={value => setSelectedCategory(value)}
+            onSave={v => console.log(v)}
+          />
+          <ProductsTab onChange={prod => setSelectedProduct(prod)} />
+        </Div2> */}
         <CategoryTabs onChange={value => setSelectedCategory(value)} onSave={v => console.log(v)} />
         <Button
           color="primary"
