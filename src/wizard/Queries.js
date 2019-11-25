@@ -1,9 +1,10 @@
-import { gql } from 'graphql-tag';
+import gql from "graphql-tag";
 export const ALL_MAINTENANCE_QUERY = gql`
   query allMaitenance {
     allMaintenance {
       id
       version
+      date
       nryears
       mm_ended
       checksrequired
