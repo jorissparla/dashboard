@@ -1,34 +1,27 @@
 import {
-  Grid,
-  Typography,
-  Switch,
-  Chip,
+  Avatar,
+  Backdrop,
+  Button,
   Card,
-  CardHeader,
   CardActions,
   CardContent,
-  Button,
+  CardHeader,
   Divider,
-  Avatar,
-  TextField,
+  Grid,
   Modal,
-  Backdrop
+  Switch,
+  Typography
 } from '@material-ui/core';
 import ListIcon from '@material-ui/icons/List';
-import _ from 'lodash';
-import React from 'react';
-import { Mutation, useQuery } from 'react-apollo';
-import FavoriteBadge from '../elements/Badge';
-import { format, distanceInWordsToNow } from '../utils/format';
-import { MUTATION_MARK_LIVE, QUERY_TENANT_DETAIL } from './TenantQueries';
-import Label from './details/components/Label';
-import EditTenantDetails from './details/components/EditTenant';
-import { Header, H2 } from './TenantStyledElements';
-import Spinner from 'utils/spinner';
-import EditIcon from '@material-ui/icons/Edit';
-import clsx from 'clsx';
 import classNames from 'classnames';
 import { UserContext } from 'globalState/UserProvider';
+import _ from 'lodash';
+import React from 'react';
+import { Mutation } from 'react-apollo';
+import { distanceInWordsToNow, format } from '../utils/format';
+import EditTenantDetails from './details/components/EditTenant';
+import Label from './details/components/Label';
+import { MUTATION_MARK_LIVE } from './TenantQueries';
 export const TenantCard = ({
   classes,
   customer,

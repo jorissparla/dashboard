@@ -22,9 +22,10 @@ import TemperatureSlider from './TemperatureSlider';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    left: '25%',
-    top: '25%',
-    position: 'absolute'
+    left: '20%',
+    top: '20%',
+    position: 'absolute',
+    width: '60%'
   },
   saveButton: {
     color: 'white',
@@ -47,9 +48,10 @@ const EditTenantDetails = props => {
     golivedate: format(profile.golivedate, 'YYYY-MM-DD'),
     golivecomments: profile.golivecomments,
     info: profile.info,
-    temperature: profile.temperature
+    temperature: profile.temperature,
+    comments: profile.comments
   });
-
+  console.log(profile);
   const [updateTenantDetailsMutation] = useMutation(MUTATION_UPDATE_DETAIL);
   const handleChange = event => {
     event.persist();
@@ -80,7 +82,7 @@ const EditTenantDetails = props => {
   return (
     <Card {...rest} className={clsx(classes.root, className)}>
       <form onSubmit={handleSubmit}>
-        <CardHeader title="Details" />
+        <CardHeader title={`Details for ${profile.customer.name}"`} />
         <Divider />
         <CardContent>
           <Grid container spacing={4}>
@@ -124,10 +126,22 @@ const EditTenantDetails = props => {
             <Grid item md={6} xs={12}>
               <TextField
                 fullWidth
-                label="Comments"
+                label="Go Live Comments"
                 name="golivecomments"
                 onChange={handleChange}
                 value={values.golivecomments}
+                variant="outlined"
+              />
+            </Grid>
+            <Grid item md={6} xs={12}>
+              <TextField
+                fullWidth
+                label="Comments"
+                name="comments"
+                onChange={handleChange}
+                multiline
+                rows="6"
+                value={values.comments}
                 variant="outlined"
               />
             </Grid>

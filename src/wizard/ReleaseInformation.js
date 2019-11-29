@@ -92,23 +92,25 @@ function ReleaseInformation({ versionInfo, handleCustomerHasValidMaintenance, va
             <SimpleField name="checklink" label="" activeVersion={versionInfo} />
           </Grid>
         )}
-        <Grid
-          container
-          xs={2}
-          justify="flex-start"
-          alignItems="center"
-          style={{ flexDirection: 'column' }}
-        >
-          <Grid>
-            <Typography variant="h4">Extended Maintenance</Typography>
+        {entitled_extended_maintenance !== 'N/A' && (
+          <Grid
+            container
+            xs={2}
+            justify="flex-start"
+            alignItems="center"
+            style={{ flexDirection: 'column' }}
+          >
+            <Grid>
+              <Typography variant="h4">Extended Maintenance</Typography>
+            </Grid>
+            <Grid>
+              <Typography>{`Start: ${format(parseInt(xm_date_since), 'DD-MMM-YYYY')}`}</Typography>
+            </Grid>
+            <Grid>
+              <Typography>{`End: ${format(parseInt(xm_end_date), 'DD-MMM-YYYY')}`}</Typography>
+            </Grid>
           </Grid>
-          <Grid>
-            <Typography>{`Start: ${format(parseInt(xm_date_since), 'DD-MMM-YYYY')}`}</Typography>
-          </Grid>
-          <Grid>
-            <Typography>{`End: ${format(parseInt(xm_end_date), 'DD-MMM-YYYY')}`}</Typography>
-          </Grid>
-        </Grid>
+        )}
       </Grid>
     </div>
   );

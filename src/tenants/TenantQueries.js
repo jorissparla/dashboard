@@ -40,6 +40,9 @@ export const QUERY_TENANT_DETAIL = gql`
       pm
       info
       temperature
+      comments
+      comments_updated
+      updated
     }
   }
 `;
@@ -57,6 +60,9 @@ export const QUERY_ALL_TENANT_DETAILS = gql`
       pm
       info
       temperature
+      comments
+      comments_updated
+      updated
     }
   }
 `;
@@ -75,6 +81,9 @@ export const MUTATION_UPDATE_DETAIL = gql`
       pm
       info
       temperature
+      comments
+      comments_updated
+      updated
     }
   }
 `;
@@ -91,6 +100,9 @@ export const MUTATION_MARK_LIVE = gql`
       }
       lastupdated
       live
+      comments
+      comments_updated
+      updated
     }
   }
 `;

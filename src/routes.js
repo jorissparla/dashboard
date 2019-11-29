@@ -36,6 +36,7 @@ import UserPermissions from './UserPermissions';
 import { AddVideo, EditVideo } from './videos/VideoOperations';
 import OtherTeamsChartContainer from './charts/OtherTeamChartsContainer';
 import MaintenanceVersionList from './pages/MaintenanceVersionList';
+import TenantViewList from 'tenants/TenantViewList';
 
 const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
 
@@ -101,6 +102,7 @@ function AppRoutes(props) {
     <Switch>
       <Route exact path="/maintenancewizard" component={MaintenanceVersionList} />
       <Route exact path="/tenantlogs" component={TenantLogsWithData} />
+      <Route exact path="/tenantview" component={TenantViewList} />
       <Route exact path="/details/:id" component={Details} />
       <AuthRoute
         exact
