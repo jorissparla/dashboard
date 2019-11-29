@@ -11,7 +11,9 @@ export const QUERY_BACKLOG = gql`
     title
     status
     dayssincelastupdate
+    ownergroup
     daysSinceCreated
+    contactname
     escalated
     Deployment
     severityname

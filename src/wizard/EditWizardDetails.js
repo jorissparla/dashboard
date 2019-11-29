@@ -7,21 +7,26 @@ import {
   colors,
   Divider,
   Grid,
-  TextField
+  TextField,
+  Typography
 } from '@material-ui/core';
+import MarkDown from 'react-markdown';
 import { makeStyles } from '@material-ui/styles';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import CloseIcon from '@material-ui/icons/Close';
 import React, { useState } from 'react';
 import { useMutation } from 'react-apollo';
+import { MUTATION_UPDATE_MAINTENANCE, ALL_MAINTENANCE_QUERY } from './Queries';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    left: '25%',
-    top: '25%',
+    left: '20%',
+    top: '20%',
     position: 'absolute',
-    width: '50%'
+    width: '60%',
+    height: '70%',
+    padding: 20
   },
   saveButton: {
     color: 'white',
@@ -33,18 +38,33 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const EditWizardDetails = props => {
-  const { data, value: defaultValue, className, onClose, onView, label, name, ...rest } = props;
-
+  const { data, value: defaultValue, className, onClose, onView, label, id, name, ...rest } = props;
+  console.log(id);
   const classes = useStyles();
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [value, setValue] = useState(defaultValue);
+  const [updateField] = useMutation(MUTATION_UPDATE_MAINTENANCE);
   const handleChange = e => {
     e.persist();
 
     setValue(e.target.value);
   };
-  const handleSubmit = v => {};
-
+  const handleSubmit = e => {
+    e.preventDefault();
+    const input = { id };
+    input[name] = value;
+    console.log({ input });
+    updateField({
+      variables: { input },
+      refetchQueries: [
+        {
+          query: ALL_MAINTENANCE_QUERY
+        }
+      ]
+    });
+    onClose();
+  };
+  console.log(id);
   return (
     <Card {...rest} className={clsx(classes.root, className)}>
       <form onSubmit={handleSubmit}>
@@ -55,7 +75,7 @@ const EditWizardDetails = props => {
             <TextField
               fullWidth
               multiline
-              rows={6}
+              rows={8}
               label={label}
               name={name}
               onChange={handleChange}
@@ -75,6 +95,9 @@ const EditWizardDetails = props => {
             Close
           </Button>
         </CardActions>
+        <Typography variant="h4">Preview </Typography>
+        <Divider />
+        <MarkDown source={value} />
       </form>
       {/* <SuccessSnackbar onClose={handleSnackbarClose} open={openSnackbar} /> */}
     </Card>

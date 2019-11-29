@@ -379,6 +379,7 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
           <BacklogTable
             classes={classes}
             backlog={data.awaiting_customer}
+            additionalFields={['ownergroup']}
             title="Awaiting customer"
             description={`All Incidents with a status of Awaiting Customer not updated for more than ${params['N_AWAITINGCUSTOMER']} days `}
           />
@@ -441,6 +442,7 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
           <BacklogTable
             classes={classes}
             backlog={data.infor}
+            additionalFields={['contactname']}
             title="Infor"
             description="All Support Backlog logged on Infor Account"
           />

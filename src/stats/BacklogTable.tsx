@@ -24,6 +24,11 @@ const CustomTableCell = withStyles(theme => ({
   }
 }))(TableCell);
 
+const capitalize = (s: string): string => {
+  if (typeof s !== 'string') return '';
+  return s.charAt(0).toUpperCase() + s.slice(1);
+};
+
 interface TableHeaderColumnProps {
   column: string;
   title: string;
@@ -82,6 +87,7 @@ type sortType = 'desc' | 'asc';
 
 export const BacklogTable = ({
   backlog,
+  additionalFields = [],
   classes,
   title,
   description = title,
@@ -150,6 +156,11 @@ export const BacklogTable = ({
               <CustomTableCell className={classes.tableheadernarrow}>Esc</CustomTableCell>
               <CustomTableCell className={classes.tableheadernarrow}>Customer </CustomTableCell>
               <CustomTableCell className={classes.tableheadernarrow}>Owner </CustomTableCell>
+              {additionalFields.map((fld: string) => (
+                <CustomTableCell key={fld} className={classes.tableheadernarrow}>
+                  {capitalize(fld)}
+                </CustomTableCell>
+              ))}
               {/* <TableHeaderColumn
                 column="customer"
                 title="customer"
@@ -193,6 +204,9 @@ export const BacklogTable = ({
                 </TableCell>
                 <TableCell>{row.customername}</TableCell>
                 <TableCell>{row.owner}</TableCell>
+                {additionalFields.map((fld: string) => (
+                  <TableCell key={fld}>{row[fld]}</TableCell>
+                ))}
                 {includeservicerestored && (
                   <>
                     <TableCell>
