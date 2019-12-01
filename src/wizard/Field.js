@@ -1,18 +1,19 @@
-import Typography from '@material-ui/core/Typography';
-import Paper from '@material-ui/core/Paper';
-import React from 'react';
-import Grid from '@material-ui/core/Grid';
-import TextField from '@material-ui/core/TextField';
-import EditIcon from '@material-ui/icons/Edit';
-import { Modal, Backdrop } from '@material-ui/core';
-import EditWizardDetails from './EditWizardDetails';
-import { useStyles } from './useStyles';
-import MarkDown from 'react-markdown';
-import { useMutation } from 'react-apollo';
+import Typography from "@material-ui/core/Typography";
+import Paper from "@material-ui/core/Paper";
+import React from "react";
+import Grid from "@material-ui/core/Grid";
+import TextField from "@material-ui/core/TextField";
+import EditIcon from "@material-ui/icons/Edit";
+import { Modal, Backdrop } from "@material-ui/core";
+import EditWizardDetails from "./EditWizardDetails";
+import { useStyles } from "./useStyles";
+import MarkDown from "react-markdown";
+import { useMutation } from "react-apollo";
+import { DashBoardContext } from "globalState/Provider";
 
 export const Field = ({ name, label, edit = false, Icon, activeVersion }) => {
   const classes = useStyles();
-
+  const { role = "Guest" } = React.useContext(DashBoardContext);
   // const { activeVersion } = React.useContext(RootContext);
   // console.log('Field', name, activeVersion);
   const [isOpen, setisOpened] = React.useState(false);
@@ -32,21 +33,16 @@ export const Field = ({ name, label, edit = false, Icon, activeVersion }) => {
         direction="row"
         justifyContent="space-between"
         alignItems="flex-start"
-        style={{ display: 'flex' }}
+        style={{ display: "flex" }}
       >
         <Grid item xs={6}>
           <Typography variant="h6">
-            {Icon ? <Icon color="#73398d" style={{ cursor: 'pointer' }}></Icon> : <div />}
+            {Icon ? <Icon color="#73398d" style={{ cursor: "pointer" }}></Icon> : <div />}
             {label}
           </Typography>
         </Grid>
-        <Grid
-          item
-          xs={6}
-          style={{ display: 'flex', justifyContent: 'flex-end' }}
-          justifyContent="flex-end"
-        >
-          <EditIcon color="primary" fontSize="small" onClick={() => setisOpened(true)} />
+        <Grid item xs={6} style={{ display: "flex", justifyContent: "flex-end" }}>
+          {role === "Admin" && <EditIcon color="primary" fontSize="small" onClick={() => setisOpened(true)} />}
         </Grid>
         <Modal
           onClose={() => setisOpened(false)}
