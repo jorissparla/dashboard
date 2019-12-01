@@ -49,6 +49,9 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: "rgb(0,0,0, 0.5)",
     color: "white"
   },
+  tablecell: {
+    fontSize: "1rem"
+  },
   tableheadernarrow: {
     fontFamily: "Poppins",
     fontSize: 18,
@@ -272,7 +275,7 @@ const TenantViewList = props => {
         <Loader loading={loading} />
         <div>
           <div className={classes.flex}>
-            <Table>
+            <Table style={{ fontSize: "1rem" }}>
               <TableHead>
                 <TableRow>
                   <TableHeaderCell>ID</TableHeaderCell>
@@ -341,8 +344,8 @@ const TenantViewList = props => {
                           {live ? "Live" : ""}
                         </Avatar>
                       </TableCell>
-                      <TableCell>{customer}</TableCell>
-                      <TableCell>{farm}</TableCell>
+                      <TableCell className={classes.tablecell}>{customer}</TableCell>
+                      <TableCell className={classes.tablecell}>{farm}</TableCell>
                       {isTen6 ? (
                         <TableCell className={classes.oldVersion}>{ar["PRD"]}</TableCell>
                       ) : (
@@ -352,9 +355,9 @@ const TenantViewList = props => {
                       <TableCell>{ar["TST"]}</TableCell>
                       <TableCell>{ar["DEV"]}</TableCell>
                       <TableCell>{ar["DEM"]}</TableCell>
-                      <TableCell>{tenantdetails.pm}</TableCell>
-                      <TableCell>{tenantdetails.csm}</TableCell>
-                      <TableCell>{tenantdetails.comments}</TableCell>
+                      <TableCell className={classes.tablecell}>{tenantdetails.pm}</TableCell>
+                      <TableCell className={classes.tablecell}>{tenantdetails.csm}</TableCell>
+                      <TableCell className={classes.tablecell}>{tenantdetails.comments}</TableCell>
                       <TableCell>
                         {" "}
                         <MoreVertIcon
