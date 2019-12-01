@@ -272,19 +272,19 @@ export default () => {
       <MaintenanceInformation />
       <Grid container spacing={3} justify="flex-start">
         <Grid item xs={2}>
-          <Field name="solutions" label="Provide Solutions" activeVersion={activeVersion} />
+          <Field name="solutions" label="Provide Solutions" activeVersion={activeVersion} Icon={null} />
         </Grid>
         <Grid item xs={4}>
-          <Field name="defects" label="Resolve defects" activeVersion={activeVersion} />
+          <Field name="defects" label="Resolve defects" activeVersion={activeVersion} Icon={null} />
         </Grid>
         <Grid item xs={4}>
-          <Field name="data_corruption" label="Fix data corruption" activeVersion={activeVersion} />
+          <Field name="data_corruption" label="Fix data corruption" activeVersion={activeVersion} Icon={null} />
         </Grid>
         <Grid item xs={2}>
-          <Field name="portingset" label="Access to new Portingsets" activeVersion={activeVersion} />
+          <Field name="portingset" label="Access to new Portingsets" activeVersion={activeVersion} Icon={null} />
         </Grid>
         <Grid item xs={6}>
-          <Field name="communication" label="Communication" Icon={MessageCircle} activeVersion={activeVersion} />
+          <Field name="communication" label="Communication" activeVersion={activeVersion} Icon={null} />
         </Grid>
       </Grid>
     </div>
