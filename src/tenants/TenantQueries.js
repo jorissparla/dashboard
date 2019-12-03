@@ -43,6 +43,14 @@ export const QUERY_TENANT_DETAIL = gql`
       comments
       comments_updated
       updated
+      tenants {
+        id
+        farm
+        name
+        version
+        lastupdated
+        live
+      }
     }
   }
 `;
@@ -63,6 +71,14 @@ export const QUERY_ALL_TENANT_DETAILS = gql`
       comments
       comments_updated
       updated
+      tenants {
+        id
+        farm
+        name
+        version
+        lastupdated
+        live
+      }
     }
   }
 `;
