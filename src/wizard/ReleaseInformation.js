@@ -88,7 +88,10 @@ function ReleaseInformation({ versionInfo, handleCustomerHasValidMaintenance, va
                 )
               }
             />
-            <Typography>How to check if customer has valid maintenance</Typography>
+            <Typography>
+              Before doing anything else, please check if the customer is entitled to Extended
+              Maintenance
+            </Typography>
             <SimpleField name="checklink" label="" activeVersion={versionInfo} />
           </Grid>
         )}

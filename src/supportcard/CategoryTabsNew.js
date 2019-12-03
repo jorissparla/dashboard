@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { useQuery } from 'react-apollo';
 import styled from 'styled-components';
 import { Block, BlockButton } from '../elements/Block';
-import { Button } from '@material-ui/core';
 const List = styled.div`
   display: flex;
   flex-wrap: wrap;

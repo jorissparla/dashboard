@@ -198,8 +198,29 @@ const MaintenanceWizard = ({ activeVersions }) => {
         <Grid item xs={2}>
           <Field name="portingset" label="Portingsets" activeVersion={activeVersion} />
         </Grid>
-        <Grid item xs={12}>
-          <Field name="communication" label="Communication" activeVersion={activeVersion} />
+        <Grid item xs={3}>
+          <Field
+            name="communication"
+            label="Customer Communication"
+            activeVersion={activeVersion}
+          />
+        </Grid>
+        <Grid item xs={3}>
+          <Field
+            name="comm_before"
+            label="Communication-before starting"
+            activeVersion={activeVersion}
+          />
+        </Grid>
+        <Grid item xs={3}>
+          <Field name="comm_ics" label="Refer to ICS" activeVersion={activeVersion} />
+        </Grid>
+        <Grid item xs={3}>
+          <Field
+            name="comm_disappointed"
+            label="Customer disappointed"
+            activeVersion={activeVersion}
+          />
         </Grid>
       </Grid>
     </div>

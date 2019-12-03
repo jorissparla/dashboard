@@ -35,7 +35,7 @@ const DELETE_CHAT = gql`
   }
 `;
 const ALL_RANGES = gql`
-  {
+  query ALL_RANGES {
     allRanges: ranges {
       ID
       FromDate
@@ -47,7 +47,7 @@ const ALL_RANGES = gql`
   }
 `;
 const ALL_CHATS = gql`
-  {
+ query ALL_CHATS {
     chats {
       id
       weeknr

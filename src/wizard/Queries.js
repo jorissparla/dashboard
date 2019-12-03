@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 export const ALL_MAINTENANCE_QUERY = gql`
-  query allMaitenance {
+  query allMaintenance {
     allMaintenance {
       id
       version
@@ -16,6 +16,9 @@ export const ALL_MAINTENANCE_QUERY = gql`
       solutions
       defects
       communication
+      comm_before
+      comm_ics
+      comm_disappointed
       portingset
     }
   }
@@ -37,6 +40,9 @@ export const SINGLE_MAINTENANCE_QUERY = gql`
       solutions
       defects
       communication
+      comm_before
+      comm_ics
+      comm_disappointed
       portingset
     }
   }
@@ -59,6 +65,9 @@ export const MUTATION_UPDATE_MAINTENANCE = gql`
       defects
       communication
       portingset
+      comm_before
+      comm_ics
+      comm_disappointed
     }
   }
 `;

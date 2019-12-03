@@ -1,23 +1,10 @@
-import React, { Component } from 'react';
+import { Grid } from '@material-ui/core';
 import gql from 'graphql-tag';
-import { Query, useQuery } from 'react-apollo';
-import HistoryChart from './historychart';
-import styled from 'styled-components';
-import Spinner from 'utils/spinner';
+import React from 'react';
+import { useQuery } from 'react-apollo';
 import { format } from 'utils/format';
-
-const Flexdiv = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  /* height: 800px; */
-  width: 100vw;
-`;
-const Contdiv = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  /* width: 1000px; */
-  height: 80%;
-`;
+import Spinner from 'utils/spinner';
+import HistoryChart from './historychart';
 
 const transform = (data, value) =>
   data.map(({ date, number }) => ({
@@ -25,6 +12,14 @@ const transform = (data, value) =>
     odate: format(parseInt(date), 'YYYYMMDD'),
     [value]: number,
     label: number,
+    data: { y: number, color: 'rgba(144, 202, 249, 0.75)' }
+  }));
+const transform2 = (data, value) =>
+  data.map(({ date, number, age }) => ({
+    date: format(parseInt(date), 'DD'),
+    odate: format(parseInt(date), 'YYYYMMDD'),
+    [value]: age,
+    label: age,
     data: { y: number, color: 'rgba(144, 202, 249, 0.75)' }
   }));
 
@@ -35,13 +30,16 @@ const OtherTeamChartsContainer = ({ color = '#ffb74d' }) => {
   console.log(data);
   if (!data) return <div>No data</div>;
   const historyXpert = transform(data.Xpert, 'xpert').filter(o => o.odate > '20191001');
+  const historyXpert2 = transform2(data.Xpert, 'age').filter(o => o.odate > '20191001');
   console.log(historyXpert.filter(o => o.odate > '20190930'));
   const historyAuto = transform(data.AutoConnect, 'auto');
+  const historyAuto2 = transform2(data.AutoConnect, 'age');
+  console.log(historyAuto2);
   const historyPLM = transform(data.PLM, 'plm');
   // return <div>Data</div>;
   return (
-    <Flexdiv>
-      <Contdiv>
+    <Grid container>
+      <Grid item xs={6}>
         <HistoryChart
           data={historyXpert}
           title={`Backlog Xpert (excl. Sol.Proposed)`}
@@ -50,8 +48,18 @@ const OtherTeamChartsContainer = ({ color = '#ffb74d' }) => {
           xvalue="date"
           value={`xpert`}
         />
-      </Contdiv>
-      <Contdiv>
+      </Grid>
+      <Grid item xs={6}>
+        <HistoryChart
+          data={historyXpert2}
+          title={`Average Age Xpert (excl. Sol.Proposed)`}
+          type="area"
+          color="#90caf9"
+          xvalue="date"
+          value={`age`}
+        />
+      </Grid>
+      <Grid item xs={6}>
         <HistoryChart
           data={historyAuto}
           title={`Backlog AutoConnect (excl. Sol.Proposed)`}
@@ -60,7 +68,17 @@ const OtherTeamChartsContainer = ({ color = '#ffb74d' }) => {
           xvalue="date"
           value={`auto`}
         />
-      </Contdiv>
+      </Grid>
+      <Grid item xs={6}>
+        <HistoryChart
+          data={historyAuto2}
+          title={`Average Age AutoConnect (excl. Sol.Proposed)`}
+          type="area"
+          color={color}
+          xvalue="date"
+          value={`age`}
+        />
+      </Grid>
       {/* <Contdiv>
         <HistoryChart
           data={historyPLM}
@@ -71,23 +89,26 @@ const OtherTeamChartsContainer = ({ color = '#ffb74d' }) => {
           value={`plm`}
         />
       </Contdiv> */}
-    </Flexdiv>
+    </Grid>
   );
 };
 
 const QUERY_HISTORY_OTHER = gql`
-  {
+  query QUERY_HISTORY_OTHER {
     Xpert: backlogHistory(ownergroup: "Xpert Support") {
       date
       number
+      age
     }
     AutoConnect: backlogHistory(ownergroup: "AutoConnect Support") {
       date
       number
+      age
     }
     PLM: backlogHistory(ownergroup: "PLM Support") {
       date
       number
+      age
     }
   }
 `;
