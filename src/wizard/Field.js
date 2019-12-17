@@ -31,15 +31,16 @@ export const Field = ({ name, label, edit = false, Icon, activeVersion }) => {
         direction="row"
         justifyContent="space-between"
         alignItems="flex-start"
-        style={{ display: 'flex' }}
+        className={classes.stretch}
+        style={{ display: 'flex', flex: '1 0 auto', minHeight: '90%', height: '100%' }}
       >
-        <Grid item xs={6}>
+        <Grid item xs={9}>
           <Typography variant="h6">
             {Icon ? <Icon color="#73398d" style={{ cursor: 'pointer' }}></Icon> : <div />}
             {label}
           </Typography>
         </Grid>
-        <Grid item xs={6} style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <Grid item xs={3} style={{ display: 'flex', justifyContent: 'flex-end' }}>
           {role === 'Admin' && (
             <EditIcon color="primary" fontSize="small" onClick={() => setisOpened(true)} />
           )}

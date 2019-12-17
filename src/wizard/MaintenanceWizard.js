@@ -185,42 +185,42 @@ const MaintenanceWizard = ({ activeVersions }) => {
       <Grid item xs={12}>
         <Field name="checksrequired" label="" activeVersion={activeVersion} />
       </Grid>
-      <Grid container spacing={3} justify="flex-start">
-        <Grid item xs={2}>
-          <Field name="solutions" label="Solutions" activeVersion={activeVersion} />
-        </Grid>
-        <Grid item xs={4}>
-          <Field name="defects" label="Defects" activeVersion={activeVersion} />
-        </Grid>
-        <Grid item xs={4}>
-          <Field name="data_corruption" label="Data corruption" activeVersion={activeVersion} />
-        </Grid>
-        <Grid item xs={2}>
-          <Field name="portingset" label="Portingsets" activeVersion={activeVersion} />
-        </Grid>
-        <Grid item xs={3}>
-          <Field
-            name="communication"
-            label="Customer Communication"
-            activeVersion={activeVersion}
-          />
-        </Grid>
+      <Grid container spacing={2} direction="row" justify="flex-start" alignItems="stretch">
         <Grid item xs={3}>
           <Field
             name="comm_before"
-            label="Communication-before starting"
+            label="Communication before starting"
             activeVersion={activeVersion}
           />
         </Grid>
         <Grid item xs={3}>
-          <Field name="comm_ics" label="Refer to ICS" activeVersion={activeVersion} />
+          <Field
+            name="comm_ics"
+            label="Communication - Refer to ICS"
+            activeVersion={activeVersion}
+          />
+        </Grid>
+        <Grid item xs={3}>
+          <Field name="solutions" label="Solutions" activeVersion={activeVersion} />
+        </Grid>
+        <Grid item xs={3}>
+          <Field name="defects" label="Defects" activeVersion={activeVersion} />
+        </Grid>
+        <Grid item xs={3}>
+          <Field name="communication" label="Other Communication" activeVersion={activeVersion} />
         </Grid>
         <Grid item xs={3}>
           <Field
             name="comm_disappointed"
-            label="Customer disappointed"
+            label="Communication - Customer disappointed"
             activeVersion={activeVersion}
           />
+        </Grid>
+        <Grid item xs={3}>
+          <Field name="portingset" label="Portingsets" activeVersion={activeVersion} />
+        </Grid>
+        <Grid item xs={3}>
+          <Field name="data_corruption" label="Data corruption" activeVersion={activeVersion} />
         </Grid>
       </Grid>
     </div>

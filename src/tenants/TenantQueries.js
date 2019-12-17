@@ -7,6 +7,10 @@ export const ALL_TENANTS = gql`
       name
       version
       customerid
+      tenant_status
+      operational_status
+      process_status
+      frozen
       customer {
         name
         number

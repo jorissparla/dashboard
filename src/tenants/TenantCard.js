@@ -10,18 +10,20 @@ import {
   Grid,
   Modal,
   Switch,
-  Typography
-} from "@material-ui/core";
-import ListIcon from "@material-ui/icons/List";
-import classNames from "classnames";
-import { UserContext } from "globalState/UserProvider";
-import _ from "lodash";
-import React from "react";
-import { Mutation } from "react-apollo";
-import { distanceInWordsToNow, format } from "../utils/format";
-import EditTenantDetails from "./details/components/EditTenant";
-import Label from "./details/components/Label";
-import { MUTATION_MARK_LIVE } from "./TenantQueries";
+  Typography,
+  Chip
+} from '@material-ui/core';
+import ListIcon from '@material-ui/icons/List';
+import classNames from 'classnames';
+import { UserContext } from 'globalState/UserProvider';
+import _ from 'lodash';
+import React from 'react';
+import { Mutation } from 'react-apollo';
+import { distanceInWordsToNow, format } from '../utils/format';
+import EditTenantDetails from './details/components/EditTenant';
+import Label from './details/components/Label';
+import { MUTATION_MARK_LIVE } from './TenantQueries';
+import { Tooltip } from '@material-ui/core/Tooltip';
 
 export const TenantCard = ({
   classes,
@@ -30,8 +32,8 @@ export const TenantCard = ({
   tenants,
   tenantdetails,
   live,
-  role = "Guest",
-  onStatusChange = () => console.log("change"),
+  role = 'Guest',
+  onStatusChange = () => console.log('change'),
   infoClicked
 }) => {
   const [isLive, setLive] = React.useState(live);
@@ -39,38 +41,38 @@ export const TenantCard = ({
   const userContext = React.useContext(UserContext);
   const { user, login, hasPermissions } = userContext;
 
-  const isTenantEditor = hasPermissions(user, ["TENANTEDIT", "ADMIN"]);
-  const isAdmin = hasPermissions(user, ["ADMIN"]);
+  const isTenantEditor = hasPermissions(user, ['TENANTEDIT', 'ADMIN']);
+  const isAdmin = hasPermissions(user, ['ADMIN']);
 
   let tenantcustomerdetail;
-  if (customer !== "Infor" && tenantdetails) {
+  if (customer !== 'Infor' && tenantdetails) {
     tenantcustomerdetail = tenantdetails;
   } else {
     tenantcustomerdetail = {
-      id: "",
+      id: '',
       customer: {
-        name: ""
+        name: ''
       },
-      customerid: "",
-      golivedate: "",
-      golivecomments: "",
-      csm: "",
-      pm: "",
-      info: "",
-      temperature: "NORMAL"
+      customerid: '',
+      golivedate: '',
+      golivecomments: '',
+      csm: '',
+      pm: '',
+      info: '',
+      temperature: 'NORMAL'
     };
   }
   let golivedate = tenantcustomerdetail.golivedate;
-  if (golivedate && golivedate !== "1568419200000" && golivedate !== "0") {
-    golivedate = format(tenantcustomerdetail.golivedate, "MMM, DD, YYYY");
-  } else golivedate = "Date is not known";
+  if (golivedate && golivedate !== '1568419200000' && golivedate !== '0') {
+    golivedate = format(tenantcustomerdetail.golivedate, 'MMM, DD, YYYY');
+  } else golivedate = 'Date is not known';
   const temp = tenantcustomerdetail.temperature;
-  const max = _.maxBy(tenants, t => format(t.lastupdated, "YYYYMMDD")).lastupdated;
+  const max = _.maxBy(tenants, t => format(t.lastupdated, 'YYYYMMDD')).lastupdated;
   const max2 = distanceInWordsToNow(max);
-  if (customer === "Azteka Consulting GmbH") console.log(customer, { isLive }, live);
+  if (customer === 'Azteka Consulting GmbH') console.log(customer, { isLive }, live);
   const avaclass = classNames({
-    [classes.alert]: temp === "ALERT" ? true : false,
-    [classes.watch]: temp === "WATCH" ? true : false,
+    [classes.alert]: temp === 'ALERT' ? true : false,
+    [classes.watch]: temp === 'WATCH' ? true : false,
     [classes.live]: live,
     [classes.notlive]: !live
   });
@@ -84,17 +86,53 @@ export const TenantCard = ({
   };
   const tags = tenants
     .map(t => {
-      const postfix = t.name.split("_")[1];
+      const postfix = t.name.split('_')[1];
       const index = indexObj[postfix] || 999;
-      return { index, ...t };
+      const { tenant_status, operational_status, process_status } = t;
+      let tag = '';
+      let tooltip = '';
+      if (tenant_status) {
+        if (
+          !(
+            tenant_status === 'active' &&
+            operational_status === 'online' &&
+            process_status === 'idle'
+          )
+        ) {
+          tag = `${tenant_status[0].toUpperCase()}-${operational_status[0].toUpperCase()}-${process_status
+            .slice(0, 2)
+            .toUpperCase()}`;
+        }
+        tooltip = `${tenant_status}-${operational_status}-${process_status}`;
+      }
+      return { index, ...t, tag, tooltip };
     })
     .sort((a, b) => (a.index > b.index ? 1 : -1));
 
-  const baseTenantId = tenants && tenants.length && tenants.length > 0 ? tenants[0].name.split("_")[0] : "";
+  // const statusTags = tenants.map(t => {
+  //   const { tenant_status, operational_status, process_status } = t;
+  //   let tag = '';
+  //   if (!tenant_status) return { name: t.name, tag: '', tooltip: '' };
+  //   if (
+  //     !(tenant_status === 'active' && operational_status === 'online' && process_status === 'idle')
+  //   ) {
+  //     tag = `${tenant_status[0].toUpperCase()}-${operational_status[0].toUpperCase()}-${process_status
+  //       .slice(0, 2)
+  //       .toUpperCase()}`;
+  //   }
+  //   return {
+  //     name: t.name,
+  //     tag,
+  //     tooltip: `${tenant_status.toUpperCase()}-${operational_status.toUpperCase()}-${process_status.toUpperCase()}`
+  //   };
+  // });
+  // console.log('statusTags', tags);
+  const baseTenantId =
+    tenants && tenants.length && tenants.length > 0 ? tenants[0].name.split('_')[0] : '';
   // console.log(customer, tenants[0]);
   return (
     <>
-      <Card className={customer === "Infor" ? classes.card2 : classes.card}>
+      <Card className={customer === 'Infor' ? classes.card2 : classes.card}>
         <CardContent>
           {/* <Header>
           <H2>{customer}</H2>
@@ -106,7 +144,7 @@ export const TenantCard = ({
             avatar={
               // <Avatar className={live ? classes.live : classes.notlive} alt="Author">
               <Avatar className={avaclass} alt="Author" title={temp}>
-                {live ? "Live" : ""}
+                {live ? 'Live' : ''}
               </Avatar>
             }
             title={customer}
@@ -122,22 +160,29 @@ export const TenantCard = ({
               {tenantcustomerdetail.golivecomments.trim() ? (
                 tenantcustomerdetail.golivecomments
               ) : (
-                <span className={classes.descriptionblank}>Customer Information will be shown here</span>
+                <span className={classes.descriptionblank}>
+                  Customer Information will be shown here
+                </span>
               )}
             </Typography>
           </div>
           <div className={classes.tags}>
-            {tags.map(({ id, name, version }) => {
-              let shortname = "";
-              if (customer === "Infor") {
+            {tags.map(({ id, name, version, tooltip, tag }) => {
+              let shortname = '';
+              if (customer === 'Infor') {
                 shortname = name;
-              } else shortname = name.split("_")[1];
-              const color = shortname.endsWith("PRD")
-                ? "rgba(46, 202, 19, 1)"
-                : shortname.endsWith("TRN")
-                ? "#1da1f2"
-                : "rgba(0,0,0,0.5)";
-              return <Label key={id} color={color}>{`${shortname}:${version}`}</Label>;
+              } else shortname = name.split('_')[1];
+              const color = shortname.endsWith('PRD')
+                ? 'rgba(46, 202, 19, 1)'
+                : shortname.endsWith('TRN')
+                ? '#1da1f2'
+                : 'rgba(0,0,0,0.5)';
+              return (
+                <div className={classes.tagContent}>
+                  <Label key={id} color={color}>{`${shortname}:${version}`}</Label>
+                  {/* {tag && <Chip className={classes.tagtooltip} label={tooltip} />} */}
+                </div>
+              );
             })}
           </div>
           <Divider />
@@ -145,14 +190,14 @@ export const TenantCard = ({
             <Grid item className={classes.csm}>
               <Typography variant="h5">PM</Typography>
               <Typography variant="body2">
-                {tenantcustomerdetail.pm ? tenantcustomerdetail.pm : "PM not entered"}
+                {tenantcustomerdetail.pm ? tenantcustomerdetail.pm : 'PM not entered'}
               </Typography>
             </Grid>
             <Grid item className={classes.csm}>
               <Typography variant="h5">CSM</Typography>
               <Typography variant="body2">
-                {" "}
-                {tenantcustomerdetail.csm ? tenantcustomerdetail.csm : "CSM not entered"}
+                {' '}
+                {tenantcustomerdetail.csm ? tenantcustomerdetail.csm : 'CSM not entered'}
               </Typography>
             </Grid>
             <Grid item>
@@ -167,7 +212,8 @@ export const TenantCard = ({
             variant="outlined"
             onClick={() =>
               window.open(
-                "http://navigator.infor.com/n/incident_list.asp?ListType=CUSTOMERID&Value=" + tenants[0].customerid
+                'http://navigator.infor.com/n/incident_list.asp?ListType=CUSTOMERID&Value=' +
+                  tenants[0].customerid
               )
             }
           >
@@ -196,7 +242,7 @@ export const TenantCard = ({
                   }}
                   value="checkedB"
                   color="secondary"
-                  inputProps={{ "aria-label": "primary checkbox" }}
+                  inputProps={{ 'aria-label': 'primary checkbox' }}
                 />
               )}
             </Mutation>

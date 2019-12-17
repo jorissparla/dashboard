@@ -133,11 +133,22 @@ const styles = theme => ({
   tags: {
     paddingTop: 2,
     paddingBottom: 10,
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
 
     marginBottom: 2,
     '& > * + *': {
       marginLeft: theme.spacing(1)
     }
+  },
+  tagsContent: {
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  tagtooltip: {
+    background: 'black',
+    color: 'white'
   },
   avatar: {
     margin: 10

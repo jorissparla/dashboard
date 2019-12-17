@@ -2,6 +2,7 @@ import { makeStyles } from '@material-ui/core/styles';
 export const useStyles = makeStyles(theme => ({
   root: {
     marginTop: theme.spacing(3),
+    flexGrow: 1,
     paddingBottom: theme.spacing(3),
     display: 'flex',
     flexDirection: 'column',
@@ -12,7 +13,12 @@ export const useStyles = makeStyles(theme => ({
   },
   paper: {
     padding: 10,
-    marginTop: 10
+    marginTop: 10,
+    flex: '1 0 auto',
+    minHeight: '90%'
+  },
+  stretch: {
+    minHeight: '90%'
   },
   grid: {
     minHeight: 150
