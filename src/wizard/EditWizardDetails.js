@@ -11,6 +11,8 @@ import {
   Typography
 } from '@material-ui/core';
 import MarkDown from 'react-markdown';
+import ReactMde from 'react-mde';
+import 'react-mde/lib/styles/css/react-mde-all.css';
 import { makeStyles } from '@material-ui/styles';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
@@ -65,6 +67,7 @@ const EditWizardDetails = props => {
     onClose();
   };
   console.log(id);
+  const taprops = { cols: 150, rows: 8, style: { fontFamily: 'roboto', fontSize: 'inherit' } };
   return (
     <Card {...rest} className={clsx(classes.root, className)}>
       <form onSubmit={handleSubmit}>
@@ -72,7 +75,14 @@ const EditWizardDetails = props => {
         <Divider />
         <CardContent>
           <Grid container spacing={4}>
-            <TextField
+            <ReactMde
+              value={value}
+              onChange={setValue}
+              selectedTab="write"
+              disablePreview={true}
+              textAreaProps={taprops}
+            />
+            {/* <TextField
               fullWidth
               multiline
               rows={8}
@@ -82,7 +92,7 @@ const EditWizardDetails = props => {
               // required
               value={value}
               variant="outlined"
-            />
+            /> */}
           </Grid>
         </CardContent>
         <Divider />
