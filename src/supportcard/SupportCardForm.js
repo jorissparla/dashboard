@@ -10,6 +10,8 @@ import TextField from '@material-ui/core/TextField';
 import { Formik } from 'formik';
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
+import MarkDown from 'react-markdown';
+import ReactMde from 'react-mde';
 import { withRouter } from 'react-router';
 import { CardSection } from '../common';
 import { useUser } from '../User';
@@ -81,6 +83,12 @@ const styles = theme => ({
     margin: theme.spacing(1),
     minWidth: 120
   },
+  markdown2: {
+    width: '50vw',
+    marginLeft: 10,
+    height: '70vh',
+    overflow: 'scroll'
+  },
   markdown: {
     width: '90vw',
     height: '60vh',
@@ -111,6 +119,12 @@ const SupportCardForm = props => {
     currentUser && !initialValues.owner
       ? { ...initialValues, owner: currentUser.fullname }
       : initialValues;
+  const [value, setValue] = React.useState(newInitialValues.description);
+  const taprops = {
+    cols: 150,
+    rows: 35,
+    style: { fontFamily: 'roboto', fontSize: 'inherit', marginRight: 10 }
+  };
   return (
     <Paper style={paperStyle}>
       <Formik
@@ -146,18 +160,31 @@ const SupportCardForm = props => {
               />
               <div className={classes.content}>
                 {!readOnly && on && (
-                  <TextField
-                    id="description"
-                    label="Description"
-                    className={classes.contentField}
-                    value={values.description}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    margin="normal"
-                    fullWidth
-                    multiline
-                    rows={25}
-                  />
+                  <>
+                    <ReactMde
+                      value={values.description}
+                      onChange={handleChange('description')}
+                      selectedTab="write"
+                      disablePreview={true}
+                      maxEditorHeight={500}
+                      textAreaProps={taprops}
+                    />
+                    <div className={classes.markdown2}>
+                      <ReactMarkdown source={values.description} />
+                    </div>
+                  </>
+                  // <TextField
+                  //   id="description"
+                  //   label="Description"
+                  //   className={classes.contentField}
+                  //   value={values.description}
+                  //   onChange={handleChange}
+                  //   onBlur={handleBlur}
+                  //   margin="normal"
+                  //   fullWidth
+                  //   multiline
+                  //   rows={25}
+                  // />
                 )}
                 {!on && (
                   <div className={classes.markdown}>
