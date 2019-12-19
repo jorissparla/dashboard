@@ -2,6 +2,8 @@ import React from 'react';
 import { Grid, Typography, Divider, Paper, Switch, FormControlLabel } from '@material-ui/core';
 import { format } from 'date-fns';
 import { SimpleField } from './SimpleField';
+import { Field } from './Field';
+import { useStyles } from './useStyles';
 
 function ReleaseInformation({ versionInfo, handleCustomerHasValidMaintenance, validMaintenance }) {
   const [valid, setValid] = React.useState(validMaintenance);
@@ -67,34 +69,7 @@ function ReleaseInformation({ versionInfo, handleCustomerHasValidMaintenance, va
             <Typography variant="h4">{` years ago`}</Typography>
           </Grid>
         </Grid>
-        {entitled_extended_maintenance !== 'N/A' && (
-          <Grid item xs={3}>
-            <FormControlLabel
-              control={
-                <Switch
-                  checked={validMaintenance}
-                  disabled={!checksrequired}
-                  onChange={handleChange}
-                  value={valid}
-                  color="primary"
-                  inputProps={{ 'aria-label': 'primary checkbox' }}
-                />
-              }
-              label={
-                validMaintenance ? (
-                  <div style={{ color: 'green' }}>Valid Maintenance 👍</div>
-                ) : (
-                  <div style={{ color: 'red' }}>No Valid Maintenance 👎</div>
-                )
-              }
-            />
-            <Typography>
-              Before doing anything else, please check if the customer is entitled to Extended
-              Maintenance
-            </Typography>
-            <SimpleField name="checklink" label="" activeVersion={versionInfo} />
-          </Grid>
-        )}
+
         {entitled_extended_maintenance !== 'N/A' && (
           <Grid
             container
@@ -114,9 +89,67 @@ function ReleaseInformation({ versionInfo, handleCustomerHasValidMaintenance, va
             </Grid>
           </Grid>
         )}
+        <Grid
+          container
+          xs={6}
+          justify="flex-end"
+          alignItems="flex-end"
+          style={{ flexDirection: 'column' }}
+        >
+          <Grid item xs={12}>
+            <SimpleField name="checksrequired" label="" activeVersion={versionInfo} bigger={true} />
+          </Grid>
+        </Grid>
       </Grid>
     </div>
   );
 }
+function MaintenanceCheck({ versionInfo, handleCustomerHasValidMaintenance, validMaintenance }) {
+  const [valid, setValid] = React.useState(validMaintenance);
+  const classes = useStyles();
+  if (versionInfo === {} || !versionInfo) return <div />;
+  // const { version: versionInfo } = useContext(RootContext);
+  const { version, checksrequired, date, entitled_extended_maintenance } = versionInfo;
+  console.log('rendering MaintenanceCheck', versionInfo, version);
+
+  console.log(checksrequired);
+
+  function handleChange(e) {
+    console.log(validMaintenance);
+    setValid(!valid);
+    handleCustomerHasValidMaintenance();
+  }
+
+  if (entitled_extended_maintenance !== 'N/A')
+    return (
+      <Paper className={classes.paper}>
+        <Grid item xs={12}>
+          <Grid component="label" container alignItems="center" spacing={1}>
+            <Typography>Does the customer have extended maintenance?</Typography>
+            <Grid item>No</Grid>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={validMaintenance}
+                  disabled={!checksrequired}
+                  onChange={handleChange}
+                  value={valid}
+                  color="primary"
+                  inputProps={{ 'aria-label': 'primary checkbox' }}
+                />
+              }
+              label=""
+            />
+            <Grid item>Yes</Grid>
+
+            <Typography>Please check entitlement for extended maintenance below</Typography>
+            <SimpleField name="checklink" label="" activeVersion={versionInfo} />
+          </Grid>
+        </Grid>
+      </Paper>
+    );
+  else return <div />;
+}
 
 export default ReleaseInformation;
+export { MaintenanceCheck };

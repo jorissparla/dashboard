@@ -9,7 +9,15 @@ import MarkDown from 'react-markdown';
 import EditWizardDetails from './EditWizardDetails';
 import { useStyles } from './useStyles';
 
-export const Field = ({ name, label, edit = false, Icon, activeVersion }) => {
+export const Field = ({
+  name,
+  label,
+  edit = false,
+  Icon,
+  activeVersion,
+  bigger = false,
+  blue = false
+}) => {
   const classes = useStyles();
   const { role = 'Guest' } = React.useContext(DashBoardContext);
   // const { activeVersion } = React.useContext(RootContext);
@@ -25,14 +33,22 @@ export const Field = ({ name, label, edit = false, Icon, activeVersion }) => {
     setValue(activeVersion[name]);
   }, [activeVersion]);
   return (
-    <Paper className={classes.paper}>
+    <Paper
+      className={classes.paper}
+      style={{ background: `${blue ? 'aliceblue' : 'lightyellow'}` }}
+    >
       <Grid
         container
         direction="row"
         justifyContent="space-between"
         alignItems="flex-start"
         className={classes.stretch}
-        style={{ display: 'flex', flex: '1 0 auto', minHeight: '90%', height: '100%' }}
+        style={{
+          display: 'flex',
+          flex: '1 0 auto',
+          minHeight: '90%',
+          height: '100%'
+        }}
       >
         <Grid item xs={9}>
           <Typography variant="h6">

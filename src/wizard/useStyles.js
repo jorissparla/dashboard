@@ -13,9 +13,10 @@ export const useStyles = makeStyles(theme => ({
   },
   paper: {
     padding: 10,
-    marginTop: 10,
-    flex: '1 0 auto',
-    minHeight: '90%'
+    marginTop: 5,
+    marginBottom: 10,
+    flex: '1 0 auto'
+    // minHeight: '90%'
   },
   stretch: {
     minHeight: '90%'

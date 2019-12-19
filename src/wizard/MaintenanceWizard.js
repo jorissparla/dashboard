@@ -4,7 +4,7 @@ import Paper from '@material-ui/core/Paper';
 import Switch from '@material-ui/core/Switch';
 import Typography from '@material-ui/core/Typography';
 import React from 'react';
-import ReleaseInformation from 'wizard/ReleaseInformation';
+import ReleaseInformation, { MaintenanceCheck } from 'wizard/ReleaseInformation';
 import { Field } from './Field';
 import { useStyles } from './useStyles';
 
@@ -23,66 +23,6 @@ let defaultValue = {
 defaultValue['Are checks Required?'] = '.';
 defaultValue['Check if Customer is entitled for Extended Maintenance?'] = 'N/A';
 
-// export const RootContext = React.createContext({
-//   activeVersion: defaultValue,
-//   setVersionByName: (name, valid) => {},
-//   checksRequired: false,
-//   validMaintenance: true,
-//   setValidMaintenance: a => {}
-// });
-
-// const RootContextProvider = ({ children }) => {
-//   const [activeVersion, setActiveVersion] = React.useState(maint[0]);
-//   const [checksRequired, setChecksRequired] = React.useState(false);
-//   const [validMaintenance, toggleValidMaintenance] = React.useState(true);
-//   const { data, loading } = useQuery(ALL_MAINTENANCE_QUERY);
-
-//   React.useEffect(() => {
-//     setActiveVersion(data && data.allMaintenance ? data.allMaintenance[0] : maint[0]);
-//     // console.log('here');
-//   }, [data]);
-
-//   if (loading || !data) return <div />;
-//   // console.log({ data });
-//   function setVersionByName(name, valid) {
-//     let found = maint.filter(o => o.version === name);
-//     console.log(found, found.length);
-//     let index = 0;
-//     if (found.length > 1) {
-//       setChecksRequired(true);
-//     } else {
-//       toggleValidMaintenance(true);
-//       setChecksRequired(false);
-//     }
-
-//     if (!valid) index = 1;
-//     if (found) {
-//       // if (valid) {
-//       //   found = found.filter()
-//       // }
-
-//       setActiveVersion(found[index]);
-//     }
-//   }
-//   function setValidMaintenance(val) {
-//     toggleValidMaintenance(val);
-//     setVersionByName(activeVersion.version, val);
-//   }
-//   return (
-//     <RootContext.Provider
-//       value={{
-//         activeVersion,
-//         setVersionByName,
-//         checksRequired,
-//         validMaintenance,
-//         setValidMaintenance
-//       }}
-//     >
-//       {children}
-//     </RootContext.Provider>
-//   );
-// };
-
 const MaintenanceInformation = ({
   activeVersion,
   checksRequired,
@@ -100,7 +40,7 @@ const MaintenanceInformation = ({
   return (
     <Paper className={classes.paper}>
       <Typography variant="h6">Maintenance Information</Typography>
-      <Grid container spacing={2} justify="center">
+      <Grid container spacing={2} justify="flex-start">
         <Grid item xs={3}>
           <FormControlLabel
             control={
@@ -115,7 +55,7 @@ const MaintenanceInformation = ({
             }
             label={
               validMaintenance ? (
-                <div style={{ color: 'green' }}>Valid Maintenance 👍</div>
+                <div style={{ color: 'green' }}>Valid Maintenance 👍👍</div>
               ) : (
                 <div style={{ color: 'red' }}>Not Valid Maintenance 👎</div>
               )
@@ -150,6 +90,7 @@ const MaintenanceWizard = ({ activeVersions }) => {
 
   const [validMaintenance, toggleValidMaintenance] = React.useState(true);
   let activeVersion = checkActiveVersion(activeVersions, validMaintenance);
+  const { entitled_extended_maintenance } = activeVersion;
 
   function checkActiveVersion(vers, maint) {
     if (vers && vers.length > 1) {
@@ -182,47 +123,76 @@ const MaintenanceWizard = ({ activeVersions }) => {
         setValidMaintenance={handleValidMaintenance}
         validMaintenance={validMaintenance}
       />
-      <Grid item xs={12}>
-        <Field name="checksrequired" label="" activeVersion={activeVersion} />
+      <Grid
+        container
+        spacing={2}
+        justify="flex-start"
+        style={{ marginTop: 5, marginBottom: 10, paddingLeft: 5 }}
+      >
+        {entitled_extended_maintenance !== 'N/A' && (
+          <Grid item xs={6}>
+            <MaintenanceCheck
+              versionInfo={activeVersion}
+              handleCustomerHasValidMaintenance={handleValidMaintenance}
+              validMaintenance={validMaintenance}
+            />
+          </Grid>
+        )}
       </Grid>
-      <Grid container spacing={2} direction="row" justify="flex-start" alignItems="stretch">
-        <Grid item xs={3}>
-          <Field
-            name="comm_before"
-            label="Communication before starting"
-            activeVersion={activeVersion}
-          />
+      <div style={{ display: 'flex', flexDirection: 'row' }}>
+        <Grid container direction="column">
+          <Grid container item xs={12} spacing={1} justify="flex-start" alignItems="flex-start">
+            <Grid item xs={12}>
+              <Field
+                blue={true}
+                name="comm_before"
+                label="Communication before starting"
+                activeVersion={activeVersion}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Field
+                blue={true}
+                name="comm_ics"
+                label="Communication - Refer to ICS"
+                activeVersion={activeVersion}
+              />
+              <Grid item xs={12}>
+                <Field
+                  blue={true}
+                  name="communication"
+                  label="Other Communication"
+                  activeVersion={activeVersion}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Field
+                  blue={true}
+                  name="comm_disappointed"
+                  label="Communication - Customer disappointed"
+                  activeVersion={activeVersion}
+                />
+              </Grid>
+            </Grid>
+          </Grid>
         </Grid>
-        <Grid item xs={3}>
-          <Field
-            name="comm_ics"
-            label="Communication - Refer to ICS"
-            activeVersion={activeVersion}
-          />
+        <Grid container direction="column">
+          <Grid container item xs={12} spacing={1}>
+            <Grid item xs={12}>
+              <Field name="solutions" label="Solutions" activeVersion={activeVersion} />
+            </Grid>
+            <Grid item xs={12}>
+              <Field name="defects" label="Defects" activeVersion={activeVersion} />
+            </Grid>
+            <Grid item xs={12}>
+              <Field name="portingset" label="Portingsets" activeVersion={activeVersion} />
+            </Grid>
+            <Grid item xs={12}>
+              <Field name="data_corruption" label="Data corruption" activeVersion={activeVersion} />
+            </Grid>
+          </Grid>
         </Grid>
-        <Grid item xs={3}>
-          <Field name="solutions" label="Solutions" activeVersion={activeVersion} />
-        </Grid>
-        <Grid item xs={3}>
-          <Field name="defects" label="Defects" activeVersion={activeVersion} />
-        </Grid>
-        <Grid item xs={3}>
-          <Field name="communication" label="Other Communication" activeVersion={activeVersion} />
-        </Grid>
-        <Grid item xs={3}>
-          <Field
-            name="comm_disappointed"
-            label="Communication - Customer disappointed"
-            activeVersion={activeVersion}
-          />
-        </Grid>
-        <Grid item xs={3}>
-          <Field name="portingset" label="Portingsets" activeVersion={activeVersion} />
-        </Grid>
-        <Grid item xs={3}>
-          <Field name="data_corruption" label="Data corruption" activeVersion={activeVersion} />
-        </Grid>
-      </Grid>
+      </div>
     </div>
   );
 };
