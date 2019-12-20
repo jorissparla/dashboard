@@ -1,4 +1,13 @@
 import gql from 'graphql-tag';
+
+export const TENANT_NOTE = gql`
+  query TENANT_NOTE {
+    updatestatus(name: "tenantlist") {
+      id
+      note
+    }
+  }
+`;
 export const ALL_TENANTS = gql`
   query q {
     tenants {

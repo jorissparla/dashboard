@@ -23,6 +23,7 @@ import PeopleIcon from '@material-ui/icons/People';
 import Person from '@material-ui/icons/PeopleOutline';
 import RequestListIcon from '@material-ui/icons/PlaylistAdd';
 import SurveysIcon from '@material-ui/icons/Whatshot';
+import SettingsIcon from '@material-ui/icons/Settings';
 import { UserContext } from 'globalState/UserProvider';
 import React, { useState } from 'react';
 import Signout from '../Signout';
@@ -56,6 +57,7 @@ export const SideBarMenu: React.FC<Props> = ({ classes, history, toggleMenu, ope
   return (
     <List>
       <ToggledNavLink title="Home" Icon={ActionHome} navigateTo="/" history={history} />
+      <ToggledNavLink title="MaintenanceWizard" Icon={SettingsIcon} navigateTo="/maintenancewizard" history={history} />
       <ToggledNavLink title="Surveys" Icon={SurveysIcon} navigateTo="/surveys" history={history} />
       {authenticated && (
         <ToggledNavLink title="WorkList" Icon={MyWorkList} navigateTo="/mywork" history={history} />

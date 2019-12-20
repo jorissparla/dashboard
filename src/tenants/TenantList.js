@@ -18,12 +18,13 @@ import { FilterFieldContext } from '../globalState/FilterContext';
 import { distanceInWordsToNow, format } from '../utils/format';
 import { DashBoardContext } from '../globalState/Provider';
 import TenantLogs from './TenantLogs';
-import { ALL_TENANTS, QUERY_ALL_TENANT_DETAILS } from './TenantQueries';
+import { ALL_TENANTS, QUERY_ALL_TENANT_DETAILS, TENANT_NOTE } from './TenantQueries';
 import { Main, Article, TextSpan } from './TenantStyledElements';
 import { TenantCard } from './TenantCard';
 import TenantCustomerDetailsForm from './TenantCustomerDetailsForm';
 import FancyFilter from './new/FancyFilter';
 import Loader from './../utils/Loader';
+import './tenants.css';
 
 const styles = theme => ({
   root: {
@@ -211,6 +212,18 @@ const CloseButton = styled.button`
   align-self: flex-end;
   align-self: center;
 `;
+
+function TenantNote() {
+  const { data, loading } = useQuery(TENANT_NOTE);
+  if (loading) return <div />;
+  const { updatestatus } = data;
+  if (updatestatus.note && updatestatus.note.length> 1) {
+
+    return <span className="marquee">{updatestatus.note}</span>;
+  }
+  return <div/>
+}
+
 export const FilterForm = ({ setSearchText, flip }) => {
   const { setFields, fields, clearFields } = useContext(FilterFieldContext);
 
@@ -550,6 +563,7 @@ export const TenantListHeader = ({
           >
             Logs
           </Button>
+          <TenantNote />
         </Typography>
         <FancyFilter onFilter={applyFilter} />
         {/* <Button variant="contained" onClick={toggleFilter}>
