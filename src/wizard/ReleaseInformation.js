@@ -1,8 +1,7 @@
-import React from 'react';
-import { Grid, Typography, Divider, Paper, Switch, FormControlLabel } from '@material-ui/core';
+import { FormControlLabel, Grid, Paper, Switch, Typography } from '@material-ui/core';
 import { format } from 'date-fns';
+import React from 'react';
 import { SimpleField } from './SimpleField';
-import { Field } from './Field';
 import { useStyles } from './useStyles';
 
 function ReleaseInformation({ versionInfo, handleCustomerHasValidMaintenance, validMaintenance }) {
@@ -19,12 +18,8 @@ function ReleaseInformation({ versionInfo, handleCustomerHasValidMaintenance, va
     xm_date_since
   } = versionInfo;
   const versionDate = parseInt(date);
-  console.log('rendering releaseinfor', versionInfo, version);
-
-  console.log(checksrequired);
 
   function handleChange(e) {
-    console.log(validMaintenance);
     setValid(!valid);
     handleCustomerHasValidMaintenance();
   }
@@ -110,12 +105,8 @@ function MaintenanceCheck({ versionInfo, handleCustomerHasValidMaintenance, vali
   if (versionInfo === {} || !versionInfo) return <div />;
   // const { version: versionInfo } = useContext(RootContext);
   const { version, checksrequired, date, entitled_extended_maintenance } = versionInfo;
-  console.log('rendering MaintenanceCheck', versionInfo, version);
-
-  console.log(checksrequired);
 
   function handleChange(e) {
-    console.log(validMaintenance);
     setValid(!valid);
     handleCustomerHasValidMaintenance();
   }

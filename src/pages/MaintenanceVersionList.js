@@ -25,6 +25,8 @@ const VersionList = () => {
 
   const { data, loading } = useQuery(ALL_MAINTENANCE_QUERY);
   let versions = [];
+
+  if (loading || !data) return <Spinner />;
   const { allMaintenance } = data;
 
   function handleChange(version) {
@@ -32,7 +34,6 @@ const VersionList = () => {
     setSelectedVersion(version);
     // setActiveVersions(allMaintenance.filter(v => v.version === version));
   }
-  if (loading) return <Spinner />;
 
   let activeVersions = allMaintenance.filter(v => v.version === selectedVersion);
   versions = [...new Set(allMaintenance.map(v => v.version))];
