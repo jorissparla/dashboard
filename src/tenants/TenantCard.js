@@ -1,34 +1,30 @@
 import {
-  Grid,
-  Typography,
-  Switch,
-  Chip,
+  Avatar,
+  Backdrop,
+  Button,
   Card,
-  CardHeader,
   CardActions,
   CardContent,
-  Button,
+  CardHeader,
   Divider,
-  Avatar,
-  TextField,
+  Grid,
   Modal,
-  Backdrop
+  Switch,
+  Typography,
+  Chip
 } from '@material-ui/core';
 import ListIcon from '@material-ui/icons/List';
-import _ from 'lodash';
-import React from 'react';
-import { Mutation, useQuery } from 'react-apollo';
-import FavoriteBadge from '../elements/Badge';
-import { format, distanceInWordsToNow } from '../utils/format';
-import { MUTATION_MARK_LIVE, QUERY_TENANT_DETAIL } from './TenantQueries';
-import Label from './details/components/Label';
-import EditTenantDetails from './details/components/EditTenant';
-import { Header, H2 } from './TenantStyledElements';
-import Spinner from 'utils/spinner';
-import EditIcon from '@material-ui/icons/Edit';
-import clsx from 'clsx';
 import classNames from 'classnames';
 import { UserContext } from 'globalState/UserProvider';
+import _ from 'lodash';
+import React from 'react';
+import { Mutation } from 'react-apollo';
+import { distanceInWordsToNow, format } from '../utils/format';
+import EditTenantDetails from './details/components/EditTenant';
+import Label from './details/components/Label';
+import { MUTATION_MARK_LIVE } from './TenantQueries';
+import { Tooltip } from '@material-ui/core/Tooltip';
+
 export const TenantCard = ({
   classes,
   customer,
@@ -92,10 +88,48 @@ export const TenantCard = ({
     .map(t => {
       const postfix = t.name.split('_')[1];
       const index = indexObj[postfix] || 999;
-      return { index, ...t };
+      const { tenant_status, operational_status, process_status } = t;
+      let tag = '';
+      let tooltip = '';
+      if (tenant_status) {
+        if (
+          !(
+            tenant_status === 'active' &&
+            operational_status === 'online' &&
+            process_status === 'idle'
+          )
+        ) {
+          tag = `${tenant_status[0].toUpperCase()}-${operational_status[0].toUpperCase()}-${process_status
+            .slice(0, 2)
+            .toUpperCase()}`;
+        }
+        tooltip = `${tenant_status}-${operational_status}-${process_status}`;
+      }
+      return { index, ...t, tag, tooltip };
     })
     .sort((a, b) => (a.index > b.index ? 1 : -1));
 
+  // const statusTags = tenants.map(t => {
+  //   const { tenant_status, operational_status, process_status } = t;
+  //   let tag = '';
+  //   if (!tenant_status) return { name: t.name, tag: '', tooltip: '' };
+  //   if (
+  //     !(tenant_status === 'active' && operational_status === 'online' && process_status === 'idle')
+  //   ) {
+  //     tag = `${tenant_status[0].toUpperCase()}-${operational_status[0].toUpperCase()}-${process_status
+  //       .slice(0, 2)
+  //       .toUpperCase()}`;
+  //   }
+  //   return {
+  //     name: t.name,
+  //     tag,
+  //     tooltip: `${tenant_status.toUpperCase()}-${operational_status.toUpperCase()}-${process_status.toUpperCase()}`
+  //   };
+  // });
+  // console.log('statusTags', tags);
+  const baseTenantId =
+    tenants && tenants.length && tenants.length > 0 ? tenants[0].name.split('_')[0] : '';
+  // console.log(customer, tenants[0]);
   return (
     <>
       <Card className={customer === 'Infor' ? classes.card2 : classes.card}>
@@ -119,6 +153,7 @@ export const TenantCard = ({
           />
           <Typography className={classes.pos} color="textSecondary">
             {tenants.length > 0 && tenants[0].farm}
+            <span className={classes.box}>{baseTenantId}</span>
           </Typography>
           <div className={classes.description}>
             <Typography color="textSecondary" variant="subtitle2">
@@ -132,7 +167,7 @@ export const TenantCard = ({
             </Typography>
           </div>
           <div className={classes.tags}>
-            {tags.map(({ id, name, version }) => {
+            {tags.map(({ id, name, version, tooltip, tag }) => {
               let shortname = '';
               if (customer === 'Infor') {
                 shortname = name;
@@ -142,7 +177,12 @@ export const TenantCard = ({
                 : shortname.endsWith('TRN')
                 ? '#1da1f2'
                 : 'rgba(0,0,0,0.5)';
-              return <Label key={id} color={color}>{`${shortname}:${version}`}</Label>;
+              return (
+                <div className={classes.tagContent}>
+                  <Label key={id} color={color}>{`${shortname}:${version}`}</Label>
+                  {/* {tag && <Chip className={classes.tagtooltip} label={tooltip} />} */}
+                </div>
+              );
             })}
           </div>
           <Divider />

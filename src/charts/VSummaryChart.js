@@ -1,10 +1,10 @@
-import React from "react";
-import gql from "graphql-tag";
-import { Query } from "react-apollo";
-import { VictoryLabel, VictoryArea, VictoryTheme, VictoryChart } from "victory";
+import React from 'react';
+import gql from 'graphql-tag';
+import { Query } from 'react-apollo';
+import { VictoryLabel, VictoryArea, VictoryTheme, VictoryChart } from 'victory';
 
-const querySummaries = gql`
-  query summaries($team: String) {
+const querySummariesv2 = gql`
+  query summaries2($team: String) {
     summaries(team: $team, recent: 6) {
       weekNr
       supportBacklog
@@ -21,22 +21,22 @@ const querySummaries = gql`
 
 class VSummaryChart extends React.Component {
   static defaultProps = {
-    team: "Tools",
-    color: "#1da1f2",
-    field: "supportBacklog",
-    type: "area"
+    team: 'Tools',
+    color: '#1da1f2',
+    field: 'supportBacklog',
+    type: 'area'
   };
   render() {
     const { color, team, field } = this.props; //|| "#c43a31";
 
     return (
-      <Query query={querySummaries} variables={{ team }}>
+      <Query query={querySummariesv2} variables={{ team }}>
         {({ data, loading }) => {
-          if (loading) return "Loading....";
-          console.log("data", data);
-          const { summaries } = data;
-          const range = summaries.map(item => item[field]);
-          console.log("range", range);
+          if (loading) return 'Loading....';
+          console.log('data', data);
+          const { summaries2 } = data;
+          const range = summaries2.map(item => item[field]);
+          console.log('range', range);
           let ymin;
           let ymax;
           if (range.length > 0) {
@@ -45,7 +45,7 @@ class VSummaryChart extends React.Component {
           }
           console.log({ ymin }, { ymax });
           return (
-            <div style={{ display: "flex", width: "30%" }}>
+            <div style={{ display: 'flex', width: '30%' }}>
               <VictoryChart width={400} theme={VictoryTheme.material}>
                 <VictoryArea
                   type={this.props.type}
@@ -55,7 +55,7 @@ class VSummaryChart extends React.Component {
                     onLoad: { duration: 1000 }
                   }}
                   theme={VictoryTheme.material}
-                  data={summaries}
+                  data={summaries2}
                   style={{
                     data: {
                       fill: color,
@@ -65,7 +65,7 @@ class VSummaryChart extends React.Component {
                     },
                     labels: {
                       fontSize: 15,
-                      fill: d => (d.x === 3 ? "#000000" : color)
+                      fill: d => (d.x === 3 ? '#000000' : color)
                     }
                   }}
                   x="weekNr"
@@ -74,7 +74,7 @@ class VSummaryChart extends React.Component {
                   labels={d => `(${d[field]})`}
                   domain={{ y: [ymin, ymax] }}
                   labelComponent={
-                    <VictoryLabel renderInPortal dy={-10} style={{ color: "#000" }} />
+                    <VictoryLabel renderInPortal dy={-10} style={{ color: '#000' }} />
                   }
                 />
                 <VictoryLabel text={`${this.props.field} - ${this.props.team}`} x={100} y={50} />
@@ -89,7 +89,7 @@ class VSummaryChart extends React.Component {
 class Charts extends React.Component {
   render() {
     return (
-      <div style={{ display: "flex", flexWrap: "wrap" }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         <VSummaryChart team="Tools" color="#81D4FA" field="opened" />
         <VSummaryChart team="Tools" color="#FF7043" field="Closed" />
         <VSummaryChart team="Tools" color="#1da1f2" field="supportBacklog" />

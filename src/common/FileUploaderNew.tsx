@@ -58,7 +58,7 @@ const Thumb = styled.image`
 `;
 
 const UPLOAD_MUTATION = gql`
-  mutation($files: [Upload!]!, $folder: String) {
+  mutation UPLOAD_MUTATION($files: [Upload!]!, $folder: String) {
     multipleUpload(files: $files, folder: $folder) {
       id
       path

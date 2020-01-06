@@ -1,0 +1,18 @@
+.marquee {
+  /* color: red; */
+  white-space: nowrap;
+  text-transform: uppercase;
+  animation: rightThenLeft 16s infinite;
+}
+
+@keyframes rightThenLeft {
+  0% {
+    margin-left: 0;
+  }
+  50% {
+    margin-left: 400px;
+  }
+  100% {
+    margin-left: 0;
+  }
+}

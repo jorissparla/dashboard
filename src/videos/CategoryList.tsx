@@ -20,7 +20,7 @@ const BrowseTitle = styled.h5`
 `;
 
 const QUERY_VIDEO_CATEGORIES = gql`
-  {
+  query QUERY_VIDEO_CATEGORIES {
     videocategories {
       id
       name

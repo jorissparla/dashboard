@@ -90,7 +90,7 @@ export default class HistoryDayAllContainer extends Component {
 }
 
 const QUERY_HISTORY_DAY = gql`
-  {
+  query QUERY_HISTORY_DAY {
     historyday {
       id
       day

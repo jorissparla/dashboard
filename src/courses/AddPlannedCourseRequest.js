@@ -27,7 +27,7 @@ const validationSchema = yup.object().shape({
 });
 
 const ALL_USERS = gql`
-  {
+  query ALL_USERS{
     supportfolks {
       id
       fullname

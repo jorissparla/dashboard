@@ -1,4 +1,13 @@
 import gql from 'graphql-tag';
+
+export const TENANT_NOTE = gql`
+  query TENANT_NOTE {
+    updatestatus(name: "tenantlist") {
+      id
+      note
+    }
+  }
+`;
 export const ALL_TENANTS = gql`
   query q {
     tenants {
@@ -7,6 +16,10 @@ export const ALL_TENANTS = gql`
       name
       version
       customerid
+      tenant_status
+      operational_status
+      process_status
+      frozen
       customer {
         name
         number
@@ -40,6 +53,17 @@ export const QUERY_TENANT_DETAIL = gql`
       pm
       info
       temperature
+      comments
+      comments_updated
+      updated
+      tenants {
+        id
+        farm
+        name
+        version
+        lastupdated
+        live
+      }
     }
   }
 `;
@@ -57,6 +81,17 @@ export const QUERY_ALL_TENANT_DETAILS = gql`
       pm
       info
       temperature
+      comments
+      comments_updated
+      updated
+      tenants {
+        id
+        farm
+        name
+        version
+        lastupdated
+        live
+      }
     }
   }
 `;
@@ -75,6 +110,9 @@ export const MUTATION_UPDATE_DETAIL = gql`
       pm
       info
       temperature
+      comments
+      comments_updated
+      updated
     }
   }
 `;
@@ -91,6 +129,11 @@ export const MUTATION_MARK_LIVE = gql`
       }
       lastupdated
       live
+      details {
+        comments
+        comments_updated
+        updated
+      }
     }
   }
 `;

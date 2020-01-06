@@ -172,7 +172,7 @@ function VideoPage(props: any) {
                   }}
                 >
                   <CardHeader
-                    titleTypographyProps={{ component: 'h2' }}
+                    // TypographyProps={{ component: 'h2' }}
                     title={title}
                     subheader={formatteddate}
                     avatar={

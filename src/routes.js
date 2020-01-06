@@ -34,7 +34,9 @@ import TestLogin from './TestLogin';
 import { UserProfileComponent } from './User';
 import UserPermissions from './UserPermissions';
 import { AddVideo, EditVideo } from './videos/VideoOperations';
-import CustomerFollow from './customerfollow';
+import OtherTeamsChartContainer from './charts/OtherTeamChartsContainer';
+import MaintenanceVersionList from './pages/MaintenanceVersionList';
+import TenantViewList from 'tenants/TenantViewList';
 
 const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
 
@@ -98,8 +100,9 @@ function AppRoutes(props) {
 
   return (
     <Switch>
-      <Route exact path="/customers" component={CustomerFollow} />
+      <Route exact path="/maintenancewizard" component={MaintenanceVersionList} />
       <Route exact path="/tenantlogs" component={TenantLogsWithData} />
+      <Route exact path="/tenantview" component={TenantViewList} />
       <Route exact path="/details/:id" component={Details} />
       <AuthRoute
         exact
@@ -219,6 +222,12 @@ function AppRoutes(props) {
         path="/supportcard/request/:id"
         component={RequireAuth(RequestEdit)}
       />
+      <EnhancedRoute
+        editors={['Admin', 'PO']}
+        user={user}
+        path="/supportcard/filter/:text"
+        component={SupportCards}
+      />
       <Route path="award" component={Award} />
       <EnhancedRoute
         editors={['Admin', 'PO']}
@@ -290,6 +299,7 @@ function AppRoutes(props) {
       <Route path="/forgot" component={RequestResetPassword} />
       <Route path="/historyday" component={HistoryDayContainer} />
       <Route path="/historyall" component={HistoryDayAll} />
+      <Route path="/historyother" component={OtherTeamsChartContainer} />
       <Route path="test/edit/:id" component={NewsItemContainer} />
       <Route exact path="/test/dashboard" component={DashBoardStatsNew} />
       <Route exact path="/test/dashboard/team/:team" component={DashBoardStatsNew} />

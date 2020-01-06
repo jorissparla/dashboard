@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/styles';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
+import { usePersistentState } from '../../../hooks';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -82,14 +83,18 @@ const Filter = props => {
     tenantName: '',
     tenantVersion: '',
     farmName: '',
-    isLive: false
+    isLive: false,
+    csm: '',
+    pm: '',
+    temperature: ''
   };
 
   const [expandCustomer, setExpandCustomer] = useState(true);
-  const [values, setValues] = useState({ ...initialValues });
+  const [values, setValues] = usePersistentState('filters', { ...initialValues });
 
   const handleClear = () => {
     setValues({ ...initialValues });
+    // console.log()
   };
 
   const handleFieldChange = (event, field, value) => {
@@ -220,6 +225,30 @@ const Filter = props => {
                     name="farmName"
                     onChange={event => handleFieldChange(event, 'farmName', event.target.value)}
                     value={values.farmName}
+                    variant="outlined"
+                  />
+                </div>
+                <div className={classes.formGroup}>
+                  <TextField
+                    className={classes.field}
+                    fullWidth
+                    label="Project Manager"
+                    margin="dense"
+                    name="pm"
+                    onChange={event => handleFieldChange(event, 'pm', event.target.value)}
+                    value={values.pm}
+                    variant="outlined"
+                  />
+                </div>
+                <div className={classes.formGroup}>
+                  <TextField
+                    className={classes.field}
+                    fullWidth
+                    label="Customer Success Manager"
+                    margin="dense"
+                    name="csm"
+                    onChange={event => handleFieldChange(event, 'csm', event.target.value)}
+                    value={values.csm}
                     variant="outlined"
                   />
                 </div>

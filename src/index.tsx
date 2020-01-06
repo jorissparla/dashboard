@@ -10,7 +10,7 @@ import reducers from './reducers';
 import { BrowserRouter } from 'react-router-dom';
 import AppRoutes from './routes';
 import { createMuiTheme } from '@material-ui/core/styles';
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import { MuiThemeProvider } from '@material-ui/core/styles';
 import { createGlobalStyle } from 'styled-components';
 import { AUTH_USER } from './actions';
 import App from './Navigation/Nav';

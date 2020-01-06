@@ -11,10 +11,14 @@ export const QUERY_BACKLOG = gql`
     title
     status
     dayssincelastupdate
+    ownergroup
     daysSinceCreated
+    contactname
     escalated
     Deployment
     severityname
+    Tenant
+    release
     service_restored_date
   }
   query QUERY_BACKLOG(
@@ -198,6 +202,16 @@ export const QUERY_BACKLOG = gql`
       deployment: "ALL"
       status: "New"
       since: $N_NEW
+      date: $date
+      productFilters: $products
+    ) {
+      ...backlogfragment
+    }
+    multitenant: backlog(
+      owner: $owner
+      orderBy: CREATED_ASC
+      deployment: "CLOUD"
+      statusFilter: BACKLOG
       date: $date
       productFilters: $products
     ) {

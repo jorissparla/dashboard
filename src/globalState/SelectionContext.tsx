@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useLocalStorage } from '../utils/useLocalStorage';
+import { usePersistentState } from '../hooks';
 
 interface Props {
   children: any;
@@ -12,7 +13,7 @@ export const SelectionContext = React.createContext(initialContext);
 
 export const SelectionProvider: React.FC<Props> = ({ children }) => {
   const [owner, setOwner] = React.useState('');
-  const [products, setProducts] = React.useState(['LN']);
+  const [products, setProducts] = usePersistentState('selectedproducts', ['LN']);
   const [isCloud, setisCloud] = React.useState(false);
   const [persons, setPersons] = useLocalStorage('persons', []);
 

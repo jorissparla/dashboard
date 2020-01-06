@@ -3,40 +3,43 @@
 // import CardActions from '@material-ui/core/CardActions';
 // import CardContent from '@material-ui/core/CardContent';
 // import CardMedia from '@material-ui/core/CardMedia';
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import { withStyles } from "@material-ui/core/styles";
-import gql from "graphql-tag";
-import _ from "lodash";
-import React from "react";
-import { adopt } from "react-adopt";
-import { Mutation, Query } from "react-apollo";
+import Button from '@material-ui/core/Button';
+import Dialog from '@material-ui/core/Dialog';
+import { withStyles } from '@material-ui/core/styles';
+import gql from 'graphql-tag';
+import { usePersistentState } from 'hooks';
+import _ from 'lodash';
+import React, { useState } from 'react';
+import { adopt } from 'react-adopt';
+import { Mutation, Query } from 'react-apollo';
 //import { SmallCard } from "./SupportCard";
-import ReactMarkdown from "react-markdown";
-import styled from "styled-components";
-import SearchBar from "../common/SearchBar";
-import { SmallCard } from "../common/SmallCard";
-import Modal from "../ModalWrapper";
-import AddCard from "../supportcard/AddCard";
-import CategoryTabs from "../supportcard/CategoryTabs";
+import ReactMarkdown from 'react-markdown';
+import styled from 'styled-components';
+import SearchBar from '../common/SearchBar';
+import { SmallCard } from '../common/SmallCard';
+import Modal from '../ModalWrapper';
+import AddCard from '../supportcard/AddCard';
+import CategoryTabs from '../supportcard/CategoryTabs';
+import { CategoryTabsNew } from '../supportcard/CategoryTabsNew';
+import { ProductsTab } from '../supportcard/ProductsTabsNew';
 // import Typography from '@material-ui/core/Typography';
-import NewRequestForm from "../supportcard/Request";
-import User from "../User";
-import Spinner from "../utils/spinner";
-import withAuth from "../utils/withAuth";
+import NewRequestForm from '../supportcard/Request';
+import User from '../User';
+import Spinner from '../utils/spinner';
+import withAuth from '../utils/withAuth';
 
 const cardColors = [
-  { back: "#7fbadb", front: "#000" },
-  { back: "#FFCC80", front: "#000" },
-  { back: "papayawhip", front: "#000" },
-  { back: "#B9F6CA", front: "#000" },
-  { back: "#EDE7F6", front: "#000" },
-  { back: "#80D8FF", front: "#000" },
-  { back: "#b39ddb", front: "#000" },
-  { back: "#FFCCBC", front: "#000" },
-  { back: "palevioletred", front: "#000" },
-  { back: "#E1F5FE", front: "#000" },
-  { back: "#607D8B", front: "#000" }
+  { back: '#7fbadb', front: '#000' },
+  { back: '#FFCC80', front: '#000' },
+  { back: 'papayawhip', front: '#000' },
+  { back: '#B9F6CA', front: '#000' },
+  { back: '#EDE7F6', front: '#000' },
+  { back: '#80D8FF', front: '#000' },
+  { back: '#b39ddb', front: '#000' },
+  { back: '#FFCCBC', front: '#000' },
+  { back: 'palevioletred', front: '#000' },
+  { back: '#E1F5FE', front: '#000' },
+  { back: '#607D8B', front: '#000' }
 ];
 
 const suppCardFragment = gql`
@@ -49,6 +52,7 @@ const suppCardFragment = gql`
     updatedAt
     isfavorite
     accessed
+    product
     category {
       name
       color
@@ -98,9 +102,9 @@ const styles = theme => ({
     padding: 10,
     height: 250,
     margin: 10,
-    display: "flex",
-    flexDirection: "column",
-    alignContent: "space-between"
+    display: 'flex',
+    flexDirection: 'column',
+    alignContent: 'space-between'
   },
   media: {
     height: 100
@@ -109,12 +113,12 @@ const styles = theme => ({
     fontSize: 12
   },
   button: {
-    height: "2rem"
+    height: '2rem'
   }
 });
 
 String.prototype.includes2 = function(search, start) {
-  if (typeof start !== "number") {
+  if (typeof start !== 'number') {
     start = 0;
   }
 
@@ -126,7 +130,7 @@ String.prototype.includes2 = function(search, start) {
 };
 
 const customContentStyle = {
-  height: "100%"
+  height: '100%'
 };
 
 const Div = styled.div`
@@ -135,6 +139,15 @@ const Div = styled.div`
   flex-wrap: wrap;
   margin: 10px;
   background: #eeeeee;
+`;
+const Div2 = styled.div`
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin: 10px;
+  background: #eeeeee;
+  width: 90vw;
+  margin: 0px 10 0px 10px;
 `;
 
 const Container = styled.div`
@@ -149,12 +162,18 @@ const Composed = adopt({
   supportcards: ({ render }) => <Query query={QUERY_ALL_SUPPORTCARDS}>{render}</Query>,
   createAudit: ({ render }) => <Mutation mutation={MUTATION_CREATE_AUDIT}>{render}</Mutation>,
   favoriteCard: ({ render }) => (
-    <Mutation mutation={MUTATION_FAVORITE_CARD} refetchQueries={[{ query: QUERY_ALL_SUPPORTCARDS }]}>
+    <Mutation
+      mutation={MUTATION_FAVORITE_CARD}
+      refetchQueries={[{ query: QUERY_ALL_SUPPORTCARDS }]}
+    >
       {render}
     </Mutation>
   ),
   unfavoriteCard: ({ render }) => (
-    <Mutation mutation={MUTATION_UNFAVORITE_CARD} refetchQueries={[{ query: QUERY_ALL_SUPPORTCARDS }]}>
+    <Mutation
+      mutation={MUTATION_UNFAVORITE_CARD}
+      refetchQueries={[{ query: QUERY_ALL_SUPPORTCARDS }]}
+    >
       {render}
     </Mutation>
   ),
@@ -162,21 +181,22 @@ const Composed = adopt({
 });
 
 export default function SupportCardContainer(props) {
+  const { text = '' } = props;
   return (
     <Composed>
       {({ supportcards, createAudit, favoriteCard, unfavoriteCard, user }) => {
         const { data, loading } = supportcards;
         if (loading) return <Spinner />;
-        const currentUser = user.data.me;
-        console.log("Currentuser", user);
+        console.log('🎉🎉', user);
         return (
           <StyledSupportCards
             supportcards={data.supportcards}
             createAudit={createAudit}
             favoriteCard={favoriteCard}
             unfavoriteCard={unfavoriteCard}
-            currentUser={currentUser}
+            currentUser={user}
             {...props}
+            filter={text}
           />
         );
       }}
@@ -184,153 +204,50 @@ export default function SupportCardContainer(props) {
   );
 }
 
-class SupportCards extends React.Component {
-  state = {
-    searchText: "",
-    selectedCategory: "",
-    showRequest: false,
-    showFavorites: false,
-    portalText: "### Where can I find release Notes documents",
-    showPortal: false
-  };
+const SupportCards = props => {
+  const [searchText, setSearchText] = useState(props.filter || '');
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedProduct, setSelectedProduct] = usePersistentState('supp_card_product', 'LN');
+  const [showFavorites, setShowFavorites] = useState(false);
+  const [showPortal, setShowPortal] = useState(false);
+  const [showRequest, setShowRequest] = useState(false);
+  const [portalText, setPortalText] = useState('### Where can I find release Notes documents');
 
-  setSearchText = value => this.setState({ searchText: value });
-  setSelectedCategory = value => this.setState({ selectedCategory: value });
+  const handleClose = () => setShowRequest(false);
 
-  handleClose = () => this.setState({ showRequest: false });
-
-  createAudit = (e, type = "SupporCard", link) => {
-    const splitAr = e.split("/");
-    const page = splitAr.slice(0, 3).join("/");
+  const createAudit = (e, type = 'SupporCard', link) => {
+    const splitAr = e.split('/');
+    const page = splitAr.slice(0, 3).join('/');
     const linkid = splitAr.slice(3, 4)[0];
-    const input = { page, linkid, username: this.props.user.fullname, type };
-    this.props.createAudit({ variables: { input } }).then(res => console.log("RES::", res));
+    const input = { page, linkid, username: props.user ? props.user.fullname : '', type };
+    props.createAudit({ variables: { input } }).then(res => console.log('RES::', res));
   };
 
-  togglePortal = text => {
-    console.log("toggle", text);
-    this.setState({ portalText: text, showPortal: true });
+  const togglePortal = text => {
+    console.log('toggle', text);
+    setPortalText(text);
+    setShowPortal(true);
   };
 
-  render() {
-    const { authenticated, isEditor, supportcards, currentUser, favoriteCard, unfavoriteCard, classes } = this.props;
-    console.log("Auth", this.props);
-    const actions = [
-      <Button variant="contained" color="secondary" onClick={this.handleClose}>
-        Cancel
-      </Button>,
-      <Button variant="contained" color="primary" onClick={this.handleClose}>
-        Submit
-      </Button>
-    ];
-    const { searchText, selectedCategory } = this.state;
-
-    let filteredCards = this.doFilter(supportcards, searchText, selectedCategory);
-
-    return (
-      <Container onDoubleClick={() => this.setState({ showRequest: true })}>
-        <Dialog
-          title="Add Request"
-          actions={actions}
-          modal={true}
-          open={this.state.showRequest}
-          contentStyle={customContentStyle}
-          onRequestClose={() => this.setState({ showRequest: false })}
-          autoScrollBodyContent={false}
-        >
-          <NewRequestForm user={this.props.user} onSubmit={() => this.setState({ showRequest: false })} />
-        </Dialog>
-        <Div>
-          <CategoryTabs onChange={this.setSelectedCategory} onSave={v => console.log(v)} />
-          <Button
-            color="primary"
-            className={classes.button}
-            variant="contained"
-            onClick={() => this.setState({ showFavorites: !this.state.showFavorites })}
-          >
-            Show {this.state.showFavorites ? `All` : `Favorites`}
-          </Button>
-        </Div>
-        <SearchBar onChange={this.setSearchText} />
-
-        <Div>
-          {authenticated && isEditor ? (
-            <AddCard link="/supportcard/add" title="Add a New Card" background="papayawhip" />
-          ) : (
-            <AddCard link="supportcard/request" title="Request a new Support Card" background="papayawhip" />
-          )}
-
-          {filteredCards.map(
-            (
-              {
-                id,
-                title,
-                description,
-                updatedAt,
-                isfavorite,
-                accessed,
-                category: { name, color, backgroundcolor },
-                link
-              },
-              i
-            ) => {
-              const vieweditLink = authenticated && isEditor ? `/supportcard/edit/${id}` : `/supportcard/view/${id}`;
-              const viewLink = `/supportcard/view/${id}`;
-
-              const isNew = false;
-              //    format(updatedAt, 'YYYYMMDD') > format(addDays(new Date(), -7), 'YYYYMMDD');
-              // console.log(
-              //   isNew,
-              //   format(updatedAt, 'YYYYMMDD'),
-              //   format(addDays(new Date(), -7), 'YYYYMMDD')
-              // );
-              const supportcard_id = id;
-              const account_id = currentUser ? currentUser.id : null;
-              return (
-                // <NewCard
-                <SmallCard
-                  onTitleClick={() => this.togglePortal(description)}
-                  color={backgroundcolor || cardColors[i % (cardColors.length - 1)].back}
-                  textcolor={color || cardColors[i % (cardColors.length - 1)].front}
-                  key={id}
-                  authenticated={authenticated}
-                  account_id={account_id}
-                  isFavorite={isfavorite}
-                  updatedAt={updatedAt}
-                  accessed={accessed}
-                  onToggleFavorite={() => {
-                    isfavorite
-                      ? unfavoriteCard({ variables: { input: { supportcard_id, account_id } } })
-                      : favoriteCard({ variables: { input: { supportcard_id, account_id } } });
-                  }}
-                  title={title}
-                  supportcard_id={id}
-                  isNew={isNew}
-                  text={description}
-                  category={name}
-                  buttonText="📂"
-                  link={link}
-                  canEdit={authenticated && isEditor}
-                  editLink={`${vieweditLink}`}
-                  viewLink={viewLink}
-                  onAudit={v => this.createAudit(v, "SupportCard", null)}
-                  onFollowLink={(v, link) => {
-                    this.createAudit(v, "SupportCardLink", link);
-                    return link;
-                  }}
-                />
-              );
-            }
-          )}
-        </Div>
-        <Modal on={this.state.showPortal} toggle={() => this.setState({ showPortal: !this.state.showPortal })}>
-          <ReactMarkdown>{this.state.portalText}</ReactMarkdown>
-        </Modal>
-      </Container>
-    );
-  }
-
-  doFilter(supportcards, searchText, selectedCategory) {
+  const {
+    authenticated,
+    isEditor,
+    supportcards,
+    currentUser,
+    favoriteCard,
+    unfavoriteCard,
+    classes
+  } = props;
+  console.log('Auth', props);
+  const actions = [
+    <Button variant="contained" color="secondary" onClick={handleClose}>
+      Cancel
+    </Button>,
+    <Button variant="contained" color="primary" onClick={handleClose}>
+      Submit
+    </Button>
+  ];
+  const doFilter = (supportcards, searchText, selectedCategory) => {
     let filteredCards = supportcards
       .filter(card => {
         const {
@@ -342,17 +259,129 @@ class SupportCards extends React.Component {
           _.includes(title.toUpperCase(), searchText.toUpperCase())
         );
       })
+      .filter(card => _.includes(card.product.toUpperCase(), selectedProduct.toUpperCase()))
       .filter(card => {
         const {
           category: { name }
         } = card;
-        return _.includes(name.toUpperCase(), selectedCategory.toUpperCase());
+        return selectedCategory !== ''
+          ? _.includes(selectedCategory.toUpperCase(), name.toUpperCase())
+          : true;
       });
-    if (this.state.showFavorites) {
+    if (showFavorites) {
       filteredCards = filteredCards.filter(card => card.isfavorite === true);
     }
     return filteredCards;
-  }
-}
+  };
+  let filteredCards = doFilter(supportcards, searchText, selectedCategory);
+
+  return (
+    <Container onDoubleClick={() => setShowRequest(true)}>
+      <Dialog
+        title="Add Request"
+        actions={actions}
+        modal={true}
+        open={showRequest}
+        contentStyle={customContentStyle}
+        onRequestClose={() => setShowRequest(false)}
+        autoScrollBodyContent={false}
+      >
+        <NewRequestForm user={props.user} onSubmit={() => setShowRequest(false)} />
+      </Dialog>
+      <Div>
+        {/* <Div2>
+          <CategoryTabsNew
+            onChange={value => setSelectedCategory(value)}
+            onSave={v => console.log(v)}
+          />
+          <ProductsTab onChange={prod => setSelectedProduct(prod)} />
+        </Div2> */}
+        <CategoryTabs onChange={value => setSelectedCategory(value)} onSave={v => console.log(v)} />
+        <Button
+          color="primary"
+          className={classes.button}
+          variant="contained"
+          onClick={() => setShowFavorites(!showFavorites)}
+        >
+          Show {showFavorites ? `All` : `Favorites`}
+        </Button>
+      </Div>
+      <SearchBar onChange={value => setSearchText(value)} />
+
+      <Div>
+        {authenticated && isEditor ? (
+          <AddCard link="/supportcard/add" title="Add a New Card" background="papayawhip" />
+        ) : (
+          <AddCard
+            link="supportcard/request"
+            title="Request a new Support Card"
+            background="papayawhip"
+          />
+        )}
+
+        {filteredCards.map(
+          (
+            {
+              id,
+              title,
+              description,
+              updatedAt,
+              isfavorite,
+              accessed,
+              category: { name, color, backgroundcolor },
+              link
+            },
+            i
+          ) => {
+            const vieweditLink =
+              authenticated && isEditor ? `/supportcard/edit/${id}` : `/supportcard/view/${id}`;
+            const viewLink = `/supportcard/view/${id}`;
+
+            const isNew = false;
+
+            const supportcard_id = id;
+            const account_id = currentUser ? currentUser.id : null;
+            return (
+              <SmallCard
+                onTitleClick={() => togglePortal(description)}
+                color={backgroundcolor || cardColors[i % (cardColors.length - 1)].back}
+                textcolor={color || cardColors[i % (cardColors.length - 1)].front}
+                key={id}
+                authenticated={authenticated}
+                account_id={account_id}
+                isFavorite={isfavorite}
+                updatedAt={updatedAt}
+                accessed={accessed}
+                onToggleFavorite={() => {
+                  isfavorite
+                    ? unfavoriteCard({ variables: { input: { supportcard_id, account_id } } })
+                    : favoriteCard({ variables: { input: { supportcard_id, account_id } } });
+                }}
+                title={title}
+                supportcard_id={id}
+                isNew={isNew}
+                text={description}
+                category={name}
+                buttonText="📂"
+                link={link}
+                canEdit={authenticated && isEditor}
+                editLink={`${vieweditLink}`}
+                viewLink={viewLink}
+                onAudit={v => createAudit(v, 'SupportCard', null)}
+                onFollowLink={(v, link) => {
+                  createAudit(v, 'SupportCardLink', link);
+                  return link;
+                }}
+              />
+            );
+          }
+        )}
+      </Div>
+      <Modal on={showPortal} toggle={() => setShowPortal(!showPortal)}>
+        <ReactMarkdown>{portalText}</ReactMarkdown>
+      </Modal>
+    </Container>
+  );
+};
 
 const StyledSupportCards = withAuth(withStyles(styles)(SupportCards));

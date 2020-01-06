@@ -101,6 +101,7 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
   function getValue(value: string) {
     return products.indexOf(value) >= 0;
   }
+  console.log('loading .....');
   return (
     <Paper className={classes.paper2}>
       {/* <FormLabel>Cloud</FormLabel>
@@ -240,6 +241,19 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
               />
             }
             label="Swan"
+          />
+        )}
+        {isXpertOrSwan && (
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={getValue('AutoConnect')}
+                onChange={() => toggleSet('AutoConnect')}
+                value="AutoConnect"
+                color="secondary"
+              />
+            }
+            label="AutoConnect"
           />
         )}
       </FormGroup>

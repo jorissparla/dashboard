@@ -18,12 +18,13 @@ import { FilterFieldContext } from '../globalState/FilterContext';
 import { distanceInWordsToNow, format } from '../utils/format';
 import { DashBoardContext } from '../globalState/Provider';
 import TenantLogs from './TenantLogs';
-import { ALL_TENANTS, QUERY_ALL_TENANT_DETAILS } from './TenantQueries';
+import { ALL_TENANTS, QUERY_ALL_TENANT_DETAILS, TENANT_NOTE } from './TenantQueries';
 import { Main, Article, TextSpan } from './TenantStyledElements';
 import { TenantCard } from './TenantCard';
 import TenantCustomerDetailsForm from './TenantCustomerDetailsForm';
 import FancyFilter from './new/FancyFilter';
 import Loader from './../utils/Loader';
+import './tenants.css';
 
 const styles = theme => ({
   root: {
@@ -35,6 +36,28 @@ const styles = theme => ({
     fontFamily: 'Raleway',
     fontSize: 20,
     fontWeight: 800
+  },
+  box: {
+    marginLeft: 20,
+    color: ' rgb(57, 73, 171)',
+    border: 'none',
+    height: '20px',
+    display: 'inline-flex',
+    padding: '4px 8px',
+    flexGrow: '0',
+    fontSize: '10px',
+    minWidth: '20px',
+    alignItems: 'center',
+    letterSpacing: '0.2rem',
+    flexShrink: '0',
+    lineHeight: '10px',
+    whiteSpace: 'nowrap',
+    borderRadius: '4px',
+    justifyContent: 'center'
+  },
+  pos: {
+    display: 'flex',
+    justifyContent: 'space-between'
   },
   card: {
     minWidth: 390,
@@ -74,8 +97,8 @@ const styles = theme => ({
     to: { opacity: 0 }
   },
   watch: {
-    background: 'rgb(251, 140, 0) !important',
-    border: '10px solid rgb(251, 140, 0) !important'
+    background: 'rgb(251, 221, 0) !important',
+    border: '10px solid rgb(251, 221, 0) !important'
   },
   alert: {
     background: 'rgb(229, 57, 53) !important',
@@ -111,11 +134,22 @@ const styles = theme => ({
   tags: {
     paddingTop: 2,
     paddingBottom: 10,
+    display: 'flex',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
 
     marginBottom: 2,
     '& > * + *': {
       marginLeft: theme.spacing(1)
     }
+  },
+  tagsContent: {
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  tagtooltip: {
+    background: 'black',
+    color: 'white'
   },
   avatar: {
     margin: 10
@@ -178,6 +212,18 @@ const CloseButton = styled.button`
   align-self: flex-end;
   align-self: center;
 `;
+
+function TenantNote() {
+  const { data, loading } = useQuery(TENANT_NOTE);
+  if (loading) return <div />;
+  const { updatestatus } = data;
+  if (updatestatus.note && updatestatus.note.length> 1) {
+
+    return <span className="marquee">{updatestatus.note}</span>;
+  }
+  return <div/>
+}
+
 export const FilterForm = ({ setSearchText, flip }) => {
   const { setFields, fields, clearFields } = useContext(FilterFieldContext);
 
@@ -277,12 +323,17 @@ const filterTenantsByCustomerFarmVersion = (tenants, fields, details) => {
     tenantVersion = '',
     tenantName = '',
     isLive = false,
-    temperature
+    temperature = '',
+    csm = '',
+    pm = ''
   } = fields;
-  // console.log({ customer });
+  console.log({ csm }, details, temperature);
   let filteredCustomerNames = null;
-  if (temperature && details) {
-    filteredCustomerNames = details.filter(detail => detail.temperature === temperature);
+  if (details) {
+    filteredCustomerNames = details
+      .filter(detail => detail.temperature.toUpperCase().includes(temperature.toUpperCase()))
+      .filter(detail => detail.csm.toUpperCase().includes(csm.toUpperCase()))
+      .filter(detail => detail.pm.toUpperCase().includes(pm.toUpperCase()));
   }
   console.log({ filteredCustomerNames });
   const retValue = _.chain(tenants)
@@ -295,7 +346,8 @@ const filterTenantsByCustomerFarmVersion = (tenants, fields, details) => {
     .filter(t => (isLive ? t.live === 1 : true))
     .sortBy(o => o.customer.name)
     .value();
-  if (temperature && details) {
+
+  if (details) {
     return retValue.filter(t =>
       filteredCustomerNames.find(cn => cn.customer.name === t.customer.name)
     );
@@ -314,8 +366,16 @@ const TenantList = props => {
   const [showLogs, setShowLogs] = useState(false);
   const [isShowingDetails, toggleShowDetails] = useState(false);
   const [counter, setCounter] = useState(0);
-  const happyPress = useKeyPress('C');
+  const keysPressed = useMultiKeyPress();
+  const happyPress = areKeysPressed(['Shift', 'C'], keysPressed); //false; //useKeyPress('C');
 
+  function areKeysPressed(keys = [], keysPressed = []) {
+    const required = new Set(keys);
+    for (var elem of keysPressed) {
+      required.delete(elem);
+    }
+    return required.size === 0;
+  }
   console.log({ counter });
   const { x } = useSpring({
     x: showFilterDialog ? 15 : 0,
@@ -326,7 +386,7 @@ const TenantList = props => {
   const applyFilter = values => {
     setFields(values);
   };
-
+  console.log({ happyPress });
   if (happyPress) {
     console.log('👍👍👍👍👍');
     // clearFields();
@@ -360,7 +420,7 @@ const TenantList = props => {
   return (
     <Main
       onKeyDown={e => {
-        console.log(e, e.keyCode);
+        // console.log(e, e.keyCode);
       }}
     >
       <Loader loading={loading} />
@@ -503,6 +563,7 @@ export const TenantListHeader = ({
           >
             Logs
           </Button>
+          <TenantNote />
         </Typography>
         <FancyFilter onFilter={applyFilter} />
         {/* <Button variant="contained" onClick={toggleFilter}>
@@ -541,6 +602,30 @@ export const TenantListHeader = ({
     </Article>
   );
 };
+
+function useMultiKeyPress() {
+  const [keysPressed, setKeyPressed] = useState(new Set([]));
+
+  function downHandler({ key }) {
+    setKeyPressed(keysPressed.add(key));
+  }
+
+  const upHandler = ({ key }) => {
+    keysPressed.delete(key);
+    setKeyPressed(keysPressed);
+  };
+
+  useEffect(() => {
+    window.addEventListener('keydown', downHandler);
+    window.addEventListener('keyup', upHandler);
+    return () => {
+      window.removeEventListener('keydown', downHandler);
+      window.removeEventListener('keyup', upHandler);
+    };
+  }, []); // Empty array ensures that effect is only run on mount and unmount
+
+  return keysPressed;
+}
 
 function useKeyPress(targetKey) {
   // State for keeping track of whether key is pressed

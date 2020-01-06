@@ -1,28 +1,29 @@
-import React, { Component } from 'react';
-import { withRouter } from 'react-router';
-import gql from 'graphql-tag';
-import { graphql } from 'react-apollo';
-import styled from 'styled-components';
-import Avatar from '@material-ui/core/Avatar';
-import Paper from '@material-ui/core/Paper';
-import { List, ListItem } from '@material-ui/core';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import Divider from '@material-ui/core/Divider';
-import MenuList from '@material-ui/core/MenuList';
-import MenuItem from '@material-ui/core/MenuItem';
-import Icon from '@material-ui/core/Icon';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import DownIcon from '@material-ui/icons/ExpandMore';
-import FileFileDownload from '@material-ui/icons/CloudQueue';
-import Chip from '@material-ui/core/Chip';
+import React, { Component } from "react";
+import { withRouter } from "react-router";
+import gql from "graphql-tag";
+import { graphql } from "react-apollo";
+import styled from "styled-components";
+import Avatar from "@material-ui/core/Avatar";
+import Paper from "@material-ui/core/Paper";
+import { List, ListItem } from "@material-ui/core";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import Divider from "@material-ui/core/Divider";
+import MenuList from "@material-ui/core/MenuList";
+import MenuItem from "@material-ui/core/MenuItem";
+import Icon from "@material-ui/core/Icon";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
+import DownIcon from "@material-ui/icons/ExpandMore";
+import FileFileDownload from "@material-ui/icons/CloudQueue";
+import Chip from "@material-ui/core/Chip";
 
-import { format } from '../utils/format';
-import _ from 'lodash';
-import SearchBar from '../common/SearchBar';
-import withAuth from '../utils/withAuth';
-import { Title, HeaderRow, HeaderLeft, StyledInitials } from '../styles';
-import { initials } from '../utils/misc';
+// import { format } from '../utils/format';
+import { format } from "date-fns";
+import _ from "lodash";
+import SearchBar from "../common/SearchBar";
+import withAuth from "../utils/withAuth";
+import { Title, HeaderRow, HeaderLeft, StyledInitials } from "../styles";
+import { initials } from "../utils/misc";
 
 const Container = styled.div`
   display: flex;
@@ -30,7 +31,7 @@ const Container = styled.div`
 `;
 
 const ProfilePicture = styled.div`
-  flex: 0;
+  :flex: 0;
   margin: 20px;
 `;
 const Details = styled.div`
@@ -42,7 +43,7 @@ const Details = styled.div`
 const Content = styled.div``;
 
 class StudentView extends Component {
-  state = { counter: 0, searchText: '' };
+  state = { counter: 0, searchText: "" };
 
   constructor(props) {
     super(props);
@@ -62,8 +63,8 @@ class StudentView extends Component {
             <MoreVertIcon />
           </Icon>
         }
-        anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
-        targetOrigin={{ horizontal: 'left', vertical: 'top' }}
+        anchorOrigin={{ horizontal: "left", vertical: "top" }}
+        targetOrigin={{ horizontal: "left", vertical: "top" }}
       >
         <MenuItem primaryText="in Progress" />
         <MenuItem primaryText="Completed" />
@@ -82,25 +83,27 @@ class StudentView extends Component {
             <DownIcon />
           </Icon>
         }
-        anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
-        targetOrigin={{ horizontal: 'left', vertical: 'top' }}
+        anchorOrigin={{ horizontal: "left", vertical: "top" }}
+        targetOrigin={{ horizontal: "left", vertical: "top" }}
       >
         <MenuItem
           primaryText="in Progress"
-          onClick={() => this.updateEnrollStatus(enrol, navid, 'In Progress')}
+          onClick={() => this.updateEnrollStatus(enrol, navid, "In Progress")}
         />
         <MenuItem
           primaryText="Completed"
-          onClick={() => this.updateEnrollStatus(enrol, navid, 'Completed')}
+          onClick={() => this.updateEnrollStatus(enrol, navid, "Completed")}
         />
         <MenuItem
           primaryText="Planned"
-          onClick={() => this.updateEnrollStatus(enrol, navid, 'Planned')}
+          onClick={() => this.updateEnrollStatus(enrol, navid, "Planned")}
         />
         <MenuItem
           primaryText="View Course"
           leftIcon={<FileFileDownload />}
-          onClick={() => this.props.history.push(`/courses/edit/${enrol.course.id}`)}
+          onClick={() =>
+            this.props.history.push(`/courses/edit/${enrol.course.id}`)
+          }
         />
       </MenuList>
     );
@@ -112,7 +115,7 @@ class StudentView extends Component {
       id: enrol.id,
       status: status
     };
-    console.log('status', enrol);
+    console.log("status", enrol);
     updatestatus({ variables: { input } }).then(this.props.data.refetch());
     this.setState({ counter: this.state.counter + 1 });
   }
@@ -121,7 +124,7 @@ class StudentView extends Component {
     const { user } = this.props;
     let validRole;
     if (user) {
-      validRole = user.role !== 'Guest';
+      validRole = user.role !== "Guest";
     } else {
       validRole = false;
     }
@@ -136,10 +139,8 @@ class StudentView extends Component {
               <ListItemText
                 primary={enrol.course.title}
                 secondary={
-                  <span style={{ display: 'flex' }}>
-                    {`${enrol.course.description}, ${enrol.plannedcourse.hours} hours, status: ${
-                      enrol.plannedcourse.status
-                    }, by trainer: ${enrol.plannedcourse.trainer}`}
+                  <span style={{ display: "flex" }}>
+                    {`${enrol.course.description}, ${enrol.plannedcourse.hours} hours, status: ${enrol.plannedcourse.status}, by trainer: ${enrol.plannedcourse.trainer}`}
                   </span>
                 }
 
@@ -147,7 +148,10 @@ class StudentView extends Component {
               />
               <ListItemSecondaryAction>
                 <Chip
-                  label={`Start  ${format(enrol.plannedcourse.startdate, 'ddd, DD-MMM-YYYY')}`}
+                  label={`Start  ${format(
+                    enrol.plannedcourse.startdate,
+                    "ddd, DD-MMM-YYYY"
+                  )}`}
                   style={{ margin: 2 }}
                 />
               </ListItemSecondaryAction>
@@ -171,8 +175,10 @@ class StudentView extends Component {
     }
     let _ = window._;
     const sortedEnrollments = _.chain(account.enrollments)
-      .map(o => _.merge({ startdate: Date.parse(o.plannedcourse.startdate) }, o))
-      .orderBy(['startdate'], ['desc'])
+      .map(o =>
+        _.merge({ startdate: Date.parse(o.plannedcourse.startdate) }, o)
+      )
+      .orderBy(["startdate"], ["desc"])
       .value();
     //console.log(sortedEnrollments);
     return (
@@ -190,7 +196,9 @@ class StudentView extends Component {
             <Title>{account.fullname}</Title>
             <Content>
               {`in Team ${account.team}, Location ${
-                account.locationdetail ? account.locationdetail.location : account.location
+                account.locationdetail
+                  ? account.locationdetail.location
+                  : account.location
               }`}
             </Content>
           </Details>
@@ -200,8 +208,8 @@ class StudentView extends Component {
             onChange={this.handleSearchTextChange}
             hintText="Search on title.."
             style={{
-              background: '#F5F5F5',
-              display: 'flex'
+              background: "#F5F5F5",
+              display: "flex"
             }}
           />
           <HeaderRow>
@@ -211,7 +219,9 @@ class StudentView extends Component {
           </HeaderRow>
 
           <Container />
-          <Content>{this.renderCourses(sortedEnrollments, account.navid)}</Content>
+          <Content>
+            {this.renderCourses(sortedEnrollments, account.navid)}
+          </Content>
         </Paper>
       </div>
     );
@@ -263,7 +273,7 @@ const updateStatus = gql`
   }
 `;
 
-export default graphql(updateStatus, { name: 'updatestatus' })(
+export default graphql(updateStatus, { name: "updatestatus" })(
   graphql(queryProfile, {
     options: ownProps => ({ variables: { id: ownProps.match.params.id } })
   })(withRouter(withAuth(StudentView)))
