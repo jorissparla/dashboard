@@ -111,7 +111,7 @@ class PlannedCourseRequestList extends React.Component {
                         }) => {
                           const courseid = course.id;
                           const partipants = students.map(st => st.fullname).join(';');
-                          const date = format(startdate, ' ddd, DD MMM YYYY');
+                          const date = format(startdate, ' EEE, dd MMM yyyy');
                           return (
                             <React.Fragment key={id}>
                               <ListItem key={id}>

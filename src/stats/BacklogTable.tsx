@@ -210,11 +210,11 @@ export const BacklogTable = ({
                 {includeservicerestored && (
                   <>
                     <TableCell>
-                      {row.incidentcreated ? format(row.incidentcreated, 'YYYY-MM-DD') : ''}
+                      {row.incidentcreated ? format(row.incidentcreated, 'yyyy-MM-dd') : ''}
                     </TableCell>
                     <TableCell>
                       {row.service_restored_date
-                        ? format(row.service_restored_date, 'YYYY-MM-DD')
+                        ? format(row.service_restored_date, 'yyyy-MM-dd')
                         : ''}
                     </TableCell>
                   </>

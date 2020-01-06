@@ -150,7 +150,7 @@ const StatsMainContainerWrapper: React.FC<ContainerProps> = (props: any) => {
 
 const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
   const { user } = React.useContext(UserContext);
-  const [date] = useState(format(Date.now(), 'YYYY-MM-DD'));
+  const [date] = useState(format(Date.now(), 'yyyy-MM-dd'));
   const [isCloud, setisCloud] = useState(false);
   const [owner, setOwner] = useState(props.user.fullname);
   const { products, persons } = useContext(SelectionContext);

@@ -8,16 +8,16 @@ import HistoryChart from './historychart';
 
 const transform = (data, value) =>
   data.map(({ date, number }) => ({
-    date: format(parseInt(date), 'DD'),
-    odate: format(parseInt(date), 'YYYYMMDD'),
+    date: format(parseInt(date), 'dd'),
+    odate: format(parseInt(date), 'yyyyMMdd'),
     [value]: number,
     label: number,
     data: { y: number, color: 'rgba(144, 202, 249, 0.75)' }
   }));
 const transform2 = (data, value) =>
   data.map(({ date, number, age }) => ({
-    date: format(parseInt(date), 'DD'),
-    odate: format(parseInt(date), 'YYYYMMDD'),
+    date: format(parseInt(date), 'dd'),
+    odate: format(parseInt(date), 'yyyyMMdd'),
     [value]: age,
     label: age,
     data: { y: number, color: 'rgba(144, 202, 249, 0.75)' }

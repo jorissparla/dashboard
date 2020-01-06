@@ -19,7 +19,7 @@ import { UserContext } from 'globalState/UserProvider';
 import _ from 'lodash';
 import React from 'react';
 import { Mutation } from 'react-apollo';
-import { distanceInWordsToNow, format } from '../utils/format';
+import { formatDistanceToNow, format } from '../utils/format';
 import EditTenantDetails from './details/components/EditTenant';
 import Label from './details/components/Label';
 import { MUTATION_MARK_LIVE } from './TenantQueries';
@@ -64,11 +64,11 @@ export const TenantCard = ({
   }
   let golivedate = tenantcustomerdetail.golivedate;
   if (golivedate && golivedate !== '1568419200000' && golivedate !== '0') {
-    golivedate = format(tenantcustomerdetail.golivedate, 'MMM, DD, YYYY');
+    golivedate = format(tenantcustomerdetail.golivedate, 'MMM, dd, yyyy');
   } else golivedate = 'Date is not known';
   const temp = tenantcustomerdetail.temperature;
-  const max = _.maxBy(tenants, t => format(t.lastupdated, 'YYYYMMDD')).lastupdated;
-  const max2 = distanceInWordsToNow(max);
+  const max = _.maxBy(tenants, t => format(t.lastupdated, 'yyyMMdd')).lastupdated;
+  const max2 = formatDistanceToNow(max);
   if (customer === 'Azteka Consulting GmbH') console.log(customer, { isLive }, live);
   const avaclass = classNames({
     [classes.alert]: temp === 'ALERT' ? true : false,

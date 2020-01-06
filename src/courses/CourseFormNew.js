@@ -5,7 +5,7 @@ import Chip from '@material-ui/core/Chip';
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import { distanceInWordsToNow } from 'date-fns';
+import { formatDistanceToNow } from 'date-fns';
 import { Formik } from 'formik';
 import gql from 'graphql-tag';
 import React from 'react';
@@ -405,7 +405,7 @@ class CourseForm extends React.Component {
                       <Chip
                         label={
                           values.id
-                            ? `Last updated  ${distanceInWordsToNow(
+                            ? `Last updated  ${formatDistanceToNow(
                                 parseInt(values.lastmodified)
                               )} ago`
                             : 'not Saved yet'

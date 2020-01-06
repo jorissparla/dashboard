@@ -114,7 +114,7 @@ class AnniversaryList extends React.Component {
                       </CardContent>
                     </CardActionArea>
                     <Button color="secondary" aria-label="Add">
-                      {format(anniversarydate, 'ddd, DD MMMM YYYY')}
+                      {format(anniversarydate, 'EEE, dd MMMM yyyy')}
                     </Button>
                   </Card>
                 ))}

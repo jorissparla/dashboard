@@ -4,7 +4,7 @@ import { Query, Mutation } from 'react-apollo';
 import _ from 'lodash';
 import { withRouter } from 'react-router';
 import PlannedCourseFormNew from './PlannedCourseFormNew';
-import addHours from 'date-fns/add_hours';
+import {addHours} from 'date-fns';
 import { QUERY_ALL_COURSES } from '../pages/CourseList';
 import { QUERY_SINGLE_COURSE } from './CourseEdit';
 

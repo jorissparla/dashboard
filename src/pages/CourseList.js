@@ -73,7 +73,7 @@ const CourseList = props => {
     )
     .orderBy(
       o =>
-        o.plannedcourses[0] ? format(o.plannedcourses[0].startdate, 'YYYYMMDD') : o.lastmodified,
+        o.plannedcourses[0] ? format(o.plannedcourses[0].startdate, 'yyyyMMdd') : o.lastmodified,
       'desc'
     )
     .value();

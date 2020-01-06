@@ -9,7 +9,7 @@ import CourseStudentList from './CourseStudentList';
 import PlannedCourses from './PlannedCourses';
 import { Title } from '../styles';
 import _ from 'lodash';
-import addHours from 'date-fns/add_hours';
+import {addHours} from 'date-fns';
 
 const Div = styled.div`
   display: flex;

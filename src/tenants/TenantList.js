@@ -15,7 +15,7 @@ import Spinner from 'utils/spinner';
 import FavoriteBadge from '../elements/Badge';
 import { FilterFieldContext } from '../globalState/FilterContext';
 //import format from 'date-fns/format';
-import { distanceInWordsToNow, format } from '../utils/format';
+import { formatDistanceToNow, format } from '../utils/format';
 import { DashBoardContext } from '../globalState/Provider';
 import TenantLogs from './TenantLogs';
 import { ALL_TENANTS, QUERY_ALL_TENANT_DETAILS, TENANT_NOTE } from './TenantQueries';
@@ -500,7 +500,7 @@ export const TenantListHeader = ({
   toggleFilter,
   applyFilter
 }) => {
-  const max = _.maxBy(tenants, t => format(t.lastupdated, 'YYYYMMDD')).lastupdated;
+  const max = _.maxBy(tenants, t => format(t.lastupdated, 'yyyyMMdd')).lastupdated;
   let tenantcustomersWithFarm = _.countBy(
     tenants.map(({ farm, tenant }) => ({ farm, tenant })),
     'farm'
@@ -536,15 +536,15 @@ export const TenantListHeader = ({
       >
         <Typography gutterBottom variant="h5" component="h2">
           <span style={{ letterSpacing: '0.2rem', textTransform: 'uppercase' }}>
-            {/* {` Multitenant customers - last change -${format(max, 'DD MMM YYYY')}`} */}
+            {/* {` Multitenant customers - last change -${format(max, 'dd MMM yyyy')}`} */}
             {` Multitenant customers `}
           </span>
           <Chip
             label={
               updatedAt
-                ? `Last check:  ${distanceInWordsToNow(updatedAt)} ago,  Last change made ${format(
+                ? `Last check:  ${formatDistanceToNow(updatedAt)} ago,  Last change made ${format(
                     max,
-                    'DD MMM YYYY'
+                    'dd MMM yyyy'
                   )} `
                 : 'not Saved yet'
             }

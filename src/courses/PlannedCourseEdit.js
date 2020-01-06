@@ -106,7 +106,7 @@ class PlannedCourseEdit extends React.Component {
     const input = {
       ...values,
       id: this.state.id2,
-      updatedAt: format(Date.now(), 'YYYY-MM-DD')
+      updatedAt: format(Date.now(), 'yyyy-MM-dd')
     };
     const res = await updatePlannedCourse({ variables: { input } });
     const lop = res.data.updatePlannedCourse.course.students;
@@ -152,8 +152,8 @@ class PlannedCourseEdit extends React.Component {
           /*   if (students && this.state.participants.length === 0) {
             this.setState({ participants: students });
           } */
-          startdate = format(Date.parse(startdate), 'YYYY-MM-DD');
-          enddate = format(Date.parse(enddate), 'YYYY-MM-DD');
+          startdate = format(Date.parse(startdate), 'yyyy-MM-dd');
+          enddate = format(Date.parse(enddate), 'yyyy-MM-dd');
           const dates = { startdate, enddate };
           //return <h1>pcEdut</h1>;
           return (

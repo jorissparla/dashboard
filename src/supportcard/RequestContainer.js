@@ -9,7 +9,7 @@ import { withRouter } from 'react-router-dom';
 import Avatar from '@material-ui/core/Avatar';
 import Divider from '@material-ui/core/Divider';
 import NewIcon from '@material-ui/icons/NewReleases';
-import { addDays, distanceInWordsToNow } from 'date-fns';
+import { addDays, formatDistanceToNow } from 'date-fns';
 import { Loading } from '../styles';
 import styled from 'styled-components';
 import { format } from '../utils/format';
@@ -31,8 +31,8 @@ const RequestItem = ({ item, handleClick }) => {
   console.log(
     'RequestItem',
     createdAt,
-    format(createdAt, 'DD MMMM YYYY'),
-    distanceInWordsToNow(new Date(createdAt))
+    format(createdAt, 'dd MMMM yyyy'),
+    formatDistanceToNow(new Date(createdAt))
   );
   return (
     <ListItem onClick={() => handleClick(item)}>
@@ -41,7 +41,7 @@ const RequestItem = ({ item, handleClick }) => {
         primary={text}
         secondary={`requested by ${name} , ${format(
           createdAt,
-          'DD MMMM YYYY'
+          'dd MMMM yyyy'
         )} , ${completeStatus}, ${assignedTo}`}
       />
       <ListItemSecondaryAction>

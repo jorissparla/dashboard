@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { format } from '../utils/format';
-import { distanceInWords } from 'date-fns';
+import { formatDistance } from 'date-fns';
 
 const Container = styled.div`
   display: grid;
@@ -82,8 +82,8 @@ const NewCard: React.FC<CardProps> = ({
     <Container>
       <Picture src="/static/media/image1.4d33fe46.jpg" />
       <Description>{title}</Description>
-      <div>{format(Date.parse(updatedAt), 'YYYY-MMM-DD')}</div>
-      <div>{distanceInWords(Date.parse(updatedAt), new Date())}</div>
+      <div>{format(Date.parse(updatedAt), 'yyyy-MMM-dd')}</div>
+      <div>{formatDistance(Date.parse(updatedAt), new Date())}</div>
     </Container>
   );
 };

@@ -163,7 +163,7 @@ class ChatContainer extends Component {
               team,
               nrchats: parseInt(nrchats),
               responseintime: parseInt(responseintime),
-              fromDate: format(parseInt(fromDate), 'YYYY-MM-DD')
+              fromDate: format(parseInt(fromDate), 'yyyy-MM-dd')
             };
             const result = await addChat({
               variables: {

@@ -190,7 +190,7 @@ export default function PriorityDashboard() {
                   Status: {item.status}
                 </span>
                 <span style={{ color: 'white', paddingTop: 5, fontSize: '0.8rem' }}>
-                  Last updated: {format(item.lastupdated, 'ddd, DD-MMM-YYYY hh:mm')}
+                  Last updated: {format(item.lastupdated, 'EEE, dd-MMM-yyyy hh:mm')}
                 </span>
               </Vertical>
             </Box2>
@@ -222,7 +222,7 @@ export default function PriorityDashboard() {
                   Status: {item.status}
                 </span>
                 <span style={{ color: 'white', paddingTop: 5, fontSize: '0.8rem' }}>
-                  Last updated: {format(item.lastupdated, 'ddd, DD-MMM-YYYY hh:mm')}
+                  Last updated: {format(item.lastupdated, 'EEE, dd-MMM-yyyy hh:mm')}
                 </span>
               </Vertical>
             </Box2>

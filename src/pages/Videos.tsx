@@ -160,7 +160,7 @@ function VideoPage(props: any) {
             <h2>No Videos selected</h2>
           ) : (
             filteredVideos.map(({ id, title, date, url, views }) => {
-              const formatteddate = format(date, 'MMMM, DD, YYYY');
+              const formatteddate = format(date, 'MMMM, dd, yyyy');
               return (
                 <Card
                   className={classes.card}

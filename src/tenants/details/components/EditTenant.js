@@ -45,7 +45,7 @@ const EditTenantDetails = props => {
     csm: profile.csm || '',
     pm: profile.pm || '',
     customerid: profile.customerid,
-    golivedate: format(profile.golivedate, 'YYYY-MM-DD'),
+    golivedate: format(profile.golivedate, 'yyyy-MM-dd'),
     golivecomments: profile.golivecomments,
     info: profile.info,
     temperature: profile.temperature,

@@ -133,10 +133,10 @@ class StudentTables extends Component {
   render() {
     let { startdate, enddate } = this.props;
     if (!startdate) {
-      startdate = format(new Date(new Date().getFullYear(), 0, 1), 'YYYY-MM-DD');
+      startdate = format(new Date(new Date().getFullYear(), 0, 1), 'yyyy-MM-dd');
     }
     if (!enddate) {
-      enddate = format(new Date(new Date().getFullYear() + 1, 0, 1), 'YYYY-MM-DD');
+      enddate = format(new Date(new Date().getFullYear() + 1, 0, 1), 'yyyy-MM-dd');
     }
     const { headerStyle, rowstyle, avatarstyle } = styles;
     console.log('Startdate', startdate);

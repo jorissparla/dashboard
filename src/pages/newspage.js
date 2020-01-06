@@ -77,7 +77,7 @@ function MediaNewsCard({ news: { title, body, img, create_date }, classes }) {
       </CardActionArea>
       <CardActions>
         <Button size="small" color="primary" variant="outlined">
-          {format(create_date, 'dddd, DD MMMM YYYY')}
+          {format(create_date, 'EEEE, dd MMMM yyyy')}
         </Button>
       </CardActions>
     </Card>

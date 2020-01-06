@@ -109,7 +109,7 @@ export default function TenantLogs({ tenantlogs }) {
               <TableRow key={log.id}>
                 <TableCell>
                   {/* {console.log(addHours(parseInt(log.date, -2)))} */}
-                  {format(addHours(parseInt(log.date), -2), 'YYYY MMMM DD, dddd - HH:mm')}
+                  {format(addHours(parseInt(log.date), -2), 'yyyy MMMM dd, EEEE - HH:mm')}
                   {/* {format(log.date, 'hh:mm:ss')} */}
                 </TableCell>
                 <TableCell>{log.log}</TableCell>

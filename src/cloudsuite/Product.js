@@ -120,7 +120,7 @@ const ProductForm = props => {
   } = props;
   const readOnly = !authenticated;
   const [on, toggle] = React.useState(false);
-  //const updatedAt = supportcard ? supportcard.updatedAt : format(new Date(), 'YYYY-MM-DD');
+  //const updatedAt = supportcard ? supportcard.updatedAt : format(new Date(), 'yyyy-MM-dd');
   //const currentUser = useUser();
   return (
     <Paper style={paperStyle}>

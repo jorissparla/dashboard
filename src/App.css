@@ -241,7 +241,7 @@ span {
   background: -ms-linear-gradient(top,  #ffffff 0%,#eeeeee 85%,#dddddd 100%); /* IE10+ */
   background: linear-gradient(to bottom,  #ffffff 0%,#eeeeee 85%,#dddddd 100%); /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#dddddd',GradientType=0 ); /* IE6-9 */
-  border: 1px solid #ddd;
+  border: 1px solid #EEE;
   border-bottom: 1px solid #aaa;
   border-radius: 3px;
   -webkit-border-radius: 3px;

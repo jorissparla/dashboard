@@ -24,11 +24,11 @@
   width: 300px;
   display: flex;
   /* height: 100px; */
-  background: #ddd;
+  background: #EEE;
 }
 
 .box {
-  background: #ddd;
+  background: #EEE;
   padding: 10px;
   height: 150px;
   width: 150px;
@@ -39,7 +39,7 @@
 }
 .box2 {
   padding: 10px;
-  background: #ddd;
+  background: #EEE;
   /* height: 150px; */
   /* display: flex; */
   /* border-radius: 4px; */
@@ -52,7 +52,7 @@
 
 .box3 {
   padding: 10px;
-  background: #ddd;
+  background: #EEE;
   min-width: 350px;
   height: 150px;
   /* display: flex; */

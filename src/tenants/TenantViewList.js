@@ -195,7 +195,7 @@ const TenantViewList = props => {
   };
   // console.log(uniqueCustomers);
   return (
-    <div style={{ margin: 5, background: '#ddd' }}>
+    <div style={{ margin: 5, background: '#EEE' }}>
       <Main
         onKeyDown={e => {
           // console.log(e, e.keyCode);

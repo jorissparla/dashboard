@@ -87,7 +87,7 @@ class RequestForm extends React.Component {
     const assignees = this.props.accounts.map(item => ({ id: item.id, name: item.fullname }));
     const { classes } = this.props;
     console.log(this.props.request.createdAt);
-    // const createdAt = format(Date.parse(this.props.request.createdAt || Date.now(), "dddd, DD-MMM-YYYY"));
+    // const createdAt = format(Date.parse(this.props.request.createdAt || Date.now(), "dddd, dd-MMM-yyyy"));
     return (
       <Formik initialValues={this.props.request} onSubmit={values => this.props.onSave(values)}>
         {({

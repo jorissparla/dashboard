@@ -12,9 +12,9 @@ import { withStyles } from '@material-ui/core/styles';
 import { withRouter } from 'react-router';
 import * as yup from 'yup';
 //import format from "date-fns/format";
-import { format, distanceInWordsToNow } from '../utils/format';
-import addHours from 'date-fns/add_hours';
-//import { distanceInWordsToNow } from "date-fns";
+import { format, formatDistanceToNow } from '../utils/format';
+import {addHours} from 'date-fns';
+//import { formatDistanceToNow } from "date-fns";
 import { adopt } from 'react-adopt';
 import { QUERY_PLANNED_COURSES } from './CourseFormNew';
 
@@ -131,8 +131,8 @@ class PlannedCourseForm extends React.Component {
       details: '',
       type: 'Class Room Training',
       category: 'Product',
-      startdate: format(addHours(Date.now(), 24), 'YYYY-MM-DD'),
-      enddate: format(addHours(Date.now(), 24), 'YYYY-MM-DD'),
+      startdate: format(addHours(Date.now(), 24), 'yyyy-MM-dd'),
+      enddate: format(addHours(Date.now(), 24), 'yyyy-MM-dd'),
       updatedAt: ''
     }
   };
@@ -153,8 +153,8 @@ class PlannedCourseForm extends React.Component {
           } = plannedcoursedata;
           const { coursetypes, statuses, supportfolks } = data;
           const { course, id } = this.props;
-          // const nstartdate = format(addHours(Date.now(), 24), 'YYYY-MM-DD');
-          // const nenddate = format(addHours(Date.now(), 24), 'YYYY-MM-DD');
+          // const nstartdate = format(addHours(Date.now(), 24), 'yyyy-MM-dd');
+          // const nenddate = format(addHours(Date.now(), 24), 'yyyy-MM-dd');
           return (
             <Formik
               initialValues={this.state.initialValues}
@@ -398,7 +398,7 @@ class PlannedCourseForm extends React.Component {
                       <Chip
                         label={
                           values.updatedAt
-                            ? `Last updated  ${distanceInWordsToNow(values.updatedAt)} ago`
+                            ? `Last updated  ${formatDistanceToNow(values.updatedAt)} ago`
                             : 'not Saved yet'
                         }
                       />

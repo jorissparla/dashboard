@@ -145,7 +145,7 @@ const SmallCard = ({
         )}
         {account_id && <ToggleFavorite toggle={onToggleFavorite} isFavorite={isFavorite} />}
       </TitleWrapper>
-      <DateWrapper>last updated: {format(updatedAt, "ddd DD MMM YYYY, hh:mm")}</DateWrapper>
+      <DateWrapper>last updated: {format(updatedAt, "EEE dd MMM yyyy, hh:mm")}</DateWrapper>
       <HR />
       <StyledBody>
         <ReactMarkdown source={text.slice(0, 200).concat("...")} />

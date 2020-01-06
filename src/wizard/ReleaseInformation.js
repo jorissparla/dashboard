@@ -42,13 +42,13 @@ function ReleaseInformation({ versionInfo, handleCustomerHasValidMaintenance, va
             <Typography variant="subtitle1">{`${version} was Released on `}</Typography>
           </Grid>
           <Grid>
-            <Typography variant="h3">{`${format(versionDate, 'YYYY')}`}</Typography>
+            <Typography variant="h3">{`${format(versionDate, 'yyyy')}`}</Typography>
           </Grid>
           <Grid>
             <Typography variant="h4">{`${format(versionDate, 'MMMM')}`}</Typography>
           </Grid>
           <Grid>
-            <Typography variant="h5">{`${format(versionDate, 'dddd, DD')}`}</Typography>
+            <Typography variant="h5">{`${format(versionDate, 'EEEE, dd')}`}</Typography>
           </Grid>
         </Grid>
 
@@ -82,10 +82,10 @@ function ReleaseInformation({ versionInfo, handleCustomerHasValidMaintenance, va
               <Typography variant="h4">Extended Maintenance</Typography>
             </Grid>
             <Grid>
-              <Typography>{`Start: ${format(parseInt(xm_date_since), 'DD-MMM-YYYY')}`}</Typography>
+              <Typography>{`Start: ${format(parseInt(xm_date_since), 'dd-MMM-yyyy')}`}</Typography>
             </Grid>
             <Grid>
-              <Typography>{`End: ${format(parseInt(xm_end_date), 'DD-MMM-YYYY')}`}</Typography>
+              <Typography>{`End: ${format(parseInt(xm_end_date), 'dd-MMM-yyyy')}`}</Typography>
             </Grid>
           </Grid>
         )}

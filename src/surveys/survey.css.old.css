@@ -16,7 +16,7 @@
 }
 
 .box {
-  background: #ddd;
+  background: #EEE;
   padding: 10px;
   height: 150px;
   min-width: 450px;
@@ -27,7 +27,7 @@
 }
 .box2 {
   padding: 10px;
-  background: #ddd;
+  background: #EEE;
   min-width: 350px;
   height: 150px;
   /* display: flex; */
@@ -42,7 +42,7 @@
 
 .box3 {
   padding: 10px;
-  background: #ddd;
+  background: #EEE;
   min-width: 350px;
   height: 150px;
   /* display: flex; */

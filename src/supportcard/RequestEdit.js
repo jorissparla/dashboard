@@ -17,7 +17,7 @@ class RequestEdit extends Component {
       assigned,
       text,
       complete,
-      updatedAt: format(new Date(), "YYYY-MM-DD")
+      updatedAt: format(new Date(), "yyyy-MM-dd")
     };
     console.log(input);
     const result = await updateRequest({ variables: { input } });

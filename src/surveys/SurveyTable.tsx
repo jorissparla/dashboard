@@ -60,7 +60,7 @@ export const SurveyTable: React.FC<Props> = ({ surveys }) => {
               <Rating value={survey.rating ? survey.rating : 5} max={5} readOnly={true} />
               {/* {survey.rating ? survey.rating : 5} */}
             {/* </TableCell> */}
-            <TableCell>{format(survey.date_submitted, "dddd, DD MMMM YYYY")}</TableCell>
+            <TableCell>{format(survey.date_submitted, "dddd, dd MMMM yyyy")}</TableCell>
           </TableRow>
         ))}
       </TableBody>
