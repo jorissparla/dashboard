@@ -10,6 +10,6 @@
     "titleBar.activeBackground": "#5e4052",
     "titleBar.inactiveBackground": "#5e4052"
   },
-  "workbench.colorTheme": "Atom One Dark",
+  "workbench.colorTheme": "Dracula Soft",
   "markdown.preview.fontSize": 15
 }

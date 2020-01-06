@@ -129,9 +129,11 @@ export const MUTATION_MARK_LIVE = gql`
       }
       lastupdated
       live
-      comments
-      comments_updated
-      updated
+      details {
+        comments
+        comments_updated
+        updated
+      }
     }
   }
 `;
