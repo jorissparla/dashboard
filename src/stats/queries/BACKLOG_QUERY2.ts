@@ -7,6 +7,7 @@ export const QUERY_BACKLOG = gql`
     incidentcreated
     owner
     customername
+    customerid
     summary
     title
     status
@@ -34,6 +35,13 @@ export const QUERY_BACKLOG = gql`
     $N_MAJORIMPACT: Int
   ) {
     mostRecentUpdate
+    multitenantcustomers: tenantcustomerdetails {
+      id
+      customerid
+      customer {
+        name
+      }
+    }
     critical: backlog(
       owner: $owner
       orderBy: DAYS_DESC

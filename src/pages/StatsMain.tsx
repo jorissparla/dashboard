@@ -234,11 +234,26 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
     return () => {};
   }, []);
   const sev1notrestored = data.critical.filter((item: any) => !item.service_restored_date);
+  const multitenantcustomers = data.multitenantcustomers;
+  // console.log('mt customers', multitenantcustomers);
+  const mtincidents = data.all
+    .filter(
+      (inc: any) =>
+        multitenantcustomers.find((cust: any) => parseInt(cust.customerid) === inc.customerid)
+      // inc.customerid === 60028554
+    )
+    .filter((x: any) => x.Tenant !== 'Multi-Tenant');
+  console.log(
+    'mt incidents',
+    mtincidents
+    // multitenantcustomers.filter((x: any) => x.customerid === 60028554)
+  );
   const multitenant = data.multitenant
     .filter((item: any) => item.Tenant === 'Multi-Tenant' && item.release !== '10.5')
-    .sort((a: any, b: any) => (a.customer > b.customer ? 1 : -1));
-  console.log('MT', { multitenant });
-  console.log('critical', sev1notrestored);
+    .filter((item: any) => item.dayssincelastupdate > 7)
+    .sort((a: any, b: any) => a.dayssincelastupdate - b.dayssincelastupdate);
+  // console.log('MT', multitenant);
+  // console.log('critical', sev1notrestored);
   const { isCloud } = useContext(SelectionContext);
   return (
     <>
@@ -354,7 +369,14 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
             classes={classes}
             backlog={multitenant}
             title="Multitenant"
-            description="All Incidents open for our MT customers"
+            description="All Incidents open for our MT customers not updated > 7 days"
+          />
+          <BacklogTable
+            classes={classes}
+            backlog={mtincidents}
+            additionalFields={['Deployment', 'Tenant']}
+            title="Multitenant customer incidents"
+            description="All Incidents open for our MT not logged as single tenant"
           />
           <BacklogTable
             classes={classes}
