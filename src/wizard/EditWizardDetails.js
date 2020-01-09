@@ -19,7 +19,12 @@ import PropTypes from 'prop-types';
 import CloseIcon from '@material-ui/icons/Close';
 import React, { useState } from 'react';
 import { useMutation } from 'react-apollo';
-import { MUTATION_UPDATE_MAINTENANCE, ALL_MAINTENANCE_QUERY } from './Queries';
+import {
+  MUTATION_UPDATE_MAINTENANCE,
+  ALL_MAINTENANCE_QUERY,
+  MUTATION_UPDATE_MAINTENANCE_FAQ,
+  MAINTENANCE_FAQ_QUERY
+} from './Queries';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -42,10 +47,13 @@ const useStyles = makeStyles(theme => ({
 const EditWizardDetails = props => {
   const { data, value: defaultValue, className, onClose, onView, label, id, name, ...rest } = props;
   console.log(id);
+  const isFAQ = rest && rest.faq;
+  console.log('isFAQ', isFAQ, name);
   const classes = useStyles();
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [value, setValue] = useState(defaultValue);
-  const [updateField] = useMutation(MUTATION_UPDATE_MAINTENANCE);
+  const mutation = isFAQ ? MUTATION_UPDATE_MAINTENANCE_FAQ : MUTATION_UPDATE_MAINTENANCE;
+  const [updateField] = useMutation(mutation);
   const handleChange = e => {
     e.persist();
 
@@ -61,6 +69,9 @@ const EditWizardDetails = props => {
       refetchQueries: [
         {
           query: ALL_MAINTENANCE_QUERY
+        },
+        {
+          query: MAINTENANCE_FAQ_QUERY
         }
       ]
     });
