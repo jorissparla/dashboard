@@ -84,7 +84,7 @@ export const TenantCard = ({
     DEV: 4,
     DEM: 5
   };
-  const tags = tenants
+  let tags = tenants
     .map(t => {
       const postfix = t.name.split('_')[1];
       const index = indexObj[postfix] || 999;
@@ -109,30 +109,16 @@ export const TenantCard = ({
     })
     .sort((a, b) => (a.index > b.index ? 1 : -1));
 
-  // const statusTags = tenants.map(t => {
-  //   const { tenant_status, operational_status, process_status } = t;
-  //   let tag = '';
-  //   if (!tenant_status) return { name: t.name, tag: '', tooltip: '' };
-  //   if (
-  //     !(tenant_status === 'active' && operational_status === 'online' && process_status === 'idle')
-  //   ) {
-  //     tag = `${tenant_status[0].toUpperCase()}-${operational_status[0].toUpperCase()}-${process_status
-  //       .slice(0, 2)
-  //       .toUpperCase()}`;
-  //   }
-  //   return {
-  //     name: t.name,
-  //     tag,
-  //     tooltip: `${tenant_status.toUpperCase()}-${operational_status.toUpperCase()}-${process_status.toUpperCase()}`
-  //   };
-  // });
-  // console.log('statusTags', tags);
+  if (customer === 'Infor') {
+    tags = tags.sort((a, b) => (a.name > b.name ? 1 : -1));
+  }
+
   const baseTenantId =
     tenants && tenants.length && tenants.length > 0 ? tenants[0].name.split('_')[0] : '';
   // console.log(customer, tenants[0]);
   return (
     <>
-      <Card className={customer === 'Infor' ? classes.card2 : classes.card}>
+      <Card className={customer === 'Infor' ? classes.card3 : classes.card}>
         <CardContent>
           {/* <Header>
           <H2>{customer}</H2>

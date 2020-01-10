@@ -76,6 +76,11 @@ const styles = theme => ({
     minWidth: 275,
     margin: 10
   },
+  card3: {
+    minWidth: '28%',
+    margin: 10,
+    background: 'transparent'
+  },
   chip: {
     margin: theme.spacing(1),
     marginBottom: 2,
@@ -217,11 +222,10 @@ function TenantNote() {
   const { data, loading } = useQuery(TENANT_NOTE);
   if (loading) return <div />;
   const { updatestatus } = data;
-  if (updatestatus.note && updatestatus.note.length> 1) {
-
+  if (updatestatus.note && updatestatus.note.length > 1) {
     return <span className="marquee">{updatestatus.note}</span>;
   }
-  return <div/>
+  return <div />;
 }
 
 export const FilterForm = ({ setSearchText, flip }) => {
@@ -355,6 +359,8 @@ const filterTenantsByCustomerFarmVersion = (tenants, fields, details) => {
 };
 
 const inforTenant = tenants => tenants.filter(o => o.customer.name === 'Infor');
+const inforTenantByFarm = (tenants, farm) =>
+  tenants.filter(o => o.customer.name === 'Infor' && o.farm === farm);
 
 const TenantList = props => {
   const dbctx = React.useContext(DashBoardContext);
@@ -467,7 +473,24 @@ const TenantList = props => {
               />
             );
           })}
-          <TenantCard classes={classes} customer="Infor" tenants={inforTenant(tenants)} />
+          {/* <TenantCard classes={classes} customer="Infor" tenants={inforTenant(tenants)} /> */}
+        </div>
+        <div style={{ display: 'flex' }}>
+          <TenantCard
+            classes={classes}
+            customer="Infor"
+            tenants={inforTenantByFarm(tenants, 'Frankfurt')}
+          />
+          <TenantCard
+            classes={classes}
+            customer="Infor"
+            tenants={inforTenantByFarm(tenants, 'Us-East-1')}
+          />
+          <TenantCard
+            classes={classes}
+            customer="Infor"
+            tenants={inforTenantByFarm(tenants, 'Sydney')}
+          />
         </div>
       </animated.div>
       <animated.div

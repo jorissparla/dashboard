@@ -374,9 +374,9 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
           <BacklogTable
             classes={classes}
             backlog={mtincidents}
-            additionalFields={['Deployment', 'Tenant']}
+            additionalFields={['Deployment', 'Tenant', 'release']}
             title="Multitenant customer incidents"
-            description="All Incidents open for our MT not logged as single tenant"
+            description="All Incidents open for our MT not logged as multi tenant"
           />
           <BacklogTable
             classes={classes}
