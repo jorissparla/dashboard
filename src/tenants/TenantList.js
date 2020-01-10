@@ -79,7 +79,8 @@ const styles = theme => ({
   card3: {
     minWidth: '28%',
     margin: 10,
-    background: 'transparent'
+    background: 'transparent',
+    backgroundImage: 'linear-gradient(to right bottom,rgba(29, 161, 242, 0.4), white)',
   },
   chip: {
     margin: theme.spacing(1),

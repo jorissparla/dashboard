@@ -13,7 +13,7 @@ import gql from 'graphql-tag';
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { adopt } from 'react-adopt';
-import { Mutation, Query } from 'react-apollo';
+import { Mutation, Query, useQuery, useMutation } from 'react-apollo';
 import { withRouter } from 'react-router';
 import DeleteChat from '../chat/DeleteChat';
 import { colorAr, getColor, WideTitle } from '../styles';
@@ -26,7 +26,7 @@ const DELETE_CHAT_MUTATION = gql`
   }
 `;
 const ALL_CHATS_QUERY = gql`
-  {
+  query ALL_CHATS_QUERY {
     chats {
       id
       weeknr
@@ -117,57 +117,53 @@ const RenderChat = ({ chat, onRemove }) => {
   });
 };
 
-class ChatList extends Component {
-  render() {
-    const { classes } = this.props;
-    return (
-      <MyContainer>
-        {({ loading, error, data, chats, deleteChat, ...props }) => {
-          if (loading) {
-            return <div>Loading</div>;
-          }
-          // const chats = data.chats;
-          const handleDelete = async id => {
-            const input = { id };
-            await deleteChat({ variables: { input } });
-          };
-          const chatsByWeek = _.chain(chats)
-            .orderBy(['fromdate', 'desc'])
-            .groupBy(o => o.weeknr)
-            .map(o => o)
-            .value();
+const ChatList = props => {
+  const { classes } = props;
+  const { data, loading } = useQuery(ALL_CHATS_QUERY);
+  const [deleteChat] = useMutation(DELETE_CHAT_MUTATION);
 
-          return (
-            <React.Fragment>
-              <Paper className={classes.root}>
-                <WideTitle variant="h4  " gutterBottom className={classes.typo}>
-                  Chat
-                  <Fab
-                    variant="round"
-                    color="secondary"
-                    aria-label="add"
-                    className={classes.button}
-                    onClick={() => this.props.history.push(`/chat/new`)}
-                  >
-                    <AddIcon />
-                  </Fab>
-                </WideTitle>
-                <List style={{ backgroundColor: 'white' }}>
-                  {chatsByWeek.map((item, index) => (
-                    <div key={index}>
-                      <WideTitle>{item[0].weeknr}</WideTitle>
-                      <RenderChat chat={item} onRemove={id => handleDelete(id)} />
-                    </div>
-                  ))}
-                </List>
-              </Paper>
-            </React.Fragment>
-          );
-        }}
-      </MyContainer>
-    );
+  if (loading) {
+    return <div>Loading</div>;
   }
-}
+  const { chats } = data;
+  // const chats = data.chats;
+  const handleDelete = async id => {
+    const input = { id };
+    await deleteChat({ variables: { input } });
+  };
+  const chatsByWeek = _.chain(chats)
+    .orderBy(['fromdate', 'desc'])
+    .groupBy(o => o.weeknr)
+    .map(o => o)
+    .value();
+
+  return (
+    <React.Fragment>
+      <Paper className={classes.root}>
+        <WideTitle variant="h4  " gutterBottom className={classes.typo}>
+          Chat
+          <Fab
+            variant="round"
+            color="secondary"
+            aria-label="add"
+            className={classes.button}
+            onClick={() => props.history.push(`/chat/new`)}
+          >
+            <AddIcon />
+          </Fab>
+        </WideTitle>
+        <List style={{ backgroundColor: 'white' }}>
+          {chatsByWeek.map((item, index) => (
+            <div key={index}>
+              <WideTitle>{item[0].weeknr}</WideTitle>
+              <RenderChat chat={item} onRemove={id => handleDelete(id)} />
+            </div>
+          ))}
+        </List>
+      </Paper>
+    </React.Fragment>
+  );
+};
 
 export default withStyles(styles)(withRouter(ChatList));
 export { ALL_CHATS_QUERY };
