@@ -13,3 +13,8 @@ export function formatDistanceToNow(date) {
     return orgdistanceInWordsToNow(parseInt(date));
   } else return orgdistanceInWordsToNow(date);
 }
+
+const YMD_FORMAT = 'yyyy-MM-dd';
+export function ymdFormat(date) {
+  return format(date, YMD_FORMAT);
+}

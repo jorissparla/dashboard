@@ -1,16 +1,15 @@
-import React from 'react';
-import gql from 'graphql-tag';
-import { useQuery } from 'react-apollo';
-import Spinner from 'utils/spinner';
-import { Typography, withStyles, Button, TableFooter } from '@material-ui/core';
+import { TableFooter, TablePagination, Typography, withStyles } from '@material-ui/core';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { TablePagination } from '@material-ui/core';
-import { format } from 'utils/format';
 import { addHours } from 'date-fns';
+import gql from 'graphql-tag';
+import React from 'react';
+import { useQuery } from 'react-apollo';
+import { format } from 'utils/format';
+import Spinner from 'utils/spinner';
 
 const TableHeaderCell = withStyles(theme => ({
   head: {
@@ -42,17 +41,6 @@ export function TenantLogsWithData() {
 
 const MAX_PAGE_LENGTH = 12;
 
-function guid() {
-  return (
-    Math.random()
-      .toString(36)
-      .substring(2, 15) +
-    Math.random()
-      .toString(36)
-      .substring(2, 15)
-  );
-}
-
 export default function TenantLogs({ tenantlogs }) {
   const [currentPage, setCurrentPage] = React.useState(0);
   const [lastPage, setLastPage] = React.useState(0);
@@ -60,18 +48,8 @@ export default function TenantLogs({ tenantlogs }) {
   React.useEffect(() => {
     setLastPage(parseInt(tenantlogs.length / MAX_PAGE_LENGTH));
     setSelectedTenantLogs(tenantlogs);
-  }, []);
-  function handleNextPage() {
-    if (currentPage < lastPage) {
-      setCurrentPage(currentPage + 1);
-    }
-  }
-  function handlePrevPage() {
-    if (currentPage > 0) {
-      setCurrentPage(currentPage - 1);
-    }
-  }
-  console.log(selectedTenantLogs);
+  }, [tenantlogs]);
+
   return (
     <div>
       <div

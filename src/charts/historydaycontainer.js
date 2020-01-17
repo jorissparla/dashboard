@@ -45,7 +45,7 @@ class HistoryChartDayContainer extends Component {
     const title = 'Backlog '.concat(column);
     // if (!history) return <div> Loading....</div>;
     return (
-      <Query query={QUERY_HISTORY_DAY}>
+      <Query query={QUERY_HISTORY_DAY_ALL}>
         {({ data, loading, ...props }) => {
           console.log('CCC', loading, data, { props });
           if (loading) {
@@ -68,8 +68,8 @@ class HistoryChartDayContainer extends Component {
   }
 }
 
-const QUERY_HISTORY_DAY = gql`
-  query QUERY_HISTORY_DAY {
+const QUERY_HISTORY_DAY_ALL = gql`
+  query QUERY_HISTORY_DAY_ALL {
     historyday {
       id
       day

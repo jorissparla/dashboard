@@ -65,14 +65,14 @@ const styles = theme => ({
 const Signin = props => {
   const userContext = React.useContext(UserContext);
   const { user, login } = userContext;
-  const setLogin = (user, token) => {
-    localStorage.setItem('id', user.id);
-    localStorage.setItem('token', token || 'PIN01');
-    localStorage.setItem('email', user.email);
-    localStorage.setItem('name', user.fullname);
-    localStorage.setItem('picture', user.image);
-    localStorage.setItem('role', user.role);
-  };
+  // const setLogin = (user, token) => {
+  //   localStorage.setItem('id', user.id);
+  //   localStorage.setItem('token', token || 'PIN01');
+  //   localStorage.setItem('email', user.email);
+  //   localStorage.setItem('name', user.fullname);
+  //   localStorage.setItem('picture', user.image);
+  //   localStorage.setItem('role', user.role);
+  // };
 
   const { classes } = props;
   return (
@@ -95,19 +95,13 @@ const Signin = props => {
         return errors;
       }}
       onSubmit={async (values, { setFieldError /* setValues and other goodies */ }) => {
-        const result = await login(values.email, values.password);
+        await login(values.email, values.password);
 
         if (user) {
           await props.history.push('/');
         } else {
           setFieldError('password', 'Invalid email or password');
         }
-        //          if (!result.data.signinUser.error) {
-        //            const { token, user } = result.data.signinUser;
-        //            this.setLogin(user, token);
-        //            // window.location.reload();
-        //         } else {
-        //         }
       }}
     >
       {({ values, handleChange, handleBlur, handleSubmit, touched, errors, isSubmitting }) => {

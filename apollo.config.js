@@ -1,7 +1,7 @@
 module.exports = {
   client: {
     service: {
-      url: 'http://nlbavwixs.infor.com:4000'
+      url: 'https://nlbavwixs.infor.com:4001'
     }
   }
 };

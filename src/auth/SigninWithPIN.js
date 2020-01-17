@@ -1,54 +1,53 @@
+import gql from 'graphql-tag';
 import React, { useState } from 'react';
 import { withRouter } from 'react-router';
-import { Button, Input, Form, Error } from '../styles';
-import gql from 'graphql-tag';
 //import { graphql, compose } from 'react-apollo';
 
-const isRequired = value => (value ? true : false);
-const isValidemail = value =>
-  value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? false : true;
+// const isRequired = value => (value ? true : false);
+// const isValidemail = value =>
+//   value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? false : true;
 
 const Signin = () => {
-  const [state, setState] = useState({
-    email: '',
-    PIN: '',
-    error: '',
-    emailError: '',
-    PINError: ''
-  });
+  // const [state, setState] = useState({
+  //   email: '',
+  //   PIN: '',
+  //   error: '',
+  //   emailError: '',
+  //   PINError: ''
+  // });
 
-  function onChange(e) {
-    setState({ [e.target.name]: e.target.value });
-  }
+  // function onChange(e) {
+  //   setState({ [e.target.name]: e.target.value });
+  // }
 
-  function validate() {
-    let isError = false;
-    const errors = {
-      emailError: '',
-      PINError: '',
-      submitError: ''
-    };
-    const { email, PIN } = this.state;
+  // function validate() {
+  //   let isError = false;
+  //   const errors = {
+  //     emailError: '',
+  //     PINError: '',
+  //     submitError: ''
+  //   };
+  //   const { email, PIN } = this.state;
 
-    if (!isValidemail(email)) {
-      isError = true;
-      errors.emailError = 'Invalid email address';
-      this.setState({
-        ...this.state,
-        ...errors
-      });
-    }
+  //   if (!isValidemail(email)) {
+  //     isError = true;
+  //     errors.emailError = 'Invalid email address';
+  //     this.setState({
+  //       ...this.state,
+  //       ...errors
+  //     });
+  //   }
 
-    if (!isRequired(PIN)) {
-      isError = true;
-      errors.PINError = 'Password cannot be empty';
-      this.setState({
-        ...this.state,
-        ...errors
-      });
-    }
-    return isError;
-  }
+  //   if (!isRequired(PIN)) {
+  //     isError = true;
+  //     errors.PINError = 'Password cannot be empty';
+  //     this.setState({
+  //       ...this.state,
+  //       ...errors
+  //     });
+  //   }
+  //   return isError;
+  // }
 
   return <div>To be reimplemented</div>;
 };
@@ -177,16 +176,16 @@ class Signin2 extends React.Component {
 }
 
 */
-const generateTempPIN = gql`
-  mutation generateTempPIN($email: String!) {
-    generateTempPIN(email: $email) {
-      error
-      user {
-        id
-      }
-    }
-  }
-`;
+// const generateTempPIN = gql`
+//   mutation generateTempPIN($email: String!) {
+//     generateTempPIN(email: $email) {
+//       error
+//       user {
+//         id
+//       }
+//     }
+//   }
+// `;
 
 //export default compose(graphql(generateTempPIN, { name: 'generateTempPIN' }))(withRouter(Signin));
 export default withRouter(Signin);

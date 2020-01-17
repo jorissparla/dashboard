@@ -50,7 +50,7 @@ const createNews = gql`
 `;
 
 const ALL_NEWS = gql`
-  {
+  query ALL_NEWS {
     news {
       title
       body

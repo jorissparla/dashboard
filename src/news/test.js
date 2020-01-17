@@ -1,14 +1,14 @@
-import React, { Component } from "react";
-import { Query } from "react-apollo";
-import { withRouter } from "react-router";
-import gql from "graphql-tag";
-import { withStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Button from "@material-ui/core/Button";
-import AddIcon from "@material-ui/icons/Add";
-import Typography from "@material-ui/core/Typography";
-import NewsList from "./newslist";
-import withAuth from "../utils/withAuth";
+import React, { Component } from 'react';
+import { Query } from 'react-apollo';
+import { withRouter } from 'react-router';
+import gql from 'graphql-tag';
+import { withStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import Button from '@material-ui/core/Button';
+import AddIcon from '@material-ui/icons/Add';
+import Typography from '@material-ui/core/Typography';
+import NewsList from './newslist';
+import withAuth from '../utils/withAuth';
 
 const styles = theme => ({
   button: {
@@ -21,7 +21,7 @@ const styles = theme => ({
 });
 
 const QUERY_NEWS = gql`
-  {
+  query QUERY_NEWS {
     news {
       title
       body

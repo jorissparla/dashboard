@@ -35,7 +35,7 @@ class KudoListComponent extends Component {
     if (!kudos) return null;
     return kudos.map(({ ownerrep_name, customer_name, account, survey_date, pic }, index) => {
       const mgender = mapGender(account.gender);
-      const img = pic ? `${pic}` : `http://${REACT_APP_SERVER}/images/${mgender}.png`;
+      const img = pic ? `${pic}` : `https://${REACT_APP_SERVER}/images/${mgender}.png`;
       const initials = pic
         ? ''
         : ownerrep_name

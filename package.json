@@ -63,6 +63,7 @@
     "react": "^16.12.0",
     "react-adopt": "^0.6.0",
     "react-apollo": "3.1.3",
+    "react-copy-to-clipboard": "^5.0.2",
     "react-dom": "^16.12.0",
     "react-feather": "^2.0.3",
     "react-highcharts": "^16.1.0",
@@ -85,8 +86,9 @@
     "yup": "^0.28.0"
   },
   "scripts": {
-    "start": "SET PORT=3000 && react-scripts start",
-    "analyze": "source-map-explorer build/static/js/main.*",
+    "start": "npm run copy:prod-env && SET PORT=3000 && react-scripts start",
+    "starts": "set HTTPS=true && SET PORT=3000 && SET REACT_HTTP=https && react-scripts start",
+    "start-dev": "set HTTPS=true&&set PORT=8762 && npm run copy:dev-env &&react-scripts start  ",
     "build": "react-scripts build",
     "copy:prod-env": "xcopy /Y .env.prod.env .env",
     "copy:dev-env": "xcopy /Y .env.dev.env .env",
@@ -98,6 +100,7 @@
     "copy:dev": "xcopy /s /Y build \\\\nlbavwixs\\dashboard.dev",
     "beta": "npm run copy:beta-env && npm run build && npm run copy && npm run copy:prod-env",
     "deploy:dev": "npm run copy:dev-env && npm run build:dev && npm run copy:dev && npm run copy:prod-env",
+    "deploy:secure": "npm run copy:dev-env && npm run build:dev && npm run copy:dev && npm run copy:prod-env",
     "deploy:live": "npm run copy:prod-env && npm run build && npm run copy:live",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",

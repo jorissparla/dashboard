@@ -47,10 +47,11 @@ export const UserProfileComponent: FunctionComponent<any> = (props: any) => {
   if (!me) {
     return <div>No user, loading...</div>;
   }
+  const profileImage = me.image ? me.image.replace('http:', 'https:') : '';
   return (
     <div>
       <h1>Hallo {me.fullname}</h1>
-      <img src={me.image || ''} />
+      <img src={profileImage || ''} alt="user my" />
     </div>
   );
 };

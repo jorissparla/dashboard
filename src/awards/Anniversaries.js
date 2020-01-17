@@ -60,7 +60,7 @@ const Image = ({ image, fullname }) => {
     .join('')
     .toUpperCase();
   if (image) {
-    return <Avatar src={image} style={{ margin: 5, width: 80, height: 80 }} size={80} />;
+    return <Avatar src={image.replace('http:', 'https:')} style={{ margin: 5, width: 80, height: 80 }} size={80} />;
   } else {
     return <StyledInitials>{initials}</StyledInitials>;
   }

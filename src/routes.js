@@ -37,6 +37,7 @@ import { AddVideo, EditVideo } from './videos/VideoOperations';
 import OtherTeamsChartContainer from './charts/OtherTeamChartsContainer';
 import MaintenanceVersionList from './pages/MaintenanceVersionList';
 import TenantViewList from 'tenants/TenantViewList';
+import SymptomsPage from 'pages/Symptoms';
 
 const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
 
@@ -100,6 +101,7 @@ function AppRoutes(props) {
 
   return (
     <Switch>
+      <Route exact path="/symptoms" component={SymptomsPage} />
       <Route exact path="/maintenancewizard" component={MaintenanceVersionList} />
       <Route exact path="/tenantlogs" component={TenantLogsWithData} />
       <Route exact path="/tenantview" component={TenantViewList} />

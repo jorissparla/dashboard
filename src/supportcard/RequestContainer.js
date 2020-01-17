@@ -20,7 +20,7 @@ const Title = styled.h3`
   padding-left: 30px;
 `;
 const { REACT_APP_SERVER = 'nlbavwixs' } = process.env;
-const defaultPicture = `http://${REACT_APP_SERVER}/images/male.png`;
+const defaultPicture = `https://${REACT_APP_SERVER}/images/male.png`;
 
 const RequestItem = ({ item, handleClick }) => {
   const { name, text, createdAt, account, complete, assigned } = item;

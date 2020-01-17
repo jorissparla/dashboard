@@ -1,17 +1,11 @@
-import React, { Component, useReducer, useRef } from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import IconButton from '@material-ui/core/IconButton';
-import FolderOpen from '@material-ui/icons/FolderOpen';
-import FileUpload from '@material-ui/icons/FileCopy';
 import gql from 'graphql-tag';
-import { useQuery, useMutation } from 'react-apollo';
+import React, { useRef } from 'react';
+import { useMutation } from 'react-apollo';
 import styled from 'styled-components';
 const PATH_PREFIX = '\\\\nlbavwixs.infor.com\\images\\news\\';
-const LINK_PREFIX = 'http://nlbavwdocsup1.infor.com:5001/';
-const HTTP_LINK_PREFIX = `http://nlbavwixs.infor.com/images/profilepics/`;
+const LINK_PREFIX = 'https://nlbavwdocsup1.infor.com:5001/';
+const HTTP_LINK_PREFIX = `https://nlbavwixs.infor.com/images/profilepics/`;
 
 const UploadButtonWrapper = styled.div`
   /* position: relative; */

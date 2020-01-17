@@ -43,8 +43,8 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
     setActionNeeded,
     products,
     setProducts,
-    setPersons,
-    persons
+    setPersons
+    // persons
   } = selectionContext;
   const [ownerVal, setOwnerVal] = useState('');
   const [criteriaChange, setCriteriaChange] = React.useState(false);
@@ -81,7 +81,7 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
     setOwner(initialValue.owner);
     console.log('Load', owner, initialValue);
     setOwnerVal(initialValue.owner);
-  }, []);
+  }, [initialValue, owner, setOwner]);
 
   React.useEffect(() => {
     console.log('ownerChange', owner);

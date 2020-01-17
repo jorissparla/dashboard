@@ -1,18 +1,18 @@
-import React, { Component } from "react";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import ListItemText from "@material-ui/core/ListItemText";
-import ClearIcon from "@material-ui/icons/Clear";
-import IconButton from "@material-ui/core/IconButton";
-import Avatar from "@material-ui/core/Avatar";
-import { withStyles } from "@material-ui/core/styles";
-import PropTypes from "prop-types";
+import React, { Component } from 'react';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
+import ClearIcon from '@material-ui/icons/Clear';
+import IconButton from '@material-ui/core/IconButton';
+import Avatar from '@material-ui/core/Avatar';
+import { withStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
 
 const styles = theme => ({
   root: {
-    width: "90vw",
-    margin: "10px",
+    width: '90vw',
+    margin: '10px',
     backgroundColor: theme.palette.background.paper
   }
 });
@@ -55,7 +55,11 @@ class EmployeeList extends Component {
             <ListItem key={emp.id} dense button className={classes.listItem}>
               <Avatar
                 alt="Remy Sharp"
-                src={emp.image || "https://picsum.photos/50/50/?image=381"}
+                src={
+                  emp.image
+                    ? emp.image.replace('http:', 'https:')
+                    : 'https://picsum.photos/50/50/?image=381'
+                }
               />
               <ListItemText
                 primary={emp.fullname || emp.login}

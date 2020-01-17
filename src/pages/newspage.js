@@ -63,10 +63,11 @@ const styles = theme => ({
 });
 
 function MediaNewsCard({ news: { title, body, img, create_date }, classes }) {
+  const newImage = img.replace('http:', 'https:');
   return (
     <Card className={classes.card}>
       <CardActionArea>
-        <CardMedia className={classes.media} image={img} title={title}>
+        <CardMedia className={classes.media} image={newImage} title={title}>
           <Typography gutterBottom variant="h5" component="h2" className={classes.title}>
             {title}
           </Typography>

@@ -10,7 +10,7 @@ import gql from 'graphql-tag';
 import { Mutation } from 'react-apollo';
 import styled from 'styled-components';
 const PATH_PREFIX = '\\\\nlbavwdocsup1\\Training\\';
-const LINK_PREFIX = 'http://nlbavwdocsup1:5001/';
+const LINK_PREFIX = 'https://nlbavwdocsup1:5001/';
 
 const UploadButtonWrapper = styled.div`
   position: relative;
@@ -26,7 +26,7 @@ const UploadButtonWrapper = styled.div`
 `;
 
 const UPLOAD_MUTATION = gql`
-  mutation($files: [Upload!]!, $folder: String) {
+  mutation UPLOAD_MUTATION($files: [Upload!]!, $folder: String) {
     multipleUpload(files: $files, folder: $folder) {
       id
       path

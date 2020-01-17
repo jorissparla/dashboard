@@ -7,7 +7,6 @@ import { Card } from '../common';
 import { SharedSnackbarConsumer } from '../globalState/SharedSnackbar.context';
 //import format from 'date-fns/format';
 import { format } from '../utils/format';
-import { CREATE_CHAT } from './../actions/index';
 import ChatAdd from './ChatAdd';
 
 window.format = format;
@@ -25,25 +24,6 @@ const ADD_CHAT = gql`
   }
 `;
 
-const DELETE_CHAT = gql`
-  mutation deleteChat($input: ChatInputType) {
-    deleteChat(input: $input) {
-      result
-    }
-  }
-`;
-const ALL_RANGES = gql`
-  query ALL_RANGES {
-    allRanges: ranges {
-      ID
-      FromDate
-      ToDate
-      Name
-      RangeType
-      FullRange
-    }
-  }
-`;
 const ALL_CHATS = gql`
   query ALL_CHATS {
     chats {
@@ -65,71 +45,23 @@ const ALL_CHATS = gql`
   }
 `;
 
-// const addChat = ({ render }) => (
-//   <Mutation
-//     mutation={ADD_CHAT}
-//     refetchQueries={[{ query: ALL_CHATS }]}
-//     update={(cache, { data: { createChat } }) => {
-//       const query = ALL_CHATS;
-//       const props = cache.readQuery({ query });
-//       const { chats } = props;
-//       cache.writeQuery({
-//         query,
-//         data: { chats: R.concat(chats, [createChat]) }
-//       });
-//     }}
-//   >
-//     {(mutation, result) => render({ mutation, result })}
-//   </Mutation>
-// );
-
-// const deleteChat = ({ render }) => (
-//   <Mutation mutation={DELETE_CHAT} refetchQueries={[{ query: ALL_CHATS }]}>
-//     {(mutation, result) => render({ mutation, result })}
-//   </Mutation>
-// );
-
-// const myRanges = ({ render }) => (
-//   <Query query={ALL_RANGES}>{(data, loading) => render(data, loading)}</Query>
-// );
-
-// const myChats = ({ render }) => <Query query={ALL_CHATS}>{data => render(data)}</Query>;
-
-// const mapper = {
-//   myRanges,
-//   myChats,
-//   //chats: <Query query={ALL_CHATS} />,
-//   addChat,
-//   deleteChat
-// };
-
-// const mapProps = ({ myRanges, myChats, addChat }) => ({
-//   ranges: myRanges.data.allRanges,
-//   chats: myChats.data.chats,
-//   loading: myChats.loading,
-//   loading1: myRanges.loading,
-//   addChat: addChat.mutation,
-//   addChatResult: addChat.result,
-//   deleteChat: deleteChat.mutation,
-//   deleteChatResult: deleteChat.result
-// });
-
-// const MyContainer = adopt(mapper, mapProps);
+const YMDFORMAT = 'yyyy-MM-dd';
 
 const ChatContainer = props => {
   const { data, loading } = useQuery(ALL_CHATS);
   const [addChat] = useMutation(ADD_CHAT);
 
-  const [state, setState] = useState({
+  const [state] = useState({
     showDialog: false,
     body: '',
     values: {},
+    message: 'added',
     showMessage: false,
     err: ''
   });
   if (loading) return <div>Loading</div>;
 
-  const { ranges, chats } = data;
+  const { ranges } = data;
   const doCancel = () => {
     props.history.push('/chat');
   };
@@ -143,15 +75,15 @@ const ChatContainer = props => {
     const { weeknr, team, nrchats, responseintime } = values;
     const fromDate = findWeekfromDate(weeknr, ranges);
 
-    const percentage = (100 * responseintime) / nrchats;
+    // const percentage = (100 * responseintime) / nrchats;
     const input = {
       weeknr,
       team,
       nrchats: parseInt(nrchats),
       responseintime: parseInt(responseintime),
-      fromDate: format(parseInt(fromDate), 'yyyy-MM-dd')
+      fromDate: format(parseInt(fromDate), YMDFORMAT)
     };
-    const result = await addChat({
+    await addChat({
       variables: {
         input
       }

@@ -6,6 +6,6 @@ const { REACT_APP_PORT_GRAPHQL = 55555, REACT_APP_GRAPHQLSERVER = "nlbavwixs" } 
 
 export default () => {
   return (
-    <Playground endpoint={`http://${REACT_APP_GRAPHQLSERVER}:${REACT_APP_PORT_GRAPHQL}/graphql`} />
+    <Playground endpoint={`https://${REACT_APP_GRAPHQLSERVER}:${REACT_APP_PORT_GRAPHQL}/graphql`} />
   );
 };

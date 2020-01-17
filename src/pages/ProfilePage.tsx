@@ -32,12 +32,12 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user }) => {
     <div>
       <h2>Update your profile picture</h2>
       <div>
-        <img src={image} style={{ height: '100px' }} />
+        <img src={image.replace('http:', 'https:')} style={{ height: '100px' }} />
       </div>
 
       <FileUploader
         link={`\\\\nlbavwixs.infor.com\\images\\profilepics\\${email}`}
-        httpLinkPrefix={`http://nlbavwixs.infor.com/images/profilepics/${email}/`}
+        httpLinkPrefix={`https://nlbavwixs.infor.com/images/profilepics/${email}/`}
         readOnly={false}
         setFile={async (value: string) => {
           console.log('Profile:::', value);

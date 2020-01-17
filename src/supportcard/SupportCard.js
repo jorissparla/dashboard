@@ -95,7 +95,7 @@ class SupportCard extends React.Component {
       text = 'Papier Und KartonFabrik',
       buttonText = '📂',
       category = 'Cloud',
-      link = 'http://www.google.com',
+      link = 'https://www.google.com',
       color = '#FFFFF',
       canEdit = true,
       editLink = '',
