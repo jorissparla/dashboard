@@ -99,7 +99,7 @@ const Image = ({ image, fullname, size = 32 }) => {
     .join('')
     .toUpperCase();
   if (image) {
-    return <Avatar src={image} size={size} />;
+    return <Avatar src={image.replace('http://','https://')} size={size} />;
   } else {
     return (
       <StyledInitials color="#1da1f2" size={size}>
