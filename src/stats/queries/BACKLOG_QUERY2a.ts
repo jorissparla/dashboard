@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 export const QUERY_LAST_UPDATED = gql`
-  {
+  query QUERY_LAST_UPDATED{
     mostRecentUpdate
   }
 `;

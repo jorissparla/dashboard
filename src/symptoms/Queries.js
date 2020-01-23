@@ -13,6 +13,7 @@ export const ALL_SYMPTOMS = gql`
     symptomrequests {
       id
       symptom
+      incident
       symptom_category
       status
       updatedAt
@@ -26,6 +27,7 @@ export const ADD_SYMPTOM_REQUEST_MUTATION = gql`
       id
       symptom
       symptom_category
+      incident
       status
       updatedAt
     }
@@ -38,6 +40,7 @@ export const DELETE_SYMPTOM_REQUEST_MUTATION = gql`
       id
       symptom
       symptom_category
+      incident
       status
       updatedAt
     }

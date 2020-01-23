@@ -9,6 +9,7 @@ import { format } from '../utils/format';
 import Spinner from '../utils/spinner';
 import { useLocalStorage } from '../utils/useLocalStorage';
 import { UserContext } from './../globalState/UserProvider';
+import { ItemStyle } from 'layout';
 const SelectionForm = React.lazy(() => import('../stats/SelectionForm'));
 
 export const styles = (theme: any) => ({
@@ -219,6 +220,8 @@ interface Props {
   actionNeeded: boolean;
 }
 
+const RELEASE_FILTER = ['Baan 4', 'Baan 5', 'LN FP5', 'LN FP6', 'LN FP7', 'LN FP3', '10.2', '10.3'];
+
 const StatsMain: React.FC<Props> = ({ classes, data }) => {
   const params = useParams();
   const sev12notrestored = [
@@ -227,14 +230,32 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
       (item: any) => !item.service_restored_date && item.status !== 'Solution Proposed'
     )
   ];
+
   const [loading, setLoading] = useState(true);
 
   React.useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 2000);
     return () => {};
   }, []);
-  const sev1notrestored = data.critical.filter((item: any) => !item.service_restored_date);
+  // const sev1notrestored = data.critical.filter((item: any) => !item.service_restored_date);
+
+  // customers that have a MT deployment type
   const multitenantcustomers = data.multitenantcustomers;
+
+  // List of customers that have extended maintenance
+  const extendedmaintenance = data.extendedMaintenance;
+
+  const extIncidents = [...data.all, ...data.all_dev]
+    .filter((item: any) => RELEASE_FILTER.includes(item.releasename))
+    .map((item: any) => ({
+      ...item,
+      extended: extendedmaintenance.find((customer: any) => customer.customerid === item.customerid)
+        ? 'Yes'
+        : 'No'
+    }))
+    .sort((a: any, b: any) => a.daysSinceCreated - b.daysSinceCreated);
+
+  console.log('🤷‍♂️🤷‍♂️', extIncidents);
   // console.log('mt customers', multitenantcustomers);
   const mtincidents = data.all
     .filter(
@@ -243,11 +264,7 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
       // inc.customerid === 60028554
     )
     .filter((x: any) => x.Tenant !== 'Multi-Tenant');
-  console.log(
-    'mt incidents',
-    mtincidents
-    // multitenantcustomers.filter((x: any) => x.customerid === 60028554)
-  );
+
   const multitenant = data.multitenant
     .filter((item: any) => item.Tenant === 'Multi-Tenant' && item.release !== '10.5')
     .filter((item: any) => item.dayssincelastupdate > 7)
@@ -273,15 +290,6 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
             title="On Hold"
             description="All Incidents with a status of On Hold By Customer with no or an Expired Action date"
           />
-
-          {/* <BacklogTable
-            classes={classes}
-            backlog={data.solution_proposed_cloud}
-            title="Solution Proposed"
-            description={`All Incidents with a status of Solution Proposed not updated for ${
-              params['N_SOLUTIONPROPOSED']
-            } days or more`}
-          /> */}
 
           <BacklogTable
             classes={classes}
@@ -380,6 +388,13 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
           />
           <BacklogTable
             classes={classes}
+            backlog={extIncidents}
+            additionalFields={['releasename', 'extended', 'daysSinceCreated']}
+            title="Extended Maintenance Check"
+            description="All Incidents open for customers logging on a version that has extended maintenance"
+          />
+          <BacklogTable
+            classes={classes}
             backlog={data.sev1notrestored}
             title="Critical"
             description="All Incidents with a severity of 'Production Outage / Critical Application halted'"
@@ -390,14 +405,7 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
             title="On Hold"
             description="All Incidents with a status of On Hold By Customer with no or an Expired Action date"
           />
-          {/* <BacklogTable
-            classes={classes}
-            backlog={data.solution_proposed}
-            title="Solution Proposed"
-            description={`All Incidents with a status of Solution Proposed not updated for ${
-              params['N_SOLUTIONPROPOSED']
-            } days or more`}
-          /> */}
+
           <BacklogTable
             classes={classes}
             backlog={data.awaiting_customer}

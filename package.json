@@ -51,6 +51,7 @@
     "downshift": "^4.0.2",
     "formik": "^2.1.1",
     "global": "^4.4.0",
+    "graphiql-with-extensions": "^0.14.3",
     "graphql": "^14.5.8",
     "graphql-tag": "^2.10.1",
     "highcharts": "^8.0.0",

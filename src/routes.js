@@ -25,7 +25,6 @@ import PlannedCourseRequestList from './pages/PlannedCourseRequestList';
 import ProfilePage from './pages/ProfilePage';
 import { StatsPage } from './pages/StatsPage2';
 import { Surveys } from './pages/Surveys';
-import { UserActivity } from './pages/testActivity';
 import VideoPage from './pages/Videos';
 import { Parameters } from './stats/Parameters';
 import PriorityDashboard from './stats/PriorityDashboard';
@@ -39,6 +38,7 @@ import MaintenanceVersionList from './pages/MaintenanceVersionList';
 import TenantViewList from 'tenants/TenantViewList';
 import SymptomsPage from 'pages/Symptoms';
 
+import Playground from './pages/Playground';
 const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
 
 //const StatsMain = React.lazy(() => import('./kudos/kudolistcomponentnew'));
@@ -101,6 +101,7 @@ function AppRoutes(props) {
 
   return (
     <Switch>
+      <Route exact path="/playground" component={Playground} />
       <Route exact path="/symptoms" component={SymptomsPage} />
       <Route exact path="/maintenancewizard" component={MaintenanceVersionList} />
       <Route exact path="/tenantlogs" component={TenantLogsWithData} />
@@ -125,7 +126,6 @@ function AppRoutes(props) {
       />
       <Route exact path="/" component={DashBoardContainer} user={user} />
       <Route exact path="/newspage" component={NewsPage} />
-      <Route exact path="/actie" component={UserActivity} />
       <Route
         exact
         path="/cloudsuites"

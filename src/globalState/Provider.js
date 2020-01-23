@@ -73,13 +73,11 @@ export default class DashBoardContextProvider extends React.Component {
   }
   componentDidMount() {
     client.query({ query: CURRENT_USER_QUERY }).then(result => {
-      console.log('Provider CDM', result);
       if (!result.data.me) {
         this.state.clearUser();
       } else {
         const { id, email, image, fullname, role } = result.data.me;
         this.state.setUser(id, email, image, image, fullname, role);
-        console.log('LOgged In successfully');
       }
     });
   }

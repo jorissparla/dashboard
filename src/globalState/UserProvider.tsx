@@ -39,12 +39,11 @@ export const UserContextProvider: React.FC<{ children: any }> = ({ children }) =
   const [user, setUser] = useState(null);
   useEffect(() => {
     client.query({ query: CURRENT_USER_QUERY }).then(result => {
-      console.log('Provider CDM', result);
       if (!result.data.me) {
         setUser(null);
       } else {
         setUser(result.data.me);
-        console.log('LOgged In successfully, ', result.data.me);
+        // console.log('LOgged In successfully, ', result.data.me);
       }
     });
   }, []);
@@ -64,7 +63,6 @@ export const UserContextProvider: React.FC<{ children: any }> = ({ children }) =
     client
       .mutate({ mutation: MUTATION_SIGNIN, variables: { input: { email, password } } })
       .then(result => {
-        console.log(result);
         if (result.data.signinUser.user) {
           setUser(result.data.signinUser.user);
         } else {

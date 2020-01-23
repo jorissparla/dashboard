@@ -61,6 +61,8 @@ function containsValues(item, value) {
 const SymptomsPage = () => {
   const { data, loading } = useQuery(ALL_SYMPTOMS);
   const [allSymptoms, setAllSymptoms] = useState([]);
+  const [foundNr, setFoundNr] = useState([]);
+  const [symptoms, setSymptoms] = useState([]);
   const [searchText, setSearchText] = useState('');
   const [maxNr, setMaxNr] = useLocalStorage('maxnrsymptoms', 10);
   const [isOpen, setisOpened] = useState(false);
@@ -68,10 +70,13 @@ const SymptomsPage = () => {
   useEffect(() => {
     if (data) setAllSymptoms(data.symptoms);
   }, [loading, data]);
+
+  useEffect(() => {
+    const found = allSymptoms.filter(({ symptom }) => containsValues(symptom, searchText));
+    setFoundNr(found.length);
+    setSymptoms(found.slice(0, maxNr || 10));
+  }, [searchText, maxNr, loading, allSymptoms]);
   if (loading) return <Spinner />;
-  const symptoms = allSymptoms
-    .filter(({ symptom }) => containsValues(symptom, searchText))
-    .slice(0, maxNr || 10);
   return (
     <div className="parent">
       <div className="div4">
@@ -93,11 +98,12 @@ const SymptomsPage = () => {
       </div>
       <div className="div3">
         <h3>
-          showing {symptoms.length} of {allSymptoms.length} symptoms
+          showing {symptoms.length} of {foundNr} matching symptoms ({allSymptoms.length} total
+          symptoms)
         </h3>
         <List>
-          {symptoms.map(s => (
-            <ListItem key={s.symptom}>
+          {symptoms.map((s, index) => (
+            <ListItem key={index}>
               <CopyToClipBoard onCopy={() => console.log('copied')} text={s.symptom}>
                 <Sym title="Click to copy to clipboard">
                   {s.symptom}({s.symptom_category})

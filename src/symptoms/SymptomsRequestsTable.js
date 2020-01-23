@@ -14,6 +14,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 
 import { DELETE_SYMPTOM_REQUEST_MUTATION, ALL_SYMPTOMS } from './Queries';
 import { useMutation } from 'react-apollo';
+import { DashBoardContext } from './../globalState/Provider';
+import { UserContext } from 'globalState/UserProvider';
 
 const useStyles = makeStyles({
   table: {
@@ -37,6 +39,9 @@ const StyledTableCell = withStyles(theme => ({
 
 export default function SimpleTable({ data }) {
   const classes = useStyles();
+  const { role = 'Guest' } = React.useContext(DashBoardContext);
+  const { user } = React.useContext(UserContext);
+  console.log('user', user);
   const [selected, setSelected] = useState(null);
 
   const [deleteSymptomRequest] = useMutation(DELETE_SYMPTOM_REQUEST_MUTATION);
@@ -62,7 +67,11 @@ export default function SimpleTable({ data }) {
         <TableHead>
           <TableRow>
             <StyledTableCell padding="checkbox">
-              {selected ? <DeleteIcon onClick={() => deleteRow(selected)} /> : <div>select</div>}
+              {selected && role === 'Admin' ? (
+                <DeleteIcon onClick={() => deleteRow(selected)} />
+              ) : (
+                <div>select</div>
+              )}
             </StyledTableCell>
             <StyledTableCell>Symptom</StyledTableCell>
             <StyledTableCell align="right">Category</StyledTableCell>

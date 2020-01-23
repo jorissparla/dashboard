@@ -4,21 +4,8 @@ import React, { useRef } from 'react';
 import { useMutation } from 'react-apollo';
 import styled from 'styled-components';
 const PATH_PREFIX = '\\\\nlbavwixs.infor.com\\images\\news\\';
-const LINK_PREFIX = 'https://nlbavwdocsup1.infor.com:5001/';
+// const LINK_PREFIX = 'https://nlbavwdocsup1.infor.com:5001/';
 const HTTP_LINK_PREFIX = `https://nlbavwixs.infor.com/images/profilepics/`;
-
-const UploadButtonWrapper = styled.div`
-  /* position: relative; */
-  /* overflow: hidden; */
-  /* display: inline-block; */
-  input[type='file'] {
-    font-size: 100px;
-    position: absolute;
-    left: 0;
-    top: 0;
-    opacity: 0;
-  }
-`;
 
 const FileInput = styled.label`
   padding: 6px 16px;
@@ -45,14 +32,8 @@ const FileInput = styled.label`
   }
 `;
 
-const Thumb = styled.image`
-  height: 50px;
-  border: 1px solid #000;
-  margin: 10px 5px 0 0;
-`;
-
-const UPLOAD_MUTATION = gql`
-  mutation UPLOAD_MUTATION($files: [Upload!]!, $folder: String) {
+const UPLOAD_FILE_MUTATION = gql`
+  mutation UPLOAD_FILE_MUTATION($files: [Upload!]!, $folder: String) {
     multipleUpload(files: $files, folder: $folder) {
       id
       path
@@ -97,7 +78,7 @@ export const FileUploadComponent: React.FC<Props> = ({
   readOnly,
   setFile
 }) => {
-  const [uploadFileMutation, { data }] = useMutation(UPLOAD_MUTATION);
+  const [uploadFileMutation, { data }] = useMutation(UPLOAD_FILE_MUTATION);
   const ref = useRef(null);
   return (
     <FileInput htmlFor="f1">
@@ -109,7 +90,7 @@ export const FileUploadComponent: React.FC<Props> = ({
         value=""
         ref={ref}
         onChange={async ({ target: { validity, files } }) => {
-          const res = await uploadFileMutation({ variables: { files, folder: link } });
+          await uploadFileMutation({ variables: { files, folder: link } });
 
           if (data) {
             const uploadedFile = data.multipleUpload[0].filename;

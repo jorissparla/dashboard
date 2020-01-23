@@ -120,6 +120,20 @@ export default function FormDialog({
                 </Select>
               </FormControl>
             </Grid>
+            <Grid item md={12} xs={12}>
+              <FormControl className={classes.formControl}>
+                <TextField
+                  fullWidth
+                  helperText="Enter Incident Number"
+                  label="incident"
+                  name="incident"
+                  onChange={handleChange}
+                  // required
+                  value={values.incident}
+                  variant="outlined"
+                />
+              </FormControl>
+            </Grid>
           </Grid>
         </CardContent>
         <Divider />
