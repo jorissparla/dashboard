@@ -42,6 +42,7 @@ const Box2 = styled.div`
   color: ${props => (props.textcolor ? props.textcolor : 'black')};
   background-color: ${props => (props.color ? props.color : 'lightblue')};
   border-radius: 4px;
+  flex-wrap: wrap;
 `;
 
 const Article = styled.article`
@@ -99,7 +100,7 @@ const Image = ({ image, fullname, size = 32 }) => {
     .join('')
     .toUpperCase();
   if (image) {
-    return <Avatar src={image.replace('http://','https://')} size={size} />;
+    return <Avatar src={image.replace('http://', 'https://')} size={size} />;
   } else {
     return (
       <StyledInitials color="#1da1f2" size={size}>

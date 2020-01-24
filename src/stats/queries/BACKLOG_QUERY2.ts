@@ -18,8 +18,10 @@ export const QUERY_BACKLOG = gql`
     escalated
     Deployment
     severityname
+    productline
     Tenant
     release
+    region
     releasename
     service_restored_date
   }

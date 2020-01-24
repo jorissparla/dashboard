@@ -37,6 +37,7 @@ import OtherTeamsChartContainer from './charts/OtherTeamChartsContainer';
 import MaintenanceVersionList from './pages/MaintenanceVersionList';
 import TenantViewList from 'tenants/TenantViewList';
 import SymptomsPage from 'pages/Symptoms';
+import Stats from './pages/Stats';
 
 import Playground from './pages/Playground';
 const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
@@ -98,6 +99,7 @@ const TestUser = () => <UserProfileComponent />;
 function AppRoutes(props) {
   //  const user = props.context;
   const { user } = React.useContext(UserContext);
+  console.log('routes', props);
 
   return (
     <Switch>
@@ -107,16 +109,10 @@ function AppRoutes(props) {
       <Route exact path="/tenantlogs" component={TenantLogsWithData} />
       <Route exact path="/tenantview" component={TenantViewList} />
       <Route exact path="/details/:id" component={Details} />
-      <AuthRoute
-        exact
-        path="/statsmain"
-        component={StatsPage}
-        user={user}
-        history={props.history}
-      />
-      <AuthRoute exact path="/statstest" component={Basic} user={user} history={props.history} />
+      <Route exact path="/stats" component={Stats} user={user} history={props.history} />
+      <AuthRoute exact path="/statstest" component={Stats} user={user} history={props.history} />
       <AuthRoute exact path="/profilepage" component={ProfilePage} user={user} />
-      <AuthRoute exact path="/mywork" component={StatsMain} user={user} history={props.history} />
+      <AuthRoute exact path="/mywork" component={Stats} user={user} history={props.history} />
       <AuthRoute
         exact
         path="/myworkparams"

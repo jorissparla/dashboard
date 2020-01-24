@@ -91,13 +91,16 @@ export const BacklogTable = ({
   classes,
   title,
   description = title,
+  filterValues = { owner: '', products: ['LN'] },
   includeservicerestored = false
 }: any) => {
   //
-
+  console.log(filterValues);
   const initialValue = { name: '', direction: '' };
   const { actionNeeded } = useContext(SelectionContext);
   const [sorted, setSorted] = useState(initialValue);
+
+  const { owner, products } = filterValues;
 
   function sortUp(leftSide: any, rightSide: any) {
     const col = 'customername';
@@ -137,12 +140,18 @@ export const BacklogTable = ({
       setSorted({ name: column, direction: 'asc' });
     }
   }
+
+  mydata = owner ? mydata.filter((o: any) => o.owner === owner) : mydata;
+  mydata = products.length ? mydata.filter((o: any) => products.includes(o.productline)) : mydata;
+  if (!mydata.length) {
+    return <div></div>;
+  }
   return (
     <ExpansionPanel TransitionProps={{ unmountOnExit: true }}>
       <ExpansionPanelSummary className={classes.summary} expandIcon={<ExpandMoreIcon />}>
         <div className={classes.spaceapart}>
           <Typography variant="h6" className={classes.heading}>
-            {title}({backlog.length})
+            {title}({mydata.length})
           </Typography>
           <div>{description}</div>
         </div>
