@@ -1,14 +1,13 @@
-import React from 'react';
-import gql from 'graphql-tag';
-import { graphql } from 'react-apollo';
-import { withRouter } from 'react-router';
-import { Link } from 'react-router-dom';
-import { Formik } from 'formik';
-import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import { Formik } from 'formik';
+import gql from 'graphql-tag';
+import React from 'react';
+import { useMutation } from 'react-apollo';
+import { Link, useHistory } from 'react-router-dom';
 import { UserContext } from '../globalState/UserProvider';
 
 export const MUTATION_SIGNIN = gql`
@@ -30,7 +29,7 @@ export const MUTATION_SIGNIN = gql`
   }
 `;
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
   button: {
     margin: theme.spacing(1),
     width: 150,
@@ -60,11 +59,12 @@ const styles = theme => ({
     flexDirection: 'column',
     marginTop: 30
   }
-});
+}));
 
 const Signin = props => {
   const userContext = React.useContext(UserContext);
   const { user, login } = userContext;
+  let history = useHistory();
   // const setLogin = (user, token) => {
   //   localStorage.setItem('id', user.id);
   //   localStorage.setItem('token', token || 'PIN01');
@@ -74,7 +74,8 @@ const Signin = props => {
   //   localStorage.setItem('role', user.role);
   // };
 
-  const { classes } = props;
+  const classes = useStyles();
+  const [signinMutation] = useMutation(MUTATION_SIGNIN);
   return (
     <Formik
       initialValues={{
@@ -95,12 +96,14 @@ const Signin = props => {
         return errors;
       }}
       onSubmit={async (values, { setFieldError /* setValues and other goodies */ }) => {
-        await login(values.email, values.password);
+        const input = values;
+        const result = await signinMutation({ variables: { input } });
+        // await login(values.email, values.password);
 
-        if (user) {
-          await props.history.push('/');
+        if (user || result.data.signinUser.token) {
+          await history.push('/');
         } else {
-          setFieldError('password', 'Invalid email or password');
+          setFieldError('password', 'Invalid email address or password');
         }
       }}
     >
@@ -161,4 +164,4 @@ const Signin = props => {
   );
 };
 
-export default graphql(MUTATION_SIGNIN, { name: 'data' })(withStyles(styles)(withRouter(Signin)));
+export default Signin;

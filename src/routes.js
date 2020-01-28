@@ -99,7 +99,6 @@ const TestUser = () => <UserProfileComponent />;
 function AppRoutes(props) {
   //  const user = props.context;
   const { user } = React.useContext(UserContext);
-  console.log('routes', props);
 
   return (
     <Switch>

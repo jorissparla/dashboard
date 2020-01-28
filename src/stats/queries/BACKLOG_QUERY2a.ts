@@ -1,14 +1,14 @@
 import gql from 'graphql-tag';
 
 export const QUERY_LAST_UPDATED = gql`
-  query QUERY_LAST_UPDATED{
+  query QUERY_LAST_UPDATED {
     mostRecentUpdate
   }
 `;
 
 export const QUERY_BACKLOG = gql`
   # Write your query or mutation here
-  fragment backlogfragment on DWH {
+  fragment backlogfragmentData on DWH {
     incident
     incidentcreated
     owner
@@ -39,16 +39,16 @@ export const QUERY_BACKLOG = gql`
   ) {
     mostRecentUpdate
     critical_cloud: backlog(orderBy: DAYS_DESC, severityname: CRITICAL, deployment: "CLOUD") {
-      ...backlogfragment
+      ...backlogfragmentData
     }
     all_cloud: backlog(orderBy: DAYS_DESC, deployment: "CLOUD", statusFilter: BACKLOG) {
-      ...backlogfragment
+      ...backlogfragmentData
     }
     all_active_cloud: backlog(orderBy: DAYS_DESC, deployment: "CLOUD", statusFilter: ACTIVE) {
-      ...backlogfragment
+      ...backlogfragmentData
     }
     on_hold_cloud: backlog(orderBy: DAYS_DESC, status: "On Hold By Customer", deployment: "CLOUD") {
-      ...backlogfragment
+      ...backlogfragmentData
     }
     solution_proposed_cloud: backlog(
       orderBy: DAYS_DESC
@@ -56,7 +56,7 @@ export const QUERY_BACKLOG = gql`
       status: "Solution Proposed"
       since: $N_SOLUTIONPROPOSED
     ) {
-      ...backlogfragment
+      ...backlogfragmentData
     }
     awaiting_customer_cloud: backlog(
       orderBy: DAYS_DESC
@@ -64,7 +64,7 @@ export const QUERY_BACKLOG = gql`
       status: "Awaiting Customer"
       since: $C_AWAITINGCUSTOMER
     ) {
-      ...backlogfragment
+      ...backlogfragmentData
     }
     researching_cloud: backlog(
       orderBy: DAYS_DESC
@@ -72,7 +72,7 @@ export const QUERY_BACKLOG = gql`
       status: "Researching"
       since: $C_RESEARCHING
     ) {
-      ...backlogfragment
+      ...backlogfragmentData
     }
     awaiting_infor_cloud: backlog(
       orderBy: DAYS_DESC
@@ -80,10 +80,10 @@ export const QUERY_BACKLOG = gql`
       status: "Awaiting Infor"
       since: $C_AWAITINGINFOR
     ) {
-      ...backlogfragment
+      ...backlogfragmentData
     }
     callbacks_cloud: backlog(orderBy: DAYS_DESC, deployment: "CLOUD", status: "Awaiting Infor") {
-      ...backlogfragment
+      ...backlogfragmentData
     }
     major_impact_cloud: backlog(
       orderBy: DAYS_DESC
@@ -94,7 +94,7 @@ export const QUERY_BACKLOG = gql`
 
       statusFilter: BACKLOG
     ) {
-      ...backlogfragment
+      ...backlogfragmentData
     }
     major_impact_cloud2: backlog(
       orderBy: DAYS_DESC
@@ -106,7 +106,7 @@ export const QUERY_BACKLOG = gql`
       aging: 5
       statusFilter: BACKLOG
     ) {
-      ...backlogfragment
+      ...backlogfragmentData
     }
 
     aging_cloud: backlog(
@@ -116,7 +116,7 @@ export const QUERY_BACKLOG = gql`
 
       statusFilter: BACKLOG
     ) {
-      ...backlogfragment
+      ...backlogfragmentData
     }
     aging_dev_cloud: backlog(
       orderBy: CREATED_ASC
@@ -124,28 +124,28 @@ export const QUERY_BACKLOG = gql`
       aging: 90
       statusFilter: DEVELOPMENT
     ) {
-      ...backlogfragment
+      ...backlogfragmentData
     }
     new_cloud: backlog(orderBy: CREATED_ASC, deployment: "CLOUD", status: "New", since: $C_NEW) {
-      ...backlogfragment
+      ...backlogfragmentData
     }
     critical: backlog(orderBy: DAYS_DESC, severityname: CRITICAL, productFilters: $products) {
-      ...backlogfragment
+      ...backlogfragmentData
     }
     cloudops: backlog(orderBy: DAYS_DESC, statusFilter: CLOUDOPS, productFilters: $products) {
-      ...backlogfragment
+      ...backlogfragmentData
     }
     active: backlog(orderBy: DAYS_DESC, statusFilter: ACTIVE, productFilters: $products) {
-      ...backlogfragment
+      ...backlogfragmentData
     }
     all: backlog(orderBy: DAYS_DESC, statusFilter: BACKLOG, productFilters: $products) {
-      ...backlogfragment
+      ...backlogfragmentData
     }
     infor: backlog(orderBy: DAYS_DESC, statusFilter: BACKLOG, customer: "Infor") {
-      ...backlogfragment
+      ...backlogfragmentData
     }
     on_hold: backlog(orderBy: DAYS_DESC, status: "On Hold By Customer") {
-      ...backlogfragment
+      ...backlogfragmentData
     }
     solution_proposed: backlog(
       orderBy: DAYS_DESC
@@ -153,7 +153,7 @@ export const QUERY_BACKLOG = gql`
       status: "Solution Proposed"
       since: $N_SOLUTIONPROPOSED
     ) {
-      ...backlogfragment
+      ...backlogfragmentData
     }
     awaiting_customer: backlog(
       orderBy: DAYS_DESC
@@ -161,7 +161,7 @@ export const QUERY_BACKLOG = gql`
       status: "Awaiting Customer"
       since: $N_AWAITINGCUSTOMER
     ) {
-      ...backlogfragment
+      ...backlogfragmentData
     }
     researching: backlog(
       orderBy: DAYS_DESC
@@ -169,7 +169,7 @@ export const QUERY_BACKLOG = gql`
       status: "Researching"
       since: $N_RESEARCHING
     ) {
-      ...backlogfragment
+      ...backlogfragmentData
     }
     awaiting_infor: backlog(
       orderBy: DAYS_DESC
@@ -177,10 +177,10 @@ export const QUERY_BACKLOG = gql`
       status: "Awaiting Infor"
       since: $N_AWAITINGINFOR
     ) {
-      ...backlogfragment
+      ...backlogfragmentData
     }
     callbacks: backlog(orderBy: DAYS_DESC, deployment: "ALL", status: "Awaiting Infor") {
-      ...backlogfragment
+      ...backlogfragmentData
     }
     major_impact: backlog(
       orderBy: DAYS_DESC
@@ -191,7 +191,7 @@ export const QUERY_BACKLOG = gql`
 
       statusFilter: BACKLOG
     ) {
-      ...backlogfragment
+      ...backlogfragmentData
     }
     major_impact2: backlog(
       orderBy: DAYS_DESC
@@ -203,7 +203,7 @@ export const QUERY_BACKLOG = gql`
       aging: 5
       statusFilter: BACKLOG
     ) {
-      ...backlogfragment
+      ...backlogfragmentData
     }
 
     aging: backlog(
@@ -213,7 +213,7 @@ export const QUERY_BACKLOG = gql`
 
       statusFilter: BACKLOG
     ) {
-      ...backlogfragment
+      ...backlogfragmentData
     }
     aging_dev: backlog(
       orderBy: CREATED_ASC
@@ -222,10 +222,10 @@ export const QUERY_BACKLOG = gql`
 
       statusFilter: DEVELOPMENT
     ) {
-      ...backlogfragment
+      ...backlogfragmentData
     }
     new: backlog(orderBy: CREATED_ASC, deployment: "ALL", status: "New", since: $N_NEW) {
-      ...backlogfragment
+      ...backlogfragmentData
     }
   }
 `;
