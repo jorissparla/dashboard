@@ -1,12 +1,13 @@
 import { Typography } from '@material-ui/core';
 import { BlockNew } from 'elements/Block';
 import { usePersistentState } from 'hooks';
-import React from 'react';
-import { useQuery } from 'react-apollo';
+import React, { useEffect } from 'react';
+import { useQuery, useMutation } from 'react-apollo';
 import Spinner from 'utils/spinner';
 import MaintenanceWizard from 'wizard/MaintenanceWizard';
 import { OtherField } from 'wizard/OtherField';
-import { ALL_MAINTENANCE_QUERY } from '../wizard/Queries';
+import { ALL_MAINTENANCE_QUERY, CREATE_AUDIT_MUTATION_WIZARD } from '../wizard/Queries';
+import { DashBoardContext } from 'globalState/Provider';
 
 // const ALL_VERSIONS = gql`
 //   query ALL_VERSIONS {
@@ -22,10 +23,24 @@ const VersionList = () => {
     'INFOR LN 10.7'
   );
 
+  const dbctx = React.useContext(DashBoardContext);
+
+  const [createAudit] = useMutation(CREATE_AUDIT_MUTATION_WIZARD);
+
   const [faqIsVisible, setShowFAQ] = usePersistentState('FAQ', false);
 
   const { data, loading } = useQuery(ALL_MAINTENANCE_QUERY);
   let versions = [];
+
+  useEffect(() => {
+    const input = {
+      username: dbctx.fullname,
+      page: '/maintenancewizard',
+      linkid: null,
+      type: 'MaintenanceWizard'
+    };
+    createAudit({ variables: { input } }).then(console.log);
+  }, []);
 
   if (loading || !data) return <Spinner />;
   const { allMaintenance, maintenanceFAQ } = data;

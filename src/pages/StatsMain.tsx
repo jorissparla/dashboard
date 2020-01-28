@@ -300,12 +300,21 @@ export const StatsMain: React.FC<Props> = ({
             title="Critical/Major Not restored"
             description="All Incidents with a severity of 'Production Outage / Major Impact' without a restored date"
           />
+
           <BacklogTable
             filterValues={filterValues}
             classes={classes}
             backlog={multitenant}
             title="Multitenant"
             description="All Incidents open for our MT customers not updated > 7 days"
+          />
+          <BacklogTable
+            filterValues={filterValues}
+            classes={classes}
+            backlog={extIncidentsWithDev}
+            additionalFields={['releasename', 'extended', 'daysSinceCreated']}
+            title="Extended Maintenance Check- Awaiting Development"
+            description="All Awaiting Development Incidents open for customers logging on a version that has extended maintenance"
           />
           <BacklogTable
             filterValues={filterValues}
@@ -322,14 +331,6 @@ export const StatsMain: React.FC<Props> = ({
             additionalFields={['releasename', 'extended', 'daysSinceCreated']}
             title="Extended Maintenance Check"
             description="All Incidents open for customers logging on a version that has extended maintenance"
-          />
-          <BacklogTable
-            filterValues={filterValues}
-            classes={classes}
-            backlog={extIncidentsWithDev}
-            additionalFields={['releasename', 'extended', 'daysSinceCreated']}
-            title="Extended Maintenance Check- Awaiting Development"
-            description="All Awaiting Development Incidents open for customers logging on a version that has extended maintenance"
           />
           <BacklogTable
             filterValues={filterValues}

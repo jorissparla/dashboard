@@ -93,3 +93,16 @@ export const MUTATION_UPDATE_MAINTENANCE_FAQ = gql`
     }
   }
 `;
+
+export const CREATE_AUDIT_MUTATION_WIZARD = gql`
+  mutation CREATE_AUDIT_MUTATION_WIZARD($input: InputAuditType) {
+    createAudit(input: $input) {
+      id
+      page
+      linkid
+      username
+      type
+      createdate
+    }
+  }
+`;

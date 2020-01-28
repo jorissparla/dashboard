@@ -102,8 +102,12 @@ const Stats = props => {
   const [date] = useState(format(Date.now(), 'yyyy-MM-dd'));
   const classes = useStyles();
   console.log('rendering data');
-
+  let enableIt = false;
   const isValidSuperUser = ['Admin', 'PO'].some(u => (user ? u === user.role : false));
+  if (user && user.permissions) {
+    enableIt = user.permissions.some(({ permission }) => permission === 'STATS');
+  }
+  console.log('user permissions', user, enableIt);
   const { loading, data } = useQuery(QUERY_BACKLOG, {
     variables: {
       date,
@@ -118,7 +122,12 @@ const Stats = props => {
   console.log('🤷‍♂️🤷‍♂️', user);
   const owner = user ? (user.fullname ? user.fullname : '') : '';
   return (
-    <StatsPage data={data} classes={classes} isValidSuperUser={isValidSuperUser} owner={owner} />
+    <StatsPage
+      data={data}
+      classes={classes}
+      isValidSuperUser={isValidSuperUser || enableIt}
+      owner={owner}
+    />
   );
 };
 

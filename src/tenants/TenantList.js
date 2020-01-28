@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 import _ from 'lodash';
 import Modal from 'ModalWrapper';
 import React, { useContext, useState, useEffect } from 'react';
-import { useQuery } from 'react-apollo';
+import { useQuery, useMutation } from 'react-apollo';
 import { animated, config, useSpring } from 'react-spring';
 import styled from 'styled-components';
 import Spinner from 'utils/spinner';
@@ -24,6 +24,7 @@ import { TenantCard } from './TenantCard';
 import TenantCustomerDetailsForm from './TenantCustomerDetailsForm';
 import FancyFilter from './new/FancyFilter';
 import Loader from './../utils/Loader';
+import { CREATE_AUDIT_MUTATION } from './Query';
 import './tenants.css';
 
 const styles = theme => ({
@@ -80,7 +81,7 @@ const styles = theme => ({
     minWidth: '28%',
     margin: 10,
     background: 'transparent',
-    backgroundImage: 'linear-gradient(to right bottom,rgba(29, 161, 242, 0.4), white)',
+    backgroundImage: 'linear-gradient(to right bottom,rgba(29, 161, 242, 0.4), white)'
   },
   chip: {
     margin: theme.spacing(1),
@@ -366,6 +367,8 @@ const inforTenantByFarm = (tenants, farm) =>
 const TenantList = props => {
   const dbctx = React.useContext(DashBoardContext);
   let role = dbctx && dbctx.role ? dbctx.role : 'Guest';
+  console.log(dbctx.fullname);
+  const [createAudit] = useMutation(CREATE_AUDIT_MUTATION);
   const { setFields, fields, clearFields } = useContext(FilterFieldContext);
   const { classes } = props;
   const [searchText, setSearchText] = useState('');
@@ -398,6 +401,11 @@ const TenantList = props => {
     console.log('👍👍👍👍👍');
     // clearFields();
   }
+
+  useEffect(() => {
+    const input = { username: dbctx.fullname, page: '/tenantlist', linkid: null, type: 'TenantList' };
+    createAudit({ variables: {input} }).then(console.log);
+  }, []);
 
   useEffect(() => {
     clearFields();
