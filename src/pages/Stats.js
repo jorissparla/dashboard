@@ -134,7 +134,8 @@ const Stats = props => {
 const StatsPage = withRouter(({ data, classes, owner, isValidSuperUser, history }) => {
   const mostRecentUpdate = data ? data.mostRecentUpdate : new Date().toLocaleTimeString();
   const [selectedProducts] = usePersistentState('selectedproducts', ['LN']);
-  const [filterValues, setFilterValues] = useState({ owner, products: selectedProducts });
+  const [region] = usePersistentState('region', 'EMEA');
+  const [filterValues, setFilterValues] = useState({ owner, products: selectedProducts, region });
   function handleChange(values) {
     setFilterValues(values);
   }

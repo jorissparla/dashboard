@@ -24,6 +24,9 @@ export const ALL_MAINTENANCE_QUERY = gql`
     maintenanceFAQ {
       id
       text
+      text2
+      text3
+      localizations
     }
   }
 `;
@@ -33,6 +36,9 @@ export const MAINTENANCE_FAQ_QUERY = gql`
     maintenanceFAQ {
       id
       text
+      text2
+      text3
+      localizations
     }
   }
 `;
@@ -90,6 +96,9 @@ export const MUTATION_UPDATE_MAINTENANCE_FAQ = gql`
     updateMaintenanceFAQ(input: $input) {
       id
       text
+      text2
+      text3
+      localizations
     }
   }
 `;

@@ -63,7 +63,7 @@ const useStyles = makeStyles(theme => ({
 
 const Signin = props => {
   const userContext = React.useContext(UserContext);
-  const { user, login } = userContext;
+  const { user } = userContext;
   let history = useHistory();
   // const setLogin = (user, token) => {
   //   localStorage.setItem('id', user.id);

@@ -94,3 +94,11 @@ export const MUTATION_REMOVE_PRODUCT_CONTACT = gql`
     }
   }
 `;
+export const CLOUD_READINESS_QUERY = gql`
+  query CLOUD_READINESS_QUERY {
+    cloudreadiness {
+      maintext
+      id
+    }
+  }
+`;

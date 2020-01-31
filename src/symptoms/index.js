@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import Spinner from 'utils/spinner';
 import { useLocalStorage } from './../utils/useLocalStorage';
 import AddSymptomRequestForm from './AddSymptomRequestForm';
+import EditSymptomRequestForm from './EditSymptomRequestForm';
 import { ALL_SYMPTOMS } from './Queries';
 import './symptoms.css';
 import SymptomsRequestTable from './SymptomsRequestsTable';
@@ -66,6 +67,9 @@ const SymptomsPage = () => {
   const [searchText, setSearchText] = useState('');
   const [maxNr, setMaxNr] = useLocalStorage('maxnrsymptoms', 10);
   const [isOpen, setisOpened] = useState(false);
+  const [isEdit, setisEdit] = useState(false);
+  const [selectedRow, setSelectedRow] = useState(null);
+  const [defaultValues, setDefaultValues] = useState(null);
 
   useEffect(() => {
     if (data) setAllSymptoms(data.symptoms);
@@ -77,6 +81,26 @@ const SymptomsPage = () => {
     setSymptoms(found.slice(0, maxNr || 10));
   }, [searchText, maxNr, loading, allSymptoms]);
   if (loading) return <Spinner />;
+
+  function fetchData(id) {
+    const results = data.symptoms.find(row => row.id === id);
+    return results;
+  }
+  function handleAdd() {
+    setisEdit(false);
+    setisOpened(true);
+  }
+  function handleEdit() {
+    setisEdit(true);
+    setisOpened(true);
+  }
+
+  function handleSelect(value) {
+    setSelectedRow(value);
+    const results = data.symptoms.find(row => row.id === value);
+    console.log(results);
+    setDefaultValues(results);
+  }
   return (
     <div className="parent">
       <div className="div4">
@@ -115,10 +139,15 @@ const SymptomsPage = () => {
       </div>
       <div className="div1">
         <h3>Pending Requests</h3>
-        <Button variant="outlined" color="primary" onClick={() => setisOpened(true)}>
+        <Button variant="contained" color="primary" onClick={handleAdd} style={{ margin: 5 }}>
           Add
         </Button>
-        <SymptomsRequestTable data={data.symptomrequests} />
+        {selectedRow && (
+          <Button variant="contained" color="secondary" onClick={handleEdit} style={{ margin: 5 }}>
+            Edit {selectedRow}
+          </Button>
+        )}
+        <SymptomsRequestTable data={data.symptomrequests} onSelected={handleSelect} />
 
         <Modal
           onClose={() => setisOpened(false)}
@@ -128,10 +157,18 @@ const SymptomsPage = () => {
             timeout: 500
           }}
         >
-          <AddSymptomRequestForm
-            onClose={() => setisOpened(false)}
-            categories={data.symptom_categories}
-          />
+          {isEdit ? (
+            <EditSymptomRequestForm
+              onClose={() => setisOpened(false)}
+              categories={data.symptom_categories}
+              defaultValues={defaultValues}
+            />
+          ) : (
+            <AddSymptomRequestForm
+              onClose={() => setisOpened(false)}
+              categories={data.symptom_categories}
+            />
+          )}
         </Modal>
       </div>
     </div>

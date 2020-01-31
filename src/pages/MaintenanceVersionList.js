@@ -28,6 +28,10 @@ const VersionList = () => {
   const [createAudit] = useMutation(CREATE_AUDIT_MUTATION_WIZARD);
 
   const [faqIsVisible, setShowFAQ] = usePersistentState('FAQ', false);
+  const [localizationsIsVisible, setLocalizationsVisible] = usePersistentState(
+    'Localizations',
+    false
+  );
 
   const { data, loading } = useQuery(ALL_MAINTENANCE_QUERY);
   let versions = [];
@@ -44,6 +48,7 @@ const VersionList = () => {
 
   if (loading || !data) return <Spinner />;
   const { allMaintenance, maintenanceFAQ } = data;
+  console.log('MaintenanceFAQ', maintenanceFAQ);
 
   function handleChange(version) {
     console.log('version', version);
@@ -53,6 +58,11 @@ const VersionList = () => {
   }
   function handleShowFAQ() {
     setShowFAQ(true);
+    setLocalizationsVisible(false);
+  }
+  function handleShowLocalizations() {
+    setShowFAQ(false);
+    setLocalizationsVisible(true);
   }
 
   let activeVersions = allMaintenance.filter(v => v.version === selectedVersion);
@@ -72,6 +82,13 @@ const VersionList = () => {
       <BlockNew key={'43242sfsf343^'} selected={faqIsVisible} onClick={() => handleShowFAQ()}>
         FAQ
       </BlockNew>
+      <BlockNew
+        key={'45552sfsf343^'}
+        selected={localizationsIsVisible}
+        onClick={() => handleShowLocalizations()}
+      >
+        Localizations
+      </BlockNew>
       {/* {JSON.stringify(selectedVersion, null, 2)} */}
       {activeVersions.length > 0 ? (
         faqIsVisible ? (
@@ -80,6 +97,14 @@ const VersionList = () => {
             name="text"
             label="Frequently asked Questions"
             text={maintenanceFAQ.text}
+            bigger={true}
+            id={maintenanceFAQ.id}
+          ></OtherField>
+        ) : localizationsIsVisible ? (
+          <OtherField
+            name="localizations"
+            label="Localizations"
+            text={maintenanceFAQ.localizations}
             bigger={true}
             id={maintenanceFAQ.id}
           ></OtherField>

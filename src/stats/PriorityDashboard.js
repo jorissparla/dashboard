@@ -6,6 +6,7 @@ import Spinner from '../utils/spinner';
 import { QUERY_PRIORITY_BACKLOG } from './queries/BACKLOG_QUERY2a';
 import { StyledInitials } from 'styles';
 import { format } from './../utils/format';
+import { usePersistentState } from 'hooks';
 
 const Container = styled.div`
   margin-top: -1rem;
@@ -111,34 +112,47 @@ const Image = ({ image, fullname, size = 32 }) => {
 };
 
 export default function PriorityDashboard() {
+  const [region, setRegion] = usePersistentState('region', 'EMEA');
   const { loading, data } = useQuery(QUERY_PRIORITY_BACKLOG, {
     variables: { products: ['LN'] }
   });
   if (loading) {
     return <Spinner />;
   }
+
   const { all, active, mostRecentUpdate, accounts } = data;
-  const escalated = active.filter(item => item.escalated !== 0);
-  const sev2 = active
-    .filter(item => item.severity === 3)
-    .map(item => {
-      const account = accounts.find(account => account.fullname === item.owner);
-      let image;
-      if (account) {
-        image = account.image || '';
-      }
-      return { ...item, image };
-    });
-  const sev1 = all
-    .filter(item => item.severity === 4)
-    .map(item => {
-      const account = accounts.find(account => account.fullname === item.owner);
-      let image;
-      if (account) {
-        image = account.image || '';
-      }
-      return { ...item, image };
-    });
+  function filterByRegion(incidents) {
+    if (incidents && incidents.length) {
+      console.log(incidents);
+      return incidents.filter(inc => inc.owner_region === region);
+    } else return incidents;
+  }
+  console.log(all.length, filterByRegion(all.length));
+  const escalated = filterByRegion(active.filter(item => item.escalated !== 0));
+  const sev2 = filterByRegion(
+    active
+      .filter(item => item.severity === 3)
+      .map(item => {
+        const account = accounts.find(account => account.fullname === item.owner);
+        let image;
+        if (account) {
+          image = account.image || '';
+        }
+        return { ...item, image };
+      })
+  );
+  const sev1 = filterByRegion(
+    all
+      .filter(item => item.severity === 4)
+      .map(item => {
+        const account = accounts.find(account => account.fullname === item.owner);
+        let image;
+        if (account) {
+          image = account.image || '';
+        }
+        return { ...item, image };
+      })
+  );
   console.log(sev1);
   return (
     <>
@@ -161,7 +175,7 @@ export default function PriorityDashboard() {
         </Box>
         <Box color="green">
           <SubP space>Support Backlog</SubP>
-          <P>{all.length}</P>
+          <P>{filterByRegion(all).length}</P>
           <SubP>Incidents</SubP>
         </Box>
       </Container>

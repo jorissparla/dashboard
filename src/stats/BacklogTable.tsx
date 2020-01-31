@@ -91,7 +91,7 @@ export const BacklogTable = ({
   classes,
   title,
   description = title,
-  filterValues = { owner: '', products: ['LN'] },
+  filterValues = { owner: '', products: ['LN'], region: 'EMEA' },
   includeservicerestored = false
 }: any) => {
   //
@@ -100,7 +100,7 @@ export const BacklogTable = ({
   const { actionNeeded } = useContext(SelectionContext);
   const [sorted, setSorted] = useState(initialValue);
 
-  const { owner, products } = filterValues;
+  const { owner, products, region } = filterValues;
 
   function sortUp(leftSide: any, rightSide: any) {
     const col = 'customername';
@@ -143,6 +143,7 @@ export const BacklogTable = ({
 
   mydata = owner ? mydata.filter((o: any) => o.owner === owner) : mydata;
   mydata = products.length ? mydata.filter((o: any) => products.includes(o.productline)) : mydata;
+  mydata = region ? mydata.filter((o: any) => o.owner_region === region) : mydata;
   if (!mydata.length) {
     return <div></div>;
   }

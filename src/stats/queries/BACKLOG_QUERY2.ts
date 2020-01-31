@@ -6,6 +6,7 @@ export const QUERY_BACKLOG = gql`
     incident
     incidentcreated
     owner
+    owner_region
     customername
     customerid
     summary

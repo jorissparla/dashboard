@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router';
-import { Route, Switch } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import Basic from 'stats/Basic';
 import { TenantLogsWithData } from 'tenants/TenantLogs';
 import RequireAuth, { AuthRoute, EnhancedRoute } from './auth/require_auth';
@@ -40,6 +40,7 @@ import SymptomsPage from 'pages/Symptoms';
 import Stats from './pages/Stats';
 
 import Playground from './pages/Playground';
+import CloudReadiness from './pages/CloudReadiness';
 const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
 
 //const StatsMain = React.lazy(() => import('./kudos/kudolistcomponentnew'));
@@ -83,7 +84,7 @@ const SupportCardAdd = DynamicImport(() => import('./supportcard/SupportCardAdd'
 const CourseDashboard = DynamicImport(() => import('./pages/CourseDashboard'));
 const StudentListContainer = DynamicImport(() => import('./courses/StudentTableNew'));
 const StudentView = DynamicImport(() => import('./courses/StudentView'));
-
+/*  */
 const AddPlannedCourseRequest = DynamicImport(() => import('./courses/AddPlannedCourseRequest'));
 const TenantPage = DynamicImport(() => import('./pages/TenantPage'));
 const DonutChart = DynamicImport(() => import('./charts/DonutChart'));
@@ -99,54 +100,38 @@ const TestUser = () => <UserProfileComponent />;
 function AppRoutes(props) {
   //  const user = props.context;
   const { user } = React.useContext(UserContext);
+  const history = useHistory();
 
   return (
     <Switch>
       <Route exact path="/playground" component={Playground} />
+      <Route exact path="/cloudreadiness" component={CloudReadiness} />
       <Route exact path="/symptoms" component={SymptomsPage} />
       <Route exact path="/maintenancewizard" component={MaintenanceVersionList} />
       <Route exact path="/tenantlogs" component={TenantLogsWithData} />
       <Route exact path="/tenantview" component={TenantViewList} />
       <Route exact path="/details/:id" component={Details} />
-      <Route exact path="/stats" component={Stats} user={user} history={props.history} />
-      <AuthRoute exact path="/statstest" component={Stats} user={user} history={props.history} />
+      <Route exact path="/stats" component={Stats} user={user} history={history} />
+      <AuthRoute exact path="/statstest" component={Stats} user={user} history={history} />
       <AuthRoute exact path="/profilepage" component={ProfilePage} user={user} />
-      <AuthRoute exact path="/mywork" component={Stats} user={user} history={props.history} />
-      <AuthRoute
-        exact
-        path="/myworkparams"
-        component={Parameters}
-        user={user}
-        history={props.history}
-      />
+      <AuthRoute exact path="/mywork" component={Stats} user={user} history={history} />
+      <AuthRoute exact path="/myworkparams" component={Parameters} user={user} history={history} />
       <Route exact path="/" component={DashBoardContainer} user={user} />
       <Route exact path="/newspage" component={NewsPage} />
-      <Route
-        exact
-        path="/cloudsuites"
-        component={CloudSuites}
-        history={props.history}
-        user={user}
-      />
+      <Route exact path="/cloudsuites" component={CloudSuites} history={history} user={user} />
       <Route
         exact
         path="/cloudsuites/product/:id"
         component={Product}
-        history={props.history}
+        history={history}
         user={user}
       />
-      <Route
-        exact
-        path="/priority"
-        component={PriorityDashboard}
-        history={props.history}
-        user={user}
-      />
+      <Route exact path="/priority" component={PriorityDashboard} history={history} user={user} />
       <Route
         exact
         path="/cloudsuite/:id"
         component={CloudSuitePage}
-        history={props.history}
+        history={history}
         user={user}
       />
       <EnhancedRoute
@@ -341,4 +326,4 @@ function AppRoutes(props) {
   );
 }
 
-export default withRouter(withDashBoardContext(AppRoutes));
+export default withDashBoardContext(AppRoutes);

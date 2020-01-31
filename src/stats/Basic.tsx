@@ -80,7 +80,7 @@ export const styles = (theme: any) => ({
 });
 
 const query = gql`
-  {
+  query BasicQuery{
     backlog(productFilters: ["LN", "PLM", "Protean", "InforOS"]) {
       incident
       incidentcreated

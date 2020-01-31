@@ -17,7 +17,11 @@ import { makeStyles } from '@material-ui/styles';
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { useMutation } from 'react-apollo';
-import { ADD_SYMPTOM_REQUEST_MUTATION, ALL_SYMPTOMS } from './Queries';
+import {
+  ADD_SYMPTOM_REQUEST_MUTATION,
+  ALL_SYMPTOMS,
+  UPDATE_SYMPTOM_REQUEST_MUTATION
+} from './Queries';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -53,20 +57,27 @@ export default function FormDialog({
     incident: ''
   });
 
+  console.log('defaults', defaultValues);
   useEffect(() => {
-    if (categories.length > 0) {
+    if (defaultValues) {
+      setValues(defaultValues);
+      console.log('defaultValues', defaultValues);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (categories.length > 0 && !defaultValues) {
       setValues({ symptom_category: categories[0].symptom_category });
     }
   }, [categories]);
-  console.log(categories);
   const classes = useStyles();
-  const [addSymptomRequest] = useMutation(ADD_SYMPTOM_REQUEST_MUTATION);
+  const [updateSymptomRequest] = useMutation(UPDATE_SYMPTOM_REQUEST_MUTATION);
 
   const handleSubmit = async event => {
     event.preventDefault();
     // console.log('Submitted values', values);
-    const result = await addSymptomRequest({
-      variables: { input: values },
+    const result = await updateSymptomRequest({
+      variables: { where: { id: values.id }, input: values },
       refetchQueries: [{ query: ALL_SYMPTOMS }]
     });
     console.log('The result is ', result);
@@ -75,7 +86,6 @@ export default function FormDialog({
   };
   const handleChange = event => {
     event.persist();
-    console.log(event.target);
     setValues({
       ...values,
       [event.target.name]: event.target.value
@@ -84,7 +94,7 @@ export default function FormDialog({
   return (
     <Card {...rest} className={clsx(classes.root, className)}>
       <form onSubmit={handleSubmit}>
-        <CardHeader title={`Add Symptom`} />
+        <CardHeader title={`Edit Symptom ${values.id}`} />
         <Divider />
         <CardContent>
           <Grid container spacing={4}>
@@ -109,7 +119,6 @@ export default function FormDialog({
                   name="symptom_category"
                 >
                   {categories.map(({ id, symptom_category }) => {
-                    console.log(symptom_category);
                     return (
                       <MenuItem key={id} value={symptom_category}>
                         {symptom_category}

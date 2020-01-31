@@ -21,3 +21,8 @@
 .div5 {
   grid-area: 1 / 2 / 2 / 3;
 }
+
+.button-edit {
+  margin-right: 10px;
+  margin-bottom: 5px;
+}

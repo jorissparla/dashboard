@@ -107,7 +107,7 @@ export const SelectionForm = ({
         // disabled={!criteriaChange}
         variant="contained"
         onClick={() => {
-          onChange({ owner: ownerVal, products: selectedProducts });
+          onChange({ owner: ownerVal, products: selectedProducts, region: region });
         }}
       >
         Search

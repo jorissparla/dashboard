@@ -29,11 +29,12 @@ export const OtherField = ({
     setValue(e.target.value);
   }
   // console.log('refresh', name, value, activeVersion);
-  console.log('Field', name, text, value);
+  // console.log('Field', name, text, value);
 
   useEffect(() => {
     setValue(text);
-  }, [text]);
+    console.log('change', text);
+  }, [text, name]);
 
   return (
     <Paper

@@ -37,7 +37,7 @@ const StyledTableCell = withStyles(theme => ({
   }
 }))(TableCell);
 
-export default function SimpleTable({ data }) {
+export default function SimpleTable({ data, onSelected = v => console.log(v) }) {
   const classes = useStyles();
   const { role = 'Guest' } = React.useContext(DashBoardContext);
   const { user } = React.useContext(UserContext);
@@ -49,8 +49,10 @@ export default function SimpleTable({ data }) {
   function handleChange(value) {
     if (selected === value) {
       setSelected(null);
+      onSelected(null);
     } else {
       setSelected(value);
+      onSelected(value);
     }
   }
 

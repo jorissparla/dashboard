@@ -12,6 +12,7 @@ export const QUERY_BACKLOG = gql`
     incident
     incidentcreated
     owner
+    owner_region
     customername
     summary
     title
@@ -246,6 +247,7 @@ export const QUERY_PRIORITY_BACKLOG = gql`
     severity
     severityname
     lastupdated
+    owner_region
   }
   query QUERY_PRIORITY_BACKLOG($products: [String]) {
     mostRecentUpdate

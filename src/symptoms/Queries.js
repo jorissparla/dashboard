@@ -33,6 +33,21 @@ export const ADD_SYMPTOM_REQUEST_MUTATION = gql`
     }
   }
 `;
+export const UPDATE_SYMPTOM_REQUEST_MUTATION = gql`
+  mutation UPDATE_SYMPTOM_REQUEST_MUTATION(
+    $where: SymptomRequestWhereInput!
+    $input: SymptomRequestInput
+  ) {
+    updateSymptomRequest(where: $where, input: $input) {
+      id
+      symptom
+      symptom_category
+      incident
+      status
+      updatedAt
+    }
+  }
+`;
 
 export const DELETE_SYMPTOM_REQUEST_MUTATION = gql`
   mutation DELETE_SYMPTOM_REQUEST_MUTATION($where: SymptomRequestWhereInput!) {
