@@ -2,18 +2,25 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter, Redirect } from 'react-router';
 import { Route } from 'react-router-dom';
+import { useContext } from 'react';
+import { UserContext } from './../globalState/UserProvider';
 
-export const AuthRoute = ({ component: Component, allowed, user, xuser, ...rest }) => {
+export const AuthRoute = ({ component: Component, allowed, xuser, ...rest }) => {
+  const { user } = useContext(UserContext);
+  // console.log('the user is ', user);
+
+  // const { authenticated } = user;
+
   return (
     <Route
       {...rest}
       render={props => {
-        console.log('🙈🙈🙈🙈', props, { user }, { xuser });
+        // console.log('🙈🙈🙈🙈', props, { user }, { xuser });
         if (!user) {
           return <Redirect to={{ pathname: '/' }} />;
         }
-        console.log('allowed', allowed, user);
-        console.dir(user);
+        // console.log('allowed', allowed, user);
+        // console.dir(user);
         if (!allowed || allowed.indexOf(user.role || []) >= 0) {
           return <Component {...props} user={user} />;
         } else {

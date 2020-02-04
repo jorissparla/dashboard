@@ -95,7 +95,7 @@ export const BacklogTable = ({
   includeservicerestored = false
 }: any) => {
   //
-  console.log(filterValues);
+  // console.log(filterValues);
   const initialValue = { name: '', direction: '' };
   const { actionNeeded } = useContext(SelectionContext);
   const [sorted, setSorted] = useState(initialValue);

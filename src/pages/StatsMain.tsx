@@ -243,7 +243,7 @@ export const StatsMain: React.FC<Props> = ({
   ];
 
   const [loading, setLoading] = useState(true);
-  console.log('👍', owner);
+  // console.log('👍', owner);
   React.useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 2000);
     return () => {};

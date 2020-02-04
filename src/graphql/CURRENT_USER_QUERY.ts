@@ -8,6 +8,7 @@ export const CURRENT_USER_QUERY = gql`
       image
       role
       team
+      region
       permissions {
         permission
       }

@@ -95,19 +95,19 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 export const PRODUCT_LIST = ['LN', 'PLM', 'Protean', 'InforOS', 'Xpert', 'Swan', 'AutoConnect'];
-export const REGION_LIST = ['APJ', 'EMEA', 'NA'];
+export const REGION_LIST = ['APJ', 'EMEA', 'NA', 'LA'];
 
 const Stats = props => {
   const { user } = React.useContext(UserContext);
   const [date] = useState(format(Date.now(), 'yyyy-MM-dd'));
   const classes = useStyles();
-  console.log('rendering data');
+  // console.log('rendering data');
   let enableIt = false;
   const isValidSuperUser = ['Admin', 'PO'].some(u => (user ? u === user.role : false));
   if (user && user.permissions) {
     enableIt = user.permissions.some(({ permission }) => permission === 'STATS');
   }
-  console.log('user permissions', user, enableIt);
+  // console.log('user permissions', user, enableIt);
   const { loading, data } = useQuery(QUERY_BACKLOG, {
     variables: {
       date,
@@ -119,7 +119,7 @@ const Stats = props => {
   });
 
   if (loading) return <NiceSpinner />;
-  console.log('🤷‍♂️🤷‍♂️', user);
+  // console.log('🤷‍♂️🤷‍♂️', user);
   const owner = user ? (user.fullname ? user.fullname : '') : '';
   return (
     <StatsPage

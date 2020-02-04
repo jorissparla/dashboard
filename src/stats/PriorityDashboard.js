@@ -123,7 +123,7 @@ export default function PriorityDashboard() {
   const { all, active, mostRecentUpdate, accounts } = data;
   function filterByRegion(incidents) {
     if (incidents && incidents.length) {
-      console.log(incidents);
+      // console.log(incidents);
       return incidents.filter(inc => inc.owner_region === region);
     } else return incidents;
   }
@@ -153,7 +153,7 @@ export default function PriorityDashboard() {
         return { ...item, image };
       })
   );
-  console.log(sev1);
+  // console.log(sev1);
   return (
     <>
       <H2>Priority Dashboard - updated {mostRecentUpdate}</H2>

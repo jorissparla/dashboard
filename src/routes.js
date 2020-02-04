@@ -15,7 +15,7 @@ import PlannedCourseAdd from './courses/PlannedCourseAdd';
 import PlannedCourseEdit from './courses/PlannedCourseEdit';
 import PlannedCourses from './courses/PlannedCoursesNew';
 import DynamicImport from './DynamicImport';
-import { withDashBoardContext } from './globalState/Provider';
+import { withDashBoardContext, DashBoardContext } from './globalState/Provider';
 import { UserContext } from './globalState/UserProvider';
 import NewsItemContainer from './news/newsitemcontainer';
 import CloudSuites, { CloudSuitePage } from './pages/CloudSuites';
@@ -41,6 +41,7 @@ import Stats from './pages/Stats';
 
 import Playground from './pages/Playground';
 import CloudReadiness from './pages/CloudReadiness';
+import NiceSpinner from 'utils/NiceSpinner';
 const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
 
 //const StatsMain = React.lazy(() => import('./kudos/kudolistcomponentnew'));
@@ -99,9 +100,11 @@ const TestUser = () => <UserProfileComponent />;
 
 function AppRoutes(props) {
   //  const user = props.context;
-  const { user } = React.useContext(UserContext);
+  const { user, loading } = React.useContext(UserContext);
+  const context = React.useContext(DashBoardContext);
+  // console.log('rendering', context, loading);
   const history = useHistory();
-
+  if (loading) return <NiceSpinner />;
   return (
     <Switch>
       <Route exact path="/playground" component={Playground} />

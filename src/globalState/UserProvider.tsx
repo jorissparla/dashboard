@@ -20,6 +20,7 @@ enum Empty {
 
 interface UserContextType {
   user: User | null;
+  loading?: Boolean;
   login: (email: string, password: string) => void;
   logout: () => void;
   isAuthenticated: boolean;
@@ -27,6 +28,7 @@ interface UserContextType {
 }
 export const UserContext = React.createContext<UserContextType>({
   user: null,
+  loading: true,
   login: () => null,
   logout: () => null,
   isAuthenticated: false,
@@ -37,14 +39,18 @@ export const UserContext = React.createContext<UserContextType>({
 
 export const UserContextProvider: React.FC<{ children: any }> = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     client.query({ query: CURRENT_USER_QUERY }).then(result => {
+      // console.log('the result is', result);
+
       if (!result.data.me) {
         setUser(null);
       } else {
         setUser(result.data.me);
         // console.log('LOgged In successfully, ', result.data.me);
       }
+      setLoading(false);
     });
   }, []);
   function isAuthenticated() {
@@ -80,7 +86,7 @@ export const UserContextProvider: React.FC<{ children: any }> = ({ children }) =
   }
   return (
     <UserContext.Provider
-      value={{ user, login, logout, isAuthenticated: isAuthenticated(), hasPermissions }}
+      value={{ user, login, logout, loading, isAuthenticated: isAuthenticated(), hasPermissions }}
     >
       {children}
     </UserContext.Provider>
