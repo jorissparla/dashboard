@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useSpring, animated, config } from 'react-spring';
 
 const BadgeWrapper = styled.span`
   display: inline-block;

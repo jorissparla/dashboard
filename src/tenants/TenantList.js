@@ -231,7 +231,7 @@ function TenantNote() {
 }
 
 export const FilterForm = ({ setSearchText, flip }) => {
-  const { setFields, fields, clearFields } = useContext(FilterFieldContext);
+  const { setFields, clearFields } = useContext(FilterFieldContext);
 
   const [customer, setCustomer] = useState('');
   const [farm, setFarm] = useState('');
@@ -308,18 +308,18 @@ export const FilterForm = ({ setSearchText, flip }) => {
   );
 };
 
-const tenantsByCustomer = (tenants, searchText) =>
-  _.chain(tenants)
-    .filter(o => o.customer.name !== 'Infor')
-    .filter(
-      t =>
-        t.customer.name.toUpperCase().includes(searchText.toUpperCase()) ||
-        t.name.toUpperCase().includes(searchText.toUpperCase()) ||
-        t.version.toUpperCase().includes(searchText.toUpperCase())
-    )
-    .sortBy(o => o.customer.name)
+// const tenantsByCustomer = (tenants, searchText) =>
+//   _.chain(tenants)
+//     .filter(o => o.customer.name !== 'Infor')
+//     .filter(
+//       t =>
+//         t.customer.name.toUpperCase().includes(searchText.toUpperCase()) ||
+//         t.name.toUpperCase().includes(searchText.toUpperCase()) ||
+//         t.version.toUpperCase().includes(searchText.toUpperCase())
+//     )
+//     .sortBy(o => o.customer.name)
 
-    .value();
+//     .value();
 const filterTenantsByCustomerFarmVersion = (tenants, fields, details) => {
   // console.log("filterTenantsByCustomerFarmVersion", fields);
   // const { customer = '', farm = '', version = '' } = fields;
@@ -360,7 +360,7 @@ const filterTenantsByCustomerFarmVersion = (tenants, fields, details) => {
   } else return retValue;
 };
 
-const inforTenant = tenants => tenants.filter(o => o.customer.name === 'Infor');
+// const inforTenant = tenants => tenants.filter(o => o.customer.name === 'Infor');
 const inforTenantByFarm = (tenants, farm) =>
   tenants.filter(o => o.customer.name === 'Infor' && o.farm === farm);
 
@@ -369,9 +369,9 @@ const TenantList = props => {
   let role = dbctx && dbctx.role ? dbctx.role : 'Guest';
   console.log(dbctx.fullname);
   const [createAudit] = useMutation(CREATE_AUDIT_MUTATION);
-  const { setFields, fields, clearFields } = useContext(FilterFieldContext);
+  const { setFields, fields } = useContext(FilterFieldContext);
   const { classes } = props;
-  const [searchText, setSearchText] = useState('');
+  const [setSearchText] = useState('');
   const [showFilterDialog, toggleShowFilterDialog] = useState(false);
   const [showLogs, setShowLogs] = useState(false);
   const [isShowingDetails, toggleShowDetails] = useState(false);
@@ -403,13 +403,15 @@ const TenantList = props => {
   }
 
   useEffect(() => {
-    const input = { username: dbctx.fullname, page: '/tenantlist', linkid: null, type: 'TenantList' };
-    createAudit({ variables: {input} }).then(console.log);
-  }, []);
+    const input = {
+      username: dbctx.fullname,
+      page: '/tenantlist',
+      linkid: null,
+      type: 'TenantList'
+    };
+    createAudit({ variables: { input } }).then(console.log);
+  }, [createAudit, dbctx.fullname]);
 
-  useEffect(() => {
-    clearFields();
-  }, [happyPress]);
   const { data, loading } = useQuery(ALL_TENANTS);
   const { data: details, loading: detailsloading } = useQuery(QUERY_ALL_TENANT_DETAILS);
 
@@ -539,9 +541,9 @@ export const TenantListHeader = ({
   );
   // const filteredTenants = filterTenantsByCustomerFarmVersion(tenants, fields, flip);
   // console.log("filterTenants", filteredTenants);
-  const uniqueCustomers = tenants
-    .map(({ farm, customer: { name } }) => name)
-    .filter((ten, i, all) => all.indexOf(ten) === i);
+  // const uniqueCustomers = tenants
+  //   .map(({ farm, customer: { name } }) => name)
+  //   .filter((ten, i, all) => all.indexOf(ten) === i);
   const listOfCustomerAndFarm = tenants
     .filter(item => item.customerid !== null)
     .map(({ customerid, farm }) => ({ customerid, farm }));
@@ -552,7 +554,7 @@ export const TenantListHeader = ({
   ).filter(t => t.live === 1);
   const totalCustomers = Object.entries(custFarms).reduce((count, item) => count + item[1], 0);
 
-  const nrOfLiveCustomers = uniqueCustomers.filter(t => t.live).length;
+  // const nrOfLiveCustomers = uniqueCustomers.filter(t => t.live).length;
   const totalTenants = Object.entries(tenantcustomersWithFarm).reduce(
     (count, item) => count + item[1],
     0
@@ -638,16 +640,15 @@ export const TenantListHeader = ({
 function useMultiKeyPress() {
   const [keysPressed, setKeyPressed] = useState(new Set([]));
 
-  function downHandler({ key }) {
-    setKeyPressed(keysPressed.add(key));
-  }
-
-  const upHandler = ({ key }) => {
-    keysPressed.delete(key);
-    setKeyPressed(keysPressed);
-  };
-
   useEffect(() => {
+    function downHandler({ key }) {
+      setKeyPressed(keysPressed.add(key));
+    }
+
+    const upHandler = ({ key }) => {
+      keysPressed.delete(key);
+      setKeyPressed(keysPressed);
+    };
     window.addEventListener('keydown', downHandler);
     window.addEventListener('keyup', upHandler);
     return () => {
@@ -659,36 +660,36 @@ function useMultiKeyPress() {
   return keysPressed;
 }
 
-function useKeyPress(targetKey) {
-  // State for keeping track of whether key is pressed
-  const [keyPressed, setKeyPressed] = useState(false);
+// function useKeyPress(targetKey) {
+//   // State for keeping track of whether key is pressed
+//   const [keyPressed, setKeyPressed] = useState(false);
 
-  // If pressed key is our target key then set to true
-  function downHandler({ key }) {
-    if (key === targetKey) {
-      setKeyPressed(true);
-    }
-  }
+//   // If pressed key is our target key then set to true
+//   function downHandler({ key }) {
+//     if (key === targetKey) {
+//       setKeyPressed(true);
+//     }
+//   }
 
-  // If released key is our target key then set to false
-  const upHandler = ({ key }) => {
-    if (key === targetKey) {
-      setKeyPressed(false);
-    }
-  };
+//   // If released key is our target key then set to false
+//   const upHandler = ({ key }) => {
+//     if (key === targetKey) {
+//       setKeyPressed(false);
+//     }
+//   };
 
-  // Add event listeners
-  useEffect(() => {
-    window.addEventListener('keydown', downHandler);
-    window.addEventListener('keyup', upHandler);
-    // Remove event listeners on cleanup
-    return () => {
-      window.removeEventListener('keydown', downHandler);
-      window.removeEventListener('keyup', upHandler);
-    };
-  }, []); // Empty array ensures that effect is only run on mount and unmount
+//   // Add event listeners
+//   useEffect(() => {
+//     window.addEventListener('keydown', downHandler);
+//     window.addEventListener('keyup', upHandler);
+//     // Remove event listeners on cleanup
+//     return () => {
+//       window.removeEventListener('keydown', downHandler);
+//       window.removeEventListener('keyup', upHandler);
+//     };
+//   }, []); // Empty array ensures that effect is only run on mount and unmount
 
-  return keyPressed;
-}
+//   return keyPressed;
+// }
 
 export default withStyles(styles)(TenantList);

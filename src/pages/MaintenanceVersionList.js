@@ -44,7 +44,7 @@ const VersionList = () => {
       type: 'MaintenanceWizard'
     };
     createAudit({ variables: { input } }).then(console.log);
-  }, []);
+  }, [createAudit, dbctx.fullname]);
 
   if (loading || !data) return <Spinner />;
   const { allMaintenance, maintenanceFAQ } = data;

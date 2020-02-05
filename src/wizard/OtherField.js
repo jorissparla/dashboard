@@ -24,10 +24,7 @@ export const OtherField = ({
   // const { activeVersion } = React.useContext(RootContext);
   const [isOpen, setisOpened] = React.useState(false);
   const [value, setValue] = React.useState(text);
-  const [editable, toggleEdit] = React.useState(edit);
-  function handleChange(e) {
-    setValue(e.target.value);
-  }
+
   // console.log('refresh', name, value, activeVersion);
   // console.log('Field', name, text, value);
 

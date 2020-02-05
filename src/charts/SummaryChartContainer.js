@@ -1,6 +1,6 @@
 import React from 'react';
 import gql from 'graphql-tag';
-import { Query, useQuery } from 'react-apollo';
+import { useQuery } from 'react-apollo';
 import SummaryChart from './NewSummaryChart';
 import shortid from 'shortid';
 

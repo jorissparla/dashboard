@@ -1,9 +1,8 @@
 import gql from 'graphql-tag';
-import React, { useState } from 'react';
-import { useQuery } from 'react-apollo';
+import { usePersistentState } from 'hooks';
+import React from 'react';
 import styled from 'styled-components';
 import { Block } from '../elements/Block';
-import { usePersistentState } from 'hooks';
 const List = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -17,15 +16,6 @@ const BrowseTitle = styled.h5`
   text-transform: uppercase;
   font-weight: 900;
   font-size: 1.2rem;
-`;
-
-const CategoryQuery = gql`
-  query CategoryQuery {
-    categories {
-      id
-      name
-    }
-  }
 `;
 
 export const ProductsTab = ({ onChange, onSave }) => {

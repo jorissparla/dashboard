@@ -27,6 +27,11 @@ const OtherTeamChartsContainer = ({ color = '#ffb74d' }) => {
   const { data, loading } = useQuery(QUERY_HISTORY_OTHER);
 
   if (loading) return <Spinner />;
+
+  const { AutoConnect } = data;
+  let filteredAutoConnect = AutoConnect.filter(item => item.owner_region === 'EMEA');
+  console.log(filteredAutoConnect);
+
   console.log(data);
   if (!data) return <div>No data</div>;
   const historyXpert = transform(data.Xpert, 'xpert').filter(o => o.odate > '20191001');
@@ -35,7 +40,7 @@ const OtherTeamChartsContainer = ({ color = '#ffb74d' }) => {
   const historyAuto = transform(data.AutoConnect, 'auto');
   const historyAuto2 = transform2(data.AutoConnect, 'age');
   console.log(historyAuto2);
-  const historyPLM = transform(data.PLM, 'plm');
+  // const historyPLM = transform(data.PLM, 'plm');
   // return <div>Data</div>;
   return (
     <Grid container>

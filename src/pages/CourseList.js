@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import gql from 'graphql-tag';
-import { graphql, useQuery } from 'react-apollo';
+import { useQuery } from 'react-apollo';
 import { withRouter } from 'react-router';
 import styled from 'styled-components';
 import _ from 'lodash';

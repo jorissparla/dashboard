@@ -17,17 +17,17 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user }) => {
   // }
   const email = user.email;
   const fullname = user.fullname;
-  const [mutation] = useMutation(UPDATE_PROFILE_PIC_MUTATION);
+  const [updateProfilePicture] = useMutation(UPDATE_PROFILE_PIC_MUTATION);
   const [image, setImage] = React.useState(user.image);
   React.useEffect(() => {
-    const result = mutation({
+    updateProfilePicture({
       variables: { where: { email, fullname }, image }
     });
-  }, [image]);
+  }, [image, email, fullname, updateProfilePicture]);
 
   React.useEffect(() => {
     userCtx.setProfilePic(image);
-  }, [image]);
+  }, [image, userCtx]);
   return (
     <div>
       <h2>Update your profile picture</h2>

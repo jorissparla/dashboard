@@ -1,9 +1,7 @@
-import React from 'react';
-import { Redirect } from 'react-router-dom';
+import { Grid } from '@material-ui/core';
 import { makeStyles } from '@material-ui/styles';
 import clsx from 'clsx';
-import PropTypes from 'prop-types';
-import { Grid } from '@material-ui/core';
+import React from 'react';
 import Header from './Header';
 import Members from './Members';
 
@@ -27,7 +25,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const Details = props => {
-  const { match, history, className } = props;
+  const { className } = props;
   const classes = useStyles();
 
   return (

@@ -1,20 +1,14 @@
-import React, { useContext, useState } from 'react';
-import { withStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import { usePersistentState } from 'hooks';
+import React, { useState } from 'react';
 import { useQuery } from 'react-apollo';
-import { SelectionContext } from '../globalState/SelectionContext';
-import { BacklogTable } from '../stats/BacklogTable';
-import { ListFavoritePersons } from '../stats/FavoritesPersons';
+import { withRouter } from 'react-router-dom';
+import { SelectionForm } from '../stats/NewSelectionForm';
 import { QUERY_BACKLOG } from '../stats/queries/BACKLOG_QUERY2';
 import { format } from '../utils/format';
-import Spinner from '../utils/spinner';
-import { useLocalStorage } from '../utils/useLocalStorage';
 import { UserContext } from './../globalState/UserProvider';
-import { useParams, StatsMain, styles } from './StatsMain';
-import { SelectionForm } from '../stats/NewSelectionForm';
-import { makeStyles } from '@material-ui/core/styles';
-import { withRouter } from 'react-router-dom';
-import { usePersistentState } from 'hooks';
 import NiceSpinner from './../utils/NiceSpinner';
+import { StatsMain, useParams } from './StatsMain';
 const useStyles = makeStyles(theme => ({
   root: theme.mixins.gutters({
     marginTop: theme.spacing(3),

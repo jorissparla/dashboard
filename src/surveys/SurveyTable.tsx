@@ -1,11 +1,10 @@
-import * as React from "react";
-import { Typography, withStyles } from "@material-ui/core";
+import Avatar from "@material-ui/core/Avatar";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import Avatar from "@material-ui/core/Avatar";
+import * as React from "react";
 // import Rating from 'material-ui-rating';
 import { initials } from "../utils/misc";
 import { format } from "./../utils/format";

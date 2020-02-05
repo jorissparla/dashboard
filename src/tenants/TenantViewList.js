@@ -19,14 +19,12 @@ import { usePersistentState } from 'hooks';
 import _ from 'lodash';
 import React, { useContext, useState } from 'react';
 import { useQuery } from 'react-apollo';
-import styled from 'styled-components';
 import Spinner from 'utils/spinner';
-import { FilterFieldContext } from '../globalState/FilterContext';
 import { DashBoardContext } from '../globalState/Provider';
 import Loader from '../utils/Loader';
 import EditTenantDetails from './details/components/EditTenant';
 import { TenantChecked } from './TenantChecked';
-import { ALL_TENANTS, QUERY_ALL_TENANT_DETAILS } from './TenantQueries';
+import { QUERY_ALL_TENANT_DETAILS } from './TenantQueries';
 import { Main } from './TenantStyledElements';
 
 const useStyles = makeStyles(theme => ({
@@ -92,33 +90,33 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const filterTenantsByCustomerFarmVersion = (tenants, fields, details, sortField = 'customer') => {
-  let filteredCustomerNames = null;
+// const filterTenantsByCustomerFarmVersion = (tenants, fields, details, sortField = 'customer') => {
+//   let filteredCustomerNames = null;
 
-  if (details) {
-    filteredCustomerNames = details;
-  }
-  console.log({ filteredCustomerNames });
+//   if (details) {
+//     filteredCustomerNames = details;
+//   }
+//   console.log({ filteredCustomerNames });
 
-  let retValue = _.chain(tenants).filter(o => o.customer.name !== 'Infor');
+//   let retValue = _.chain(tenants).filter(o => o.customer.name !== 'Infor');
 
-  if (sortField === 'customer') {
-    retValue = _.chain(tenants)
-      .filter(o => o.customer.name !== 'Infor')
-      .sortBy(o => o.customer.name)
-      .value();
-  } else {
-    retValue = _.chain(tenants)
-      .filter(o => o.customer.name !== 'Infor')
-      .sortBy(o => o.csm);
-  }
+//   if (sortField === 'customer') {
+//     retValue = _.chain(tenants)
+//       .filter(o => o.customer.name !== 'Infor')
+//       .sortBy(o => o.customer.name)
+//       .value();
+//   } else {
+//     retValue = _.chain(tenants)
+//       .filter(o => o.customer.name !== 'Infor')
+//       .sortBy(o => o.csm);
+//   }
 
-  if (details) {
-    return retValue.filter(t =>
-      filteredCustomerNames.find(cn => cn.customer.name === t.customer.name)
-    );
-  } else return retValue;
-};
+//   if (details) {
+//     return retValue.filter(t =>
+//       filteredCustomerNames.find(cn => cn.customer.name === t.customer.name)
+//     );
+//   } else return retValue;
+// };
 
 const TableHeaderCell = withStyles(theme => ({
   head: {
@@ -136,7 +134,6 @@ const TableHeaderCell = withStyles(theme => ({
 const TenantViewList = props => {
   const dbctx = React.useContext(DashBoardContext);
   let role = dbctx && dbctx.role ? dbctx.role : 'Guest';
-  // const { setFields, fields } = useContext(FilterFieldContext);
 
   const [showNotReady, setShowNotReady] = usePersistentState('not ready', false);
   const [sortedByCSM, setSortedByCSM] = usePersistentState('sort by csm', false);
@@ -145,7 +142,6 @@ const TenantViewList = props => {
   // const [showFilterDialog, toggleShowFilterDialog] = useState(false);
   const [isShowingDetails, toggleShowDetails] = useState(false);
 
-  // const { data, loading } = useQuery(ALL_TENANTS);
   const { data: details, loading: detailsloading } = useQuery(QUERY_ALL_TENANT_DETAILS);
 
   if (detailsloading) {
@@ -157,13 +153,7 @@ const TenantViewList = props => {
   // }
   // const { tenants, updatestatus, tenantlogs } = data;
   const { tenantcustomerdetails } = details;
-  // let fields = null;
-  // let filteredTenants = filterTenantsByCustomerFarmVersion(
-  //   tenants,
-  //   fields,
-  //   details.tenantcustomerdetails,
-  //   sortedByCSM ? 'csm' : 'customer'
-  // );
+
   let allCustomers;
   if (!sortedByCSM) {
     allCustomers = _.chain(tenantcustomerdetails)

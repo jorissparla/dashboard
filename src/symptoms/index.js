@@ -82,10 +82,10 @@ const SymptomsPage = () => {
   }, [searchText, maxNr, loading, allSymptoms]);
   if (loading) return <Spinner />;
 
-  function fetchData(id) {
-    const results = data.symptoms.find(row => row.id === id);
-    return results;
-  }
+  // function fetchData(id) {
+  //   const results = data.symptoms.find(row => row.id === id);
+  //   return results;
+  // }
   function handleAdd() {
     setisEdit(false);
     setisOpened(true);

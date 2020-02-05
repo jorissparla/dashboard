@@ -87,9 +87,9 @@ function Product({ match, history }) {
 
   const { loading, data } = useQuery(QUERY_SINGLE_PRODUCT, { variables: { id } });
   if (loading) return <Spinner />;
-  const {
-    cloudsuiteproduct: { name, description, content: contentVal }
-  } = data;
+  // const {
+  //   cloudsuiteproduct: { name, description, content: contentVal }
+  // } = data;
 
   return (
     <ProductForm product={data.cloudsuiteproduct} history={history} classes={classes}></ProductForm>
