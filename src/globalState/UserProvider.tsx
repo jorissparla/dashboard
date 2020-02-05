@@ -52,7 +52,7 @@ export const UserContextProvider: React.FC<{ children: any }> = ({ children }) =
       }
       setLoading(false);
     });
-  }, []);
+  }, [user]);
   function isAuthenticated() {
     return user ? true : false;
   }
@@ -66,16 +66,18 @@ export const UserContextProvider: React.FC<{ children: any }> = ({ children }) =
     } else return false;
   }
   async function login(email: string, password: string) {
-    client
-      .mutate({ mutation: MUTATION_SIGNIN, variables: { input: { email, password } } })
-      .then(result => {
-        if (result.data.signinUser.user) {
-          setUser(result.data.signinUser.user);
-        } else {
-          setUser(null);
-        }
-        return result;
-      });
+    const result = await client.mutate({
+      mutation: MUTATION_SIGNIN,
+      variables: { input: { email, password } }
+    });
+
+    console.log('login result', result);
+    if (result.data.signinUser.user) {
+      setUser(result.data.signinUser.user);
+    } else {
+      setUser(null);
+    }
+    return result;
   }
   async function logout() {
     client.mutate({ mutation: MUTATION_SIGNOUT }).then(result => {

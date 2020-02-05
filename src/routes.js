@@ -35,9 +35,11 @@ import { Parameters } from './stats/Parameters';
 import PriorityDashboard from './stats/PriorityDashboard';
 import Details from './tenants/details/index';
 import TestLogin from './TestLogin';
+// import Test
 import { UserProfileComponent } from './User';
 import UserPermissions from './UserPermissions';
 import { AddVideo, EditVideo } from './videos/VideoOperations';
+import Test from './pages/Test';
 
 const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
 
@@ -170,12 +172,12 @@ function AppRoutes(props) {
       />
       <Route exact path="/image_convert" component={ImageConverter} />
       <Route exact path="/anniversaries" component={AnniversaryList} />
-      <AuthRoute
+      <Route
         allowed={['Admin', 'PO', 'SU', 'Guest', 'Chat']}
         user={user}
         exact
         path="/test"
-        component={TestUser}
+        component={Test}
       />
       <EnhancedRoute
         editors={['Admin', 'PO', 'SU']}

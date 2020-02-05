@@ -63,7 +63,7 @@ const useStyles = makeStyles(theme => ({
 
 const Signin = props => {
   const userContext = React.useContext(UserContext);
-  const { user } = userContext;
+  const { user, login } = userContext;
   let history = useHistory();
   // const setLogin = (user, token) => {
   //   localStorage.setItem('id', user.id);
@@ -97,8 +97,9 @@ const Signin = props => {
       }}
       onSubmit={async (values, { setFieldError /* setValues and other goodies */ }) => {
         const input = values;
-        const result = await signinMutation({ variables: { input } });
-        // await login(values.email, values.password);
+        let result = await signinMutation({ variables: { input } });
+        result = await login(values.email, values.password);
+        console.log('result', result);
 
         if (user || result.data.signinUser.token) {
           await history.push('/');
