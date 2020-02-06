@@ -100,6 +100,7 @@ const TestUser = () => <UserProfileComponent />;
 function AppRoutes(props) {
   //  const user = props.context;
   const { user, loading } = React.useContext(UserContext);
+  console.log('user', user);
   // const context = React.useContext(DashBoardContext);
   // console.log('rendering', context, loading);
   const history = useHistory();
@@ -172,7 +173,7 @@ function AppRoutes(props) {
       />
       <Route exact path="/image_convert" component={ImageConverter} />
       <Route exact path="/anniversaries" component={AnniversaryList} />
-      <Route
+      <EnhancedRoute
         allowed={['Admin', 'PO', 'SU', 'Guest', 'Chat']}
         user={user}
         exact
