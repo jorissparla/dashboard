@@ -211,7 +211,7 @@ export const TenantCard = ({
               Edit
             </Button>
           )}
-          {isAdmin && (
+          {isTenantEditor && (
             <Mutation mutation={MUTATION_MARK_LIVE}>
               {mutate => (
                 <Switch
