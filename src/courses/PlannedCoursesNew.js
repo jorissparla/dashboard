@@ -74,8 +74,8 @@ const styles = theme => ({
   }
 });
 
-export const PLANNEDCOURSE_DELETE_MUTATION = gql`
-  mutation PLANNEDCOURSE_DELETE_MUTATION($input: InputPlannedCourseType) {
+export const PLANNEDCOURSE_DELETE_MUTATION_1 = gql`
+  mutation PLANNEDCOURSE_DELETE_MUTATION_1($input: InputPlannedCourseType) {
     deletePlannedCourse(input: $input) {
       text
     }

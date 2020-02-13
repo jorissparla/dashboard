@@ -41,7 +41,6 @@ export default function SimpleTable({ data, onSelected = v => console.log(v) }) 
   const classes = useStyles();
   const { role = 'Guest' } = React.useContext(DashBoardContext);
   const { user } = React.useContext(UserContext);
-  console.log('user', user);
   const [selected, setSelected] = useState(null);
 
   const [deleteSymptomRequest] = useMutation(DELETE_SYMPTOM_REQUEST_MUTATION);
@@ -52,7 +51,8 @@ export default function SimpleTable({ data, onSelected = v => console.log(v) }) 
       onSelected(null);
     } else {
       setSelected(value);
-      onSelected(value);
+      onSelected(data.find(row => row.id === value));
+      // onSelected(value);
     }
   }
 
@@ -62,7 +62,6 @@ export default function SimpleTable({ data, onSelected = v => console.log(v) }) 
       refetchQueries: [{ query: ALL_SYMPTOMS }]
     });
   }
-  console.log('value', selected);
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} size="small" aria-label="simple table">

@@ -58,7 +58,6 @@ export default function FormDialog({
       setValues({ symptom_category: categories[0].symptom_category });
     }
   }, [categories]);
-  console.log(categories);
   const classes = useStyles();
   const [addSymptomRequest] = useMutation(ADD_SYMPTOM_REQUEST_MUTATION);
 
@@ -69,13 +68,11 @@ export default function FormDialog({
       variables: { input: values },
       refetchQueries: [{ query: ALL_SYMPTOMS }]
     });
-    console.log('The result is ', result);
     onClose();
     // setOpenSnackbar(true);
   };
   const handleChange = event => {
     event.persist();
-    console.log(event.target);
     setValues({
       ...values,
       [event.target.name]: event.target.value

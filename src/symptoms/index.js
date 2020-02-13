@@ -91,15 +91,16 @@ const SymptomsPage = () => {
     setisOpened(true);
   }
   function handleEdit() {
+    console.log('defaultValues', defaultValues);
     setisEdit(true);
     setisOpened(true);
   }
 
   function handleSelect(value) {
-    setSelectedRow(value);
+    setSelectedRow(value.id);
     const results = data.symptoms.find(row => row.id === value);
     console.log(results);
-    setDefaultValues(results);
+    setDefaultValues(value);
   }
   return (
     <div className="parent">

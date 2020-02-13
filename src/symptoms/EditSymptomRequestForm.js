@@ -22,6 +22,7 @@ import {
   ALL_SYMPTOMS,
   UPDATE_SYMPTOM_REQUEST_MUTATION
 } from './Queries';
+import { createPortal } from 'react-dom';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -57,7 +58,7 @@ export default function FormDialog({
     incident: ''
   });
 
-  console.log('defaults', defaultValues);
+  console.log('Rendering defaultsEdit', values, defaultValues);
   useEffect(() => {
     if (defaultValues) {
       setValues(defaultValues);
@@ -76,8 +77,12 @@ export default function FormDialog({
   const handleSubmit = async event => {
     event.preventDefault();
     // console.log('Submitted values', values);
+    const { symptom, incident, symptom_category, status } = values;
+    const input = { symptom, incident, symptom_category, status };
+
+    console.log(input);
     const result = await updateSymptomRequest({
-      variables: { where: { id: values.id }, input: values },
+      variables: { where: { id: values.id }, input },
       refetchQueries: [{ query: ALL_SYMPTOMS }]
     });
     console.log('The result is ', result);
@@ -90,6 +95,7 @@ export default function FormDialog({
       ...values,
       [event.target.name]: event.target.value
     });
+    console.log('Editing values', event.target.name, event.target.value);
   };
   return (
     <Card {...rest} className={clsx(classes.root, className)}>
@@ -146,13 +152,23 @@ export default function FormDialog({
         </CardContent>
         <Divider />
         <CardActions>
-          <Button className={classes.saveButton} type="submit" variant="contained" color="primary">
-            Save Changes
-          </Button>
-          <Button onClick={onClose} size="small">
-            <CloseIcon className={classes.buttonIcon} />
-            Close
-          </Button>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <Button
+              className={classes.saveButton}
+              type="submit"
+              variant="contained"
+              color="primary"
+            >
+              Save Changes
+            </Button>
+            <Button className={classes.saveButton} variant="contained" color="#000">
+              Delete
+            </Button>
+            <Button onClick={onClose} size="small">
+              <CloseIcon className={classes.buttonIcon} />
+              Close
+            </Button>
+          </div>
         </CardActions>
       </form>
       {/* <SuccessSnackbar onClose={handleSnackbarClose} open={openSnackbar} /> */}
