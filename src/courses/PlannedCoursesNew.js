@@ -74,8 +74,8 @@ const styles = theme => ({
   }
 });
 
-export const PLANNEDCOURSE_DELETE_MUTATION = gql`
-  mutation PLANNEDCOURSE_DELETE_MUTATION($input: InputPlannedCourseType) {
+export const PLANNEDCOURSE_DELETE_MUTATION_1 = gql`
+  mutation PLANNEDCOURSE_DELETE_MUTATION_1($input: InputPlannedCourseType) {
     deletePlannedCourse(input: $input) {
       text
     }
@@ -118,7 +118,7 @@ export const QUERY_SCHEDULED_COURSES = gql`
 `;
 
 const fmtDate = val => {
-  console.log(val, format(Date.parse(val), 'ddd, DD MMM YYYY'));
+  console.log(val, format(Date.parse(val), 'EEE, dd MMM yyyy'));
   return LongFormattedDate(val);
 };
 

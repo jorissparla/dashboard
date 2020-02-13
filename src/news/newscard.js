@@ -1,15 +1,18 @@
-import React from "react";
+import React from 'react';
 
 const NewsCard = props => {
-  const { data: { img, title, id, body, link, link_text } } = props;
+  const {
+    data: { img, title, id, body, link, link_text }
+  } = props;
   if (!props.data) {
     return <div>Loading</div>;
   }
+  const newsImage = img.replace('http:', 'https:');
   return (
     <div key={id} className="col s3">
       <div className="card">
         <div className="card-image">
-          <img src={img} alt="" />
+          <img src={newsImage} alt="News" />
           <span className="card-title">{title}</span>
         </div>
         <div className="card-content">

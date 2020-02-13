@@ -1,12 +1,6 @@
 import { Button, TextField } from '@material-ui/core';
-import Chip from '@material-ui/core/Chip';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
 import Paper from '@material-ui/core/Paper';
-import Select from '@material-ui/core/Select';
 import { makeStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
 import { Formik } from 'formik';
 import React from 'react';
 import { useQuery } from 'react-apollo';
@@ -14,10 +8,6 @@ import ReactMarkdown from 'react-markdown';
 import { withRouter } from 'react-router';
 import Spinner from 'utils/spinner';
 import { CardSection } from '../common';
-import useInput from '../hooks/useInput';
-import { useUser } from '../User';
-//import { format } from 'date-fns';
-import { format } from '../utils/format';
 import { QUERY_SINGLE_PRODUCT } from './graphql/Queries';
 
 const paperStyle = {
@@ -93,14 +83,13 @@ const useStyles = makeStyles(theme => ({
 function Product({ match, history }) {
   const classes = useStyles();
   const id = match.params.id;
-  const [isEditable, setEditable] = React.useState(false);
+  // const [isEditable, setEditable] = React.useState(false);
 
   const { loading, data } = useQuery(QUERY_SINGLE_PRODUCT, { variables: { id } });
   if (loading) return <Spinner />;
-  console.log(data);
-  const {
-    cloudsuiteproduct: { name, description, content: contentVal }
-  } = data;
+  // const {
+  //   cloudsuiteproduct: { name, description, content: contentVal }
+  // } = data;
 
   return (
     <ProductForm product={data.cloudsuiteproduct} history={history} classes={classes}></ProductForm>
@@ -120,7 +109,7 @@ const ProductForm = props => {
   } = props;
   const readOnly = !authenticated;
   const [on, toggle] = React.useState(false);
-  //const updatedAt = supportcard ? supportcard.updatedAt : format(new Date(), 'YYYY-MM-DD');
+  //const updatedAt = supportcard ? supportcard.updatedAt : format(new Date(), 'yyyy-MM-dd');
   //const currentUser = useUser();
   return (
     <Paper style={paperStyle}>

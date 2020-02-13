@@ -38,18 +38,16 @@ class TrainersListContainer extends Component {
 
 const trainersQuery = gql`
   query trainersQuery {
-    {
-      plannedcourses {
+    plannedcourses {
+      id
+      trainer
+      hours
+      course {
         id
-        trainer
-        hours
-        course {
-          id
-          title
-        }
-        startdate
-        enddate
+        title
       }
+      startdate
+      enddate
     }
   }
 `;

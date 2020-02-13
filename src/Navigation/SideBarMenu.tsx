@@ -26,7 +26,7 @@ import SurveysIcon from '@material-ui/icons/Whatshot';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { UserContext } from 'globalState/UserProvider';
 import React, { useState } from 'react';
-import Signout from '../Signout';
+// import Signout from '../Signout';
 import { NavLink } from './NavLink';
 
 interface Props {

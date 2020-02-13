@@ -54,8 +54,8 @@ class TrainerView extends React.Component {
       <Query
         query={QUERY_TRAINERS}
         variables={{
-          from: format(Date.parse(from), 'YYYY-MM-DD'),
-          to: format(Date.parse(to), 'YYYY-MM-DD')
+          from: format(Date.parse(from), 'yyyy-MM-dd'),
+          to: format(Date.parse(to), 'yyyy-MM-dd')
         }}
       >
         {({ data, loading }) => {

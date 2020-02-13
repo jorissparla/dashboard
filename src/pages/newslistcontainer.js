@@ -20,8 +20,8 @@ const styles = theme => ({
   })
 });
 
-const QUERY_NEWS = gql`
-  {
+const QUERY_NEWS1 = gql`
+  query QUERY_NEWS1 {
     news {
       title
       body
@@ -46,7 +46,7 @@ class Test extends Component {
   render() {
     const { authenticated, classes } = this.props;
     return (
-      <Query query={QUERY_NEWS}>
+      <Query query={QUERY_NEWS1}>
         {({ loading, error, data }) => {
           if (loading) return <div>Loading</div>;
           if (error) return <div>Error! ${error.message}</div>;

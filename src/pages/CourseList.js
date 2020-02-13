@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import gql from 'graphql-tag';
-import { graphql, useQuery } from 'react-apollo';
+import { useQuery } from 'react-apollo';
 import { withRouter } from 'react-router';
 import styled from 'styled-components';
 import _ from 'lodash';
@@ -73,7 +73,7 @@ const CourseList = props => {
     )
     .orderBy(
       o =>
-        o.plannedcourses[0] ? format(o.plannedcourses[0].startdate, 'YYYYMMDD') : o.lastmodified,
+        o.plannedcourses[0] ? format(o.plannedcourses[0].startdate, 'yyyyMMdd') : o.lastmodified,
       'desc'
     )
     .value();

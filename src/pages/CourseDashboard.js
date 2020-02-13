@@ -5,7 +5,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import addDays from 'date-fns/add_days';
+import { addDays } from 'date-fns';
 //import format from 'date-fns/format';
 import { format } from '../utils/format';
 import _ from 'lodash';
@@ -81,12 +81,12 @@ const styles = theme => ({
 });
 
 const CourseView = props => {
-  const [startdate, setStartDate] = useState(format(addDays(new Date(), -7), 'YYYY-MM-DD'));
+  const [startdate, setStartDate] = useState(format(addDays(new Date(), -7), 'yyyy-MM-dd'));
   const [studentfilterstartdate, setStudentFiterStartDate] = useState(
-    format(addDays(new Date(), -180), 'YYYY-MM-DD')
+    format(addDays(new Date(), -180), 'yyyy-MM-dd')
   );
   const [studentfilterenddate, setStudentFilterEndDate] = useState(
-    format(addDays(new Date(), -7), 'YYYY-MM-DD')
+    format(addDays(new Date(), -7), 'yyyy-MM-dd')
   );
   const [activeTab, setActiveTab] = React.useState(props.start || 'student');
   const [participants, setParticipants] = useState({ show: false, id: null, students: [] });
@@ -95,9 +95,9 @@ const CourseView = props => {
   const { user } = useContext(UserContext);
   // const user = props.user;
   // state = {
-  //   startdate: format(addDays(new Date(), -7), 'YYYY-MM-DD'),
-  //   studentfilterstartdate: format(addDays(new Date(), -180), 'YYYY-MM-DD'),
-  //   studentfilterenddate: format(new Date(), 'YYYY-MM-DD'),
+  //   startdate: format(addDays(new Date(), -7), 'yyyy-MM-dd'),
+  //   studentfilterstartdate: format(addDays(new Date(), -180), 'yyyy-MM-dd'),
+  //   studentfilterenddate: format(new Date(), 'yyyy-MM-dd'),
   //   value: '',
   //   activeTab: props.start ? props.start : 'student',
   //   participants: { show: false, id: null, students: [] }
@@ -116,10 +116,10 @@ const CourseView = props => {
 
   function setYear(year) {
     setCurrentYear(year);
-    setStartDate(format(new Date(year, 0, 1), 'YYYY-MM-DD'));
-    setStudentFiterStartDate(format(new Date(year, 0, 1), 'YYYY-MM-DD'));
-    setStudentFilterEndDate(format(new Date(year + 1, 0, 1), 'YYYY-MM-DD'));
-    enddate: format(new Date(year + 1, 0, 1), 'YYYY-MM-DD');
+    setStartDate(format(new Date(year, 0, 1), 'yyyy-MM-dd'));
+    setStudentFiterStartDate(format(new Date(year, 0, 1), 'yyyy-MM-dd'));
+    setStudentFilterEndDate(format(new Date(year + 1, 0, 1), 'yyyy-MM-dd'));
+    enddate: format(new Date(year + 1, 0, 1), 'yyyy-MM-dd');
   }
   // const { role = 'Admin' } = user; //props.user;
   const role = 'Admin';

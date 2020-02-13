@@ -5,7 +5,7 @@ import Chip from '@material-ui/core/Chip';
 import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import { distanceInWordsToNow } from 'date-fns';
+import { formatDistanceToNow } from 'date-fns';
 import { Formik } from 'formik';
 import gql from 'graphql-tag';
 import React from 'react';
@@ -79,8 +79,8 @@ const styles = theme => ({
   }
 });
 
-const QUERY_ALL_FIELDS = gql`
-  query QUERY_ALL_FIELDS {
+const QUERY_ALL_COURSEFORM_FIELDS = gql`
+  query QUERY_ALL_COURSEFORM_FIELDS {
     coursetypes {
       name
     }
@@ -142,13 +142,13 @@ class CourseForm extends React.Component {
     console.log('rendering initialValues', this.state.initialValues);
     const { classes, history, id, view } = this.props;
     return (
-      <Query query={QUERY_ALL_FIELDS}>
+      <Query query={QUERY_ALL_COURSEFORM_FIELDS}>
         {({ data, loading }) => {
           if (loading) {
             return 'Loading...';
           }
 
-          const { coursetypes, coursecategories, statuses,  supportfolks } = data;
+          const { coursetypes, coursecategories, statuses, supportfolks } = data;
           const { title } = this.state.initialValues;
           return (
             <Formik
@@ -405,7 +405,7 @@ class CourseForm extends React.Component {
                       <Chip
                         label={
                           values.id
-                            ? `Last updated  ${distanceInWordsToNow(
+                            ? `Last updated  ${formatDistanceToNow(
                                 parseInt(values.lastmodified)
                               )} ago`
                             : 'not Saved yet'

@@ -6,7 +6,9 @@ export const QUERY_BACKLOG = gql`
     incident
     incidentcreated
     owner
+    owner_region
     customername
+    customerid
     summary
     title
     status
@@ -17,8 +19,11 @@ export const QUERY_BACKLOG = gql`
     escalated
     Deployment
     severityname
+    productline
     Tenant
     release
+    region
+    releasename
     service_restored_date
   }
   query QUERY_BACKLOG(
@@ -34,6 +39,17 @@ export const QUERY_BACKLOG = gql`
     $N_MAJORIMPACT: Int
   ) {
     mostRecentUpdate
+    extendedMaintenance {
+      customerid
+      customername
+    }
+    multitenantcustomers: tenantcustomerdetails {
+      id
+      customerid
+      customer {
+        name
+      }
+    }
     critical: backlog(
       owner: $owner
       orderBy: DAYS_DESC
@@ -196,6 +212,16 @@ export const QUERY_BACKLOG = gql`
     ) {
       ...backlogfragment
     }
+    all_dev: backlog(
+      owner: $owner
+      orderBy: CREATED_ASC
+      deployment: "ALL"
+      date: $date
+      statusFilter: DEVELOPMENT
+      productFilters: $products
+    ) {
+      ...backlogfragment
+    }
     new: backlog(
       owner: $owner
       orderBy: CREATED_ASC
@@ -221,7 +247,7 @@ export const QUERY_BACKLOG = gql`
 `;
 export const QUERY_PRIORITY_BACKLOG = gql`
   # Write your query or mutation here
-  fragment backlogfragment on DWH {
+  fragment backlogfragment2 on DWH {
     incident
     incidentcreated
     owner
@@ -241,10 +267,10 @@ export const QUERY_PRIORITY_BACKLOG = gql`
     mostRecentUpdate
 
     active: backlog(orderBy: DAYS_DESC, statusFilter: ACTIVE, productFilters: $products) {
-      ...backlogfragment
+      ...backlogfragment2
     }
     all: backlog(orderBy: DAYS_DESC, statusFilter: BACKLOG, productFilters: $products) {
-      ...backlogfragment
+      ...backlogfragment2
     }
     accounts {
       fullname

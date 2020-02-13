@@ -68,8 +68,8 @@ const Outer = styled.div`
 `;
 const { REACT_APP_SERVER = 'nlbavwixs' } = process.env;
 
-const imageURL = `http://${REACT_APP_SERVER}/ixs/_mugshots/infor_gmaggio_20170209161047.jpg`;
-const URL2 = `http://${REACT_APP_SERVER}/ixs/_mugshots/infor_imohnen_20170209102233.JPG`;
+const imageURL = `https://${REACT_APP_SERVER}/ixs/_mugshots/infor_gmaggio_20170209161047.jpg`;
+const URL2 = `https://${REACT_APP_SERVER}/ixs/_mugshots/infor_imohnen_20170209102233.JPG`;
 const URL3 = 'https://www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/auth.png';
 
 const Card = ({

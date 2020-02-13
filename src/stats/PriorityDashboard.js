@@ -6,6 +6,7 @@ import Spinner from '../utils/spinner';
 import { QUERY_PRIORITY_BACKLOG } from './queries/BACKLOG_QUERY2a';
 import { StyledInitials } from 'styles';
 import { format } from './../utils/format';
+import { usePersistentState } from 'hooks';
 
 const Container = styled.div`
   margin-top: -1rem;
@@ -42,6 +43,7 @@ const Box2 = styled.div`
   color: ${props => (props.textcolor ? props.textcolor : 'black')};
   background-color: ${props => (props.color ? props.color : 'lightblue')};
   border-radius: 4px;
+  flex-wrap: wrap;
 `;
 
 const Article = styled.article`
@@ -99,7 +101,7 @@ const Image = ({ image, fullname, size = 32 }) => {
     .join('')
     .toUpperCase();
   if (image) {
-    return <Avatar src={image} size={size} />;
+    return <Avatar src={image.replace('http://', 'https://')} size={size} />;
   } else {
     return (
       <StyledInitials color="#1da1f2" size={size}>
@@ -110,35 +112,48 @@ const Image = ({ image, fullname, size = 32 }) => {
 };
 
 export default function PriorityDashboard() {
+  const [region, setRegion] = usePersistentState('region', 'EMEA');
   const { loading, data } = useQuery(QUERY_PRIORITY_BACKLOG, {
     variables: { products: ['LN'] }
   });
   if (loading) {
     return <Spinner />;
   }
+
   const { all, active, mostRecentUpdate, accounts } = data;
-  const escalated = active.filter(item => item.escalated !== 0);
-  const sev2 = active
-    .filter(item => item.severity === 3)
-    .map(item => {
-      const account = accounts.find(account => account.fullname === item.owner);
-      let image;
-      if (account) {
-        image = account.image || '';
-      }
-      return { ...item, image };
-    });
-  const sev1 = all
-    .filter(item => item.severity === 4)
-    .map(item => {
-      const account = accounts.find(account => account.fullname === item.owner);
-      let image;
-      if (account) {
-        image = account.image || '';
-      }
-      return { ...item, image };
-    });
-  console.log(sev1);
+  function filterByRegion(incidents) {
+    if (incidents && incidents.length) {
+      // console.log(incidents);
+      return incidents.filter(inc => inc.owner_region === region);
+    } else return incidents;
+  }
+  console.log(all.length, filterByRegion(all.length));
+  const escalated = filterByRegion(active.filter(item => item.escalated !== 0));
+  const sev2 = filterByRegion(
+    active
+      .filter(item => item.severity === 3)
+      .map(item => {
+        const account = accounts.find(account => account.fullname === item.owner);
+        let image;
+        if (account) {
+          image = account.image || '';
+        }
+        return { ...item, image };
+      })
+  );
+  const sev1 = filterByRegion(
+    all
+      .filter(item => item.severity === 4)
+      .map(item => {
+        const account = accounts.find(account => account.fullname === item.owner);
+        let image;
+        if (account) {
+          image = account.image || '';
+        }
+        return { ...item, image };
+      })
+  );
+  // console.log(sev1);
   return (
     <>
       <H2>Priority Dashboard - updated {mostRecentUpdate}</H2>
@@ -160,7 +175,7 @@ export default function PriorityDashboard() {
         </Box>
         <Box color="green">
           <SubP space>Support Backlog</SubP>
-          <P>{all.length}</P>
+          <P>{filterByRegion(all).length}</P>
           <SubP>Incidents</SubP>
         </Box>
       </Container>
@@ -190,7 +205,7 @@ export default function PriorityDashboard() {
                   Status: {item.status}
                 </span>
                 <span style={{ color: 'white', paddingTop: 5, fontSize: '0.8rem' }}>
-                  Last updated: {format(item.lastupdated, 'ddd, DD-MMM-YYYY hh:mm')}
+                  Last updated: {format(item.lastupdated, 'EEE, dd-MMM-yyyy hh:mm')}
                 </span>
               </Vertical>
             </Box2>
@@ -222,7 +237,7 @@ export default function PriorityDashboard() {
                   Status: {item.status}
                 </span>
                 <span style={{ color: 'white', paddingTop: 5, fontSize: '0.8rem' }}>
-                  Last updated: {format(item.lastupdated, 'ddd, DD-MMM-YYYY hh:mm')}
+                  Last updated: {format(item.lastupdated, 'EEE, dd-MMM-yyyy hh:mm')}
                 </span>
               </Vertical>
             </Box2>

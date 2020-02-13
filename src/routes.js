@@ -1,12 +1,14 @@
+import SymptomsPage from 'pages/Symptoms';
 import React from 'react';
-import { withRouter } from 'react-router';
-import { Route, Switch } from 'react-router-dom';
-import Basic from 'stats/Basic';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import { TenantLogsWithData } from 'tenants/TenantLogs';
+import TenantViewList from 'tenants/TenantViewList';
+import NiceSpinner from 'utils/NiceSpinner';
 import RequireAuth, { AuthRoute, EnhancedRoute } from './auth/require_auth';
 import Signin from './auth/signin';
 import SigninWithPIN from './auth/SigninWithPIN';
 import Signout from './auth/signout';
+import OtherTeamsChartContainer from './charts/OtherTeamChartsContainer';
 import Product from './cloudsuite/Product';
 import CourseAdd from './courses/CourseAdd';
 import CourseEdit from './courses/CourseEdit';
@@ -15,28 +17,29 @@ import PlannedCourseAdd from './courses/PlannedCourseAdd';
 import PlannedCourseEdit from './courses/PlannedCourseEdit';
 import PlannedCourses from './courses/PlannedCoursesNew';
 import DynamicImport from './DynamicImport';
-import { withDashBoardContext } from './globalState/Provider';
+import { DashBoardContext, withDashBoardContext } from './globalState/Provider';
 import { UserContext } from './globalState/UserProvider';
 import NewsItemContainer from './news/newsitemcontainer';
+import CloudReadiness from './pages/CloudReadiness';
 import CloudSuites, { CloudSuitePage } from './pages/CloudSuites';
 import DashBoardContainer from './pages/dashboardcontainer';
+import MaintenanceVersionList from './pages/MaintenanceVersionList';
 import NewsPage from './pages/newspage';
 import PlannedCourseRequestList from './pages/PlannedCourseRequestList';
+import Playground from './pages/Playground';
 import ProfilePage from './pages/ProfilePage';
-import { StatsPage } from './pages/StatsPage2';
+import Stats from './pages/Stats';
 import { Surveys } from './pages/Surveys';
-import { UserActivity } from './pages/testActivity';
 import VideoPage from './pages/Videos';
 import { Parameters } from './stats/Parameters';
 import PriorityDashboard from './stats/PriorityDashboard';
 import Details from './tenants/details/index';
 import TestLogin from './TestLogin';
+// import Test
 import { UserProfileComponent } from './User';
 import UserPermissions from './UserPermissions';
 import { AddVideo, EditVideo } from './videos/VideoOperations';
-import OtherTeamsChartContainer from './charts/OtherTeamChartsContainer';
-import MaintenanceVersionList from './pages/MaintenanceVersionList';
-import TenantViewList from 'tenants/TenantViewList';
+import Test from './pages/Test';
 
 const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
 
@@ -81,7 +84,7 @@ const SupportCardAdd = DynamicImport(() => import('./supportcard/SupportCardAdd'
 const CourseDashboard = DynamicImport(() => import('./pages/CourseDashboard'));
 const StudentListContainer = DynamicImport(() => import('./courses/StudentTableNew'));
 const StudentView = DynamicImport(() => import('./courses/StudentView'));
-
+/*  */
 const AddPlannedCourseRequest = DynamicImport(() => import('./courses/AddPlannedCourseRequest'));
 const TenantPage = DynamicImport(() => import('./pages/TenantPage'));
 const DonutChart = DynamicImport(() => import('./charts/DonutChart'));
@@ -96,60 +99,42 @@ const TestUser = () => <UserProfileComponent />;
 
 function AppRoutes(props) {
   //  const user = props.context;
-  const { user } = React.useContext(UserContext);
-
+  const { user, loading } = React.useContext(UserContext);
+  console.log('user', user);
+  // const context = React.useContext(DashBoardContext);
+  // console.log('rendering', context, loading);
+  const history = useHistory();
+  if (loading) return <NiceSpinner />;
   return (
     <Switch>
+      <Route exact path="/playground" component={Playground} />
+      <Route exact path="/cloudreadiness" component={CloudReadiness} />
+      <Route exact path="/symptoms" component={SymptomsPage} />
       <Route exact path="/maintenancewizard" component={MaintenanceVersionList} />
       <Route exact path="/tenantlogs" component={TenantLogsWithData} />
       <Route exact path="/tenantview" component={TenantViewList} />
       <Route exact path="/details/:id" component={Details} />
-      <AuthRoute
-        exact
-        path="/statsmain"
-        component={StatsPage}
-        user={user}
-        history={props.history}
-      />
-      <AuthRoute exact path="/statstest" component={Basic} user={user} history={props.history} />
+      <Route exact path="/stats" component={Stats} user={user} history={history} />
+      <AuthRoute exact path="/statstest" component={Stats} user={user} history={history} />
       <AuthRoute exact path="/profilepage" component={ProfilePage} user={user} />
-      <AuthRoute exact path="/mywork" component={StatsMain} user={user} history={props.history} />
-      <AuthRoute
-        exact
-        path="/myworkparams"
-        component={Parameters}
-        user={user}
-        history={props.history}
-      />
+      <AuthRoute exact path="/mywork" component={Stats} user={user} history={history} />
+      <AuthRoute exact path="/myworkparams" component={Parameters} user={user} history={history} />
       <Route exact path="/" component={DashBoardContainer} user={user} />
       <Route exact path="/newspage" component={NewsPage} />
-      <Route exact path="/actie" component={UserActivity} />
-      <Route
-        exact
-        path="/cloudsuites"
-        component={CloudSuites}
-        history={props.history}
-        user={user}
-      />
+      <Route exact path="/cloudsuites" component={CloudSuites} history={history} user={user} />
       <Route
         exact
         path="/cloudsuites/product/:id"
         component={Product}
-        history={props.history}
+        history={history}
         user={user}
       />
-      <Route
-        exact
-        path="/priority"
-        component={PriorityDashboard}
-        history={props.history}
-        user={user}
-      />
+      <Route exact path="/priority" component={PriorityDashboard} history={history} user={user} />
       <Route
         exact
         path="/cloudsuite/:id"
         component={CloudSuitePage}
-        history={props.history}
+        history={history}
         user={user}
       />
       <EnhancedRoute
@@ -188,12 +173,12 @@ function AppRoutes(props) {
       />
       <Route exact path="/image_convert" component={ImageConverter} />
       <Route exact path="/anniversaries" component={AnniversaryList} />
-      <AuthRoute
+      <EnhancedRoute
         allowed={['Admin', 'PO', 'SU', 'Guest', 'Chat']}
         user={user}
         exact
         path="/test"
-        component={TestUser}
+        component={Test}
       />
       <EnhancedRoute
         editors={['Admin', 'PO', 'SU']}
@@ -344,4 +329,4 @@ function AppRoutes(props) {
   );
 }
 
-export default withRouter(withDashBoardContext(AppRoutes));
+export default withDashBoardContext(AppRoutes);

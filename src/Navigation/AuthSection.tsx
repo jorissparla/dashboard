@@ -1,6 +1,5 @@
 import { Button } from '@material-ui/core';
 import * as React from 'react';
-import User from '../User';
 import UserMenu from '../UserMenu';
 import { UserContext } from './../globalState/UserProvider';
 

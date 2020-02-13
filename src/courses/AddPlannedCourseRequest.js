@@ -4,7 +4,7 @@ import Paper from '@material-ui/core/Paper';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
-import addHours from 'date-fns/add_hours';
+import {addHours} from 'date-fns';
 import { Formik } from 'formik';
 import gql from 'graphql-tag';
 import _ from 'lodash';
@@ -157,8 +157,8 @@ class AddPlannedCourseRequest extends React.Component {
                             trainer: courses ? courses[0].trainer : 'A',
                             course2: '',
                             participants: defaultUser,
-                            startdate: format(addHours(Date.now(), 24), 'YYYY-MM-DD'),
-                            enddate: format(addHours(Date.now(), 24), 'YYYY-MM-DD'),
+                            startdate: format(addHours(Date.now(), 24), 'yyyy-MM-dd'),
+                            enddate: format(addHours(Date.now(), 24), 'yyyy-MM-dd'),
                             hours: 4,
                             details: '',
                             type: 'Self Study'
@@ -179,8 +179,8 @@ class AddPlannedCourseRequest extends React.Component {
                             } = values;
                             const input = {
                               courseid: this.getCourseId(courses, values.course),
-                              startdate, //: format(startdate, 'YYYY-MM-DD'),
-                              enddate, //: format(enddate, 'YYYY-MM-DD'),
+                              startdate, //: format(startdate, 'yyyy-MM-dd'),
+                              enddate, //: format(enddate, 'yyyy-MM-dd'),
                               hours,
                               trainer,
                               details,

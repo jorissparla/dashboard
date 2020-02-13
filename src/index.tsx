@@ -9,8 +9,7 @@ import './index.css';
 import reducers from './reducers';
 import { BrowserRouter } from 'react-router-dom';
 import AppRoutes from './routes';
-import { createMuiTheme } from '@material-ui/core/styles';
-import { MuiThemeProvider } from '@material-ui/core/styles';
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
 import { createGlobalStyle } from 'styled-components';
 import { AUTH_USER } from './actions';
 import App from './Navigation/Nav';
@@ -33,7 +32,8 @@ const {
   REACT_APP_PORT_GRAPHQL = 55555,
   REACT_APP_GRAPHQLSERVER = 'nlbavwixs',
   REACT_APP_GRAPHQL_PATH = '',
-  REACT_APP_HTTP = 'http'
+  REACT_APP_HTTP = 'http',
+  HTTPS = false
 } = process.env;
 
 const Global = createGlobalStyle`
@@ -41,6 +41,8 @@ const Global = createGlobalStyle`
 `;
 
 const prefix = REACT_APP_HTTP.trim();
+const isHttps = HTTPS;
+console.log('🤷‍♂️🤷‍♂️🤷‍♂️', isHttps, process.env);
 let uri = `${REACT_APP_GRAPHQLSERVER}:${REACT_APP_PORT_GRAPHQL}`;
 const wsuri = prefix === 'https' ? 'wss://' + uri : 'ws://' + uri;
 const wsLink = new WebSocketLink({

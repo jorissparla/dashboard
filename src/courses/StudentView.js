@@ -150,7 +150,7 @@ class StudentView extends Component {
                 <Chip
                   label={`Start  ${format(
                     enrol.plannedcourse.startdate,
-                    "ddd, DD-MMM-YYYY"
+                    "EEE, dd-MMM-yyyy"
                   )}`}
                   style={{ margin: 2 }}
                 />

@@ -19,7 +19,6 @@ const Loader = ({ loading }) => {
         <animated.div
           key={key}
           style={{
-            background: 'purple',
             position: 'fixed',
             top: '25%',
             left: '25%',

@@ -76,7 +76,7 @@ const Right = styled.div`
   justify-content: flex-end;
 `;
 
-const dayPart = d => format(d, 'DD');
+const dayPart = d => format(d, 'dd');
 const monthPart = d => format(d, 'MMMM');
 
 const GoLiveItem = ({ item, bg = '#ec407a', index, classes }) => {

@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import { makeStyles } from '@material-ui/styles';
-import { Grid, Button } from '@material-ui/core';
+import { Button, Grid } from '@material-ui/core';
 import FilterListIcon from '@material-ui/icons/FilterList';
-
+import { makeStyles } from '@material-ui/styles';
+import PropTypes from 'prop-types';
+import React, { useState } from 'react';
 import { Filter } from '../details/components';
+
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -28,7 +27,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const FancyFilter = props => {
-  const { onFilter, className, ...rest } = props;
+  const { onFilter, className } = props;
 
   const classes = useStyles();
 

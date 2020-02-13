@@ -73,17 +73,17 @@ export default class DashBoardContextProvider extends React.Component {
   }
   componentDidMount() {
     client.query({ query: CURRENT_USER_QUERY }).then(result => {
-      console.log('Provider CDM', result);
+      // console.log('current_user_query');
       if (!result.data.me) {
         this.state.clearUser();
       } else {
         const { id, email, image, fullname, role } = result.data.me;
         this.state.setUser(id, email, image, image, fullname, role);
-        console.log('LOgged In successfully');
       }
     });
   }
   render() {
+    // console.log('Sahsboard', this.state);
     return (
       <DashBoardContext.Provider value={this.state}>
         {this.props.children}
@@ -94,6 +94,7 @@ export default class DashBoardContextProvider extends React.Component {
 
 export function withDashBoardContext(Component) {
   return function dashBoardedComponent(props) {
+    console.log('Dashboard props', props);
     return (
       <DashBoardContext.Consumer>
         {context => <Component {...props} context={context} />}

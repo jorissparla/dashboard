@@ -172,7 +172,7 @@ const VideoForm: React.FC<VideoFormProps> = ({
 }) => {
   const title = useInput(initialValues.title);
   const url = useInput(initialValues.url);
-  const date = useInput(format(initialValues.date, 'YYYY-MM-DD'));
+  const date = useInput(format(initialValues.date, 'yyyy-MM-dd'));
   const [categories, setCategories] = React.useState(initialValues.category);
   const id = initialValues.id;
   console.log(date);

@@ -1,9 +1,6 @@
+import { Button, TextField, withStyles } from '@material-ui/core';
 import * as React from 'react';
-import { Button, Paper, TextField, withStyles } from '@material-ui/core';
-import styled from 'styled-components';
-import { useInput } from './VideoOperations';
 
-const ButtonContainer = styled.div``;
 const styles: any = (theme: any) => ({
   root: {
     display: 'flex',
@@ -38,9 +35,8 @@ const SafeDeleteButton: React.FC<Props> = ({ onDelete, classes }) => {
   const [disabled, setEnabled] = React.useState(true);
 
   React.useEffect(() => {
-    console.log(pin);
     setEnabled(pin !== deleteCode);
-  });
+  }, [pin]);
   async function handleChange(e: any) {
     await setPin(e.target.value);
   }

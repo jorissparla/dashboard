@@ -8,16 +8,16 @@ import HistoryChart from './historychart';
 
 const transform = (data, value) =>
   data.map(({ date, number }) => ({
-    date: format(parseInt(date), 'DD'),
-    odate: format(parseInt(date), 'YYYYMMDD'),
+    date: format(parseInt(date), 'dd'),
+    odate: format(parseInt(date), 'yyyyMMdd'),
     [value]: number,
     label: number,
     data: { y: number, color: 'rgba(144, 202, 249, 0.75)' }
   }));
 const transform2 = (data, value) =>
   data.map(({ date, number, age }) => ({
-    date: format(parseInt(date), 'DD'),
-    odate: format(parseInt(date), 'YYYYMMDD'),
+    date: format(parseInt(date), 'dd'),
+    odate: format(parseInt(date), 'yyyyMMdd'),
     [value]: age,
     label: age,
     data: { y: number, color: 'rgba(144, 202, 249, 0.75)' }
@@ -27,6 +27,11 @@ const OtherTeamChartsContainer = ({ color = '#ffb74d' }) => {
   const { data, loading } = useQuery(QUERY_HISTORY_OTHER);
 
   if (loading) return <Spinner />;
+
+  const { AutoConnect } = data;
+  let filteredAutoConnect = AutoConnect.filter(item => item.owner_region === 'EMEA');
+  console.log(filteredAutoConnect);
+
   console.log(data);
   if (!data) return <div>No data</div>;
   const historyXpert = transform(data.Xpert, 'xpert').filter(o => o.odate > '20191001');
@@ -35,7 +40,7 @@ const OtherTeamChartsContainer = ({ color = '#ffb74d' }) => {
   const historyAuto = transform(data.AutoConnect, 'auto');
   const historyAuto2 = transform2(data.AutoConnect, 'age');
   console.log(historyAuto2);
-  const historyPLM = transform(data.PLM, 'plm');
+  // const historyPLM = transform(data.PLM, 'plm');
   // return <div>Data</div>;
   return (
     <Grid container>

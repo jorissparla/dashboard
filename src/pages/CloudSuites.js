@@ -46,6 +46,7 @@ export default function CloudSuites({ history }) {
           //let prods = suite.products.map(prod => prod.product.name).join('-');
           //          let availableprods = products.filter(prod => !_.includes(prods, prod.name));
           // console.log('suite', suite.name, prods, availableprods);
+          const suiteImage = suite.imageURL.replace('http:', 'https:');
           return (
             <Article key={suite.id}>
               <Header>
@@ -53,7 +54,7 @@ export default function CloudSuites({ history }) {
                 <H2>{suite.description}</H2>
               </Header>
               <Image>
-                <Img src={suite.imageURL} alt="CloudSuite" />
+                <Img src={suiteImage} alt="CloudSuite" />
               </Image>
               <Padded>
                 <P>
@@ -80,7 +81,7 @@ export default function CloudSuites({ history }) {
                   secondary
                   onClick={() =>
                     window.open(
-                      'http://development.home.infor.com/pmprojects/Lists/Product%20Contacts%20List/All%20Contacts.aspx?mkt_tok=eyJpIjoiTldJMFlqRTJOamczWXpWbSIsInQiOiJaTjRzakE1VDI2ZFFha1d3eHFSdFdCKzRvSkFGUk5iaFNnQW1mZ3U4dHNXNllvZmJ0UlR1MnVTTk1raHZLXC9JRHFNV1g4a3lIU3JiXC9VYVwvT2k5V2thSU41TUtSSWhHRHVMbTNMY2lqSzJjK1ZHem9iTythRzd5cGwwSTA1Q1g0QSJ9'
+                      'https://development.home.infor.com/pmprojects/Lists/Product%20Contacts%20List/All%20Contacts.aspx?mkt_tok=eyJpIjoiTldJMFlqRTJOamczWXpWbSIsInQiOiJaTjRzakE1VDI2ZFFha1d3eHFSdFdCKzRvSkFGUk5iaFNnQW1mZ3U4dHNXNllvZmJ0UlR1MnVTTk1raHZLXC9JRHFNV1g4a3lIU3JiXC9VYVwvT2k5V2thSU41TUtSSWhHRHVMbTNMY2lqSzJjK1ZHem9iTythRzd5cGwwSTA1Q1g0QSJ9'
                     )
                   }
                 >
@@ -113,6 +114,7 @@ export const CloudSuitePage = ({
   let prods = suite.products.map(prod => prod.product.name).join('-');
   let availableprods = products.filter(prod => !_.includes(prods, prod.name));
   console.log('suite', suite.name, prods, availableprods);
+  const suiteImage = suite.imageURL.replace('http:', 'https:');
   return (
     <Article>
       <Header>
@@ -123,7 +125,7 @@ export const CloudSuitePage = ({
         <H2>{suite.description}</H2>
       </Header>
       <Image>
-        <Img src={suite.imageURL} alt="CloudSuite" />
+        <Img src={suiteImage} alt="CloudSuite" />
       </Image>
       <Padded>
         <P>

@@ -20,8 +20,6 @@ import { SmallCard } from '../common/SmallCard';
 import Modal from '../ModalWrapper';
 import AddCard from '../supportcard/AddCard';
 import CategoryTabs from '../supportcard/CategoryTabs';
-import { CategoryTabsNew } from '../supportcard/CategoryTabsNew';
-import { ProductsTab } from '../supportcard/ProductsTabsNew';
 // import Typography from '@material-ui/core/Typography';
 import NewRequestForm from '../supportcard/Request';
 import User from '../User';
@@ -117,17 +115,17 @@ const styles = theme => ({
   }
 });
 
-String.prototype.includes2 = function(search, start) {
-  if (typeof start !== 'number') {
-    start = 0;
-  }
+// String.prototype.includes2 = function(search, start) {
+//   if (typeof start !== 'number') {
+//     start = 0;
+//   }
 
-  if (start + search.length > this.length) {
-    return false;
-  } else {
-    return this.indexOf(search, start) !== -1;
-  }
-};
+//   if (start + search.length > this.length) {
+//     return false;
+//   } else {
+//     return this.indexOf(search, start) !== -1;
+//   }
+// };
 
 const customContentStyle = {
   height: '100%'
@@ -139,15 +137,6 @@ const Div = styled.div`
   flex-wrap: wrap;
   margin: 10px;
   background: #eeeeee;
-`;
-const Div2 = styled.div`
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  margin: 10px;
-  background: #eeeeee;
-  width: 90vw;
-  margin: 0px 10 0px 10px;
 `;
 
 const Container = styled.div`
@@ -207,7 +196,7 @@ export default function SupportCardContainer(props) {
 const SupportCards = props => {
   const [searchText, setSearchText] = useState(props.filter || '');
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [selectedProduct, setSelectedProduct] = usePersistentState('supp_card_product', 'LN');
+  const [selectedProduct] = usePersistentState('supp_card_product', 'LN');
   const [showFavorites, setShowFavorites] = useState(false);
   const [showPortal, setShowPortal] = useState(false);
   const [showRequest, setShowRequest] = useState(false);

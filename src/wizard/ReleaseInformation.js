@@ -1,8 +1,7 @@
-import React from 'react';
-import { Grid, Typography, Divider, Paper, Switch, FormControlLabel } from '@material-ui/core';
+import { FormControlLabel, Grid, Paper, Switch, Typography } from '@material-ui/core';
 import { format } from 'date-fns';
+import React from 'react';
 import { SimpleField } from './SimpleField';
-import { Field } from './Field';
 import { useStyles } from './useStyles';
 
 function ReleaseInformation({ versionInfo, handleCustomerHasValidMaintenance, validMaintenance }) {
@@ -19,12 +18,8 @@ function ReleaseInformation({ versionInfo, handleCustomerHasValidMaintenance, va
     xm_date_since
   } = versionInfo;
   const versionDate = parseInt(date);
-  console.log('rendering releaseinfor', versionInfo, version);
-
-  console.log(checksrequired);
 
   function handleChange(e) {
-    console.log(validMaintenance);
     setValid(!valid);
     handleCustomerHasValidMaintenance();
   }
@@ -42,13 +37,13 @@ function ReleaseInformation({ versionInfo, handleCustomerHasValidMaintenance, va
             <Typography variant="subtitle1">{`${version} was Released on `}</Typography>
           </Grid>
           <Grid>
-            <Typography variant="h3">{`${format(versionDate, 'YYYY')}`}</Typography>
+            <Typography variant="h3">{`${format(versionDate, 'yyyy')}`}</Typography>
           </Grid>
           <Grid>
             <Typography variant="h4">{`${format(versionDate, 'MMMM')}`}</Typography>
           </Grid>
           <Grid>
-            <Typography variant="h5">{`${format(versionDate, 'dddd, DD')}`}</Typography>
+            <Typography variant="h5">{`${format(versionDate, 'EEEE, dd')}`}</Typography>
           </Grid>
         </Grid>
 
@@ -82,10 +77,10 @@ function ReleaseInformation({ versionInfo, handleCustomerHasValidMaintenance, va
               <Typography variant="h4">Extended Maintenance</Typography>
             </Grid>
             <Grid>
-              <Typography>{`Start: ${format(parseInt(xm_date_since), 'DD-MMM-YYYY')}`}</Typography>
+              <Typography>{`Start: ${format(parseInt(xm_date_since), 'dd-MMM-yyyy')}`}</Typography>
             </Grid>
             <Grid>
-              <Typography>{`End: ${format(parseInt(xm_end_date), 'DD-MMM-YYYY')}`}</Typography>
+              <Typography>{`End: ${format(parseInt(xm_end_date), 'dd-MMM-yyyy')}`}</Typography>
             </Grid>
           </Grid>
         )}
@@ -110,12 +105,8 @@ function MaintenanceCheck({ versionInfo, handleCustomerHasValidMaintenance, vali
   if (versionInfo === {} || !versionInfo) return <div />;
   // const { version: versionInfo } = useContext(RootContext);
   const { version, checksrequired, date, entitled_extended_maintenance } = versionInfo;
-  console.log('rendering MaintenanceCheck', versionInfo, version);
-
-  console.log(checksrequired);
 
   function handleChange(e) {
-    console.log(validMaintenance);
     setValid(!valid);
     handleCustomerHasValidMaintenance();
   }

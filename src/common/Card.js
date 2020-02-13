@@ -6,7 +6,7 @@ const styles = {
     backGround: "#FAFAFA",
     borderWidth: 1,
     borderRadius: 2,
-    borderColor: "#ddd",
+    borderColor: "#EEE",
     borderBottomWidth: 0,
     shadowColor: "#000",
     shadowOffset: { width: "0px", height: "2px" },

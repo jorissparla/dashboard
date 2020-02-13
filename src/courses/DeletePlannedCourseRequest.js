@@ -6,27 +6,15 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import ClearIcon from '@material-ui/icons/Clear';
-import gql from 'graphql-tag';
 import React, { useState } from 'react';
 import { adopt } from 'react-adopt';
 import { Mutation } from 'react-apollo';
 import { SharedSnackbarConsumer } from '../globalState/SharedSnackbar.context';
 import { QUERY_PLANNEDCOURSEREQUESTS } from '../pages/PlannedCourseRequestList';
-
-
-const CONVERT_TO_PLANNED_COURSE_MUTATION = gql`
-  mutation CONVERT_TO_PLANNED_COURSE_MUTATION($input: PlannedCourseRequestInput) {
-    converttoplannedcourse(input: $input) {
-      id
-    }
-  }
-`;
-
-const DELETE_PLANNING_REQUEST_MUTATION = gql`
-  mutation DELETE_PLANNING_REQUEST_MUTATION($input: PlannedCourseRequestInput) {
-    deleteplannedcourserequest(input: $input)
-  }
-`;
+import {
+  CONVERT_TO_PLANNED_COURSE_MUTATION,
+  DELETE_PLANNING_REQUEST_MUTATION
+} from './AcceptPlannedCourseRequest';
 
 const Composed = adopt({
   converttoplannedcourse: ({ render }) => (

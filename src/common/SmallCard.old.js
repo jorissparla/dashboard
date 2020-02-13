@@ -113,7 +113,7 @@ const SmallCard = ({
   text = "Papier Und KartonFabrik",
   buttonText = "Modify",
   category = "Cloud",
-  link = "http://www.google.com",
+  link = "https://www.google.com",
   action = null,
   color = "#FFFFF",
   textcolor = "#000",
@@ -145,7 +145,7 @@ const SmallCard = ({
         )}
         {account_id && <ToggleFavorite toggle={onToggleFavorite} isFavorite={isFavorite} />}
       </TitleWrapper>
-      <DateWrapper>last updated: {format(updatedAt, "ddd DD MMM YYYY, hh:mm")}</DateWrapper>
+      <DateWrapper>last updated: {format(updatedAt, "EEE dd MMM yyyy, hh:mm")}</DateWrapper>
       <HR />
       <StyledBody>
         <ReactMarkdown source={text.slice(0, 200).concat("...")} />

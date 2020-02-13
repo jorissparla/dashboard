@@ -1,4 +1,5 @@
 import gql from 'graphql-tag';
+import CloudReadiness from './../../pages/CloudReadiness';
 const SuitesFragment = gql`
   fragment SuiteDetails on CloudSuite {
     id
@@ -91,6 +92,35 @@ export const MUTATION_REMOVE_PRODUCT_CONTACT = gql`
   mutation MUTATION_REMOVE_PRODUCT_CONTACT($input: InputRemoveContactFromProduct) {
     removecontactfromproduct(input: $input) {
       ...ProductDetails
+    }
+  }
+`;
+
+export const ReadinessFragment = gql`
+  fragment ReadinessFragment on CloudReadiness {
+    id
+    maintext
+    text2
+    text3
+    text4
+    imageURL
+  }
+`;
+
+export const CLOUD_READINESS_QUERY = gql`
+  ${ReadinessFragment}
+  query CLOUD_READINESS_QUERY {
+    cloudreadiness {
+      ...ReadinessFragment
+    }
+  }
+`;
+
+export const MUTATION_UPDATE_CLOUD_READINESS = gql`
+  ${ReadinessFragment}
+  mutation MUTATION_UPDATE_CLOUD_READINESS($input: CloudReadinessInput!) {
+    updatecloudreadiness(input: $input) {
+      ...ReadinessFragment
     }
   }
 `;

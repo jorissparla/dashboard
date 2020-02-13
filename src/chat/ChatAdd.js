@@ -82,6 +82,7 @@ class ChatAdd extends React.Component {
 
   render() {
     const { ranges, onCancel, classes } = this.props;
+    console.log('ranges', ranges)
 
     if (!ranges) {
       return <CardSection>Loading...</CardSection>;

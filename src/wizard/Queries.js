@@ -21,8 +21,28 @@ export const ALL_MAINTENANCE_QUERY = gql`
       comm_disappointed
       portingset
     }
+    maintenanceFAQ {
+      id
+      text
+      text2
+      text3
+      localizations
+    }
   }
 `;
+
+export const MAINTENANCE_FAQ_QUERY = gql`
+  query MAINTENANCE_FAQ_QUERY {
+    maintenanceFAQ {
+      id
+      text
+      text2
+      text3
+      localizations
+    }
+  }
+`;
+
 export const SINGLE_MAINTENANCE_QUERY = gql`
   query SINGLE_MAINTENANCE_QUERY($version: String, $valid: Boolean) {
     maintenance(version: $version, valid: $valid) {
@@ -68,6 +88,30 @@ export const MUTATION_UPDATE_MAINTENANCE = gql`
       comm_before
       comm_ics
       comm_disappointed
+    }
+  }
+`;
+export const MUTATION_UPDATE_MAINTENANCE_FAQ = gql`
+  mutation MUTATION_UPDATE_MAINTENANCE_FAQ($input: MaintenanceFAQUpdateType) {
+    updateMaintenanceFAQ(input: $input) {
+      id
+      text
+      text2
+      text3
+      localizations
+    }
+  }
+`;
+
+export const CREATE_AUDIT_MUTATION_WIZARD = gql`
+  mutation CREATE_AUDIT_MUTATION_WIZARD($input: InputAuditType) {
+    createAudit(input: $input) {
+      id
+      page
+      linkid
+      username
+      type
+      createdate
     }
   }
 `;

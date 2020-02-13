@@ -15,7 +15,7 @@ import PropTypes from 'prop-types';
 import CloseIcon from '@material-ui/icons/Close';
 import React, { useState } from 'react';
 import { useMutation } from 'react-apollo';
-// import SuccessSnackbar from './SuccessSnackbar';
+
 import { MUTATION_UPDATE_DETAIL } from './../../TenantQueries';
 import { format } from 'utils/format';
 import TemperatureSlider from './TemperatureSlider';
@@ -40,12 +40,11 @@ const EditTenantDetails = props => {
   const { profile, className, onClose, onView, ...rest } = props;
 
   const classes = useStyles();
-  const [openSnackbar, setOpenSnackbar] = useState(false);
   const [values, setValues] = useState({
     csm: profile.csm || '',
     pm: profile.pm || '',
     customerid: profile.customerid,
-    golivedate: format(profile.golivedate, 'YYYY-MM-DD'),
+    golivedate: format(profile.golivedate, 'yyyy-MM-dd'),
     golivecomments: profile.golivecomments,
     info: profile.info,
     temperature: profile.temperature,
@@ -75,10 +74,8 @@ const EditTenantDetails = props => {
   const handleTemperatureChange = value => {
     setValues({ ...values, temperature: value });
   };
-  const handleSnackbarClose = () => {
-    setOpenSnackbar(false);
-  };
-  const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:11:54'));
+
+  // const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:11:54'));
   return (
     <Card {...rest} className={clsx(classes.root, className)}>
       <form onSubmit={handleSubmit}>

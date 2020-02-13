@@ -16,7 +16,7 @@ import { SharedSnackbarConsumer } from '../globalState/SharedSnackbar.context';
 import { QUERY_PLANNEDCOURSEREQUESTS } from '../pages/PlannedCourseRequestList';
 import { QUERY_SCHEDULED_COURSES } from './PlannedCoursesNew';
 
-const CONVERT_TO_PLANNED_COURSE_MUTATION = gql`
+export const CONVERT_TO_PLANNED_COURSE_MUTATION = gql`
   mutation CONVERT_TO_PLANNED_COURSE_MUTATION($input: PlannedCourseRequestInput) {
     converttoplannedcourse(input: $input) {
       id
@@ -24,7 +24,7 @@ const CONVERT_TO_PLANNED_COURSE_MUTATION = gql`
   }
 `;
 
-const DELETE_PLANNING_REQUEST_MUTATION = gql`
+export const DELETE_PLANNING_REQUEST_MUTATION = gql`
   mutation DELETE_PLANNING_REQUEST_MUTATION($input: PlannedCourseRequestInput) {
     deleteplannedcourserequest(input: $input)
   }

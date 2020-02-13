@@ -31,7 +31,7 @@ class NewsList extends Component {
           <ListItem>
             <Left>
               <Avatar src={img} />
-              <DateField>{format(expire_date, 'ddd, DD MMM')}</DateField>
+              <DateField>{format(expire_date, 'EEE, dd MMM')}</DateField>
             </Left>
             <ListItemText primary={title} secondary={body} />
             <ListItemSecondaryAction onClick={() => this.props.onEdit(id)}>

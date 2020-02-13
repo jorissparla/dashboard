@@ -20,6 +20,7 @@ enum Empty {
 
 interface UserContextType {
   user: User | null;
+  loading?: Boolean;
   login: (email: string, password: string) => void;
   logout: () => void;
   isAuthenticated: boolean;
@@ -27,6 +28,7 @@ interface UserContextType {
 }
 export const UserContext = React.createContext<UserContextType>({
   user: null,
+  loading: true,
   login: () => null,
   logout: () => null,
   isAuthenticated: false,
@@ -37,17 +39,20 @@ export const UserContext = React.createContext<UserContextType>({
 
 export const UserContextProvider: React.FC<{ children: any }> = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     client.query({ query: CURRENT_USER_QUERY }).then(result => {
-      console.log('Provider CDM', result);
+      // console.log('the result is', result);
+
       if (!result.data.me) {
         setUser(null);
       } else {
         setUser(result.data.me);
-        console.log('LOgged In successfully, ', result.data.me);
+        // console.log('LOgged In successfully, ', result.data.me);
       }
+      setLoading(false);
     });
-  }, []);
+  }, [user]);
   function isAuthenticated() {
     return user ? true : false;
   }
@@ -61,17 +66,18 @@ export const UserContextProvider: React.FC<{ children: any }> = ({ children }) =
     } else return false;
   }
   async function login(email: string, password: string) {
-    client
-      .mutate({ mutation: MUTATION_SIGNIN, variables: { input: { email, password } } })
-      .then(result => {
-        console.log(result);
-        if (result.data.signinUser.user) {
-          setUser(result.data.signinUser.user);
-        } else {
-          setUser(null);
-        }
-        return result;
-      });
+    const result = await client.mutate({
+      mutation: MUTATION_SIGNIN,
+      variables: { input: { email, password } }
+    });
+
+    console.log('login result', result);
+    if (result.data.signinUser.user) {
+      setUser(result.data.signinUser.user);
+    } else {
+      setUser(null);
+    }
+    return result;
   }
   async function logout() {
     client.mutate({ mutation: MUTATION_SIGNOUT }).then(result => {
@@ -82,7 +88,7 @@ export const UserContextProvider: React.FC<{ children: any }> = ({ children }) =
   }
   return (
     <UserContext.Provider
-      value={{ user, login, logout, isAuthenticated: isAuthenticated(), hasPermissions }}
+      value={{ user, login, logout, loading, isAuthenticated: isAuthenticated(), hasPermissions }}
     >
       {children}
     </UserContext.Provider>

@@ -1,17 +1,17 @@
-import Grid from "@material-ui/core/Grid";
-import { withStyles } from "@material-ui/core/styles";
-import FavoriteIcon from "@material-ui/icons/Star";
-import FavoriteBorderIcon from "@material-ui/icons/StarBorder";
-import React from "react";
-import { adopt } from "react-adopt";
-import User from "./User";
+import Grid from '@material-ui/core/Grid';
+import { withStyles } from '@material-ui/core/styles';
+import FavoriteIcon from '@material-ui/icons/Star';
+import FavoriteBorderIcon from '@material-ui/icons/StarBorder';
+import React from 'react';
+import { adopt } from 'react-adopt';
+import User from './User';
 
 const styles = theme => ({
   root: {
     color: theme.palette.text.primary
   },
   icon: {
-    color: "#EEC015"
+    color: '#EEC015'
   }
 });
 
@@ -50,11 +50,11 @@ const Composed = adopt({
 
 class FavoriteWrapper extends React.Component {
   render() {
-    const { id = "F0D7A3B6-4D23-4960-9502-96C48099BE7A", isFavorite } = this.props;
+    const { id = 'F0D7A3B6-4D23-4960-9502-96C48099BE7A', isFavorite } = this.props;
     <Composed>
       {({ favorite, unfavorite, user: { data, loading }, supportcard }) => {
         if (loading) {
-          return "loading";
+          return 'loading';
         }
         if (!data || !data.me) {
           return <div />;
@@ -63,7 +63,7 @@ class FavoriteWrapper extends React.Component {
           me: { id }
         } = data;
         console.log();
-        return <StyledFavorite toggleFavorite={() => console.log("toggle")} />;
+        return <StyledFavorite toggleFavorite={() => console.log('toggle')} />;
       }}
     </Composed>;
   }

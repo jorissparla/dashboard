@@ -27,7 +27,7 @@ const QUERY_PLANNEDCOURSE_WITHPARTICIPANTS = gql`
 `;
 
 const ADD_PARTICIPANTS_TO_COURSE = gql`
-  mutation ADD_PARTICIPANTS_TO_COURSE($participants: String, $id: ID) {
+  mutation ADD_PARTICIPANTS_TO_COURSE($participants: String!, $id: ID!) {
     updatePlannedCourseParticipants(participants: $participants, where: { id: $id }) {
       course {
         id

@@ -173,7 +173,7 @@ interface RRProps {
   pct: number;
 }
 const ResponseRate: React.FC<RRProps> = ({ sent, responded, pct }) => (
-  <StyledPapier width="30%" backgroundColor="#ddd;">
+  <StyledPapier width="30%" backgroundColor="#EEE;">
     <TitlesRow>
       <div style={{ paddingRight: 10 }}>Sent</div>
       <div style={{ paddingLeft: 10 }}>Responded</div>
@@ -193,7 +193,7 @@ interface SatisfactionProps {
   pct_dissatisfied: number;
 }
 const Satisfaction: React.FC<SatisfactionProps> = ({ pct_satisfied, pct_dissatisfied }) => (
-  <StyledPapier width="30%" backgroundColor="#ddd;">
+  <StyledPapier width="30%" backgroundColor="#EEE;">
     <TitlesRow>
       <div>Overall Satisfaction</div>
     </TitlesRow>
@@ -219,7 +219,7 @@ const Feedback: React.FC<FeedbackProps> = ({
   feedback_comments,
   pct_feedback_comments
 }) => (
-  <StyledPapier width="30%" backgroundColor="#ddd;">
+  <StyledPapier width="30%" backgroundColor="#EEE;">
     <TitlesRow>
       <div>Satisfied Feedback</div>
     </TitlesRow>

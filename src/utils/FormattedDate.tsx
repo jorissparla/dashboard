@@ -1,20 +1,20 @@
 import { format } from '../utils/format';
-import { distanceInWords, addHours, addDays } from 'date-fns';
+import { formatDistance, addHours, addDays } from 'date-fns';
 export function FormattedDate(date: Date | string | number) {
-  return format(date, 'YYYY-MM-DD');
+  return format(date, 'yyyy-MM-dd');
 }
-export function FormattedDateNextDay(date: Date | string | number) {
-  return format(addHours(date, 24), 'YYYY-MM-DD');
+export function FormattedDateNextDay(date: any) {
+  return format(addHours(date, 24), 'yyyy-MM-dd');
 }
-export function LongFormattedDate(date: string) {
-  return format(Date.parse(date), 'ddd, DD MMMM YYYY');
+export function LongFormattedDate(date: any) {
+  return format(Date.parse(date), 'EEE, dd MMMM yyyy');
 }
-export function SpecialLongFormattedDate(date: Date | string | number) {
-  return format(date, 'MMMM, DD, YYYY');
+export function SpecialLongFormattedDate(date: any) {
+  return format(date, 'MMMM, dd, yyyy');
 }
 
-export function DistanceInWords(date: Date | string | number) {
-  return distanceInWords(date, new Date());
+export function DistanceInWords(date: any) {
+  return formatDistance(date, new Date());
 }
 export function FormattedDateNow() {
   return FormattedDate(Date.now());

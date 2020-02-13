@@ -85,10 +85,10 @@ const styles = theme => ({
   content: {
     display: 'flex',
     marginLeft: '2rem',
-    borderTop: 'solid 1px #ddd',
-    borderBottom: 'solid 1px #ddd',
+    borderTop: 'solid 1px #EEE',
+    borderBottom: 'solid 1px #EEE',
     height: '200px',
-    border: '1px solid #ddd',
+    border: '1px solid #EEE',
     borderRadius: 8,
     margin: 8
   },

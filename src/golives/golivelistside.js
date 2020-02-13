@@ -15,7 +15,7 @@ import styled from 'styled-components';
 const getDay = date =>
   format(date, 'MMM')
     .toUpperCase()
-    .substr(0, 3) + format(date, 'DD');
+    .substr(0, 3) + format(date, 'dd');
 
 const GoLiveListStyle = styled.div`
   margin-right: 10px;

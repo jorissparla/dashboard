@@ -1,10 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
 import Slider from '@material-ui/core/Slider';
-import Typography from '@material-ui/core/Typography';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
+import PropTypes from 'prop-types';
+import React from 'react';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -99,7 +98,7 @@ export default function CustomizedSlider({ initialValue = 'NORMAL', onChange }) 
   React.useEffect(() => {
     const temp = marks.find(m => m.label === initialValue);
     setValue(temp ? initialValue : temp.value);
-  }, []);
+  }, [initialValue]);
   console.log(value);
   const handleChange = (_, v) => {
     setValue(v);

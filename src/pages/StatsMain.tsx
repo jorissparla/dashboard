@@ -7,8 +7,11 @@ import { ListFavoritePersons } from '../stats/FavoritesPersons';
 import { QUERY_BACKLOG } from '../stats/queries/BACKLOG_QUERY2';
 import { format } from '../utils/format';
 import Spinner from '../utils/spinner';
+
+import LoadingDots from './../utils/LoadingDots';
 import { useLocalStorage } from '../utils/useLocalStorage';
 import { UserContext } from './../globalState/UserProvider';
+import { ItemStyle } from 'layout';
 const SelectionForm = React.lazy(() => import('../stats/SelectionForm'));
 
 export const styles = (theme: any) => ({
@@ -150,7 +153,7 @@ const StatsMainContainerWrapper: React.FC<ContainerProps> = (props: any) => {
 
 const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
   const { user } = React.useContext(UserContext);
-  const [date] = useState(format(Date.now(), 'YYYY-MM-DD'));
+  const [date] = useState(format(Date.now(), 'yyyy-MM-dd'));
   const [isCloud, setisCloud] = useState(false);
   const [owner, setOwner] = useState(props.user.fullname);
   const { products, persons } = useContext(SelectionContext);
@@ -216,10 +219,21 @@ interface Props {
   classes: any;
   data: any;
   isCloud: boolean;
-  actionNeeded: boolean;
+  owner?: string;
+  products?: string[];
+  actionNeeded?: boolean;
+  filterValues?: any;
 }
 
-const StatsMain: React.FC<Props> = ({ classes, data }) => {
+const RELEASE_FILTER = ['Baan 4', 'Baan 5', 'LN FP5', 'LN FP6', 'LN FP7', 'LN FP3', '10.2', '10.3'];
+
+export const StatsMain: React.FC<Props> = ({
+  classes,
+  data,
+  owner = '',
+  products = ['LN'],
+  filterValues
+}) => {
   const params = useParams();
   const sev12notrestored = [
     ...data.critical.filter((item: any) => !item.service_restored_date),
@@ -227,156 +241,114 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
       (item: any) => !item.service_restored_date && item.status !== 'Solution Proposed'
     )
   ];
-  const [loading, setLoading] = useState(true);
 
+  const [loading, setLoading] = useState(true);
+  // console.log('👍', owner);
   React.useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 2000);
     return () => {};
   }, []);
-  const sev1notrestored = data.critical.filter((item: any) => !item.service_restored_date);
+  // const sev1notrestored = data.critical.filter((item: any) => !item.service_restored_date);
+
+  // customers that have a MT deployment type
+  const multitenantcustomers = data.multitenantcustomers;
+
+  // List of customers that have extended maintenance
+  const extendedmaintenance = data.extendedMaintenance;
+
+  const extIncidents = [...data.all, ...data.all_dev]
+    .filter((item: any) => RELEASE_FILTER.includes(item.releasename))
+    .map((item: any) => ({
+      ...item,
+      extended: extendedmaintenance.find((customer: any) => customer.customerid === item.customerid)
+        ? 'Yes'
+        : 'No'
+    }))
+    .sort((a: any, b: any) => a.daysSinceCreated - b.daysSinceCreated);
+
+  const extIncidentsWithDev = extIncidents.filter(
+    (item: any) => item.status === 'Awaiting Development'
+  );
+  // console.log('🤷‍♂️🤷‍♂️', extIncidents);
+  // console.log('mt customers', multitenantcustomers);
+  const mtincidents = data.all
+    .filter(
+      (inc: any) =>
+        multitenantcustomers.find((cust: any) => parseInt(cust.customerid) === inc.customerid)
+      // inc.customerid === 60028554
+    )
+    .filter((x: any) => x.Tenant !== 'Multi-Tenant');
+
   const multitenant = data.multitenant
     .filter((item: any) => item.Tenant === 'Multi-Tenant' && item.release !== '10.5')
-    .sort((a: any, b: any) => (a.customer > b.customer ? 1 : -1));
-  console.log('MT', { multitenant });
-  console.log('critical', sev1notrestored);
+    .filter((item: any) => item.dayssincelastupdate > 7)
+    .sort((a: any, b: any) => a.dayssincelastupdate - b.dayssincelastupdate);
+  // console.log('MT', multitenant);
+  // console.log('critical', sev1notrestored);
   const { isCloud } = useContext(SelectionContext);
+  // const filterValues = { owner, products };
   return (
     <>
-      {loading && <Spinner />}
-      {isCloud && (
-        <div>
-          <BacklogTable
-            classes={classes}
-            backlog={data.critical_cloud}
-            title="Critical"
-            description="All Incidents with a severity of 'Production Outage / Critical Application halted'"
-          />
+      {loading && <LoadingDots />}
 
-          <BacklogTable
-            classes={classes}
-            backlog={data.on_hold_cloud}
-            title="On Hold"
-            description="All Incidents with a status of On Hold By Customer with no or an Expired Action date"
-          />
-
-          {/* <BacklogTable
-            classes={classes}
-            backlog={data.solution_proposed_cloud}
-            title="Solution Proposed"
-            description={`All Incidents with a status of Solution Proposed not updated for ${
-              params['N_SOLUTIONPROPOSED']
-            } days or more`}
-          /> */}
-
-          <BacklogTable
-            classes={classes}
-            backlog={data.awaiting_customer_cloud}
-            title="Awaiting customer"
-            description={`All Incidents with a status of Awaiting Customer not updated for more than  ${params['C_AWAITINGCUSTOMER']} days `}
-          />
-
-          <BacklogTable
-            classes={classes}
-            backlog={data.researching_cloud}
-            title="Researching"
-            description={`Incidents with status 'Researching' Last updated  ${params['C_RESEARCHING']} days or more`}
-          />
-
-          <BacklogTable
-            classes={classes}
-            backlog={data.awaiting_infor_cloud}
-            title="Awaiting Infor"
-            description={`Incidents with status 'Awaiting Infor' Last updated  ${params['C_AWAITINGINFOR']} days or more`}
-          />
-          <BacklogTable
-            classes={classes}
-            backlog={data.callbacks_cloud}
-            title="Callbacks/Awaiting Infor"
-            description="All callbacks and Incidents with status 'Awaiting Infor'"
-          />
-
-          <BacklogTable
-            classes={classes}
-            backlog={data.major_impact_cloud}
-            title="Major Impact"
-            description="Incidents with severity 'Major Impact' Last updated 2 days or more"
-          />
-
-          <BacklogTable
-            classes={classes}
-            backlog={data.major_impact_cloud2}
-            title="Major Impact"
-            description="Incidents with severity 'Major Impact' Last updated 2 days or more Not resolved in 5 days"
-          />
-
-          <BacklogTable
-            classes={classes}
-            backlog={data.aging_cloud}
-            title="Aging"
-            description={`Incidents older than ${params['N_AGING']}  days`}
-          />
-          <BacklogTable
-            classes={classes}
-            backlog={data.aging_dev_cloud}
-            title="Aging- Development"
-            description="Incidents older than 90 days - Development Backlog"
-          />
-          <BacklogTable
-            classes={classes}
-            backlog={data.new_cloud}
-            title="New Incidents"
-            description={`Incidents with status 'New' not updated for more than  ${params['C_NEW']} days`}
-          />
-
-          <BacklogTable
-            classes={classes}
-            backlog={data.cloudops}
-            title="All CloudOps"
-            description="All Incidents with a CloudOps Specific status (Task....)"
-          />
-          <BacklogTable
-            classes={classes}
-            backlog={data.all_cloud}
-            title="All"
-            description="All Support Backlog"
-          />
-        </div>
-      )}
       {!isCloud && (
         <div>
           <BacklogTable
+            filterValues={filterValues}
             classes={classes}
             backlog={sev12notrestored}
             title="Critical/Major Not restored"
             description="All Incidents with a severity of 'Production Outage / Major Impact' without a restored date"
           />
+
           <BacklogTable
+            filterValues={filterValues}
             classes={classes}
             backlog={multitenant}
             title="Multitenant"
-            description="All Incidents open for our MT customers"
+            description="All Incidents open for our MT customers not updated > 7 days"
           />
           <BacklogTable
+            filterValues={filterValues}
+            classes={classes}
+            backlog={extIncidentsWithDev}
+            additionalFields={['releasename', 'extended', 'daysSinceCreated']}
+            title="Extended Maintenance Check- Awaiting Development"
+            description="All Awaiting Development Incidents open for customers logging on a version that has extended maintenance"
+          />
+          <BacklogTable
+            filterValues={filterValues}
+            classes={classes}
+            backlog={mtincidents}
+            additionalFields={['Deployment', 'Tenant', 'release']}
+            title="Multitenant customer incidents"
+            description="All Incidents open for our MT not logged as multi tenant"
+          />
+          <BacklogTable
+            filterValues={filterValues}
+            classes={classes}
+            backlog={extIncidents}
+            additionalFields={['releasename', 'extended', 'daysSinceCreated']}
+            title="Extended Maintenance Check"
+            description="All Incidents open for customers logging on a version that has extended maintenance"
+          />
+          <BacklogTable
+            filterValues={filterValues}
             classes={classes}
             backlog={data.sev1notrestored}
             title="Critical"
             description="All Incidents with a severity of 'Production Outage / Critical Application halted'"
           />
           <BacklogTable
+            filterValues={filterValues}
             classes={classes}
             backlog={data.on_hold}
             title="On Hold"
             description="All Incidents with a status of On Hold By Customer with no or an Expired Action date"
           />
-          {/* <BacklogTable
-            classes={classes}
-            backlog={data.solution_proposed}
-            title="Solution Proposed"
-            description={`All Incidents with a status of Solution Proposed not updated for ${
-              params['N_SOLUTIONPROPOSED']
-            } days or more`}
-          /> */}
+
           <BacklogTable
+            filterValues={filterValues}
             classes={classes}
             backlog={data.awaiting_customer}
             additionalFields={['ownergroup']}
@@ -384,24 +356,28 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
             description={`All Incidents with a status of Awaiting Customer not updated for more than ${params['N_AWAITINGCUSTOMER']} days `}
           />
           <BacklogTable
+            filterValues={filterValues}
             classes={classes}
             backlog={data.researching}
             title="Researching"
             description={`Incidents with status 'Researching' Last updated  ${params['N_RESEARCHING']} days or more`}
           />
           <BacklogTable
+            filterValues={filterValues}
             classes={classes}
             backlog={data.awaiting_infor}
             title="Awaiting Infor"
             description={`Incidents with status 'Awaiting Infor' Last updated  ${params['N_AWAITINGINFOR']} days or more`}
           />
           <BacklogTable
+            filterValues={filterValues}
             classes={classes}
             backlog={data.callbacks}
             title="Callbacks/Awaiting Infor"
             description="All callbacks and Incidents with status 'Awaiting Infor'"
           />
           <BacklogTable
+            filterValues={filterValues}
             classes={classes}
             backlog={data.major_impact}
             title="Major Impact"
@@ -409,6 +385,7 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
             includeservicerestored={true}
           />
           <BacklogTable
+            filterValues={filterValues}
             classes={classes}
             backlog={data.major_impact2}
             title="Major Impact"
@@ -416,30 +393,35 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
             includeservicerestored={true}
           />
           <BacklogTable
+            filterValues={filterValues}
             classes={classes}
             backlog={data.aging}
             title="Aging- Support"
             description={`Incidents older than ${params['N_AGING']}  days`}
           />
           <BacklogTable
+            filterValues={filterValues}
             classes={classes}
             backlog={data.aging_dev}
             title="Aging- Development"
             description="Incidents older than 90 days - Development Backlog"
           />
           <BacklogTable
+            filterValues={filterValues}
             classes={classes}
             backlog={data.new}
             title="New Incidents"
             description={`Incidents with status 'New' not updated for more than  ${params['N_NEW']} days`}
           />
           <BacklogTable
+            filterValues={filterValues}
             classes={classes}
             backlog={data.cloudops}
             title="All CloudOps"
             description="All Incidents with a CloudOps Specific status (Task....)"
           />
           <BacklogTable
+            filterValues={filterValues}
             classes={classes}
             backlog={data.infor}
             additionalFields={['contactname']}
@@ -447,12 +429,14 @@ const StatsMain: React.FC<Props> = ({ classes, data }) => {
             description="All Support Backlog logged on Infor Account"
           />
           <BacklogTable
+            filterValues={filterValues}
             classes={classes}
             backlog={data.active}
             title="Active"
             description="All Active Support Backlog"
           />
           <BacklogTable
+            filterValues={filterValues}
             classes={classes}
             backlog={data.all}
             title="All"

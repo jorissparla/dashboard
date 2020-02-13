@@ -24,14 +24,11 @@ export const Field = ({
   // console.log('Field', name, activeVersion);
   const [isOpen, setisOpened] = React.useState(false);
   const [value, setValue] = React.useState(activeVersion[name]);
-  const [editable, toggleEdit] = React.useState(edit);
-  function handleChange(e) {
-    setValue(e.target.value);
-  }
+
   // console.log('refresh', name, value, activeVersion);
   React.useEffect(() => {
     setValue(activeVersion[name]);
-  }, [activeVersion]);
+  }, [activeVersion, name]);
   return (
     <Paper
       className={classes.paper}

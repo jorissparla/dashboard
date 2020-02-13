@@ -112,7 +112,7 @@ const SupportCardForm = props => {
   } = props;
   const readOnly = !authenticated;
   const [on, toggle] = React.useState(false);
-  const updatedAt = supportcard ? supportcard.updatedAt : format(new Date(), 'YYYY-MM-DD');
+  const updatedAt = supportcard ? supportcard.updatedAt : format(new Date(), 'yyyy-MM-dd');
   const currentUser = useUser();
   console.log('blba', { initialValues }, currentUser);
   let newInitialValues =
@@ -292,7 +292,7 @@ const SupportCardForm = props => {
                 </Button>
                 <Chip
                   style={{ margin: 4 }}
-                  label={`Last updated at ${format(updatedAt, 'ddd, DD MMM YYYY')}`}
+                  label={`Last updated at ${format(updatedAt, 'EEE, dd MMM yyyy')}`}
                 />
               </CardSection>
             </form>

@@ -55,9 +55,19 @@ const MaintenanceInformation = ({
             }
             label={
               validMaintenance ? (
-                <div style={{ color: 'green' }}>Valid Maintenance 👍👍</div>
+                <div style={{ color: 'green' }}>
+                  Valid Maintenance{' '}
+                  <span role="img" aria-label="vm">
+                    👍👍
+                  </span>
+                </div>
               ) : (
-                <div style={{ color: 'red' }}>Not Valid Maintenance 👎</div>
+                <div style={{ color: 'red' }}>
+                  Not Valid Maintenance{' '}
+                  <span role="img" aria-label="uvm">
+                    👎
+                  </span>
+                </div>
               )
             }
           />

@@ -9,7 +9,7 @@ import CourseStudentList from './CourseStudentList';
 import PlannedCourses from './PlannedCourses';
 import { Title } from '../styles';
 import _ from 'lodash';
-import addHours from 'date-fns/add_hours';
+import {addHours} from 'date-fns';
 
 const Div = styled.div`
   display: flex;
@@ -261,8 +261,8 @@ const CourseDelete = gql`
   }
 `;
 
-const CourseUpdate = gql`
-  mutation updateCourse($input: InputCourseType) {
+const UPDATE_COURSE_MUTATION = gql`
+  mutation UPDATE_COURSE_MUTATION($input: InputCourseType) {
     updateCourse(input: $input) {
       course {
         id
@@ -374,7 +374,7 @@ const CourseQuery = gql`
 
 export default compose(
   graphql(CourseDelete, { name: 'deleteCourse' }),
-  graphql(CourseUpdate, { name: 'updateCourse' }),
+  graphql(UPDATE_COURSE_MUTATION, { name: 'UPDATE_COURSE_MUTATION' }),
   graphql(PlannedCourseUpdate, { name: 'updatePlannedCourse' }),
   graphql(PlannedCourseAdd, { name: 'addPlannedCourse' }),
   graphql(PlannedCourseDelete, { name: 'deletePlannedCourse' }),

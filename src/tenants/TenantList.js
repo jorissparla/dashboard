@@ -8,14 +8,14 @@ import Typography from '@material-ui/core/Typography';
 import _ from 'lodash';
 import Modal from 'ModalWrapper';
 import React, { useContext, useState, useEffect } from 'react';
-import { useQuery } from 'react-apollo';
+import { useQuery, useMutation } from 'react-apollo';
 import { animated, config, useSpring } from 'react-spring';
 import styled from 'styled-components';
 import Spinner from 'utils/spinner';
 import FavoriteBadge from '../elements/Badge';
 import { FilterFieldContext } from '../globalState/FilterContext';
 //import format from 'date-fns/format';
-import { distanceInWordsToNow, format } from '../utils/format';
+import { formatDistanceToNow, format } from '../utils/format';
 import { DashBoardContext } from '../globalState/Provider';
 import TenantLogs from './TenantLogs';
 import { ALL_TENANTS, QUERY_ALL_TENANT_DETAILS, TENANT_NOTE } from './TenantQueries';
@@ -24,6 +24,7 @@ import { TenantCard } from './TenantCard';
 import TenantCustomerDetailsForm from './TenantCustomerDetailsForm';
 import FancyFilter from './new/FancyFilter';
 import Loader from './../utils/Loader';
+import { CREATE_AUDIT_MUTATION } from './Query';
 import './tenants.css';
 
 const styles = theme => ({
@@ -75,6 +76,12 @@ const styles = theme => ({
   card2: {
     minWidth: 275,
     margin: 10
+  },
+  card3: {
+    minWidth: '28%',
+    margin: 10,
+    background: 'transparent',
+    backgroundImage: 'linear-gradient(to right bottom,rgba(29, 161, 242, 0.4), white)'
   },
   chip: {
     margin: theme.spacing(1),
@@ -217,15 +224,14 @@ function TenantNote() {
   const { data, loading } = useQuery(TENANT_NOTE);
   if (loading) return <div />;
   const { updatestatus } = data;
-  if (updatestatus.note && updatestatus.note.length> 1) {
-
+  if (updatestatus.note && updatestatus.note.length > 1) {
     return <span className="marquee">{updatestatus.note}</span>;
   }
-  return <div/>
+  return <div />;
 }
 
 export const FilterForm = ({ setSearchText, flip }) => {
-  const { setFields, fields, clearFields } = useContext(FilterFieldContext);
+  const { setFields, clearFields } = useContext(FilterFieldContext);
 
   const [customer, setCustomer] = useState('');
   const [farm, setFarm] = useState('');
@@ -302,18 +308,18 @@ export const FilterForm = ({ setSearchText, flip }) => {
   );
 };
 
-const tenantsByCustomer = (tenants, searchText) =>
-  _.chain(tenants)
-    .filter(o => o.customer.name !== 'Infor')
-    .filter(
-      t =>
-        t.customer.name.toUpperCase().includes(searchText.toUpperCase()) ||
-        t.name.toUpperCase().includes(searchText.toUpperCase()) ||
-        t.version.toUpperCase().includes(searchText.toUpperCase())
-    )
-    .sortBy(o => o.customer.name)
+// const tenantsByCustomer = (tenants, searchText) =>
+//   _.chain(tenants)
+//     .filter(o => o.customer.name !== 'Infor')
+//     .filter(
+//       t =>
+//         t.customer.name.toUpperCase().includes(searchText.toUpperCase()) ||
+//         t.name.toUpperCase().includes(searchText.toUpperCase()) ||
+//         t.version.toUpperCase().includes(searchText.toUpperCase())
+//     )
+//     .sortBy(o => o.customer.name)
 
-    .value();
+//     .value();
 const filterTenantsByCustomerFarmVersion = (tenants, fields, details) => {
   // console.log("filterTenantsByCustomerFarmVersion", fields);
   // const { customer = '', farm = '', version = '' } = fields;
@@ -354,14 +360,18 @@ const filterTenantsByCustomerFarmVersion = (tenants, fields, details) => {
   } else return retValue;
 };
 
-const inforTenant = tenants => tenants.filter(o => o.customer.name === 'Infor');
+// const inforTenant = tenants => tenants.filter(o => o.customer.name === 'Infor');
+const inforTenantByFarm = (tenants, farm) =>
+  tenants.filter(o => o.customer.name === 'Infor' && o.farm === farm);
 
 const TenantList = props => {
   const dbctx = React.useContext(DashBoardContext);
   let role = dbctx && dbctx.role ? dbctx.role : 'Guest';
-  const { setFields, fields, clearFields } = useContext(FilterFieldContext);
+  console.log(dbctx.fullname);
+  const [createAudit] = useMutation(CREATE_AUDIT_MUTATION);
+  const { setFields, fields } = useContext(FilterFieldContext);
   const { classes } = props;
-  const [searchText, setSearchText] = useState('');
+  const [setSearchText] = useState('');
   const [showFilterDialog, toggleShowFilterDialog] = useState(false);
   const [showLogs, setShowLogs] = useState(false);
   const [isShowingDetails, toggleShowDetails] = useState(false);
@@ -393,8 +403,15 @@ const TenantList = props => {
   }
 
   useEffect(() => {
-    clearFields();
-  }, [happyPress]);
+    const input = {
+      username: dbctx.fullname,
+      page: '/tenantlist',
+      linkid: null,
+      type: 'TenantList'
+    };
+    createAudit({ variables: { input } }).then(console.log);
+  }, [createAudit, dbctx.fullname]);
+
   const { data, loading } = useQuery(ALL_TENANTS);
   const { data: details, loading: detailsloading } = useQuery(QUERY_ALL_TENANT_DETAILS);
 
@@ -467,7 +484,24 @@ const TenantList = props => {
               />
             );
           })}
-          <TenantCard classes={classes} customer="Infor" tenants={inforTenant(tenants)} />
+          {/* <TenantCard classes={classes} customer="Infor" tenants={inforTenant(tenants)} /> */}
+        </div>
+        <div style={{ display: 'flex' }}>
+          <TenantCard
+            classes={classes}
+            customer="Infor"
+            tenants={inforTenantByFarm(tenants, 'Frankfurt')}
+          />
+          <TenantCard
+            classes={classes}
+            customer="Infor"
+            tenants={inforTenantByFarm(tenants, 'Us-East-1')}
+          />
+          <TenantCard
+            classes={classes}
+            customer="Infor"
+            tenants={inforTenantByFarm(tenants, 'Sydney')}
+          />
         </div>
       </animated.div>
       <animated.div
@@ -500,16 +534,16 @@ export const TenantListHeader = ({
   toggleFilter,
   applyFilter
 }) => {
-  const max = _.maxBy(tenants, t => format(t.lastupdated, 'YYYYMMDD')).lastupdated;
+  const max = _.maxBy(tenants, t => format(t.lastupdated, 'yyyyMMdd')).lastupdated;
   let tenantcustomersWithFarm = _.countBy(
     tenants.map(({ farm, tenant }) => ({ farm, tenant })),
     'farm'
   );
   // const filteredTenants = filterTenantsByCustomerFarmVersion(tenants, fields, flip);
   // console.log("filterTenants", filteredTenants);
-  const uniqueCustomers = tenants
-    .map(({ farm, customer: { name } }) => name)
-    .filter((ten, i, all) => all.indexOf(ten) === i);
+  // const uniqueCustomers = tenants
+  //   .map(({ farm, customer: { name } }) => name)
+  //   .filter((ten, i, all) => all.indexOf(ten) === i);
   const listOfCustomerAndFarm = tenants
     .filter(item => item.customerid !== null)
     .map(({ customerid, farm }) => ({ customerid, farm }));
@@ -520,7 +554,7 @@ export const TenantListHeader = ({
   ).filter(t => t.live === 1);
   const totalCustomers = Object.entries(custFarms).reduce((count, item) => count + item[1], 0);
 
-  const nrOfLiveCustomers = uniqueCustomers.filter(t => t.live).length;
+  // const nrOfLiveCustomers = uniqueCustomers.filter(t => t.live).length;
   const totalTenants = Object.entries(tenantcustomersWithFarm).reduce(
     (count, item) => count + item[1],
     0
@@ -536,15 +570,15 @@ export const TenantListHeader = ({
       >
         <Typography gutterBottom variant="h5" component="h2">
           <span style={{ letterSpacing: '0.2rem', textTransform: 'uppercase' }}>
-            {/* {` Multitenant customers - last change -${format(max, 'DD MMM YYYY')}`} */}
+            {/* {` Multitenant customers - last change -${format(max, 'dd MMM yyyy')}`} */}
             {` Multitenant customers `}
           </span>
           <Chip
             label={
               updatedAt
-                ? `Last check:  ${distanceInWordsToNow(updatedAt)} ago,  Last change made ${format(
+                ? `Last check:  ${formatDistanceToNow(updatedAt)} ago,  Last change made ${format(
                     max,
-                    'DD MMM YYYY'
+                    'dd MMM yyyy'
                   )} `
                 : 'not Saved yet'
             }
@@ -606,16 +640,15 @@ export const TenantListHeader = ({
 function useMultiKeyPress() {
   const [keysPressed, setKeyPressed] = useState(new Set([]));
 
-  function downHandler({ key }) {
-    setKeyPressed(keysPressed.add(key));
-  }
-
-  const upHandler = ({ key }) => {
-    keysPressed.delete(key);
-    setKeyPressed(keysPressed);
-  };
-
   useEffect(() => {
+    function downHandler({ key }) {
+      setKeyPressed(keysPressed.add(key));
+    }
+
+    const upHandler = ({ key }) => {
+      keysPressed.delete(key);
+      setKeyPressed(keysPressed);
+    };
     window.addEventListener('keydown', downHandler);
     window.addEventListener('keyup', upHandler);
     return () => {
@@ -627,36 +660,36 @@ function useMultiKeyPress() {
   return keysPressed;
 }
 
-function useKeyPress(targetKey) {
-  // State for keeping track of whether key is pressed
-  const [keyPressed, setKeyPressed] = useState(false);
+// function useKeyPress(targetKey) {
+//   // State for keeping track of whether key is pressed
+//   const [keyPressed, setKeyPressed] = useState(false);
 
-  // If pressed key is our target key then set to true
-  function downHandler({ key }) {
-    if (key === targetKey) {
-      setKeyPressed(true);
-    }
-  }
+//   // If pressed key is our target key then set to true
+//   function downHandler({ key }) {
+//     if (key === targetKey) {
+//       setKeyPressed(true);
+//     }
+//   }
 
-  // If released key is our target key then set to false
-  const upHandler = ({ key }) => {
-    if (key === targetKey) {
-      setKeyPressed(false);
-    }
-  };
+//   // If released key is our target key then set to false
+//   const upHandler = ({ key }) => {
+//     if (key === targetKey) {
+//       setKeyPressed(false);
+//     }
+//   };
 
-  // Add event listeners
-  useEffect(() => {
-    window.addEventListener('keydown', downHandler);
-    window.addEventListener('keyup', upHandler);
-    // Remove event listeners on cleanup
-    return () => {
-      window.removeEventListener('keydown', downHandler);
-      window.removeEventListener('keyup', upHandler);
-    };
-  }, []); // Empty array ensures that effect is only run on mount and unmount
+//   // Add event listeners
+//   useEffect(() => {
+//     window.addEventListener('keydown', downHandler);
+//     window.addEventListener('keyup', upHandler);
+//     // Remove event listeners on cleanup
+//     return () => {
+//       window.removeEventListener('keydown', downHandler);
+//       window.removeEventListener('keyup', upHandler);
+//     };
+//   }, []); // Empty array ensures that effect is only run on mount and unmount
 
-  return keyPressed;
-}
+//   return keyPressed;
+// }
 
 export default withStyles(styles)(TenantList);
