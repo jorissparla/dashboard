@@ -1,94 +1,95 @@
-import SymptomsPage from 'pages/Symptoms';
-import React from 'react';
-import { Route, Switch, useHistory } from 'react-router-dom';
-import { TenantLogsWithData } from 'tenants/TenantLogs';
-import TenantViewList from 'tenants/TenantViewList';
-import NiceSpinner from 'utils/NiceSpinner';
-import RequireAuth, { AuthRoute, EnhancedRoute } from './auth/require_auth';
-import Signin from './auth/signin';
-import SigninWithPIN from './auth/SigninWithPIN';
-import Signout from './auth/signout';
-import OtherTeamsChartContainer from './charts/OtherTeamChartsContainer';
-import Product from './cloudsuite/Product';
-import CourseAdd from './courses/CourseAdd';
-import CourseEdit from './courses/CourseEdit';
-import CourseFileUpload from './courses/CourseFileUpload';
-import PlannedCourseAdd from './courses/PlannedCourseAdd';
-import PlannedCourseEdit from './courses/PlannedCourseEdit';
-import PlannedCourses from './courses/PlannedCoursesNew';
-import DynamicImport from './DynamicImport';
-import { DashBoardContext, withDashBoardContext } from './globalState/Provider';
-import { UserContext } from './globalState/UserProvider';
-import NewsItemContainer from './news/newsitemcontainer';
-import CloudReadiness from './pages/CloudReadiness';
-import CloudSuites, { CloudSuitePage } from './pages/CloudSuites';
-import DashBoardContainer from './pages/dashboardcontainer';
-import MaintenanceVersionList from './pages/MaintenanceVersionList';
-import NewsPage from './pages/newspage';
-import PlannedCourseRequestList from './pages/PlannedCourseRequestList';
-import Playground from './pages/Playground';
-import ProfilePage from './pages/ProfilePage';
-import Stats from './pages/Stats';
-import { Surveys } from './pages/Surveys';
-import VideoPage from './pages/Videos';
-import { Parameters } from './stats/Parameters';
-import PriorityDashboard from './stats/PriorityDashboard';
-import Details from './tenants/details/index';
-import TestLogin from './TestLogin';
+import SymptomsPage from "pages/Symptoms";
+import React from "react";
+import { Route, Switch, useHistory } from "react-router-dom";
+import { TenantLogsWithData } from "tenants/TenantLogs";
+import TenantViewList from "tenants/TenantViewList";
+import NiceSpinner from "utils/NiceSpinner";
+import RequireAuth, { AuthRoute, EnhancedRoute } from "./auth/require_auth";
+import Signin from "./auth/signin";
+import SigninWithPIN from "./auth/SigninWithPIN";
+import Signout from "./auth/signout";
+import OtherTeamsChartContainer from "./charts/OtherTeamChartsContainer";
+import Product from "./cloudsuite/Product";
+import CourseAdd from "./courses/CourseAdd";
+import CourseEdit from "./courses/CourseEdit";
+import CourseFileUpload from "./courses/CourseFileUpload";
+import PlannedCourseAdd from "./courses/PlannedCourseAdd";
+import PlannedCourseEdit from "./courses/PlannedCourseEdit";
+import PlannedCourses from "./courses/PlannedCoursesNew";
+import DynamicImport from "./DynamicImport";
+import { DashBoardContext, withDashBoardContext } from "./globalState/Provider";
+import { UserContext } from "./globalState/UserProvider";
+import NewsItemContainer from "./news/newsitemcontainer";
+import CloudReadiness from "./pages/CloudReadiness";
+import CloudSuites, { CloudSuitePage } from "./pages/CloudSuites";
+import DashBoardContainer from "./pages/dashboardcontainer";
+import MaintenanceVersionList from "./pages/MaintenanceVersionList";
+import NewsPage from "./pages/newspage";
+import PlannedCourseRequestList from "./pages/PlannedCourseRequestList";
+import Playground from "./pages/Playground";
+import ProfilePage from "./pages/ProfilePage";
+import Stats from "./pages/Stats";
+import { Surveys } from "./pages/Surveys";
+import VideoPage from "./pages/Videos";
+import { Parameters } from "./stats/Parameters";
+import PriorityDashboard from "./stats/PriorityDashboard";
+import Details from "./tenants/details/index";
+import TestLogin from "./TestLogin";
 // import Test
-import { UserProfileComponent } from './User';
-import UserPermissions from './UserPermissions';
-import { AddVideo, EditVideo } from './videos/VideoOperations';
-import Test from './pages/Test';
+import { UserProfileComponent } from "./User";
+import UserPermissions from "./UserPermissions";
+import { AddVideo, EditVideo } from "./videos/VideoOperations";
+import Test from "./pages/Test";
+import LoginForm from "./auth/LoginForm";
 
-const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
+const StatsMain = DynamicImport(() => import("./pages/StatsMain"));
 
 //const StatsMain = React.lazy(() => import('./kudos/kudolistcomponentnew'));
 
-const Award = DynamicImport(() => import('./awards/award'));
-const KudoListComponentNew = DynamicImport(() => import('./kudos/kudolistcomponentnew'));
-const ResetPasswordForm = DynamicImport(() => import('./auth/ResetPasswordForm'));
-const RequestResetPassword = DynamicImport(() => import('./auth/RequestResetPassword'));
+const Award = DynamicImport(() => import("./awards/award"));
+const KudoListComponentNew = DynamicImport(() => import("./kudos/kudolistcomponentnew"));
+const ResetPasswordForm = DynamicImport(() => import("./auth/ResetPasswordForm"));
+const RequestResetPassword = DynamicImport(() => import("./auth/RequestResetPassword"));
 
-const NewsListContainer = DynamicImport(() => import('./pages/newslistcontainer'));
+const NewsListContainer = DynamicImport(() => import("./pages/newslistcontainer"));
 
-const NewsItemAddContainer = DynamicImport(() => import('./news/newsitemaddcontainer'));
-const RequestList = DynamicImport(() => import('./supportcard/RequestContainer'));
-const RequestEdit = DynamicImport(() => import('./supportcard/RequestEdit'));
-const AddSupportCardRequest = DynamicImport(() => import('./supportcard/Request'));
-const ImageConverter = DynamicImport(() => import('./utils/ConvertImages'));
+const NewsItemAddContainer = DynamicImport(() => import("./news/newsitemaddcontainer"));
+const RequestList = DynamicImport(() => import("./supportcard/RequestContainer"));
+const RequestEdit = DynamicImport(() => import("./supportcard/RequestEdit"));
+const AddSupportCardRequest = DynamicImport(() => import("./supportcard/Request"));
+const ImageConverter = DynamicImport(() => import("./utils/ConvertImages"));
 
-const AnniversaryList = DynamicImport(() => import('./awards/Anniversaries'));
+const AnniversaryList = DynamicImport(() => import("./awards/Anniversaries"));
 
 //const ResolutionChart = DynamicImport(() => import('./charts/ResolutionChart'));
 
-const CourseList = DynamicImport(() => import('./pages/CourseList'));
+const CourseList = DynamicImport(() => import("./pages/CourseList"));
 
-const AccountList = DynamicImport(() => import('./Account/AccountList'));
+const AccountList = DynamicImport(() => import("./Account/AccountList"));
 
-const ChatContainer = DynamicImport(() => import('./chat/ChatContainer'));
-const ChatList = DynamicImport(() => import('./pages/ChatList'));
-const SmallCard = DynamicImport(() => import('./supportcard/SupportCard'));
-const DashBoardStats = DynamicImport(() => import('./pages/dashboardstats'));
+const ChatContainer = DynamicImport(() => import("./chat/ChatContainer"));
+const ChatList = DynamicImport(() => import("./pages/ChatList"));
+const SmallCard = DynamicImport(() => import("./supportcard/SupportCard"));
+const DashBoardStats = DynamicImport(() => import("./pages/dashboardstats"));
 
-const HistoryDayContainer = DynamicImport(() => import('./charts/historydaycontainer'));
-const HistoryDayAll = DynamicImport(() => import('./charts/historydayallcontainer'));
-const GoLiveListNew = DynamicImport(() => import('./pages/goLiveListNew'));
-const GoLiveListSide = DynamicImport(() => import('./golives/golivelistside'));
-const DashBoardStatsNew = DynamicImport(() => import('./pages/DashBoardStatsNew'));
-const SupportCards = DynamicImport(() => import('./pages/SupportCards'));
+const HistoryDayContainer = DynamicImport(() => import("./charts/historydaycontainer"));
+const HistoryDayAll = DynamicImport(() => import("./charts/historydayallcontainer"));
+const GoLiveListNew = DynamicImport(() => import("./pages/goLiveListNew"));
+const GoLiveListSide = DynamicImport(() => import("./golives/golivelistside"));
+const DashBoardStatsNew = DynamicImport(() => import("./pages/DashBoardStatsNew"));
+const SupportCards = DynamicImport(() => import("./pages/SupportCards"));
 
-const RequestEditAdd = DynamicImport(() => import('./supportcard/Request'));
-const SupportCardEdit = DynamicImport(() => import('./supportcard/SupportCardEdit'));
-const SupportCardAdd = DynamicImport(() => import('./supportcard/SupportCardAdd'));
-const CourseDashboard = DynamicImport(() => import('./pages/CourseDashboard'));
-const StudentListContainer = DynamicImport(() => import('./courses/StudentTableNew'));
-const StudentView = DynamicImport(() => import('./courses/StudentView'));
+const RequestEditAdd = DynamicImport(() => import("./supportcard/Request"));
+const SupportCardEdit = DynamicImport(() => import("./supportcard/SupportCardEdit"));
+const SupportCardAdd = DynamicImport(() => import("./supportcard/SupportCardAdd"));
+const CourseDashboard = DynamicImport(() => import("./pages/CourseDashboard"));
+const StudentListContainer = DynamicImport(() => import("./courses/StudentTableNew"));
+const StudentView = DynamicImport(() => import("./courses/StudentView"));
 /*  */
-const AddPlannedCourseRequest = DynamicImport(() => import('./courses/AddPlannedCourseRequest'));
-const TenantPage = DynamicImport(() => import('./pages/TenantPage'));
-const DonutChart = DynamicImport(() => import('./charts/DonutChart'));
-const VSummaryChart = DynamicImport(() => import('./charts/VSummaryChart'));
+const AddPlannedCourseRequest = DynamicImport(() => import("./courses/AddPlannedCourseRequest"));
+const TenantPage = DynamicImport(() => import("./pages/TenantPage"));
+const DonutChart = DynamicImport(() => import("./charts/DonutChart"));
+const VSummaryChart = DynamicImport(() => import("./charts/VSummaryChart"));
 
 const NotFound = props => {
   //withDashBoardContext(props => {
@@ -100,13 +101,14 @@ const TestUser = () => <UserProfileComponent />;
 function AppRoutes(props) {
   //  const user = props.context;
   const { user, loading } = React.useContext(UserContext);
-  console.log('user', user);
+  console.log("user", user);
   // const context = React.useContext(DashBoardContext);
   // console.log('rendering', context, loading);
   const history = useHistory();
   if (loading) return <NiceSpinner />;
   return (
     <Switch>
+      <Route exact path="/login" component={LoginForm} />
       <Route exact path="/playground" component={Playground} />
       <Route exact path="/cloudreadiness" component={CloudReadiness} />
       <Route exact path="/symptoms" component={SymptomsPage} />
@@ -122,29 +124,10 @@ function AppRoutes(props) {
       <Route exact path="/" component={DashBoardContainer} user={user} />
       <Route exact path="/newspage" component={NewsPage} />
       <Route exact path="/cloudsuites" component={CloudSuites} history={history} user={user} />
-      <Route
-        exact
-        path="/cloudsuites/product/:id"
-        component={Product}
-        history={history}
-        user={user}
-      />
+      <Route exact path="/cloudsuites/product/:id" component={Product} history={history} user={user} />
       <Route exact path="/priority" component={PriorityDashboard} history={history} user={user} />
-      <Route
-        exact
-        path="/cloudsuite/:id"
-        component={CloudSuitePage}
-        history={history}
-        user={user}
-      />
-      <EnhancedRoute
-        auth="admin"
-        editors={['Admin', 'PO']}
-        user={user}
-        exact
-        path="/supportcard"
-        component={SupportCards}
-      />
+      <Route exact path="/cloudsuite/:id" component={CloudSuitePage} history={history} user={user} />
+      <EnhancedRoute auth="admin" editors={["Admin", "PO"]} user={user} exact path="/supportcard" component={SupportCards} />
       <Route exact path="/tenant" component={TenantPage} />
       />
       <Route exact path="/region/:region" component={DashBoardContainer} user={user} />
@@ -163,114 +146,31 @@ function AppRoutes(props) {
       <Route exact path="/courses/create" component={CourseAdd} />
       <Route exact path="/testlogin" component={TestLogin} />
       <Route exact path="/smallcard" component={SmallCard} />
-      <AuthRoute
-        auth="admin"
-        allowed={['Admin', 'PO']}
-        user={user}
-        exact
-        path="/accounts"
-        component={AccountList}
-      />
+      <AuthRoute auth="admin" allowed={["Admin", "PO"]} user={user} exact path="/accounts" component={AccountList} />
       <Route exact path="/image_convert" component={ImageConverter} />
       <Route exact path="/anniversaries" component={AnniversaryList} />
-      <EnhancedRoute
-        allowed={['Admin', 'PO', 'SU', 'Guest', 'Chat']}
-        user={user}
-        exact
-        path="/test"
-        component={Test}
-      />
-      <EnhancedRoute
-        editors={['Admin', 'PO', 'SU']}
-        user={user}
-        exact
-        path="/coursedashboard"
-        component={RequireAuth(CourseDashboard)}
-      />
-      <EnhancedRoute
-        editors={['Admin', 'PO']}
-        user={user}
-        exact
-        path="/requestlist"
-        component={RequireAuth(RequestList)}
-      />
-      <EnhancedRoute
-        editors={['Admin', 'PO']}
-        user={user}
-        exact
-        path="/addrequest"
-        component={RequireAuth(AddSupportCardRequest)}
-      />
-      <EnhancedRoute
-        editors={['Admin', 'PO']}
-        user={user}
-        path="/supportcard/request/:id"
-        component={RequireAuth(RequestEdit)}
-      />
-      <EnhancedRoute
-        editors={['Admin', 'PO']}
-        user={user}
-        path="/supportcard/filter/:text"
-        component={SupportCards}
-      />
+      <EnhancedRoute allowed={["Admin", "PO", "SU", "Guest", "Chat"]} user={user} exact path="/test" component={Test} />
+      <EnhancedRoute editors={["Admin", "PO", "SU"]} user={user} exact path="/coursedashboard" component={RequireAuth(CourseDashboard)} />
+      <EnhancedRoute editors={["Admin", "PO"]} user={user} exact path="/requestlist" component={RequireAuth(RequestList)} />
+      <EnhancedRoute editors={["Admin", "PO"]} user={user} exact path="/addrequest" component={RequireAuth(AddSupportCardRequest)} />
+      <EnhancedRoute editors={["Admin", "PO"]} user={user} path="/supportcard/request/:id" component={RequireAuth(RequestEdit)} />
+      <EnhancedRoute editors={["Admin", "PO"]} user={user} path="/supportcard/filter/:text" component={SupportCards} />
       <Route path="award" component={Award} />
       <EnhancedRoute
-        editors={['Admin', 'PO']}
-        allowed={['Admin', 'PO']}
+        editors={["Admin", "PO"]}
+        allowed={["Admin", "PO"]}
         user={user}
         path="/supportcard/edit/:id"
         component={RequireAuth(SupportCardEdit)}
       />
-      <EnhancedRoute
-        editors={['None']}
-        user={user}
-        path="/supportcard/view/:id"
-        component={SupportCardEdit}
-      />
-      <EnhancedRoute
-        allowed={['Admin']}
-        editors={['Admin', 'PO']}
-        user={user}
-        exact
-        path="/supportcard/add"
-        component={SupportCardAdd}
-      />
-      <AuthRoute
-        allowed={['Admin', 'PO', 'SU', 'Guest', 'Chat']}
-        user={user}
-        exact
-        path="/supportcard/request"
-        component={RequestEditAdd}
-      />
+      <EnhancedRoute editors={["None"]} user={user} path="/supportcard/view/:id" component={SupportCardEdit} />
+      <EnhancedRoute allowed={["Admin"]} editors={["Admin", "PO"]} user={user} exact path="/supportcard/add" component={SupportCardAdd} />
+      <AuthRoute allowed={["Admin", "PO", "SU", "Guest", "Chat"]} user={user} exact path="/supportcard/request" component={RequestEditAdd} />
       <Route exact path="/news" component={NewsListContainer} />
-      <AuthRoute
-        allowed={['Admin', 'PO', 'SU']}
-        user={user}
-        exact
-        path="/news/edit/:id"
-        component={RequireAuth(NewsItemContainer)}
-      />
-      <AuthRoute
-        allowed={['Admin', 'PO', 'SU', 'Chat']}
-        user={user}
-        exact
-        path="/chat"
-        component={RequireAuth(ChatList)}
-      />
-      <AuthRoute
-        allowed={['Admin', 'PO', 'SU', 'Chat']}
-        user={user}
-        exact
-        path="/chat/new"
-        component={RequireAuth(ChatContainer)}
-      />
-      <AuthRoute
-        allowed={['Admin', 'PO', 'SU', 'Guest']}
-        user={user}
-        exact
-        path="/news/add"
-        component={RequireAuth(NewsItemAddContainer)}
-      />
+      <AuthRoute allowed={["Admin", "PO", "SU"]} user={user} exact path="/news/edit/:id" component={RequireAuth(NewsItemContainer)} />
+      <AuthRoute allowed={["Admin", "PO", "SU", "Chat"]} user={user} exact path="/chat" component={RequireAuth(ChatList)} />
+      <AuthRoute allowed={["Admin", "PO", "SU", "Chat"]} user={user} exact path="/chat/new" component={RequireAuth(ChatContainer)} />
+      <AuthRoute allowed={["Admin", "PO", "SU", "Guest"]} user={user} exact path="/news/add" component={RequireAuth(NewsItemAddContainer)} />
       <Route path="/golivelist" component={GoLiveListNew} />
       <Route path="/golivelistside" component={GoLiveListSide} />
       <Route path="/golives" component={GoLiveListNew} />
@@ -292,14 +192,9 @@ function AppRoutes(props) {
       <Route exact path="/coursedashboard" component={CourseDashboard} />
       <Route exact path="/students" component={StudentListContainer} />
       <Route path="/students/:id" component={StudentView} />
+      <AuthRoute allowed={["Admin", "PO"]} user={user} path="/courses/edit/:id" component={CourseEdit} />
       <AuthRoute
-        allowed={['Admin', 'PO']}
-        user={user}
-        path="/courses/edit/:id"
-        component={CourseEdit}
-      />
-      <AuthRoute
-        allowed={['Admin', 'PO', 'SU', 'Guest', 'Chat']}
+        allowed={["Admin", "PO", "SU", "Guest", "Chat"]}
         user={user}
         path="/courses/view/:id"
         component={props => <CourseEdit {...props} view={true} />}
@@ -310,20 +205,8 @@ function AppRoutes(props) {
       <Route exact path="/addplannedcourserequest" component={AddPlannedCourseRequest} />
       <Route exact path="/about" component={VideoPage} user={user} />
       <EnhancedRoute exact path="/videos" component={VideoPage} user={user} />
-      <AuthRoute
-        allowed={['Admin', 'PO']}
-        user={user}
-        exact
-        path="/addvideo"
-        component={AddVideo}
-      />
-      <AuthRoute
-        allowed={['Admin', 'PO']}
-        user={user}
-        exact
-        path="/editvideo/:id"
-        component={EditVideo}
-      />
+      <AuthRoute allowed={["Admin", "PO"]} user={user} exact path="/addvideo" component={AddVideo} />
+      <AuthRoute allowed={["Admin", "PO"]} user={user} exact path="/editvideo/:id" component={EditVideo} />
       <Route component={NotFound} />
     </Switch>
   );

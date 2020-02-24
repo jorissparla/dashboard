@@ -1,12 +1,9 @@
-import React from 'react';
-import gql from 'graphql-tag';
-import { Query, Mutation } from 'react-apollo';
-import Component from '../common/component-component';
-import { StyledMultiple } from './StyledDropdowns';
-import { Formik } from 'formik';
+import gql from "graphql-tag";
+import React from "react";
+import { Query } from "react-apollo";
 
-const QUERY_PLANNEDCOURSE_WITHPARTICIPANTS = gql`
-  query QUERY_PLANNEDCOURSE_WITHPARTICIPANTS($id: ID) {
+const QUERY_PLANNEDCOURSE_WITHPARTICIPANTS_1 = gql`
+  query QUERY_PLANNEDCOURSE_WITHPARTICIPANTS_1($id: ID) {
     plannedcourse(id: $id) {
       id
       course {
@@ -26,24 +23,15 @@ const QUERY_PLANNEDCOURSE_WITHPARTICIPANTS = gql`
   }
 `;
 
-const ADD_PARTICIPANTS_TO_COURSE = gql`
-  mutation ADD_PARTICIPANTS_TO_COURSE($participants: String!, $id: ID!) {
-    updatePlannedCourseParticipants(participants: $participants, where: { id: $id }) {
-      course {
-        id
-      }
-    }
-  }
-`;
 class DownshiftMultiple extends React.Component {
   state = {
-    inputValue: '',
+    inputValue: "",
     selectedItem: []
   };
 
   handleKeyDown = event => {
     const { inputValue, selectedItem } = this.state;
-    if (selectedItem.length && !inputValue.length && keycode(event) === 'backspace') {
+    if (selectedItem.length && !inputValue.length && keycode(event) === "backspace") {
       this.setState({
         selectedItem: selectedItem.slice(0, selectedItem.length - 1)
       });
@@ -62,7 +50,7 @@ class DownshiftMultiple extends React.Component {
     }
 
     this.setState({
-      inputValue: '',
+      inputValue: "",
       selectedItem
     });
   };
@@ -80,60 +68,34 @@ class DownshiftMultiple extends React.Component {
     const { inputValue, selectedItem } = this.state;
 
     return (
-      <Query
-        query={QUERY_PLANNEDCOURSE_WITHPARTICIPANTS}
-        variables={{ id: this.props.id || '611E0A88-8690-4102-A629-F7E3B28874A3' }}
-      >
+      <Query query={QUERY_PLANNEDCOURSE_WITHPARTICIPANTS_1} variables={{ id: this.props.id || "611E0A88-8690-4102-A629-F7E3B28874A3" }}>
         {({ data, loading, error }) => {
           if (loading) {
-            return 'Loading';
+            return "Loading";
           }
           if (!data) {
-            return 'No data';
+            return "No data";
           }
           const { plannedcourse, supportfolks } = data;
-          console.log(
-            this.props.id,
-            plannedcourse.students.map(({ fullname }) => fullname).join(';')
-          );
+          console.log(this.props.id, plannedcourse.students.map(({ fullname }) => fullname).join(";"));
           const suggestions = supportfolks;
-          const participants = plannedcourse
-            ? plannedcourse.students.map(({ fullname }) => fullname).join(';')
-            : '';
+          const participants = plannedcourse ? plannedcourse.students.map(({ fullname }) => fullname).join(";") : "";
           return (
-            <Downshift
-              id="downshift-multiple"
-              inputValue={inputValue}
-              onChange={this.handleChange}
-              selectedItem={selectedItem}
-            >
-              {({
-                getInputProps,
-                getItemProps,
-                isOpen,
-                inputValue: inputValue2,
-                selectedItem: selectedItem2,
-                highlightedIndex
-              }) => (
+            <Downshift id="downshift-multiple" inputValue={inputValue} onChange={this.handleChange} selectedItem={selectedItem}>
+              {({ getInputProps, getItemProps, isOpen, inputValue: inputValue2, selectedItem: selectedItem2, highlightedIndex }) => (
                 <div className={classes.container}>
                   {renderInput({
                     fullWidth: true,
                     classes,
                     InputProps: getInputProps({
                       startAdornment: selectedItem.map(item => (
-                        <Chip
-                          key={item}
-                          tabIndex={-1}
-                          label={item}
-                          className={classes.chip}
-                          onDelete={this.handleDelete(item)}
-                        />
+                        <Chip key={item} tabIndex={-1} label={item} className={classes.chip} onDelete={this.handleDelete(item)} />
                       )),
                       onChange: this.handleInputChange,
                       onKeyDown: this.handleKeyDown,
-                      placeholder: 'Select multiple countries'
+                      placeholder: "Select multiple countries"
                     }),
-                    label: 'Label'
+                    label: "Label"
                   })}
                   {isOpen ? (
                     <Paper className={classes.paper} square>

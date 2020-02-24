@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import { withRouter } from 'react-router';
-import { CardSection } from '../common';
-import Button from '@material-ui/core/Button';
-import styled from 'styled-components';
-import { Formik } from 'formik';
-import { TextField, Avatar } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import FileUploaderNew from '../common/FileUploaderNew';
-import SafeDeleteButton from '../videos/SafeDeleteButton';
+import React, { useState } from "react";
+import { withRouter } from "react-router";
+import { CardSection } from "../common";
+import Button from "@material-ui/core/Button";
+import styled from "styled-components";
+import { Formik } from "formik";
+import { TextField, Avatar } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
+import Paper from "@material-ui/core/Paper";
+import Typography from "@material-ui/core/Typography";
+import FileUploaderNew from "../common/FileUploaderNew";
+import SafeDeleteButton from "../videos/SafeDeleteButton";
 
 const Left = styled.div`
   width: 10%;
@@ -25,11 +25,11 @@ const styles = theme => ({
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
     padding: theme.spacing(2),
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    margin: '15px',
-    minWidth: '200px'
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    margin: "15px",
+    minWidth: "200px"
   },
   button: {
     margin: theme.spacing(1)
@@ -37,7 +37,7 @@ const styles = theme => ({
 
   buttonDel: {
     margin: theme.spacing(1),
-    backgroundColor: '#000'
+    backgroundColor: "#000"
   },
 
   textField: {
@@ -49,33 +49,22 @@ const styles = theme => ({
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
     marginBottom: 20,
-    width: '60vw'
+    width: "60vw"
   }
 });
 
-const NewsItem = ({
-  initialValues: newsitem,
-  onSave,
-  onDelete,
-  onCancel,
-  handleSubmit,
-  title,
-  history,
-  classes
-}) => {
+const NewsItem = ({ initialValues: newsitem, onSave, onDelete, onCancel, handleSubmit, title, history, classes }) => {
   const handleDelete = e => {
-    console.log('Deleting item', e);
     onDelete(newsitem.id);
   };
-  const [imageFile, setImageFile] = useState(newsitem.img || '');
-  console.log('In newsitem', newsitem);
+  const [imageFile, setImageFile] = useState(newsitem.img || "");
   return (
     <Formik
       className={classes.root}
       initialValues={newsitem}
       onSubmit={values => {
         const res = { ...values, img: imageFile };
-        console.log('onSubmit', { ...values, img: imageFile });
+        console.log("onSubmit", { ...values, img: imageFile });
         onSave(res);
       }}
     >
@@ -110,7 +99,7 @@ const NewsItem = ({
               rowsMax={8}
               fullWidth
             />
-            <div style={{ display: 'flex', alignContent: 'center' }}>
+            <div style={{ display: "flex", alignContent: "center" }}>
               <Left>
                 <Avatar src={imageFile} />
               </Left>
@@ -127,31 +116,19 @@ const NewsItem = ({
                   link={`\\\\nlbavwixs.infor.com\\images\\news`}
                   httpLinkPrefix={`https://nlbavwixs.infor.com/images/news/`}
                   setFile={async value => {
-                    console.log('NewsItem:::', value);
+                    console.log("NewsItem:::", value);
                     setImageFile(value);
                   }}
                 />
               </Right>
             </div>
             <CardSection>
-              <Button
-                className={classes.button}
-                variant="contained"
-                color="primary"
-                label="Save"
-                type="submit"
-              >
+              <Button className={classes.button} variant="contained" color="primary" label="Save" type="submit">
                 Save
               </Button>
               {onDelete && <SafeDeleteButton onDelete={handleDelete} />}
 
-              <Button
-                className={classes.button}
-                variant="contained"
-                label="Cancel"
-                color="secondary"
-                onClick={() => history.push('/news')}
-              >
+              <Button className={classes.button} variant="contained" label="Cancel" color="secondary" onClick={() => history.push("/news")}>
                 Cancel
               </Button>
             </CardSection>
