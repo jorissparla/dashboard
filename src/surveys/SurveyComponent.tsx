@@ -1,6 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components';
-import './survey.css';
+// import './survey.css';
 
 const Percentage = styled.div<{ percentage: any }>`
   display: flex;

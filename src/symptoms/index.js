@@ -9,8 +9,8 @@ import { useLocalStorage } from './../utils/useLocalStorage';
 import AddSymptomRequestForm from './AddSymptomRequestForm';
 import EditSymptomRequestForm from './EditSymptomRequestForm';
 import { ALL_SYMPTOMS } from './Queries';
-import './symptoms.css';
-import SymptomsRequestTable from './SymptomsRequestsTable';
+// import SymptomsRequestTable from './SymptomsRequestsTable';
+import SymptomsRequestTable from './SymptomsTableNew';
 
 const ListItem = styled.li`
   list-style-type: circle;
@@ -71,109 +71,9 @@ const SymptomsPage = () => {
   const [selectedRow, setSelectedRow] = useState(null);
   const [defaultValues, setDefaultValues] = useState(null);
 
-  useEffect(() => {
-    if (data) setAllSymptoms(data.symptoms);
-  }, [loading, data]);
-
-  useEffect(() => {
-    const found = allSymptoms.filter(({ symptom }) => containsValues(symptom, searchText));
-    setFoundNr(found.length);
-    setSymptoms(found.slice(0, maxNr || 10));
-  }, [searchText, maxNr, loading, allSymptoms]);
   if (loading) return <Spinner />;
 
-  // function fetchData(id) {
-  //   const results = data.symptoms.find(row => row.id === id);
-  //   return results;
-  // }
-  function handleAdd() {
-    setisEdit(false);
-    setisOpened(true);
-  }
-  function handleEdit() {
-    console.log('defaultValues', defaultValues);
-    setisEdit(true);
-    setisOpened(true);
-  }
-
-  function handleSelect(value) {
-    setSelectedRow(value.id);
-    const results = data.symptoms.find(row => row.id === value);
-    console.log(results);
-    setDefaultValues(value);
-  }
-  return (
-    <div className="parent">
-      <div className="div4">
-        <Input
-          name="search"
-          onChange={e => setSearchText(e.target.value)}
-          placeholder="Start typing to match symptom"
-          width={300}
-        />
-      </div>
-      <div className="div5">
-        Show first
-        <Input
-          name="maxnr"
-          value={maxNr}
-          onChange={e => setMaxNr(e.target.value || 10)}
-          width={50}
-        />
-      </div>
-      <div className="div3">
-        <h3>
-          showing {symptoms.length} of {foundNr} matching symptoms ({allSymptoms.length} total
-          symptoms)
-        </h3>
-        <List>
-          {symptoms.map((s, index) => (
-            <ListItem key={index}>
-              <CopyToClipBoard onCopy={() => console.log('copied')} text={s.symptom}>
-                <Sym title="Click to copy to clipboard">
-                  {s.symptom}({s.symptom_category})
-                </Sym>
-              </CopyToClipBoard>
-            </ListItem>
-          ))}
-        </List>
-      </div>
-      <div className="div1">
-        <h3>Pending Requests</h3>
-        <Button variant="contained" color="primary" onClick={handleAdd} style={{ margin: 5 }}>
-          Add
-        </Button>
-        {selectedRow && (
-          <Button variant="contained" color="secondary" onClick={handleEdit} style={{ margin: 5 }}>
-            Edit {selectedRow}
-          </Button>
-        )}
-        <SymptomsRequestTable data={data.symptomrequests} onSelected={handleSelect} />
-
-        <Modal
-          onClose={() => setisOpened(false)}
-          open={isOpen}
-          BackdropComponent={Backdrop}
-          BackdropProps={{
-            timeout: 500
-          }}
-        >
-          {isEdit ? (
-            <EditSymptomRequestForm
-              onClose={() => setisOpened(false)}
-              categories={data.symptom_categories}
-              defaultValues={defaultValues}
-            />
-          ) : (
-            <AddSymptomRequestForm
-              onClose={() => setisOpened(false)}
-              categories={data.symptom_categories}
-            />
-          )}
-        </Modal>
-      </div>
-    </div>
-  );
+  return <SymptomsRequestTable data={data} />;
 };
 
 export default SymptomsPage;

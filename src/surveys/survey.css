@@ -24,11 +24,11 @@
   width: 300px;
   display: flex;
   /* height: 100px; */
-  background: #EEE;
+  background: #eee;
 }
 
 .box {
-  background: #EEE;
+  background: #eee;
   padding: 10px;
   height: 150px;
   width: 150px;
@@ -39,7 +39,7 @@
 }
 .box2 {
   padding: 10px;
-  background: #EEE;
+  background: #eee;
   /* height: 150px; */
   /* display: flex; */
   /* border-radius: 4px; */
@@ -52,7 +52,7 @@
 
 .box3 {
   padding: 10px;
-  background: #EEE;
+  background: #eee;
   min-width: 350px;
   height: 150px;
   /* display: flex; */
@@ -145,7 +145,7 @@
   grid-column: 1;
   grid-row: 2;
 }
-.flex {
+.flex1 {
   display: flex;
   width: 100vw;
   grid-template-columns: 450px 450px 450px;

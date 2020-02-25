@@ -20,6 +20,14 @@ export const ALL_SYMPTOMS = gql`
     }
   }
 `;
+export const ALL_SYMPTOM_CATEGORIES = gql`
+  query ALL_SYMPTOM_CATEGORIES {
+    symptom_categories {
+      id
+      symptom_category
+    }
+  }
+`;
 
 export const ADD_SYMPTOM_REQUEST_MUTATION = gql`
   mutation ADD_SYMPTOM_REQUEST_MUTATION($input: SymptomRequestInput) {
