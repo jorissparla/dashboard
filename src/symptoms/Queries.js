@@ -41,6 +41,19 @@ export const ADD_SYMPTOM_REQUEST_MUTATION = gql`
     }
   }
 `;
+
+export const TOGGLE_STATUS_COMPLETE_MUTATION = gql`
+  mutation TOGGLE_STATUS_COMPLETE_MUTATION($where: SymptomRequestWhereInput!) {
+    toggleCompleteStatusSymptomRequest(where: $where) {
+      id
+      symptom
+      symptom_category
+      incident
+      status
+      updatedAt
+    }
+  }
+`;
 export const UPDATE_SYMPTOM_REQUEST_MUTATION = gql`
   mutation UPDATE_SYMPTOM_REQUEST_MUTATION(
     $where: SymptomRequestWhereInput!

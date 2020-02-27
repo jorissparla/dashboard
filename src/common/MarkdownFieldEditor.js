@@ -14,7 +14,7 @@ import { makeStyles } from '@material-ui/styles';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 import { useMutation } from 'react-apollo';
-import MarkDown from 'react-markdown';
+import MarkDown from 'react-markdown/with-html';
 import ReactMde from 'react-mde';
 import 'react-mde/lib/styles/css/react-mde-all.css';
 
@@ -116,7 +116,11 @@ const MarkDownFieldEditor = props => {
         </CardActions>
         <Typography variant="h4">Preview </Typography>
         <Divider />
-        <MarkDown source={value} />
+        <MarkDown
+          source={value}
+          escapeHtml={false}
+          className="bg-white border shadow-lg px-4 ml-2"
+        />
       </form>
       {/* <SuccessSnackbar onClose={handleSnackbarClose} open={openSnackbar} /> */}
     </Card>

@@ -102,9 +102,6 @@ const TestUser = () => <UserProfileComponent />;
 function AppRoutes(props) {
   //  const user = props.context;
   const { user, loading } = React.useContext(UserContext);
-  console.log('user', user);
-  // const context = React.useContext(DashBoardContext);
-  // console.log('rendering', context, loading);
   const history = useHistory();
   if (loading) return <NiceSpinner />;
   return (

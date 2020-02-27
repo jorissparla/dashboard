@@ -24,6 +24,7 @@ import Person from '@material-ui/icons/PeopleOutline';
 import RequestListIcon from '@material-ui/icons/PlaylistAdd';
 import SurveysIcon from '@material-ui/icons/Whatshot';
 import SettingsIcon from '@material-ui/icons/Settings';
+import SymptomsIcon from '@material-ui/icons/ErrorOutline';
 import { UserContext } from 'globalState/UserProvider';
 import React, { useState } from 'react';
 // import Signout from '../Signout';
@@ -57,8 +58,24 @@ export const SideBarMenu: React.FC<Props> = ({ classes, history, toggleMenu, ope
   return (
     <List>
       <ToggledNavLink title="Home" Icon={ActionHome} navigateTo="/" history={history} />
-      <ToggledNavLink title="MaintenanceWizard" Icon={SettingsIcon} navigateTo="/maintenancewizard" history={history} />
-      <ToggledNavLink title="Surveys" Icon={SurveysIcon} navigateTo="/surveys" history={history} />
+      <ToggledNavLink
+        title="MaintenanceWizard"
+        Icon={SettingsIcon}
+        navigateTo="/maintenancewizard"
+        history={history}
+      />
+      <ToggledNavLink
+        title="MT Customers"
+        Icon={ExtensionIcon}
+        navigateTo="/tenant"
+        history={history}
+      />
+      <ToggledNavLink
+        title="Request Symptoms"
+        Icon={SymptomsIcon}
+        navigateTo="/symptoms"
+        history={history}
+      />
       {authenticated && (
         <ToggledNavLink title="WorkList" Icon={MyWorkList} navigateTo="/mywork" history={history} />
       )}
@@ -99,12 +116,7 @@ export const SideBarMenu: React.FC<Props> = ({ classes, history, toggleMenu, ope
       </ExpandableMenuItem>
       <Divider />
       <ToggledNavLink title="Go Lives" Icon={GoLiveIcon} navigateTo="/golives" history={history} />
-      <ToggledNavLink
-        title="MT Customers"
-        Icon={ExtensionIcon}
-        navigateTo="/tenant"
-        history={history}
-      />
+      <ToggledNavLink title="Surveys" Icon={SurveysIcon} navigateTo="/surveys" history={history} />
       <ToggledNavLink
         title="CloudSuites"
         Icon={ExtensionIcon}

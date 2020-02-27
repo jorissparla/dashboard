@@ -73,7 +73,10 @@ const AddSymptomRequest = () => {
             </div>
           </div>
           <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="incident">
+            <label
+              className="block text-gray-700 text-sm font-bold font-oswald mb-2"
+              htmlFor="incident"
+            >
               Incident
             </label>
             <input

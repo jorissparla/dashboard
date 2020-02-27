@@ -9,7 +9,7 @@ import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { Formik } from 'formik';
 import React from 'react';
-import ReactMarkdown from 'react-markdown';
+import ReactMarkdown from 'react-markdown/with-html';
 import MarkDown from 'react-markdown';
 import ReactMde from 'react-mde';
 import { withRouter } from 'react-router';
@@ -102,7 +102,10 @@ const styles = theme => ({
 const SupportCardForm = props => {
   const {
     supportcard,
-    categories = [{ id: 1, category: 'Cloud' }, { id: 2, category: 'IXS' }],
+    categories = [
+      { id: 1, category: 'Cloud' },
+      { id: 2, category: 'IXS' }
+    ],
     initialValues,
     onSave,
     authenticated,
@@ -170,7 +173,7 @@ const SupportCardForm = props => {
                       textAreaProps={taprops}
                     />
                     <div className={classes.markdown2}>
-                      <ReactMarkdown source={values.description} />
+                      <ReactMarkdown source={values.description} escapeHtml={false} />
                     </div>
                   </>
                   // <TextField
@@ -188,7 +191,7 @@ const SupportCardForm = props => {
                 )}
                 {!on && (
                   <div className={classes.markdown}>
-                    <ReactMarkdown source={values.description} />
+                    <ReactMarkdown source={values.description} escapeHtml={false} />
                   </div>
                 )}
                 {!readOnly && (
