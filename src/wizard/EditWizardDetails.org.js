@@ -7,23 +7,24 @@ import {
   colors,
   Divider,
   Grid,
+  TextField,
   Typography
 } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
+import MarkDown from 'react-markdown';
+import ReactMde from 'react-mde';
+import 'react-mde/lib/styles/css/react-mde-all.css';
 import { makeStyles } from '@material-ui/styles';
 import clsx from 'clsx';
-import JoditEditor from 'jodit-react';
-import MarkDown from 'react-markdown/with-html';
-import React, { useRef, useState } from 'react';
+import PropTypes from 'prop-types';
+import CloseIcon from '@material-ui/icons/Close';
+import React, { useState } from 'react';
 import { useMutation } from 'react-apollo';
-import 'react-mde/lib/styles/css/react-mde-all.css';
 import {
-  ALL_MAINTENANCE_QUERY,
-  MAINTENANCE_FAQ_QUERY,
   MUTATION_UPDATE_MAINTENANCE,
-  MUTATION_UPDATE_MAINTENANCE_FAQ
+  ALL_MAINTENANCE_QUERY,
+  MUTATION_UPDATE_MAINTENANCE_FAQ,
+  MAINTENANCE_FAQ_QUERY
 } from './Queries';
-import ReactMde from 'react-mde';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -50,8 +51,6 @@ const EditWizardDetails = props => {
   console.log('isFAQ', isFAQ, name);
   const classes = useStyles();
   const [openSnackbar, setOpenSnackbar] = useState(false);
-  const editor = useRef(null);
-  const viewer = useRef(null);
   const [value, setValue] = useState(defaultValue);
   const mutation = isFAQ ? MUTATION_UPDATE_MAINTENANCE_FAQ : MUTATION_UPDATE_MAINTENANCE;
   const [updateField] = useMutation(mutation);
@@ -79,15 +78,6 @@ const EditWizardDetails = props => {
     onClose();
   };
   console.log(id);
-  const config = {
-    readonly: false, // all options from https://xdsoft.net/jodit/doc/,
-    toolbar: true,
-    // theme: 'dark',
-    showWordsCounter: false,
-    showXPathInStatusbar: false,
-    showCharsCounter: false
-  };
-  const config2 = { ...config, toolbar: false, readonly: true };
   const taprops = { cols: 150, rows: 8, style: { fontFamily: 'roboto', fontSize: 'inherit' } };
   return (
     <Card {...rest} className={clsx(classes.root, className)}>
@@ -96,19 +86,6 @@ const EditWizardDetails = props => {
         <Divider />
         <CardContent>
           <Grid container spacing={4}>
-            {/* <JoditEditor
-              style={{ font: '24px Arial', color: '#000' }}
-              ref={editor}
-              value={value}
-              config={config}
-              tabIndex={1} // tabIndex of textarea
-              onBlur={newContent => setValue(newContent)} // preferred to use only this option to update the content for performance reasons
-              onChange={newContent => {
-                console.log(newContent);
-              }}
-
-/> */}
-
             <ReactMde
               value={value}
               onChange={setValue}
@@ -141,17 +118,7 @@ const EditWizardDetails = props => {
         </CardActions>
         <Typography variant="h4">Preview </Typography>
         <Divider />
-        {/* <JoditEditor
-          ref={viewer}
-          value={value}
-          config={config2}
-          tabIndex={2} // tabIndex of textarea
-          // onBlur={newContent => setValue(newContent)} // preferred to use only this option to update the content for performance reasons
-          // onChange={newContent => {
-          //   console.log(newContent);
-          // }}
-        /> */}
-        <MarkDown source={value} escapeHtml={false} />
+        <MarkDown source={value} />
       </form>
       {/* <SuccessSnackbar onClose={handleSnackbarClose} open={openSnackbar} /> */}
     </Card>

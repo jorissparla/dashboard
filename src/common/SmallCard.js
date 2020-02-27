@@ -7,7 +7,7 @@ import NewIcon from '@material-ui/icons/NewReleases';
 import { Link } from 'react-router-dom';
 import { Papier, HR } from '../styles/index.js';
 import Divider from '@material-ui/core/Divider';
-import ReactMarkdown from 'react-markdown';
+import ReactMarkdown from 'react-markdown/with-html';
 import { ToggleFavorite } from '../supportcard/Favorite';
 import NumberOfViews from '../pages/NumberOfViews';
 import { format } from '../utils/format';

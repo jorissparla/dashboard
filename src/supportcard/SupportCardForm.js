@@ -10,7 +10,6 @@ import TextField from '@material-ui/core/TextField';
 import { Formik } from 'formik';
 import React from 'react';
 import ReactMarkdown from 'react-markdown/with-html';
-import MarkDown from 'react-markdown';
 import ReactMde from 'react-mde';
 import { withRouter } from 'react-router';
 import { CardSection } from '../common';

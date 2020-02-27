@@ -13,7 +13,7 @@ import React, { useState } from 'react';
 import { adopt } from 'react-adopt';
 import { Mutation, Query } from 'react-apollo';
 //import { SmallCard } from "./SupportCard";
-import ReactMarkdown from 'react-markdown';
+import ReactMarkdown from 'react-markdown/with-html';
 import styled from 'styled-components';
 import SearchBar from '../common/SearchBar';
 import { SmallCard } from '../common/SmallCard';
@@ -367,7 +367,7 @@ const SupportCards = props => {
         )}
       </Div>
       <Modal on={showPortal} toggle={() => setShowPortal(!showPortal)}>
-        <ReactMarkdown>{portalText}</ReactMarkdown>
+        <ReactMarkdown source={portalText} escapeHtml={false}></ReactMarkdown>
       </Modal>
     </Container>
   );

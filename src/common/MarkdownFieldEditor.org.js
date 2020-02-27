@@ -12,11 +12,10 @@ import {
 import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from '@material-ui/styles';
 import clsx from 'clsx';
-import JoditEditor from 'jodit-react';
-import ReactMde from 'react-mde';
-
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
+import { useMutation } from 'react-apollo';
 import MarkDown from 'react-markdown/with-html';
+import ReactMde from 'react-mde';
 import 'react-mde/lib/styles/css/react-mde-all.css';
 
 const useStyles = makeStyles(theme => ({
@@ -52,8 +51,6 @@ const MarkDownFieldEditor = props => {
   } = props;
   const classes = useStyles();
   const [openSnackbar, setOpenSnackbar] = useState(false);
-
-  const editor = useRef(null);
   const [value, setValue] = useState(defaultValue);
   // const mutation = isFAQ ? MUTATION_UPDATE_MAINTENANCE_FAQ : MUTATION_UPDATE_MAINTENANCE;
   //
@@ -79,14 +76,6 @@ const MarkDownFieldEditor = props => {
     onSaveAndClose(value);
   };
   console.log(id);
-  const config = {
-    readonly: false, // all options from https://xdsoft.net/jodit/doc/,
-    toolbar: true,
-    // theme: 'dark',
-    showWordsCounter: false,
-    showXPathInStatusbar: false,
-    showCharsCounter: false
-  };
   const taprops = { cols: 180, rows: 10, style: { fontFamily: 'roboto', fontSize: 'inherit' } };
   return (
     <Card {...rest} className={clsx(classes.root, className)}>
@@ -95,17 +84,6 @@ const MarkDownFieldEditor = props => {
         <Divider />
         <CardContent>
           <Grid container spacing={4}>
-            {/* <JoditEditor
-              style={{ font: '24px Arial', color: '#000' }}
-              ref={editor}
-              value={value}
-              config={config}
-              tabIndex={1} // tabIndex of textarea
-              onBlur={newContent => setValue(newContent)} // preferred to use only this option to update the content for performance reasons
-              onChange={newContent => {
-                console.log(newContent);
-              }}
-            /> */}
             <ReactMde
               value={value}
               onChange={setValue}

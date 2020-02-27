@@ -5,7 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import EditIcon from '@material-ui/icons/Edit';
 import { DashBoardContext } from 'globalState/Provider';
 import React, { useEffect } from 'react';
-import MarkDown from 'react-markdown';
+import MarkDown from 'react-markdown/with-html';
 import EditWizardDetails from './EditWizardDetails';
 import { useStyles } from './useStyles';
 
@@ -83,7 +83,7 @@ export const OtherField = ({
         </Modal>
       </Grid>
 
-      <MarkDown source={value}></MarkDown>
+      <MarkDown source={value} escapeHtml={false}></MarkDown>
     </Paper>
   );
 };

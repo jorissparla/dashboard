@@ -1,12 +1,11 @@
-import React from 'react';
 import { Backdrop, Modal, Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
-import EditIcon from '@material-ui/icons/Edit';
-import { DashBoardContext } from 'globalState/Provider';
-import MarkDown from 'react-markdown';
-import MarkDownFieldEditor from './MarkdownFieldEditor';
-import { useMutation } from 'react-apollo';
 import Paper from '@material-ui/core/Paper';
+import EditIcon from '@material-ui/icons/Edit';
+import React from 'react';
+import { useMutation } from 'react-apollo';
+import MarkDown from 'react-markdown/with-html';
+import MarkDownFieldEditor from './MarkdownFieldEditor';
 
 const EditableMarkDownField = ({
   canEdit = true,
@@ -71,7 +70,7 @@ const EditableMarkDownField = ({
           />
         </div>
       </Modal>
-      <MarkDown source={fieldValue}></MarkDown>
+      <MarkDown source={fieldValue} escapeHtml={false}></MarkDown>
     </Paper>
   );
 };

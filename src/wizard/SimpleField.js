@@ -3,7 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import EditIcon from '@material-ui/icons/Edit';
 import { DashBoardContext } from 'globalState/Provider';
 import React from 'react';
-import MarkDown from 'react-markdown';
+import MarkDown from 'react-markdown/with-html';
 import EditWizardDetails from './EditWizardDetails';
 import { useStyles } from './useStyles';
 
@@ -55,7 +55,7 @@ export const SimpleField = ({ name, label, edit = false, Icon, activeVersion }) 
           />
         </div>
       </Modal>
-      <MarkDown source={activeVersion[name]}></MarkDown>
+      <MarkDown source={activeVersion[name]} escapeHtml={false}></MarkDown>
     </div>
   );
 };
