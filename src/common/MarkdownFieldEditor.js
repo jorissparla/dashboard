@@ -83,6 +83,7 @@ const MarkDownFieldEditor = props => {
     readonly: false, // all options from https://xdsoft.net/jodit/doc/,
     toolbar: true,
     // theme: 'dark',
+    autoHeight: true,
     showWordsCounter: false,
     showXPathInStatusbar: false,
     showCharsCounter: false
@@ -95,7 +96,7 @@ const MarkDownFieldEditor = props => {
         <Divider />
         <CardContent>
           <Grid container spacing={4}>
-            {/* <JoditEditor
+            <JoditEditor
               style={{ font: '24px Arial', color: '#000' }}
               ref={editor}
               value={value}
@@ -105,14 +106,14 @@ const MarkDownFieldEditor = props => {
               onChange={newContent => {
                 console.log(newContent);
               }}
-            /> */}
-            <ReactMde
+            />
+            {/* <ReactMde
               value={value}
               onChange={setValue}
               selectedTab="write"
               disablePreview={true}
               textAreaProps={taprops}
-            />
+            /> */}
             {/* <TextField
                 fullWidth
                 multiline
@@ -138,11 +139,11 @@ const MarkDownFieldEditor = props => {
         </CardActions>
         <Typography variant="h4">Preview </Typography>
         <Divider />
-        <MarkDown
+        {/* <MarkDown
           source={value}
           escapeHtml={false}
           className="bg-white border shadow-lg px-4 ml-2"
-        />
+        /> */}
       </form>
       {/* <SuccessSnackbar onClose={handleSnackbarClose} open={openSnackbar} /> */}
     </Card>

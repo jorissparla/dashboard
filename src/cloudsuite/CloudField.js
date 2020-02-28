@@ -61,7 +61,7 @@ const CloudField = ({ name, label, edit = false, Icon, initialValue }) => {
           />
         </div> */}
       </Modal>
-      {/* <JoditEditor
+      <JoditEditor
         ref={viewer}
         value={value}
         config={config2}
@@ -70,8 +70,8 @@ const CloudField = ({ name, label, edit = false, Icon, initialValue }) => {
         // onChange={newContent => {
         //   console.log(newContent);
         // }}
-      /> */}
-      <MarkDown source={initialValue[name]} escapeHtml={false}></MarkDown>
+      />
+      {/* <MarkDown source={initialValue[name]} escapeHtml={false}></MarkDown> */}
     </div>
   );
 };

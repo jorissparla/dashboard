@@ -83,6 +83,7 @@ const EditWizardDetails = props => {
     readonly: false, // all options from https://xdsoft.net/jodit/doc/,
     toolbar: true,
     // theme: 'dark',
+    autoHeight: true,
     showWordsCounter: false,
     showXPathInStatusbar: false,
     showCharsCounter: false
@@ -91,12 +92,12 @@ const EditWizardDetails = props => {
   const taprops = { cols: 150, rows: 8, style: { fontFamily: 'roboto', fontSize: 'inherit' } };
   return (
     <Card {...rest} className={clsx(classes.root, className)}>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} style={{}}>
         <CardHeader title={`Edit ${label}`} />
         <Divider />
         <CardContent>
           <Grid container spacing={4}>
-            {/* <JoditEditor
+            <JoditEditor
               style={{ font: '24px Arial', color: '#000' }}
               ref={editor}
               value={value}
@@ -106,26 +107,14 @@ const EditWizardDetails = props => {
               onChange={newContent => {
                 console.log(newContent);
               }}
+            />
 
-/> */}
-
-            <ReactMde
+            {/* <ReactMde
               value={value}
               onChange={setValue}
               selectedTab="write"
               disablePreview={true}
               textAreaProps={taprops}
-            />
-            {/* <TextField
-              fullWidth
-              multiline
-              rows={8}
-              label={label}
-              name={name}
-              onChange={handleChange}
-              // required
-              value={value}
-              variant="outlined"
             /> */}
           </Grid>
         </CardContent>
@@ -139,8 +128,7 @@ const EditWizardDetails = props => {
             Close
           </Button>
         </CardActions>
-        <Typography variant="h4">Preview </Typography>
-        <Divider />
+
         {/* <JoditEditor
           ref={viewer}
           value={value}
@@ -151,7 +139,7 @@ const EditWizardDetails = props => {
           //   console.log(newContent);
           // }}
         /> */}
-        <MarkDown source={value} escapeHtml={false} />
+        {/* <MarkDown source={value} escapeHtml={false} /> */}
       </form>
       {/* <SuccessSnackbar onClose={handleSnackbarClose} open={openSnackbar} /> */}
     </Card>

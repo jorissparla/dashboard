@@ -213,7 +213,6 @@ const SupportCards = props => {
   };
 
   const togglePortal = text => {
-    console.log('toggle', text);
     setPortalText(text);
     setShowPortal(true);
   };

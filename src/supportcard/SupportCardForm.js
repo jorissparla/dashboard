@@ -8,7 +8,7 @@ import Select from '@material-ui/core/Select';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { Formik } from 'formik';
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown/with-html';
 import ReactMde from 'react-mde';
 import { withRouter } from 'react-router';
@@ -16,6 +16,7 @@ import { CardSection } from '../common';
 import { useUser } from '../User';
 //import { format } from 'date-fns';
 import { format } from '../utils/format';
+import JoditEditor from 'jodit-react';
 
 const owners = [
   { id: 'Ricardo Exposito', name: 'Ricardo Exposito' },
@@ -127,6 +128,18 @@ const SupportCardForm = props => {
     rows: 35,
     style: { fontFamily: 'roboto', fontSize: 'inherit', marginRight: 10 }
   };
+  const config = {
+    readonly: false, // all options from https://xdsoft.net/jodit/doc/,
+    toolbar: true,
+    // theme: 'dark',
+    autoHeight: true,
+    showWordsCounter: false,
+    showXPathInStatusbar: false,
+    showCharsCounter: false
+  };
+  const editor = useRef(null);
+  const viewer = useRef(null);
+  const config2 = { ...config, toolbar: false, readonly: true };
   return (
     <Paper style={paperStyle}>
       <Formik
@@ -161,48 +174,32 @@ const SupportCardForm = props => {
                 fullWidth
               />
               <div className={classes.content}>
-                {!readOnly && on && (
-                  <>
-                    <ReactMde
-                      value={values.description}
-                      onChange={handleChange('description')}
-                      selectedTab="write"
-                      disablePreview={true}
-                      maxEditorHeight={500}
-                      textAreaProps={taprops}
-                    />
-                    <div className={classes.markdown2}>
-                      <ReactMarkdown source={values.description} escapeHtml={false} />
-                    </div>
-                  </>
-                  // <TextField
-                  //   id="description"
-                  //   label="Description"
-                  //   className={classes.contentField}
-                  //   value={values.description}
-                  //   onChange={handleChange}
-                  //   onBlur={handleBlur}
-                  //   margin="normal"
-                  //   fullWidth
-                  //   multiline
-                  //   rows={25}
-                  // />
-                )}
-                {!on && (
-                  <div className={classes.markdown}>
-                    <ReactMarkdown source={values.description} escapeHtml={false} />
-                  </div>
-                )}
-                {!readOnly && (
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    className={classes.button2}
-                    onClick={() => toggle(!on)}
-                  >
-                    {on ? 'Preview' : 'Edit '}
-                  </Button>
-                )}
+                {!readOnly ? (
+                  <JoditEditor
+                    style={{ font: '24px Arial', color: '#000' }}
+                    ref={editor}
+                    value={values.description}
+                    onChange={handleChange('description')}
+                    onBlur={handleChange('description')}
+                    config={config}
+                    tabIndex={1} // tabIndex of textarea
+                  />
+                ) : (
+                  <JoditEditor
+                    style={{ font: '24px Arial', color: '#000' }}
+                    ref={viewer}
+                    value={values.description}
+                    onChange={handleChange('description')}
+                    onBlur={handleChange('description')}
+                    config={config2}
+                    tabIndex={2} // tabIndex of textarea
+                  />
+                )
+
+                // <div className={classes.markdown2}>
+                //   <ReactMarkdown source={values.description} escapeHtml={false} />
+                // </div>
+                }
               </div>
               <FormControl className={classes.formControl}>
                 <InputLabel htmlFor="category-simple">Category</InputLabel>

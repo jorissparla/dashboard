@@ -93,17 +93,6 @@ const EditWizardDetails = props => {
               disablePreview={true}
               textAreaProps={taprops}
             />
-            {/* <TextField
-              fullWidth
-              multiline
-              rows={8}
-              label={label}
-              name={name}
-              onChange={handleChange}
-              // required
-              value={value}
-              variant="outlined"
-            /> */}
           </Grid>
         </CardContent>
         <Divider />
