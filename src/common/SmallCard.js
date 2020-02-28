@@ -35,6 +35,9 @@ const TitleWrapper = styled.div`
   flex-direction: row;
   font-family: 'Montserrat', Roboto;
   justify-content: space-between;
+  justify-content: center;
+  text-align: center;
+  min-height: 25%;
   :hover {
     color: rgba(0, 0, 0, 0.7);
     cursor: pointer;
@@ -46,9 +49,12 @@ const Title2 = styled.div`
   font-weight: bold;
   padding: 2px;
   flex-grow: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #374151;
   margin: 5px;
-  width: 80%;
-  color: ${props => (props.textcolor ? props.textcolor : '#2f2e2e')};
+  // width: 80%;
+  color: ${props => (props.textcolor ? props.textcolor : '#374151;')};
 `;
 
 const TitleIcon = styled.div`
@@ -96,8 +102,10 @@ const StyledLink = styled(Link)`
 `;
 
 const DateWrapper = styled.div`
-  font-size: 10px;
-  font-style: italic;
+  margin-bottom: 0.5rem;
+  display: flex;
+  margin-left: 0.5rem;
+  letter-spacing: 0.025rem;
 `;
 
 const StyledPapier = styled(Papier)`
@@ -108,7 +116,8 @@ const StyledPapier = styled(Papier)`
   min-width: 200px;
   color: ${props => (props.textcolor ? props.textcolor : 'black')};
   background-color: ${props => (props.color ? props.color : 'lightblue')};
-  border-radius: 14px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  border-radius: 0.5rem;
   background-image: ${props =>
     `linear-gradient(to bottom right, ${props.color || 'black'}, white)`};
 `;
@@ -150,9 +159,20 @@ const SmallCard = ({
         )}
         {account_id && <ToggleFavorite toggle={onToggleFavorite} isFavorite={isFavorite} />}
       </TitleWrapper>
-      <DateWrapper>last updated: {format(updatedAt, 'EEE dd MMM yyyy, hh:mm')}</DateWrapper>
+      <DateWrapper>
+        <svg
+          className="fill-current w-4 h-4 text-gray-500 mr-2"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+        >
+          <path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-7.59V4h2v5.59l3.95 3.95-1.41 1.41L9 10.41z" />
+        </svg>
+        <span className="text-xs tracking-widest">
+          Last updated: {format(updatedAt, 'EEE dd MMM yyyy, hh:mm')}
+        </span>
+      </DateWrapper>
       <HR />
-      <div style={{ width: '25%' }}>
+      <div style={{ width: '80%' }}>
         <Block selected={true}>{category}</Block>
       </div>
       <Divider />

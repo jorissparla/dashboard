@@ -45,8 +45,8 @@ const StyledContainer = styled(Paper)`
   align-content: center;
   border: 1 px solid blue;
   padding: 10px;
-  width: 17%;
-  height: 200px;
+  width: 18%;
+  // height: 200px;
   margin: 5px;
   background-color: ${props => props.background};
   border-radius: 14px;

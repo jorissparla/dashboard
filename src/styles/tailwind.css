@@ -3,7 +3,13 @@
 @tailwind utilities;
 
 .btn-tw {
-  @apply ml-4 rounded-lg px-4  py-3    text-gray-800 font-semibold leading-tight shadow-md;
+  @apply ml-4 rounded-lg px-4  py-3     leading-tight shadow-md;
+}
+.btn-tw-l {
+  @apply ml-4 rounded-lg px-4  py-3    text-white  leading-tight shadow-md;
+}
+.btn-tw-u {
+  @apply ml-4 rounded-lg  py-3      leading-tight shadow-md;
 }
 
 .btn-tw:md {

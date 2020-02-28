@@ -193,6 +193,44 @@ export default function SupportCardContainer(props) {
   );
 }
 
+const TestCard = () => {
+  return (
+    <div className="w-full max-w-md ">
+      <div className="rounded-lg  m-4 bg-purple-200 p-4 shadow-lg">
+        <div
+          className="overflow-hidden truncate font-bold font-mon text-base"
+          title="Check for extended maintenance -Lifecycle policy"
+        >
+          Check for extended maintenance -Lifecycle policy
+        </div>
+        <span className="mt-2 text-sm tracking-wide text-gray-600">
+          Last updated: Fri 07 Feb 2020, 04:06
+        </span>
+        <div className="mt-4">
+          <span className="rounded-lg border bg-teal-300 text-gray-700 uppercase font-bold px-3 py-2 text-lg font-pop w-64">
+            REPRODUCTION
+          </span>
+        </div>
+        <div className="border-t-2 border-purple-100 h-1 w-full mt-4"></div>
+        <div className="flex justify-between items-center justify-between mt-8">
+          <button className=" btn-tw text-gray-700 bg-gray-200 hover:bg-blue-700 text-white font-pop font-semibold py-2 px-4 rounded inline-flex items-center  shadow-lg">
+            <svg
+              className="fill-current w-4 h-4 mr-2"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+            >
+              <path d="M0 4c0-1.1.9-2 2-2h7l2 2h7a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V4zm2 2v10h16V6H2z" />
+            </svg>
+            <span>Open</span>
+          </button>
+          <button className="text-black px-6 cursor-pointer leading-tight font-pop">View</button>
+          <button className="text-black px-6 btn-tw-u bg-teal-300 ">Link</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const SupportCards = props => {
   const [searchText, setSearchText] = useState(props.filter || '');
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -300,6 +338,7 @@ const SupportCards = props => {
         {authenticated && isEditor ? (
           <AddCard link="/supportcard/add" title="Add a New Card" background="papayawhip" />
         ) : (
+          // <TestCard />
           <AddCard
             link="supportcard/request"
             title="Request a new Support Card"
