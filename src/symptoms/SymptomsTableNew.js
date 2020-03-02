@@ -1,10 +1,16 @@
 import { UserContext } from 'globalState/UserProvider';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useMutation } from 'react-apollo';
 import { useHistory } from 'react-router';
 import { usePersistentState } from '../hooks';
-import { ALL_SYMPTOMS, TOGGLE_STATUS_COMPLETE_MUTATION } from './Queries';
+import {
+  ALL_SYMPTOMS,
+  TOGGLE_STATUS_COMPLETE_MUTATION,
+  DELETE_SYMPTOM_REQUEST_MUTATION
+} from './Queries';
 import { format } from '../utils/format';
+
+const PAGE_LENGTH = 10;
 
 const ColumnHeader = ({ name }) => (
   <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -13,7 +19,7 @@ const ColumnHeader = ({ name }) => (
 );
 
 const Cell = ({ value, complete }) => (
-  <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+  <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
     {complete === 1 ? (
       <p className="text-gray-900 whitespace-no-wrap line-through">{value}</p>
     ) : (
@@ -21,21 +27,34 @@ const Cell = ({ value, complete }) => (
     )}
   </td>
 );
+const NiceCell = ({ value, complete }) => (
+  <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+    {complete === 1 ? (
+      <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium leading-5 bg-purple-100 text-purple-800 line-through">
+        {value}
+      </span>
+    ) : (
+      <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium leading-5 bg-green-100 text-green-800">
+        {value}
+      </span>
+    )}
+  </td>
+);
 const CompleteCell = ({ value, handleClick, canEdit = false }) => {
   return (
-    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-      <div className="flex">
+    <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+      <div className="flex flex-no-wrap">
         <label className="md:w-2/3 block text-gray-500 font-bold">
           {value === 0 ? (
             <input
-              className="mr-2 leading-tight bg-red-300 cursor-pointer transition-colors ease-in-out duration-700"
+              className="mr-2 leading-tight bg-red-300 cursor-pointer transition-colors ease-in-out duration-700 form-checkbox text-green-500"
               checked={false}
               type="checkbox"
               onClick={canEdit && handleClick}
             />
           ) : (
             <input
-              className="mr-2 leading-tight cursor-pointer transition-colors ease-in-out duration-200 "
+              className="mr-2 leading-tight cursor-pointer transition-colors ease-in-out duration-200  form-checkbox text-green-500"
               id="x"
               type="checkbox"
               checked
@@ -49,10 +68,10 @@ const CompleteCell = ({ value, handleClick, canEdit = false }) => {
   );
 };
 
-const RemoveCell = () => {
+const RemoveCell = ({ handleDelete }) => {
   return (
     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-blue-700">
-      <span>
+      <span onClick={handleDelete} className="cursor-pointer">
         <svg
           className="fill-current h-4 w-4"
           xmlns="http://www.w3.org/2000/svg"
@@ -68,8 +87,13 @@ const RemoveCell = () => {
 function SymptomsTableNew({ data }) {
   const history = useHistory();
   const [toggleStatusComplete] = useMutation(TOGGLE_STATUS_COMPLETE_MUTATION);
+  const [handleDeleteSymptomRequest] = useMutation(DELETE_SYMPTOM_REQUEST_MUTATION);
   const [filter, setFilter] = usePersistentState('symptomsfilter', 'All');
+  const [requests, setRequests] = useState(data.symptomrequests || []);
+  const [length, setLength] = useState((data.symptomrequests || []).length);
+  const [modifiedDate, updateModifiedDate] = useState(Date.now());
   const [search, setSearch] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
   const { user = null } = React.useContext(UserContext);
   // console.log('%c User', 'font-size: 24px', user);
   const VALID_PERMISSIONS = ['ADMIN', 'SYMPTOMSEDIT'];
@@ -82,25 +106,29 @@ function SymptomsTableNew({ data }) {
       variables: { where: { id } },
       refetchQueries: [{ query: ALL_SYMPTOMS }]
     });
+    updateModifiedDate(new Date());
   }
 
+  async function handleDelete(id) {
+    const result = await handleDeleteSymptomRequest({
+      variables: { where: { id } },
+      refetchQueries: [{ query: ALL_SYMPTOMS }]
+    });
+    updateModifiedDate(new Date());
+  }
   function filterValues(filter, symptoms, search) {
     switch (filter) {
       case 'Open':
         return symptoms.filter(s => s.status === 0); //.filter(s => s.symptom.includes(search));
-        break;
       case 'Completed':
         return symptoms.filter(s => s.status === 1); //.filter(s => s.symptom.includes(search));
-        break;
 
       default:
         return symptoms;
-        break;
     }
   }
 
   const isCompleteView = filter === 'Completed';
-  const requests = filterValues(filter, data.symptomrequests);
 
   function handleChange(e) {
     setSearch(e.target.value);
@@ -108,6 +136,30 @@ function SymptomsTableNew({ data }) {
   function handleChangeFilter(e) {
     setFilter(e.target.value);
   }
+
+  function handlePrev() {
+    setCurrentPage(currentPage - 1);
+  }
+  function handleNext() {
+    setCurrentPage(currentPage + 1);
+  }
+
+  let maxPages = parseInt(length / PAGE_LENGTH) + 1;
+
+  useEffect(() => {
+    const filtered = filterValues(filter, data.symptomrequests);
+    setLength(filtered.length);
+    maxPages = parseInt(length / PAGE_LENGTH) + 1;
+    console.log(
+      (currentPage - 1) * PAGE_LENGTH,
+      currentPage * PAGE_LENGTH - 1,
+      filtered,
+      filtered.slice((currentPage - 1) * PAGE_LENGTH, currentPage * PAGE_LENGTH - 1)
+    );
+    setRequests(filtered.slice((currentPage - 1) * PAGE_LENGTH, currentPage * PAGE_LENGTH - 1));
+  }, [filter, currentPage, modifiedDate, data]);
+
+  console.log(requests);
   return (
     <div className=" bg-gray-200 min-h-full h-screen">
       <div className="flex flex-row mt-4 justify-between items-center bg-white py-4 px-2">
@@ -173,7 +225,7 @@ function SymptomsTableNew({ data }) {
               {requests.map(item => (
                 <tr key={item.id}>
                   <Cell value={item.symptom} complete={item.status} />
-                  <Cell value={item.symptom_category} complete={item.status} />
+                  <NiceCell value={item.symptom_category} complete={item.status} />
                   <Cell value={item.incident} complete={item.status} />
                   <CompleteCell
                     value={item.status}
@@ -184,7 +236,7 @@ function SymptomsTableNew({ data }) {
                     value={format(item.updatedAt, 'EEE dd MMM yyyy, HH:mm')}
                     complete={item.status}
                   />
-                  {isCompleteView && <RemoveCell />}
+                  {isCompleteView && <RemoveCell handleDelete={() => handleDelete(item.id)} />}
                   {/* <Cell value={item.status} /> */}
                 </tr>
               ))}
@@ -192,13 +244,23 @@ function SymptomsTableNew({ data }) {
           </table>
           <div class="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between          ">
             <span class="text-xs xs:text-sm text-gray-900">
-              Showing 1 to 10 of {requests.length} Entries
+              Showing {(currentPage - 1) * PAGE_LENGTH + 1} to {currentPage * PAGE_LENGTH} of{' '}
+              {length} Entries
             </span>
-            <div class="inline-flex mt-2 xs:mt-0">
-              <button class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-l">
-                Prev
+            <div class="inline-flex ml-2 xs:mt-0">
+              {currentPage}/{maxPages}
+              <button
+                disabled={currentPage === 1}
+                class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 btn-tw font-semibold font-sansI"
+                onClick={handlePrev}
+              >
+                Previous
               </button>
-              <button class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded-r">
+              <button
+                disabled={currentPage >= maxPages}
+                class="text-sm bg-teal-300 ml-2 hover:bg-gray-400 text-teal-800 btn-tw "
+                onClick={handleNext}
+              >
                 Next
               </button>
             </div>
