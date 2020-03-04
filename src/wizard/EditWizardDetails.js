@@ -49,9 +49,7 @@ const EditWizardDetails = props => {
   const isFAQ = rest && rest.faq;
   console.log('isFAQ', isFAQ, name);
   const classes = useStyles();
-  const [openSnackbar, setOpenSnackbar] = useState(false);
   const editor = useRef(null);
-  const viewer = useRef(null);
   const [value, setValue] = useState(defaultValue);
   const mutation = isFAQ ? MUTATION_UPDATE_MAINTENANCE_FAQ : MUTATION_UPDATE_MAINTENANCE;
   const [updateField] = useMutation(mutation);

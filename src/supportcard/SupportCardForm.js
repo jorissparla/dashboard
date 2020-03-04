@@ -1,22 +1,19 @@
 import Button from '@material-ui/core/Button';
 import Chip from '@material-ui/core/Chip';
+import Paper from '@material-ui/core/Paper';
+import { withStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
-import Paper from '@material-ui/core/Paper';
 import Select from '@material-ui/core/Select';
-import { withStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import { Formik } from 'formik';
-import React, { useRef, useState } from 'react';
-import ReactMarkdown from 'react-markdown/with-html';
-import ReactMde from 'react-mde';
+import JoditEditor from 'jodit-react';
+import React, { useRef } from 'react';
 import { withRouter } from 'react-router';
 import { CardSection } from '../common';
 import { useUser } from '../User';
 //import { format } from 'date-fns';
 import { format } from '../utils/format';
-import JoditEditor from 'jodit-react';
 
 const owners = [
   { id: 'Ricardo Exposito', name: 'Ricardo Exposito' },
@@ -114,20 +111,25 @@ const SupportCardForm = props => {
     classes
   } = props;
   const readOnly = !authenticated;
-  const [on, toggle] = React.useState(false);
   const updatedAt = supportcard ? supportcard.updatedAt : format(new Date(), 'yyyy-MM-dd');
+  const [values, setValues] = React.useState(initialValues);
   const currentUser = useUser();
   console.log('blba', { initialValues }, currentUser);
   let newInitialValues =
     currentUser && !initialValues.owner
       ? { ...initialValues, owner: currentUser.fullname }
       : initialValues;
-  const [value, setValue] = React.useState(newInitialValues.description);
-  const taprops = {
-    cols: 150,
-    rows: 35,
-    style: { fontFamily: 'roboto', fontSize: 'inherit', marginRight: 10 }
+  // const [value, setValue] = React.useState(newInitialValues.description);
+
+  // console.log(values);
+  const handleChange = event => {
+    event.persist();
+    setValues({
+      ...values,
+      [event.target.name]: event.target.value
+    });
   };
+
   const config = {
     readonly: false, // all options from https://xdsoft.net/jodit/doc/,
     toolbar: true,
@@ -140,164 +142,153 @@ const SupportCardForm = props => {
   const editor = useRef(null);
   const viewer = useRef(null);
   const config2 = { ...config, toolbar: false, readonly: true };
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    onSave(values);
+  }
+
   return (
     <Paper style={paperStyle}>
-      <Formik
-        initialValues={newInitialValues}
-        onSubmit={values => {
-          console.log('Submitting value', values);
-          onSave(values);
-        }}
-      >
-        {({
-          values,
-          touched,
-          errors,
-          dirty,
-          isSubmitting,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          handleReset
-        }) => {
-          return (
-            <form onSubmit={handleSubmit}>
-              <TextField
-                id="title"
-                label="Title"
-                className={classes.titleField}
-                value={values.title}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                margin="normal"
-                disabled={readOnly}
-                fullWidth
-              />
-              <div className={classes.content}>
-                {!readOnly ? (
-                  <JoditEditor
-                    style={{ font: '24px Arial', color: '#000' }}
-                    ref={editor}
-                    value={values.description}
-                    onChange={handleChange('description')}
-                    onBlur={handleChange('description')}
-                    config={config}
-                    tabIndex={1} // tabIndex of textarea
-                  />
-                ) : (
-                  <JoditEditor
-                    style={{ font: '24px Arial', color: '#000' }}
-                    ref={viewer}
-                    value={values.description}
-                    onChange={handleChange('description')}
-                    onBlur={handleChange('description')}
-                    config={config2}
-                    tabIndex={2} // tabIndex of textarea
-                  />
-                )
+      <form onSubmit={handleSubmit}>
+        <TextField
+          id="title"
+          name="title"
+          label="Title"
+          className={classes.titleField}
+          value={values.title}
+          onChange={handleChange}
+          // onBlur={handleChange}
+          margin="normal"
+          disabled={readOnly}
+          fullWidth
+        />
+        <div className={classes.content}>
+          {!readOnly ? (
+            <JoditEditor
+              id="description"
+              name="description"
+              style={{ font: '24px Arial', color: '#000' }}
+              ref={editor}
+              value={values.description}
+              onBlur={v => {
+                setValues({ ...values, description: v });
+                setTimeout(() => {
+                  editor.current.focus();
+                }, 50);
+              }}
+              // onBlur={v => setValues({ ...values, description: v })}
+              // onBlur={e => console.log(e)}
+              config={config}
+              // tabIndex={1} // tabIndex of textarea
+            />
+          ) : (
+            <JoditEditor
+              id="description"
+              name="description"
+              style={{ font: '24px Arial', color: '#000' }}
+              ref={viewer}
+              value={values.description}
+              onChange={v => setValues(prevState => ({ ...prevState, description: v }))}
+              onBlur={e => console.log(e)}
+              config={config2}
+              tabIndex={2} // tabIndex of textarea
+            />
+          )
 
-                // <div className={classes.markdown2}>
-                //   <ReactMarkdown source={values.description} escapeHtml={false} />
-                // </div>
-                }
-              </div>
-              <FormControl className={classes.formControl}>
-                <InputLabel htmlFor="category-simple">Category</InputLabel>
-                <Select
-                  value={values.categoryname}
-                  onChange={handleChange}
-                  disabled={readOnly}
-                  inputProps={{
-                    name: 'categoryname',
-                    id: 'category-simple'
-                  }}
-                >
-                  {categories.map(({ id, name }) => (
-                    <MenuItem key={id} value={name}>
-                      {name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <FormControl className={classes.formControl}>
-                <InputLabel htmlFor="owner">Owner</InputLabel>
-                <Select
-                  value={values.owner}
-                  onChange={handleChange}
-                  disabled={readOnly}
-                  inputProps={{
-                    name: 'owner',
-                    id: 'owner'
-                  }}
-                >
-                  {owners.map(({ id, name }) => (
-                    <MenuItem key={id} value={name}>
-                      {name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <TextField
-                id="link"
-                label="Link to Document"
-                className={classes.linkField}
-                value={values.link}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                margin="normal"
-                fullWidth
-              />
-
-              <CardSection>
-                {!readOnly && (
-                  <React.Fragment>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      className={classes.button}
-                      type="submit"
-                    >
-                      Save
-                    </Button>
-                  </React.Fragment>
-                )}
-                {!readOnly && supportcard && (
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    className={classes.buttonDel}
-                    onClick={() => onDelete(supportcard)}
-                  >
-                    Delete
-                  </Button>
-                )}
-                {readOnly && supportcard && (
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    className={classes.buttonDel}
-                    onClick={() => window.open(initialValues.link)}
-                  >
-                    View Link
-                  </Button>
-                )}
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  className={classes.button}
-                  onClick={() => setTimeout(history.push('/supportcard'), 500)}
-                >
-                  Cancel
-                </Button>
-                <Chip
-                  style={{ margin: 4 }}
-                  label={`Last updated at ${format(updatedAt, 'EEE, dd MMM yyyy')}`}
-                />
-              </CardSection>
-            </form>
-          );
-        }}
-      </Formik>
+          // <div className={classes.markdown2}>
+          //   <ReactMarkdown source={values.description} escapeHtml={false} />
+          // </div>
+          }
+        </div>
+        <FormControl className={classes.formControl}>
+          <InputLabel htmlFor="category-simple">Category</InputLabel>
+          <Select
+            value={values.categoryname}
+            onChange={handleChange}
+            disabled={readOnly}
+            inputProps={{
+              name: 'categoryname',
+              id: 'category-simple'
+            }}
+          >
+            {categories.map(({ id, name }) => (
+              <MenuItem key={id} value={name}>
+                {name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl className={classes.formControl}>
+          <InputLabel htmlFor="owner">Owner</InputLabel>
+          <Select
+            value={values.owner}
+            onChange={handleChange}
+            disabled={readOnly}
+            inputProps={{
+              name: 'owner',
+              id: 'owner'
+            }}
+          >
+            {owners.map(({ id, name }) => (
+              <MenuItem key={id} value={name}>
+                {name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <TextField
+          id="link"
+          label="Link to Document"
+          className={classes.linkField}
+          value={values.link}
+          onChange={handleChange}
+          onBlur={handleChange}
+          margin="normal"
+          fullWidth
+        />
+        <CardSection>
+          {!readOnly && (
+            <React.Fragment>
+              <Button variant="contained" color="primary" className={classes.button} type="submit">
+                Save
+              </Button>
+            </React.Fragment>
+          )}
+          {!readOnly && supportcard && (
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.buttonDel}
+              onClick={() => onDelete(supportcard)}
+            >
+              Delete
+            </Button>
+          )}
+          {readOnly && supportcard && (
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.buttonDel}
+              onClick={() => window.open(initialValues.link)}
+            >
+              View Link
+            </Button>
+          )}
+          <Button
+            variant="contained"
+            color="secondary"
+            className={classes.button}
+            onClick={() => setTimeout(history.push('/supportcard'), 500)}
+          >
+            Cancel
+          </Button>
+          <Chip
+            style={{ margin: 4 }}
+            label={`Last updated at ${format(updatedAt, 'EEE, dd MMM yyyy')}`}
+          />
+        </CardSection>
+      </form>
     </Paper>
   );
 };

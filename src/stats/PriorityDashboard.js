@@ -14,7 +14,6 @@ const Container = styled.div`
   height: 100%;
   display: flex;
   flex-wrap: wrap;
-  margin-bottom: 2rem;
 `;
 
 const Box = styled.div`
@@ -23,7 +22,7 @@ const Box = styled.div`
   align-items: center;
   justify-content: space-between;
   font-family: Montserrat;
-  margin: 20px;
+  margin-left: 0.5rem;
   width: 22%;
   min-width: 200px;
 
@@ -36,29 +35,6 @@ const Box = styled.div`
   margin-bottom: 1.5rem;
   padding: 1rem;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-`;
-const Box2 = styled.div`
-  display: flex;
-  /* flex-direction: column; */
-  align-items: center;
-  justify-content: space-between;
-  font-family: Montserrat;
-  padding: 10px;
-  margin: 20px;
-  padding: 1rem;
-  width: 22%;
-  min-width: 200px;
-  border-radius: 0.5rem;
-  color: ${props => (props.textcolor ? props.textcolor : '#4a5568')};
-  background-color: ${props => (props.color ? props.color : 'lightblue')};
-  border-radius: 0.5rem;
-  flex-wrap: wrap;
-`;
-
-const Article = styled.article`
-  background-image: ${props =>
-    `linear-gradient(to bottom right, ${props.color || 'black'}, white)`};
-  background-size: cover;
 `;
 
 const P = styled.div`
@@ -81,22 +57,8 @@ const H2 = styled.h2`
   font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
   font-weight: 400;
   line-height: 1.33;
-  margin-bottom: 1.5rem;
-  margin-left: 1.5rem;
-`;
 
-const Vertical = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin: 5px;
-  justify-content: space-between;
-`;
-const RedText = styled.div`
-  letter-spacing: 0.2rem;
-  font-size: 1.3rem;
-  font-weight: 300;
-  text-transform: uppercase;
-  color: #ededed;
+  margin-left: 1.5rem;
 `;
 
 const Avatar = styled.img`
@@ -104,23 +66,6 @@ const Avatar = styled.img`
   width: ${props => (props.size ? props.size + 'px' : '32px')};
   height: ${props => (props.size ? props.size + 'px' : '32px')};
 `;
-
-const Image = ({ image, fullname, size = 32 }) => {
-  const initials = fullname
-    .split(' ')
-    .map(name => name[0])
-    .join('')
-    .toUpperCase();
-  if (image) {
-    return <Avatar src={image.replace('http://', 'https://')} size={size} />;
-  } else {
-    return (
-      <StyledInitials color="#1da1f2" size={size}>
-        {initials}
-      </StyledInitials>
-    );
-  }
-};
 
 export default function PriorityDashboard() {
   const [region, setRegion] = usePersistentState('region', 'EMEA');
@@ -201,14 +146,14 @@ export default function PriorityDashboard() {
           const statusColor =
             item.status === 'Awaiting Infor'
               ? 'bg-orange-700 text-orange-200 '
-              : 'bg-teal-700 text-teal-100';
+              : 'bg-teal-700 text-teal-100 ';
           return (
             <div
               key={item.incident}
-              className={`flex w-64  max-w-xs flex-col m-2 justify-end border ${bgclass} rounded-lg  overflow-hidden`}
+              className={`flex w-1/4 max-w-xs flex-col m-2 justify-end border ${bgclass} rounded-lg  overflow-hidden`}
             >
               <img
-                className="h-48 w-full object-cover"
+                className="h-32 w-full object-cover"
                 src={
                   item.image ||
                   'https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60'

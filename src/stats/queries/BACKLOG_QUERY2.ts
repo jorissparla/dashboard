@@ -245,7 +245,7 @@ export const QUERY_BACKLOG = gql`
     }
   }
 `;
-export const QUERY_PRIORITY_BACKLOG = gql`
+export const QUERY_PRIORITY_BACKLOG_0 = gql`
   # Write your query or mutation here
   fragment backlogfragment2 on DWH {
     incident
@@ -263,7 +263,7 @@ export const QUERY_PRIORITY_BACKLOG = gql`
     severityname
     lastupdated
   }
-  query QUERY_PRIORITY_BACKLOG($products: [String]) {
+  query QUERY_PRIORITY_BACKLOG_0($products: [String]) {
     mostRecentUpdate
 
     active: backlog(orderBy: DAYS_DESC, statusFilter: ACTIVE, productFilters: $products) {

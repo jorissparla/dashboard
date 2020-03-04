@@ -41,6 +41,7 @@
     "global": "^4.4.0",
     "graphiql-with-extensions": "^0.14.3",
     "graphql": "^14.5.8",
+    "graphql-request": "^1.8.2",
     "graphql-tag": "^2.10.1",
     "highcharts": "^8.0.0",
     "jodit": "^3.3.24",
@@ -69,6 +70,7 @@
     "shortid": "^2.2.15",
     "styled-components": "^4.4.1",
     "subscriptions-transport-ws": "^0.9.16",
+    "swr": "^0.1.18",
     "tailwindcss": "^1.2.0",
     "victory": "^34.0.0",
     "yup": "^0.28.0"
