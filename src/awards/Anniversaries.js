@@ -144,11 +144,14 @@ function AnniversaryList({ classes }) {
 
   return (
     <div className="h-screen w-full bg-cool-gray-200">
-      <div class="font-sansI text-3xl">Anniversaries</div>
+      <div className="font-sansI text-3xl">Anniversaries</div>
 
       <div style={{ display: 'flex', margin: 4, flexWrap: 'wrap' }}>
         {anniversaries.map(({ id, fullname, years, account, anniversarydate }) => (
-          <div className="inline-flex max-w-xs flex-col m-2 justify-end border rounded-lg  overflow-hidden bg-white relative">
+          <div
+            key={id}
+            className="inline-flex max-w-xs flex-col m-2 justify-end border rounded-lg  overflow-hidden bg-white relative"
+          >
             <div
               className="left-2 absolute bottom-12 opacity-75 text-teal-200 text-4xl inline-block "
               style={{ textShadow: '1px 1px #000' }}

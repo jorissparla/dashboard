@@ -24,6 +24,7 @@ import { TenantCard } from './TenantCard';
 import TenantCustomerDetailsForm from './TenantCustomerDetailsForm';
 import FancyFilter from './new/FancyFilter';
 import Loader from './../utils/Loader';
+
 import { CREATE_AUDIT_MUTATION } from './Query';
 import './tenants.css';
 
