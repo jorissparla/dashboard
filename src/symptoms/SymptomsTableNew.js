@@ -1,5 +1,6 @@
 import { UserContext } from 'globalState/UserProvider';
 import React, { useState, useEffect } from 'react';
+import _ from 'lodash';
 import { useMutation } from 'react-apollo';
 import { useHistory } from 'react-router';
 import { usePersistentState } from '../hooks';
@@ -12,11 +13,27 @@ import { format } from '../utils/format';
 
 const PAGE_LENGTH = 10;
 
-const ColumnHeader = ({ name }) => (
-  <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-    {name}
-  </th>
-);
+const ColumnHeader = ({ name, onSort }) => {
+  function handleSortUp() {
+    console.log('Clicked up for ' + name);
+    onSort(name, 'A');
+  }
+  function handleSortDown() {
+    console.log('Clicked up for ' + name);
+    onSort(name, 'D');
+  }
+  return (
+    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+      {name}{' '}
+      <span className="hover:text-green hover: cursor-pointer" onClick={handleSortUp}>
+        ▲
+      </span>
+      <span className="hover:text-green hover: cursor-pointer" onClick={handleSortDown}>
+        ▼
+      </span>
+    </th>
+  );
+};
 
 const Cell = ({ value, complete }) => (
   <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
@@ -61,7 +78,7 @@ const CompleteCell = ({ value, handleClick, canEdit = false }) => {
               onClick={canEdit && handleClick}
             />
           )}
-          <span className="text-sm">Done!</span>
+          <span className="text-sm">Mark {value === 0 ? 'Complete' : 'Incomplete'}</span>
         </label>
       </div>
     </td>
@@ -88,7 +105,8 @@ function SymptomsTableNew({ data }) {
   const history = useHistory();
   const [toggleStatusComplete] = useMutation(TOGGLE_STATUS_COMPLETE_MUTATION);
   const [handleDeleteSymptomRequest] = useMutation(DELETE_SYMPTOM_REQUEST_MUTATION);
-  const [filter, setFilter] = usePersistentState('symptomsfilter', 'All');
+  const [filter, setFilter] = usePersistentState('symptomsfilter', 'Open');
+  const [sortState, setSortState] = useState({ name: '', direction: 'A' });
   const [requests, setRequests] = useState(data.symptomrequests || []);
   const [length, setLength] = useState((data.symptomrequests || []).length);
   const [modifiedDate, updateModifiedDate] = useState(Date.now());
@@ -127,6 +145,15 @@ function SymptomsTableNew({ data }) {
         return symptoms;
     }
   }
+
+  const handleColumnSort = col => (name, direction) => {
+    const u = direction === 'A' ? 'asc' : 'desc';
+    console.log(requests);
+    const sorted = _.orderBy(requests, [col], [u]);
+    console.log('HandleSort', name, direction, u, sorted);
+    setRequests(sorted);
+    setSortState({ name, direction });
+  };
 
   const isCompleteView = filter === 'Completed';
 
@@ -213,11 +240,11 @@ function SymptomsTableNew({ data }) {
           <table className="shadow-lg rounded-lg w-full leading-normal shadow rounded-lg  mt-4 transition duration-500 ease-in-out ">
             <thead>
               <tr>
-                <ColumnHeader name="Symptom" />
-                <ColumnHeader name="Category" />
-                <ColumnHeader name="Incident" />
+                <ColumnHeader name="Symptom" onSort={handleColumnSort('symptom')} />
+                <ColumnHeader name="Category" onSort={handleColumnSort('symptom_category')} />
+                <ColumnHeader name="Incident" onSort={handleColumnSort('incident')} />
                 <ColumnHeader name="Complete" />
-                <ColumnHeader name="Updated" />
+                <ColumnHeader name="Updated" onSort={handleColumnSort('updatedAt')} />
                 {isCompleteView && <ColumnHeader name="Remove" />}
               </tr>
             </thead>
