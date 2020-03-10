@@ -46,7 +46,7 @@ const CategoryTabs = ({ data: { loading, error, categories }, onChange, onSave }
 };
 
 const CategoryQuery = gql`
-  query CategoryQuery {
+  query allCategories {
     categories {
       id
       name

@@ -51,8 +51,8 @@ const styles: any = (theme: any) => ({
     flexWrap: 'wrap'
   },
   textField: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing(2),
+    marginRight: theme.spacing(2),
     width: 500
   },
   button: {
@@ -76,9 +76,9 @@ export const FileUploadComponent: React.FC<Props> = ({
   link = PATH_PREFIX,
   classes,
   readOnly,
-  setFile
+  setFile = (v: any) => console.log(v)
 }) => {
-  const [uploadFileMutation, { data }] = useMutation(UPLOAD_FILE_MUTATION);
+  const [uploadFileMutation] = useMutation(UPLOAD_FILE_MUTATION);
   const ref = useRef(null);
   return (
     <FileInput htmlFor="f1">
@@ -86,12 +86,12 @@ export const FileUploadComponent: React.FC<Props> = ({
       <input
         id="f1"
         type="file"
+        accept="image/*"
         multiple
         value=""
         ref={ref}
         onChange={async ({ target: { validity, files } }) => {
-          await uploadFileMutation({ variables: { files, folder: link } });
-
+          const { data } = await uploadFileMutation({ variables: { files, folder: link } });
           if (data) {
             const uploadedFile = data.multipleUpload[0].filename;
             console.log('files', uploadedFile);

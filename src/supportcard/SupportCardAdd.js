@@ -1,9 +1,9 @@
-import gql from "graphql-tag";
-import { graphql } from "react-apollo";
-import React from "react";
-import { withRouter } from "react-router";
-import SupportCardForm from "./SupportCardForm";
-import withAuth from "../utils/withAuth";
+import gql from 'graphql-tag';
+import { graphql } from 'react-apollo';
+import React from 'react';
+import { withRouter } from 'react-router';
+import SupportCardForm from './SupportCardForm';
+import withAuth from '../utils/withAuth';
 
 const SupportCardAdd = ({
   data: { loading, error, categories },
@@ -15,10 +15,10 @@ const SupportCardAdd = ({
   const handleAdd = e => {
     const { id, title, description, category, link } = e;
     const categoryname = category;
-    const createdby = user.email || "system";
+    const createdby = user.email || 'system';
 
     addSupportCard({ id, title, description, categoryname, link, createdby })
-      .then(() => history.push("/supportcard"))
+      .then(() => history.push('/supportcard'))
       .catch(e => window.alert(JSON.stringify(e, null, 2)));
   };
   if (loading) {
@@ -34,7 +34,7 @@ const SupportCardAdd = ({
         readOnly={false}
         authenticated={authenticated}
         categories={categories}
-        initialValues={{ category: "IXS" }}
+        initialValues={{ category: 'IXS' }}
       />
     </div>
   );
@@ -57,7 +57,7 @@ const addSupportCard = gql`
   }
 `;
 const CategoryQuery = gql`
-  query CategoryQuery {
+  query theCategory {
     categories {
       id
       name

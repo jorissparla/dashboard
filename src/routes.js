@@ -42,6 +42,7 @@ import { AddVideo, EditVideo } from './videos/VideoOperations';
 import Test from './pages/Test';
 import LoginForm from './auth/LoginForm';
 import AddSymptomRequest from 'symptoms/AddSymptomRequest';
+import UploadImageComponent from 'pages/UploadImageComponent';
 
 const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
 
@@ -106,6 +107,7 @@ function AppRoutes(props) {
   if (loading) return <NiceSpinner />;
   return (
     <Switch>
+      <Route exact path="/uploadimage" component={UploadImageComponent} />
       <Route exact path="/login" component={LoginForm} />
       <Route exact path="/symptoms/add" component={AddSymptomRequest} />
       <Route exact path="/playground" component={Playground} />
