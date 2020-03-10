@@ -82,7 +82,7 @@ export const FileUploadComponent: React.FC<Props> = ({
   const ref = useRef(null);
   return (
     <FileInput htmlFor="f1">
-      <span>Upload</span>
+      <span>Upload </span>
       <input
         id="f1"
         type="file"
@@ -99,7 +99,7 @@ export const FileUploadComponent: React.FC<Props> = ({
           }
         }}
       />
-      File
+      Image
     </FileInput>
   );
 };
