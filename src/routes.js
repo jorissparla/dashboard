@@ -17,7 +17,7 @@ import PlannedCourseAdd from './courses/PlannedCourseAdd';
 import PlannedCourseEdit from './courses/PlannedCourseEdit';
 import PlannedCourses from './courses/PlannedCoursesNew';
 import DynamicImport from './DynamicImport';
-import { DashBoardContext, withDashBoardContext } from './globalState/Provider';
+import { withDashBoardContext } from './globalState/Provider';
 import { UserContext } from './globalState/UserProvider';
 import NewsItemContainer from './news/newsitemcontainer';
 import CloudReadiness from './pages/CloudReadiness';
@@ -36,7 +36,6 @@ import PriorityDashboard from './stats/PriorityDashboard';
 import Details from './tenants/details/index';
 import TestLogin from './TestLogin';
 // import Test
-import { UserProfileComponent } from './User';
 import UserPermissions from './UserPermissions';
 import { AddVideo, EditVideo } from './videos/VideoOperations';
 import Test from './pages/Test';
@@ -44,12 +43,9 @@ import LoginForm from './auth/LoginForm';
 import AddSymptomRequest from 'symptoms/AddSymptomRequest';
 import UploadImageComponent from 'pages/UploadImageComponent';
 
-const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
-
-//const StatsMain = React.lazy(() => import('./kudos/kudolistcomponentnew'));
+// const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
 
 const Award = DynamicImport(() => import('./awards/award'));
-const KudoListComponentNew = DynamicImport(() => import('./kudos/kudolistcomponentnew'));
 const ResetPasswordForm = DynamicImport(() => import('./auth/ResetPasswordForm'));
 const RequestResetPassword = DynamicImport(() => import('./auth/RequestResetPassword'));
 
@@ -98,7 +94,7 @@ const NotFound = props => {
   return <h2>Not Found</h2>;
 }; //);
 
-const TestUser = () => <UserProfileComponent />;
+// const TestUser = () => <UserProfileComponent />;
 
 function AppRoutes(props) {
   //  const user = props.context;
@@ -276,8 +272,6 @@ function AppRoutes(props) {
       />
       <Route path="/golivelist" component={GoLiveListNew} />
       <Route path="/golivelistside" component={GoLiveListSide} />
-      <Route path="/golives" component={GoLiveListNew} />
-      <Route path="/kudos" component={KudoListComponentNew} />
       <Route exact path="/surveys/:id" component={Surveys} />
       <Route exact path="/surveys" component={Surveys} />
       <Route path="/signin" component={Signin} />

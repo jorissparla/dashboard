@@ -32,7 +32,7 @@ const ProfilePage: React.FC<ProfilePageProps> = ({ user }) => {
     <div>
       <h2>Update your profile picture</h2>
       <div>
-        <img src={image.replace('http:', 'https:')} style={{ height: '100px' }} />
+        <img src={image.replace('http:', 'https:')} style={{ height: '100px' }} alt="" />
       </div>
 
       <FileUploader

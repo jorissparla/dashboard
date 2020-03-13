@@ -29,7 +29,7 @@ import { main } from './styles/globalstyles';
 const {
   REACT_APP_PORT_GRAPHQL = 55555,
   REACT_APP_GRAPHQLSERVER = 'nlbavwixs',
-  REACT_APP_GRAPHQL_PATH = '',
+  // REACT_APP_GRAPHQL_PATH = '',
   REACT_APP_HTTP = 'http',
   HTTPS = false
 } = process.env;

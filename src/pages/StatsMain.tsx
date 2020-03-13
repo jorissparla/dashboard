@@ -11,7 +11,6 @@ import Spinner from '../utils/spinner';
 import LoadingDots from './../utils/LoadingDots';
 import { useLocalStorage } from '../utils/useLocalStorage';
 import { UserContext } from './../globalState/UserProvider';
-import { ItemStyle } from 'layout';
 const SelectionForm = React.lazy(() => import('../stats/SelectionForm'));
 
 export const styles = (theme: any) => ({
@@ -243,10 +242,11 @@ export const StatsMain: React.FC<Props> = ({
   ];
 
   const [loading, setLoading] = useState(true);
-  // console.log('👍', owner);
   React.useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 2000);
-    return () => {};
+    return () => {
+      clearTimeout(timer);
+    };
   }, []);
   // const sev1notrestored = data.critical.filter((item: any) => !item.service_restored_date);
 

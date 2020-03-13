@@ -10,9 +10,12 @@ const AddSymptomRequest = () => {
   const history = useHistory();
   useEffect(() => {
     if (data && data.symptom_categories) {
-      setState({ ...state, symptom_category: data.symptom_categories[0].symptom_category });
+      setState(prevState => ({
+        ...prevState,
+        symptom_category: data.symptom_categories[0].symptom_category
+      }));
     }
-  }, [loading]);
+  }, [loading, data]);
   if (loading) return <div></div>;
 
   const categories = data.symptom_categories;
@@ -20,7 +23,7 @@ const AddSymptomRequest = () => {
   const handleSubmit = async event => {
     event.preventDefault();
     // console.log('Submitted values', values);
-    const result = await addSymptomRequest({
+    await addSymptomRequest({
       variables: { input: state },
       refetchQueries: [{ query: ALL_SYMPTOMS }]
     });

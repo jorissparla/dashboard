@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { Filter } from '../details/components';
 
-
 const useStyles = makeStyles(theme => ({
   root: {
     display: 'flex',
@@ -27,7 +26,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const FancyFilter = props => {
-  const { onFilter, className } = props;
+  const { onFilter } = props;
 
   const classes = useStyles();
 

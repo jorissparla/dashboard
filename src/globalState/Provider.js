@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { client } from '../index';
 import { MUTATION_SIGNIN } from './../auth/signin';
 import { MUTATION_SIGNOUT } from './../auth/signout';
@@ -57,10 +57,10 @@ export default class DashBoardContextProvider extends React.Component {
     client
       .mutate({ mutation: MUTATION_SIGNIN, variables: { input: { email, password } } })
       .then(result => {
-        if (this.result.signinUser.user) {
+        if (result.signinUser.user) {
+          const { id, email, image, fullname, role } = result.data.signinUser.user;
           this.setUser(id, email, image, image, fullname, role);
         }
-        const { id, email, image, fullname, role } = result.data.signinUser.user;
         return result;
       });
   }

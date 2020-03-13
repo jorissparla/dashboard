@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import Icon from '@material-ui/core/Icon';
 import ViewIcon from '@material-ui/icons/Pageview';
@@ -7,11 +7,10 @@ import NewIcon from '@material-ui/icons/NewReleases';
 import { Link } from 'react-router-dom';
 import { Papier, HR } from '../styles/index.js';
 import Divider from '@material-ui/core/Divider';
-import ReactMarkdown from 'react-markdown/with-html';
 import { ToggleFavorite } from '../supportcard/Favorite';
 import NumberOfViews from '../pages/NumberOfViews';
 import { format } from '../utils/format';
-import { Block, Title } from '../elements/Block';
+import { Block } from '../elements/Block';
 
 const OtherButton = styled.a`
   display: flex;
@@ -27,9 +26,7 @@ const Text = styled.div`
   font-weight: 900;
   color: ${props => (props.textcolor ? props.textcolor : 'black')};
 `;
-const Cat = styled.div`
-  font-weight: 800;
-`;
+
 const TitleWrapper = styled.div`
   display: flex;
   flex-direction: row;
@@ -73,17 +70,6 @@ const BottomStyle = styled.div`
   align-items: center;
   padding-top: 20px;
   padding-bottom: 10px;
-`;
-
-const StyledBody = styled.div`
-  margin: 5px;
-  margin-bottom: 20px;
-  font-size: 12px;
-  flex-grow: 1;
-  font-size: 12px;
-  font-family: Helvetica;
-  overflow: hidden;
-  font-family: Montserrat;
 `;
 
 const Outer = styled.div`

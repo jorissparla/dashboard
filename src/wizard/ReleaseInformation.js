@@ -5,13 +5,13 @@ import { SimpleField } from './SimpleField';
 import { useStyles } from './useStyles';
 
 function ReleaseInformation({ versionInfo, handleCustomerHasValidMaintenance, validMaintenance }) {
-  const [valid, setValid] = React.useState(validMaintenance);
+  // const [valid, setValid] = React.useState(validMaintenance);
   if (versionInfo === {} || !versionInfo) return <div />;
   // const { version: versionInfo } = useContext(RootContext);
   const {
     version,
     nryears,
-    checksrequired,
+    // checksrequired,
     date,
     entitled_extended_maintenance,
     xm_end_date,
@@ -19,10 +19,10 @@ function ReleaseInformation({ versionInfo, handleCustomerHasValidMaintenance, va
   } = versionInfo;
   const versionDate = parseInt(date);
 
-  function handleChange(e) {
-    setValid(!valid);
-    handleCustomerHasValidMaintenance();
-  }
+  // function handleChange(e) {
+  //   setValid(!valid);
+  //   handleCustomerHasValidMaintenance();
+  // }
   return (
     <div>
       <Grid container>
@@ -104,7 +104,7 @@ function MaintenanceCheck({ versionInfo, handleCustomerHasValidMaintenance, vali
   const classes = useStyles();
   if (versionInfo === {} || !versionInfo) return <div />;
   // const { version: versionInfo } = useContext(RootContext);
-  const { version, checksrequired, date, entitled_extended_maintenance } = versionInfo;
+  const { checksrequired, entitled_extended_maintenance } = versionInfo;
 
   function handleChange(e) {
     setValid(!valid);

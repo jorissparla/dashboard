@@ -1,5 +1,4 @@
 import gql from 'graphql-tag';
-import CloudReadiness from './../../pages/CloudReadiness';
 const SuitesFragment = gql`
   fragment SuiteDetails on CloudSuite {
     id

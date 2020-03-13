@@ -1,10 +1,10 @@
-import { Button, Divider, Drawer, Switch, TextField, Typography } from '@material-ui/core';
+import { Button, Drawer, Switch, TextField, Typography } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import DeleteIcon from '@material-ui/icons/DeleteOutlined';
 import { makeStyles } from '@material-ui/styles';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React from 'react';
 import { usePersistentState } from '../../../hooks';
 
 const useStyles = makeStyles(theme => ({
@@ -89,7 +89,6 @@ const Filter = props => {
     temperature: ''
   };
 
-  const [expandCustomer, setExpandCustomer] = useState(true);
   const [values, setValues] = usePersistentState('filters', { ...initialValues });
 
   const handleClear = () => {
@@ -111,30 +110,6 @@ const Filter = props => {
       ...values,
       [event.target.name]:
         event.target.type === 'checkbox' ? event.target.checked : event.target.value
-    });
-  };
-  const handleTagAdd = () => {
-    setValues(values => {
-      const newValues = { ...values };
-
-      if (newValues.tag && !newValues.tags.includes(newValues.tag)) {
-        newValues.tags = [...newValues.tags];
-        newValues.tags.push(newValues.tag);
-      }
-
-      newValues.tag = '';
-
-      return newValues;
-    });
-  };
-
-  const handleTagDelete = tag => {
-    setValues(values => {
-      const newValues = { ...values };
-
-      newValues.tags = newValues.tags.filter(t => t !== tag);
-
-      return newValues;
     });
   };
 

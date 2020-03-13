@@ -6,24 +6,20 @@ import {
   CardHeader,
   colors,
   Divider,
-  Grid,
-  Typography
+  Grid
 } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from '@material-ui/styles';
 import clsx from 'clsx';
 import JoditEditor from 'jodit-react';
-import MarkDown from 'react-markdown/with-html';
 import React, { useRef, useState } from 'react';
 import { useMutation } from 'react-apollo';
-import 'react-mde/lib/styles/css/react-mde-all.css';
 import {
   ALL_MAINTENANCE_QUERY,
   MAINTENANCE_FAQ_QUERY,
   MUTATION_UPDATE_MAINTENANCE,
   MUTATION_UPDATE_MAINTENANCE_FAQ
 } from './Queries';
-import ReactMde from 'react-mde';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -53,11 +49,7 @@ const EditWizardDetails = props => {
   const [value, setValue] = useState(defaultValue);
   const mutation = isFAQ ? MUTATION_UPDATE_MAINTENANCE_FAQ : MUTATION_UPDATE_MAINTENANCE;
   const [updateField] = useMutation(mutation);
-  const handleChange = e => {
-    e.persist();
 
-    setValue(e.target.value);
-  };
   const handleSubmit = e => {
     e.preventDefault();
     const input = { id };
@@ -86,8 +78,6 @@ const EditWizardDetails = props => {
     showXPathInStatusbar: false,
     showCharsCounter: false
   };
-  const config2 = { ...config, toolbar: false, readonly: true };
-  const taprops = { cols: 150, rows: 8, style: { fontFamily: 'roboto', fontSize: 'inherit' } };
   return (
     <Card {...rest} className={clsx(classes.root, className)}>
       <form onSubmit={handleSubmit} style={{}}>

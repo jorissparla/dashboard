@@ -17,12 +17,7 @@ import { makeStyles } from '@material-ui/styles';
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
 import { useMutation } from 'react-apollo';
-import {
-  ADD_SYMPTOM_REQUEST_MUTATION,
-  ALL_SYMPTOMS,
-  UPDATE_SYMPTOM_REQUEST_MUTATION
-} from './Queries';
-import { createPortal } from 'react-dom';
+import { ALL_SYMPTOMS, UPDATE_SYMPTOM_REQUEST_MUTATION } from './Queries';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -64,13 +59,13 @@ export default function FormDialog({
       setValues(defaultValues);
       console.log('defaultValues', defaultValues);
     }
-  }, []);
+  }, [defaultValues]);
 
   useEffect(() => {
     if (categories.length > 0 && !defaultValues) {
       setValues({ symptom_category: categories[0].symptom_category });
     }
-  }, [categories]);
+  }, [categories, defaultValues]);
   const classes = useStyles();
   const [updateSymptomRequest] = useMutation(UPDATE_SYMPTOM_REQUEST_MUTATION);
 

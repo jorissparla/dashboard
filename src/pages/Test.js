@@ -1,8 +1,7 @@
-import React from 'react';
-import EditableMarkDownField from 'common/EditableMarkdownField';
-import { useQuery } from 'react-apollo';
-import { MAINTENANCE_FAQ_QUERY, MUTATION_UPDATE_MAINTENANCE_FAQ } from 'wizard/Queries';
 import { CLOUD_READINESS_QUERY, MUTATION_UPDATE_CLOUD_READINESS } from 'cloudsuite/graphql/Queries';
+import EditableMarkDownField from 'common/EditableMarkdownField';
+import React from 'react';
+import { useQuery } from 'react-apollo';
 import useStyles from '../cloudsuite/useCloudFieldStyles';
 const Test = ({ user }) => {
   console.log('user', user);
@@ -19,7 +18,7 @@ const Test = ({ user }) => {
   if (loading) return <div></div>;
   const { cloudreadiness } = data;
 
-  const { id, maintext, text2, text3, text4 } = cloudreadiness;
+  const { id } = cloudreadiness;
 
   const fields = [
     { name: 'maintext', title: 'Main' },

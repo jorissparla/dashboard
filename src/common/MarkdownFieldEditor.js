@@ -13,10 +13,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from '@material-ui/styles';
 import clsx from 'clsx';
 import JoditEditor from 'jodit-react';
-import ReactMde from 'react-mde';
 
 import React, { useRef, useState } from 'react';
-import MarkDown from 'react-markdown/with-html';
 import 'react-mde/lib/styles/css/react-mde-all.css';
 
 const useStyles = makeStyles(theme => ({
@@ -51,7 +49,6 @@ const MarkDownFieldEditor = props => {
     ...rest
   } = props;
   const classes = useStyles();
-  const [openSnackbar, setOpenSnackbar] = useState(false);
 
   const editor = useRef(null);
   const [value, setValue] = useState(defaultValue);
@@ -88,7 +85,6 @@ const MarkDownFieldEditor = props => {
     showXPathInStatusbar: false,
     showCharsCounter: false
   };
-  const taprops = { cols: 180, rows: 10, style: { fontFamily: 'roboto', fontSize: 'inherit' } };
   return (
     <Card {...rest} className={clsx(classes.root, className)}>
       <form onSubmit={handleSubmit}>

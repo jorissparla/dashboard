@@ -106,7 +106,7 @@ function SymptomsTableNew({ data }) {
   const [toggleStatusComplete] = useMutation(TOGGLE_STATUS_COMPLETE_MUTATION);
   const [handleDeleteSymptomRequest] = useMutation(DELETE_SYMPTOM_REQUEST_MUTATION);
   const [filter, setFilter] = usePersistentState('symptomsfilter', 'Open');
-  const [sortState, setSortState] = useState({ name: '', direction: 'A' });
+  const [_, setSortState] = useState({ name: '', direction: 'A' });
   const [requests, setRequests] = useState(data.symptomrequests || []);
   const [length, setLength] = useState((data.symptomrequests || []).length);
   const [modifiedDate, updateModifiedDate] = useState(Date.now());
@@ -120,7 +120,7 @@ function SymptomsTableNew({ data }) {
     user.role === 'Admin';
 
   async function toggleCompleteStatus(id) {
-    const result = await toggleStatusComplete({
+    await toggleStatusComplete({
       variables: { where: { id } },
       refetchQueries: [{ query: ALL_SYMPTOMS }]
     });
@@ -128,7 +128,7 @@ function SymptomsTableNew({ data }) {
   }
 
   async function handleDelete(id) {
-    const result = await handleDeleteSymptomRequest({
+    await handleDeleteSymptomRequest({
       variables: { where: { id } },
       refetchQueries: [{ query: ALL_SYMPTOMS }]
     });

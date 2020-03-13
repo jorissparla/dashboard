@@ -1,17 +1,15 @@
-import React, { useContext, useState, useEffect } from 'react';
 import { Typography, withStyles } from '@material-ui/core';
+import ExpansionPanel from '@material-ui/core/ExpansionPanel';
+import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import React, { useContext, useState } from 'react';
 import { SelectionContext } from '../globalState/SelectionContext';
-import SortIcon from '@material-ui/icons/SwapVert';
-import _ from 'lodash';
 import { format } from './../utils/format';
 
 const CustomTableCell = withStyles(theme => ({
@@ -36,53 +34,6 @@ interface TableHeaderColumnProps {
   className: string;
 }
 
-const TableHeaderColumn: React.FC<TableHeaderColumnProps> = ({
-  column,
-  title,
-  handleSortChange,
-  className
-}) => (
-  <TableCell
-    style={{
-      fontSize: 16,
-      display: 'flex',
-      justifyContent: 'center',
-      textTransform: 'uppercase',
-      backgroundColor: 'rgb(0,0,0, 0.5)',
-      color: 'white'
-    }}
-    key={title}
-  >
-    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
-      <SortIcon onClick={() => handleSortChange(column)} color="primary" />
-      {title.toUpperCase()}
-    </div>
-  </TableCell>
-);
-
-const AnotherCustomTableCell = ({ title, column, handleSortChange, className }: any) => {
-  return (
-    <TableCell
-      onClick={() => {
-        handleSortChange(column);
-      }}
-      className={className}
-    >
-      {title}
-    </TableCell>
-  );
-};
-
-const STHC = withStyles(theme => ({
-  head: {
-    backgroundColor: 'rgb(0,0,0, 0.5)',
-    color: theme.palette.common.white
-  },
-  body: {
-    fontSize: '1rem'
-  }
-}))(AnotherCustomTableCell);
-
 type sortType = 'desc' | 'asc';
 
 export const BacklogTable = ({
@@ -104,7 +55,6 @@ export const BacklogTable = ({
 
   function sortUp(leftSide: any, rightSide: any) {
     const col = 'customername';
-    const order = 'desc';
     let result = 0;
 
     if (leftSide[col] > rightSide[col]) {
@@ -120,25 +70,18 @@ export const BacklogTable = ({
   }
 
   let mydata = backlog;
-  useEffect(() => {
-    if (sorted.name) {
-      mydata = sorted.direction === 'asc' ? backlog.sort(sortUp) : backlog.sort(sortUp);
-      console.log(sorted);
-    }
-  });
+  // useEffect(() => {
+  //   if (sorted.name) {
+  //     mydata = sorted.direction === 'asc' ? backlog.sort(sortUp) : backlog.sort(sortUp);
+  //     console.log(sorted);
+  //   }
+  // });
 
   if (!backlog) {
     return <div></div>;
   }
   if (actionNeeded && backlog.length === 0) {
     return <div />;
-  }
-  function handleSortChange(column: string) {
-    if (sorted.name === column) {
-      setSorted({ ...sorted, direction: sorted.direction === 'asc' ? 'desc' : 'asc' });
-    } else {
-      setSorted({ name: column, direction: 'asc' });
-    }
   }
 
   mydata = owner ? mydata.filter((o: any) => o.owner === owner) : mydata;

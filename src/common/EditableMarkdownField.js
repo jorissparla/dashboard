@@ -2,9 +2,9 @@ import { Backdrop, Modal, Typography } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import EditIcon from '@material-ui/icons/Edit';
-import React from 'react';
+import JoditEditor from 'jodit-react';
+import React, { useRef } from 'react';
 import { useMutation } from 'react-apollo';
-import MarkDown from 'react-markdown/with-html';
 import MarkDownFieldEditor from './MarkdownFieldEditor';
 
 const EditableMarkDownField = ({
@@ -19,7 +19,7 @@ const EditableMarkDownField = ({
 }) => {
   const [isOpen, setisOpened] = React.useState(false);
   const [fieldValue, setFieldValue] = React.useState(value);
-  const [editable, toggleEdit] = React.useState(canEdit);
+  // const [editable, toggleEdit] = React.useState(canEdit);
 
   const [updateMutution] = useMutation(updateQuery);
   async function handleSaveAndClose(value) {
@@ -31,7 +31,16 @@ const EditableMarkDownField = ({
     console.log({ input });
     await updateMutution({ variables: { input } });
   }
-
+  const config = {
+    readonly: true, // all options from https://xdsoft.net/jodit/doc/,
+    toolbar: false,
+    // theme: 'dark',
+    autoHeight: true,
+    showWordsCounter: false,
+    showXPathInStatusbar: false,
+    showCharsCounter: false
+  };
+  const viewer = useRef(null);
   return (
     <Paper
       className={classes.paper}
@@ -70,7 +79,18 @@ const EditableMarkDownField = ({
           />
         </div>
       </Modal>
-      <MarkDown source={fieldValue} escapeHtml={false}></MarkDown>
+      <JoditEditor
+        id="description"
+        name="description"
+        style={{ font: '24px Arial', color: '#000' }}
+        ref={viewer}
+        value={fieldValue}
+        onChange={v => console.log(v)}
+        onBlur={e => console.log(e)}
+        config={config}
+        tabIndex={2} // tabIndex of textarea
+      />
+      {/* <MarkDown source={fieldValue} escapeHtml={false}></MarkDown> */}
     </Paper>
   );
 };

@@ -17,7 +17,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import classNames from 'classnames';
 import { usePersistentState } from 'hooks';
 import _ from 'lodash';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import { useQuery } from 'react-apollo';
 import Spinner from 'utils/spinner';
 import { DashBoardContext } from '../globalState/Provider';
@@ -174,6 +174,7 @@ const TenantViewList = props => {
     if (!found) {
       filteredCustomers.push(o);
     }
+    return 0;
   });
   console.log('filterTenants', filteredCustomers);
 

@@ -1,21 +1,20 @@
-import React, { useContext, useState } from 'react';
-import { usePersistentState } from 'hooks';
 import {
-  Paper,
-  TextField,
-  Switch,
-  FormLabel,
   Button,
+  Checkbox,
+  FormControl,
   FormControlLabel,
   FormGroup,
-  Checkbox,
-  Select,
-  MenuItem,
+  FormLabel,
   InputLabel,
-  FormControl,
-  FormHelperText
+  MenuItem,
+  Paper,
+  Select,
+  Switch,
+  TextField
 } from '@material-ui/core';
+import { usePersistentState } from 'hooks';
 import { PRODUCT_LIST, REGION_LIST } from 'pages/Stats';
+import React, { useState } from 'react';
 
 export const SelectionForm = ({
   classes,

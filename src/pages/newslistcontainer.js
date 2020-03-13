@@ -1,15 +1,15 @@
-import { Fab } from "@material-ui/core";
-import Paper from "@material-ui/core/Paper";
-import { withStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import AddIcon from "@material-ui/icons/Add";
-import gql from "graphql-tag";
-import React, { Component } from "react";
-import { Query, useQuery } from "react-apollo";
-import { withRouter, useHistory } from "react-router";
-import NewsList from "../news/newslist";
-import withAuth from "../utils/withAuth";
-import Spinner from "utils/spinner";
+import { Fab } from '@material-ui/core';
+import Paper from '@material-ui/core/Paper';
+import { withStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
+import AddIcon from '@material-ui/icons/Add';
+import gql from 'graphql-tag';
+import React from 'react';
+import { useQuery } from 'react-apollo';
+import { useHistory } from 'react-router';
+import Spinner from 'utils/spinner';
+import NewsList from '../news/newslist';
+import withAuth from '../utils/withAuth';
 
 const styles = theme => ({
   button: {

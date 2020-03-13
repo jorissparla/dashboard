@@ -14,10 +14,6 @@ interface User {
   permissions: { permission: string }[];
 }
 
-enum Empty {
-  empty
-}
-
 interface UserContextType {
   user: User | null;
   loading?: Boolean;
@@ -58,7 +54,7 @@ export const UserContextProvider: React.FC<{ children: any }> = ({ children }) =
   }
   function hasPermissions(user: User, roles: string[]): boolean {
     if (!user) return false;
-    const permissions = user.permissions;
+    // const permissions = user.permissions;
     if (!user.permissions) return false;
     const found = user.permissions.filter(u => roles.includes(u.permission));
     if (found.length > 0) {

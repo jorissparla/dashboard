@@ -4,8 +4,10 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import EditIcon from '@material-ui/icons/Edit';
 import { DashBoardContext } from 'globalState/Provider';
-import React from 'react';
+import JoditEditor from 'jodit-react';
+import React, { useRef, useState } from 'react';
 import MarkDown from 'react-markdown/with-html';
+
 import EditWizardDetails from './EditWizardDetails';
 import { useStyles } from './useStyles';
 
@@ -19,6 +21,16 @@ export const Field = ({
   blue = false
 }) => {
   const classes = useStyles();
+  const viewer = useRef(null);
+  const config = {
+    readonly: true, // all options from https://xdsoft.net/jodit/doc/,
+    toolbar: false,
+    // theme: 'dark',
+    autoHeight: true,
+    showWordsCounter: false,
+    showXPathInStatusbar: false,
+    showCharsCounter: false
+  };
   const { role = 'Guest' } = React.useContext(DashBoardContext);
   // const { activeVersion } = React.useContext(RootContext);
   // console.log('Field', name, activeVersion);
@@ -77,8 +89,18 @@ export const Field = ({
           </div>
         </Modal>
       </Grid>
-
-      <MarkDown source={activeVersion[name]} escapeHtml={false}></MarkDown>
+      <JoditEditor
+        id="description"
+        name="description"
+        style={{ font: '24px Arial', color: '#000' }}
+        ref={viewer}
+        value={activeVersion[name]}
+        onChange={v => console.log(v)}
+        onBlur={e => console.log(e)}
+        config={config}
+        tabIndex={2} // tabIndex of textarea
+      />
+      {/* <MarkDown source={activeVersion[name]} escapeHtml={false}></MarkDown> */}
     </Paper>
   );
 };

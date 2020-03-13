@@ -16,7 +16,7 @@ const Row = styled.div`
 `;
 
 const DashBoardStats = props => {
-  const teams = ['Logistics', 'Finance', 'Tools'];
+  // const teams = ['Logistics', 'Finance', 'Tools'];
 
   const team = props.match ? props.match.params.team : props.team;
   // console.log(

@@ -43,6 +43,7 @@ const styles = theme => ({
   button2: {
     margin: theme.spacing(1),
     height: '40px',
+    fontSize: '24px',
     backgroundColor: 'palevioletred'
   },
 
@@ -61,7 +62,8 @@ const styles = theme => ({
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
     fontSize: '40px',
-    color: '#039BE5'
+    color: '#039BE5',
+    fontWeight: 900
   },
   content: {
     display: 'flex'
@@ -114,12 +116,12 @@ const SupportCardForm = props => {
   const updatedAt = supportcard ? supportcard.updatedAt : format(new Date(), 'yyyy-MM-dd');
   const [values, setValues] = React.useState(initialValues);
   const currentUser = useUser();
-  console.log('blba', { initialValues }, currentUser);
-  let newInitialValues =
-    currentUser && !initialValues.owner
-      ? { ...initialValues, owner: currentUser.fullname }
-      : initialValues;
-  // const [value, setValue] = React.useState(newInitialValues.description);
+  // console.log('blba', { initialValues }, currentUser);
+  // let newInitialValues =
+  //   currentUser && !initialValues.owner
+  //     ? { ...initialValues, owner: currentUser.fullname }
+  //     : initialValues;
+  // // const [value, setValue] = React.useState(newInitialValues.description);
 
   // console.log(values);
   const handleChange = event => {
@@ -163,7 +165,10 @@ const SupportCardForm = props => {
           disabled={readOnly}
           fullWidth
         />
-        <div className={classes.content}>
+        <div
+          className={classes.content}
+          style={{ boxShadow: '2px 2px 5px rgba(0,0,0,0.2)', background: 'rgba(0,0,0,0.05)' }}
+        >
           {!readOnly ? (
             <JoditEditor
               id="description"

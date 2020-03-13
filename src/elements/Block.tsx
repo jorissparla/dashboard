@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import styled from 'styled-components';
 
 const SELECTEDCOLOR = 'rgb(130, 216, 216)';

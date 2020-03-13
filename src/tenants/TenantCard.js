@@ -10,8 +10,7 @@ import {
   Grid,
   Modal,
   Switch,
-  Typography,
-  Chip
+  Typography
 } from '@material-ui/core';
 import ListIcon from '@material-ui/icons/List';
 import classNames from 'classnames';
@@ -19,11 +18,10 @@ import { UserContext } from 'globalState/UserProvider';
 import _ from 'lodash';
 import React from 'react';
 import { Mutation } from 'react-apollo';
-import { formatDistanceToNow, format } from '../utils/format';
+import { format, formatDistanceToNow } from '../utils/format';
 import EditTenantDetails from './details/components/EditTenant';
 import Label from './details/components/Label';
 import { MUTATION_MARK_LIVE } from './TenantQueries';
-import { Tooltip } from '@material-ui/core/Tooltip';
 
 export const TenantCard = ({
   classes,
@@ -39,10 +37,10 @@ export const TenantCard = ({
   const [isLive, setLive] = React.useState(live);
   const [isOpen, setisOpened] = React.useState(false);
   const userContext = React.useContext(UserContext);
-  const { user, login, hasPermissions } = userContext;
+  const { user, hasPermissions } = userContext;
 
   const isTenantEditor = hasPermissions(user, ['TENANTEDIT', 'ADMIN']);
-  const isAdmin = hasPermissions(user, ['ADMIN']);
+  // const isAdmin = hasPermissions(user, ['ADMIN']);
 
   let tenantcustomerdetail;
   if (customer !== 'Infor' && tenantdetails) {

@@ -1,24 +1,20 @@
-import React, { Component, useState, useEffect } from 'react';
-import DynamicImport from '../DynamicImport';
-
+import { UserContext } from 'globalState/UserProvider';
+import React, { useEffect, useState } from 'react';
+import PriorityDashboard from 'stats/PriorityDashboard';
 import Anniversaries from '../awards/Anniversaries';
+import DynamicImport from '../DynamicImport';
+import CloudSuites from './CloudSuites';
+import CourseDashboard from './CourseDashboard';
 // import FeedbackList from './feedbackList';
 import CourseList from './CourseList';
 import { Surveys } from './Surveys';
-import CourseDashboard from './CourseDashboard';
-import PriorityDashboard from 'stats/PriorityDashboard';
-
-import CloudSuites from './CloudSuites';
-import { UserContext } from 'globalState/UserProvider';
 
 // const CourseDash
-const DashBoard = DynamicImport(() => import('../dashboard'));
 const DashBoardStats = DynamicImport(() => import('./DashBoardStatsNew'));
 const GoLives = DynamicImport(() => import('./goLiveListNew'));
 const SupportCards = DynamicImport(() => import('./SupportCards'));
 const HistoryDayAll = DynamicImport(() => import('../charts/historydayallcontainer'));
 const NewsPage = DynamicImport(() => import('./newspage'));
-const KudoList = DynamicImport(() => import('../kudos/kudolistcomponentnew'));
 // const CourseList = DynamicImport(() => import('./CourseList'))
 
 const DashBoardContainer = props => {

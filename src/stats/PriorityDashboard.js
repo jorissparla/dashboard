@@ -1,12 +1,10 @@
-import React, { useContext, useState } from 'react';
+import { usePersistentState } from 'hooks';
+import React from 'react';
 import { useQuery } from 'react-apollo';
 import styled from 'styled-components';
-import _ from 'lodash';
 import Spinner from '../utils/spinner';
-import { QUERY_PRIORITY_BACKLOG } from './queries/BACKLOG_QUERY2a';
-import { StyledInitials } from 'styles';
 import { format } from './../utils/format';
-import { usePersistentState } from 'hooks';
+import { QUERY_PRIORITY_BACKLOG } from './queries/BACKLOG_QUERY2a';
 
 const Container = styled.div`
   margin-top: -1rem;
@@ -61,14 +59,8 @@ const H2 = styled.h2`
   margin-left: 1.5rem;
 `;
 
-const Avatar = styled.img`
-  border-radius: 50%;
-  width: ${props => (props.size ? props.size + 'px' : '32px')};
-  height: ${props => (props.size ? props.size + 'px' : '32px')};
-`;
-
 export default function PriorityDashboard() {
-  const [region, setRegion] = usePersistentState('region', 'EMEA');
+  const [region] = usePersistentState('region', 'EMEA');
   const { loading, data } = useQuery(QUERY_PRIORITY_BACKLOG, {
     variables: { products: ['LN'] }
   });

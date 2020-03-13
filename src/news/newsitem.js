@@ -1,23 +1,8 @@
+import { withStyles } from '@material-ui/core/styles';
 import React, { useState } from 'react';
 import { withRouter } from 'react-router';
-import { CardSection } from '../common';
-import Button from '@material-ui/core/Button';
-import styled from 'styled-components';
-import { Formik } from 'formik';
-import { TextField, Avatar } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
 import FileUploaderNew from '../common/FileUploaderNew';
 import SafeDeleteButton from '../videos/SafeDeleteButton';
-
-const Left = styled.div`
-  width: 10%;
-  margin: 10px;
-`;
-const Right = styled.div`
-  width: 80%;
-`;
 
 const styles = theme => ({
   root: {

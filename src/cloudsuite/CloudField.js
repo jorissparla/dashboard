@@ -2,17 +2,13 @@ import { Backdrop, Modal } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import EditIcon from '@material-ui/icons/Edit';
 import { DashBoardContext } from 'globalState/Provider';
-import React, { useRef } from 'react';
-import MarkDown from 'react-markdown/with-html';
-import useStyles from './useCloudFieldStyles';
 import JoditEditor from 'jodit-react';
+import React, { useRef } from 'react';
 
-const CloudField = ({ name, label, edit = false, Icon, initialValue }) => {
-  const classes = useStyles();
+const CloudField = ({ name, edit = false, Icon, initialValue }) => {
   const { role = 'Guest' } = React.useContext(DashBoardContext);
   const [isOpen, setisOpened] = React.useState(false);
-  const [value, setValue] = React.useState(initialValue[name]);
-  const [editable, toggleEdit] = React.useState(edit);
+  const [value] = React.useState(initialValue[name]);
 
   const config = {
     readonly: false, // all options from https://xdsoft.net/jodit/doc/,
@@ -23,9 +19,9 @@ const CloudField = ({ name, label, edit = false, Icon, initialValue }) => {
     showCharsCounter: false
   };
   const config2 = { ...config, toolbar: false, readonly: true };
-  function handleChange(e) {
-    setValue(e.target.value);
-  }
+  // function handleChange(e) {
+  //   setValue(e.target.value);
+  // }
 
   const viewer = useRef(null);
   return (

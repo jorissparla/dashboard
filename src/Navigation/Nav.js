@@ -15,10 +15,6 @@ import { withRouter } from 'react-router';
 import withAuth from '../utils/withAuth';
 import { AuthenticationSection } from './AuthSection';
 import { SideBarMenu } from './SideBarMenu';
-import { useUser } from '../User';
-import { ThemeContext } from 'globalState/ThemeContext';
-import { ThemeProvider } from '@material-ui/core/styles';
-import { UserContext } from 'globalState/UserProvider';
 
 const drawerWidth = 340;
 
@@ -103,11 +99,10 @@ const styles = theme => ({
 
 const Header = props => {
   const [open, setOpen] = useState(false);
-  const context = React.useContext(ThemeContext);
   function toggleMenu() {
     setOpen(!open);
   }
-  const { classes, authenticated, theme, history } = props;
+  const { classes, theme, history } = props;
   //const currentUser = useUser();
   let titleText = ''; // this.state.ipaddress ? this.state.ipaddress : "";
   titleText = titleText + process.env.NODE_ENV !== 'production' ? `(${process.env.NODE_ENV})` : '';

@@ -12,16 +12,6 @@ export const MUTATION_SIGNOUT = gql`
   }
 `;
 
-const signoutUser = () => {
-  localStorage.removeItem('token');
-  localStorage.removeItem('name');
-  localStorage.removeItem('id');
-  localStorage.removeItem('role');
-  localStorage.setItem('email', '');
-  localStorage.setItem('picture', '');
-  localStorage.setItem('role', '');
-};
-
 interface Props {
   history: any;
 }
@@ -29,8 +19,7 @@ interface Props {
 export const Signout: React.FunctionComponent<RouteComponentProps<any, StaticContext, any>> = ({
   history
 }) => {
-  let userCtx: any;
-  const { user, logout } = React.useContext(UserContext);
+  const { logout } = React.useContext(UserContext);
   logout();
   React.useEffect(() => {
     const h = setTimeout(() => {
