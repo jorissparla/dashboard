@@ -5,8 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import EditIcon from '@material-ui/icons/Edit';
 import { DashBoardContext } from 'globalState/Provider';
 import JoditEditor from 'jodit-react';
-import React, { useRef, useState } from 'react';
-import MarkDown from 'react-markdown/with-html';
+import React, { useRef } from 'react';
 
 import EditWizardDetails from './EditWizardDetails';
 import { useStyles } from './useStyles';
@@ -100,7 +99,6 @@ export const Field = ({
         config={config}
         tabIndex={2} // tabIndex of textarea
       />
-      {/* <MarkDown source={activeVersion[name]} escapeHtml={false}></MarkDown> */}
     </Paper>
   );
 };

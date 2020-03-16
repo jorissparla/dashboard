@@ -73,7 +73,7 @@ const DashBoardStats = DynamicImport(() => import('./pages/dashboardstats'));
 const HistoryDayContainer = DynamicImport(() => import('./charts/historydaycontainer'));
 const HistoryDayAll = DynamicImport(() => import('./charts/historydayallcontainer'));
 const GoLiveListNew = DynamicImport(() => import('./pages/goLiveListNew'));
-const GoLiveListSide = DynamicImport(() => import('./golives/golivelistside'));
+// const GoLiveListSide = DynamicImport(() => import('./golives/golivelistside'));
 const DashBoardStatsNew = DynamicImport(() => import('./pages/DashBoardStatsNew'));
 const SupportCards = DynamicImport(() => import('./pages/SupportCards'));
 
@@ -86,7 +86,6 @@ const StudentView = DynamicImport(() => import('./courses/StudentView'));
 /*  */
 const AddPlannedCourseRequest = DynamicImport(() => import('./courses/AddPlannedCourseRequest'));
 const TenantPage = DynamicImport(() => import('./pages/TenantPage'));
-const DonutChart = DynamicImport(() => import('./charts/DonutChart'));
 const VSummaryChart = DynamicImport(() => import('./charts/VSummaryChart'));
 
 const NotFound = props => {
@@ -271,7 +270,7 @@ function AppRoutes(props) {
         component={RequireAuth(NewsItemAddContainer)}
       />
       <Route path="/golivelist" component={GoLiveListNew} />
-      <Route path="/golivelistside" component={GoLiveListSide} />
+      <Route path="/golives" component={GoLiveListNew} />
       <Route exact path="/surveys/:id" component={Surveys} />
       <Route exact path="/surveys" component={Surveys} />
       <Route path="/signin" component={Signin} />
@@ -303,7 +302,6 @@ function AppRoutes(props) {
       />
       />
       <Route exact path="/chart" component={VSummaryChart} />
-      <Route exact path="/donut" component={DonutChart} />
       <Route exact path="/addplannedcourserequest" component={AddPlannedCourseRequest} />
       <Route exact path="/about" component={VideoPage} user={user} />
       <EnhancedRoute exact path="/videos" component={VideoPage} user={user} />

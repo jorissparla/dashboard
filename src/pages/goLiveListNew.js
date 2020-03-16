@@ -51,10 +51,12 @@ const Div = styled.div`
 const Span = styled.div`
   display: flex;
   flex-grow: 1;
-  font-weight: bold;
+
+  font-family: sans-serif;
+  color: rgba(0, 0, 0, 0.75);
+  letter-spacing: 0.1rem;
   font-size: 16px;
-  color: black;
-  width: 52%;
+  font-wwidth: 52%;
 `;
 
 const Mid = styled.div`

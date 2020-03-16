@@ -49,7 +49,7 @@ export const BacklogTable = ({
   // console.log(filterValues);
   const initialValue = { name: '', direction: '' };
   const { actionNeeded } = useContext(SelectionContext);
-  const [sorted, setSorted] = useState(initialValue);
+  // const [sorted, setSorted] = useState(initialValue);
 
   const { owner, products, region } = filterValues;
 
@@ -70,12 +70,6 @@ export const BacklogTable = ({
   }
 
   let mydata = backlog;
-  // useEffect(() => {
-  //   if (sorted.name) {
-  //     mydata = sorted.direction === 'asc' ? backlog.sort(sortUp) : backlog.sort(sortUp);
-  //     console.log(sorted);
-  //   }
-  // });
 
   if (!backlog) {
     return <div></div>;
