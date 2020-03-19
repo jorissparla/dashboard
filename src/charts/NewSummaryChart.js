@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ReactHighCharts from "react-highcharts";
-import "highcharts/highcharts-3d";
+// import "highcharts/highcharts-3d";
 import styled from "styled-components";
 import shortid from "shortid";
 
@@ -16,53 +16,68 @@ const Card = styled.div`
   width: 30%;
 `;
 
-const arColors = ["#c62828", "#90caf9", "#01579b", "#ffa726", "#4db6ac", "#fbc02d", "#4527a0"];
+const arColors = [
+  "#c62828",
+  "#90caf9",
+  "#01579b",
+  "#ffa726",
+  "#4db6ac",
+  "#fbc02d",
+  "#4527a0"
+];
 
-export default class summaryChart extends Component {
-  state = {
-    config: {
-      chart: {
-        type: "column",
-        style: {
-          fontFamily: "Arial"
-        }
-      },
-      options3d: {
-        enabled: true,
-        alpha: 15,
-        beta: 15,
-        depth: 50,
-        viewDistance: 25
-      },
-      xAxis: {
-        categories: []
-      },
-      plotOptions: {
-        area: {
-          color: "b39ddb"
-        },
-        column: {
-          depth: 25
-        },
-        series: {
-          pointWidth: 50 // width of the column bars irrespective of the chart size
-        }
-      },
-      series: [
-        {
-          name: "Tools",
-          type: "column",
-          data: [],
-          dataLabels: { enabled: true }
-        }
-      ],
-      colors: ["#c62828", "#90caf9", "#ffa726", "#4db6ac"],
-      title: {
-        text: "Hallo"
-      }
+const config = {
+  chart: {
+    type: "column",
+    style: {
+      fontFamily: "Arial"
     }
-  };
-  renderSummary = (config, val, team, title, color, type, summary, xvalue) => {
+  },
+  options3d: {
+    enabled: true,
+    alpha: 15,
+    beta: 15,
+    depth: 50,
+    viewDistance: 25
+  },
+  xAxis: {
+    categories: []
+  },
+  plotOptions: {
+    area: {
+      color: "b39ddb"
+    },
+    column: {
+      depth: 25
+    },
+    series: {
+      pointWidth: 50 // width of the column bars irrespective of the chart size
+    }
+  },
+  series: [
+    {
+      name: "Tools",
+      type: "column",
+      data: [],
+      dataLabels: { enabled: true }
+    }
+  ],
+  colors: ["#c62828", "#90caf9", "#ffa726", "#4db6ac"],
+  title: {
+    text: "Hallo"
+  }
+};
+export default props => {
+  const renderSummary = (
+    config,
+    val,
+    team,
+    title,
+    color,
+    type,
+    summary,
+    xvalue
+  ) => {
     if (color) {
       config.plotOptions.area.color = color;
     }
@@ -94,22 +109,23 @@ export default class summaryChart extends Component {
     return config;
   };
 
-  render() {
-    const { value, team, title, color, type, data, xvalue } = this.props;
-    const newConfig = this.renderSummary(
-      this.state.config,
-      value,
-      team,
-      title,
-      color,
-      type,
-      data,
-      xvalue
-    );
-    return (
-      <Card id={shortid.generate()}>
-        <ReactHighCharts config={newConfig} id={shortid.generate()} />
-      </Card>
-    );
-  }
-}
+  const { value, team, title, color, type, data, xvalue } = props;
+  console.log(JSON.stringify(data));
+  const newConfig = renderSummary(
+    config,
+    value,
+    team,
+    title,
+    color,
+    type,
+    data,
+    xvalue
+  );
+
+  // console.log("newConfig", JSON.stringify(newConfig), newConfig.yAxis);
+  return (
+    <div className="shadow-lg m-4 rounded-lg" id={shortid.generate()}>
+      <ReactHighCharts config={newConfig} id={shortid.generate()} />
+    </div>
+  );
+};

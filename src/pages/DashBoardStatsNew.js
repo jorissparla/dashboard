@@ -1,9 +1,9 @@
-import React from 'react';
+import React from "react";
 
-import '../App.css';
-import SummaryChartContainer from '../charts/SummaryChartContainer';
-import styled from 'styled-components';
-import shortid from 'shortid';
+import "../App.css";
+import SummaryChartContainer from "../charts/SummaryChartContainer";
+import styled from "styled-components";
+import shortid from "shortid";
 
 const Row = styled.div`
   margin-left: 10px;
@@ -23,9 +23,9 @@ const DashBoardStats = props => {
   //   ` RETURNS TEAM: ${team} , PROPS:  ${props.team}, PARAMS: ${JSON.stringify(props.match)}`
   // );
   //const { data, team } = props;
-  console.log('Rendering');
+  console.log("Rendering");
   return (
-    <Row>
+    <div className="m-1 flex h-screen flex-wrap ">
       <SummaryChartContainer
         id={shortid.generate()}
         team={team}
@@ -80,7 +80,7 @@ const DashBoardStats = props => {
         type="column"
         refreshRate={0}
       />
-    </Row>
+    </div>
   );
 };
 // added short id
