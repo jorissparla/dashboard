@@ -1,10 +1,20 @@
-import { FormControlLabel, Grid, Paper, Switch, Typography } from '@material-ui/core';
-import { format } from 'date-fns';
-import React from 'react';
-import { SimpleField } from './SimpleField';
-import { useStyles } from './useStyles';
+import {
+  FormControlLabel,
+  Grid,
+  Paper,
+  Switch,
+  Typography
+} from "@material-ui/core";
+import { format } from "date-fns";
+import React from "react";
+import { SimpleField } from "./SimpleField";
+import { useStyles } from "./useStyles";
 
-function ReleaseInformation({ versionInfo, handleCustomerHasValidMaintenance, validMaintenance }) {
+function ReleaseInformation({
+  versionInfo,
+  handleCustomerHasValidMaintenance,
+  validMaintenance
+}) {
   // const [valid, setValid] = React.useState(validMaintenance);
   if (versionInfo === {} || !versionInfo) return <div />;
   // const { version: versionInfo } = useContext(RootContext);
@@ -31,19 +41,28 @@ function ReleaseInformation({ versionInfo, handleCustomerHasValidMaintenance, va
           xs={2}
           justify="flex-start"
           alignItems="center"
-          style={{ flexDirection: 'column' }}
+          style={{ flexDirection: "column" }}
         >
           <Grid>
             <Typography variant="subtitle1">{`${version} was Released on `}</Typography>
           </Grid>
           <Grid>
-            <Typography variant="h3">{`${format(versionDate, 'yyyy')}`}</Typography>
+            <Typography variant="h3">{`${format(
+              versionDate,
+              "yyyy"
+            )}`}</Typography>
           </Grid>
           <Grid>
-            <Typography variant="h4">{`${format(versionDate, 'MMMM')}`}</Typography>
+            <Typography variant="h4">{`${format(
+              versionDate,
+              "MMMM"
+            )}`}</Typography>
           </Grid>
           <Grid>
-            <Typography variant="h5">{`${format(versionDate, 'EEEE, dd')}`}</Typography>
+            <Typography variant="h5">{`${format(
+              versionDate,
+              "EEEE, dd"
+            )}`}</Typography>
           </Grid>
         </Grid>
 
@@ -52,7 +71,7 @@ function ReleaseInformation({ versionInfo, handleCustomerHasValidMaintenance, va
           xs={2}
           justify="flex-start"
           alignItems="center"
-          style={{ flexDirection: 'column' }}
+          style={{ flexDirection: "column" }}
         >
           <Grid>
             <Typography variant="subtitle1">This was</Typography>
@@ -65,22 +84,28 @@ function ReleaseInformation({ versionInfo, handleCustomerHasValidMaintenance, va
           </Grid>
         </Grid>
 
-        {entitled_extended_maintenance !== 'N/A' && (
+        {entitled_extended_maintenance !== "N/A" && (
           <Grid
             container
             xs={2}
             justify="flex-start"
             alignItems="center"
-            style={{ flexDirection: 'column' }}
+            style={{ flexDirection: "column" }}
           >
             <Grid>
               <Typography variant="h4">Extended Maintenance</Typography>
             </Grid>
             <Grid>
-              <Typography>{`Start: ${format(parseInt(xm_date_since), 'dd-MMM-yyyy')}`}</Typography>
+              <Typography>{`Start: ${format(
+                parseInt(xm_date_since),
+                "dd-MMM-yyyy"
+              )}`}</Typography>
             </Grid>
             <Grid>
-              <Typography>{`End: ${format(parseInt(xm_end_date), 'dd-MMM-yyyy')}`}</Typography>
+              <Typography>{`End: ${format(
+                parseInt(xm_end_date),
+                "dd-MMM-yyyy"
+              )}`}</Typography>
             </Grid>
           </Grid>
         )}
@@ -89,17 +114,26 @@ function ReleaseInformation({ versionInfo, handleCustomerHasValidMaintenance, va
           xs={6}
           justify="flex-end"
           alignItems="flex-end"
-          style={{ flexDirection: 'column' }}
+          style={{ flexDirection: "column" }}
         >
           <Grid item xs={12}>
-            <SimpleField name="checksrequired" label="" activeVersion={versionInfo} bigger={true} />
+            <SimpleField
+              name="checksrequired"
+              label=""
+              activeVersion={versionInfo}
+              bigger={true}
+            />
           </Grid>
         </Grid>
       </Grid>
     </div>
   );
 }
-function MaintenanceCheck({ versionInfo, handleCustomerHasValidMaintenance, validMaintenance }) {
+function MaintenanceCheck({
+  versionInfo,
+  handleCustomerHasValidMaintenance,
+  validMaintenance
+}) {
   const [valid, setValid] = React.useState(validMaintenance);
   const classes = useStyles();
   if (versionInfo === {} || !versionInfo) return <div />;
@@ -111,12 +145,20 @@ function MaintenanceCheck({ versionInfo, handleCustomerHasValidMaintenance, vali
     handleCustomerHasValidMaintenance();
   }
 
-  if (entitled_extended_maintenance !== 'N/A')
+  if (entitled_extended_maintenance !== "N/A")
     return (
       <Paper className={classes.paper}>
         <Grid item xs={12}>
-          <Grid component="label" container alignItems="center" spacing={1}>
-            <Typography>Does the customer have extended maintenance?</Typography>
+          <Grid
+            component="label"
+            container
+            alignItems="center"
+            spacing={1}
+            style={{ overflow: "hidden" }}
+          >
+            <Typography>
+              Does the customer have extended maintenance?
+            </Typography>
             <Grid item>No</Grid>
             <FormControlLabel
               control={
@@ -126,15 +168,21 @@ function MaintenanceCheck({ versionInfo, handleCustomerHasValidMaintenance, vali
                   onChange={handleChange}
                   value={valid}
                   color="primary"
-                  inputProps={{ 'aria-label': 'primary checkbox' }}
+                  inputProps={{ "aria-label": "primary checkbox" }}
                 />
               }
               label=""
             />
             <Grid item>Yes</Grid>
 
-            <Typography>Please check entitlement for extended maintenance below</Typography>
-            <SimpleField name="checklink" label="" activeVersion={versionInfo} />
+            <Typography>
+              Please check entitlement for extended maintenance below
+            </Typography>
+            <SimpleField
+              name="checklink"
+              label=""
+              activeVersion={versionInfo}
+            />
           </Grid>
         </Grid>
       </Paper>

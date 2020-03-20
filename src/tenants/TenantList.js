@@ -1,77 +1,85 @@
-import Button from '@material-ui/core/Button';
-import Chip from '@material-ui/core/Chip';
-import deepOrange from '@material-ui/core/colors/deepOrange';
-import deepPurple from '@material-ui/core/colors/deepPurple';
-import { withStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-import _ from 'lodash';
-import Modal from 'ModalWrapper';
-import React, { useContext, useState, useEffect } from 'react';
-import { useQuery, useMutation } from 'react-apollo';
-import { animated, config, useSpring } from 'react-spring';
-import styled from 'styled-components';
-import Spinner from 'utils/spinner';
-import FavoriteBadge from '../elements/Badge';
-import { FilterFieldContext } from '../globalState/FilterContext';
+import Button from "@material-ui/core/Button";
+import Chip from "@material-ui/core/Chip";
+import deepOrange from "@material-ui/core/colors/deepOrange";
+import deepPurple from "@material-ui/core/colors/deepPurple";
+import { withStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
+import _ from "lodash";
+import Modal from "ModalWrapper";
+import React, { useContext, useState, useEffect } from "react";
+import { useQuery, useMutation } from "react-apollo";
+import { animated, config, useSpring } from "react-spring";
+import styled from "styled-components";
+import Spinner from "utils/spinner";
+import FavoriteBadge from "../elements/Badge";
+import {
+  FilterFieldContext,
+  useFilterField
+} from "../globalState/FilterContext";
 //import format from 'date-fns/format';
-import { formatDistanceToNow, format } from '../utils/format';
-import { DashBoardContext } from '../globalState/Provider';
-import TenantLogs from './TenantLogs';
-import { ALL_TENANTS, QUERY_ALL_TENANT_DETAILS, TENANT_NOTE } from './TenantQueries';
-import { Main, Article, TextSpan } from './TenantStyledElements';
-import { TenantCard } from './TenantCard';
-import TenantCustomerDetailsForm from './TenantCustomerDetailsForm';
-import FancyFilter from './new/FancyFilter';
-import Loader from './../utils/Loader';
+import { formatDistanceToNow, format } from "../utils/format";
+import { DashBoardContext } from "../globalState/Provider";
+import TenantLogs from "./TenantLogs";
+import {
+  ALL_TENANTS,
+  QUERY_ALL_TENANT_DETAILS,
+  TENANT_NOTE
+} from "./TenantQueries";
+import { Main, Article, TextSpan } from "./TenantStyledElements";
+import { TenantCard } from "./TenantCard";
+import TenantCustomerDetailsForm from "./TenantCustomerDetailsForm";
+import FancyFilter from "./new/FancyFilter";
+import Loader from "./../utils/Loader";
 
-import { CREATE_AUDIT_MUTATION } from './Query';
-import './tenants.css';
+import { CREATE_AUDIT_MUTATION } from "./Query";
+import "./tenants.css";
 
 const styles = theme => ({
   root: {
-    width: '90vw',
-    margin: '10px',
+    width: "90vw",
+    margin: "10px",
     backgroundColor: theme.palette.background.paper
   },
   itemtitle: {
-    fontFamily: 'Raleway',
+    fontFamily: "Raleway",
     fontSize: 20,
     fontWeight: 800
   },
   box: {
     marginLeft: 20,
-    color: ' rgb(57, 73, 171)',
-    border: 'none',
-    height: '20px',
-    display: 'inline-flex',
-    padding: '4px 8px',
-    flexGrow: '0',
-    fontSize: '10px',
-    minWidth: '20px',
-    alignItems: 'center',
-    letterSpacing: '0.2rem',
-    flexShrink: '0',
-    lineHeight: '10px',
-    whiteSpace: 'nowrap',
-    borderRadius: '4px',
-    justifyContent: 'center'
+    color: " rgb(57, 73, 171)",
+    border: "none",
+    height: "20px",
+    display: "inline-flex",
+    padding: "4px 8px",
+    flexGrow: "0",
+    fontSize: "10px",
+    minWidth: "20px",
+    alignItems: "center",
+    letterSpacing: "0.2rem",
+    flexShrink: "0",
+    lineHeight: "10px",
+    whiteSpace: "nowrap",
+    borderRadius: "4px",
+    justifyContent: "center"
   },
   pos: {
-    display: 'flex',
-    justifyContent: 'space-between'
+    display: "flex",
+    justifyContent: "space-between"
   },
   card: {
     minWidth: 390,
     margin: 10,
     width: 380,
     // height: 350,
-    display: 'flex',
-    flexDirection: 'column',
+    display: "flex",
+    flexDirection: "column",
 
-    justifyContent: 'space-between',
+    justifyContent: "space-between",
     // backgroundImage: 'linear-gradient(to right bottom, rgb(128, 216, 255), white)',
-    backgroundImage: 'linear-gradient(to right bottom,rgba(29, 161, 242, 0.4), white)',
+    backgroundImage:
+      "linear-gradient(to right bottom,rgba(29, 161, 242, 0.4), white)",
     borderRadius: 4
   },
   card2: {
@@ -79,10 +87,11 @@ const styles = theme => ({
     margin: 10
   },
   card3: {
-    minWidth: '28%',
+    minWidth: "28%",
     margin: 10,
-    background: 'transparent',
-    backgroundImage: 'linear-gradient(to right bottom,rgba(29, 161, 242, 0.4), white)'
+    background: "transparent",
+    backgroundImage:
+      "linear-gradient(to right bottom,rgba(29, 161, 242, 0.4), white)"
   },
   chip: {
     margin: theme.spacing(1),
@@ -92,117 +101,117 @@ const styles = theme => ({
     borderRadius: 5,
     // color: 'black',
     width: 137,
-    border: '1px solid rgb(117, 117, 117)',
-    color: 'rgb(117, 117, 117)',
-    background: 'transparent'
+    border: "1px solid rgb(117, 117, 117)",
+    color: "rgb(117, 117, 117)",
+    background: "transparent"
   },
   live: {
-    background: 'rgb(46, 202, 19)',
-    border: '5px solid rgba(46, 202, 19, 1)'
+    background: "rgb(46, 202, 19)",
+    border: "5px solid rgba(46, 202, 19, 1)"
   },
-  '@keyframes blinker': {
+  "@keyframes blinker": {
     from: { opacity: 1 },
     to: { opacity: 0 }
   },
   watch: {
-    background: 'rgb(251, 221, 0) !important',
-    border: '10px solid rgb(251, 221, 0) !important'
+    background: "rgb(251, 221, 0) !important",
+    border: "10px solid rgb(251, 221, 0) !important"
   },
   alert: {
-    background: 'rgb(229, 57, 53) !important',
-    border: '10px solid rgb(229, 57, 53) !important'
+    background: "rgb(229, 57, 53) !important",
+    border: "10px solid rgb(229, 57, 53) !important"
   },
 
   description: {
     paddingBottom: 2,
     maxHeight: 50,
-    overflow: 'hidden'
+    overflow: "hidden"
   },
   descriptionblank: {
     paddingBottom: 2,
     maxHeight: 50,
-    overflow: 'hidden',
-    color: 'transparent'
+    overflow: "hidden",
+    color: "transparent"
   },
   header: {
     fontWeight: 500,
-    fontSize: '18px',
-    letterSpacing: '-0.06px',
-    lineHeight: '24px',
+    fontSize: "18px",
+    letterSpacing: "-0.06px",
+    lineHeight: "24px",
     minHeight: 60,
     padding: 0
   },
   filterButton: {
-    marginLeft: 'auto'
+    marginLeft: "auto"
   },
   notlive: {
-    background: 'transparent',
-    border: '5px solid rgba(46, 202, 19, 1)'
+    background: "transparent",
+    border: "5px solid rgba(46, 202, 19, 1)"
   },
   tags: {
     paddingTop: 2,
     paddingBottom: 10,
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
 
     marginBottom: 2,
-    '& > * + *': {
+    "& > * + *": {
       marginLeft: theme.spacing(1)
     }
   },
   tagsContent: {
-    display: 'flex',
-    flexDirection: 'column'
+    display: "flex",
+    flexDirection: "column"
   },
   tagtooltip: {
-    background: 'black',
-    color: 'white'
+    background: "black",
+    color: "white"
   },
   avatar: {
     margin: 10
   },
   flex: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    background: '#eee'
+    display: "flex",
+    flexWrap: "wrap",
+    background: "#eee"
   },
   flex2: {
-    display: 'flex',
-    flexWrap: 'wrap'
+    display: "flex",
+    flexWrap: "wrap"
   },
   flexBot: {
-    display: 'flex',
-    justifySelf: 'flex-end'
+    display: "flex",
+    justifySelf: "flex-end"
   },
   bigAvatar: {
     width: 100,
     height: 50,
-    borderRadius: '50%',
-    justifyContent: 'center',
-    paddingTop: '15px',
+    borderRadius: "50%",
+    justifyContent: "center",
+    paddingTop: "15px",
     fontWeight: 800
   },
   orangeAvatar: {
     margin: 10,
-    color: '#fff',
+    color: "#fff",
     backgroundColor: deepOrange[500]
   },
   purpleAvatar: {
     margin: 10,
-    color: '#fff',
+    color: "#fff",
     backgroundColor: deepPurple[500]
   },
   blueAvatar: {
     margin: 10,
-    color: '#fff',
-    backgroundColor: '#81D4FA'
+    color: "#fff",
+    backgroundColor: "#81D4FA"
   },
   main: {
-    display: 'flex'
+    display: "flex"
   },
   spaceFooter: {
-    justifyContent: 'space-between'
+    justifyContent: "space-between"
   },
   csm: {
     maxWidth: 120
@@ -234,9 +243,9 @@ function TenantNote() {
 export const FilterForm = ({ setSearchText, flip }) => {
   const { setFields, clearFields } = useContext(FilterFieldContext);
 
-  const [customer, setCustomer] = useState('');
-  const [farm, setFarm] = useState('');
-  const [version, setVersion] = useState('');
+  const [customer, setCustomer] = useState("");
+  const [farm, setFarm] = useState("");
+  const [version, setVersion] = useState("");
 
   function setAllFields() {
     setFields({ customer, farm, version });
@@ -244,9 +253,9 @@ export const FilterForm = ({ setSearchText, flip }) => {
   }
 
   function clearAllFields() {
-    setCustomer('');
-    setFarm('');
-    setVersion('');
+    setCustomer("");
+    setFarm("");
+    setVersion("");
     clearFields();
   }
 
@@ -258,8 +267,9 @@ export const FilterForm = ({ setSearchText, flip }) => {
         setAllFields();
       }}
     >
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <h1>Filter</h1> <CloseButton onClick={() => flip()}>&times;</CloseButton>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <h1>Filter</h1>{" "}
+        <CloseButton onClick={() => flip()}>&times;</CloseButton>
       </div>
       <TextField
         id="customer.name"
@@ -325,28 +335,32 @@ const filterTenantsByCustomerFarmVersion = (tenants, fields, details) => {
   // console.log("filterTenantsByCustomerFarmVersion", fields);
   // const { customer = '', farm = '', version = '' } = fields;
   const {
-    customerName = '',
-    farmName = '',
-    tenantVersion = '',
-    tenantName = '',
+    customerName = "",
+    farmName = "",
+    tenantVersion = "",
+    tenantName = "",
     isLive = false,
-    temperature = '',
-    csm = '',
-    pm = ''
+    temperature = "",
+    csm = "",
+    pm = ""
   } = fields;
   console.log({ csm }, details, temperature);
   let filteredCustomerNames = null;
   if (details) {
     filteredCustomerNames = details
-      .filter(detail => detail.temperature.toUpperCase().includes(temperature.toUpperCase()))
+      .filter(detail =>
+        detail.temperature.toUpperCase().includes(temperature.toUpperCase())
+      )
       .filter(detail => detail.csm.toUpperCase().includes(csm.toUpperCase()))
       .filter(detail => detail.pm.toUpperCase().includes(pm.toUpperCase()));
   }
   console.log({ filteredCustomerNames });
   const retValue = _.chain(tenants)
-    .filter(o => o.customer.name !== 'Infor')
+    .filter(o => o.customer.name !== "Infor")
 
-    .filter(t => t.customer.name.toUpperCase().includes(customerName.toUpperCase()))
+    .filter(t =>
+      t.customer.name.toUpperCase().includes(customerName.toUpperCase())
+    )
     .filter(t => t.farm.toUpperCase().includes(farmName.toUpperCase()))
     .filter(t => t.version.toUpperCase().includes(tenantVersion.toUpperCase()))
     .filter(t => t.name.toUpperCase().includes(tenantName.toUpperCase()))
@@ -363,22 +377,22 @@ const filterTenantsByCustomerFarmVersion = (tenants, fields, details) => {
 
 // const inforTenant = tenants => tenants.filter(o => o.customer.name === 'Infor');
 const inforTenantByFarm = (tenants, farm) =>
-  tenants.filter(o => o.customer.name === 'Infor' && o.farm === farm);
+  tenants.filter(o => o.customer.name === "Infor" && o.farm === farm);
 
 const TenantList = props => {
   const dbctx = React.useContext(DashBoardContext);
-  let role = dbctx && dbctx.role ? dbctx.role : 'Guest';
+  let role = dbctx && dbctx.role ? dbctx.role : "Guest";
   console.log(dbctx.fullname);
   const [createAudit] = useMutation(CREATE_AUDIT_MUTATION);
-  const { setFields, fields } = useContext(FilterFieldContext);
+  const { setFields, fields } = useFilterField(); // useContext(FilterFieldContext);
   const { classes } = props;
-  const [setSearchText] = useState('');
+  const [setSearchText] = useState("");
   const [showFilterDialog, toggleShowFilterDialog] = useState(false);
   const [showLogs, setShowLogs] = useState(false);
   const [isShowingDetails, toggleShowDetails] = useState(false);
   const [counter, setCounter] = useState(0);
   const keysPressed = useMultiKeyPress();
-  const happyPress = areKeysPressed(['Shift', 'C'], keysPressed); //false; //useKeyPress('C');
+  const happyPress = areKeysPressed(["Shift", "C"], keysPressed); //false; //useKeyPress('C');
 
   function areKeysPressed(keys = [], keysPressed = []) {
     const required = new Set(keys);
@@ -399,22 +413,24 @@ const TenantList = props => {
   };
   console.log({ happyPress });
   if (happyPress) {
-    console.log('👍👍👍👍👍');
+    console.log("👍👍👍👍👍");
     // clearFields();
   }
 
   useEffect(() => {
     const input = {
       username: dbctx.fullname,
-      page: '/tenantlist',
+      page: "/tenantlist",
       linkid: null,
-      type: 'TenantList'
+      type: "TenantList"
     };
     createAudit({ variables: { input } }).then(console.log);
   }, [createAudit, dbctx.fullname]);
 
   const { data, loading } = useQuery(ALL_TENANTS);
-  const { data: details, loading: detailsloading } = useQuery(QUERY_ALL_TENANT_DETAILS);
+  const { data: details, loading: detailsloading } = useQuery(
+    QUERY_ALL_TENANT_DETAILS
+  );
 
   if (loading || detailsloading) {
     return <Spinner />;
@@ -462,14 +478,19 @@ const TenantList = props => {
           }}
         >
           {uniqueCustomers.map((customer, index) => {
-            const sub = filteredTenants.filter(o => o.customer.name === customer);
+            const sub = filteredTenants.filter(
+              o => o.customer.name === customer
+            );
             const liveCust = sub[0].live === 1 ? true : false;
             const customerid = sub[0].customerid;
-            const tenantdetails = tenantcustomerdetails.filter(d => d.customerid === customerid);
+            const tenantdetails = tenantcustomerdetails.filter(
+              d => d.customerid === customerid
+            );
             if (tenantdetails.length) {
             } else {
             }
-            if (customer === 'Azteka Consulting GmbH') console.log('👍', customer, liveCust, sub);
+            if (customer === "Azteka Consulting GmbH")
+              console.log("👍", customer, liveCust, sub);
             return (
               <TenantCard
                 key={index}
@@ -477,7 +498,9 @@ const TenantList = props => {
                 customer={customer}
                 customerid={customerid}
                 tenants={sub}
-                tenantdetails={tenantdetails.length > 0 ? tenantdetails[0] : null}
+                tenantdetails={
+                  tenantdetails.length > 0 ? tenantdetails[0] : null
+                }
                 role={role}
                 live={liveCust}
                 onStatusChange={() => setCounter(counter + 1)}
@@ -487,32 +510,32 @@ const TenantList = props => {
           })}
           {/* <TenantCard classes={classes} customer="Infor" tenants={inforTenant(tenants)} /> */}
         </div>
-        <div style={{ display: 'flex' }}>
+        <div style={{ display: "flex" }}>
           <TenantCard
             classes={classes}
             customer="Infor"
-            tenants={inforTenantByFarm(tenants, 'Frankfurt')}
+            tenants={inforTenantByFarm(tenants, "Frankfurt")}
           />
           <TenantCard
             classes={classes}
             customer="Infor"
-            tenants={inforTenantByFarm(tenants, 'Us-East-1')}
+            tenants={inforTenantByFarm(tenants, "Us-East-1")}
           />
           <TenantCard
             classes={classes}
             customer="Infor"
-            tenants={inforTenantByFarm(tenants, 'Sydney')}
+            tenants={inforTenantByFarm(tenants, "Sydney")}
           />
         </div>
       </animated.div>
       <animated.div
         style={{
           width: x.interpolate(x => `${x}vw`),
-          display: 'flex',
+          display: "flex",
           padding: x.interpolate(x => `${x}px`),
-          flexDirection: 'column',
+          flexDirection: "column",
           boxShadow:
-            '0px 1px 3px 0px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 2px 1px -1px rgba(0,0,0,0.12)'
+            "0px 1px 3px 0px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 2px 1px -1px rgba(0,0,0,0.12)"
         }}
       >
         {/* <SearchBar onChange={e => setSearchText(e)} /> */}
@@ -521,7 +544,11 @@ const TenantList = props => {
       <Modal on={showLogs} toggle={() => setShowLogs(!showLogs)} height={80}>
         <TenantLogs tenantlogs={tenantlogs} />
       </Modal>
-      <Modal on={isShowingDetails} toggle={() => toggleShowDetails(!isShowingDetails)} height={80}>
+      <Modal
+        on={isShowingDetails}
+        toggle={() => toggleShowDetails(!isShowingDetails)}
+        height={80}
+      >
         <TenantCustomerDetailsForm closeForm={() => toggleShowDetails(false)} />
       </Modal>
     </Main>
@@ -535,10 +562,11 @@ export const TenantListHeader = ({
   toggleFilter,
   applyFilter
 }) => {
-  const max = _.maxBy(tenants, t => format(t.lastupdated, 'yyyyMMdd')).lastupdated;
+  const max = _.maxBy(tenants, t => format(t.lastupdated, "yyyyMMdd"))
+    .lastupdated;
   let tenantcustomersWithFarm = _.countBy(
     tenants.map(({ farm, tenant }) => ({ farm, tenant })),
-    'farm'
+    "farm"
   );
   // const filteredTenants = filterTenantsByCustomerFarmVersion(tenants, fields, flip);
   // console.log("filterTenants", filteredTenants);
@@ -548,12 +576,18 @@ export const TenantListHeader = ({
   const listOfCustomerAndFarm = tenants
     .filter(item => item.customerid !== null)
     .map(({ customerid, farm }) => ({ customerid, farm }));
-  const custFarms = _.countBy(_.uniqWith(listOfCustomerAndFarm, _.isEqual), 'farm');
+  const custFarms = _.countBy(
+    _.uniqWith(listOfCustomerAndFarm, _.isEqual),
+    "farm"
+  );
   const liveCustomers = _.uniqWith(
     tenants.map(t => ({ customer: t.customer.name, live: t.live })),
     _.isEqual
   ).filter(t => t.live === 1);
-  const totalCustomers = Object.entries(custFarms).reduce((count, item) => count + item[1], 0);
+  const totalCustomers = Object.entries(custFarms).reduce(
+    (count, item) => count + item[1],
+    0
+  );
 
   // const nrOfLiveCustomers = uniqueCustomers.filter(t => t.live).length;
   const totalTenants = Object.entries(tenantcustomersWithFarm).reduce(
@@ -564,24 +598,23 @@ export const TenantListHeader = ({
     <Article>
       <div
         style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          letterSpacing: '0.2rem'
+          display: "flex",
+          justifyContent: "space-between",
+          letterSpacing: "0.2rem"
         }}
       >
         <Typography gutterBottom variant="h5" component="h2">
-          <span style={{ letterSpacing: '0.2rem', textTransform: 'uppercase' }}>
+          <span style={{ letterSpacing: "0.2rem", textTransform: "uppercase" }}>
             {/* {` Multitenant customers - last change -${format(max, 'dd MMM yyyy')}`} */}
             {` Multitenant customers `}
           </span>
           <Chip
             label={
               updatedAt
-                ? `Last check:  ${formatDistanceToNow(updatedAt)} ago,  Last change made ${format(
-                    max,
-                    'dd MMM yyyy'
-                  )} `
-                : 'not Saved yet'
+                ? `Last check:  ${formatDistanceToNow(
+                    updatedAt
+                  )} ago,  Last change made ${format(max, "dd MMM yyyy")} `
+                : "not Saved yet"
             }
             style={{
               marginRight: 10
@@ -607,10 +640,10 @@ export const TenantListHeader = ({
       </div>
       <div
         style={{
-          display: 'flex',
+          display: "flex",
           marginBottom: 2,
           marginTop: 10,
-          letterSpacing: '0.2rem'
+          letterSpacing: "0.2rem"
         }}
       >
         <TextSpan>TENANTS: ({totalTenants})</TextSpan>
@@ -618,7 +651,12 @@ export const TenantListHeader = ({
           // console.log(item[0]);
           const text = `${item[0]} : ${item[1]}`;
           return (
-            <FavoriteBadge key={text} isVisible={true} color="#40a5ed" style={{ margin: 3 }}>
+            <FavoriteBadge
+              key={text}
+              isVisible={true}
+              color="#40a5ed"
+              style={{ margin: 3 }}
+            >
               {text}
             </FavoriteBadge>
           );
@@ -627,7 +665,12 @@ export const TenantListHeader = ({
         {Object.entries(custFarms).map(item => {
           const text = `${item[0]} : ${item[1]}`;
           return (
-            <FavoriteBadge key={text} isVisible={true} color="purple" style={{ margin: 3 }}>
+            <FavoriteBadge
+              key={text}
+              isVisible={true}
+              color="purple"
+              style={{ margin: 3 }}
+            >
               {text}
             </FavoriteBadge>
           );
@@ -650,11 +693,11 @@ function useMultiKeyPress() {
       keysPressed.delete(key);
       setKeyPressed(keysPressed);
     };
-    window.addEventListener('keydown', downHandler);
-    window.addEventListener('keyup', upHandler);
+    window.addEventListener("keydown", downHandler);
+    window.addEventListener("keyup", upHandler);
     return () => {
-      window.removeEventListener('keydown', downHandler);
-      window.removeEventListener('keyup', upHandler);
+      window.removeEventListener("keydown", downHandler);
+      window.removeEventListener("keyup", upHandler);
     };
   }, [keysPressed]); // Empty array ensures that effect is only run on mount and unmount
 

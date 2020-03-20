@@ -1,11 +1,12 @@
-import { Backdrop, Modal, Typography } from '@material-ui/core';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import EditIcon from '@material-ui/icons/Edit';
-import JoditEditor from 'jodit-react';
-import React, { useRef } from 'react';
-import { useMutation } from 'react-apollo';
-import MarkDownFieldEditor from './MarkdownFieldEditor';
+import { Backdrop, Modal, Typography } from "@material-ui/core";
+import Grid from "@material-ui/core/Grid";
+import Paper from "@material-ui/core/Paper";
+import EditIcon from "@material-ui/icons/Edit";
+import JoditEditor from "jodit-react";
+import React, { useRef } from "react";
+import { useMutation } from "react-apollo";
+import MarkDownFieldEditor from "./MarkdownFieldEditor";
+import { useAlert } from "globalState/AlertContext";
 
 const EditableMarkDownField = ({
   canEdit = true,
@@ -19,6 +20,7 @@ const EditableMarkDownField = ({
 }) => {
   const [isOpen, setisOpened] = React.useState(false);
   const [fieldValue, setFieldValue] = React.useState(value);
+  const alert = useAlert();
   // const [editable, toggleEdit] = React.useState(canEdit);
 
   const [updateMutution] = useMutation(updateQuery);
@@ -30,6 +32,7 @@ const EditableMarkDownField = ({
     input[name] = value;
     console.log({ input });
     await updateMutution({ variables: { input } });
+    alert.setMessage("Thank you for updating " + label);
   }
   const config = {
     readonly: true, // all options from https://xdsoft.net/jodit/doc/,
@@ -44,7 +47,11 @@ const EditableMarkDownField = ({
   return (
     <Paper
       className={classes.paper}
-      style={{ border: '1px solid rgba(0,0,0,0.1)', borderRadius: 8, background: 'aliceblue' }}
+      style={{
+        border: "1px solid rgba(0,0,0,0.1)",
+        borderRadius: 8,
+        background: "aliceblue"
+      }}
     >
       <Grid item xs={9}>
         <Typography variant="h6">{label}</Typography>
@@ -53,12 +60,18 @@ const EditableMarkDownField = ({
         item
         xs={12}
         style={{
-          display: 'flex',
-          justifyContent: 'flex-end'
+          display: "flex",
+          justifyContent: "flex-end"
         }}
         justifyContent="flex-end"
       >
-        {canEdit && <EditIcon color="primary" fontSize="small" onClick={() => setisOpened(true)} />}
+        {canEdit && (
+          <EditIcon
+            color="primary"
+            fontSize="small"
+            onClick={() => setisOpened(true)}
+          />
+        )}
       </Grid>
       <Modal
         onClose={() => setisOpened(false)}
@@ -82,7 +95,7 @@ const EditableMarkDownField = ({
       <JoditEditor
         id="description"
         name="description"
-        style={{ font: '24px Arial', color: '#000' }}
+        style={{ font: "24px Arial", color: "#000" }}
         ref={viewer}
         value={fieldValue}
         onChange={v => console.log(v)}

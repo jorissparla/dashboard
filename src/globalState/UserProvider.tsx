@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { client } from '../index';
-import { MUTATION_SIGNIN } from './../auth/signin';
-import { MUTATION_SIGNOUT } from './../auth/signout';
-import { CURRENT_USER_QUERY } from './../graphql/CURRENT_USER_QUERY';
+import React, { useEffect, useState } from "react";
+import { client } from "../index";
+import { MUTATION_SIGNIN } from "./../auth/signin";
+import { MUTATION_SIGNOUT } from "./../auth/signout";
+import { CURRENT_USER_QUERY } from "./../graphql/CURRENT_USER_QUERY";
 
 interface User {
   id: string;
@@ -31,9 +31,12 @@ export const UserContext = React.createContext<UserContextType>({
   hasPermissions: () => false
 });
 
+export const useUserContext = () => React.useContext(UserContext);
 //test
 
-export const UserContextProvider: React.FC<{ children: any }> = ({ children }) => {
+export const UserContextProvider: React.FC<{ children: any }> = ({
+  children
+}) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
@@ -67,7 +70,7 @@ export const UserContextProvider: React.FC<{ children: any }> = ({ children }) =
       variables: { input: { email, password } }
     });
 
-    console.log('login result', result);
+    console.log("login result", result);
     if (result.data.signinUser.user) {
       setUser(result.data.signinUser.user);
     } else {
@@ -84,7 +87,14 @@ export const UserContextProvider: React.FC<{ children: any }> = ({ children }) =
   }
   return (
     <UserContext.Provider
-      value={{ user, login, logout, loading, isAuthenticated: isAuthenticated(), hasPermissions }}
+      value={{
+        user,
+        login,
+        logout,
+        loading,
+        isAuthenticated: isAuthenticated(),
+        hasPermissions
+      }}
     >
       {children}
     </UserContext.Provider>

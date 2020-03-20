@@ -4,18 +4,6 @@ import ReactHighCharts from "react-highcharts";
 import styled from "styled-components";
 import shortid from "shortid";
 
-const Card = styled.div`
-  display: flex;
-  position: relative;
-  margin: 10px;
-  background-color: #fff;
-  transition: box-shadow 0.25s;
-  border-radius: 2px;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12),
-    0 3px 1px -2px rgba(0, 0, 0, 0.2);
-  width: 30%;
-`;
-
 const arColors = [
   "#c62828",
   "#90caf9",

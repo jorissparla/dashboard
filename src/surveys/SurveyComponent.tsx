@@ -1,5 +1,5 @@
-import * as React from 'react';
-import styled from 'styled-components';
+import * as React from "react";
+import styled from "styled-components";
 // import './survey.css';
 
 const Percentage = styled.div<{ percentage: any }>`
@@ -56,11 +56,12 @@ const Container = styled.div`
 const StyledPapier = styled.div`
   color: black;
   background-color: ${(props: IPapier) =>
-    props.backgroundColor ? props.backgroundColor : 'rgb(127, 186, 219)'};
+    props.backgroundColor ? props.backgroundColor : "rgb(127, 186, 219)"};
   transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
   box-sizing: border-box;
   font-family: Roboto, sans-serif;
-  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 30px, rgba(0, 0, 0, 0.23) 0px 6px 10px;
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 30px,
+    rgba(0, 0, 0, 0.23) 0px 6px 10px;
   border-radius: 2px;
   display: flex;
   flex-direction: column;
@@ -71,7 +72,7 @@ const StyledPapier = styled.div`
   display: flex;
   justify-content: space-between;
   font-family: Montserrat;
-  width: ${(props: IPapier) => (props.width ? props.width : '18%')};
+  width: ${(props: IPapier) => (props.width ? props.width : "18%")};
   min-width: 200px;
   border-radius: 14px;
 `;
@@ -137,34 +138,107 @@ export const SurveyComponent: React.FC<Props> = ({
 }) => {
   const pct = Math.round((100 * responded) / sent);
   return (
-    <div style={{ background: '#fff', color: '#333', height: '250px', marginLeft: 10 }}>
-      <h1>Quick Satisfaction survey Results</h1>
-
-      <Container id="x">
-        <ResponseRate sent={sent} responded={responded} pct={pct} />
-
-        <Satisfaction pct_dissatisfied={pct_dissatisfied} pct_satisfied={pct_satisfied} />
-
-        <Feedback
-          satisfied_feedback={satisfied_feedback}
-          feedback_comments={feedback_comments}
-          pct_feedback_comments={pct_feedback_comments}
-        />
-        {/* {false && (
-          <div className="top-row1">
-            <div className="box3">
-              <div className="sat">Unsatisfied Feedback</div>
-              <div className="red-box" />
-              <div className="red-box2" />
-              <div className="large2">{dissatisfied_feedback}</div>
-              <div className="large2">{uncategorized}</div>
-              <div>Uncategorized({pct_uncategorized}%)</div>
+    <div className="bg-gray-100 pt-2 ">
+      <div className="max-w-screen-xl mx-auto px-4 ">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-3xl leading-9 font-extrabold text-gray-900 ">
+            Quick Satisfaction Survey Results
+          </h2>
+          {/* <p className="mt-3 text-xl leading-7 text-gray-500 ">
+       Quick Satisfaction Survey Results
+      </p> */}
+        </div>
+      </div>
+      <div className="mt-10 pb-12 bg-white ">
+        <div className="relative">
+          <div className="absolute inset-0 h-1/2 bg-gray-100"></div>
+          <div className="relative max-w-screen-xl mx-auto px-4  lg:px-8">
+            <div className="max-w-6xl mx-auto">
+              <div className="rounded-lg bg-white shadow-lg flex items-center justify-between">
+                <div className="border-r border-gray-200 p-6 text-center ">
+                  <p className="text-5xl leading-none font-extrabold text-indigo-600">
+                    {sent}
+                  </p>
+                  <p className="mt-2 text-lg leading-6 font-medium text-gray-500">
+                    Invitations Sent
+                  </p>
+                </div>
+                <div className="border-r border-gray-200 p-6 text-center ">
+                  <p className="text-5xl leading-none font-extrabold text-indigo-600">
+                    {responded}
+                  </p>
+                  <p className="mt-2 text-lg leading-6 font-medium text-gray-500">
+                    Responses
+                  </p>
+                </div>
+                <div className="border-r border-gray-200 p-6 text-center ">
+                  <p className="text-5xl leading-none font-extrabold text-teal-600">
+                    {pct}%
+                  </p>
+                  <p className="mt-2 text-lg leading-6 font-medium text-gray-500">
+                    Responded
+                  </p>
+                </div>
+                <div className="border-t border-r border-gray-100 p-6 text-center ">
+                  <p className="text-5xl leading-none font-extrabold text-indigo-600">
+                    {pct_satisfied}%
+                  </p>
+                  <p className="mt-2 text-lg leading-6 font-medium text-gray-500">
+                    Satisfied
+                  </p>
+                </div>
+                <div className="border-r border-gray-100 p-6 text-center ">
+                  <p className="text-5xl leading-none font-extrabold text-indigo-600">
+                    {satisfied_feedback}
+                  </p>
+                  <p className="mt-2 text-lg leading-6 font-medium text-gray-500">
+                    Satisfied feedback
+                  </p>
+                </div>
+                <div className="border-r border-gray-100 p-6 text-center ">
+                  <p className="text-5xl leading-none font-extrabold text-indigo-600">
+                    {pct_feedback_comments}%
+                  </p>
+                  <p className="mt-2 text-lg leading-6 font-medium text-gray-500">
+                    Left Comments
+                  </p>
+                </div>
               </div>
-              </div>
-            )} */}
-      </Container>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
+
+  //   <div style={{ background: '#fff', color: '#333', height: '250px', marginLeft: 10 }}>
+  //     <h1>Quick Satisfaction survey Results</h1>
+
+  //     <Container id="x">
+  //       <ResponseRate sent={sent} responded={responded} pct={pct} />
+
+  //       <Satisfaction pct_dissatisfied={pct_dissatisfied} pct_satisfied={pct_satisfied} />
+
+  //       <Feedback
+  //         satisfied_feedback={satisfied_feedback}
+  //         feedback_comments={feedback_comments}
+  //         pct_feedback_comments={pct_feedback_comments}
+  //       />
+  //       {/* {false && (
+  //         <div className="top-row1">
+  //           <div className="box3">
+  //             <div className="sat">Unsatisfied Feedback</div>
+  //             <div className="red-box" />
+  //             <div className="red-box2" />
+  //             <div className="large2">{dissatisfied_feedback}</div>
+  //             <div className="large2">{uncategorized}</div>
+  //             <div>Uncategorized({pct_uncategorized}%)</div>
+  //             </div>
+  //             </div>
+  //           )} */}
+  //     </Container>
+  //   </div>
+  // );
 };
 
 interface RRProps {
@@ -192,7 +266,10 @@ interface SatisfactionProps {
   pct_satisfied: number;
   pct_dissatisfied: number;
 }
-const Satisfaction: React.FC<SatisfactionProps> = ({ pct_satisfied, pct_dissatisfied }) => (
+const Satisfaction: React.FC<SatisfactionProps> = ({
+  pct_satisfied,
+  pct_dissatisfied
+}) => (
   <StyledPapier width="30%" backgroundColor="#EEE;">
     <TitlesRow>
       <div>Overall Satisfaction</div>
@@ -200,7 +277,7 @@ const Satisfaction: React.FC<SatisfactionProps> = ({ pct_satisfied, pct_dissatis
     <ResultsRow>
       <GreenBox />
       <div>{pct_satisfied}%</div>
-      <NormalText>{'    '}Satisfied</NormalText>
+      <NormalText>{"    "}Satisfied</NormalText>
     </ResultsRow>
     <ResultsRow>
       <RedBox />
