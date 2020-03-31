@@ -144,7 +144,10 @@ export const TenantCard = ({
             }
             // title={customer}
             title={
-              <div className=" text-xl font-semibold font-pop text-gray-600 overflow-hidden truncate ellipsis mr-2">
+              <div
+                title={customer}
+                className=" text-xl font-semibold font-pop text-gray-600 overflow-hidden truncate ellipsis mr-2"
+              >
                 {customer}
               </div>
             }

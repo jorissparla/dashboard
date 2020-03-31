@@ -16,7 +16,10 @@ const styles = {
 const CardSection = props => {
   const cardSectionStyle = { ...styles.containerStyle, ...props.style };
   return (
-    <div style={cardSectionStyle}>
+    <div
+      className="flex mt-1 p bg-white items-center border-b border-gray-200"
+      // style={cardSectionStyle}
+    >
       {props.children}
     </div>
   );
