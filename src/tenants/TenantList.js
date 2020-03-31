@@ -78,9 +78,12 @@ const styles = theme => ({
 
     justifyContent: "space-between",
     // backgroundImage: 'linear-gradient(to right bottom, rgb(128, 216, 255), white)',
+    padding: "0 0.25rem",
+    margin: "0.5rem",
     backgroundImage:
       "linear-gradient(to right bottom,rgba(29, 161, 242, 0.4), white)",
-    borderRadius: 4
+    borderRadius: "0.25rem",
+    boxShadow: "0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -2px rgba(0,0,0,.05)"
   },
   card2: {
     minWidth: 275,
@@ -139,7 +142,8 @@ const styles = theme => ({
     letterSpacing: "-0.06px",
     lineHeight: "24px",
     minHeight: 60,
-    padding: 0
+    padding: 0,
+    overflow: "hidden"
   },
   filterButton: {
     marginLeft: "auto"
@@ -319,18 +323,6 @@ export const FilterForm = ({ setSearchText, flip }) => {
   );
 };
 
-// const tenantsByCustomer = (tenants, searchText) =>
-//   _.chain(tenants)
-//     .filter(o => o.customer.name !== 'Infor')
-//     .filter(
-//       t =>
-//         t.customer.name.toUpperCase().includes(searchText.toUpperCase()) ||
-//         t.name.toUpperCase().includes(searchText.toUpperCase()) ||
-//         t.version.toUpperCase().includes(searchText.toUpperCase())
-//     )
-//     .sortBy(o => o.customer.name)
-
-//     .value();
 const filterTenantsByCustomerFarmVersion = (tenants, fields, details) => {
   // console.log("filterTenantsByCustomerFarmVersion", fields);
   // const { customer = '', farm = '', version = '' } = fields;
@@ -596,15 +588,9 @@ export const TenantListHeader = ({
   );
   return (
     <Article>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          letterSpacing: "0.2rem"
-        }}
-      >
+      <div className="flex justify-between tracking-widest  ">
         <Typography gutterBottom variant="h5" component="h2">
-          <span style={{ letterSpacing: "0.2rem", textTransform: "uppercase" }}>
+          <span className="tracking-wide uppercase">
             {/* {` Multitenant customers - last change -${format(max, 'dd MMM yyyy')}`} */}
             {` Multitenant customers `}
           </span>

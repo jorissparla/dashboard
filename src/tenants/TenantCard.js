@@ -11,17 +11,17 @@ import {
   Modal,
   Switch,
   Typography
-} from '@material-ui/core';
-import ListIcon from '@material-ui/icons/List';
-import classNames from 'classnames';
-import { UserContext } from 'globalState/UserProvider';
-import _ from 'lodash';
-import React from 'react';
-import { Mutation } from 'react-apollo';
-import { format, formatDistanceToNow } from '../utils/format';
-import EditTenantDetails from './details/components/EditTenant';
-import Label from './details/components/Label';
-import { MUTATION_MARK_LIVE } from './TenantQueries';
+} from "@material-ui/core";
+import ListIcon from "@material-ui/icons/List";
+import classNames from "classnames";
+import { UserContext } from "globalState/UserProvider";
+import _ from "lodash";
+import React from "react";
+import { Mutation } from "react-apollo";
+import { format, formatDistanceToNow } from "../utils/format";
+import EditTenantDetails from "./details/components/EditTenant";
+import Label from "./details/components/Label";
+import { MUTATION_MARK_LIVE } from "./TenantQueries";
 
 export const TenantCard = ({
   classes,
@@ -30,8 +30,8 @@ export const TenantCard = ({
   tenants,
   tenantdetails,
   live,
-  role = 'Guest',
-  onStatusChange = () => console.log('change'),
+  role = "Guest",
+  onStatusChange = () => console.log("change"),
   infoClicked
 }) => {
   const [isLive, setLive] = React.useState(live);
@@ -39,40 +39,49 @@ export const TenantCard = ({
   const userContext = React.useContext(UserContext);
   const { user, hasPermissions } = userContext;
 
-  const isTenantEditor = hasPermissions(user, ['TENANTEDIT', 'ADMIN']);
+  const isTenantEditor = hasPermissions(user, ["TENANTEDIT", "ADMIN"]);
   // const isAdmin = hasPermissions(user, ['ADMIN']);
 
   let tenantcustomerdetail;
-  if (customer !== 'Infor' && tenantdetails) {
+  if (customer !== "Infor" && tenantdetails) {
     tenantcustomerdetail = tenantdetails;
   } else {
     tenantcustomerdetail = {
-      id: '',
+      id: "",
       customer: {
-        name: ''
+        name: ""
       },
-      customerid: '',
-      golivedate: '',
-      golivecomments: '',
-      csm: '',
-      pm: '',
-      info: '',
-      temperature: 'NORMAL'
+      customerid: "",
+      golivedate: "",
+      golivecomments: "",
+      csm: "",
+      pm: "",
+      info: "",
+      temperature: "NORMAL"
     };
   }
   let golivedate = tenantcustomerdetail.golivedate;
-  if (golivedate && golivedate !== '1568419200000' && golivedate !== '0') {
-    golivedate = format(tenantcustomerdetail.golivedate, 'MMM, dd, yyyy');
-  } else golivedate = 'Date is not known';
+  if (golivedate && golivedate !== "1568419200000" && golivedate !== "0") {
+    golivedate = format(tenantcustomerdetail.golivedate, "MMM, dd, yyyy");
+  } else golivedate = "Date is not known";
   const temp = tenantcustomerdetail.temperature;
-  const max = _.maxBy(tenants, t => format(t.lastupdated, 'yyyMMdd')).lastupdated;
+  const max = _.maxBy(tenants, t => format(t.lastupdated, "yyyMMdd"))
+    .lastupdated;
   const max2 = formatDistanceToNow(max);
-  if (customer === 'Azteka Consulting GmbH') console.log(customer, { isLive }, live);
-  const avaclass = classNames({
-    [classes.alert]: temp === 'ALERT' ? true : false,
-    [classes.watch]: temp === 'WATCH' ? true : false,
+  if (customer === "Azteka Consulting GmbH")
+    console.log(customer, { isLive }, live);
+  const avaclass1 = classNames({
+    [classes.alert]: temp === "ALERT" ? true : false,
+    [classes.watch]: temp === "WATCH" ? true : false,
     [classes.live]: live,
     [classes.notlive]: !live
+  });
+  const cl = `rounded-full h-16 w-16  p-3  flex items-center justify-center text-lg font-semibold shadow-lg`;
+  const avaclass = classNames({
+    [cl]: true,
+    "bg-red-400 text-red-800": temp === "ALERT" ? true : false,
+    "bg-yellow-200 text-yellow-800": temp === "WATCH" ? true : false,
+    "bg-green-200 text-green-800": temp === "NORMAL" ? true : false
   });
 
   const indexObj = {
@@ -84,17 +93,17 @@ export const TenantCard = ({
   };
   let tags = tenants
     .map(t => {
-      const postfix = t.name.split('_')[1];
+      const postfix = t.name.split("_")[1];
       const index = indexObj[postfix] || 999;
       const { tenant_status, operational_status, process_status } = t;
-      let tag = '';
-      let tooltip = '';
+      let tag = "";
+      let tooltip = "";
       if (tenant_status) {
         if (
           !(
-            tenant_status === 'active' &&
-            operational_status === 'online' &&
-            process_status === 'idle'
+            tenant_status === "active" &&
+            operational_status === "online" &&
+            process_status === "idle"
           )
         ) {
           tag = `${tenant_status[0].toUpperCase()}-${operational_status[0].toUpperCase()}-${process_status
@@ -107,16 +116,18 @@ export const TenantCard = ({
     })
     .sort((a, b) => (a.index > b.index ? 1 : -1));
 
-  if (customer === 'Infor') {
+  if (customer === "Infor") {
     tags = tags.sort((a, b) => (a.name > b.name ? 1 : -1));
   }
 
   const baseTenantId =
-    tenants && tenants.length && tenants.length > 0 ? tenants[0].name.split('_')[0] : '';
+    tenants && tenants.length && tenants.length > 0
+      ? tenants[0].name.split("_")[0]
+      : "";
   // console.log(customer, tenants[0]);
   return (
     <>
-      <Card className={customer === 'Infor' ? classes.card3 : classes.card}>
+      <Card className={customer === "Infor" ? classes.card3 : classes.card}>
         <CardContent>
           {/* <Header>
           <H2>{customer}</H2>
@@ -127,13 +138,32 @@ export const TenantCard = ({
             className={classes.header}
             avatar={
               // <Avatar className={live ? classes.live : classes.notlive} alt="Author">
-              <Avatar className={avaclass} alt="Author" title={temp}>
-                {live ? 'Live' : ''}
-              </Avatar>
+              <div className={avaclass} alt="Author" title={temp}>
+                {live ? "Live" : ""}
+              </div>
             }
-            title={customer}
+            // title={customer}
+            title={
+              <div className=" text-xl font-semibold font-pop text-gray-600 overflow-hidden truncate ellipsis mr-2">
+                {customer}
+              </div>
+            }
             disableTypography
-            subheader={<Typography variant="body2">Updated {max2} ago</Typography>}
+            subheader={
+              // <Typography variant="body2">Updated {max2} ago</Typography>
+              <div className="flex items-center">
+                <svg
+                  className="fill-current w-4 h-4 text-gray-500 mr-2"
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-7.59V4h2v5.59l3.95 3.95-1.41 1.41L9 10.41z" />
+                </svg>
+                <span className="text-gray-600 text-sm">
+                  Updated {max2} ago
+                </span>
+              </div>
+            }
           />
           <Typography className={classes.pos} color="textSecondary">
             {tenants.length > 0 && tenants[0].farm}
@@ -152,36 +182,48 @@ export const TenantCard = ({
           </div>
           <div className={classes.tags}>
             {tags.map(({ id, name, version, tooltip, tag }) => {
-              let shortname = '';
-              if (customer === 'Infor') {
+              let shortname = "";
+              if (customer === "Infor") {
                 shortname = name;
-              } else shortname = name.split('_')[1];
-              const color = shortname.endsWith('PRD')
-                ? 'rgba(46, 202, 19, 1)'
-                : shortname.endsWith('TRN')
-                ? '#1da1f2'
-                : 'rgba(0,0,0,0.5)';
+              } else shortname = name.split("_")[1];
+              const color = shortname.endsWith("PRD")
+                ? "rgba(46, 202, 19, 1)"
+                : shortname.endsWith("TRN")
+                ? "#1da1f2"
+                : "rgba(0,0,0,0.5)";
               return (
                 <div className={classes.tagContent}>
-                  <Label key={id} color={color}>{`${shortname}:${version}`}</Label>
+                  <Label
+                    key={id}
+                    color={color}
+                  >{`${shortname}:${version}`}</Label>
                   {/* {tag && <Chip className={classes.tagtooltip} label={tooltip} />} */}
                 </div>
               );
             })}
           </div>
           <Divider />
-          <Grid alignItems="center" container justify="space-between" spacing={3}>
+          <Grid
+            alignItems="center"
+            container
+            justify="space-between"
+            spacing={3}
+          >
             <Grid item className={classes.csm}>
               <Typography variant="h5">PM</Typography>
               <Typography variant="body2">
-                {tenantcustomerdetail.pm ? tenantcustomerdetail.pm : 'PM not entered'}
+                {tenantcustomerdetail.pm
+                  ? tenantcustomerdetail.pm
+                  : "PM not entered"}
               </Typography>
             </Grid>
             <Grid item className={classes.csm}>
               <Typography variant="h5">CSM</Typography>
               <Typography variant="body2">
-                {' '}
-                {tenantcustomerdetail.csm ? tenantcustomerdetail.csm : 'CSM not entered'}
+                {" "}
+                {tenantcustomerdetail.csm
+                  ? tenantcustomerdetail.csm
+                  : "CSM not entered"}
               </Typography>
             </Grid>
             <Grid item>
@@ -196,7 +238,7 @@ export const TenantCard = ({
             variant="outlined"
             onClick={() =>
               window.open(
-                'http://navigator.infor.com/n/incident_list.asp?ListType=CUSTOMERID&Value=' +
+                "http://navigator.infor.com/n/incident_list.asp?ListType=CUSTOMERID&Value=" +
                   tenants[0].customerid
               )
             }
@@ -205,7 +247,11 @@ export const TenantCard = ({
             Incidents
           </Button>
           {isTenantEditor && (
-            <Button variant="outlined" color="primary" onClick={() => setisOpened(true)}>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={() => setisOpened(true)}
+            >
               Edit
             </Button>
           )}
@@ -217,7 +263,10 @@ export const TenantCard = ({
                   onChange={() => {
                     // console.log("change" + tenants[0].customerid);
                     setLive(prev => {
-                      const input = { live: 1 - prev, number: tenants[0].customerid };
+                      const input = {
+                        live: 1 - prev,
+                        number: tenants[0].customerid
+                      };
                       // console.log(input);
                       mutate({ variables: { input } });
                       onStatusChange();
@@ -226,7 +275,7 @@ export const TenantCard = ({
                   }}
                   value="checkedB"
                   color="secondary"
-                  inputProps={{ 'aria-label': 'primary checkbox' }}
+                  inputProps={{ "aria-label": "primary checkbox" }}
                 />
               )}
             </Mutation>
@@ -241,7 +290,10 @@ export const TenantCard = ({
           timeout: 500
         }}
       >
-        <EditTenantDetails profile={tenantcustomerdetail} onClose={() => setisOpened(false)} />
+        <EditTenantDetails
+          profile={tenantcustomerdetail}
+          onClose={() => setisOpened(false)}
+        />
         {/* </Grid> */}
       </Modal>
     </>

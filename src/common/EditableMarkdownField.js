@@ -95,7 +95,11 @@ const EditableMarkDownField = ({
       <JoditEditor
         id="description"
         name="description"
-        style={{ font: "24px Arial", color: "#000" }}
+        style={{
+          font: "24px Arial",
+          color: "#000",
+          borderLeft: "solid 4px #ccc"
+        }}
         ref={viewer}
         value={fieldValue}
         onChange={v => console.log(v)}
