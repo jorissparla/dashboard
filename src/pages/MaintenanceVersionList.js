@@ -1,13 +1,16 @@
-import { Typography } from '@material-ui/core';
-import { BlockNew } from 'elements/Block';
-import { usePersistentState } from 'hooks';
-import React, { useEffect } from 'react';
-import { useQuery, useMutation } from 'react-apollo';
-import Spinner from 'utils/spinner';
-import MaintenanceWizard from 'wizard/MaintenanceWizard';
-import { OtherField } from 'wizard/OtherField';
-import { ALL_MAINTENANCE_QUERY, CREATE_AUDIT_MUTATION_WIZARD } from '../wizard/Queries';
-import { DashBoardContext } from 'globalState/Provider';
+import { Typography } from "@material-ui/core";
+import { BlockNew } from "elements/Block";
+import { usePersistentState } from "hooks";
+import React, { useEffect } from "react";
+import { useQuery, useMutation } from "react-apollo";
+import Spinner from "utils/spinner";
+import MaintenanceWizard from "wizard/MaintenanceWizard";
+import { OtherField } from "wizard/OtherField";
+import {
+  ALL_MAINTENANCE_QUERY,
+  CREATE_AUDIT_MUTATION_WIZARD
+} from "../wizard/Queries";
+import { DashBoardContext } from "globalState/Provider";
 
 // const ALL_VERSIONS = gql`
 //   query ALL_VERSIONS {
@@ -19,17 +22,17 @@ import { DashBoardContext } from 'globalState/Provider';
 
 const VersionList = () => {
   const [selectedVersion, setSelectedVersion] = usePersistentState(
-    'activeVersion',
-    'INFOR LN 10.7'
+    "activeVersion",
+    "INFOR LN 10.7"
   );
 
   const dbctx = React.useContext(DashBoardContext);
 
   const [createAudit] = useMutation(CREATE_AUDIT_MUTATION_WIZARD);
 
-  const [faqIsVisible, setShowFAQ] = usePersistentState('FAQ', false);
+  const [faqIsVisible, setShowFAQ] = usePersistentState("FAQ", false);
   const [localizationsIsVisible, setLocalizationsVisible] = usePersistentState(
-    'Localizations',
+    "Localizations",
     false
   );
 
@@ -39,21 +42,22 @@ const VersionList = () => {
   useEffect(() => {
     const input = {
       username: dbctx.fullname,
-      page: '/maintenancewizard',
+      page: "/maintenancewizard",
       linkid: null,
-      type: 'MaintenanceWizard'
+      type: "MaintenanceWizard"
     };
     createAudit({ variables: { input } }).then(console.log);
   }, [createAudit, dbctx.fullname]);
 
   if (loading || !data) return <Spinner />;
   const { allMaintenance, maintenanceFAQ } = data;
-  console.log('MaintenanceFAQ', maintenanceFAQ);
+  console.log("MaintenanceFAQ", maintenanceFAQ);
 
   function handleChange(version) {
-    console.log('version', version);
+    console.log("version", version);
     setSelectedVersion(version);
     setShowFAQ(false);
+    setLocalizationsVisible(false);
     // setActiveVersions(allMaintenance.filter(v => v.version === version));
   }
   function handleShowFAQ() {
@@ -65,7 +69,9 @@ const VersionList = () => {
     setLocalizationsVisible(true);
   }
 
-  let activeVersions = allMaintenance.filter(v => v.version === selectedVersion);
+  let activeVersions = allMaintenance.filter(
+    v => v.version === selectedVersion
+  );
   versions = [...new Set(allMaintenance.map(v => v.version))];
   // console.log('activeVersion', activeVersions, allMaintenance, selectedVersion);
   return (
@@ -79,11 +85,15 @@ const VersionList = () => {
           {version}
         </BlockNew>
       ))}
-      <BlockNew key={'43242sfsf343^'} selected={faqIsVisible} onClick={() => handleShowFAQ()}>
+      <BlockNew
+        key={"43242sfsf343^"}
+        selected={faqIsVisible}
+        onClick={() => handleShowFAQ()}
+      >
         FAQ
       </BlockNew>
       <BlockNew
-        key={'45552sfsf343^'}
+        key={"45552sfsf343^"}
         selected={localizationsIsVisible}
         onClick={() => handleShowLocalizations()}
       >
