@@ -1,4 +1,4 @@
-import gql from 'graphql-tag';
+import gql from "graphql-tag";
 
 export const ALL_SYMPTOMS = gql`
   query ALL_SYMPTOMS {
@@ -16,6 +16,7 @@ export const ALL_SYMPTOMS = gql`
       incident
       symptom_category
       status
+      note
       updatedAt
     }
   }
@@ -37,6 +38,7 @@ export const ADD_SYMPTOM_REQUEST_MUTATION = gql`
       symptom_category
       incident
       status
+      note
       updatedAt
     }
   }
@@ -50,6 +52,7 @@ export const TOGGLE_STATUS_COMPLETE_MUTATION = gql`
       symptom_category
       incident
       status
+      note
       updatedAt
     }
   }
@@ -57,7 +60,7 @@ export const TOGGLE_STATUS_COMPLETE_MUTATION = gql`
 export const UPDATE_SYMPTOM_REQUEST_MUTATION = gql`
   mutation UPDATE_SYMPTOM_REQUEST_MUTATION(
     $where: SymptomRequestWhereInput!
-    $input: SymptomRequestInput
+    $input: SymptomRequestUpdate
   ) {
     updateSymptomRequest(where: $where, input: $input) {
       id
@@ -65,6 +68,7 @@ export const UPDATE_SYMPTOM_REQUEST_MUTATION = gql`
       symptom_category
       incident
       status
+      note
       updatedAt
     }
   }
@@ -78,6 +82,7 @@ export const DELETE_SYMPTOM_REQUEST_MUTATION = gql`
       symptom_category
       incident
       status
+      note
       updatedAt
     }
   }

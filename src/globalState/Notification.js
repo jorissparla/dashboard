@@ -2,6 +2,18 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 const Notification = ({ title = "", message, onClose }) => {
+  const [step, setStep] = useState(0);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setStep(state => {
+        if (state < 100) return state + 1;
+        return state;
+      });
+    }, 10);
+    return () => clearInterval(timer);
+  }, []);
+
   return (
     <motion.div
       animate={{ left: -50 }}
@@ -9,6 +21,12 @@ const Notification = ({ title = "", message, onClose }) => {
       className="left-0  mt-2  right-0 z-50 max-w-lg w-full bg-white rounded-lg shadow-lg relative"
     >
       <div className="font-sans rounded-lg shadow-xs overflow-hidden  z-10 right-auto">
+        <div>
+          <div
+            className="border-t-4 border-blue-700"
+            style={{ width: `${step}%` }}
+          />
+        </div>
         <div className="p-4">
           <div className="flex items-start">
             <div className="flex-shrink-0">

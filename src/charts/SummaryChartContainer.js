@@ -20,17 +20,25 @@ const QUERY_SUMMARY_DATA = gql`
     }
   }
 `;
-const SummaryChartContainer = props => {
-  const value = !props.value ? "supportBacklog" : props.value;
-  const title = !props.title ? value : props.title;
-  const type = !props.type ? "column" : props.type;
-  const team = props.team || "Logistics";
+// const SummaryChartContainer = props => {
+const SummaryChartContainer = ({
+  value = "supportBacklog",
+  title = "supportBacklog",
+  type = "column",
+  team = "Logistics",
+  color = "#FFF",
+  region = "EMEA",
+}) => {
+  // const value = !props.value ? "supportBacklog" : props.value;
+  // const title = !props.title ? value : props.title;
+  // const type = !props.type ? "column" : props.type;
+  // const team = props.team || "Logistics";
   const { data, loading } = useQuery(QUERY_SUMMARY_DATA, {
-    variables: { team }
+    variables: { team },
   });
   console.log("TEAM", team, data);
   //  const summary = summaries; // .reverse()
-  const color = props.color;
+  // const color = props.color;
   if (loading) return <div>Loading....</div>;
   if (data && data.summaries) {
     const summary = data.summaries;

@@ -1,13 +1,23 @@
-import React, { useState, useEffect } from 'react';
-import { useQuery, useMutation } from 'react-apollo';
-import { ALL_SYMPTOM_CATEGORIES, ADD_SYMPTOM_REQUEST_MUTATION, ALL_SYMPTOMS } from './Queries';
-import { useHistory } from 'react-router';
+import React, { useState, useEffect } from "react";
+import { useQuery, useMutation } from "react-apollo";
+import {
+  ALL_SYMPTOM_CATEGORIES,
+  ADD_SYMPTOM_REQUEST_MUTATION,
+  ALL_SYMPTOMS
+} from "./Queries";
+import { useHistory } from "react-router";
+import { useAlert } from "globalState/AlertContext";
 
 const AddSymptomRequest = () => {
   const { data, loading } = useQuery(ALL_SYMPTOM_CATEGORIES);
-  const [state, setState] = useState({ symptom: '', symptom_category: '', incident: '' });
+  const [state, setState] = useState({
+    symptom: "",
+    symptom_category: "",
+    incident: ""
+  });
   const [addSymptomRequest] = useMutation(ADD_SYMPTOM_REQUEST_MUTATION);
   const history = useHistory();
+  const alert = useAlert();
   useEffect(() => {
     if (data && data.symptom_categories) {
       setState(prevState => ({
@@ -27,7 +37,8 @@ const AddSymptomRequest = () => {
       variables: { input: state },
       refetchQueries: [{ query: ALL_SYMPTOMS }]
     });
-    history.push('/symptoms');
+    alert.setMessage(`${state.symptom} was added`);
+    history.push("/symptoms");
   };
   const handleChange = event => {
     event.persist();
@@ -40,12 +51,18 @@ const AddSymptomRequest = () => {
   return (
     <div className="bg-gray-200 fixed inset-0 h-full w-full mt-16 flex ">
       <div className="  flex flex-col  justify-between w-full">
-        <form className="rounded shadow m-4 bg-white p-4" onSubmit={handleSubmit}>
-          <div style={{ fontFamily: 'Poppins' }} className="font-pop text-4xl">
+        <form
+          className="rounded shadow m-4 bg-white p-4"
+          onSubmit={handleSubmit}
+        >
+          <div style={{ fontFamily: "Poppins" }} className="font-pop text-4xl">
             Request new Symptom
           </div>
           <div className="w-full">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="username"
+            >
               Symptom
             </label>
             <input
@@ -59,7 +76,10 @@ const AddSymptomRequest = () => {
             />
           </div>
           <div className="mb-6">
-            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
+            <label
+              className="block text-gray-700 text-sm font-bold mb-2"
+              htmlFor="password"
+            >
               Category
             </label>
             <div class="relative rounded ml-2 mr-4 appearance-none border rounded shadow-xs py-2 px-3 text-gray-700 ">
@@ -102,7 +122,7 @@ const AddSymptomRequest = () => {
             </button>
             <button
               className="ml-4 rounded-lg px-4 md:px-5 xl:px-4 py-2 md:py-4 xl:py-3 bg-gray-300 hover:bg-gray-200 md:text-md xl:text-base text-gray-800 font-semibold leading-tight shadow-md"
-              onClick={() => history.push('/symptoms')}
+              onClick={() => history.push("/symptoms")}
             >
               Cancel
             </button>
