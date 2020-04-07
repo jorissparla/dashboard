@@ -7,10 +7,12 @@ import { usePersistentState } from "../hooks";
 import {
   ALL_SYMPTOMS,
   TOGGLE_STATUS_COMPLETE_MUTATION,
-  DELETE_SYMPTOM_REQUEST_MUTATION
+  DELETE_SYMPTOM_REQUEST_MUTATION,
+  UPDATE_SYMPTOM_REQUEST_MUTATION,
 } from "./Queries";
 import { format } from "../utils/format";
 import { useAlert } from "globalState/AlertContext";
+import UpdateSymptomDetails from "./UpdateSymptomDetails";
 
 const PAGE_LENGTH = 10;
 
@@ -87,7 +89,74 @@ const NiceCell = ({ value, complete }) => (
     )}
   </td>
 );
-const CompleteCell = ({ value, handleClick, canEdit = false }) => {
+const CompleteCell = ({ value, values, handleClick, canEdit = false }) => {
+  const [isOpen, setisOpen] = useState(false);
+  const alert = useAlert();
+  const [toggleStatusComplete] = useMutation(TOGGLE_STATUS_COMPLETE_MUTATION);
+  const [updateSymptomRequest] = useMutation(UPDATE_SYMPTOM_REQUEST_MUTATION);
+  const handleOpen = () => {
+    if (canEdit) {
+      setisOpen(true);
+    }
+  };
+
+  return (
+    <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+      {isOpen && (
+        <UpdateSymptomDetails
+          values={values}
+          onCancel={() => setisOpen(false)}
+          onSave={async (note) => {
+            await updateSymptomRequest({
+              variables: {
+                where: { id: values.id },
+                input: { note },
+              },
+              refetchQueries: [{ query: ALL_SYMPTOMS }],
+            });
+
+            alert.setMessage(`symptom note was updated to  ${note}`);
+            setisOpen(false);
+          }}
+          onComplete={async () => {
+            await toggleStatusComplete({
+              variables: { where: { id: values.id } },
+              refetchQueries: [{ query: ALL_SYMPTOMS }],
+            });
+            alert.setMessage(
+              `symptom ${values.symptom} was marked complete/incomplete`
+            );
+            // updateModifiedDate(new Date());
+          }}
+        />
+      )}
+      <div className="flex flex-no-wrap">
+        <label className="md:w-2/3 block text-gray-500 font-bold">
+          {value === 0 ? (
+            <input
+              className="mr-2 leading-tight bg-red-300 cursor-pointer transition-colors ease-in-out duration-700 form-checkbox text-green-500"
+              checked={false}
+              type="checkbox"
+              onClick={handleOpen}
+            />
+          ) : (
+            <input
+              className="mr-2 leading-tight cursor-pointer transition-colors ease-in-out duration-200  form-checkbox text-green-500"
+              id="x"
+              type="checkbox"
+              checked
+              onClick={handleOpen}
+            />
+          )}
+          <span className="text-sm">
+            Mark {value === 0 ? "Complete" : "Incomplete"}
+          </span>
+        </label>
+      </div>
+    </td>
+  );
+};
+const CompleteCellOld = ({ value, handleClick, canEdit = false }) => {
   return (
     <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
       <div className="flex flex-no-wrap">
@@ -137,6 +206,7 @@ function SymptomsTableNew({ data }) {
   const history = useHistory();
   const alert = useAlert();
   const [toggleStatusComplete] = useMutation(TOGGLE_STATUS_COMPLETE_MUTATION);
+  const [isOpen, setisOpen] = useState(false);
   const [handleDeleteSymptomRequest] = useMutation(
     DELETE_SYMPTOM_REQUEST_MUTATION
   );
@@ -158,34 +228,35 @@ function SymptomsTableNew({ data }) {
     user.role === "Admin";
 
   async function toggleCompleteStatus(id, symptom) {
-    await toggleStatusComplete({
-      variables: { where: { id } },
-      refetchQueries: [{ query: ALL_SYMPTOMS }]
-    });
-    alert.setMessage(`symptom ${symptom} was marked complete/incomplete`);
-    updateModifiedDate(new Date());
+    setisOpen(true);
+    // await toggleStatusComplete({
+    //   variables: { where: { id } },
+    //   refetchQueries: [{ query: ALL_SYMPTOMS }]
+    // });
+    // alert.setMessage(`symptom ${symptom} was marked complete/incomplete`);
+    // updateModifiedDate(new Date());
   }
 
   async function handleDelete(id) {
     await handleDeleteSymptomRequest({
       variables: { where: { id } },
-      refetchQueries: [{ query: ALL_SYMPTOMS }]
+      refetchQueries: [{ query: ALL_SYMPTOMS }],
     });
     updateModifiedDate(new Date());
   }
   function filterValues(filter, symptoms, search) {
     switch (filter) {
       case "Open":
-        return symptoms.filter(s => s.status === 0); //.filter(s => s.symptom.includes(search));
+        return symptoms.filter((s) => s.status === 0); //.filter(s => s.symptom.includes(search));
       case "Completed":
-        return symptoms.filter(s => s.status === 1); //.filter(s => s.symptom.includes(search));
+        return symptoms.filter((s) => s.status === 1); //.filter(s => s.symptom.includes(search));
 
       default:
         return symptoms;
     }
   }
 
-  const handleColumnSort = col => (name, direction) => {
+  const handleColumnSort = (col) => (name, direction) => {
     const u = direction === "A" ? "asc" : "desc";
     console.log(requests);
     const sorted = _.orderBy(requests, [col], [u]);
@@ -238,17 +309,21 @@ function SymptomsTableNew({ data }) {
     <div className=" bg-gray-200 min-h-full h-screen">
       <div className="flex flex-row mt-4 justify-between items-center bg-white py-4 px-2">
         <div class="relative rounded-lg ">
-          <select
-            name="selectfilter"
-            class="border-gray-200 border appearance-none h-full block w-full bg-white border-gray-400 text-gray-700 py-2 px-4 pr-8 leading-tight  focus:border-gray-500"
-            value={filter}
-            onChange={handleChangeFilter}
-          >
-            <option>All</option>
-            <option>Open</option>
-            <option>Completed</option>
-          </select>
-          <div class="pointer-events-none absolute inset-y-0 right-0 flex rounded items-center px-2 text-gray-700">
+          <label class="block mt-4">
+            <span class="text-gray-700 mr-2 ml-2">Status Filter</span>
+
+            <select
+              name="selectfilter"
+              class="form-select "
+              value={filter}
+              onChange={handleChangeFilter}
+            >
+              <option>All</option>
+              <option>Open</option>
+              <option>Completed</option>
+            </select>
+          </label>
+          {/* <div class="pointer-events-none absolute inset-y-0 right-0 flex rounded items-center px-2 text-gray-700">
             <svg
               class="fill-current h-4 w-4"
               xmlns="http://www.w3.org/2000/svg"
@@ -256,7 +331,7 @@ function SymptomsTableNew({ data }) {
             >
               <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
             </svg>
-          </div>
+          </div> */}
         </div>
         <div class="block relative mt-2">
           <span class="h-full absolute inset-y-0 left-0 flex items-center pl-2">
@@ -283,6 +358,7 @@ function SymptomsTableNew({ data }) {
       </div>
       <div className="  flex flex-col my-2">
         <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto"></div>
+
         <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
           <table className="shadow-lg rounded-lg w-full leading-normal shadow rounded-lg  mt-4 transition duration-500 ease-in-out ">
             <thead>
@@ -309,7 +385,7 @@ function SymptomsTableNew({ data }) {
               </tr>
             </thead>
             <tbody>
-              {requests.map(item => (
+              {requests.map((item) => (
                 <tr key={item.id}>
                   <Cell value={item.symptom} complete={item.status} />
                   <NiceCell
@@ -317,9 +393,10 @@ function SymptomsTableNew({ data }) {
                     complete={item.status}
                   />
                   <Cell value={item.incident} complete={item.status} />
-                  <NoteCell value={item.note} complete={item.status} />
+                  <Cell value={item.note} complete={item.status} />
                   <CompleteCell
                     value={item.status}
+                    values={item}
                     handleClick={() =>
                       toggleCompleteStatus(item.id, item.symptom)
                     }
