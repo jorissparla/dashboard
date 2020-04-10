@@ -33,9 +33,9 @@ export const SelectionForm = ({
     return persons ? persons.sort() : [];
   };
 
-  React.useEffect(() => {
-    doAddPersonToLocalStorage(initialValue.owner);
-  }, []);
+  // React.useEffect(() => {
+  //   doAddPersonToLocalStorage(initialValue.owner);
+  // }, []);
 
   const doAddPersonToLocalStorage = (newPerson) => {
     const item = window.localStorage.getItem("worklist.favorite.persons");
@@ -154,7 +154,7 @@ export const SelectionForm = ({
         value={actionNeeded}
         color="secondary"
       /> */}
-      <div style={{ marginLeft: 20, border: "1px solid #ccc", padding: 5 }}>
+      <div className="border border-gray-200 p-2 m-2 rounded">
         {PRODUCT_LIST.map((product) => (
           <label className="inline-flex items-center" key={product}>
             {/* control={ */}
@@ -166,11 +166,12 @@ export const SelectionForm = ({
               value={getValue(product)}
               color="primary"
             />
-            <span className="ml-2">{product}</span>
+            <span className="mr-3">{product}</span>
           </label>
         ))}
       </div>
-      <FormControl variant="outlined" className={classes.formControl}>
+      <div className="border-gray-50 p-2 m-2 rounded">
+        {/* <FormControl variant="outlined" className={classes.formControl}> */}
         <label className="flex mr-4 items-center px-4">
           <span className="text-gray-700">Region</span>
           <select
@@ -199,8 +200,9 @@ export const SelectionForm = ({
             </MenuItem>
           ))}
         </Select> */}
-      </FormControl>
-
+        {/* </FormControl>
+         */}
+      </div>
       <div className="tracking-wide inline-flex items-center">
         <svg
           className="fill-current w-4 h-4 text-gray-500 mr-2"
