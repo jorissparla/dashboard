@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState } from "react";
 import {
   Paper,
   TextField,
@@ -7,9 +7,10 @@ import {
   Button,
   FormControlLabel,
   FormGroup,
-  Checkbox
-} from '@material-ui/core';
-import { SelectionContext } from '../globalState/SelectionContext';
+  Checkbox,
+} from "@material-ui/core";
+import { SelectionContext } from "../globalState/SelectionContext";
+import { usePersistentState } from "hooks";
 
 interface SelectionProps {
   classes: any;
@@ -31,7 +32,7 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
   valuesChanged,
   isValidSuperUser,
   isXpertOrSwan,
-  onNavigateToParams
+  onNavigateToParams,
 }) => {
   const selectionContext = useContext(SelectionContext);
   const {
@@ -43,28 +44,28 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
     setActionNeeded,
     products,
     setProducts,
-    setPersons
+    setPersons,
     // persons
   } = selectionContext;
-  const [ownerVal, setOwnerVal] = useState('');
+  const [ownerVal, setOwnerVal] = usePersistentState("selowner", "");
   const [criteriaChange, setCriteriaChange] = React.useState(false);
-  const [allOwners, toggleAllOwners] = React.useState(false);
+  const [allOwners, toggleAllOwners] = usePersistentState("allowners", false);
   const [newData, setnewData] = React.useState(false);
 
   const doAddPersonToLocalStorage = (newPerson: string) => {
-    const item = window.localStorage.getItem('persons');
+    const item = window.localStorage.getItem("persons");
     let persons: any = [];
     if (!item || item.length === 0) {
       persons = [];
     } else {
       persons = JSON.parse(item);
-      console.log('do', item, persons, typeof persons);
+      console.log("do", item, persons, typeof persons);
     }
     persons = persons
       .filter((person: any) => newPerson !== person.name)
       .concat({ name: newPerson });
 
-    window.localStorage.setItem('persons', JSON.stringify(persons));
+    window.localStorage.setItem("persons", JSON.stringify(persons));
     setPersons(persons);
     return persons;
   };
@@ -79,20 +80,20 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
 
   React.useEffect(() => {
     setOwner(initialValue.owner);
-    console.log('Load', owner, initialValue);
+    console.log("Load", owner, initialValue);
     setOwnerVal(initialValue.owner);
   }, [initialValue, owner, setOwner]);
 
   React.useEffect(() => {
-    console.log('ownerChange', owner);
+    console.log("ownerChange", owner);
     setOwnerVal(owner);
     setCriteriaChange(true);
   }, [owner]);
 
   React.useEffect(() => {
-    console.log('timer set');
+    console.log("timer set");
     const timer = setTimeout(() => {
-      console.log('expired');
+      console.log("expired");
       setnewData(true);
     }, 15000);
     return () => clearTimeout(timer);
@@ -101,7 +102,7 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
   function getValue(value: string) {
     return products.indexOf(value) >= 0;
   }
-  console.log('loading .....');
+  console.log("loading .....");
   return (
     <Paper className={classes.paper2}>
       {/* <FormLabel>Cloud</FormLabel>
@@ -114,19 +115,32 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
         value={isCloud}
         color="primary"
       /> */}
+      <div className="rounded-md shadow-sm">
+        <input
+          className="relative block w-full px-3 py-2 border border-gray-300 rounded focus:shadow-outline focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
+          type="text"
+          placeholder="enter name of person"
+          value={ownerVal}
+          onChange={(event) => {
+            setOwnerVal(event.target.value);
+            setCriteriaChange(true);
+          }}
+        />
+      </div>
+
       <TextField
         value={ownerVal}
         disabled={!isValidSuperUser}
-        onMouseDown={e => {
+        onMouseDown={(e) => {
           if (e.nativeEvent.which === 3) {
             doAddPersonToLocalStorage(ownerVal);
           }
         }}
-        onChange={event => {
+        onChange={(event) => {
           setOwnerVal(event.target.value);
           setCriteriaChange(true);
         }}
-        onKeyDown={event => {
+        onKeyDown={(event) => {
           if (event.keyCode === 13) {
             console.log(event.target);
           }
@@ -137,9 +151,9 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
       {isValidSuperUser && (
         <Switch
           checked={allOwners}
-          onChange={e => {
+          onChange={(e) => {
             if (!allOwners) {
-              setOwnerVal('');
+              setOwnerVal("");
             } else {
               setOwnerVal(initialValue.owner);
             }
@@ -165,19 +179,22 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
       <FormLabel> Only Actions Needed</FormLabel>
       <Switch
         checked={actionNeeded}
-        onChange={e => {
+        onChange={(e) => {
           setActionNeeded(!actionNeeded);
           setCriteriaChange(true);
         }}
         value={actionNeeded}
         color="secondary"
       />
-      <FormGroup row style={{ marginLeft: 50, border: '1px solid #ccc', padding: 5 }}>
+      <FormGroup
+        row
+        style={{ marginLeft: 50, border: "1px solid #ccc", padding: 5 }}
+      >
         <FormControlLabel
           control={
             <Checkbox
-              checked={getValue('LN')}
-              onChange={() => toggleSet('LN')}
+              checked={getValue("LN")}
+              onChange={() => toggleSet("LN")}
               value="LN"
               color="primary"
             />
@@ -187,8 +204,8 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
         <FormControlLabel
           control={
             <Checkbox
-              checked={getValue('PLM')}
-              onChange={() => toggleSet('PLM')}
+              checked={getValue("PLM")}
+              onChange={() => toggleSet("PLM")}
               value="PLM"
               color="secondary"
             />
@@ -198,8 +215,8 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
         <FormControlLabel
           control={
             <Checkbox
-              checked={getValue('Protean')}
-              onChange={() => toggleSet('Protean')}
+              checked={getValue("Protean")}
+              onChange={() => toggleSet("Protean")}
               value="Protean"
               color="secondary"
             />
@@ -209,8 +226,8 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
         <FormControlLabel
           control={
             <Checkbox
-              checked={getValue('InforOS')}
-              onChange={() => toggleSet('InforOS')}
+              checked={getValue("InforOS")}
+              onChange={() => toggleSet("InforOS")}
               value="InforOS"
               color="secondary"
             />
@@ -221,8 +238,8 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
           <FormControlLabel
             control={
               <Checkbox
-                checked={getValue('Xpert')}
-                onChange={() => toggleSet('Xpert')}
+                checked={getValue("Xpert")}
+                onChange={() => toggleSet("Xpert")}
                 value="Xpert"
                 color="secondary"
               />
@@ -234,8 +251,8 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
           <FormControlLabel
             control={
               <Checkbox
-                checked={getValue('Swan')}
-                onChange={() => toggleSet('Swan')}
+                checked={getValue("Swan")}
+                onChange={() => toggleSet("Swan")}
                 value="Swan"
                 color="secondary"
               />
@@ -247,8 +264,8 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
           <FormControlLabel
             control={
               <Checkbox
-                checked={getValue('AutoConnect')}
-                onChange={() => toggleSet('AutoConnect')}
+                checked={getValue("AutoConnect")}
+                onChange={() => toggleSet("AutoConnect")}
                 value="AutoConnect"
                 color="secondary"
               />
@@ -258,10 +275,10 @@ export const SelectionForm: React.FunctionComponent<SelectionProps> = ({
         )}
       </FormGroup>
 
-      <div style={{ position: 'relative', right: '-40px' }}>
-        {' '}
+      <div style={{ position: "relative", right: "-40px" }}>
+        {" "}
         last Updated: {initialValue.lastUpdated}
-        {newData && '...new data available'}
+        {newData && "...new data available"}
       </div>
       {isValidSuperUser && (
         <Button

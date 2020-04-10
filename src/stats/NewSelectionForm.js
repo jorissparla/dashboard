@@ -1,20 +1,8 @@
-import {
-  Button,
-  Checkbox,
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  FormLabel,
-  InputLabel,
-  MenuItem,
-  Paper,
-  Select,
-  Switch,
-  TextField
-} from '@material-ui/core';
-import { usePersistentState } from 'hooks';
-import { PRODUCT_LIST, REGION_LIST } from 'pages/Stats';
-import React, { useState } from 'react';
+import { FormControl, Switch } from "@material-ui/core";
+import { usePersistentState } from "hooks";
+import { PRODUCT_LIST, REGION_LIST } from "pages/Stats";
+import React, { useState } from "react";
+import { ListFavoritePersons } from "./FavoritesPersons";
 
 export const SelectionForm = ({
   classes,
@@ -22,39 +10,58 @@ export const SelectionForm = ({
   valuesChanged,
   isValidSuperUser,
   onChange,
-  onNavigateToParams
+  onNavigateToParams,
 }) => {
-  const [selectedProducts, setSelectedProducts] = usePersistentState('selectedproducts', ['LN']);
+  const [
+    selectedProducts,
+    setSelectedProducts,
+  ] = usePersistentState("selectedproducts", ["LN"]);
   const [ownerVal, setOwnerVal] = useState(initialValue.owner);
-  const [region, setRegion] = usePersistentState('region', 'EMEA');
+  const [person, setPerson] = useState("");
+  const [region, setRegion] = usePersistentState("region", "EMEA");
   const [actionNeeded, setActionNeeded] = useState(false);
-  const [allOwners, toggleAllOwners] = React.useState(false);
+  const [allOwners, toggleAllOwners] = useState(false);
 
-  const inputLabel = React.useRef(null);
-  const [labelWidth, setLabelWidth] = React.useState(0);
+  // const [labelWidth, setLabelWidth] = React.useState(0);
+  // React.useEffect(() => {
+  //   setLabelWidth(inputLabel.current.offsetWidth);
+  // }, []);
+
+  const getPersons = () => {
+    const item = window.localStorage.getItem("worklist.favorite.persons");
+    let persons = JSON.parse(item);
+    return persons ? persons.sort() : [];
+  };
+
   React.useEffect(() => {
-    setLabelWidth(inputLabel.current.offsetWidth);
+    doAddPersonToLocalStorage(initialValue.owner);
   }, []);
-  const doAddPersonToLocalStorage = newPerson => {
-    const item = window.localStorage.getItem('persons');
+
+  const doAddPersonToLocalStorage = (newPerson) => {
+    const item = window.localStorage.getItem("worklist.favorite.persons");
     let persons = [];
     if (!item || item.length === 0) {
       persons = [];
     } else {
       persons = JSON.parse(item);
-      console.log('do', item, persons, typeof persons);
+      console.log("do", item, persons, typeof persons);
     }
-    persons = persons.filter(person => newPerson !== person.name).concat({ name: newPerson });
+    persons = persons
+      .filter((person) => newPerson !== person.name)
+      .concat({ name: newPerson });
 
-    window.localStorage.setItem('persons', JSON.stringify(persons));
+    window.localStorage.setItem(
+      "worklist.favorite.persons",
+      JSON.stringify(persons)
+    );
     // setPersons(persons);
     return persons;
   };
 
   function toggleSet(value) {
-    console.log('toggle selectedProducts', selectedProducts, value);
+    console.log("toggle selectedProducts", selectedProducts, value);
     if (selectedProducts.indexOf(value) >= 0) {
-      setSelectedProducts(selectedProducts.filter(prod => prod !== value));
+      setSelectedProducts(selectedProducts.filter((prod) => prod !== value));
     } else {
       setSelectedProducts(selectedProducts.concat(value));
     }
@@ -63,113 +70,171 @@ export const SelectionForm = ({
   function getValue(value) {
     return selectedProducts.indexOf(value) >= 0;
   }
-  console.log('loading .....', selectedProducts);
+  const persons = getPersons() || [];
+  console.log(persons);
   return (
-    <Paper className={classes.paper2}>
-      <TextField
+    // <Paper className={classes.paper2}>
+    <div className="mb-4 rounded shadow-lg bg-white px-3 py-2 flex items-center w-full text-gray-700 flex-wrap">
+      <div className="rounded-md shadow-sm">
+        <input
+          className="form-input"
+          type="text"
+          placeholder="enter name of person"
+          value={ownerVal}
+          disabled={!isValidSuperUser}
+          onChange={(event) => {
+            setOwnerVal(event.target.value);
+          }}
+          onMouseDown={(e) => {
+            console.log(e);
+            if (e.nativeEvent.which === 3) {
+              doAddPersonToLocalStorage(ownerVal);
+            }
+          }}
+        />
+      </div>
+      {/* <TextField
         value={ownerVal}
         disabled={!isValidSuperUser}
-        onMouseDown={e => {
+        onMouseDown={(e) => {
           if (e.nativeEvent.which === 3) {
             doAddPersonToLocalStorage(ownerVal);
           }
         }}
-        onChange={event => {
+        onChange={(event) => {
           setOwnerVal(event.target.value);
         }}
-        onKeyDown={event => {
+        onKeyDown={(event) => {
           if (event.keyCode === 13) {
             console.log(event.target);
           }
         }}
-        placeholder="enter person"
-      />
-      {isValidSuperUser && <FormLabel>Clear Owner / All Owners</FormLabel>}
+        placeholder="name of person"
+      /> */}
+      {/* {isValidSuperUser && <FormLabel>Clear Owner / All Owners</FormLabel>} */}
       {isValidSuperUser && (
-        <Switch
-          checked={allOwners}
-          onChange={e => {
-            if (!allOwners) {
-              setOwnerVal('');
-            } else {
-              setOwnerVal(initialValue.owner);
-            }
-            toggleAllOwners(!allOwners);
-          }}
-          value={allOwners}
-          color="primary"
-        />
+        <label className="ml-2">
+          All owners
+          <Switch
+            checked={allOwners}
+            onChange={(e) => {
+              if (!allOwners) {
+                setOwnerVal("");
+              } else {
+                setOwnerVal(initialValue.owner);
+              }
+              toggleAllOwners(!allOwners);
+            }}
+            value={allOwners}
+            color="primary"
+          />
+        </label>
       )}
-      <Button
+      <button
         color="primary"
-        className="button"
+        className="btn-tw bg-purp text-white mr-3"
         // disabled={!criteriaChange}
         variant="contained"
         onClick={() => {
-          onChange({ owner: ownerVal, products: selectedProducts, region: region });
+          onChange({
+            owner: ownerVal,
+            products: selectedProducts,
+            region: region,
+          });
         }}
       >
         Search
-      </Button>
-      <FormLabel> Only Actions Needed</FormLabel>
+      </button>
+      {/* <FormLabel> Only Actions Needed</FormLabel>
       <Switch
         checked={actionNeeded}
-        onChange={e => {
+        onChange={(e) => {
           setActionNeeded(!actionNeeded);
         }}
         value={actionNeeded}
         color="secondary"
-      />
-      <FormGroup row style={{ marginLeft: 20, border: '1px solid #ccc', padding: 5 }}>
-        {PRODUCT_LIST.map(product => (
-          <FormControlLabel
-            key={product}
-            control={
-              <Checkbox
-                checked={getValue(product)}
-                onChange={() => toggleSet(product)}
-                value={product}
-                color="primary"
-              />
-            }
-            label={product}
-          />
+      /> */}
+      <div style={{ marginLeft: 20, border: "1px solid #ccc", padding: 5 }}>
+        {PRODUCT_LIST.map((product) => (
+          <label className="inline-flex items-center" key={product}>
+            {/* control={ */}
+            <input
+              type="checkbox"
+              className="form-checkbox mx-2"
+              defaultChecked={getValue(product)}
+              onChange={() => toggleSet(product)}
+              value={getValue(product)}
+              color="primary"
+            />
+            <span className="ml-2">{product}</span>
+          </label>
         ))}
-      </FormGroup>
+      </div>
       <FormControl variant="outlined" className={classes.formControl}>
-        <InputLabel ref={inputLabel} id="demo-simple-select-outlined-label">
+        <label className="flex mr-4 items-center px-4">
+          <span className="text-gray-700">Region</span>
+          <select
+            className="form-select block w-full mt-1 ml-2"
+            value={region}
+            onChange={(e) => setRegion(e.target.value)}
+          >
+            {REGION_LIST.map((r) => (
+              <option key={r}>{r}</option>
+            ))}
+          </select>
+        </label>
+        {/* <InputLabel ref={inputLabel} id="demo-simple-select-outlined-label">
           Region
         </InputLabel>
         <Select
           labelId="demo-simple-select-outlined-label"
           id="demo-simple-select-outlined"
           value={region}
-          onChange={e => setRegion(e.target.value)}
+          onChange={(e) => setRegion(e.target.value)}
           labelWidth={labelWidth}
         >
-          {REGION_LIST.map(r => (
+          {REGION_LIST.map((r) => (
             <MenuItem key={r} value={r}>
               {r}
             </MenuItem>
           ))}
-        </Select>
+        </Select> */}
       </FormControl>
 
-      <div style={{ position: 'relative', right: '-40px' }}>
-        {' '}
-        last Updated: {initialValue.lastUpdated}
+      <div className="tracking-wide inline-flex items-center">
+        <svg
+          className="fill-current w-4 h-4 text-gray-500 mr-2"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 20 20"
+        >
+          <path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-7.59V4h2v5.59l3.95 3.95-1.41 1.41L9 10.41z"></path>
+        </svg>
+        last update {initialValue.lastUpdated}
       </div>
       {isValidSuperUser && (
-        <Button
-          color="secondary"
-          variant="contained"
-          style={{ marginLeft: 60 }}
+        <button
+          className="btn-tw bg-pink-200 text-pink-800 hover:bg-pink-300"
           onClick={onNavigateToParams}
         >
           Parameters
-        </Button>
+        </button>
       )}
-    </Paper>
+
+      {persons && persons.length > 0 && (
+        <label className="flex mr-4 items-center px-4">
+          <span className="text-gray-700">People</span>
+          <select
+            className="form-select block w-full mt-1 ml-2"
+            value={ownerVal}
+            onChange={(e) => setOwnerVal(e.target.value)}
+          >
+            {persons.map(({ name }) => (
+              <option key={name}>{name}</option>
+            ))}
+          </select>
+        </label>
+      )}
+    </div>
   );
 };
 export default SelectionForm;
