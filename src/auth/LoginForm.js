@@ -76,24 +76,20 @@ const LoginForm = ({}) => {
             />
           </div>
         </label>
-
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
           <button
+            className="bg-gray-700 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
             type="submit"
-            className="bg-gray-700 hover:bg-blue-700  text-center py-2 px-4 m-2 rounded text-white inline-flex w-48 items-center"
           >
-            Login
+            Log In
           </button>
-          <div className="text-sm leading-5">
-            <a
-              href="/forgot"
-              className="font-medium text-purp hover:text-indigo-500 focus:outline-none focus:underline transition ease-in-out duration-150"
-            >
-              Forgot your password?
-            </a>
-          </div>
+          <a
+            className="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker"
+            href="/forgot"
+          >
+            Forgot Password?
+          </a>
         </div>
-        <div className="mt-6 flex items-center justify-end"></div>
       </form>
     </div>
   );
