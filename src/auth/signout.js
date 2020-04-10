@@ -22,7 +22,7 @@ export const Signout = ({ history }) => {
       history.push("/");
     }, 500);
     return clearTimeout(h);
-  }, [history]);
+  }, []);
   return <div>Sorry to see you go...</div>;
 };
 

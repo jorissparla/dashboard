@@ -4,29 +4,36 @@ import Notification from "./Notification";
 const AlertContext = createContext(null);
 
 export const AlertContextProvider = ({ children }) => {
-  const initialState = { message: "", title: "" };
+  const initialState = { message: "", title: "", error: "" };
   const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
   const [visible, setIsVisible] = useState(false);
   useEffect(() => {
     if (message) setIsVisible(true);
-  }, [message]);
+    if (error) setIsVisible(true);
+  }, [message || error]);
 
   useEffect(() => {
     const handler = setTimeout(() => {
       setIsVisible(false);
       setMessage("");
+      setError("");
     }, 2000);
     return () => clearTimeout(handler);
-  }, [message]);
+  }, [message, error]);
   return (
-    <AlertContext.Provider value={{ message, setMessage }}>
+    <AlertContext.Provider value={{ message, setMessage, error, setError }}>
       {children}
       <div
         style={{ position: "fixed", right: 0, top: 8, zIndex: 9999 }}
         className="fixed b-0"
       >
         {visible && (
-          <Notification message={message} onClose={() => setIsVisible(false)} />
+          <Notification
+            message={message}
+            error={error}
+            onClose={() => setIsVisible(false)}
+          />
         )}
       </div>
     </AlertContext.Provider>

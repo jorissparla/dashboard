@@ -1,10 +1,10 @@
-import { usePersistentState } from 'hooks';
-import React from 'react';
-import { useQuery } from 'react-apollo';
-import styled from 'styled-components';
-import Spinner from '../utils/spinner';
-import { format } from './../utils/format';
-import { QUERY_PRIORITY_BACKLOG } from './queries/BACKLOG_QUERY2a';
+import { usePersistentState } from "hooks";
+import React from "react";
+import { useQuery } from "react-apollo";
+import styled from "styled-components";
+import Spinner from "../utils/spinner";
+import { format } from "./../utils/format";
+import { QUERY_PRIORITY_BACKLOG } from "./queries/BACKLOG_QUERY2a";
 
 const Container = styled.div`
   margin-top: -1rem;
@@ -24,15 +24,16 @@ const Box = styled.div`
   width: 22%;
   min-width: 200px;
 
-  color: ${props => (props.textcolor ? props.textcolor : '#4a5568')};
-  background-color: ${props => (props.color ? props.color : 'lightblue')};
+  color: ${(props) => (props.textcolor ? props.textcolor : "#4a5568")};
+  background-color: ${(props) => (props.color ? props.color : "lightblue")};
   border-radius: 0.5rem;
-  background-image: ${props =>
-    `linear-gradient(to bottom right, ${props.color || 'black'}, white)`};
+  background-image: ${(props) =>
+    `linear-gradient(to bottom right, ${props.color || "black"}, white)`};
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
   padding: 1rem;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
 `;
 
 const P = styled.div`
@@ -43,7 +44,7 @@ const P = styled.div`
 
 const SubP = styled.p`
   text-align: center;
-  letter-spacing: ${props => (props.space ? '0.2rem' : '0')};
+  letter-spacing: ${(props) => (props.space ? "0.2rem" : "0")};
   font-size: 1.25rem;
   font-weight: 800;
   line-height: 1.25;
@@ -52,7 +53,7 @@ const H2 = styled.h2`
   letter-spacing: 0.2rem;
   font-size: 1.3rem;
   color: rgba(0, 0, 0, 0.87);
-  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
   font-weight: 400;
   line-height: 1.33;
 
@@ -60,9 +61,9 @@ const H2 = styled.h2`
 `;
 
 export default function PriorityDashboard() {
-  const [region] = usePersistentState('region', 'EMEA');
+  const [region] = usePersistentState("region", "EMEA");
   const { loading, data } = useQuery(QUERY_PRIORITY_BACKLOG, {
-    variables: { products: ['LN'] }
+    variables: { products: ["LN"] },
   });
   if (loading) {
     return <Spinner />;
@@ -72,38 +73,44 @@ export default function PriorityDashboard() {
   function filterByRegion(incidents) {
     if (incidents && incidents.length) {
       // console.log(incidents);
-      return incidents.filter(inc => inc.owner_region === region);
+      return incidents.filter((inc) => inc.owner_region === region);
     } else return incidents;
   }
   console.log(all.length, filterByRegion(all.length));
-  const escalated = filterByRegion(active.filter(item => item.escalated !== 0));
+  const escalated = filterByRegion(
+    active.filter((item) => item.escalated !== 0)
+  );
   const sev2 = filterByRegion(
     active
-      .filter(item => item.severity === 3)
-      .map(item => {
-        const account = accounts.find(account => account.fullname === item.owner);
+      .filter((item) => item.severity === 3)
+      .map((item) => {
+        const account = accounts.find(
+          (account) => account.fullname === item.owner
+        );
         let image;
         if (account) {
-          image = account.image || '';
+          image = account.image || "";
         }
         return { ...item, image };
       })
   );
   const sev1 = filterByRegion(
     all
-      .filter(item => item.severity === 4)
-      .map(item => {
-        const account = accounts.find(account => account.fullname === item.owner);
+      .filter((item) => item.severity === 4)
+      .map((item) => {
+        const account = accounts.find(
+          (account) => account.fullname === item.owner
+        );
         let image;
         if (account) {
-          image = account.image || '';
+          image = account.image || "";
         }
         return { ...item, image };
       })
   );
   // console.log(sev1);
   return (
-    <div style={{ minHeight: '100vh', backgroundColor: '#ededed' }}>
+    <div style={{ minHeight: "100vh", backgroundColor: "#ededed" }}>
       <H2>Priority Dashboard - updated {mostRecentUpdate}</H2>
       <Container>
         <Box color="red">
@@ -129,16 +136,16 @@ export default function PriorityDashboard() {
       </Container>
       <hr />
       <Container>
-        {[...sev1, ...sev2].map(item => {
-          let bgclass = 'bg-white shadow-xl';
+        {[...sev1, ...sev2].map((item) => {
+          let bgclass = "bg-white shadow-xl";
           if (item.severity === 4) {
-            bgclass = 'bg-red-100 shadow-xl-red';
+            bgclass = "bg-red-100 shadow-xl-red";
           }
           console.log(item.severity);
           const statusColor =
-            item.status === 'Awaiting Infor'
-              ? 'bg-orange-700 text-orange-200 '
-              : 'bg-teal-700 text-teal-100 ';
+            item.status === "Awaiting Infor"
+              ? "bg-orange-700 text-orange-200 "
+              : "bg-teal-700 text-teal-100 ";
           return (
             <div
               key={item.incident}
@@ -148,13 +155,13 @@ export default function PriorityDashboard() {
                 className="h-32 w-full object-cover"
                 src={
                   item.image ||
-                  'https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60'
+                  "https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
                 }
                 alt="incident owner"
               />
-              <div class="p-2">
-                <div class="flex items-baseline">
-                  <div class="ml-2 text-gray-600  uppercase font-semibold tracking-wider">
+              <div className="p-2">
+                <div className="flex items-baseline">
+                  <div className="ml-2 text-gray-600  uppercase font-semibold tracking-wider">
                     {item.owner}
                   </div>
                 </div>
@@ -167,11 +174,11 @@ export default function PriorityDashboard() {
               </div>
               <div className="flex items-baseline px-2">
                 <span
-                  class={`mb-2  inline-block  ${statusColor} text-xs px-2 py-1 rounded-full  font-semibold tracking-wide`}
+                  className={`mb-2  inline-block  ${statusColor} text-xs px-2 py-1 rounded-full  font-semibold tracking-wide`}
                 >
                   {item.status}
                 </span>
-                <div class="ml-2 text-gray-600 text-xs uppercase font-semibold tracking-wide">
+                <div className="ml-2 text-gray-600 text-xs uppercase font-semibold tracking-wide">
                   {item.incident}
                 </div>
               </div>
@@ -185,7 +192,8 @@ export default function PriorityDashboard() {
                   <path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-7.59V4h2v5.59l3.95 3.95-1.41 1.41L9 10.41z" />
                 </svg>
                 <span className="text-xs tracking-widest">
-                  Last updated: {format(item.lastupdated, 'EEE, dd-MMM-yyyy hh:mm')}
+                  Last updated:{" "}
+                  {format(item.lastupdated, "EEE, dd-MMM-yyyy hh:mm")}
                 </span>
               </div>
             </div>
@@ -231,9 +239,9 @@ export default function PriorityDashboard() {
                 }
                 alt="incident owner"
               />
-              <div class="p-2">
-                <div class="flex items-baseline">
-                  <div class="ml-2 text-gray-600  uppercase font-semibold tracking-wider">
+              <div className="p-2">
+                <div className="flex items-baseline">
+                  <div className="ml-2 text-gray-600  uppercase font-semibold tracking-wider">
                     {item.owner}
                   </div>
                 </div>
@@ -246,11 +254,11 @@ export default function PriorityDashboard() {
               </div>
               <div className="flex items-baseline">
                 <span
-                  class={`mb-2 inline-block  ${statusColor} text-xs px-2 py-1 rounded-full  font-semibold tracking-wide`}
+                  className={`mb-2 inline-block  ${statusColor} text-xs px-2 py-1 rounded-full  font-semibold tracking-wide`}
                 >
                   {item.status}
                 </span>
-                <div class="ml-2 text-gray-600 text-xs uppercase font-semibold tracking-wide">
+                <div className="ml-2 text-gray-600 text-xs uppercase font-semibold tracking-wide">
                   {item.incident}
                 </div>
               </div>

@@ -1,27 +1,27 @@
-import { List, ListItem } from '@material-ui/core';
-import Avatar from '@material-ui/core/Avatar';
-import Chip from '@material-ui/core/Chip';
-import Divider from '@material-ui/core/Divider';
-import Icon from '@material-ui/core/Icon';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
-import MenuItem from '@material-ui/core/MenuItem';
-import MenuList from '@material-ui/core/MenuList';
-import Paper from '@material-ui/core/Paper';
-import FileFileDownload from '@material-ui/icons/CloudQueue';
-import DownIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import { List, ListItem } from "@material-ui/core";
+import Avatar from "@material-ui/core/Avatar";
+import Chip from "@material-ui/core/Chip";
+import Divider from "@material-ui/core/Divider";
+import Icon from "@material-ui/core/Icon";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import ListItemText from "@material-ui/core/ListItemText";
+import MenuItem from "@material-ui/core/MenuItem";
+import MenuList from "@material-ui/core/MenuList";
+import Paper from "@material-ui/core/Paper";
+import FileFileDownload from "@material-ui/icons/CloudQueue";
+import DownIcon from "@material-ui/icons/ExpandMore";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
 // import { format } from '../utils/format';
-import { format } from 'date-fns';
-import gql from 'graphql-tag';
-import React, { Component } from 'react';
-import { graphql } from 'react-apollo';
-import { withRouter } from 'react-router';
-import styled from 'styled-components';
-import SearchBar from '../common/SearchBar';
-import { HeaderLeft, HeaderRow, StyledInitials, Title } from '../styles';
-import { initials } from '../utils/misc';
-import withAuth from '../utils/withAuth';
+import { format } from "date-fns";
+import gql from "graphql-tag";
+import React, { Component } from "react";
+import { graphql } from "react-apollo";
+import { withRouter } from "react-router";
+import styled from "styled-components";
+import SearchBar from "../common/SearchBar";
+import { HeaderLeft, HeaderRow, StyledInitials, Title } from "../styles";
+import { initials } from "../utils/misc";
+import withAuth from "../utils/withAuth";
 
 const Container = styled.div`
   display: flex;
@@ -41,7 +41,7 @@ const Details = styled.div`
 const Content = styled.div``;
 
 class StudentView extends Component {
-  state = { counter: 0, searchText: '' };
+  state = { counter: 0, searchText: "" };
 
   constructor(props) {
     super(props);
@@ -61,8 +61,8 @@ class StudentView extends Component {
             <MoreVertIcon />
           </Icon>
         }
-        anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
-        targetOrigin={{ horizontal: 'left', vertical: 'top' }}
+        anchorOrigin={{ horizontal: "left", vertical: "top" }}
+        targetOrigin={{ horizontal: "left", vertical: "top" }}
       >
         <MenuItem primaryText="in Progress" />
         <MenuItem primaryText="Completed" />
@@ -81,25 +81,27 @@ class StudentView extends Component {
             <DownIcon />
           </Icon>
         }
-        anchorOrigin={{ horizontal: 'left', vertical: 'top' }}
-        targetOrigin={{ horizontal: 'left', vertical: 'top' }}
+        anchorOrigin={{ horizontal: "left", vertical: "top" }}
+        targetOrigin={{ horizontal: "left", vertical: "top" }}
       >
         <MenuItem
           primaryText="in Progress"
-          onClick={() => this.updateEnrollStatus(enrol, navid, 'In Progress')}
+          onClick={() => this.updateEnrollStatus(enrol, navid, "In Progress")}
         />
         <MenuItem
           primaryText="Completed"
-          onClick={() => this.updateEnrollStatus(enrol, navid, 'Completed')}
+          onClick={() => this.updateEnrollStatus(enrol, navid, "Completed")}
         />
         <MenuItem
           primaryText="Planned"
-          onClick={() => this.updateEnrollStatus(enrol, navid, 'Planned')}
+          onClick={() => this.updateEnrollStatus(enrol, navid, "Planned")}
         />
         <MenuItem
           primaryText="View Course"
           leftIcon={<FileFileDownload />}
-          onClick={() => this.props.history.push(`/courses/edit/${enrol.course.id}`)}
+          onClick={() =>
+            this.props.history.push(`/courses/edit/${enrol.course.id}`)
+          }
         />
       </MenuList>
     );
@@ -109,9 +111,9 @@ class StudentView extends Component {
     const { updatestatus } = this.props;
     const input = {
       id: enrol.id,
-      status: status
+      status: status,
     };
-    console.log('status', enrol);
+    console.log("status", enrol);
     updatestatus({ variables: { input } }).then(this.props.data.refetch());
     this.setState({ counter: this.state.counter + 1 });
   }
@@ -120,7 +122,7 @@ class StudentView extends Component {
     const { user } = this.props;
     let validRole = false;
     if (user) {
-      validRole = user.role !== 'Guest';
+      validRole = user.role !== "Guest";
     } else {
       validRole = false;
     }
@@ -135,7 +137,7 @@ class StudentView extends Component {
               <ListItemText
                 primary={enrol.course.title}
                 secondary={
-                  <span style={{ display: 'flex' }}>
+                  <span style={{ display: "flex" }}>
                     {`${enrol.course.description}, ${enrol.plannedcourse.hours} hours, status: ${enrol.plannedcourse.status}, by trainer: ${enrol.plannedcourse.trainer}`}
                   </span>
                 }
@@ -144,12 +146,16 @@ class StudentView extends Component {
               />
               <ListItemSecondaryAction>
                 <Chip
-                  label={`Start  ${format(enrol.plannedcourse.startdate, 'EEE, dd-MMM-yyyy')}`}
+                  label={`Start  ${format(
+                    new Date(enrol.plannedcourse.startdate),
+                    "EEE, dd-MMM-yyyy"
+                  )}`}
+                  // label={`Start  ${new Date(enrol.plannedcourse.startdate)}`}
                   style={{ margin: 2 }}
                 />
               </ListItemSecondaryAction>
             </ListItem>,
-            <Divider key={i} />
+            <Divider key={i} />,
           ];
         })}
       </List>
@@ -168,8 +174,10 @@ class StudentView extends Component {
     }
     let _ = window._;
     const sortedEnrollments = _.chain(account.enrollments)
-      .map(o => _.merge({ startdate: Date.parse(o.plannedcourse.startdate) }, o))
-      .orderBy(['startdate'], ['desc'])
+      .map((o) =>
+        _.merge({ startdate: Date.parse(o.plannedcourse.startdate) }, o)
+      )
+      .orderBy(["startdate"], ["desc"])
       .value();
     //console.log(sortedEnrollments);
     return (
@@ -187,7 +195,9 @@ class StudentView extends Component {
             <Title>{account.fullname}</Title>
             <Content>
               {`in Team ${account.team}, Location ${
-                account.locationdetail ? account.locationdetail.location : account.location
+                account.locationdetail
+                  ? account.locationdetail.location
+                  : account.location
               }`}
             </Content>
           </Details>
@@ -197,8 +207,8 @@ class StudentView extends Component {
             onChange={this.handleSearchTextChange}
             hintText="Search on title.."
             style={{
-              background: '#F5F5F5',
-              display: 'flex'
+              background: "#F5F5F5",
+              display: "flex",
             }}
           />
           <HeaderRow>
@@ -208,7 +218,9 @@ class StudentView extends Component {
           </HeaderRow>
 
           <Container />
-          <Content>{this.renderCourses(sortedEnrollments, account.navid)}</Content>
+          <Content>
+            {this.renderCourses(sortedEnrollments, account.navid)}
+          </Content>
         </Paper>
       </div>
     );
@@ -260,8 +272,8 @@ const updateStatus = gql`
   }
 `;
 
-export default graphql(updateStatus, { name: 'updatestatus' })(
+export default graphql(updateStatus, { name: "updatestatus" })(
   graphql(queryProfile, {
-    options: ownProps => ({ variables: { id: ownProps.match.params.id } })
+    options: (ownProps) => ({ variables: { id: ownProps.match.params.id } }),
   })(withRouter(withAuth(StudentView)))
 );

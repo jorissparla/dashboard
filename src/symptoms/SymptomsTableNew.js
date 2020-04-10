@@ -69,7 +69,7 @@ const NoteCell = ({ value, complete }) => (
         stroke-linejoin="round"
         stroke-width="2"
         viewBox="0 0 24 24"
-        class="w-8 h-8"
+        className="w-8 h-8"
       >
         <path d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
       </svg>
@@ -79,11 +79,11 @@ const NoteCell = ({ value, complete }) => (
 const NiceCell = ({ value, complete }) => (
   <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
     {complete === 1 ? (
-      <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium leading-5 bg-purple-100 text-purple-800 line-through">
+      <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium leading-5 bg-purple-100 text-purple-800 line-through">
         {value}
       </span>
     ) : (
-      <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium leading-5 bg-green-100 text-green-800">
+      <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium leading-5 bg-green-100 text-green-800">
         {value}
       </span>
     )}
@@ -97,6 +97,8 @@ const CompleteCell = ({ value, values, handleClick, canEdit = false }) => {
   const handleOpen = () => {
     if (canEdit) {
       setisOpen(true);
+    } else {
+      alert.setError("You do not have permission to change this");
     }
   };
 
@@ -135,7 +137,7 @@ const CompleteCell = ({ value, values, handleClick, canEdit = false }) => {
           {value === 0 ? (
             <input
               className="mr-2 leading-tight bg-red-300 cursor-pointer transition-colors ease-in-out duration-700 form-checkbox text-green-500"
-              checked={false}
+              defaultChecked={false}
               type="checkbox"
               onClick={handleOpen}
             />
@@ -225,7 +227,7 @@ function SymptomsTableNew({ data }) {
       user.permissions.some(({ permission }) =>
         VALID_PERMISSIONS.includes(permission)
       )) ||
-    user.role === "Admin";
+    (user && user.role === "Admin");
 
   async function toggleCompleteStatus(id, symptom) {
     setisOpen(true);
@@ -308,13 +310,13 @@ function SymptomsTableNew({ data }) {
   return (
     <div className=" bg-gray-200 min-h-full h-screen">
       <div className="flex flex-row mt-4 justify-between items-center bg-white py-4 px-2">
-        <div class="relative rounded-lg ">
-          <label class="block mt-4">
-            <span class="text-gray-700 mr-2 ml-2">Status Filter</span>
+        <div className="relative rounded-lg ">
+          <label className="block mt-4">
+            <span className="text-gray-700 mr-2 ml-2">Status Filter</span>
 
             <select
               name="selectfilter"
-              class="form-select "
+              className="form-select "
               value={filter}
               onChange={handleChangeFilter}
             >
@@ -323,9 +325,9 @@ function SymptomsTableNew({ data }) {
               <option>Completed</option>
             </select>
           </label>
-          {/* <div class="pointer-events-none absolute inset-y-0 right-0 flex rounded items-center px-2 text-gray-700">
+          {/* <div className="pointer-events-none absolute inset-y-0 right-0 flex rounded items-center px-2 text-gray-700">
             <svg
-              class="fill-current h-4 w-4"
+              className="fill-current h-4 w-4"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 20 20"
             >
@@ -333,9 +335,12 @@ function SymptomsTableNew({ data }) {
             </svg>
           </div> */}
         </div>
-        <div class="block relative mt-2">
-          <span class="h-full absolute inset-y-0 left-0 flex items-center pl-2">
-            <svg viewBox="0 0 24 24" class="h-4 w-4 fill-current text-gray-500">
+        <div className="block relative mt-2">
+          <span className="h-full absolute inset-y-0 left-0 flex items-center pl-2">
+            <svg
+              viewBox="0 0 24 24"
+              className="h-4 w-4 fill-current text-gray-500"
+            >
               <path d="M10 4a6 6 0 100 12 6 6 0 000-12zm-8 6a8 8 0 1114.32 4.906l5.387 5.387a1 1 0 01-1.414 1.414l-5.387-5.387A8 8 0 012 10z"></path>
             </svg>
           </span>
@@ -344,13 +349,13 @@ function SymptomsTableNew({ data }) {
             value={search}
             onChange={handleChange}
             placeholder="Search"
-            class="appearance-none rounded-r rounded-l sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none"
+            className="appearance-none rounded-r rounded-l sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none"
           />
         </div>
         <div className="mt-2">
           <button
             onClick={() => history.push("/symptoms/add")}
-            class="ml-4 rounded-lg px-4 md:px-5 xl:px-4 py-2 md:py-4 xl:py-3 bg-gray-300 hover:bg-gray-200 md:text-md xl:text-base text-gray-800 font-semibold leading-tight shadow-md"
+            className="ml-4 rounded-lg px-4 md:px-5 xl:px-4 py-2 md:py-4 xl:py-3 bg-gray-300 hover:bg-gray-200 md:text-md xl:text-base text-gray-800 font-semibold leading-tight shadow-md"
           >
             Request new Symptom
           </button>
@@ -414,23 +419,23 @@ function SymptomsTableNew({ data }) {
               ))}
             </tbody>
           </table>
-          <div class="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between          ">
-            <span class="text-xs xs:text-sm text-gray-900">
+          <div className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between          ">
+            <span className="text-xs xs:text-sm text-gray-900">
               Showing {(currentPage - 1) * PAGE_LENGTH + 1} to{" "}
               {currentPage * PAGE_LENGTH} of {length} Entries
             </span>
-            <div class="inline-flex ml-2 xs:mt-0">
+            <div className="inline-flex ml-2 xs:mt-0">
               {currentPage}/{maxPages}
               <button
                 disabled={currentPage === 1}
-                class="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 btn-tw font-semibold font-sansI"
+                className="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 btn-tw font-semibold font-sansI"
                 onClick={handlePrev}
               >
                 Previous
               </button>
               <button
                 disabled={currentPage >= maxPages}
-                class="text-sm bg-teal-300 ml-2 hover:bg-gray-400 text-teal-800 btn-tw "
+                className="text-sm bg-teal-300 ml-2 hover:bg-gray-400 text-teal-800 btn-tw "
                 onClick={handleNext}
               >
                 Next

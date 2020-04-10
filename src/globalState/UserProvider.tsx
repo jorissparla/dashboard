@@ -28,19 +28,20 @@ export const UserContext = React.createContext<UserContextType>({
   login: () => null,
   logout: () => null,
   isAuthenticated: false,
-  hasPermissions: () => false
+  hasPermissions: () => false,
 });
 
 export const useUserContext = () => React.useContext(UserContext);
 //test
 
 export const UserContextProvider: React.FC<{ children: any }> = ({
-  children
+  children,
 }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   useEffect(() => {
-    client.query({ query: CURRENT_USER_QUERY }).then(result => {
+    console.log("UseEffevt");
+    client.query({ query: CURRENT_USER_QUERY }).then((result) => {
       // console.log('the result is', result);
 
       if (!result.data.me) {
@@ -51,7 +52,8 @@ export const UserContextProvider: React.FC<{ children: any }> = ({
       }
       setLoading(false);
     });
-  }, [user]);
+  }, []);
+
   function isAuthenticated() {
     return user ? true : false;
   }
@@ -59,7 +61,7 @@ export const UserContextProvider: React.FC<{ children: any }> = ({
     if (!user) return false;
     // const permissions = user.permissions;
     if (!user.permissions) return false;
-    const found = user.permissions.filter(u => roles.includes(u.permission));
+    const found = user.permissions.filter((u) => roles.includes(u.permission));
     if (found.length > 0) {
       return true;
     } else return false;
@@ -67,19 +69,19 @@ export const UserContextProvider: React.FC<{ children: any }> = ({
   async function login(email: string, password: string) {
     const result = await client.mutate({
       mutation: MUTATION_SIGNIN,
-      variables: { input: { email, password } }
+      variables: { input: { email, password } },
     });
 
-    console.log("login result", result);
+    console.log("login result in global state", result);
     if (result.data.signinUser.user) {
-      setUser(result.data.signinUser.user);
+      setUser((old) => result.data.signinUser.user);
     } else {
       setUser(null);
     }
     return result;
   }
   async function logout() {
-    client.mutate({ mutation: MUTATION_SIGNOUT }).then(result => {
+    client.mutate({ mutation: MUTATION_SIGNOUT }).then((result) => {
       if (result) {
         setUser(null);
       }
@@ -93,7 +95,7 @@ export const UserContextProvider: React.FC<{ children: any }> = ({
         logout,
         loading,
         isAuthenticated: isAuthenticated(),
-        hasPermissions
+        hasPermissions,
       }}
     >
       {children}

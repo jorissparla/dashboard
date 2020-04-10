@@ -44,10 +44,13 @@ class RequestResetPassword extends Component {
   _doSubmit = async () => {
     try {
       const result = await this.props.requestReset({
-        variables: { email: this.state.email }
+        variables: { email: this.state.email },
       });
       console.log(result);
-      this.setState({ errors: "", message: "A password update Link was sent per email" });
+      this.setState({
+        errors: "",
+        message: "A password update Link was sent per email",
+      });
     } catch (e) {
       console.log(e);
       this.setState({ ...this.state, errors: "Invalid email address" });
@@ -63,4 +66,6 @@ const requestreset = gql`
     }
   }
 `;
-export default graphql(requestreset, { name: "requestReset" })(withRouter(RequestResetPassword));
+export default graphql(requestreset, { name: "requestReset" })(
+  withRouter(RequestResetPassword)
+);
