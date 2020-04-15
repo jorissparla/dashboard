@@ -3,6 +3,7 @@ import gql from "graphql-tag";
 import { useMutation } from "react-apollo";
 import { Link, useHistory } from "react-router-dom";
 import { UserContext, useUserContext } from "../globalState/UserProvider";
+import TWButton from "../elements/TWButton";
 
 const MUTATION_SIGNIN = gql`
   mutation loginUser($input: AUTH_PROVIDER_EMAIL) {
@@ -42,55 +43,43 @@ const LoginForm = ({}) => {
     }
   };
   return (
-    <div className="w-full max-w-lg  rounded shadow-lg pb-5 flex items-center flex-col justify-center bg-white">
-      <img
-        className=""
-        src="https://images.unsplash.com/photo-1515965885361-f1e0095517ea?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=3300&q=80"
-        alt=""
-      />
-      <p className="text-xl text-bold font-pop uppercase">
-        Login to your account
-      </p>
-      <form onSubmit={handleSubmit} className="px-10 w-full">
-        <label className="text-sm text-gray-600 font-semibold">
-          Email
-          <div className="rounded-md shadow-sm">
-            <input
-              className="relative block w-full px-3 py-2 border border-gray-300 rounded focus:shadow-outline focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
-              type="email"
-              placeholder="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
+    <div className="pt-10 h-screen bg-gray-100">
+      <div className="max-w-lg mx-auto rounded shadow-lg pb-5 flex items-center flex-col justify-center bg-white">
+        <img className="" src="https://nlbavwixs.infor.com/images/news/desktop.jpg" alt="" />
+        <p className="text-xl text-bold font-pop uppercase">Login to your account</p>
+        <form onSubmit={handleSubmit} className="px-10 w-full">
+          <label className="text-sm text-gray-600 font-semibold">
+            Email
+            <div className="rounded-md shadow-sm">
+              <input
+                className="relative block w-full px-3 py-2 border border-gray-300 rounded focus:shadow-outline focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
+                type="email"
+                placeholder="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+          </label>
+          <label className="text-sm text-gray-600 font-semibold">
+            <div className="mb-4">
+              Password
+              <input
+                className="relative block w-full px-3 py-2 border border-gray-300 rounded focus:shadow-outline focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+          </label>
+          <div className="flex items-center justify-between">
+            <TWButton type="submit">Log In</TWButton>
+            <a className="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker" href="/forgot">
+              Forgot Password?
+            </a>
           </div>
-        </label>
-        <label className="text-sm text-gray-600 font-semibold">
-          <div className="mb-4">
-            Password
-            <input
-              className="relative block w-full px-3 py-2 border border-gray-300 rounded focus:shadow-outline focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-            />
-          </div>
-        </label>
-        <div className="flex items-center justify-between">
-          <button
-            className="bg-gray-700 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            type="submit"
-          >
-            Log In
-          </button>
-          <a
-            className="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker"
-            href="/forgot"
-          >
-            Forgot Password?
-          </a>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   );
 };

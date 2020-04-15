@@ -3,6 +3,7 @@
   "version": "0.4.0",
   "private": true,
   "devDependencies": {
+    "@fullhuman/postcss-purgecss": "^2.1.2",
     "@tailwindcss/custom-forms": "^0.2.1",
     "@tailwindcss/ui": "^0.1.3",
     "@types/apollo-upload-client": "^8.1.3",
@@ -83,7 +84,7 @@
     "copy:unsecure-env": "xcopy /Y .env.unsecure.env .env",
     "copy:secure-env": "xcopy /Y .env.secure.env .env",
     "build": "npm run build:secure",
-    "build:secure": "SET REACT_APP_HTTP=https && SET REACT_APP_PORT_GRAPHQL=4001 && SET REACT_APP_PORT1_REST=3002 && react-scripts build",
+    "build:secure": "SET REACT_APP_HTTP=https && SET REACT_APP_PORT_GRAPHQL=4001 && SET REACT_APP_PORT1_REST=3002 && npm run build:css && react-scripts build",
     "copy": "npm run copy:secure",
     "copy:unsecure": "xcopy /s /Y build \\\\nlbavwixs\\dashboard",
     "copy:secure": "xcopy /s /Y build \\\\nlbavwixs.infor.com\\dashboard.dev",
@@ -94,7 +95,7 @@
     "eject": "react-scripts eject",
     "testenv": "SET NODE_ENV=test",
     "prodenv": "SET NODE_ENV=production",
-    "build:css": "postcss src/styles/tailwind.css -o src/styles/app.css"
+    "build:css": "postcss src/styles/tailwind.css -o src/styles/app.css --env production"
   },
   "browserslist": [
     ">0.2%",
