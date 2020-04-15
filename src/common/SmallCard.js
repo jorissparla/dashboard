@@ -149,7 +149,10 @@ const SmallCard = ({
           <img className="object-cover h-16 w-full border-b border-gray-300" src={image} alt="" />
         </div>
         <div className=" pb-2">
-          <div className="px-3 text-xl overflow-hidden truncate font-bold font-nice text-gray-700">{title}</div>
+          <div className="px-3 text-xl overflow-hidden truncate font-bold font-nice text-gray-700" title={title}>
+            {title}
+          </div>
+
           <div className="px-3 flex items-center">
             <svg className="fill-current w-4 h-4 text-gray-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
               <path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-7.59V4h2v5.59l3.95 3.95-1.41 1.41L9 10.41z" />
@@ -157,11 +160,15 @@ const SmallCard = ({
             <span className="px-3 mt-2 text-sm tracking-wide text-gray-600">Last updated: {format(updatedAt, "EEE dd MMM yyyy, hh:mm")}</span>
           </div>
           <div className="px-3 mt-2">
-            <span class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-teal-100 text-teal-800">{category}</span>
+            <span className="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-teal-100 text-teal-800">
+              {category}
+            </span>
           </div>
           <div className="border-t border-gray-300  w-full mt-2 "></div>
           <div className="px-3 flex justify-between items-center mt-4">
-            <a href={editLink}>{canEdit === true ? <Button>Open</Button> : <Button color="teal">View</Button>}</a>
+            <a href={editLink} onClick={(e) => onAudit(editLink)}>
+              {canEdit === true ? <Button>Open</Button> : <Button color="teal">View</Button>}
+            </a>
             {link && (
               <a
                 target="_blank_"
