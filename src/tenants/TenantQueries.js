@@ -1,4 +1,4 @@
-import gql from 'graphql-tag';
+import gql from "graphql-tag";
 
 export const TENANT_NOTE = gql`
   query TENANT_NOTE {
@@ -19,6 +19,7 @@ export const ALL_TENANTS = gql`
       tenant_status
       operational_status
       process_status
+      updatedAt
       frozen
       customer {
         name

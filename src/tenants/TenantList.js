@@ -13,19 +13,12 @@ import { animated, config, useSpring } from "react-spring";
 import styled from "styled-components";
 import Spinner from "utils/spinner";
 import FavoriteBadge from "../elements/Badge";
-import {
-  FilterFieldContext,
-  useFilterField
-} from "../globalState/FilterContext";
+import { FilterFieldContext, useFilterField } from "../globalState/FilterContext";
 //import format from 'date-fns/format';
 import { formatDistanceToNow, format } from "../utils/format";
 import { DashBoardContext } from "../globalState/Provider";
 import TenantLogs from "./TenantLogs";
-import {
-  ALL_TENANTS,
-  QUERY_ALL_TENANT_DETAILS,
-  TENANT_NOTE
-} from "./TenantQueries";
+import { ALL_TENANTS, QUERY_ALL_TENANT_DETAILS, TENANT_NOTE } from "./TenantQueries";
 import { Main, Article, TextSpan } from "./TenantStyledElements";
 import { TenantCard } from "./TenantCard";
 import TenantCustomerDetailsForm from "./TenantCustomerDetailsForm";
@@ -35,16 +28,16 @@ import Loader from "./../utils/Loader";
 import { CREATE_AUDIT_MUTATION } from "./Query";
 import "./tenants.css";
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
     width: "90vw",
     margin: "10px",
-    backgroundColor: theme.palette.background.paper
+    backgroundColor: theme.palette.background.paper,
   },
   itemtitle: {
     fontFamily: "Raleway",
     fontSize: 20,
-    fontWeight: 800
+    fontWeight: 800,
   },
   box: {
     marginLeft: 20,
@@ -62,11 +55,11 @@ const styles = theme => ({
     lineHeight: "10px",
     whiteSpace: "nowrap",
     borderRadius: "4px",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   pos: {
     display: "flex",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   card: {
     minWidth: 390,
@@ -80,21 +73,20 @@ const styles = theme => ({
     // backgroundImage: 'linear-gradient(to right bottom, rgb(128, 216, 255), white)',
     padding: "0 0.25rem",
     margin: "0.5rem",
-    backgroundImage:
-      "linear-gradient(to right bottom,rgba(29, 161, 242, 0.4), white)",
+    overflow: "visible",
+    backgroundImage: "linear-gradient(to right bottom,rgba(29, 161, 242, 0.4), white)",
     borderRadius: "0.25rem",
-    boxShadow: "0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -2px rgba(0,0,0,.05)"
+    boxShadow: "0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -2px rgba(0,0,0,.05)",
   },
   card2: {
     minWidth: 275,
-    margin: 10
+    margin: 10,
   },
   card3: {
     minWidth: "28%",
     margin: 10,
     background: "transparent",
-    backgroundImage:
-      "linear-gradient(to right bottom,rgba(29, 161, 242, 0.4), white)"
+    backgroundImage: "linear-gradient(to right bottom,rgba(29, 161, 242, 0.4), white)",
   },
   chip: {
     margin: theme.spacing(1),
@@ -106,35 +98,35 @@ const styles = theme => ({
     width: 137,
     border: "1px solid rgb(117, 117, 117)",
     color: "rgb(117, 117, 117)",
-    background: "transparent"
+    background: "transparent",
   },
   live: {
     background: "rgb(46, 202, 19)",
-    border: "5px solid rgba(46, 202, 19, 1)"
+    border: "5px solid rgba(46, 202, 19, 1)",
   },
   "@keyframes blinker": {
     from: { opacity: 1 },
-    to: { opacity: 0 }
+    to: { opacity: 0 },
   },
   watch: {
     background: "rgb(251, 221, 0) !important",
-    border: "10px solid rgb(251, 221, 0) !important"
+    border: "10px solid rgb(251, 221, 0) !important",
   },
   alert: {
     background: "rgb(229, 57, 53) !important",
-    border: "10px solid rgb(229, 57, 53) !important"
+    border: "10px solid rgb(229, 57, 53) !important",
   },
 
   description: {
     paddingBottom: 2,
     maxHeight: 50,
-    overflow: "hidden"
+    overflow: "hidden",
   },
   descriptionblank: {
     paddingBottom: 2,
     maxHeight: 50,
     overflow: "hidden",
-    color: "transparent"
+    color: "transparent",
   },
   header: {
     fontWeight: 500,
@@ -143,14 +135,14 @@ const styles = theme => ({
     lineHeight: "24px",
     minHeight: 60,
     padding: 0,
-    overflow: "hidden"
+    overflow: "hidden",
   },
   filterButton: {
-    marginLeft: "auto"
+    marginLeft: "auto",
   },
   notlive: {
     background: "transparent",
-    border: "5px solid rgba(46, 202, 19, 1)"
+    border: "5px solid rgba(46, 202, 19, 1)",
   },
   tags: {
     paddingTop: 2,
@@ -161,32 +153,32 @@ const styles = theme => ({
 
     marginBottom: 2,
     "& > * + *": {
-      marginLeft: theme.spacing(1)
-    }
+      marginLeft: theme.spacing(1),
+    },
   },
   tagsContent: {
     display: "flex",
-    flexDirection: "column"
+    flexDirection: "column",
   },
   tagtooltip: {
     background: "black",
-    color: "white"
+    color: "white",
   },
   avatar: {
-    margin: 10
+    margin: 10,
   },
   flex: {
     display: "flex",
     flexWrap: "wrap",
-    background: "#eee"
+    background: "#eee",
   },
   flex2: {
     display: "flex",
-    flexWrap: "wrap"
+    flexWrap: "wrap",
   },
   flexBot: {
     display: "flex",
-    justifySelf: "flex-end"
+    justifySelf: "flex-end",
   },
   bigAvatar: {
     width: 100,
@@ -194,32 +186,32 @@ const styles = theme => ({
     borderRadius: "50%",
     justifyContent: "center",
     paddingTop: "15px",
-    fontWeight: 800
+    fontWeight: 800,
   },
   orangeAvatar: {
     margin: 10,
     color: "#fff",
-    backgroundColor: deepOrange[500]
+    backgroundColor: deepOrange[500],
   },
   purpleAvatar: {
     margin: 10,
     color: "#fff",
-    backgroundColor: deepPurple[500]
+    backgroundColor: deepPurple[500],
   },
   blueAvatar: {
     margin: 10,
     color: "#fff",
-    backgroundColor: "#81D4FA"
+    backgroundColor: "#81D4FA",
   },
   main: {
-    display: "flex"
+    display: "flex",
   },
   spaceFooter: {
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   csm: {
-    maxWidth: 120
-  }
+    maxWidth: 120,
+  },
 });
 
 const CloseButton = styled.button`
@@ -266,14 +258,13 @@ export const FilterForm = ({ setSearchText, flip }) => {
   // console.log(fields);
   return (
     <form
-      onSubmit={e => {
+      onSubmit={(e) => {
         e.preventDefault();
         setAllFields();
       }}
     >
       <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <h1>Filter</h1>{" "}
-        <CloseButton onClick={() => flip()}>&times;</CloseButton>
+        <h1>Filter</h1> <CloseButton onClick={() => flip()}>&times;</CloseButton>
       </div>
       <TextField
         id="customer.name"
@@ -281,25 +272,17 @@ export const FilterForm = ({ setSearchText, flip }) => {
         type="text"
         label="Customer Name"
         placeholder="Customer Name"
-        onChange={e => setCustomer(e.target.value)}
+        onChange={(e) => setCustomer(e.target.value)}
         value={customer}
       />
-      <TextField
-        id="farm"
-        name="farm"
-        type="text"
-        label="farm"
-        placeholder="Farm"
-        onChange={e => setFarm(e.target.value)}
-        value={farm}
-      />
+      <TextField id="farm" name="farm" type="text" label="farm" placeholder="Farm" onChange={(e) => setFarm(e.target.value)} value={farm} />
       <TextField
         id="version"
         name="version"
         type="text"
         label="version"
         placeholder="version"
-        onChange={e => setVersion(e.target.value)}
+        onChange={(e) => setVersion(e.target.value)}
         value={version}
       />
       <Button
@@ -311,12 +294,7 @@ export const FilterForm = ({ setSearchText, flip }) => {
       >
         Filter
       </Button>
-      <Button
-        style={{ marginTop: 10 }}
-        variant="contained"
-        color="secondary"
-        onClick={() => clearAllFields()}
-      >
+      <Button style={{ marginTop: 10 }} variant="contained" color="secondary" onClick={() => clearAllFields()}>
         Clear
       </Button>
     </form>
@@ -326,52 +304,36 @@ export const FilterForm = ({ setSearchText, flip }) => {
 const filterTenantsByCustomerFarmVersion = (tenants, fields, details) => {
   // console.log("filterTenantsByCustomerFarmVersion", fields);
   // const { customer = '', farm = '', version = '' } = fields;
-  const {
-    customerName = "",
-    farmName = "",
-    tenantVersion = "",
-    tenantName = "",
-    isLive = false,
-    temperature = "",
-    csm = "",
-    pm = ""
-  } = fields;
+  const { customerName = "", farmName = "", tenantVersion = "", tenantName = "", isLive = false, temperature = "", csm = "", pm = "" } = fields;
   console.log({ csm }, details, temperature);
   let filteredCustomerNames = null;
   if (details) {
     filteredCustomerNames = details
-      .filter(detail =>
-        detail.temperature.toUpperCase().includes(temperature.toUpperCase())
-      )
-      .filter(detail => detail.csm.toUpperCase().includes(csm.toUpperCase()))
-      .filter(detail => detail.pm.toUpperCase().includes(pm.toUpperCase()));
+      .filter((detail) => detail.temperature.toUpperCase().includes(temperature.toUpperCase()))
+      .filter((detail) => detail.csm.toUpperCase().includes(csm.toUpperCase()))
+      .filter((detail) => detail.pm.toUpperCase().includes(pm.toUpperCase()));
   }
   console.log({ filteredCustomerNames });
   const retValue = _.chain(tenants)
-    .filter(o => o.customer.name !== "Infor")
+    .filter((o) => o.customer.name !== "Infor")
 
-    .filter(t =>
-      t.customer.name.toUpperCase().includes(customerName.toUpperCase())
-    )
-    .filter(t => t.farm.toUpperCase().includes(farmName.toUpperCase()))
-    .filter(t => t.version.toUpperCase().includes(tenantVersion.toUpperCase()))
-    .filter(t => t.name.toUpperCase().includes(tenantName.toUpperCase()))
-    .filter(t => (isLive ? t.live === 1 : true))
-    .sortBy(o => o.customer.name)
+    .filter((t) => t.customer.name.toUpperCase().includes(customerName.toUpperCase()))
+    .filter((t) => t.farm.toUpperCase().includes(farmName.toUpperCase()))
+    .filter((t) => t.version.toUpperCase().includes(tenantVersion.toUpperCase()))
+    .filter((t) => t.name.toUpperCase().includes(tenantName.toUpperCase()))
+    .filter((t) => (isLive ? t.live === 1 : true))
+    .sortBy((o) => o.customer.name)
     .value();
 
   if (details) {
-    return retValue.filter(t =>
-      filteredCustomerNames.find(cn => cn.customer.name === t.customer.name)
-    );
+    return retValue.filter((t) => filteredCustomerNames.find((cn) => cn.customer.name === t.customer.name));
   } else return retValue;
 };
 
 // const inforTenant = tenants => tenants.filter(o => o.customer.name === 'Infor');
-const inforTenantByFarm = (tenants, farm) =>
-  tenants.filter(o => o.customer.name === "Infor" && o.farm === farm);
+const inforTenantByFarm = (tenants, farm) => tenants.filter((o) => o.customer.name === "Infor" && o.farm === farm);
 
-const TenantList = props => {
+const TenantList = (props) => {
   const dbctx = React.useContext(DashBoardContext);
   let role = dbctx && dbctx.role ? dbctx.role : "Guest";
   console.log(dbctx.fullname);
@@ -396,11 +358,11 @@ const TenantList = props => {
   console.log({ counter });
   const { x } = useSpring({
     x: showFilterDialog ? 15 : 0,
-    config: config.wobbly
+    config: config.wobbly,
   });
   const flip = () => toggleShowFilterDialog(!showFilterDialog);
 
-  const applyFilter = values => {
+  const applyFilter = (values) => {
     setFields(values);
   };
   console.log({ happyPress });
@@ -414,15 +376,13 @@ const TenantList = props => {
       username: dbctx.fullname,
       page: "/tenantlist",
       linkid: null,
-      type: "TenantList"
+      type: "TenantList",
     };
     createAudit({ variables: { input } }).then(console.log);
   }, [createAudit, dbctx.fullname]);
 
   const { data, loading } = useQuery(ALL_TENANTS);
-  const { data: details, loading: detailsloading } = useQuery(
-    QUERY_ALL_TENANT_DETAILS
-  );
+  const { data: details, loading: detailsloading } = useQuery(QUERY_ALL_TENANT_DETAILS);
 
   if (loading || detailsloading) {
     return <Spinner />;
@@ -434,25 +394,19 @@ const TenantList = props => {
   const { tenants, updatestatus, tenantlogs } = data;
   const { tenantcustomerdetails } = details;
   const { updatedAt } = updatestatus;
-  const filteredTenants = filterTenantsByCustomerFarmVersion(
-    tenants,
-    fields,
-    details.tenantcustomerdetails
-  );
+  const filteredTenants = filterTenantsByCustomerFarmVersion(tenants, fields, details.tenantcustomerdetails);
   // console.log("filterTenants", filteredTenants);
-  const uniqueCustomers = filteredTenants
-    .map(({ farm, customer: { name } }) => name)
-    .filter((ten, i, all) => all.indexOf(ten) === i);
+  const uniqueCustomers = filteredTenants.map(({ farm, customer: { name } }) => name).filter((ten, i, all) => all.indexOf(ten) === i);
   return (
     <Main
-      onKeyDown={e => {
+      onKeyDown={(e) => {
         // console.log(e, e.keyCode);
       }}
     >
       <Loader loading={loading} />
       <animated.div
         style={{
-          width: x.interpolate(x => `${100 - x}vw`)
+          width: x.interpolate((x) => `${100 - x}vw`),
         }}
       >
         <TenantListHeader
@@ -465,24 +419,19 @@ const TenantList = props => {
 
         <div
           className={classes.flex}
-          onKeyDown={e => {
+          onKeyDown={(e) => {
             console.log(e, e.keyCode);
           }}
         >
           {uniqueCustomers.map((customer, index) => {
-            const sub = filteredTenants.filter(
-              o => o.customer.name === customer
-            );
+            const sub = filteredTenants.filter((o) => o.customer.name === customer);
             const liveCust = sub[0].live === 1 ? true : false;
             const customerid = sub[0].customerid;
-            const tenantdetails = tenantcustomerdetails.filter(
-              d => d.customerid === customerid
-            );
+            const tenantdetails = tenantcustomerdetails.filter((d) => d.customerid === customerid);
             if (tenantdetails.length) {
             } else {
             }
-            if (customer === "Azteka Consulting GmbH")
-              console.log("👍", customer, liveCust, sub);
+            if (customer === "Azteka Consulting GmbH") console.log("👍", customer, liveCust, sub);
             return (
               <TenantCard
                 key={index}
@@ -490,9 +439,7 @@ const TenantList = props => {
                 customer={customer}
                 customerid={customerid}
                 tenants={sub}
-                tenantdetails={
-                  tenantdetails.length > 0 ? tenantdetails[0] : null
-                }
+                tenantdetails={tenantdetails.length > 0 ? tenantdetails[0] : null}
                 role={role}
                 live={liveCust}
                 onStatusChange={() => setCounter(counter + 1)}
@@ -503,31 +450,18 @@ const TenantList = props => {
           {/* <TenantCard classes={classes} customer="Infor" tenants={inforTenant(tenants)} /> */}
         </div>
         <div style={{ display: "flex" }}>
-          <TenantCard
-            classes={classes}
-            customer="Infor"
-            tenants={inforTenantByFarm(tenants, "Frankfurt")}
-          />
-          <TenantCard
-            classes={classes}
-            customer="Infor"
-            tenants={inforTenantByFarm(tenants, "Us-East-1")}
-          />
-          <TenantCard
-            classes={classes}
-            customer="Infor"
-            tenants={inforTenantByFarm(tenants, "Sydney")}
-          />
+          <TenantCard classes={classes} customer="Infor" tenants={inforTenantByFarm(tenants, "Frankfurt")} />
+          <TenantCard classes={classes} customer="Infor" tenants={inforTenantByFarm(tenants, "Us-East-1")} />
+          <TenantCard classes={classes} customer="Infor" tenants={inforTenantByFarm(tenants, "Sydney")} />
         </div>
       </animated.div>
       <animated.div
         style={{
-          width: x.interpolate(x => `${x}vw`),
+          width: x.interpolate((x) => `${x}vw`),
           display: "flex",
-          padding: x.interpolate(x => `${x}px`),
+          padding: x.interpolate((x) => `${x}px`),
           flexDirection: "column",
-          boxShadow:
-            "0px 1px 3px 0px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 2px 1px -1px rgba(0,0,0,0.12)"
+          boxShadow: "0px 1px 3px 0px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 2px 1px -1px rgba(0,0,0,0.12)",
         }}
       >
         {/* <SearchBar onChange={e => setSearchText(e)} /> */}
@@ -536,26 +470,15 @@ const TenantList = props => {
       <Modal on={showLogs} toggle={() => setShowLogs(!showLogs)} height={80}>
         <TenantLogs tenantlogs={tenantlogs} />
       </Modal>
-      <Modal
-        on={isShowingDetails}
-        toggle={() => toggleShowDetails(!isShowingDetails)}
-        height={80}
-      >
+      <Modal on={isShowingDetails} toggle={() => toggleShowDetails(!isShowingDetails)} height={80}>
         <TenantCustomerDetailsForm closeForm={() => toggleShowDetails(false)} />
       </Modal>
     </Main>
   );
 };
 
-export const TenantListHeader = ({
-  updatedAt,
-  tenants,
-  toggleShowLogs,
-  toggleFilter,
-  applyFilter
-}) => {
-  const max = _.maxBy(tenants, t => format(t.lastupdated, "yyyyMMdd"))
-    .lastupdated;
+export const TenantListHeader = ({ updatedAt, tenants, toggleShowLogs, toggleFilter, applyFilter }) => {
+  const max = _.maxBy(tenants, (t) => format(t.lastupdated, "yyyyMMdd")).lastupdated;
   let tenantcustomersWithFarm = _.countBy(
     tenants.map(({ farm, tenant }) => ({ farm, tenant })),
     "farm"
@@ -565,27 +488,16 @@ export const TenantListHeader = ({
   // const uniqueCustomers = tenants
   //   .map(({ farm, customer: { name } }) => name)
   //   .filter((ten, i, all) => all.indexOf(ten) === i);
-  const listOfCustomerAndFarm = tenants
-    .filter(item => item.customerid !== null)
-    .map(({ customerid, farm }) => ({ customerid, farm }));
-  const custFarms = _.countBy(
-    _.uniqWith(listOfCustomerAndFarm, _.isEqual),
-    "farm"
-  );
+  const listOfCustomerAndFarm = tenants.filter((item) => item.customerid !== null).map(({ customerid, farm }) => ({ customerid, farm }));
+  const custFarms = _.countBy(_.uniqWith(listOfCustomerAndFarm, _.isEqual), "farm");
   const liveCustomers = _.uniqWith(
-    tenants.map(t => ({ customer: t.customer.name, live: t.live })),
+    tenants.map((t) => ({ customer: t.customer.name, live: t.live })),
     _.isEqual
-  ).filter(t => t.live === 1);
-  const totalCustomers = Object.entries(custFarms).reduce(
-    (count, item) => count + item[1],
-    0
-  );
+  ).filter((t) => t.live === 1);
+  const totalCustomers = Object.entries(custFarms).reduce((count, item) => count + item[1], 0);
 
   // const nrOfLiveCustomers = uniqueCustomers.filter(t => t.live).length;
-  const totalTenants = Object.entries(tenantcustomersWithFarm).reduce(
-    (count, item) => count + item[1],
-    0
-  );
+  const totalTenants = Object.entries(tenantcustomersWithFarm).reduce((count, item) => count + item[1], 0);
   return (
     <Article>
       <div className="flex justify-between tracking-widest  ">
@@ -596,14 +508,10 @@ export const TenantListHeader = ({
           </span>
           <Chip
             label={
-              updatedAt
-                ? `Last check:  ${formatDistanceToNow(
-                    updatedAt
-                  )} ago,  Last change made ${format(max, "dd MMM yyyy")} `
-                : "not Saved yet"
+              updatedAt ? `Last check:  ${formatDistanceToNow(updatedAt)} ago,  Last change made ${format(max, "dd MMM yyyy")} ` : "not Saved yet"
             }
             style={{
-              marginRight: 10
+              marginRight: 10,
             }}
           />
           <Button
@@ -629,34 +537,24 @@ export const TenantListHeader = ({
           display: "flex",
           marginBottom: 2,
           marginTop: 10,
-          letterSpacing: "0.2rem"
+          letterSpacing: "0.2rem",
         }}
       >
         <TextSpan>TENANTS: ({totalTenants})</TextSpan>
-        {Object.entries(tenantcustomersWithFarm).map(item => {
+        {Object.entries(tenantcustomersWithFarm).map((item) => {
           // console.log(item[0]);
           const text = `${item[0]} : ${item[1]}`;
           return (
-            <FavoriteBadge
-              key={text}
-              isVisible={true}
-              color="#40a5ed"
-              style={{ margin: 3 }}
-            >
+            <FavoriteBadge key={text} isVisible={true} color="#40a5ed" style={{ margin: 3 }}>
               {text}
             </FavoriteBadge>
           );
         })}
         <TextSpan>CUSTOMERS:({totalCustomers})</TextSpan>
-        {Object.entries(custFarms).map(item => {
+        {Object.entries(custFarms).map((item) => {
           const text = `${item[0]} : ${item[1]}`;
           return (
-            <FavoriteBadge
-              key={text}
-              isVisible={true}
-              color="purple"
-              style={{ margin: 3 }}
-            >
+            <FavoriteBadge key={text} isVisible={true} color="purple" style={{ margin: 3 }}>
               {text}
             </FavoriteBadge>
           );
