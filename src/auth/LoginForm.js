@@ -43,7 +43,7 @@ const LoginForm = ({}) => {
     }
   };
   return (
-    <div className="pt-10 h-screen bg-gray-100">
+    <div className="pt-10 h-screen ">
       <div className="max-w-lg mx-auto rounded shadow-lg pb-5 flex items-center flex-col justify-center bg-white">
         <img className="" src="https://nlbavwixs.infor.com/images/news/desktop.jpg" alt="" />
         <p className="text-xl text-bold font-pop uppercase">Login to your account</p>
