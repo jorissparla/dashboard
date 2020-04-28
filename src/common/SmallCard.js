@@ -126,6 +126,8 @@ const SmallCard = ({
   account_id = null,
   supportcard_id = null,
   updatedAt = null,
+  keywords = "",
+  id = { id },
   onTitleClick = () => null,
   onToggleFavorite = () => {},
   onAudit = () => console.log("onaudit"),
@@ -142,6 +144,13 @@ const SmallCard = ({
   };
   const image = images[category.toLowerCase()] || "https://nlbavwixs.infor.com/images/background/nice.png";
 
+  const kw = keywords
+    ? keywords
+        .trim()
+        .split(";")
+        .map((t) => t.trim())
+        .slice(0, 3)
+    : [];
   return (
     <div className="w-full max-w-sm ">
       <div style={{ backgroundImage: `linear-gradient(to bottom right, ${color}, white)` }} className="rounded-lg  m-3  shadow-lg">
@@ -160,9 +169,17 @@ const SmallCard = ({
             <span className="px-3 mt-2 text-sm tracking-wide text-gray-600">Last updated: {format(updatedAt, "EEE dd MMM yyyy, hh:mm")}</span>
           </div>
           <div className="px-3 mt-2">
-            <span className="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-teal-100 text-teal-800">
+            <span className="mr-4 inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-teal-100 text-teal-800">
               {category}
             </span>
+            {kw.map((k) => (
+              <span
+                key={k}
+                className="ml-1 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium leading-4 bg-purple-100 text-purple-800"
+              >
+                {k}
+              </span>
+            ))}
           </div>
           <div className="border-t border-gray-300  w-full mt-2 "></div>
           <div className="px-3 flex justify-between items-center mt-4">

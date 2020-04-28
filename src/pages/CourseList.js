@@ -10,6 +10,7 @@ import Card from "../courses/NewCard";
 import SearchBar from "../common/SearchBar";
 import AddCard from "../courses/AddCard";
 import withAuth from "../utils/withAuth";
+import { useUserContext, useIsValidEditor } from "globalState/UserProvider";
 const StyledContainer = styled.div`
   margin-top: 10px;
   display: flex;
@@ -50,7 +51,9 @@ const QUERY_ALL_COURSES = gql`
 
 const CourseList = (props) => {
   const [searchText, setSearchText] = useState("");
-  // state = { searchText: '' };
+  // const { user } = useUserContext();
+  let [validRole, user] = useIsValidEditor("COURSEEDIT");
+
   const { loading, data } = useQuery(QUERY_ALL_COURSES);
   if (loading) {
     return <p>Loading ...</p>;
@@ -59,11 +62,6 @@ const CourseList = (props) => {
   const handleSearchTextChange = (val) => {
     setSearchText(val);
   };
-  const { user } = props;
-  let validRole = false;
-  if (user) {
-    validRole = user.role !== "Guest";
-  }
 
   const filteredCourses = _.chain(courses)
     .filter((course) => course.title.toUpperCase().includes(searchText.toUpperCase()) || course.team.toUpperCase().includes(searchText.toUpperCase()))

@@ -50,16 +50,16 @@ const CategoryTabs = ({ data: { loading, error, categories }, onChange, onSave }
   const cats = [{ id: "", name: "All" }, ...categories];
   return (
     <div className="bg-white">
-      <div class="sm:hidden">
-        <select class="form-select block w-full">
+      <div className="sm:hidden">
+        <select className="form-select block w-full" defaultValue={selected}>
           {cats.map(({ id, name }) => (
-            <option selected={name === selected}>{name}</option>
+            <option key={id}>{name}</option>
           ))}
         </select>
       </div>
-      <div class="hidden sm:block">
-        <div class="border-b border-gray-200">
-          <nav class="flex -mb-px">
+      <div className="hidden sm:block">
+        <div className="border-b border-gray-200">
+          <nav className="flex -mb-px">
             {cats.map(({ id, name }) => {
               if (selected !== name) {
                 return (
@@ -67,7 +67,7 @@ const CategoryTabs = ({ data: { loading, error, categories }, onChange, onSave }
                     href="#"
                     key={id}
                     onClick={() => handleChangeSelection(name)}
-                    class="no-underline ml-8 group inline-flex items-center py-4 px-1 border-b-2 border-transparent font-medium text-sm leading-5 text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300"
+                    className="no-underline ml-8 group inline-flex items-center py-4 px-1 border-b-2 border-transparent font-medium text-sm leading-5 text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300"
                   >
                     {IconMapper(name)}
 
@@ -80,7 +80,7 @@ const CategoryTabs = ({ data: { loading, error, categories }, onChange, onSave }
                     href="#"
                     key={id}
                     onClick={() => handleChangeSelection(name)}
-                    class="no-underline ml-8 group inline-flex items-center py-4 px-1 border-b-2 border-indigo-500 font-medium text-sm leading-5 text-indigo-600 focus:outline-none focus:text-indigo-800 focus:border-indigo-700"
+                    className="no-underline ml-8 group inline-flex items-center py-4 px-1 border-b-2 border-indigo-500 font-medium text-sm leading-5 text-indigo-600 focus:outline-none focus:text-indigo-800 focus:border-indigo-700"
                   >
                     {IconMapper(name)}
 
@@ -96,8 +96,8 @@ const CategoryTabs = ({ data: { loading, error, categories }, onChange, onSave }
 
   return (
     <div className="bg-white">
-      <div class="sm:hidden">
-        <select class="form-select block w-full">
+      <div className="sm:hidden">
+        <select className="form-select block w-full">
           <option>My Account</option>
           <option>Company</option>
           <option selected>Team Members</option>
@@ -106,13 +106,13 @@ const CategoryTabs = ({ data: { loading, error, categories }, onChange, onSave }
       </div>
       {/* <Tabs value="All" onChange={(e, v) => onChange(v)}> */}
       {/* <Tab key="2ddgdfgdgt534" label="All" value="All" icon={<AllPin />} /> */}
-      <div class="hidden sm:block">
-        <nav class="flex -mb-px">
+      <div className="hidden sm:block">
+        <nav className="flex -mb-px">
           {categories.map(({ id, name }) => (
             <a
               href="#"
               key={id}
-              class="group inline-flex items-center py-4 px-1 border-b-2 border-transparent font-medium text-sm leading-5 text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300"
+              className="group inline-flex items-center py-4 px-1 border-b-2 border-transparent font-medium text-sm leading-5 text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none focus:text-gray-700 focus:border-gray-300"
             >
               {IconMapper(name)}
               <span>{name}</span>

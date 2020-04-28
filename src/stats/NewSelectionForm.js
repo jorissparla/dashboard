@@ -4,18 +4,8 @@ import { PRODUCT_LIST, REGION_LIST } from "pages/Stats";
 import React, { useState } from "react";
 import { ListFavoritePersons } from "./FavoritesPersons";
 
-export const SelectionForm = ({
-  classes,
-  initialValue,
-  valuesChanged,
-  isValidSuperUser,
-  onChange,
-  onNavigateToParams,
-}) => {
-  const [
-    selectedProducts,
-    setSelectedProducts,
-  ] = usePersistentState("selectedproducts", ["LN"]);
+export const SelectionForm = ({ classes, initialValue, valuesChanged, isValidSuperUser, onChange, onNavigateToParams }) => {
+  const [selectedProducts, setSelectedProducts] = usePersistentState("selectedproducts", ["LN"]);
   const [ownerVal, setOwnerVal] = useState(initialValue.owner);
   const [person, setPerson] = useState("");
   const [region, setRegion] = usePersistentState("region", "EMEA");
@@ -46,14 +36,9 @@ export const SelectionForm = ({
       persons = JSON.parse(item);
       console.log("do", item, persons, typeof persons);
     }
-    persons = persons
-      .filter((person) => newPerson !== person.name)
-      .concat({ name: newPerson });
+    persons = persons.filter((person) => newPerson !== person.name).concat({ name: newPerson });
 
-    window.localStorage.setItem(
-      "worklist.favorite.persons",
-      JSON.stringify(persons)
-    );
+    window.localStorage.setItem("worklist.favorite.persons", JSON.stringify(persons));
     // setPersons(persons);
     return persons;
   };
@@ -174,50 +159,21 @@ export const SelectionForm = ({
         {/* <FormControl variant="outlined" className={classes.formControl}> */}
         <label className="flex mr-4 items-center px-4">
           <span className="text-gray-700">Region</span>
-          <select
-            className="form-select block w-full mt-1 ml-2"
-            value={region}
-            onChange={(e) => setRegion(e.target.value)}
-          >
+          <select className="form-select block w-full mt-1 ml-2" value={region} onChange={(e) => setRegion(e.target.value)}>
             {REGION_LIST.map((r) => (
               <option key={r}>{r}</option>
             ))}
           </select>
         </label>
-        {/* <InputLabel ref={inputLabel} id="demo-simple-select-outlined-label">
-          Region
-        </InputLabel>
-        <Select
-          labelId="demo-simple-select-outlined-label"
-          id="demo-simple-select-outlined"
-          value={region}
-          onChange={(e) => setRegion(e.target.value)}
-          labelWidth={labelWidth}
-        >
-          {REGION_LIST.map((r) => (
-            <MenuItem key={r} value={r}>
-              {r}
-            </MenuItem>
-          ))}
-        </Select> */}
-        {/* </FormControl>
-         */}
       </div>
       <div className="tracking-wide inline-flex items-center">
-        <svg
-          className="fill-current w-4 h-4 text-gray-500 mr-2"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-        >
+        <svg className="fill-current w-4 h-4 text-gray-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
           <path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-7.59V4h2v5.59l3.95 3.95-1.41 1.41L9 10.41z"></path>
         </svg>
         last update {initialValue.lastUpdated}
       </div>
       {isValidSuperUser && (
-        <button
-          className="btn-tw bg-pink-200 text-pink-800 hover:bg-pink-300"
-          onClick={onNavigateToParams}
-        >
+        <button className="btn-tw bg-pink-200 text-pink-800 hover:bg-pink-300" onClick={onNavigateToParams}>
           Parameters
         </button>
       )}
@@ -225,11 +181,7 @@ export const SelectionForm = ({
       {persons && persons.length > 0 && (
         <label className="flex mr-4 items-center px-4">
           <span className="text-gray-700">People</span>
-          <select
-            className="form-select block w-full mt-1 ml-2"
-            value={ownerVal}
-            onChange={(e) => setOwnerVal(e.target.value)}
-          >
+          <select className="form-select block w-full mt-1 ml-2" value={ownerVal} onChange={(e) => setOwnerVal(e.target.value)}>
             {persons.map(({ name }) => (
               <option key={name}>{name}</option>
             ))}

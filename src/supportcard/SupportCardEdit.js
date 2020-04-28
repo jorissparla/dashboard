@@ -1,80 +1,70 @@
-import gql from 'graphql-tag';
-import { graphql } from 'react-apollo';
-import React from 'react';
-import { withRouter } from 'react-router';
-import SupportCardForm from './SupportCardForm';
-import withAuth from '../utils/withAuth';
-import { SharedSnackbarConsumer } from '../globalState/SharedSnackbar.context';
+import gql from "graphql-tag";
+import { graphql } from "react-apollo";
+import React from "react";
+import { withRouter, useHistory } from "react-router";
+import SupportCardForm from "./SupportCardForm";
+import withAuth from "../utils/withAuth";
+import { SharedSnackbarConsumer } from "../globalState/SharedSnackbar.context";
+import { useAlert } from "globalState/AlertContext";
 
-class SupportCardEdit extends React.Component {
-  constructor(props) {
-    super(props);
-    this.handleSave = this.handleSave.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
-  }
+const SupportCardEdit = (props) => {
+  const history = useHistory();
+  const alert = useAlert();
 
-  handleDelete(e) {
+  function handleDelete(e) {
     const { id } = e;
-    this.props
+    props
       .deleteSupportCard({ id })
-      // .then(this.props.data.refetch())
-      .then(() => setTimeout(this.props.history.push('/supportcard'), 500))
-      .catch(e => alert(JSON.stringify(e, null, 2)));
+      // .then(props.data.refetch())
+      .then(() => setTimeout(history.push("/supportcard"), 500))
+      .catch((e) => alert(JSON.stringify(e, null, 2)));
   }
 
-  handleSave = async e => {
-    const { id, title, description, categoryname, link, owner = 'none' } = e;
+  const handleSave = async (e) => {
+    const { id, title, description, categoryname, link, owner = "none" } = e;
 
-    await this.props
+    await props
       .modifySupportCard({
         id,
         title,
         description,
         categoryname,
         link,
-        owner
+        owner,
       })
-      // .then(this.props.data.refetch())
-      .then(() => this.props.history.push('/supportcard'))
-      .catch(e => window.alert(JSON.stringify(e, null, 2)));
+      // .then(props.data.refetch())
+      .then(() => history.push("/supportcard"))
+      .catch((e) => window.alert(JSON.stringify(e, null, 2)));
   };
 
-  render() {
-    const { loading, error, categories, supportcard, me } = this.props.data;
-    const { authenticated, isEditor } = this.props;
-    console.log('me', me);
-    if (loading) {
-      return <p>Loading ...</p>;
-    }
-    if (error) {
-      return <p>{error.message}</p>;
-    }
-
-    return (
-      <SharedSnackbarConsumer>
-        {({ openSnackbar }) => {
-          return (
-            <SupportCardForm
-              initialValues={supportcard}
-              supportcard={supportcard}
-              onSave={async values => {
-                await this.handleSave(values);
-                openSnackbar('saved SupportCard');
-              }}
-              onDelete={async values => {
-                await this.handleDelete(values);
-                openSnackbar('Deleted SupportCard');
-              }}
-              readOnly={!(authenticated && isEditor)}
-              authenticated={authenticated && isEditor}
-              categories={categories}
-            />
-          );
-        }}
-      </SharedSnackbarConsumer>
-    );
+  const { loading, error, categories, supportcard, me } = props.data;
+  const { authenticated, isEditor } = props;
+  console.log("me", me);
+  if (loading) {
+    return <p>Loading ...</p>;
   }
-}
+  if (error) {
+    return <p>{error.message}</p>;
+  }
+
+  return (
+    <SupportCardForm
+      initialValues={supportcard}
+      supportcard={supportcard}
+      onSave={async (values) => {
+        await handleSave(values);
+        alert.setMessage("saved SupportCard");
+      }}
+      onDelete={async (values) => {
+        await handleDelete(values);
+        alert.setMessage("Deleted SupportCard");
+      }}
+      readOnly={!(authenticated && isEditor)}
+      authenticated={authenticated && isEditor}
+      categories={categories}
+    />
+  );
+};
 
 const CURRENT_SUPPORTCARD_QUERY = gql`
   query CURRENT_SUPPORTCARD_QUERY($id: String) {
@@ -90,6 +80,7 @@ const CURRENT_SUPPORTCARD_QUERY = gql`
       owner
       created
       updatedAt
+      keywords
     }
     categories {
       id
@@ -126,26 +117,26 @@ const UPDATE_SUPPORTCARD_MUTATION = gql`
 
 export default graphql(DELETE_SUPPORTCARD_MUTATION, {
   props: ({ mutate }) => ({
-    deleteSupportCard: input =>
+    deleteSupportCard: (input) =>
       mutate({
         variables: {
-          input
-        }
-      })
-  })
+          input,
+        },
+      }),
+  }),
 })(
   graphql(UPDATE_SUPPORTCARD_MUTATION, {
     props: ({ mutate }) => ({
-      modifySupportCard: input =>
+      modifySupportCard: (input) =>
         mutate({
           variables: {
-            input
-          }
-        })
-    })
+            input,
+          },
+        }),
+    }),
   })(
     graphql(CURRENT_SUPPORTCARD_QUERY, {
-      options: ownProps => ({ variables: { id: ownProps.match.params.id } })
+      options: (ownProps) => ({ variables: { id: ownProps.match.params.id } }),
     })(withRouter(withAuth(SupportCardEdit)))
   )
 );

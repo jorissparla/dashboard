@@ -6,10 +6,7 @@ import { useQuery, useMutation } from "react-apollo";
 import Spinner from "utils/spinner";
 import MaintenanceWizard from "wizard/MaintenanceWizard";
 import { OtherField } from "wizard/OtherField";
-import {
-  ALL_MAINTENANCE_QUERY,
-  CREATE_AUDIT_MUTATION_WIZARD
-} from "../wizard/Queries";
+import { ALL_MAINTENANCE_QUERY, CREATE_AUDIT_MUTATION_WIZARD } from "../wizard/Queries";
 import { DashBoardContext } from "globalState/Provider";
 
 // const ALL_VERSIONS = gql`
@@ -21,20 +18,14 @@ import { DashBoardContext } from "globalState/Provider";
 // `;
 
 const VersionList = () => {
-  const [selectedVersion, setSelectedVersion] = usePersistentState(
-    "activeVersion",
-    "INFOR LN 10.7"
-  );
+  const [selectedVersion, setSelectedVersion] = usePersistentState("activeVersion", "INFOR LN 10.7");
 
   const dbctx = React.useContext(DashBoardContext);
 
   const [createAudit] = useMutation(CREATE_AUDIT_MUTATION_WIZARD);
 
   const [faqIsVisible, setShowFAQ] = usePersistentState("FAQ", false);
-  const [localizationsIsVisible, setLocalizationsVisible] = usePersistentState(
-    "Localizations",
-    false
-  );
+  const [localizationsIsVisible, setLocalizationsVisible] = usePersistentState("Localizations", false);
 
   const { data, loading } = useQuery(ALL_MAINTENANCE_QUERY);
   let versions = [];
@@ -44,7 +35,7 @@ const VersionList = () => {
       username: dbctx.fullname,
       page: "/maintenancewizard",
       linkid: null,
-      type: "MaintenanceWizard"
+      type: "MaintenanceWizard",
     };
     createAudit({ variables: { input } }).then(console.log);
   }, [createAudit, dbctx.fullname]);
@@ -69,47 +60,27 @@ const VersionList = () => {
     setLocalizationsVisible(true);
   }
 
-  let activeVersions = allMaintenance.filter(
-    v => v.version === selectedVersion
-  );
-  versions = [...new Set(allMaintenance.map(v => v.version))];
+  let activeVersions = allMaintenance.filter((v) => v.version === selectedVersion);
+  versions = [...new Set(allMaintenance.map((v) => v.version))];
   // console.log('activeVersion', activeVersions, allMaintenance, selectedVersion);
   return (
     <div>
       {versions.map((version, index) => (
-        <BlockNew
-          key={index}
-          selected={selectedVersion === version}
-          onClick={() => handleChange(version)}
-        >
+        <BlockNew key={index} selected={selectedVersion === version} onClick={() => handleChange(version)}>
           {version}
         </BlockNew>
       ))}
-      <BlockNew
-        key={"43242sfsf343^"}
-        selected={faqIsVisible}
-        onClick={() => handleShowFAQ()}
-      >
-        FAQ
+      <BlockNew key={"43242sfsf343^"} selected={faqIsVisible} onClick={() => handleShowFAQ()}>
+        FAQ /Language Templates
       </BlockNew>
-      <BlockNew
-        key={"45552sfsf343^"}
-        selected={localizationsIsVisible}
-        onClick={() => handleShowLocalizations()}
-      >
+      <BlockNew key={"45552sfsf343^"} selected={localizationsIsVisible} onClick={() => handleShowLocalizations()}>
         Localizations
       </BlockNew>
       {/* {JSON.stringify(selectedVersion, null, 2)} */}
       {activeVersions.length > 0 ? (
         faqIsVisible ? (
           // <h1>{maintenanceFAQ.text}</h1>
-          <OtherField
-            name="text"
-            label="Frequently asked Questions"
-            text={maintenanceFAQ.text}
-            bigger={true}
-            id={maintenanceFAQ.id}
-          ></OtherField>
+          <OtherField name="text" label="Frequently asked Questions" text={maintenanceFAQ.text} bigger={true} id={maintenanceFAQ.id}></OtherField>
         ) : localizationsIsVisible ? (
           <OtherField
             name="localizations"

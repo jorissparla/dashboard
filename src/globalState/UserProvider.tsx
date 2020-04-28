@@ -34,9 +34,16 @@ export const UserContext = React.createContext<UserContextType>({
 export const useUserContext = () => React.useContext(UserContext);
 //test
 
-export const UserContextProvider: React.FC<{ children: any }> = ({
-  children,
-}) => {
+export const useIsValidEditor: any = (role: string) => {
+  const { user } = useUserContext();
+  let validEditor = ["Admin", "PO"].some((u) => (user ? u === user.role : false));
+  if (user && user.permissions) {
+    validEditor = validEditor || user.permissions.some(({ permission }) => permission === role);
+  }
+  return [validEditor, user];
+};
+
+export const UserContextProvider: React.FC<{ children: any }> = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   useEffect(() => {

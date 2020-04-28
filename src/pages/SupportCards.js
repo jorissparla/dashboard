@@ -52,6 +52,16 @@ const suppCardFragment = gql`
       color
       backgroundcolor
     }
+    keywords
+  }
+`;
+
+export const MUTATION_UPDATE_CARD_KEYWORDS = gql`
+  ${suppCardFragment}
+  mutation MUTATION_UPDATE_CARD_KEYWORDS($input: inputSupportCardKeywords) {
+    updateSupportCardKeywords(input: $input) {
+      ...SupportCardDetails
+    }
   }
 `;
 
@@ -133,6 +143,7 @@ const Div = styled.div`
   flex-wrap: wrap;
   margin: 10px;
   background: #eeeeee;
+  height: 100vh;
 `;
 
 const Container = styled.div`
@@ -223,25 +234,39 @@ const SupportCards = (props) => {
         const {
           category: { name },
           title,
+          keywords,
         } = card;
-        return _.includes(name.toUpperCase(), searchText.toUpperCase()) || _.includes(title.toUpperCase(), searchText.toUpperCase());
+        // if (keywords)
+        //   console.log(
+        //     keywords?.toUpperCase(),
+        //     _.includes(card.product.toUpperCase(), selectedProduct.toUpperCase()),
+        //     selectedCategory === "" ? true : _.includes(selectedCategory.toUpperCase(), card.name.toUpperCase()),
+        //     card.category.name,
+        //     _.includes(keywords.toUpperCase(), searchText.toUpperCase())
+        //   );
+        return (
+          _.includes(name.toUpperCase(), searchText.toUpperCase()) ||
+          _.includes(title.toUpperCase(), searchText.toUpperCase()) ||
+          _.includes(keywords.toUpperCase(), searchText.toUpperCase())
+        );
       })
       .filter((card) => _.includes(card.product.toUpperCase(), selectedProduct.toUpperCase()))
       .filter((card) => {
         const {
           category: { name },
         } = card;
-        return selectedCategory !== "" ? _.includes(selectedCategory.toUpperCase(), name.toUpperCase()) : true;
+        return selectedCategory === "" ? true : _.includes(selectedCategory.toUpperCase(), card.category.name.toUpperCase());
       });
     if (showFavorites) {
       filteredCards = filteredCards.filter((card) => card.isfavorite === true);
     }
+    console.log(filteredCards);
     return filteredCards;
   };
   let filteredCards = doFilter(supportcards, searchText, selectedCategory);
 
   return (
-    <div className="flex flex-col i" onDoubleClick={() => setShowRequest(true)}>
+    <div className="flex flex-col  h-full" onDoubleClick={() => setShowRequest(true)}>
       <Dialog
         title="Add Request"
         actions={actions}
@@ -269,7 +294,7 @@ const SupportCards = (props) => {
           Show {showFavorites ? `All` : `Favorites`}
         </Button> */}
       </div>
-      <SearchBar onChange={(value) => setSearchText(value)} />
+      <SearchBar onChange={(value) => setSearchText(value)} hintText="Start typing to match title, category or keywords..." />
 
       <Div>
         {authenticated && isEditor ? (
@@ -279,48 +304,52 @@ const SupportCards = (props) => {
           <AddCard link="supportcard/request" title="Request a new Support Card" background="papayawhip" />
         )}
 
-        {filteredCards.map(({ id, title, description, updatedAt, isfavorite, accessed, category: { name, color, backgroundcolor }, link }, i) => {
-          const vieweditLink = authenticated && isEditor ? `/supportcard/edit/${id}` : `/supportcard/view/${id}`;
-          const viewLink = `/supportcard/view/${id}`;
+        {filteredCards.map(
+          ({ id, title, description, updatedAt, isfavorite, accessed, category: { name, color, backgroundcolor }, link, keywords }, i) => {
+            const vieweditLink = authenticated && isEditor ? `/supportcard/edit/${id}` : `/supportcard/view/${id}`;
+            const viewLink = `/supportcard/view/${id}`;
 
-          const isNew = false;
+            const isNew = false;
 
-          const supportcard_id = id;
-          const account_id = currentUser ? currentUser.id : null;
-          return (
-            <SmallCard
-              onTitleClick={() => togglePortal(description)}
-              color={backgroundcolor || cardColors[i % (cardColors.length - 1)].back}
-              textcolor={color || cardColors[i % (cardColors.length - 1)].front}
-              key={id}
-              authenticated={authenticated}
-              account_id={account_id}
-              isFavorite={isfavorite}
-              updatedAt={updatedAt}
-              accessed={accessed}
-              onToggleFavorite={() => {
-                isfavorite
-                  ? unfavoriteCard({ variables: { input: { supportcard_id, account_id } } })
-                  : favoriteCard({ variables: { input: { supportcard_id, account_id } } });
-              }}
-              title={title}
-              supportcard_id={id}
-              isNew={isNew}
-              text={description}
-              category={name}
-              buttonText="📂"
-              link={link}
-              canEdit={authenticated && isEditor}
-              editLink={`${vieweditLink}`}
-              viewLink={viewLink}
-              onAudit={(v) => createAudit(v, "SupportCard", null)}
-              onFollowLink={(v, link) => {
-                createAudit(v, "SupportCardLink", link);
-                return link;
-              }}
-            />
-          );
-        })}
+            const supportcard_id = id;
+            const account_id = currentUser ? currentUser.id : null;
+            return (
+              <SmallCard
+                id={id}
+                onTitleClick={() => togglePortal(description)}
+                color={backgroundcolor || cardColors[i % (cardColors.length - 1)].back}
+                textcolor={color || cardColors[i % (cardColors.length - 1)].front}
+                key={id}
+                authenticated={authenticated}
+                account_id={account_id}
+                isFavorite={isfavorite}
+                updatedAt={updatedAt}
+                accessed={accessed}
+                keywords={keywords}
+                onToggleFavorite={() => {
+                  isfavorite
+                    ? unfavoriteCard({ variables: { input: { supportcard_id, account_id } } })
+                    : favoriteCard({ variables: { input: { supportcard_id, account_id } } });
+                }}
+                title={title}
+                supportcard_id={id}
+                isNew={isNew}
+                text={description}
+                category={name}
+                buttonText="📂"
+                link={link}
+                canEdit={authenticated && isEditor}
+                editLink={`${vieweditLink}`}
+                viewLink={viewLink}
+                onAudit={(v) => createAudit(v, "SupportCard", null)}
+                onFollowLink={(v, link) => {
+                  createAudit(v, "SupportCardLink", link);
+                  return link;
+                }}
+              />
+            );
+          }
+        )}
       </Div>
       <Modal on={showPortal} toggle={() => setShowPortal(!showPortal)}>
         <ReactMarkdown source={portalText} escapeHtml={false}></ReactMarkdown>
