@@ -1,21 +1,18 @@
+import { addHours, format } from "date-fns";
+import { useAlert } from "globalState/AlertContext";
+import { useUserContext } from "globalState/UserProvider";
 import React from "react";
 import { useMutation } from "react-apollo";
 import FileUploader from "../common/FileUploaderNew";
 import { UPDATE_PROFILE_PIC_MUTATION } from "../graphql/UPDATE_PROFILE_PIC";
-import { DashBoardContext } from "../globalState/Provider";
-import { useUserContext } from "globalState/UserProvider";
-import { useAlert } from "globalState/AlertContext";
 
-const ProfilePage = ({}) => {
-  const { user, setProfilePic } = useUserContext();
+const ProfilePage = ({ active = null }) => {
+  const { user: current, setProfilePic } = useUserContext();
   const alert = useAlert();
-  // const [file, setFile] = usePersistentState("");
+
+  let user = active || current;
+  const { email, fullname, navid } = user;
   console.log(user);
-  // if (!user) {
-  //   return <h1>Not logged in </h1>;
-  // }
-  const email = user.email;
-  const fullname = user.fullname;
   const [updateProfilePicture] = useMutation(UPDATE_PROFILE_PIC_MUTATION);
   const [image, setImage] = React.useState(user.image);
 
@@ -30,17 +27,20 @@ const ProfilePage = ({}) => {
   return (
     <div className="h-screen antialiased w-full bg-gray-200 p-10 mt-10">
       <div className="max-w-2xl mx-auto rounded shadow-lg py-5 flex px-2 flex-col justify-center bg-white flex-wrap overflow-hidden">
-        <h2 className="text-gray-700 font-semibold">Hi {fullname}, Update your profile picture</h2>
+        <h2 className="text-gray-700 font-semibold text-center">Hi {fullname}!!</h2>
         <div className="w-full ">
           <img className=" w-full rounded object-cover " src={image.replace("http:", "https:")} alt="" />
         </div>
         <a href={image}>{image}</a>
-        <FileUploader
-          link={`\\\\nlbavwixs.infor.com\\images\\profilepics\\${email}`}
-          httpLinkPrefix={`https://nlbavwixs.infor.com/images/profilepics/${email}/`}
-          readOnly={false}
-          setFile={handleSetFile}
-        />
+        {current.role === "Admin" && (
+          <FileUploader
+            link={`\\\\nlbavwixs.infor.com\\images\\profilepics\\${email}`}
+            httpLinkPrefix={`https://nlbavwixs.infor.com/images/profilepics/${email}/`}
+            readOnly={false}
+            setFile={handleSetFile}
+            title="Profile Picture"
+          />
+        )}
         <div className="mt-4 flex">
           <div className="font-semibold flex items-start">
             Role:
@@ -48,7 +48,19 @@ const ProfilePage = ({}) => {
           </div>
           <div className="font-semibold flex items-start">
             Email:
-            <span className="uppercase mx-2 text-teal-500">{email}</span>
+            <span className=" mx-2 text-teal-500">{email}</span>
+          </div>
+          <div className="font-semibold flex items-start">
+            NavID:
+            <span className=" mx-2 text-teal-500">{user.navid}</span>
+          </div>
+          <div className="font-semibold flex items-start">
+            Team:
+            <span className=" mx-2 text-teal-500">{user.team}</span>
+          </div>
+          <div className="font-semibold flex items-start">
+            Region:
+            <span className=" mx-2 text-teal-500">{user.region}</span>
           </div>
         </div>
         <div className="mt-2 flex w-full justify-end px-4 items-center">
@@ -62,6 +74,10 @@ const ProfilePage = ({}) => {
               </span>
             ))}
           </div>
+        </div>
+        <div className="font-semibold flex items-start mt-4">
+          Last Login:
+          <span className=" mx-2 text-teal-500"> {format(addHours(parseInt(user.lastlogin), -2), "yyyy-MM-dd HH:mm")}</span>
         </div>
       </div>
     </div>

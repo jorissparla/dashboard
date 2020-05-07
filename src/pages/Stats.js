@@ -4,10 +4,7 @@ import React, { useState } from "react";
 import { useQuery } from "react-apollo";
 import { withRouter, useHistory } from "react-router-dom";
 import { SelectionForm } from "../stats/NewSelectionForm";
-import {
-  QUERY_BACKLOG,
-  QUERY_BACKLOG_TEXT,
-} from "../stats/queries/BACKLOG_QUERY2";
+import { QUERY_BACKLOG, QUERY_BACKLOG_TEXT } from "../stats/queries/BACKLOG_QUERY2";
 import { request } from "graphql-request";
 import useSWR from "swr";
 import { format } from "../utils/format";
@@ -93,15 +90,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
   },
 }));
-export const PRODUCT_LIST = [
-  "LN",
-  "PLM",
-  "Protean",
-  "InforOS",
-  "Xpert",
-  "Swan",
-  "AutoConnect",
-];
+export const PRODUCT_LIST = ["LN", "PLM", "Protean", "InforOS", "Xpert", "Swan", "AutoConnect"];
 export const REGION_LIST = ["APJ", "EMEA", "NA", "LA"];
 
 const Stats = (props) => {
@@ -110,14 +99,11 @@ const Stats = (props) => {
   const classes = useStyles();
   // console.log('rendering data');
   let enableIt = false;
-  const isValidSuperUser = ["Admin", "PO"].some((u) =>
-    user ? u === user.role : false
-  );
+  const isValidSuperUser = ["Admin", "PO"].some((u) => (user ? u === user.role : false));
   if (user && user.permissions) {
-    enableIt = user.permissions.some(
-      ({ permission }) => permission === "STATS"
-    );
+    enableIt = user.permissions.some(({ permission }) => permission === "STATS");
   }
+  console.log("Start:", new Date());
   const parms = useParams(!isValidSuperUser);
   const API = "https://nlbavwixs.infor.com:4001";
   const { data, error } = useSWR(
@@ -158,56 +144,40 @@ const Stats = (props) => {
   */
     const owner = user ? (user.fullname ? user.fullname : "") : "";
     console.log(owner, data);
-    return (
-      <StatsPage
-        data={data}
-        classes={classes}
-        isValidSuperUser={isValidSuperUser || enableIt}
-        owner={owner}
-      />
-    );
+    return <StatsPage data={data} classes={classes} isValidSuperUser={isValidSuperUser || enableIt} owner={owner} />;
   }
 };
 
-const StatsPage = withRouter(
-  ({ data, classes, owner, isValidSuperUser, history }) => {
-    const mostRecentUpdate = data
-      ? data.mostRecentUpdate
-      : new Date().toLocaleTimeString();
-    const [selectedProducts] = usePersistentState("selectedproducts", ["LN"]);
-    const [region] = usePersistentState("region", "EMEA");
-    const [filterValues, setFilterValues] = useState({
-      owner,
-      products: selectedProducts,
-      region,
-    });
-    function handleChange(values) {
-      setFilterValues(values);
-    }
-    return (
-      <div className="font-sans text-lg  bg-gray-200 min-h-screen flex items-center mb-10 px-2 flex-col w-full">
-        <SelectionForm
-          classes={classes}
-          isValidSuperUser={isValidSuperUser}
-          onChange={handleChange}
-          onNavigateToParams={() => history.push("/myworkparams")}
-          initialValue={{
-            owner,
-            lastUpdated: mostRecentUpdate,
-            actionNeeded: true,
-          }}
-        />
-
-        <StatsMain
-          data={data}
-          classes={classes}
-          owner={owner}
-          filterValues={filterValues}
-        />
-      </div>
-    );
+const StatsPage = withRouter(({ data, classes, owner, isValidSuperUser, history }) => {
+  const mostRecentUpdate = data ? data.mostRecentUpdate : new Date().toLocaleTimeString();
+  const [selectedProducts] = usePersistentState("selectedproducts", ["LN"]);
+  const [region] = usePersistentState("region", "EMEA");
+  const [filterValues, setFilterValues] = useState({
+    owner,
+    products: selectedProducts,
+    region,
+  });
+  function handleChange(values) {
+    setFilterValues(values);
   }
-);
+  return (
+    <div className="font-sans text-lg  bg-gray-200 min-h-screen flex items-center mb-10 px-2 flex-col w-full">
+      <SelectionForm
+        classes={classes}
+        isValidSuperUser={isValidSuperUser}
+        onChange={handleChange}
+        onNavigateToParams={() => history.push("/myworkparams")}
+        initialValue={{
+          owner,
+          lastUpdated: mostRecentUpdate,
+          actionNeeded: true,
+        }}
+      />
+
+      <StatsMain data={data} classes={classes} owner={owner} filterValues={filterValues} />
+    </div>
+  );
+});
 
 // const Test = () => {
 //   const { user } = React.useContext(UserContext);

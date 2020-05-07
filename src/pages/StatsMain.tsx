@@ -11,6 +11,7 @@ import Spinner from "../utils/spinner";
 import LoadingDots from "./../utils/LoadingDots";
 import { useLocalStorage } from "../utils/useLocalStorage";
 import { UserContext } from "./../globalState/UserProvider";
+import { Backlog } from "stats/BacklogType";
 const SelectionForm = React.lazy(() => import("../stats/SelectionForm"));
 
 export const styles = (theme: any) => ({
@@ -141,95 +142,87 @@ type backlogParams = {
   isValidSuperUser: boolean;
 };
 
-const StatsMainContainerWrapper: React.FC<ContainerProps> = (props: any) => {
-  const { user } = React.useContext(UserContext);
-  if (!user || user.fullname === null) {
-    return <div>You need to be logged in to see this page</div>;
-  } else {
-    return <StatsMainContainer {...props} />;
-  }
-};
+// const StatsMainContainerWrapper: React.FC<ContainerProps> = (props: any) => {
+//   const { user } = React.useContext(UserContext);
+//   if (!user || user.fullname === null) {
+//     return <div>You need to be logged in to see this page</div>;
+//   } else {
+//     return <StatsMainContainer {...props} />;
+//   }
+// };
 
-const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
-  const { user } = React.useContext(UserContext);
-  const [date] = useState(format(Date.now(), "yyyy-MM-dd"));
-  const [isCloud, setisCloud] = useState(false);
-  const [owner, setOwner] = useState(props.user.fullname);
-  const { products, persons } = useContext(SelectionContext);
-  const { classes } = props;
-
-  const isValidSuperUser = ["Admin", "PO"].some((u) =>
-    user ? u === user.role : false
-  );
-  const { loading, data } = useQuery(QUERY_BACKLOG, {
-    variables: {
-      date,
-      owner,
-      products,
-      deployment: "ALL",
-      ...useParams(!isValidSuperUser),
-    },
-  });
-  if (loading) return null;
-  if (!data) return null;
-  //const data = getBacklog({ date, owner, products, isValidSuperUser });
-  // const currentUser = props.user;
-  // console.log('currentUser', dauserta, products);
-  let enableIt: boolean;
-  enableIt = false;
-  let isXpertOrSwan = false;
-  if (user && user.permissions) {
-    enableIt = user.permissions.some(
-      (u: { permission: string }): any => u.permission === "STATS"
-    );
-    if (user.team) {
-      isXpertOrSwan = ["Xpert", "Swan"].some(
-        (item) => item.toLowerCase() === user.team.toLowerCase()
-      );
-    }
-  } else {
-    // enableIt = false;
-  }
-  const mostRecentUpdate = data
-    ? data.mostRecentUpdate
-    : new Date().toLocaleTimeString();
-  return (
-    <div className={classes.root}>
-      <SelectionForm
-        isValidSuperUser={isValidSuperUser || enableIt}
-        isXpertOrSwan={isValidSuperUser || isXpertOrSwan || enableIt}
-        onNavigateToParams={() => props.history.push("/myworkparams")}
-        classes={props.classes}
-        initialValue={{
-          owner,
-          isCloud,
-          lastUpdated: mostRecentUpdate,
-          actionNeeded: true,
-        }}
-        valuesChanged={(a: string, b: boolean) => {
-          if (a !== owner) {
-            setOwner(a);
-          }
-          if (b !== isCloud) {
-            setisCloud(b);
-          }
-        }}
-      />
-      <ListFavoritePersons persons={persons} />
-      {!data ? (
-        <Spinner />
-      ) : (
-        <StatsMain
-          classes={props.classes}
-          data={data}
-          // onChange={(date: string) => setDate(date)}
-          isCloud={isCloud}
-          actionNeeded={false}
-        />
-      )}
-    </div>
-  );
-};
+// const StatsMainContainer: React.FC<ContainerProps> = (props: any) => {
+//   const { user } = React.useContext(UserContext);
+//   const [date] = useState(format(Date.now(), "yyyy-MM-dd"));
+//   const [isCloud, setisCloud] = useState(false);
+//   const [owner, setOwner] = useState(props.user.fullname);
+//   const { products, persons } = useContext(SelectionContext);
+//   const { classes } = props;
+//   const isValidSuperUser = ["Admin", "PO"].some((u) => (user ? u === user.role : false));
+//   const { loading, data } = useQuery(QUERY_BACKLOG, {
+//     variables: {
+//       date,
+//       owner,
+//       products,
+//       deployment: "ALL",
+//       ...useParams(!isValidSuperUser),
+//     },
+//   });
+//   console.log("Start:", new Date());
+//   if (loading) return null;
+//   if (!data) return null;
+//   //const data = getBacklog({ date, owner, products, isValidSuperUser });
+//   // const currentUser = props.user;
+//   // console.log('currentUser', dauserta, products);
+//   let enableIt: boolean;
+//   enableIt = false;
+//   let isXpertOrSwan = false;
+//   if (user && user.permissions) {
+//     enableIt = user.permissions.some((u: { permission: string }): any => u.permission === "STATS");
+//     if (user.team) {
+//       isXpertOrSwan = ["Xpert", "Swan"].some((item) => item.toLowerCase() === user.team.toLowerCase());
+//     }
+//   } else {
+//     // enableIt = false;
+//   }
+//   const mostRecentUpdate = data ? data.mostRecentUpdate : new Date().toLocaleTimeString();
+//   return (
+//     <div className={classes.root}>
+//       <SelectionForm
+//         isValidSuperUser={isValidSuperUser || enableIt}
+//         isXpertOrSwan={isValidSuperUser || isXpertOrSwan || enableIt}
+//         onNavigateToParams={() => props.history.push("/myworkparams")}
+//         classes={props.classes}
+//         initialValue={{
+//           owner,
+//           isCloud,
+//           lastUpdated: mostRecentUpdate,
+//           actionNeeded: true,
+//         }}
+//         valuesChanged={(a: string, b: boolean) => {
+//           if (a !== owner) {
+//             setOwner(a);
+//           }
+//           if (b !== isCloud) {
+//             setisCloud(b);
+//           }
+//         }}
+//       />
+//       <ListFavoritePersons persons={persons} />
+//       {!data ? (
+//         <Spinner />
+//       ) : (
+//         <StatsMain
+//           classes={props.classes}
+//           data={data}
+//           // onChange={(date: string) => setDate(date)}
+//           isCloud={isCloud}
+//           actionNeeded={false}
+//         />
+//       )}
+//     </div>
+//   );
+// };
 
 interface Props {
   classes: any;
@@ -241,32 +234,26 @@ interface Props {
   filterValues?: any;
 }
 
-const RELEASE_FILTER = [
-  "Baan 4",
-  "Baan 5",
-  "LN FP5",
-  "LN FP6",
-  "LN FP7",
-  "LN FP3",
-  "10.2",
-  "10.3",
-];
+const RELEASE_FILTER = ["Baan 4", "Baan 5", "LN FP5", "LN FP6", "LN FP7", "LN FP3", "10.2", "10.3"];
 
-export const StatsMain: React.FC<Props> = ({
-  classes,
-  data,
-  owner = "",
-  products = ["LN"],
-  filterValues,
-}) => {
+export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products = ["LN"], filterValues }) => {
   const params = useParams();
-  const sev12notrestored = [
-    ...data.critical.filter((item: any) => !item.service_restored_date),
-    ...data.sev2.filter(
-      (item: any) =>
-        !item.service_restored_date && item.status !== "Solution Proposed"
-    ),
-  ];
+  const blBase = new Backlog(data.everything);
+  const sev12notrestored = blBase
+    .notServicedRestored()
+    .hasSeverity(["Major Impact", "Production Outage / Critical Application halted"])
+    .notStatus(["Solution Proposed"])
+    .getData();
+  const critical = blBase
+    .init()
+    .severity("Production Outage / Critical Application halted")
+    .notServicedRestored()
+    .notStatus(["Solution Proposed"])
+    .getData();
+  // [
+  //   ...data.critical.filter((item: any) => !item.service_restored_date),
+  //   ...data.sev2.filter((item: any) => !item.service_restored_date && item.status !== "Solution Proposed"),
+  // ];
 
   const [loading, setLoading] = useState(true);
   React.useEffect(() => {
@@ -287,39 +274,90 @@ export const StatsMain: React.FC<Props> = ({
     .filter((item: any) => RELEASE_FILTER.includes(item.releasename))
     .map((item: any) => ({
       ...item,
-      extended: extendedmaintenance.find(
-        (customer: any) => customer.customerid === item.customerid
-      )
-        ? "Yes"
-        : "No",
+      extended: extendedmaintenance.find((customer: any) => customer.customerid === item.customerid) ? "Yes" : "No",
     }))
     .sort((a: any, b: any) => a.daysSinceCreated - b.daysSinceCreated);
 
-  const extIncidentsWithDev = extIncidents.filter(
-    (item: any) => item.status === "Awaiting Development"
-  );
+  const extIncidentsWithDev = extIncidents.filter((item: any) => item.status === "Awaiting Development");
   // console.log('🤷‍♂️🤷‍♂️', extIncidents);
   // console.log('mt customers', multitenantcustomers);
   const mtincidents = data.all
     .filter(
-      (inc: any) =>
-        multitenantcustomers.find(
-          (cust: any) => parseInt(cust.customerid) === inc.customerid
-        )
+      (inc: any) => multitenantcustomers.find((cust: any) => parseInt(cust.customerid) === inc.customerid)
       // inc.customerid === 60028554
     )
     .filter((x: any) => x.Tenant !== "Multi-Tenant");
 
-  const multitenant = data.multitenant
-    .filter(
-      (item: any) => item.Tenant === "Multi-Tenant" && item.release !== "10.5"
-    )
-    .filter((item: any) => item.dayssincelastupdate > 7)
-    .sort((a: any, b: any) => a.dayssincelastupdate - b.dayssincelastupdate);
-  // console.log('MT', multitenant);
-  // console.log('critical', sev1notrestored);
+  const multitenant = new Backlog(data.multitenant).isMT().dayssincelastupdate(7).sort("dayssincelastupdate", "D").getData();
+  // const multitenant = data.multitenant
+  //   .filter(
+  //     (item: any) => item.Tenant === "Multi-Tenant" && item.release !== "10.5"
+  //   )
+  //   .filter((item: any) => item.dayssincelastupdate > 7)
+  //   .sort((a: any, b: any) => a.dayssincelastupdate - b.dayssincelastupdate);
+
+  const awaiting_customer = blBase
+    .init()
+    .status("Awaiting Customer")
+    .dayssincelastupdate(params["N_AWAITINGCUSTOMER"])
+    .sort("dayssincelastupdate", "D")
+    .getData();
+  const awaiting_infor = blBase
+    .init()
+    .status("Awaiting Infor")
+    .dayssincelastupdate(params["N_AWAITINGINFOR"])
+    .sort("dayssincelastupdate", "D")
+    .getData();
+  const researching = blBase.init().status("Researching").dayssincelastupdate(params["N_RESEARCHING"]).sort("dayssincelastupdate", "D").getData();
+  const infor = blBase
+    .init()
+    // .hasStatus(["Researching", "On Hold by Customer", "Awaiting Infor", "Awaiting Customer"])
+    .customername("Infor ")
+    .sort("dayssincelastupdate", "D")
+    .getData();
+  const on_hold = blBase.init().status("On hold by customer").valid_actiondate().sort("dayssincelastupdate", "D").getData();
+  const aging = blBase
+    .init()
+    .hasStatus(["Researching", "On Hold by Customer", "Awaiting Infor", "Awaiting Customer"])
+    .daysSinceCreated(params["N_AGING"])
+    .sort("dayssincelastupdate", "D")
+    .getData();
+  const aging_dev = blBase.init().hasStatus(["Awaiting Development"]).daysSinceCreated(90).sort("dayssincelastupdate", "D").getData();
+  const major_impact = blBase
+    .init()
+    .severity("Major Impact")
+    .notServicedRestored()
+    .notStatus(["Solution Proposed"])
+    .dayssincelastupdate(params["N_MAJORIMPACT"])
+    .sort("dayssincelastupdate", "D")
+    .getData();
+
+  const escalated = blBase
+    .init()
+    // .region("EMEA")
+    .escalated()
+    .notStatus(["Solution Proposed"])
+    .sort("dayssincelastupdate", "D")
+    .getData();
+  const cloudops = blBase
+    .init()
+    // .region("EMEA")
+    .statusContains("task")
+    .sort("dayssincelastupdate", "D")
+    .getData();
+  const new_inc = blBase
+    .init()
+    // .region("EMEA")
+    // .escalated()
+    .status("New")
+    .dayssincelastupdate(params["N_NEW"])
+    .sort("dayssincelastupdate", "D")
+    .getData();
+  const callbacks = blBase.init().status("Awaiting Infor").sort("dayssincelastupdate", "D").getData();
+  console.log({ infor });
   const { isCloud } = useContext(SelectionContext);
   console.log("filtervalues", filterValues);
+  console.log("End:", new Date());
   // const filterValues = { owner, products };
   return (
     <>
@@ -327,6 +365,7 @@ export const StatsMain: React.FC<Props> = ({
 
       {!isCloud && (
         <div className="w-full mx-4">
+          <BacklogTable filterValues={filterValues} classes={classes} backlog={escalated} title="Escalated" description="All Incidents escalated" />
           <BacklogTable
             filterValues={filterValues}
             classes={classes}
@@ -376,7 +415,8 @@ export const StatsMain: React.FC<Props> = ({
           <BacklogTable
             filterValues={filterValues}
             classes={classes}
-            backlog={data.on_hold}
+            backlog={on_hold}
+            // backlog={data.on_hold}
             title="On Hold"
             description="All Incidents with a status of On Hold By Customer with no or an Expired Action date"
           />
@@ -384,7 +424,8 @@ export const StatsMain: React.FC<Props> = ({
           <BacklogTable
             filterValues={filterValues}
             classes={classes}
-            backlog={data.awaiting_customer}
+            // backlog={data.awaiting_customer}
+            backlog={awaiting_customer}
             additionalFields={["ownergroup"]}
             title="Awaiting customer"
             description={`All Incidents with a status of Awaiting Customer not updated for more than ${params["N_AWAITINGCUSTOMER"]} days `}
@@ -392,65 +433,66 @@ export const StatsMain: React.FC<Props> = ({
           <BacklogTable
             filterValues={filterValues}
             classes={classes}
-            backlog={data.researching}
+            // backlog={data.researching}
+            backlog={researching}
             title="Researching"
             description={`Incidents with status 'Researching' Last updated  ${params["N_RESEARCHING"]} days or more`}
           />
           <BacklogTable
             filterValues={filterValues}
             classes={classes}
-            backlog={data.awaiting_infor}
+            // backlog={data.awaiting_infor}
+            backlog={awaiting_infor}
             title="Awaiting Infor"
             description={`Incidents with status 'Awaiting Infor' Last updated  ${params["N_AWAITINGINFOR"]} days or more`}
           />
           <BacklogTable
             filterValues={filterValues}
             classes={classes}
-            backlog={data.callbacks}
+            // backlog={data.callbacks}
+            backlog={callbacks}
             title="Callbacks/Awaiting Infor"
             description="All callbacks and Incidents with status 'Awaiting Infor'"
           />
           <BacklogTable
             filterValues={filterValues}
             classes={classes}
-            backlog={data.major_impact}
+            // backlog={data.major_impact}
+            backlog={major_impact}
             title="Major Impact"
             description={`Incidents with severity 'Major Impact' Last updated ${params["N_MAJORIMPACT"]} days or more`}
             includeservicerestored={true}
           />
+
           <BacklogTable
             filterValues={filterValues}
             classes={classes}
-            backlog={data.major_impact2}
-            title="Major Impact"
-            description={`Incidents with severity 'Major Impact' Last updated ${params["N_MAJORIMPACT"]} days or more Not resolved in 5 days`}
-            includeservicerestored={true}
-          />
-          <BacklogTable
-            filterValues={filterValues}
-            classes={classes}
-            backlog={data.aging}
+            backlog={aging}
+            // backlog={data.aging}
             title="Aging- Support"
             description={`Incidents older than ${params["N_AGING"]}  days`}
           />
           <BacklogTable
             filterValues={filterValues}
             classes={classes}
-            backlog={data.aging_dev}
+            backlog={aging_dev}
+            // backlog={data.aging_dev}
             title="Aging- Development"
             description="Incidents older than 90 days - Development Backlog"
           />
           <BacklogTable
             filterValues={filterValues}
             classes={classes}
-            backlog={data.new}
+            backlog={new_inc}
+            // backlog={data.new}
             title="New Incidents"
             description={`Incidents with status 'New' not updated for more than  ${params["N_NEW"]} days`}
           />
           <BacklogTable
             filterValues={filterValues}
             classes={classes}
-            backlog={data.cloudops}
+            // backlog={data.cloudops}
+            backlog={cloudops}
             title="All CloudOps"
             description="All Incidents with a CloudOps Specific status (Task....)"
           />
@@ -458,28 +500,17 @@ export const StatsMain: React.FC<Props> = ({
             filterValues={filterValues}
             classes={classes}
             backlog={data.infor}
+            // backlog={infor}
             additionalFields={["contactname"]}
             title="Infor"
             description="All Support Backlog logged on Infor Account"
           />
-          <BacklogTable
-            filterValues={filterValues}
-            classes={classes}
-            backlog={data.active}
-            title="Active"
-            description="All Active Support Backlog"
-          />
-          <BacklogTable
-            filterValues={filterValues}
-            classes={classes}
-            backlog={data.all}
-            title="All"
-            description="All Support Backlog"
-          />
+          <BacklogTable filterValues={filterValues} classes={classes} backlog={data.active} title="Active" description="All Active Support Backlog" />
+          <BacklogTable filterValues={filterValues} classes={classes} backlog={data.all} title="All" description="All Support Backlog" />
         </div>
       )}
     </>
   );
 };
 
-export default withStyles(styles)(StatsMainContainerWrapper);
+// export default withStyles(styles)(StatsMainContainerWrapper);

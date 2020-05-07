@@ -43,6 +43,7 @@ import Test from "./pages/Test";
 import LoginForm from "./auth/LoginForm";
 import AddSymptomRequest from "symptoms/AddSymptomRequest";
 import UploadImageComponent from "pages/UploadImageComponent";
+import UserPage from "pages/UserPage";
 
 // const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
 const LoggedInUsers = React.lazy(() => import("./pages/loggedinusers"));
@@ -118,6 +119,7 @@ function AppRoutes(props) {
       <Route exact path="/stats" component={Stats} user={user} history={history} />
       <AuthRoute exact path="/statstest" component={Stats} user={user} history={history} />
       <AuthRoute exact path="/profilepage" component={ProfilePage} user={user} />
+      <AuthRoute exact path="/profilepage/:id" component={UserPage} user={user} />
       <AuthRoute exact path="/mywork" component={Stats} user={user} history={history} />
       <AuthRoute exact path="/myworkparams" component={Parameters} user={user} history={history} />
       <Route exact path="/" component={DashBoardContainer} user={user} />

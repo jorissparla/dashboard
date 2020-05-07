@@ -236,6 +236,19 @@ export const TenantCard = ({
                               <td className="text-sm text-center">{t.operational_status}</td>
                               <td className="text-sm text-center">{t.process_status}</td>
                               <td className="text-sm text-center">{format(addHours(parseInt(t.updatedAt), -2), "yyyy-MM-dd HH:mm")}</td>
+                              <td className="text-sm text-center">
+                                <svg
+                                  className="w-4 h-4 text-gray-500"
+                                  fill="none"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth="2"
+                                  stroke="currentColor"
+                                  viewBox="0 0 24 24"
+                                >
+                                  <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                </svg>
+                              </td>
                             </tr>
                           ))}
                         </tbody>

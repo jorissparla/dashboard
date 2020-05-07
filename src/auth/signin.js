@@ -21,9 +21,11 @@ export const MUTATION_SIGNIN = gql`
         email
         role
         image
+        navid
         permissions {
           permission
         }
+        lastlogin
       }
       error
     }

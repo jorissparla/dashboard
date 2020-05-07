@@ -6,13 +6,26 @@ import { format, addHours } from "date-fns";
 import _ from "lodash";
 import SearchBar from "common/SearchBar";
 import getInitials from "tenants/details/getInitials";
+import { useUserContext } from "globalState/UserProvider";
+import { useHistory } from "react-router";
 
 const query = `
   {
     accounts {
-    fullname
-    lastlogin
-    image
+      id
+      fullname
+      lastlogin
+      image
+      email
+      navid
+      role
+      team
+      region
+      permissions {
+        permission
+      }
+
+
   }
 }
 
@@ -25,6 +38,9 @@ const Loggedinusers = () => {
     (query) => request(uri, query)
   );
 
+  const { user: current } = useUserContext();
+  const history = useHistory();
+  let isAdmin = current?.role === "Admin";
   const [searchText, setSearchText] = useState("");
 
   let showData = data?.accounts.filter((d) => d.lastlogin);
@@ -41,14 +57,16 @@ const Loggedinusers = () => {
           {showData?.map((acc) => (
             <div key={acc.fullname} className=" rounded shadow-lg bg-white p-2 m-2 w-full overflow-hidden">
               <div className="flex items-center justify-between mb-2">
-                <h1 className="font-pop  font-semibold overflow-hidden">{acc.fullname}</h1>
-                {acc.image ? (
-                  <img className="h-12 w-12 shadow rounded-full" src={acc.image} alt="Profile Picture" />
-                ) : (
-                  <div className="h-12 w-12 shadow rounded-full bg-teal-200 text-teal-800 text-xl flex items-center justify-center font-semibold">
-                    {getInitials(acc.fullname)}
-                  </div>
-                )}
+                <h1 className="font-pop cursor-pointer font-semibold overflow-hidden">{acc.fullname}</h1>
+                <button onClick={() => (isAdmin ? history.push("/profilepage/" + acc.id) : null)}>
+                  {acc.image ? (
+                    <img className="h-12 w-12 shadow rounded-full" src={acc.image} alt="Profile Picture" />
+                  ) : (
+                    <div className="h-12 w-12 shadow rounded-full bg-teal-200 text-teal-800 text-xl flex items-center justify-center font-semibold">
+                      {getInitials(acc.fullname)}
+                    </div>
+                  )}
+                </button>
               </div>
               <span className="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-teal-200 text-teal-800">
                 {format(addHours(parseInt(acc.lastlogin), -2), "yyyy-MM-dd HH:mm")}

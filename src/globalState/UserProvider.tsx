@@ -11,6 +11,8 @@ interface User {
   image: string;
   role: string;
   team: string;
+  navid: string;
+  lastlogin: string;
   permissions: { permission: string }[];
 }
 
