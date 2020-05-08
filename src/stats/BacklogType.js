@@ -1,13 +1,37 @@
 const lower = (item) => item.toLowerCase();
 
 class Backlog {
-  constructor(data) {
+  constructor(data, accounts = []) {
     this.data = data;
     this.temp = data;
+    this.accounts = accounts;
+  }
+
+  addManager() {
+    const response = this.temp.map((item) => {
+      let managername = "";
+      // console.log("🤦‍♂️", item.navid.toString());
+      const owner = this.accounts.find((account) => account.navid.toString() === item.navid.toString());
+      if (owner && owner.managerid) {
+        const manager = this.accounts.find((account) => account.navid.toString() === owner.managerid.toString());
+        // console.log("🤦‍♂️", owner, manager);
+        managername = manager?.fullname;
+      }
+      // const manager = this.accounts.find((account) => account.managerid?.toString() === item.navid.toString());
+      // console.log("🤦‍♂️", item.navid, manager);
+      return { ...item, managername };
+    });
+    this.temp = response.slice();
+    return this;
   }
 
   init() {
     this.temp = this.data;
+    return this;
+  }
+
+  hold() {
+    this.data = this.temp;
     return this;
   }
   valid_actiondate() {

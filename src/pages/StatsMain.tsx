@@ -12,6 +12,7 @@ import LoadingDots from "./../utils/LoadingDots";
 import { useLocalStorage } from "../utils/useLocalStorage";
 import { UserContext } from "./../globalState/UserProvider";
 import { Backlog } from "stats/BacklogType";
+import BacklogTableNewStyle from "stats/BacklogTableNewStyle";
 const SelectionForm = React.lazy(() => import("../stats/SelectionForm"));
 
 export const styles = (theme: any) => ({
@@ -238,7 +239,7 @@ const RELEASE_FILTER = ["Baan 4", "Baan 5", "LN FP5", "LN FP6", "LN FP7", "LN FP
 
 export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products = ["LN"], filterValues }) => {
   const params = useParams();
-  const blBase = new Backlog(data.everything);
+  const blBase = new Backlog(data.everything, data.accounts);
   const sev12notrestored = blBase
     .notServicedRestored()
     .hasSeverity(["Major Impact", "Production Outage / Critical Application halted"])
@@ -289,12 +290,6 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
     .filter((x: any) => x.Tenant !== "Multi-Tenant");
 
   const multitenant = new Backlog(data.multitenant).isMT().dayssincelastupdate(7).sort("dayssincelastupdate", "D").getData();
-  // const multitenant = data.multitenant
-  //   .filter(
-  //     (item: any) => item.Tenant === "Multi-Tenant" && item.release !== "10.5"
-  //   )
-  //   .filter((item: any) => item.dayssincelastupdate > 7)
-  //   .sort((a: any, b: any) => a.dayssincelastupdate - b.dayssincelastupdate);
 
   const awaiting_customer = blBase
     .init()
@@ -336,9 +331,11 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
     .init()
     // .region("EMEA")
     .escalated()
-    .notStatus(["Solution Proposed"])
+    .notStatus(["Solution Proposed", "Solution Pending Maintenance"])
     .sort("dayssincelastupdate", "D")
+    .addManager()
     .getData();
+
   const cloudops = blBase
     .init()
     // .region("EMEA")
@@ -354,7 +351,7 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
     .sort("dayssincelastupdate", "D")
     .getData();
   const callbacks = blBase.init().status("Awaiting Infor").sort("dayssincelastupdate", "D").getData();
-  console.log({ infor });
+
   const { isCloud } = useContext(SelectionContext);
   console.log("filtervalues", filterValues);
   console.log("End:", new Date());
@@ -365,8 +362,16 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
 
       {!isCloud && (
         <div className="w-full mx-4">
-          <BacklogTable filterValues={filterValues} classes={classes} backlog={escalated} title="Escalated" description="All Incidents escalated" />
-          <BacklogTable
+          <BacklogTableNewStyle
+            filterValues={filterValues}
+            classes={classes}
+            additionalFields={["managername"]}
+            backlog={escalated}
+            title="Escalated"
+            description="All Incidents escalated"
+          />
+
+          <BacklogTableNewStyle
             filterValues={filterValues}
             classes={classes}
             backlog={sev12notrestored}
@@ -374,22 +379,22 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
             description="All Incidents with a severity of 'Production Outage / Major Impact' without a restored date"
           />
 
-          <BacklogTable
+          <BacklogTableNewStyle
             filterValues={filterValues}
             classes={classes}
             backlog={multitenant}
             title="Multitenant"
             description="All Incidents open for our MT customers not updated > 7 days"
           />
-          <BacklogTable
+          <BacklogTableNewStyle
             filterValues={filterValues}
             classes={classes}
             backlog={extIncidentsWithDev}
-            additionalFields={["releasename", "extended", "daysSinceCreated"]}
+            additionalFields={["releasename", "extended"]}
             title="Extended Maintenance Check- Awaiting Development"
             description="All Awaiting Development Incidents open for customers logging on a version that has extended maintenance"
           />
-          <BacklogTable
+          <BacklogTableNewStyle
             filterValues={filterValues}
             classes={classes}
             backlog={mtincidents}
@@ -397,22 +402,22 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
             title="Multitenant customer incidents"
             description="All Incidents open for our MT not logged as multi tenant"
           />
-          <BacklogTable
+          <BacklogTableNewStyle
             filterValues={filterValues}
             classes={classes}
             backlog={extIncidents}
-            additionalFields={["releasename", "extended", "daysSinceCreated"]}
+            additionalFields={["releasename", "extended"]}
             title="Extended Maintenance Check"
             description="All Incidents open for customers logging on a version that has extended maintenance"
           />
-          <BacklogTable
+          <BacklogTableNewStyle
             filterValues={filterValues}
             classes={classes}
             backlog={data.sev1notrestored}
             title="Critical"
             description="All Incidents with a severity of 'Production Outage / Critical Application halted'"
           />
-          <BacklogTable
+          <BacklogTableNewStyle
             filterValues={filterValues}
             classes={classes}
             backlog={on_hold}
@@ -421,7 +426,7 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
             description="All Incidents with a status of On Hold By Customer with no or an Expired Action date"
           />
 
-          <BacklogTable
+          <BacklogTableNewStyle
             filterValues={filterValues}
             classes={classes}
             // backlog={data.awaiting_customer}
@@ -430,7 +435,7 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
             title="Awaiting customer"
             description={`All Incidents with a status of Awaiting Customer not updated for more than ${params["N_AWAITINGCUSTOMER"]} days `}
           />
-          <BacklogTable
+          <BacklogTableNewStyle
             filterValues={filterValues}
             classes={classes}
             // backlog={data.researching}
@@ -438,7 +443,7 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
             title="Researching"
             description={`Incidents with status 'Researching' Last updated  ${params["N_RESEARCHING"]} days or more`}
           />
-          <BacklogTable
+          <BacklogTableNewStyle
             filterValues={filterValues}
             classes={classes}
             // backlog={data.awaiting_infor}
@@ -446,7 +451,7 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
             title="Awaiting Infor"
             description={`Incidents with status 'Awaiting Infor' Last updated  ${params["N_AWAITINGINFOR"]} days or more`}
           />
-          <BacklogTable
+          <BacklogTableNewStyle
             filterValues={filterValues}
             classes={classes}
             // backlog={data.callbacks}
@@ -454,7 +459,7 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
             title="Callbacks/Awaiting Infor"
             description="All callbacks and Incidents with status 'Awaiting Infor'"
           />
-          <BacklogTable
+          <BacklogTableNewStyle
             filterValues={filterValues}
             classes={classes}
             // backlog={data.major_impact}
@@ -464,7 +469,7 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
             includeservicerestored={true}
           />
 
-          <BacklogTable
+          <BacklogTableNewStyle
             filterValues={filterValues}
             classes={classes}
             backlog={aging}
@@ -472,7 +477,7 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
             title="Aging- Support"
             description={`Incidents older than ${params["N_AGING"]}  days`}
           />
-          <BacklogTable
+          <BacklogTableNewStyle
             filterValues={filterValues}
             classes={classes}
             backlog={aging_dev}
@@ -480,7 +485,7 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
             title="Aging- Development"
             description="Incidents older than 90 days - Development Backlog"
           />
-          <BacklogTable
+          <BacklogTableNewStyle
             filterValues={filterValues}
             classes={classes}
             backlog={new_inc}
@@ -488,7 +493,7 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
             title="New Incidents"
             description={`Incidents with status 'New' not updated for more than  ${params["N_NEW"]} days`}
           />
-          <BacklogTable
+          <BacklogTableNewStyle
             filterValues={filterValues}
             classes={classes}
             // backlog={data.cloudops}
@@ -496,7 +501,7 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
             title="All CloudOps"
             description="All Incidents with a CloudOps Specific status (Task....)"
           />
-          <BacklogTable
+          <BacklogTableNewStyle
             filterValues={filterValues}
             classes={classes}
             backlog={data.infor}
@@ -505,8 +510,14 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
             title="Infor"
             description="All Support Backlog logged on Infor Account"
           />
-          <BacklogTable filterValues={filterValues} classes={classes} backlog={data.active} title="Active" description="All Active Support Backlog" />
-          <BacklogTable filterValues={filterValues} classes={classes} backlog={data.all} title="All" description="All Support Backlog" />
+          <BacklogTableNewStyle
+            filterValues={filterValues}
+            classes={classes}
+            backlog={data.active}
+            title="Active"
+            description="All Active Support Backlog"
+          />
+          <BacklogTableNewStyle filterValues={filterValues} classes={classes} backlog={data.all} title="All" description="All Support Backlog" />
         </div>
       )}
     </>

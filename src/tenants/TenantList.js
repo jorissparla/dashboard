@@ -255,7 +255,6 @@ export const FilterForm = ({ setSearchText, flip }) => {
     clearFields();
   }
 
-  // console.log(fields);
   return (
     <form
       onSubmit={(e) => {
@@ -302,10 +301,8 @@ export const FilterForm = ({ setSearchText, flip }) => {
 };
 
 const filterTenantsByCustomerFarmVersion = (tenants, fields, details) => {
-  // console.log("filterTenantsByCustomerFarmVersion", fields);
-  // const { customer = '', farm = '', version = '' } = fields;
   const { customerName = "", farmName = "", tenantVersion = "", tenantName = "", isLive = false, temperature = "", csm = "", pm = "" } = fields;
-  console.log({ csm }, details, temperature);
+
   let filteredCustomerNames = null;
   if (details) {
     filteredCustomerNames = details
@@ -313,7 +310,7 @@ const filterTenantsByCustomerFarmVersion = (tenants, fields, details) => {
       .filter((detail) => detail.csm.toUpperCase().includes(csm.toUpperCase()))
       .filter((detail) => detail.pm.toUpperCase().includes(pm.toUpperCase()));
   }
-  console.log({ filteredCustomerNames });
+
   const retValue = _.chain(tenants)
     .filter((o) => o.customer.name !== "Infor")
 
@@ -336,7 +333,6 @@ const inforTenantByFarm = (tenants, farm) => tenants.filter((o) => o.customer.na
 const TenantList = (props) => {
   const dbctx = React.useContext(DashBoardContext);
   let role = dbctx && dbctx.role ? dbctx.role : "Guest";
-  console.log(dbctx.fullname);
   const [createAudit] = useMutation(CREATE_AUDIT_MUTATION);
   const { setFields, fields } = useFilterField(); // useContext(FilterFieldContext);
   const { classes } = props;
@@ -355,7 +351,6 @@ const TenantList = (props) => {
     }
     return required.size === 0;
   }
-  console.log({ counter });
   const { x } = useSpring({
     x: showFilterDialog ? 15 : 0,
     config: config.wobbly,
@@ -365,9 +360,7 @@ const TenantList = (props) => {
   const applyFilter = (values) => {
     setFields(values);
   };
-  console.log({ happyPress });
   if (happyPress) {
-    console.log("👍👍👍👍👍");
     // clearFields();
   }
 
@@ -395,14 +388,10 @@ const TenantList = (props) => {
   const { tenantcustomerdetails } = details;
   const { updatedAt } = updatestatus;
   const filteredTenants = filterTenantsByCustomerFarmVersion(tenants, fields, details.tenantcustomerdetails);
-  // console.log("filterTenants", filteredTenants);
+
   const uniqueCustomers = filteredTenants.map(({ farm, customer: { name } }) => name).filter((ten, i, all) => all.indexOf(ten) === i);
   return (
-    <Main
-      onKeyDown={(e) => {
-        // console.log(e, e.keyCode);
-      }}
-    >
+    <Main onKeyDown={(e) => {}}>
       <Loader loading={loading} />
       <animated.div
         style={{
@@ -417,12 +406,7 @@ const TenantList = (props) => {
           tenants={tenants}
         />
 
-        <div
-          className={classes.flex}
-          onKeyDown={(e) => {
-            console.log(e, e.keyCode);
-          }}
-        >
+        <div className={classes.flex} onKeyDown={(e) => {}}>
           {uniqueCustomers.map((customer, index) => {
             const sub = filteredTenants.filter((o) => o.customer.name === customer);
             const liveCust = sub[0].live === 1 ? true : false;
@@ -483,11 +467,7 @@ export const TenantListHeader = ({ updatedAt, tenants, toggleShowLogs, toggleFil
     tenants.map(({ farm, tenant }) => ({ farm, tenant })),
     "farm"
   );
-  // const filteredTenants = filterTenantsByCustomerFarmVersion(tenants, fields, flip);
-  // console.log("filterTenants", filteredTenants);
-  // const uniqueCustomers = tenants
-  //   .map(({ farm, customer: { name } }) => name)
-  //   .filter((ten, i, all) => all.indexOf(ten) === i);
+
   const listOfCustomerAndFarm = tenants.filter((item) => item.customerid !== null).map(({ customerid, farm }) => ({ customerid, farm }));
   const custFarms = _.countBy(_.uniqWith(listOfCustomerAndFarm, _.isEqual), "farm");
   const liveCustomers = _.uniqWith(
@@ -542,7 +522,6 @@ export const TenantListHeader = ({ updatedAt, tenants, toggleShowLogs, toggleFil
       >
         <TextSpan>TENANTS: ({totalTenants})</TextSpan>
         {Object.entries(tenantcustomersWithFarm).map((item) => {
-          // console.log(item[0]);
           const text = `${item[0]} : ${item[1]}`;
           return (
             <FavoriteBadge key={text} isVisible={true} color="#40a5ed" style={{ margin: 3 }}>

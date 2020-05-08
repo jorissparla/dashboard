@@ -1,29 +1,29 @@
-import { Typography, withStyles } from '@material-ui/core';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import React, { useContext, useState } from 'react';
-import { SelectionContext } from '../globalState/SelectionContext';
-import { format } from './../utils/format';
+import { Typography, withStyles } from "@material-ui/core";
+import ExpansionPanel from "@material-ui/core/ExpansionPanel";
+import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import React, { useContext, useState } from "react";
+import { SelectionContext } from "../globalState/SelectionContext";
+import { format } from "./../utils/format";
 
-const CustomTableCell = withStyles(theme => ({
+const CustomTableCell = withStyles((theme) => ({
   head: {
-    backgroundColor: 'rgb(0,0,0, 0.5)',
-    color: theme.palette.common.white
+    backgroundColor: "rgb(0,0,0, 0.5)",
+    color: theme.palette.common.white,
   },
   body: {
-    fontSize: '1rem'
-  }
+    fontSize: "1rem",
+  },
 }))(TableCell);
 
 const capitalize = (s: string): string => {
-  if (typeof s !== 'string') return '';
+  if (typeof s !== "string") return "";
   return s.charAt(0).toUpperCase() + s.slice(1);
 };
 
@@ -34,7 +34,7 @@ interface TableHeaderColumnProps {
   className: string;
 }
 
-type sortType = 'desc' | 'asc';
+type sortType = "desc" | "asc";
 
 export const BacklogTable = ({
   backlog,
@@ -42,19 +42,19 @@ export const BacklogTable = ({
   classes,
   title,
   description = title,
-  filterValues = { owner: '', products: ['LN'], region: 'EMEA' },
-  includeservicerestored = false
+  filterValues = { owner: "", products: ["LN"], region: "EMEA" },
+  includeservicerestored = false,
 }: any) => {
   //
   // console.log(filterValues);
-  const initialValue = { name: '', direction: '' };
+  const initialValue = { name: "", direction: "" };
   const { actionNeeded } = useContext(SelectionContext);
   // const [sorted, setSorted] = useState(initialValue);
 
   const { owner, products, region } = filterValues;
 
   function sortUp(leftSide: any, rightSide: any) {
-    const col = 'customername';
+    const col = "customername";
     let result = 0;
 
     if (leftSide[col] > rightSide[col]) {
@@ -138,16 +138,19 @@ export const BacklogTable = ({
             {mydata.sort(sortUp).map((row: any, index: number) => (
               <TableRow key={index} className={classes.row}>
                 <TableCell component="th" scope="row">
-                  <a
-                    href={`http://navigator.infor.com/n/incident.asp?IncidentID=${row.incident}`}
-                    target="_blank"
-                  >
+                  <a href={`http://navigator.infor.com/n/incident.asp?IncidentID=${row.incident}`} target="_blank">
                     {row.incident}
                   </a>
                 </TableCell>
                 <TableCell>{row.severityname}</TableCell>
                 <TableCell className={classes.tableheadernarrow}>
-                  {row.escalated ? 'Yes' : ''}
+                  {row.escalated ? (
+                    <span className="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-pink-100 text-pink-800">
+                      Yes
+                    </span>
+                  ) : (
+                    ""
+                  )}
                 </TableCell>
                 <TableCell>{row.customername}</TableCell>
                 <TableCell>{row.owner}</TableCell>
@@ -156,14 +159,8 @@ export const BacklogTable = ({
                 ))}
                 {includeservicerestored && (
                   <>
-                    <TableCell>
-                      {row.incidentcreated ? format(row.incidentcreated, 'yyyy-MM-dd') : ''}
-                    </TableCell>
-                    <TableCell>
-                      {row.service_restored_date
-                        ? format(row.service_restored_date, 'yyyy-MM-dd')
-                        : ''}
-                    </TableCell>
+                    <TableCell>{row.incidentcreated ? format(row.incidentcreated, "yyyy-MM-dd") : ""}</TableCell>
+                    <TableCell>{row.service_restored_date ? format(row.service_restored_date, "yyyy-MM-dd") : ""}</TableCell>
                   </>
                 )}
                 <TableCell>{row.status}</TableCell>

@@ -13,6 +13,7 @@ const query = `
   {
     accounts {
       id
+      navid
       fullname
       lastlogin
       image
@@ -24,6 +25,7 @@ const query = `
       permissions {
         permission
       }
+      managerid
 
 
   }
@@ -43,11 +45,19 @@ const Loggedinusers = () => {
   let isAdmin = current?.role === "Admin";
   const [searchText, setSearchText] = useState("");
 
+  const addManager = (data = [], refField = "managerid", idField = "navid", asFieldName = "managerName") => {
+    return data.map((item) => {
+      let managerName = "Manager";
+      const foundName = data.find((refItem) => refItem[idField] === item[refField])?.fullname;
+      return { ...item, [asFieldName]: foundName || managerName };
+    });
+  };
+
   let showData = data?.accounts.filter((d) => d.lastlogin);
+  showData = addManager(_.orderBy(showData, "lastlogin", "desc"));
   if (searchText) {
     showData = showData.filter(({ fullname }) => fullname.includes(searchText));
   }
-  showData = _.orderBy(showData, "lastlogin", "desc");
 
   return (
     <div className="h-screen w-full bg-gray-200">
