@@ -49,7 +49,7 @@ const BacklogTableNewStyle = ({
       mydata = region ? mydata.filter((o) => o.owner_region === region) : mydata;
       setTableData(mydata);
     }
-  }, [backlog]);
+  }, [backlog, filterValues]);
 
   if (!backlog) {
     return <div></div>;

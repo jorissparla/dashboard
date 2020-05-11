@@ -251,12 +251,14 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
     .notServicedRestored()
     .notStatus(["Solution Proposed"])
     .getData();
-  // [
-  //   ...data.critical.filter((item: any) => !item.service_restored_date),
-  //   ...data.sev2.filter((item: any) => !item.service_restored_date && item.status !== "Solution Proposed"),
-  // ];
 
   const [loading, setLoading] = useState(true);
+  const all = blBase
+    .init()
+    .notStatus(["Awaiting Development", "Solution Proposed", "Solution Pending Maintenance"])
+    .sort("dayssincelastupdate", "D")
+    .getData();
+  const all_dev = blBase.init().status("Awaiting Development").sort("dayssincelastupdate", "D").getData();
   React.useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 2000);
     return () => {
@@ -271,7 +273,7 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
   // List of customers that have extended maintenance
   const extendedmaintenance = data.extendedMaintenance;
 
-  const extIncidents = [...data.all, ...data.all_dev]
+  const extIncidents = [...all, ...all_dev]
     .filter((item: any) => RELEASE_FILTER.includes(item.releasename))
     .map((item: any) => ({
       ...item,
@@ -282,7 +284,7 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
   const extIncidentsWithDev = extIncidents.filter((item: any) => item.status === "Awaiting Development");
   // console.log('🤷‍♂️🤷‍♂️', extIncidents);
   // console.log('mt customers', multitenantcustomers);
-  const mtincidents = data.all
+  const mtincidents = all
     .filter(
       (inc: any) => multitenantcustomers.find((cust: any) => parseInt(cust.customerid) === inc.customerid)
       // inc.customerid === 60028554
@@ -308,6 +310,7 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
     .init()
     // .hasStatus(["Researching", "On Hold by Customer", "Awaiting Infor", "Awaiting Customer"])
     .customername("Infor ")
+    .notStatus(["Solution Proposed", "Solution Pending Maintenance", "Awaiting Development"])
     .sort("dayssincelastupdate", "D")
     .getData();
   const on_hold = blBase.init().status("On hold by customer").valid_actiondate().sort("dayssincelastupdate", "D").getData();
@@ -361,9 +364,7 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
   const callbacks = blBase.init().status("Awaiting Infor").sort("dayssincelastupdate", "D").getData();
 
   const { isCloud } = useContext(SelectionContext);
-  console.log("filtervalues", filterValues);
-  console.log("End:", new Date());
-  // const filterValues = { owner, products };
+
   return (
     <>
       {loading && <LoadingDots />}
@@ -520,7 +521,7 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
           <BacklogTableNewStyle
             filterValues={filterValues}
             classes={classes}
-            backlog={data.infor}
+            backlog={infor}
             // backlog={infor}
             additionalFields={["contactname"]}
             title="Infor"
@@ -533,7 +534,7 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
             title="Active"
             description="All Active Support Backlog"
           />
-          <BacklogTableNewStyle filterValues={filterValues} classes={classes} backlog={data.all} title="All" description="All Support Backlog" />
+          <BacklogTableNewStyle filterValues={filterValues} classes={classes} backlog={all} title="All" description="All Support Backlog" />
         </div>
       )}
     </>

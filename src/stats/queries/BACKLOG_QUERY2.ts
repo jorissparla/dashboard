@@ -237,38 +237,10 @@ export const QUERY_BACKLOG_TEXT = `
     ) {
       ...backlogfragment
     }
-    all: backlog(
-      owner: $owner
-      orderBy: DAYS_DESC
-      statusFilter: BACKLOG
-      productFilters: $products
-    ) {
-      ...backlogfragment
-    }
+
     everything: backlog(
       owner: $owner
       orderBy: DAYS_DESC
-      productFilters: $products
-    ) {
-      ...backlogfragment
-    }
-    infor: backlog(
-      owner: $owner
-      orderBy: DAYS_DESC
-      statusFilter: BACKLOG
-      customer: "Infor"
-      productFilters: $products
-    ) {
-      ...backlogfragment
-    }
-
-
-    all_dev: backlog(
-      owner: $owner
-      orderBy: CREATED_ASC
-      deployment: "ALL"
-      date: $date
-      statusFilter: DEVELOPMENT
       productFilters: $products
     ) {
       ...backlogfragment
