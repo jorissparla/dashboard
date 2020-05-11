@@ -8,6 +8,7 @@ import SearchBar from "common/SearchBar";
 import getInitials from "tenants/details/getInitials";
 import { useUserContext } from "globalState/UserProvider";
 import { useHistory } from "react-router";
+import { classNames } from "elements/TableComponent";
 
 const query = `
   {
@@ -53,6 +54,7 @@ const Loggedinusers = () => {
     });
   };
 
+  if (!data) return null;
   let showData = data?.accounts.filter((d) => d.lastlogin);
   showData = addManager(_.orderBy(showData, "lastlogin", "desc"));
   if (searchText) {
@@ -64,25 +66,39 @@ const Loggedinusers = () => {
       <SearchBar onChange={(value) => setSearchText(value)} hintText="Enter name" />
       <div className="w-full px-6">
         <div className="grid lg:grid-cols-7 sm:grid-cols-6 gap-1 mx-auto w-full">
-          {showData?.map((acc) => (
-            <div key={acc.fullname} className=" rounded shadow-lg bg-white p-2 m-2 w-full overflow-hidden">
-              <div className="flex items-center justify-between mb-2">
-                <h1 className="font-pop cursor-pointer font-semibold overflow-hidden">{acc.fullname}</h1>
-                <button onClick={() => (isAdmin ? history.push("/profilepage/" + acc.id) : null)}>
-                  {acc.image ? (
-                    <img className="h-12 w-12 shadow rounded-full" src={acc.image} alt="Profile Picture" />
-                  ) : (
-                    <div className="h-12 w-12 shadow rounded-full bg-teal-200 text-teal-800 text-xl flex items-center justify-center font-semibold">
-                      {getInitials(acc.fullname)}
-                    </div>
-                  )}
-                </button>
+          {showData?.map((acc) => {
+            const regionCls = {
+              EMEA: "bg-teal-200 text-teal-800 ",
+              NA: "bg-purple-200 text-purple-800 ",
+              LA: "bg-pink-200 text-pink-800 ",
+              APJ: "bg-gray-200 text-gray-800 ",
+              GLB: "bg-blue-200 text-blue-800 ",
+            };
+            const baseClass = "h-12 w-12 shadow rounded-full  text-xl flex items-center justify-center font-semibold";
+            const avaClass = classNames(regionCls[acc.region], baseClass);
+            const tagClass = classNames(
+              regionCls[acc.region],
+              " inline-flex items-center px-3 py-0.5 rounded-full text-sm  font-semibold leading-5 "
+            );
+
+            return (
+              <div key={acc.fullname} className=" rounded shadow-lg bg-white p-2 m-2 w-full overflow-hidden">
+                <div className="flex items-center justify-between mb-2">
+                  <h1 className="font-pop cursor-pointer font-semibold overflow-hidden">{acc.fullname}</h1>
+                  <button onClick={() => (isAdmin ? history.push("/profilepage/" + acc.id) : null)}>
+                    {acc.image ? (
+                      <img className="h-12 w-12 shadow rounded-full" src={acc.image} alt="Profile Picture" />
+                    ) : (
+                      // <div className="h-12 w-12 shadow rounded-full bg-teal-200 text-teal-800 text-xl flex items-center justify-center font-semibold">
+                      <div className={avaClass}>{getInitials(acc.fullname)}</div>
+                    )}
+                  </button>
+                </div>
+                {/* <span className="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-teal-200 text-teal-800"> */}
+                <span className={tagClass}>{format(addHours(parseInt(acc.lastlogin), -2), "yyyy-MM-dd HH:mm")}</span>
               </div>
-              <span className="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-teal-200 text-teal-800">
-                {format(addHours(parseInt(acc.lastlogin), -2), "yyyy-MM-dd HH:mm")}
-              </span>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
       {/* <pre>{JSON.stringify(showData, null, 2)}</pre> */}

@@ -128,7 +128,7 @@ const BacklogTableNewStyle = ({
   const severityColors = {
     "Production Outage / Critical Application halted": "text-white bg-red-700",
     "Major impact": "text-red-800 bg-red-300",
-    "High impact": "text-orange-800 bg-orange-200",
+    "High impact": "text-gray-800 font-bold",
 
     Standard: "text-gray-600",
   };

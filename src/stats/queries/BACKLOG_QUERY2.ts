@@ -208,6 +208,7 @@ export const QUERY_BACKLOG_TEXT = `
     region
     releasename
     service_restored_date
+    scheduled_activity_date
   }
   query QUERY_BACKLOG(
     $date: String

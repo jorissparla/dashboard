@@ -38,6 +38,10 @@ class Backlog {
     this.temp = this.temp.filter((item) => item.action_date && item.action_date > new Date().getTime());
     return this;
   }
+  invalid_activity_date() {
+    this.temp = this.temp.filter((item) => !item.scheduled_activity_date);
+    return this;
+  }
   //owner
   owner(owner) {
     this.temp = this.temp.filter((item) => item.owner.toLowerCase() === owner.toLowerCase());
@@ -81,6 +85,7 @@ class Backlog {
     this.temp = this.temp.filter((item) => item.dayssincelastupdate > dayssincelastupdate);
     return this;
   }
+
   // ownergroup
   ownergroup(ownergroup) {
     this.temp = this.temp.filter((item) => item.ownergroup.toLowerCase() === ownergroup.toLowerCase());

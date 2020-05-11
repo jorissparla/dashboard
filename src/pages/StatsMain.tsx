@@ -335,6 +335,14 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
     .sort("dayssincelastupdate", "D")
     .addManager()
     .getData();
+  const pendingmaintenance = blBase
+    .init()
+    // .region("EMEA")
+    .hasStatus(["Solution Pending Maintenance"])
+    .invalid_activity_date()
+    .sort("dayssincelastupdate", "D")
+    .addManager()
+    .getData();
 
   const cloudops = blBase
     .init()
@@ -385,6 +393,14 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
             backlog={multitenant}
             title="Multitenant"
             description="All Incidents open for our MT customers not updated > 7 days"
+          />
+
+          <BacklogTableNewStyle
+            filterValues={filterValues}
+            classes={classes}
+            backlog={pendingmaintenance}
+            title="Pending Maintenance"
+            description="All Incidents Solution Pending Maintenance without a valid activity date "
           />
           <BacklogTableNewStyle
             filterValues={filterValues}

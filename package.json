@@ -15,7 +15,7 @@
     "customize-cra": "^0.9.1",
     "customize-cra-react-refresh": "^1.0.1",
     "postcss-cli": "^7.1.0",
-    "react-app-rewired": "^2.1.5",
+    "react-app-rewired": "^2.1.6",
     "react-scripts": "^3.4.0",
     "react-testing-library": "^8.0.1",
     "typescript": "^3.8.3"
@@ -82,8 +82,8 @@
   },
   "scripts": {
     "start-unsec": "npm run copy:unsecure-env && SET PORT=3000 && react-scripts start",
-    "start": "set HTTPS=true&&set PORT=8762 && npm run copy:secure-env &&react-scripts start  ",
-    "start2": "set HTTPS=true&&set PORT=8762 && npm run copy:secure-env && react-app-rewired start",
+    "start2": "set HTTPS=true&&set PORT=8762 && npm run copy:secure-env &&react-scripts start  ",
+    "start": "set HTTPS=true&&set PORT=8762 && npm run copy:secure-env && react-app-rewired start",
     "build-unsecure": "react-scripts build",
     "copy:unsecure-env": "xcopy /Y .env.unsecure.env .env",
     "copy:secure-env": "xcopy /Y .env.secure.env .env",
