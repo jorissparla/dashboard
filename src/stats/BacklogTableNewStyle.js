@@ -25,7 +25,13 @@ const BacklogTableNewStyle = ({
 }) => {
   const [tableData, setTableData] = useState(backlog || []);
   const [sortState, setSortState] = useState({ name: "", direction: "A" });
-  const xtraFields = additionalFields.map((fld) => ({ name: fld, title: fld, type: "" }));
+  const xtraFields = additionalFields.map((fld) => {
+    let type = "";
+    if (fld.includes("time")) {
+      type = "dt";
+    }
+    return { name: fld, title: fld, type };
+  });
   const fields = [
     { name: "incident", title: "Incident", type: "hl" },
     { name: "severityname", title: "Severity", type: "sev" },
@@ -105,6 +111,11 @@ const BacklogTableNewStyle = ({
       <p className="text-gray-900 whitespace-no-wrap">{value}</p>
     </td>
   );
+  const DateCell = ({ value }) => (
+    <td className="px-5 py-1 border-b border-gray-200  text-sm break-words w-full whitespace-normal">
+      <p className="text-gray-900 whitespace-no-wrap">{format(value, "yyyy-MMM-dd")}</p>
+    </td>
+  );
   const HyperLinkCell = ({ value }) => (
     <td className="px-5 py-1 border-b border-gray-200  text-sm">
       <a
@@ -178,6 +189,8 @@ const BacklogTableNewStyle = ({
 
                       case "sev":
                         return <SeverityCell key={name} value={item[name]} />;
+                      case "dt":
+                        return <DateCell key={name} value={item[name]} />;
 
                       default:
                         return <Cell key={name} value={item[name]} />;

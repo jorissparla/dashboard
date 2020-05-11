@@ -1,3 +1,4 @@
+import { differenceInDays } from "date-fns";
 const lower = (item) => item.toLowerCase();
 
 class Backlog {
@@ -20,6 +21,16 @@ class Backlog {
       // const manager = this.accounts.find((account) => account.managerid?.toString() === item.navid.toString());
       // console.log("🤦‍♂️", item.navid, manager);
       return { ...item, managername };
+    });
+    this.temp = response.slice();
+    return this;
+  }
+
+  addEscalatedDays() {
+    console.log("hier");
+    const response = this.temp.map((item) => {
+      console.log(item.escalation_time);
+      return { ...item, daysEscalated: !item.escalation_time ? 0 : differenceInDays(new Date(), parseInt(item.escalation_time)) };
     });
     this.temp = response.slice();
     return this;

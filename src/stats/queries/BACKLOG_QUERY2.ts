@@ -209,6 +209,7 @@ export const QUERY_BACKLOG_TEXT = `
     releasename
     service_restored_date
     scheduled_activity_date
+    escalation_time
   }
   query QUERY_BACKLOG(
     $date: String

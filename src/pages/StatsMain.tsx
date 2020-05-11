@@ -334,6 +334,7 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
     .init()
     // .region("EMEA")
     .escalated()
+    .addEscalatedDays()
     .notStatus(["Solution Proposed", "Solution Pending Maintenance"])
     .sort("dayssincelastupdate", "D")
     .addManager()
@@ -363,6 +364,7 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
     .getData();
   const callbacks = blBase.init().status("Awaiting Infor").sort("dayssincelastupdate", "D").getData();
 
+  console.log(escalated);
   const { isCloud } = useContext(SelectionContext);
 
   return (
@@ -374,7 +376,7 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
           <BacklogTableNewStyle
             filterValues={filterValues}
             classes={classes}
-            additionalFields={["managername"]}
+            additionalFields={["managername", "daysEscalated"]}
             backlog={escalated}
             title="Escalated"
             description="All Incidents escalated"
