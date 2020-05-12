@@ -260,7 +260,6 @@ const SupportCards = (props) => {
     if (showFavorites) {
       filteredCards = filteredCards.filter((card) => card.isfavorite === true);
     }
-    console.log(filteredCards);
     return filteredCards;
   };
   let filteredCards = doFilter(supportcards, searchText, selectedCategory);

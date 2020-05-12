@@ -243,7 +243,7 @@ const SupportCardForm = (props) => {
           </FormControl>
 
           <div className="w-full" disabled={readOnly}>
-            <SupportCardTags id={supportcard.id} keywords={supportcard.keywords} readOnly={readOnly} />
+            {supportcard && <SupportCardTags id={supportcard?.id} keywords={supportcard?.keywords} readOnly={readOnly} />}
           </div>
         </div>
         <TextField
