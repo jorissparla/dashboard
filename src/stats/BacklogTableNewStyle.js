@@ -19,6 +19,7 @@ const BacklogTableNewStyle = ({
   additionalFields = [],
   classes,
   title,
+  sub = "",
   description = title,
   filterValues = { owner: "", products: ["LN"], region: "EMEA" },
   includeservicerestored = false,
@@ -149,7 +150,6 @@ const BacklogTableNewStyle = ({
       "w-28 inline-flex items-center px-3 py-0.5 rounded-full text-xs font-semibold leading-5 ": true,
       [sevClass]: true,
     });
-    console.log(classes);
     return (
       <td className="px-5 py-2 border-b border-gray-200  text-sm text">
         <span className={classes}>{value}</span>
@@ -160,11 +160,20 @@ const BacklogTableNewStyle = ({
   return (
     <ExpansionPanel TransitionProps={{ unmountOnExit: true }}>
       <ExpansionPanelSummary className={classes.summary} expandIcon={<ExpandMoreIcon />}>
-        <div className={classes.spaceapart}>
-          <Typography variant="h6" className={classes.heading}>
-            {title}({tableData.length})
-          </Typography>
-          <div>{description}</div>
+        <div className="flex items-center justify-between w-full p-2">
+          <div variant="h6" className="text-xl text-gray-500 font-semibold">
+            <span className=" text-teal-600">{title}</span>
+            <span className="ml-2 p-1 text-md ">({tableData.length})</span>
+            {sub && (
+              <div className="flex items-center text-base font-normal">
+                <svg className="fill-current w-4 h-4 text-gray-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                  <path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-7.59V4h2v5.59l3.95 3.95-1.41 1.41L9 10.41z"></path>
+                </svg>
+                <span>{sub}</span>
+              </div>
+            )}
+          </div>
+          <p className="w-2/5 text-base  text-gray-500 ">{description}</p>
         </div>
       </ExpansionPanelSummary>
       <ExpansionPanelDetails>

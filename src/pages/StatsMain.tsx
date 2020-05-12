@@ -253,17 +253,17 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
     .getData();
 
   const [loading, setLoading] = useState(true);
-  const all = blBase
+  const [avgAgeSupport, all] = blBase
     .init()
     .notStatus(["Awaiting Development", "Solution Proposed", "Solution Pending Maintenance"])
     .sort("dayssincelastupdate", "D")
-    .getData();
-  const allOver30 = blBase
+    .getAvgAndData();
+  const [avgAge, allOver30] = blBase
     .init()
     .notStatus(["Solution Proposed", "Solution Pending Maintenance"])
     .daysSinceCreated(30)
     .sort("daysSinceCreated", "D")
-    .getData();
+    .getAvgAndData();
   const all_dev = blBase.init().status("Awaiting Development").sort("dayssincelastupdate", "D").getData();
   React.useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 2000);
@@ -542,8 +542,22 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
             title="Active"
             description="All Active Support Backlog"
           />
-          <BacklogTableNewStyle filterValues={filterValues} classes={classes} backlog={all} title="All" description="All Support Backlog" />
-          <BacklogTableNewStyle filterValues={filterValues} classes={classes} backlog={allOver30} title="All" description="Aged over 30" />
+          <BacklogTableNewStyle
+            filterValues={filterValues}
+            classes={classes}
+            backlog={all}
+            sub={` age ${avgAgeSupport} days`}
+            title={`All  `}
+            description="All Support Backlog"
+          />
+          <BacklogTableNewStyle
+            filterValues={filterValues}
+            classes={classes}
+            backlog={allOver30}
+            sub={` age ${avgAge} days`}
+            title={`All `}
+            description="Aged over 30"
+          />
         </div>
       )}
     </>

@@ -29,7 +29,6 @@ class Backlog {
   addEscalatedDays() {
     console.log("hier");
     const response = this.temp.map((item) => {
-      console.log(item.escalation_time);
       return { ...item, daysEscalated: !item.escalation_time ? 0 : differenceInDays(new Date(), parseInt(item.escalation_time)) };
     });
     this.temp = response.slice();
@@ -179,6 +178,11 @@ class Backlog {
   }
   getData() {
     return this.temp;
+  }
+  getAvgAndData() {
+    const sum = this.temp.reduce((total, item) => total + item.daysSinceCreated, 0);
+    const avg = (sum / (this.temp.length || 0 + 1)).toFixed(0);
+    return [avg, this.temp];
   }
 }
 
