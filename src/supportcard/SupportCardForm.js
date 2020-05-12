@@ -230,8 +230,8 @@ const SupportCardForm = (props) => {
               onChange={handleChange}
               disabled={readOnly}
               inputProps={{
-                name: "owner1",
-                id: "owner1",
+                name: "owner",
+                id: "owner",
               }}
             >
               {owners.map(({ id, name }) => (
