@@ -15,6 +15,7 @@ import { useUser } from "../User";
 //import { format } from 'date-fns';
 import { format } from "../utils/format";
 import SupportCardTags from "./SupportCardTags";
+import TWButton from "elements/TWButton";
 
 const owners = [
   { id: "Ricardo Exposito", name: "Ricardo Exposito" },
@@ -259,9 +260,9 @@ const SupportCardForm = (props) => {
         <CardSection>
           {!readOnly && (
             <React.Fragment>
-              <Button variant="contained" color="primary" className={classes.button} type="submit">
+              <TWButton color="primary" type="submit">
                 Save
-              </Button>
+              </TWButton>
             </React.Fragment>
           )}
           {!readOnly && supportcard && (
@@ -274,9 +275,9 @@ const SupportCardForm = (props) => {
               View Link
             </Button>
           )}
-          <Button variant="contained" color="secondary" className={classes.button} onClick={() => setTimeout(history.push("/supportcard"), 500)}>
+          <TWButton variant="contained" color="teal" onClick={() => setTimeout(history.push("/supportcard"), 500)}>
             Cancel
-          </Button>
+          </TWButton>
           <Chip style={{ margin: 4 }} label={`Last updated at ${format(updatedAt, "EEE, dd MMM yyyy")}`} />
         </CardSection>
       </form>
