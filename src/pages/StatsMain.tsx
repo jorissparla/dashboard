@@ -258,6 +258,12 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
     .notStatus(["Awaiting Development", "Solution Proposed", "Solution Pending Maintenance"])
     .sort("dayssincelastupdate", "D")
     .getData();
+  const allOver30 = blBase
+    .init()
+    .notStatus(["Solution Proposed", "Solution Pending Maintenance"])
+    .daysSinceCreated(30)
+    .sort("daysSinceCreated", "D")
+    .getData();
   const all_dev = blBase.init().status("Awaiting Development").sort("dayssincelastupdate", "D").getData();
   React.useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 2000);
@@ -537,6 +543,7 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
             description="All Active Support Backlog"
           />
           <BacklogTableNewStyle filterValues={filterValues} classes={classes} backlog={all} title="All" description="All Support Backlog" />
+          <BacklogTableNewStyle filterValues={filterValues} classes={classes} backlog={allOver30} title="All" description="Aged over 30" />
         </div>
       )}
     </>
