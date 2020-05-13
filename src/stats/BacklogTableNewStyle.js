@@ -25,6 +25,7 @@ const BacklogTableNewStyle = ({
   includeservicerestored = false,
 }) => {
   const [tableData, setTableData] = useState(backlog || []);
+  const [avgAge, setAvgAge] = useState(0);
   const [sortState, setSortState] = useState({ name: "", direction: "A" });
   const xtraFields = additionalFields.map((fld) => {
     let type = "";
@@ -54,10 +55,16 @@ const BacklogTableNewStyle = ({
       let mydata = backlog && owner ? backlog.filter((o) => o.owner === owner) : backlog;
       mydata = products.length ? mydata.filter((o) => products.includes(o.productline)) : mydata;
       mydata = region ? mydata.filter((o) => o.owner_region === region) : mydata;
+      setAvgAge(getAvgAndData(mydata));
       setTableData(mydata);
     }
   }, [backlog, filterValues]);
 
+  const getAvgAndData = (data) => {
+    const sum = data.reduce((total, item) => total + item.daysSinceCreated, 0);
+    const avg = (sum / (data.length || 0 + 1)).toFixed(0);
+    return avg;
+  };
   if (!backlog) {
     return <div></div>;
   }
@@ -169,7 +176,7 @@ const BacklogTableNewStyle = ({
                 <svg className="fill-current w-4 h-4 text-gray-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                   <path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-7.59V4h2v5.59l3.95 3.95-1.41 1.41L9 10.41z"></path>
                 </svg>
-                <span>{sub}</span>
+                <span>{avgAge} days</span>
               </div>
             )}
           </div>
