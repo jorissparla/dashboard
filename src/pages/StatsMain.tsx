@@ -1,18 +1,11 @@
-import { withStyles } from "@material-ui/core";
 import React, { useContext, useState } from "react";
-import { useQuery } from "react-apollo";
-import { SelectionContext } from "../globalState/SelectionContext";
-import { BacklogTable } from "../stats/BacklogTable";
-import { ListFavoritePersons } from "../stats/FavoritesPersons";
-import { QUERY_BACKLOG } from "../stats/queries/BACKLOG_QUERY2";
-import { format } from "../utils/format";
-import Spinner from "../utils/spinner";
-
-import LoadingDots from "./../utils/LoadingDots";
-import { useLocalStorage } from "../utils/useLocalStorage";
-import { UserContext } from "./../globalState/UserProvider";
-import { Backlog } from "stats/BacklogType";
 import BacklogTableNewStyle from "stats/BacklogTableNewStyle";
+import { Backlog } from "stats/BacklogType";
+import { SelectionContext } from "../globalState/SelectionContext";
+import { useLocalStorage } from "../utils/useLocalStorage";
+import { useIsValidEditor } from "./../globalState/UserProvider";
+import LoadingDots from "./../utils/LoadingDots";
+
 const SelectionForm = React.lazy(() => import("../stats/SelectionForm"));
 
 export const styles = (theme: any) => ({
@@ -238,6 +231,7 @@ interface Props {
 const RELEASE_FILTER = ["Baan 4", "Baan 5", "LN FP5", "LN FP6", "LN FP7", "LN FP3", "10.2", "10.3"];
 
 export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products = ["LN"], filterValues }) => {
+  const [isValidEditor, user] = useIsValidEditor();
   const params = useParams();
   const blBase = new Backlog(data.everything, data.accounts);
   const sev12notrestored = blBase
@@ -370,7 +364,6 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
     .getData();
   const callbacks = blBase.init().status("Awaiting Infor").sort("dayssincelastupdate", "D").getData();
 
-  console.log(escalated);
   const { isCloud } = useContext(SelectionContext);
 
   return (

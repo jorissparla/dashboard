@@ -104,7 +104,7 @@ const Stats = (props) => {
     enableIt = user.permissions.some(({ permission }) => permission === "STATS");
   }
   console.log("Start:", new Date());
-  const parms = useParams(!isValidSuperUser);
+  const parms = useParams(!isValidSuperUser && !enableIt);
   const API = "https://nlbavwixs.infor.com:4001";
   const { data, error } = useSWR(
     QUERY_BACKLOG_TEXT,

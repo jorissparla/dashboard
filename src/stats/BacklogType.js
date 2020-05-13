@@ -27,7 +27,6 @@ class Backlog {
   }
 
   addEscalatedDays() {
-    console.log("hier");
     const response = this.temp.map((item) => {
       return { ...item, daysEscalated: !item.escalation_time ? 0 : differenceInDays(new Date(), parseInt(item.escalation_time)) };
     });
