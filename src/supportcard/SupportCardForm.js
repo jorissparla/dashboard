@@ -18,6 +18,7 @@ import { useUser } from "../User";
 import { format } from "../utils/format";
 import SupportCardTags from "./SupportCardTags";
 import TWButton from "elements/TWButton";
+import SafeDeleteButton from "videos/SafeDeleteButton";
 
 const owners = [
   { id: "Ricardo Exposito", name: "Ricardo Exposito" },
@@ -118,7 +119,7 @@ const SupportCardForm = (props) => {
   } = props;
   const [category, setCategory] = useState(initialValues.category);
   const readOnly = !authenticated;
-  const updatedAt = supportcard ? supportcard.updatedAt : format(new Date(), "yyyy-MM-dd");
+  const updatedAt = supportcard?.updatedAt; //: format(new Date(), "yyyy-MM-dd");
   const [values, setValues] = React.useState(initialValues);
   const currentUser = useUser();
 
@@ -154,128 +155,125 @@ const SupportCardForm = (props) => {
 
   console.log("🐱‍🏍", supportcard);
   return (
-    <Paper style={paperStyle}>
-      <form onSubmit={handleSubmit}>
-        {!readOnly ? (
-          <input
-            id="title"
-            name="title"
-            className="form-input text-blue-400 font-semibold  text-xl w-full"
-            value={values.title}
-            onChange={handleChange}
-            type="text"
-          />
-        ) : (
-          <div className="text-blue-400 font-semibold text-xl w-full">{values.title}</div>
-        )}
-
-        <div className={classes.content}>
-          {
-            // !readOnly ? (
-            <CKEditor
-              editor={ClassicEditor}
-              disabled={readOnly}
-              data={values.description}
-              onInit={(editor) => {
-                // You can store the "editor" and use when it is needed.
-                console.log("Editor is ready to use!", editor);
-              }}
-              onChange={(event, editor) => {
-                const data = editor.getData();
-                // console.log("Change", { event, editor, data });
-                setValues({ ...values, description: data });
-              }}
-              onBlur={(event, editor) => {
-                // console.log("Blur.", editor);
-              }}
-              onFocus={(event, editor) => {
-                // console.log("Focus.", editor);
-              }}
+    <div className="bg-gray-200 h-screen w-full p-2">
+      <div className="rounded shadow-lg p-4 bg-white mx-2">
+        <form onSubmit={handleSubmit}>
+          {!readOnly ? (
+            <input
+              id="title"
+              name="title"
+              className="form-input text-blue-400 font-semibold  text-xl w-full"
+              value={values.title}
+              onChange={handleChange}
+              type="text"
             />
-          }
-        </div>
-        <div className="flex items-center">
-          <FormControl className={classes.formControl}>
-            <InputLabel htmlFor="category-simple">Category</InputLabel>
-            <Select
-              value={values.categoryname}
-              onChange={handleChange}
-              disabled={readOnly}
-              inputProps={{
-                name: "categoryname",
-                id: "category-simple",
-              }}
-            >
-              {categories.map(({ id, name }) => (
-                <MenuItem key={id} value={name}>
-                  {name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          <FormControl className={classes.formControl}>
-            <InputLabel htmlFor="owner">Owner</InputLabel>
-            <Select
-              value={values.owner}
-              onChange={handleChange}
-              disabled={readOnly}
-              inputProps={{
-                name: "owner",
-                id: "owner",
-              }}
-            >
-              {owners.map(({ id, name }) => (
-                <MenuItem key={id} value={name}>
-                  {name}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          ) : (
+            <div className="text-blue-400 font-semibold text-xl w-full">{values.title}</div>
+          )}
 
-          <div className="w-full" disabled={readOnly}>
+          <div className="flex text-gray-600 mb-4">
+            {
+              // !readOnly ? (
+              <CKEditor
+                editor={ClassicEditor}
+                disabled={readOnly}
+                data={values.description}
+                onInit={(editor) => {
+                  // You can store the "editor" and use when it is needed.
+                  console.log("Editor is ready to use!", editor);
+                }}
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+                  // console.log("Change", { event, editor, data });
+                  setValues({ ...values, description: data });
+                }}
+                onBlur={(event, editor) => {
+                  // console.log("Blur.", editor);
+                }}
+                onFocus={(event, editor) => {
+                  // console.log("Focus.", editor);
+                }}
+              />
+            }
+          </div>
+          <div className="flex items-center mb-4">
+            <FormControl className={classes.formControl}>
+              <InputLabel htmlFor="category-simple">Category</InputLabel>
+              <Select
+                value={values.categoryname}
+                onChange={handleChange}
+                disabled={readOnly}
+                inputProps={{
+                  name: "categoryname",
+                  id: "category-simple",
+                }}
+              >
+                {categories.map(({ id, name }) => (
+                  <MenuItem key={id} value={name}>
+                    {name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl className={classes.formControl}>
+              <InputLabel htmlFor="owner">Owner</InputLabel>
+              <Select
+                value={values.owner}
+                onChange={handleChange}
+                disabled={readOnly}
+                inputProps={{
+                  name: "owner",
+                  id: "owner",
+                }}
+              >
+                {owners.map(({ id, name }) => (
+                  <MenuItem key={id} value={name}>
+                    {name}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+          </div>
+          <div className="w-full mb-4" disabled={readOnly}>
             {supportcard && <SupportCardTags id={supportcard?.id} keywords={supportcard?.keywords} readOnly={readOnly} />}
           </div>
-        </div>
-        {!readOnly ? (
-          <input
-            id="link"
-            name="link"
-            placeholder="Link to Document"
-            className="form-input  text-gray-600 w-full"
-            value={values.link}
-            onChange={handleChange}
-            onBlur={handleChange}
-          />
-        ) : (
-          <a href={values.link} target="_blank_" className="underline text-gray-600 w-full">
-            {values.link}
-          </a>
-        )}
-        <CardSection>
-          {!readOnly && (
-            <React.Fragment>
-              <TWButton color="primary" type="submit">
-                Save
-              </TWButton>
-            </React.Fragment>
+          {!readOnly ? (
+            <input
+              id="link"
+              name="link"
+              placeholder="Link to Document"
+              className="form-input  text-gray-600 w-full mb-2"
+              value={values.link}
+              onChange={handleChange}
+              onBlur={handleChange}
+            />
+          ) : (
+            <a href={values.link} target="_blank_" className="underline text-gray-600 w-full mb-2">
+              {values.link}
+            </a>
           )}
-          {!readOnly && supportcard && (
-            <Button variant="contained" color="primary" className={classes.buttonDel} onClick={() => onDelete(supportcard)}>
-              Delete
-            </Button>
-          )}
-          {readOnly && supportcard && (
-            <Button variant="contained" color="primary" className={classes.buttonDel} onClick={() => window.open(initialValues.link)}>
-              View Link
-            </Button>
-          )}
-          <TWButton variant="contained" color="teal" onClick={() => setTimeout(history.push("/supportcard"), 500)}>
-            Cancel
-          </TWButton>
-          <Chip style={{ margin: 4 }} label={`Last updated at ${format(updatedAt, "EEE, dd MMM yyyy")}`} />
-        </CardSection>
-      </form>
-    </Paper>
+          <CardSection>
+            {!readOnly && (
+              <React.Fragment>
+                <TWButton color="primary" type="submit">
+                  Save Card
+                </TWButton>
+              </React.Fragment>
+            )}
+            {!readOnly && supportcard && <SafeDeleteButton onDelete={() => onDelete(supportcard)}></SafeDeleteButton>}
+            {readOnly && supportcard && (
+              <Button variant="contained" color="primary" className={classes.buttonDel} onClick={() => window.open(initialValues.link)}>
+                View Link
+              </Button>
+            )}
+            <TWButton variant="contained" color="teal" onClick={() => setTimeout(history.push("/supportcard"), 500)}>
+              Cancel
+            </TWButton>
+            <Chip style={{ margin: 4 }} label={updatedAt ? `Last updated at ${format(updatedAt, "EEE, dd MMM yyyy")}` : `Not saved yet`} />
+          </CardSection>
+        </form>
+      </div>
+    </div>
   );
 };
 

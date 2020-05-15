@@ -1,10 +1,11 @@
 import React from "react";
 import clsx from "clsx";
 const base_class = "mx-2 rounded px-4  py-3  font-bold   leading-tight shadow-md";
-const def_classes = "bg-gray-700 text-white hover:bg-gray-500";
+const def_classes = "bg-gray-700 text-white hover:bg-gray-400";
 const grey_class = "text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 btn-tw font-semibold font-sansI";
+const grey_forbidden_class = "cursor-not-allowed text-sm bg-gray-300 hover:bg-gray-400 text-gray-500 btn-tw font-semibold font-sansI";
 const teal_class = "bg-teal-300 hover:bg-teal-400 text-teal-800";
-const black_class = "bg-gray-800 hover:bg-bg-gray-700 text-white";
+const black_class = "bg-gray-800 hover:bg-bg-gray-600 text-white";
 const pink_class = "bg-pink-200 text-pink-800 hover:bg-pink-300";
 const purple_class = "bg-purp text-white hover:bg-purple-400";
 const indigo_class =
@@ -20,6 +21,12 @@ export default ({ children, ...props }) => {
       break;
     case "black":
       classes = clsx(base_class, black_class);
+      break;
+    case "grey":
+      classes = clsx(base_class, grey_class);
+      break;
+    case "greyforbidden":
+      classes = clsx(base_class, grey_forbidden_class);
       break;
     case "pink":
       classes = clsx(base_class, pink_class);

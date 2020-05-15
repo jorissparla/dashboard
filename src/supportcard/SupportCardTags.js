@@ -59,10 +59,10 @@ const SupportCardTags = ({ id, keywords, readOnly }) => {
   }
   return (
     <div className="flex w-full justify-end px-4 items-center">
-      <label htmlFor="kw" className="mr-2 block text-sm font-semibold leading-5 text-gray-700">
-        Keyword
+      <label htmlFor="kw" className="mr-3 pr-3 block text-sm font-semibold leading-5 text-gray-700">
+        Keywords
       </label>
-      <div className="mt-1 relative rounded-md shadow-sm w-96">
+      <div className="mt-1 mr-2 relative rounded-md shadow-sm w-96">
         <input
           type="text"
           name="kw"
