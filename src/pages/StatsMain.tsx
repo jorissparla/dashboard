@@ -113,6 +113,7 @@ export function useParams(clean = false) {
   const [N_NEW] = useLocalStorage("N_NEW", 1, clean);
   const [N_SOLUTIONPROPOSED] = useLocalStorage("N_SOLUTIONPROPOSED", 30, clean);
   const [N_AGING] = useLocalStorage("N_AGING", 90, clean);
+  const [C_AGING] = useLocalStorage("C_AGING", 30, clean);
   const [N_MAJORIMPACT] = useLocalStorage("N_MAJORIMPACT", 2, clean);
   return {
     C_AWAITINGCUSTOMER,
@@ -125,6 +126,7 @@ export function useParams(clean = false) {
     N_NEW,
     N_SOLUTIONPROPOSED,
     N_AGING,
+    C_AGING,
     N_MAJORIMPACT,
   };
 }
@@ -320,6 +322,13 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
     .daysSinceCreated(params["N_AGING"])
     .sort("dayssincelastupdate", "D")
     .getData();
+  const agingCloud = blBase
+    .init()
+    .hasStatus(["Researching", "On Hold by Customer", "Awaiting Infor", "Awaiting Customer"])
+    .Deployment("Cloud")
+    .daysSinceCreated(params["C_AGING"])
+    .sort("dayssincelastupdate", "D")
+    .getData();
   const aging_dev = blBase.init().hasStatus(["Awaiting Development"]).daysSinceCreated(90).sort("dayssincelastupdate", "D").getData();
   const major_impact = blBase
     .init()
@@ -364,6 +373,8 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
     .getData();
   const callbacks = blBase.init().status("Awaiting Infor").sort("dayssincelastupdate", "D").getData();
 
+  const incorrectOwnergroups = blBase.init().incorrectOwnerGroup().getData();
+  console.log({ incorrectOwnergroups });
   const { isCloud } = useContext(SelectionContext);
 
   return (
@@ -372,6 +383,14 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
 
       {!isCloud && (
         <div className="w-full mx-4">
+          <BacklogTableNewStyle
+            filterValues={filterValues}
+            classes={classes}
+            additionalFields={["ownergroup"]}
+            backlog={incorrectOwnergroups}
+            title="Incorrect Owner Group"
+            description="Incorrect Owner Group"
+          />
           <BacklogTableNewStyle
             filterValues={filterValues}
             classes={classes}
@@ -494,6 +513,14 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
             // backlog={data.aging}
             title="Aging- Support"
             description={`Incidents older than ${params["N_AGING"]}  days`}
+          />
+          <BacklogTableNewStyle
+            filterValues={filterValues}
+            classes={classes}
+            backlog={agingCloud}
+            // backlog={data.aging}
+            title="Aging- Support - Cloud"
+            description={`Cloud Incidents older than ${params["C_AGING"]}  days`}
           />
           <BacklogTableNewStyle
             filterValues={filterValues}

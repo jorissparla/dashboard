@@ -26,6 +26,13 @@ class Backlog {
     return this;
   }
 
+  incorrectOwnerGroup() {
+    const ownergroups = ["LN Tools Support", "LN Finance Support", "LN Logistics Support", "LN Manufacturing Support"];
+    const response = this.temp.filter((item) => item.productline === "LN" && !ownergroups.includes(item.ownergroup));
+    this.temp = response.slice();
+    return this;
+  }
+
   addEscalatedDays() {
     const response = this.temp.map((item) => {
       return { ...item, daysEscalated: !item.escalation_time ? 0 : differenceInDays(new Date(), parseInt(item.escalation_time)) };

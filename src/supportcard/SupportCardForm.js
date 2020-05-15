@@ -8,6 +8,8 @@ import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import JoditEditor from "jodit-react";
+import CKEditor from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-balloon";
 import React, { useRef, useState } from "react";
 import { withRouter } from "react-router";
 import { CardSection } from "../common";
@@ -154,55 +156,42 @@ const SupportCardForm = (props) => {
   return (
     <Paper style={paperStyle}>
       <form onSubmit={handleSubmit}>
-        <TextField
-          id="title"
-          name="title"
-          label="Title"
-          className={classes.titleField}
-          value={values.title}
-          onChange={handleChange}
-          // onBlur={handleChange}
-          margin="normal"
-          disabled={readOnly}
-          fullWidth
-        />
-        <div className={classes.content} style={{ boxShadow: "2px 2px 5px rgba(0,0,0,0.2)", background: "rgba(0,0,0,0.05)" }}>
-          {
-            !readOnly ? (
-              <JoditEditor
-                id="description"
-                name="description"
-                style={{ font: "24px Arial", color: "#000" }}
-                ref={editor}
-                value={values.description}
-                onBlur={(v) => {
-                  setValues({ ...values, description: v });
-                  setTimeout(() => {
-                    editor.current.focus();
-                  }, 50);
-                }}
-                // onBlur={v => setValues({ ...values, description: v })}
-                // onBlur={e => console.log(e)}
-                config={config}
-                // tabIndex={1} // tabIndex of textarea
-              />
-            ) : (
-              <JoditEditor
-                id="description"
-                name="description"
-                style={{ font: "24px Arial", color: "#000" }}
-                ref={viewer}
-                value={values.description}
-                onChange={(v) => setValues((prevState) => ({ ...prevState, description: v }))}
-                onBlur={(e) => console.log(e)}
-                config={config2}
-                tabIndex={2} // tabIndex of textarea
-              />
-            )
+        {!readOnly ? (
+          <input
+            id="title"
+            name="title"
+            className="form-input text-blue-400 font-semibold  text-xl w-full"
+            value={values.title}
+            onChange={handleChange}
+            type="text"
+          />
+        ) : (
+          <div className="text-blue-400 font-semibold text-xl w-full">{values.title}</div>
+        )}
 
-            // <div className={classes.markdown2}>
-            //   <ReactMarkdown source={values.description} escapeHtml={false} />
-            // </div>
+        <div className={classes.content}>
+          {
+            // !readOnly ? (
+            <CKEditor
+              editor={ClassicEditor}
+              disabled={readOnly}
+              data={values.description}
+              onInit={(editor) => {
+                // You can store the "editor" and use when it is needed.
+                console.log("Editor is ready to use!", editor);
+              }}
+              onChange={(event, editor) => {
+                const data = editor.getData();
+                // console.log("Change", { event, editor, data });
+                setValues({ ...values, description: data });
+              }}
+              onBlur={(event, editor) => {
+                // console.log("Blur.", editor);
+              }}
+              onFocus={(event, editor) => {
+                // console.log("Focus.", editor);
+              }}
+            />
           }
         </div>
         <div className="flex items-center">
@@ -247,16 +236,21 @@ const SupportCardForm = (props) => {
             {supportcard && <SupportCardTags id={supportcard?.id} keywords={supportcard?.keywords} readOnly={readOnly} />}
           </div>
         </div>
-        <TextField
-          id="link"
-          label="Link to Document"
-          className={classes.linkField}
-          value={values.link}
-          onChange={handleChange}
-          onBlur={handleChange}
-          margin="normal"
-          fullWidth
-        />
+        {!readOnly ? (
+          <input
+            id="link"
+            name="link"
+            placeholder="Link to Document"
+            className="form-input  text-gray-600 w-full"
+            value={values.link}
+            onChange={handleChange}
+            onBlur={handleChange}
+          />
+        ) : (
+          <a href={values.link} target="_blank_" className="underline text-gray-600 w-full">
+            {values.link}
+          </a>
+        )}
         <CardSection>
           {!readOnly && (
             <React.Fragment>

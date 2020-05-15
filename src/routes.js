@@ -130,7 +130,6 @@ function AppRoutes(props) {
       <Route exact path="/cloudsuite/:id" component={CloudSuitePage} history={history} user={user} />
       <EnhancedRoute auth="admin" editors={["Admin", "PO"]} user={user} exact path="/supportcard" component={SupportCards} />
       <Route exact path="/tenant" component={TenantPage} />
-      />
       <Route exact path="/region/:region" component={DashBoardContainer} user={user} />
       <Route exact path="/team/:team" component={DashBoardStatsNew} />
       <Route exact path="/team/:team/region/:region" component={DashBoardStats} />
@@ -198,7 +197,6 @@ function AppRoutes(props) {
         user={user}
         path="/courses/view/:id"
         component={(props) => <CourseEdit {...props} view={true} />}
-      />
       />
       <Route exact path="/chart" component={VSummaryChart} />
       <Route exact path="/addplannedcourserequest" component={AddPlannedCourseRequest} />

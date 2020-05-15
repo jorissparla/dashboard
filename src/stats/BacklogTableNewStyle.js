@@ -154,12 +154,16 @@ const BacklogTableNewStyle = ({
   const SeverityCell = ({ value }) => {
     let sevClass = severityColors[value] || "";
     let classes = classNames({
-      "w-28 inline-flex items-center px-3 py-0.5 rounded-full text-xs font-semibold leading-5 ": true,
+      "w-28 inline-flex items-center px-3 py-0.5 rounded-full text-xs font-semibold leading-5  ": true,
       [sevClass]: true,
     });
+    const tv = value === "Production Outage / Critical Application halted" ? "Production down" : value;
     return (
       <td className="px-5 py-2 border-b border-gray-200  text-sm text">
-        <span className={classes}>{value}</span>
+        <span className={classes}>
+          {/* {value} */}
+          {tv}
+        </span>
       </td>
     );
   };

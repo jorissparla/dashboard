@@ -170,13 +170,13 @@ export const SelectionForm = ({ classes, initialValue, valuesChanged, isValidSup
         <svg className="fill-current w-4 h-4 text-gray-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
           <path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-7.59V4h2v5.59l3.95 3.95-1.41 1.41L9 10.41z"></path>
         </svg>
-        last update {initialValue.lastUpdated}
+        last updated {initialValue?.lastUpdated || "Data not available yet"}
       </div>
-      {isValidSuperUser && (
-        <button className="btn-tw bg-pink-200 text-pink-800 hover:bg-pink-300" onClick={onNavigateToParams}>
-          Parameters
-        </button>
-      )}
+      {/* {isValidSuperUser && ( */}
+      <button className="btn-tw bg-pink-200 text-pink-800 hover:bg-pink-300" onClick={onNavigateToParams}>
+        Parameters
+      </button>
+      {/* )} */}
 
       {persons && persons.length > 0 && (
         <label className="flex mr-4 items-center px-4">
