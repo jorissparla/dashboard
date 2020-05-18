@@ -1,5 +1,5 @@
 module.exports = {
-  purge: ["./public/**/*.html", "./public/**/*.html"],
+  purge: ["./public/**/*.html", "./public/**/*.html", "./src/**/*.js", "./src/**/*.tsx"],
   theme: {
     extend: {
       boxShadow: {

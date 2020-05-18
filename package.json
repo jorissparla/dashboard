@@ -96,7 +96,7 @@
     "copy:unsecure": "xcopy /s /Y build \\\\nlbavwixs\\dashboard",
     "copy:secure": "xcopy /s /Y build \\\\nlbavwixs.infor.com\\dashboard.dev",
     "deploy": "npm run deploy:secure",
-    "deploy:secure": "npm run copy:secure-env && npm run build:secure && npm run copy:secure",
+    "deploy:secure": "SET NODE_ENV=production && npm run copy:secure-env && npm run build:secure && npm run copy:secure",
     "deploy:unsecure": "npm run copy:unsecure-env && npm run build && npm run copy:unsecure",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
