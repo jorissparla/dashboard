@@ -1,18 +1,12 @@
-import { Typography, withStyles } from "@material-ui/core";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import classNames from "classnames";
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { SelectionContext } from "../globalState/SelectionContext";
-import _ from "lodash";
+import CopyToClipBoard from "react-copy-to-clipboard";
 import { format } from "./../utils/format";
+import { useAlert } from "globalState/AlertContext";
 
 const BacklogTableNewStyle = ({
   backlog,
@@ -25,6 +19,7 @@ const BacklogTableNewStyle = ({
   includeservicerestored = false,
 }) => {
   const [tableData, setTableData] = useState(backlog || []);
+  const [exportedData, setExportedData] = useState("");
   const [fieldFilters, setFieldFilters] = useState({});
   const [avgAge, setAvgAge] = useState(0);
   const [sortState, setSortState] = useState({ name: "", direction: "A" });
@@ -51,6 +46,7 @@ const BacklogTableNewStyle = ({
     ]);
   const { owner, products, region } = filterValues;
   const { actionNeeded } = useContext(SelectionContext);
+  const alert = useAlert();
   useEffect(() => {
     if (backlog?.length > 0) {
       let mydata = backlog && owner ? backlog.filter((o) => o.owner === owner) : backlog;
@@ -67,10 +63,20 @@ const BacklogTableNewStyle = ({
 
       setAvgAge(getAvgAndData(mydata));
       setTableData(mydata);
+      setExportedData(exportToFile(mydata));
     }
   }, [backlog, filterValues, fieldFilters]);
 
-  const exportToFile = () => {};
+  const exportToFile = (data) => {
+    const tableHeaders = `<tr>` + fields.map((fld) => `<th style="border: 1px solid black">${fld.title}</th>`).join("") + `<tr>`;
+    const tableContents = data
+      .map((row) => {
+        const tableRow = fields.map((fld) => `<td style="border: 1px solid black">${row[fld.name]}</td>`).join("");
+        return `<tr style="border: 1px solid black">${tableRow}</tr>`;
+      })
+      .join("");
+    return `<table style="border: 1px solid black; border-collapse: collapse;">${tableHeaders}${tableContents}</table>`;
+  };
 
   const getAvgAndData = (data) => {
     const sum = data.reduce((total, item) => total + item.daysSinceCreated, 0);
@@ -264,9 +270,10 @@ const BacklogTableNewStyle = ({
     <ExpansionPanel TransitionProps={{ unmountOnExit: true }}>
       <ExpansionPanelSummary className="h-16" expandIcon={<ExpandMoreIcon />}>
         <div className="flex items-center justify-between w-full p-2 font-sansI">
-          <div variant="h6" className=" text-gray-500 font-semibold">
+          <div variant="h6" className=" text-gray-500 font-semibold flex items-center">
             <span className=" text-gray-500 text-lg">{title}</span>
             <span className="ml-2 p-1 text-md ">({tableData.length})</span>
+
             <FieldFilterSpans />
             {sub && (
               <div className="flex items-center text-base font-normal">
@@ -277,7 +284,32 @@ const BacklogTableNewStyle = ({
               </div>
             )}
           </div>
-          <p className="w-2/5 text-base  text-gray-500 ">{description}</p>
+          <>
+            <p className="w-2/5 text-base  text-gray-500 hover:bg-gray-300 p-2   " title="Click to copy to clipboard">
+              {description}
+            </p>
+            <CopyToClipBoard
+              text={exportedData}
+              onCopy={(d) => {
+                alert.setMessage("table copied to clipboard");
+                console.log(d);
+              }}
+              options={{ format: "text/html" }}
+            >
+              <svg
+                title="click to copy to Clipboard"
+                className=" w-4 h-4 text-gray-500 mr-2"
+                fill="none"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"></path>
+              </svg>
+            </CopyToClipBoard>
+          </>
         </div>
       </ExpansionPanelSummary>
       <div>
