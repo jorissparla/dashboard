@@ -1,47 +1,36 @@
-import React from 'react';
-import gql from 'graphql-tag';
-import { graphql } from 'react-apollo';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Avatar from '@material-ui/core/Avatar';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import styled from 'styled-components';
-import _ from 'lodash';
+import React from "react";
+import gql from "graphql-tag";
+import { graphql, useQuery } from "react-apollo";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import Avatar from "@material-ui/core/Avatar";
+import styled from "styled-components";
+import _ from "lodash";
 //import { format } from "date-fns";
-import { format } from '../utils/format';
-import { withStyles } from '@material-ui/core/styles';
-const colors = ['#BA68C8', '#81D4FA', '#FF7043', '#8BC34A', '#ec407a', '#1da1f2', '#E57373'];
+import { format } from "../utils/format";
+import { withStyles } from "@material-ui/core/styles";
+import clsx from "clsx";
+const colors = ["#BA68C8", "#81D4FA", "#FF7043", "#8BC34A", "#ec407a", "#1da1f2", "#E57373"];
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
     backgroundColor: theme.palette.background.paper,
-    width: 500
+    width: 500,
   },
   color0: {
-    backgroundColor: '#1da1f2'
+    backgroundColor: "#1da1f2",
   },
   color1: {
-    backgroundColor: '#BA68C8'
+    backgroundColor: "#BA68C8",
   },
   color2: {
-    backgroundColor: '#81D4FA'
+    backgroundColor: "#81D4FA",
   },
   color3: {
-    backgroundColor: '#FF7043'
-  }
+    backgroundColor: "#FF7043",
+  },
 });
-
-const Title = styled.h3`
-  display: flex;
-  align-content: center;
-  font-weight: 200;
-  font-family: Raleway;
-  padding-left: 30px;
-  background-color: lightgrey;
-  height: 50px;
-  align-items: center;
-`;
 
 const Div = styled.div`
   display: flex;
@@ -78,62 +67,53 @@ const Right = styled.div`
   justify-content: flex-end;
 `;
 
-const dayPart = d => format(d, 'dd');
-const monthPart = d => format(d, 'MMMM');
+const dayPart = (d) => format(d, "dd");
+const monthPart = (d) => format(d, "MMMM");
 
-const GoLiveItem = ({ item, bg = '#ec407a', index, classes }) => {
+const GoLiveItem = ({ item, bg = "#ec407a", index }) => {
   const { id, day, customername, customerid, region, version, comments } = item;
   const nr = index % 3;
+  const baseClass = `w-12 h-12 p-2 mt-2 ml-2 flex items-center justify-center text-xl rounded-full shadow-xl col-span-1 row-span-2 `;
+  const colorClass = nr === 0 ? `bg-orange-300 text-orange-700` : nr === 1 ? `bg-blue-300 text-blue-700` : `bg-pink-300 text-pink-700`;
+  const cls = clsx(baseClass, colorClass);
   return (
-    <ListItem
+    <div
+      className="grid grid-cols-10 grid-rows-2 mt-2 border-b border-gray-200"
       key={id}
-      onClick={() =>
-        window.open(
-          `http://navigator.infor.com/n/incident_list.asp?ListType=CUSTOMERID&Value=${customerid}`
-        )
-      }
+      onClick={() => window.open(`http://navigator.infor.com/n/incident_list.asp?ListType=CUSTOMERID&Value=${customerid}`)}
     >
-      <ListItemAvatar>
-        <Avatar className={nr === 1 ? classes.color1 : nr === 2 ? classes.color2 : classes.color3}>
-          {day}
-        </Avatar>
-      </ListItemAvatar>
-      <ListItemText
-        primary={
-          <Div>
-            <Span>{`${customername.toUpperCase()}`}</Span>
-            <Mid>{`${region}`}</Mid>
-            <Right>{version}</Right>
-          </Div>
-        }
-        secondary={comments.slice(0, 300) + '...'}
-      />
-    </ListItem>
+      <div className={cls}>{day}</div>
+      <div className="col-span-6 row-span-2">
+        <span className="font-semibold text-gray-700">{`${customername.toUpperCase()}`}</span>
+        <p className="text-sm overflow-hidden italic text-gray-600">{comments.slice(0, 300) + "..."}</p>
+      </div>
+      <div className="col-span-1 row-span-2 font-semibold flex items-center justify-center">{`${region}`}</div>
+      <div className="col-span-2 row-span-2 flex items-center justify-start text-sm">{version}</div>
+    </div>
   );
 };
 
-const RenderMonthItems = ({ items, classes }) =>
-  items.map((item, index) => (
-    <GoLiveItem key={index} item={item} bg={colors[index % 6]} index={index} classes={classes} />
-  ));
+const RenderMonthItems = ({ items }) => items.map((item, index) => <GoLiveItem key={index} item={item} bg={colors[index % 6]} index={index} />);
 
-const goLivesContainer = ({ data: { loading, golives }, classes }) => {
+const GoLivesContainer = () => {
+  const { data, loading } = useQuery(UPCOMING_GOLIVES_QUERY);
   if (loading) {
     return <div>Loading...</div>;
   }
+  const { golives } = data;
   const goLivesByMonth = _.chain(golives)
-    .sortBy(o => Date.parse(o.date))
-    .groupBy(function(g) {
-      return format(g.date, 'MMMM');
+    .sortBy((o) => Date.parse(o.date))
+    .groupBy(function (g) {
+      return format(g.date, "MMMM");
     })
-    .map(o => _.map(o, i => _.merge({ day: dayPart(i.date), month: monthPart(i.date) }, i)))
+    .map((o) => _.map(o, (i) => _.merge({ day: dayPart(i.date), month: monthPart(i.date) }, i)))
     .value();
   return (
-    <List style={{ backgroundColor: 'white' }}>
+    <List style={{ backgroundColor: "white" }}>
       {goLivesByMonth.map((m, index) => (
         <div key={index}>
-          <Title>{m[0].month}</Title>
-          <RenderMonthItems items={m} classes={classes} />
+          <div className="flex bg-gray-200 text-lg py-3 pl-6 items-center text-gray-700 font-semibold font-pop shadow-lg">{m[0].month}</div>
+          <RenderMonthItems items={m} />
         </div>
       ))}
     </List>
@@ -155,4 +135,4 @@ const UPCOMING_GOLIVES_QUERY = gql`
   }
 `;
 
-export default graphql(UPCOMING_GOLIVES_QUERY)(withStyles(styles)(goLivesContainer));
+export default GoLivesContainer;
