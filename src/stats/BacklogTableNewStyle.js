@@ -7,6 +7,7 @@ import { SelectionContext } from "../globalState/SelectionContext";
 import CopyToClipBoard from "react-copy-to-clipboard";
 import { format } from "./../utils/format";
 import { useAlert } from "globalState/AlertContext";
+import TWButton from "elements/TWButton";
 
 const BacklogTableNewStyle = ({
   backlog,
@@ -285,7 +286,7 @@ const BacklogTableNewStyle = ({
             )}
           </div>
           <>
-            <p className="w-2/5 text-base  text-gray-500 hover:bg-gray-300 p-2   " title="Click to copy to clipboard">
+            <p className="w-2/5 text-base  text-gray-500    " title="Click to copy to clipboard">
               {description}
             </p>
             <CopyToClipBoard

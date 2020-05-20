@@ -8,16 +8,7 @@ import { useMutation } from "react-apollo";
 import MarkDownFieldEditor from "./MarkdownFieldEditor";
 import { useAlert } from "globalState/AlertContext";
 
-const EditableMarkDownField = ({
-  canEdit = true,
-  name,
-  label,
-  value,
-  id,
-  classes,
-  updateQuery,
-  requeryFunction
-}) => {
+const EditableMarkDownField = ({ canEdit = true, name, label, value, id, classes, updateQuery, requeryFunction }) => {
   const [isOpen, setisOpened] = React.useState(false);
   const [fieldValue, setFieldValue] = React.useState(value);
   const alert = useAlert();
@@ -41,7 +32,7 @@ const EditableMarkDownField = ({
     autoHeight: true,
     showWordsCounter: false,
     showXPathInStatusbar: false,
-    showCharsCounter: false
+    showCharsCounter: false,
   };
   const viewer = useRef(null);
   return (
@@ -50,7 +41,7 @@ const EditableMarkDownField = ({
       style={{
         border: "1px solid rgba(0,0,0,0.1)",
         borderRadius: 8,
-        background: "aliceblue"
+        background: "aliceblue",
       }}
     >
       <Grid item xs={9}>
@@ -61,24 +52,18 @@ const EditableMarkDownField = ({
         xs={12}
         style={{
           display: "flex",
-          justifyContent: "flex-end"
+          justifyContent: "flex-end",
         }}
         justifyContent="flex-end"
       >
-        {canEdit && (
-          <EditIcon
-            color="primary"
-            fontSize="small"
-            onClick={() => setisOpened(true)}
-          />
-        )}
+        {canEdit && <EditIcon color="primary" fontSize="small" onClick={() => setisOpened(true)} />}
       </Grid>
       <Modal
         onClose={() => setisOpened(false)}
         open={isOpen}
         BackdropComponent={Backdrop}
         BackdropProps={{
-          timeout: 500
+          timeout: 500,
         }}
       >
         <div>
@@ -98,12 +83,12 @@ const EditableMarkDownField = ({
         style={{
           font: "24px Arial",
           color: "#000",
-          borderLeft: "solid 4px #ccc"
+          borderLeft: "solid 4px #ccc",
         }}
         ref={viewer}
         value={fieldValue}
-        onChange={v => console.log(v)}
-        onBlur={e => console.log(e)}
+        onChange={(v) => console.log(v)}
+        onBlur={(e) => console.log(e)}
         config={config}
         tabIndex={2} // tabIndex of textarea
       />
