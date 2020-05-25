@@ -46,13 +46,14 @@ const BacklogTableNewStyle = ({
       { name: "title", title: "Summary", type: "" },
     ]);
   const { owner, products, region } = filterValues;
+  let correctedRegion = region === "All" ? "" : region;
   const { actionNeeded } = useContext(SelectionContext);
   const alert = useAlert();
   useEffect(() => {
     if (backlog?.length > 0) {
       let mydata = backlog && owner ? backlog.filter((o) => o.owner === owner) : backlog;
       mydata = products.length ? mydata.filter((o) => products.includes(o.productline)) : mydata;
-      mydata = region ? mydata.filter((o) => o.owner_region === region) : mydata;
+      mydata = correctedRegion ? mydata.filter((o) => o.owner_region === correctedRegion) : mydata;
       for (let [key, value] of Object.entries(fieldFilters)) {
         if (value) {
           mydata = mydata.filter((item) => {

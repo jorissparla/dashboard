@@ -110,7 +110,7 @@ export const REGION_LIST_2 = [
     title: "NA",
   },
   {
-    value: "",
+    value: "All",
     title: "ALL REGIONS",
   },
 ];
