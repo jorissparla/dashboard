@@ -92,6 +92,28 @@ const useStyles = makeStyles((theme) => ({
 }));
 export const PRODUCT_LIST = ["LN", "PLM", "Protean", "InforOS", "Xpert", "Swan", "AutoConnect", "AutoRelease", "SupplyWeb", "TRANS4M"];
 export const REGION_LIST = ["APJ", "EMEA", "NA", "LA"];
+export const REGION_LIST_2 = [
+  {
+    value: "APJ",
+    title: "APJ",
+  },
+  {
+    value: "EMEA",
+    title: "EMEA",
+  },
+  {
+    value: "LA",
+    title: "LA",
+  },
+  {
+    value: "NA",
+    title: "NA",
+  },
+  {
+    value: "",
+    title: "ALL REGIONS",
+  },
+];
 
 const Stats = (props) => {
   const { user } = React.useContext(UserContext);

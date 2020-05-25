@@ -1,6 +1,6 @@
 import { FormControl, Switch } from "@material-ui/core";
 import { usePersistentState } from "hooks";
-import { PRODUCT_LIST, REGION_LIST } from "pages/Stats";
+import { PRODUCT_LIST, REGION_LIST, REGION_LIST_2 } from "pages/Stats";
 import React, { useState } from "react";
 import { ListFavoritePersons } from "./FavoritesPersons";
 
@@ -56,6 +56,12 @@ export const SelectionForm = ({ classes, initialValue, valuesChanged, isValidSup
     return selectedProducts.indexOf(value) >= 0;
   }
   const persons = getPersons() || [];
+
+  function handleSelect({ target: { value } }) {
+    console.log(value);
+    setRegion(value);
+  }
+
   console.log(persons);
   return (
     // <Paper className={classes.paper2}>
@@ -159,9 +165,11 @@ export const SelectionForm = ({ classes, initialValue, valuesChanged, isValidSup
         {/* <FormControl variant="outlined" className={classes.formControl}> */}
         <label className="flex mr-4 items-center px-4">
           <span className="text-gray-700">Region</span>
-          <select className="form-select block w-full mt-1 ml-2" value={region} onChange={(e) => setRegion(e.target.value)}>
-            {REGION_LIST.map((r) => (
-              <option key={r}>{r}</option>
+          <select className="form-select block w-full mt-1 ml-2" value={region} onChange={handleSelect}>
+            {REGION_LIST_2.map((r) => (
+              <option key={r.value} value={r.value}>
+                {r.title}
+              </option>
             ))}
           </select>
         </label>
