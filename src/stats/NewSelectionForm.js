@@ -1,14 +1,14 @@
-import { FormControl, Switch } from "@material-ui/core";
+import { Switch } from "@material-ui/core";
 import { usePersistentState } from "hooks";
-import { PRODUCT_LIST, REGION_LIST, REGION_LIST_2 } from "pages/Stats";
+import { PRODUCT_LIST, REGION_LIST_2 } from "pages/Stats";
 import React, { useState } from "react";
-import { ListFavoritePersons } from "./FavoritesPersons";
 
 export const SelectionForm = ({ classes, initialValue, valuesChanged, isValidSuperUser, onChange, onNavigateToParams }) => {
   const [selectedProducts, setSelectedProducts] = usePersistentState("selectedproducts", ["LN"]);
   const [ownerVal, setOwnerVal] = useState(initialValue.owner);
   const [person, setPerson] = useState("");
   const [region, setRegion] = usePersistentState("region", "EMEA");
+  const [showDropDown, toggle] = useState(false);
   const [actionNeeded, setActionNeeded] = useState(false);
   const [allOwners, toggleAllOwners] = useState(false);
 
@@ -57,11 +57,14 @@ export const SelectionForm = ({ classes, initialValue, valuesChanged, isValidSup
   }
   const persons = getPersons() || [];
 
-  function handleSelect({ target: { value } }) {
+  const handleSelect = ({ target: { value } }) => {
+    toggleDropDown();
     console.log(value);
     setRegion(value);
+  };
+  function toggleDropDown() {
+    toggle(!showDropDown);
   }
-
   console.log(persons);
   return (
     // <Paper className={classes.paper2}>
@@ -163,16 +166,56 @@ export const SelectionForm = ({ classes, initialValue, valuesChanged, isValidSup
       </div>
       <div className="border-gray-50 p-2 m-2 rounded">
         {/* <FormControl variant="outlined" className={classes.formControl}> */}
-        <label className="flex mr-4 items-center px-4">
-          <span className="text-gray-700">Region</span>
-          <select className="form-select block w-full mt-1 ml-2" value={region} onChange={handleSelect}>
-            {REGION_LIST_2.map((r) => (
-              <option key={r.value} value={r.value}>
-                {r.title}
-              </option>
-            ))}
-          </select>
-        </label>
+        <div className="relative inline-block text-left">
+          <div>
+            <span className="rounded-md shadow-sm">
+              <button
+                type="button"
+                onClick={toggleDropDown}
+                className="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition ease-in-out duration-150"
+              >
+                {region || "EMEA"}
+                <svg className="-mr-1 ml-2 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path
+                    fill-rule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </button>
+            </span>
+          </div>
+
+          {showDropDown && (
+            <div className="z-50 origin-top-right absolute right-0 mt-1 w-56 rounded-lg shadow-lg">
+              <div className="rounded-lg bg-white shadow-xs">
+                <div className="pt-0">
+                  {REGION_LIST_2.map((region, index) => (
+                    <>
+                      {index === REGION_LIST_2.length - 1 ? (
+                        <button
+                          value={region.value}
+                          onClick={handleSelect}
+                          className="z-50 block px-4 py-2 text-sm leading-5 w-full bg-gray-300 hover:bg-gray-300 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
+                        >
+                          {region.title}
+                        </button>
+                      ) : (
+                        <button
+                          value={region.value}
+                          onClick={handleSelect}
+                          className="z-50 block px-4 py-2 text-sm leading-5 w-full text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
+                        >
+                          {region.title}
+                        </button>
+                      )}
+                    </>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </div>
       <div className="tracking-wide inline-flex items-center">
         <svg className="fill-current w-4 h-4 text-gray-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
