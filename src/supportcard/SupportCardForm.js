@@ -9,7 +9,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Select from "@material-ui/core/Select";
 import JoditEditor from "jodit-react";
 import CKEditor from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-balloon";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import React, { useRef, useState } from "react";
 import { withRouter } from "react-router";
 import { CardSection } from "../common";

@@ -187,7 +187,7 @@ export const SelectionForm = ({ classes, initialValue, valuesChanged, isValidSup
           </div>
 
           {showDropDown && (
-            <div className="z-50 origin-top-right absolute right-0 mt-1 w-56 rounded-lg shadow-lg">
+            <div className="z-50 origin-top-right absolute right-0 mt-2 w-56 rounded-lg shadow-2xl">
               <div className="rounded-lg bg-white shadow-xs">
                 <div className="pt-0">
                   {REGION_LIST_2.map((region, index) => (
@@ -196,18 +196,21 @@ export const SelectionForm = ({ classes, initialValue, valuesChanged, isValidSup
                         <button
                           value={region.value}
                           onClick={handleSelect}
-                          className="z-50 block px-4 py-2 text-sm leading-5 w-full bg-gray-300 hover:bg-gray-300 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
+                          className="z-50 block font-semibold px-4 py-2 text-sm leading-5 w-full bg-gray-300 hover:bg-gray-300 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
                         >
                           {region.title}
                         </button>
                       ) : (
-                        <button
-                          value={region.value}
-                          onClick={handleSelect}
-                          className="z-50 block px-4 py-2 text-sm leading-5 w-full text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
-                        >
-                          {region.title}
-                        </button>
+                        <>
+                          <button
+                            value={region.value}
+                            onClick={handleSelect}
+                            className="z-50 block px-4 py-2 text-sm font-medium leading-5 w-full text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:outline-none focus:bg-gray-100 focus:text-gray-900"
+                          >
+                            {region.title}
+                          </button>
+                          <div class="border-t border-gray-200"></div>
+                        </>
                       )}
                     </>
                   ))}
