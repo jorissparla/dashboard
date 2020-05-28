@@ -65,7 +65,6 @@ export const SelectionForm = ({ classes, initialValue, valuesChanged, isValidSup
   function toggleDropDown() {
     toggle(!showDropDown);
   }
-  console.log(persons);
   return (
     // <Paper className={classes.paper2}>
     <div className="mb-4 rounded shadow-lg bg-white px-3 py-2 flex items-center w-full text-gray-700 flex-wrap">
@@ -177,9 +176,9 @@ export const SelectionForm = ({ classes, initialValue, valuesChanged, isValidSup
                 {region || "EMEA"}
                 <svg className="-mr-1 ml-2 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
                   <path
-                    fill-rule="evenodd"
+                    fillRule="evenodd"
                     d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                    clip-rule="evenodd"
+                    clipRule="evenodd"
                   />
                 </svg>
               </button>

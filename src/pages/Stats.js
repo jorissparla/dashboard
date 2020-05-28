@@ -1,7 +1,6 @@
 import { makeStyles } from "@material-ui/core/styles";
 import { usePersistentState } from "hooks";
 import React, { useState } from "react";
-import { useQuery } from "react-apollo";
 import { withRouter, useHistory } from "react-router-dom";
 import { SelectionForm } from "../stats/NewSelectionForm";
 import { QUERY_BACKLOG, QUERY_BACKLOG_TEXT } from "../stats/queries/BACKLOG_QUERY2";
@@ -170,7 +169,8 @@ const Stats = (props) => {
   }
 };
 
-const StatsPage = withRouter(({ data, classes, owner, isValidSuperUser, history }) => {
+const StatsPage = ({ data, classes, owner, isValidSuperUser }) => {
+  const history = useHistory();
   const mostRecentUpdate = data ? data.mostRecentUpdate : new Date().toLocaleTimeString();
   const [selectedProducts] = usePersistentState("selectedproducts", ["LN"]);
   const [region] = usePersistentState("region", "EMEA");
@@ -199,7 +199,7 @@ const StatsPage = withRouter(({ data, classes, owner, isValidSuperUser, history 
       <StatsMain data={data} classes={classes} owner={owner} filterValues={filterValues} />
     </div>
   );
-});
+};
 
 // const Test = () => {
 //   const { user } = React.useContext(UserContext);

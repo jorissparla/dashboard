@@ -263,7 +263,25 @@ export const QUERY_BACKLOG_TEXT = `
       navid
       managerid
     }
+    
+
   }
+`;
+
+export const KBQUERY = `
+    allKB {
+      kbid
+      owner:fullname
+      region
+      daysSinceCreated
+      dayssincelastupdate
+      productline
+      ownergroup: ownerGroupName
+      status
+      viewCount
+      summary
+    
+    }
 `;
 // export const QUERY_BACKLOG_TEXT1 = `
 //   # Write your query or mutation here

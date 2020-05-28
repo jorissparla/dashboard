@@ -1,108 +1,12 @@
 import React, { useContext, useState } from "react";
-import BacklogTableNewStyle from "stats/BacklogTableNewStyle";
+import BacklogTableNewStyle, { KBTable } from "stats/BacklogTableNewStyle";
 import { Backlog } from "stats/BacklogType";
 import { SelectionContext } from "../globalState/SelectionContext";
 import { useLocalStorage } from "../utils/useLocalStorage";
 import { useIsValidEditor } from "./../globalState/UserProvider";
 import LoadingDots from "./../utils/LoadingDots";
 
-const SelectionForm = React.lazy(() => import("../stats/SelectionForm"));
-
-export const styles = (theme: any) => ({
-  root: theme.mixins.gutters({
-    marginTop: theme.spacing(3),
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignContent: "flex-start",
-    top: "200px",
-    backgroundColor: "rgba(0,0,0,0.1)",
-  }),
-  tableheader: {
-    fontFamily: "Poppins",
-    fontSize: 18,
-    backgroundColor: "rgb(0,0,0, 0.5)",
-    color: "white",
-  },
-  tableheadernarrow: {
-    fontFamily: "Poppins",
-    fontSize: 18,
-    width: 20,
-  },
-  narrow: {
-    width: 20,
-  },
-  paper: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  paper2: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "flex-start",
-    margin: 15,
-    padding: 10,
-  },
-  summary: {
-    display: "flex",
-    justifyContent: "space-between",
-  },
-  textfield: {
-    verticalAlign: "center",
-    margin: 10,
-  },
-  button: {
-    margin: 10,
-  },
-  spaceapart: {
-    display: "flex",
-    width: "100%",
-    justifyContent: "space-between",
-    padding: 10,
-  },
-  number: {
-    alignItems: "center",
-    justifyContent: "center",
-    display: "flex",
-    backgroundColor: "black",
-    color: "white",
-    fontSize: 18,
-    margin: 2,
-    width: 40,
-    height: 40,
-    borderRadius: "50%",
-  },
-  row: {
-    fontFamily: "Poppins",
-    "&:nth-of-type(odd)": {
-      backgroundColor: theme.palette.background.default,
-    },
-  },
-});
-
-interface ContainerProps {
-  classes: any;
-  user?: any;
-  history?: any;
-}
-
-type functionParms = {
-  owner: string;
-  isCloud: boolean;
-};
-
 export function useParams(clean = false) {
-  // return {
-  //   C_AWAITINGCUSTOMER: 6,
-  //   N_AWAITINGCUSTOMER: 6,
-  //   C_RESEARCHING: 3,
-  //   N_RESEARCHING: 1,
-  //   C_AWAITINGINFOR: 1,
-  //   N_AWAITINGINFOR: 1,
-  //   C_NEW: 1,
-  //   N_NEW: 1
-  // };
   const [C_AWAITINGCUSTOMER] = useLocalStorage("C_AWAITINGCUSTOMER", 6, clean);
   const [C_AWAITINGINFOR] = useLocalStorage("C_AWAITINGINFOR", 1, clean);
   const [C_RESEARCHING] = useLocalStorage("C_RESEARCHING", 3, clean);
@@ -131,15 +35,8 @@ export function useParams(clean = false) {
   };
 }
 
-type backlogParams = {
-  date: string;
-  owner: string;
-  products: string[];
-  isValidSuperUser: boolean;
-};
-
 interface Props {
-  classes: any;
+  classes?: any;
   data: any;
   isCloud: boolean;
   owner?: string;
@@ -150,9 +47,11 @@ interface Props {
 
 const RELEASE_FILTER = ["Baan 4", "Baan 5", "LN FP5", "LN FP6", "LN FP7", "LN FP3", "10.2", "10.3"];
 
-export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products = ["LN"], filterValues }) => {
-  const [isValidEditor, user] = useIsValidEditor();
+export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"], filterValues }) => {
   const params = useParams();
+  // const allKB = data.allKB;
+  // console.log(allKB);
+
   const blBase = new Backlog(data.everything, data.accounts);
   const sev12notrestored = blBase
     .notServicedRestored()
@@ -292,214 +191,179 @@ export const StatsMain: React.FC<Props> = ({ classes, data, owner = "", products
   const callbacks = blBase.init().status("Awaiting Infor").sort("dayssincelastupdate", "D").getData();
 
   const incorrectOwnergroups = blBase.init().incorrectOwnerGroup().getData();
-  console.log({ incorrectOwnergroups });
-  const { isCloud } = useContext(SelectionContext);
 
   return (
     <>
       {loading && <LoadingDots />}
+      <div className="w-full mx-4">
+        {/* <KBTable filterValues={filterValues} additionalFields={["ownergroup"]} data={allKB} title="KB Articles" description="KB Articles" /> */}
+        <BacklogTableNewStyle
+          filterValues={filterValues}
+          additionalFields={["ownergroup"]}
+          data={incorrectOwnergroups}
+          title="Incorrect Owner Group"
+          description="Incorrect Owner Group"
+        />
+        <BacklogTableNewStyle
+          filterValues={filterValues}
+          additionalFields={["managername", "daysEscalated"]}
+          data={escalated}
+          title="Escalated"
+          description="All Incidents escalated"
+        />
 
-      {!isCloud && (
-        <div className="w-full mx-4">
-          <BacklogTableNewStyle
-            filterValues={filterValues}
-            classes={classes}
-            additionalFields={["ownergroup"]}
-            backlog={incorrectOwnergroups}
-            title="Incorrect Owner Group"
-            description="Incorrect Owner Group"
-          />
-          <BacklogTableNewStyle
-            filterValues={filterValues}
-            classes={classes}
-            additionalFields={["managername", "daysEscalated"]}
-            backlog={escalated}
-            title="Escalated"
-            description="All Incidents escalated"
-          />
+        <BacklogTableNewStyle
+          filterValues={filterValues}
+          data={sev12notrestored}
+          title="Critical/Major Not restored"
+          description="All Incidents with a severity of 'Production Outage / Major Impact' without a restored date"
+        />
 
-          <BacklogTableNewStyle
-            filterValues={filterValues}
-            classes={classes}
-            backlog={sev12notrestored}
-            title="Critical/Major Not restored"
-            description="All Incidents with a severity of 'Production Outage / Major Impact' without a restored date"
-          />
+        <BacklogTableNewStyle
+          filterValues={filterValues}
+          data={multitenant}
+          title="Multitenant"
+          description="All Incidents open for our MT customers not updated > 7 days"
+        />
 
-          <BacklogTableNewStyle
-            filterValues={filterValues}
-            classes={classes}
-            backlog={multitenant}
-            title="Multitenant"
-            description="All Incidents open for our MT customers not updated > 7 days"
-          />
+        <BacklogTableNewStyle
+          filterValues={filterValues}
+          data={pendingmaintenance}
+          title="Pending Maintenance"
+          description="All Incidents Solution Pending Maintenance without a valid activity date "
+        />
+        <BacklogTableNewStyle
+          filterValues={filterValues}
+          data={extIncidentsWithDev}
+          additionalFields={["releasename", "extended"]}
+          title="Extended Maintenance Check- Awaiting Development"
+          description="All Awaiting Development Incidents open for customers logging on a version that has extended maintenance"
+        />
+        <BacklogTableNewStyle
+          filterValues={filterValues}
+          data={mtincidents}
+          additionalFields={["Deployment", "Tenant", "release"]}
+          title="Multitenant customer incidents"
+          description="All Incidents open for our MT not logged as multi tenant"
+        />
+        <BacklogTableNewStyle
+          filterValues={filterValues}
+          data={extIncidents}
+          additionalFields={["releasename", "extended"]}
+          title="Extended Maintenance Check"
+          description="All Incidents open for customers logging on a version that has extended maintenance"
+        />
+        <BacklogTableNewStyle
+          filterValues={filterValues}
+          data={data.sev1notrestored}
+          title="Critical"
+          description="All Incidents with a severity of 'Production Outage / Critical Application halted'"
+        />
+        <BacklogTableNewStyle
+          filterValues={filterValues}
+          data={on_hold}
+          // data={data.on_hold}
+          title="On Hold"
+          description="All Incidents with a status of On Hold By Customer with no or an Expired Action date"
+        />
 
-          <BacklogTableNewStyle
-            filterValues={filterValues}
-            classes={classes}
-            backlog={pendingmaintenance}
-            title="Pending Maintenance"
-            description="All Incidents Solution Pending Maintenance without a valid activity date "
-          />
-          <BacklogTableNewStyle
-            filterValues={filterValues}
-            classes={classes}
-            backlog={extIncidentsWithDev}
-            additionalFields={["releasename", "extended"]}
-            title="Extended Maintenance Check- Awaiting Development"
-            description="All Awaiting Development Incidents open for customers logging on a version that has extended maintenance"
-          />
-          <BacklogTableNewStyle
-            filterValues={filterValues}
-            classes={classes}
-            backlog={mtincidents}
-            additionalFields={["Deployment", "Tenant", "release"]}
-            title="Multitenant customer incidents"
-            description="All Incidents open for our MT not logged as multi tenant"
-          />
-          <BacklogTableNewStyle
-            filterValues={filterValues}
-            classes={classes}
-            backlog={extIncidents}
-            additionalFields={["releasename", "extended"]}
-            title="Extended Maintenance Check"
-            description="All Incidents open for customers logging on a version that has extended maintenance"
-          />
-          <BacklogTableNewStyle
-            filterValues={filterValues}
-            classes={classes}
-            backlog={data.sev1notrestored}
-            title="Critical"
-            description="All Incidents with a severity of 'Production Outage / Critical Application halted'"
-          />
-          <BacklogTableNewStyle
-            filterValues={filterValues}
-            classes={classes}
-            backlog={on_hold}
-            // backlog={data.on_hold}
-            title="On Hold"
-            description="All Incidents with a status of On Hold By Customer with no or an Expired Action date"
-          />
+        <BacklogTableNewStyle
+          filterValues={filterValues}
+          // data={data.awaiting_customer}
+          data={awaiting_customer}
+          additionalFields={["ownergroup"]}
+          title="Awaiting customer"
+          description={`All Incidents with a status of Awaiting Customer not updated for more than ${params["N_AWAITINGCUSTOMER"]} days `}
+        />
+        <BacklogTableNewStyle
+          filterValues={filterValues}
+          // data={data.researching}
+          data={researching}
+          title="Researching"
+          description={`Incidents with status 'Researching' Last updated  ${params["N_RESEARCHING"]} days or more`}
+        />
+        <BacklogTableNewStyle
+          filterValues={filterValues}
+          // data={data.awaiting_infor}
+          data={awaiting_infor}
+          title="Awaiting Infor"
+          description={`Incidents with status 'Awaiting Infor' Last updated  ${params["N_AWAITINGINFOR"]} days or more`}
+        />
+        <BacklogTableNewStyle
+          filterValues={filterValues}
+          // data={data.callbacks}
+          data={callbacks}
+          title="Callbacks/Awaiting Infor"
+          description="All callbacks and Incidents with status 'Awaiting Infor'"
+        />
+        <BacklogTableNewStyle
+          filterValues={filterValues}
+          // data={data.major_impact}
+          data={major_impact}
+          title="Major Impact"
+          description={`Incidents with severity 'Major Impact' Last updated ${params["N_MAJORIMPACT"]} days or more`}
+          includeservicerestored={true}
+        />
 
-          <BacklogTableNewStyle
-            filterValues={filterValues}
-            classes={classes}
-            // backlog={data.awaiting_customer}
-            backlog={awaiting_customer}
-            additionalFields={["ownergroup"]}
-            title="Awaiting customer"
-            description={`All Incidents with a status of Awaiting Customer not updated for more than ${params["N_AWAITINGCUSTOMER"]} days `}
-          />
-          <BacklogTableNewStyle
-            filterValues={filterValues}
-            classes={classes}
-            // backlog={data.researching}
-            backlog={researching}
-            title="Researching"
-            description={`Incidents with status 'Researching' Last updated  ${params["N_RESEARCHING"]} days or more`}
-          />
-          <BacklogTableNewStyle
-            filterValues={filterValues}
-            classes={classes}
-            // backlog={data.awaiting_infor}
-            backlog={awaiting_infor}
-            title="Awaiting Infor"
-            description={`Incidents with status 'Awaiting Infor' Last updated  ${params["N_AWAITINGINFOR"]} days or more`}
-          />
-          <BacklogTableNewStyle
-            filterValues={filterValues}
-            classes={classes}
-            // backlog={data.callbacks}
-            backlog={callbacks}
-            title="Callbacks/Awaiting Infor"
-            description="All callbacks and Incidents with status 'Awaiting Infor'"
-          />
-          <BacklogTableNewStyle
-            filterValues={filterValues}
-            classes={classes}
-            // backlog={data.major_impact}
-            backlog={major_impact}
-            title="Major Impact"
-            description={`Incidents with severity 'Major Impact' Last updated ${params["N_MAJORIMPACT"]} days or more`}
-            includeservicerestored={true}
-          />
-
-          <BacklogTableNewStyle
-            filterValues={filterValues}
-            classes={classes}
-            backlog={aging}
-            // backlog={data.aging}
-            title="Aging- Support"
-            description={`Incidents older than ${params["N_AGING"]}  days`}
-          />
-          <BacklogTableNewStyle
-            filterValues={filterValues}
-            classes={classes}
-            backlog={agingCloud}
-            // backlog={data.aging}
-            title="Aging- Support - Cloud"
-            description={`Cloud Incidents older than ${params["C_AGING"]}  days`}
-          />
-          <BacklogTableNewStyle
-            filterValues={filterValues}
-            classes={classes}
-            backlog={aging_dev}
-            // backlog={data.aging_dev}
-            title="Aging- Development"
-            description="Incidents older than 90 days - Development Backlog"
-          />
-          <BacklogTableNewStyle
-            filterValues={filterValues}
-            classes={classes}
-            backlog={new_inc}
-            // backlog={data.new}
-            title="New Incidents"
-            description={`Incidents with status 'New' not updated for more than  ${params["N_NEW"]} days`}
-          />
-          <BacklogTableNewStyle
-            filterValues={filterValues}
-            classes={classes}
-            // backlog={data.cloudops}
-            backlog={cloudops}
-            title="All CloudOps"
-            description="All Incidents with a CloudOps Specific status (Task....)"
-          />
-          <BacklogTableNewStyle
-            filterValues={filterValues}
-            classes={classes}
-            backlog={infor}
-            // backlog={infor}
-            additionalFields={["contactname"]}
-            title="Infor"
-            description="All Support Backlog logged on Infor Account"
-          />
-          <BacklogTableNewStyle
-            filterValues={filterValues}
-            classes={classes}
-            backlog={data.active}
-            title="Active"
-            description="All Active Support Backlog"
-          />
-          <BacklogTableNewStyle
-            filterValues={filterValues}
-            classes={classes}
-            backlog={all}
-            sub={` age ${avgAgeSupport} days`}
-            title={`All  `}
-            description="All Support Backlog"
-          />
-          <BacklogTableNewStyle
-            filterValues={filterValues}
-            classes={classes}
-            backlog={allOver30}
-            sub={` age ${avgAge} days`}
-            title={`All `}
-            description="Aged over 30"
-          />
-        </div>
-      )}
+        <BacklogTableNewStyle
+          filterValues={filterValues}
+          data={aging}
+          // data={data.aging}
+          title="Aging- Support"
+          description={`Incidents older than ${params["N_AGING"]}  days`}
+        />
+        <BacklogTableNewStyle
+          filterValues={filterValues}
+          data={agingCloud}
+          // data={data.aging}
+          title="Aging- Support - Cloud"
+          description={`Cloud Incidents older than ${params["C_AGING"]}  days`}
+        />
+        <BacklogTableNewStyle
+          filterValues={filterValues}
+          data={aging_dev}
+          // data={data.aging_dev}
+          title="Aging- Development"
+          description="Incidents older than 90 days - Development Backlog"
+        />
+        <BacklogTableNewStyle
+          filterValues={filterValues}
+          data={new_inc}
+          // data={data.new}
+          title="New Incidents"
+          description={`Incidents with status 'New' not updated for more than  ${params["N_NEW"]} days`}
+        />
+        <BacklogTableNewStyle
+          filterValues={filterValues}
+          // data={data.cloudops}
+          data={cloudops}
+          title="All CloudOps"
+          description="All Incidents with a CloudOps Specific status (Task....)"
+        />
+        <BacklogTableNewStyle
+          filterValues={filterValues}
+          data={infor}
+          // data={infor}
+          additionalFields={["contactname"]}
+          title="Infor"
+          description="All Support Backlog logged on Infor Account"
+        />
+        <BacklogTableNewStyle filterValues={filterValues} data={data.active} title="Active" description="All Active Support Backlog" />
+        <BacklogTableNewStyle
+          filterValues={filterValues}
+          data={all}
+          subtitle={` age ${avgAgeSupport} days`}
+          title={`All  `}
+          description="All Support Backlog"
+        />
+        <BacklogTableNewStyle
+          filterValues={filterValues}
+          data={allOver30}
+          subtitle={` age ${avgAge} days`}
+          title={`All `}
+          description="Aged over 30"
+        />
+      </div>{" "}
     </>
   );
 };
-
-// export default withStyles(styles)(StatsMainContainerWrapper);
