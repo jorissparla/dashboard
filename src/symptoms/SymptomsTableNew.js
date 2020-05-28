@@ -4,15 +4,11 @@ import _ from "lodash";
 import { useMutation } from "react-apollo";
 import { useHistory } from "react-router";
 import { usePersistentState } from "../hooks";
-import {
-  ALL_SYMPTOMS,
-  TOGGLE_STATUS_COMPLETE_MUTATION,
-  DELETE_SYMPTOM_REQUEST_MUTATION,
-  UPDATE_SYMPTOM_REQUEST_MUTATION,
-} from "./Queries";
+import { ALL_SYMPTOMS, TOGGLE_STATUS_COMPLETE_MUTATION, DELETE_SYMPTOM_REQUEST_MUTATION, UPDATE_SYMPTOM_REQUEST_MUTATION } from "./Queries";
 import { format } from "../utils/format";
 import { useAlert } from "globalState/AlertContext";
 import UpdateSymptomDetails from "./UpdateSymptomDetails";
+import SearchBar from "../common/SearchBar";
 
 const PAGE_LENGTH = 10;
 
@@ -28,16 +24,10 @@ const ColumnHeader = ({ name, onSort }) => {
   return (
     <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
       {name}{" "}
-      <span
-        className="hover:text-green hover: cursor-pointer"
-        onClick={handleSortUp}
-      >
+      <span className="hover:text-green hover: cursor-pointer" onClick={handleSortUp}>
         ▲
       </span>
-      <span
-        className="hover:text-green hover: cursor-pointer"
-        onClick={handleSortDown}
-      >
+      <span className="hover:text-green hover: cursor-pointer" onClick={handleSortDown}>
         ▼
       </span>
     </th>
@@ -83,9 +73,7 @@ const NiceCell = ({ value, complete }) => (
         {value}
       </span>
     ) : (
-      <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium leading-5 bg-green-100 text-green-800">
-        {value}
-      </span>
+      <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium leading-5 bg-green-100 text-green-800">{value}</span>
     )}
   </td>
 );
@@ -125,9 +113,7 @@ const CompleteCell = ({ value, values, handleClick, canEdit = false }) => {
               variables: { where: { id: values.id } },
               refetchQueries: [{ query: ALL_SYMPTOMS }],
             });
-            alert.setMessage(
-              `symptom ${values.symptom} was marked complete/incomplete`
-            );
+            alert.setMessage(`symptom ${values.symptom} was marked complete/incomplete`);
             // updateModifiedDate(new Date());
           }}
         />
@@ -150,9 +136,7 @@ const CompleteCell = ({ value, values, handleClick, canEdit = false }) => {
               onClick={handleOpen}
             />
           )}
-          <span className="text-sm">
-            Mark {value === 0 ? "Complete" : "Incomplete"}
-          </span>
+          <span className="text-sm">Mark {value === 0 ? "Complete" : "Incomplete"}</span>
         </label>
       </div>
     </td>
@@ -179,9 +163,7 @@ const CompleteCellOld = ({ value, handleClick, canEdit = false }) => {
               onClick={canEdit && handleClick}
             />
           )}
-          <span className="text-sm">
-            Mark {value === 0 ? "Complete" : "Incomplete"}
-          </span>
+          <span className="text-sm">Mark {value === 0 ? "Complete" : "Incomplete"}</span>
         </label>
       </div>
     </td>
@@ -192,11 +174,7 @@ const RemoveCell = ({ handleDelete }) => {
   return (
     <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-blue-700">
       <span onClick={handleDelete} className="cursor-pointer">
-        <svg
-          className="fill-current h-4 w-4 text-gray-300"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 20 20"
-        >
+        <svg className="fill-current h-4 w-4 text-gray-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
           <path d="M6 2l2-2h4l2 2h4v2H2V2h4zM3 6h14l-1 14H4L3 6zm5 2v10h1V8H8zm3 0v10h1V8h-1z" />
         </svg>
       </span>
@@ -209,9 +187,7 @@ function SymptomsTableNew({ data }) {
   const alert = useAlert();
   const [toggleStatusComplete] = useMutation(TOGGLE_STATUS_COMPLETE_MUTATION);
   const [isOpen, setisOpen] = useState(false);
-  const [handleDeleteSymptomRequest] = useMutation(
-    DELETE_SYMPTOM_REQUEST_MUTATION
-  );
+  const [handleDeleteSymptomRequest] = useMutation(DELETE_SYMPTOM_REQUEST_MUTATION);
   const [filter, setFilter] = usePersistentState("symptomsfilter", "Open");
   const [_, setSortState] = useState({ name: "", direction: "A" });
   const [requests, setRequests] = useState(data.symptomrequests || []);
@@ -223,11 +199,7 @@ function SymptomsTableNew({ data }) {
   // console.log('%c User', 'font-size: 24px', user);
   const VALID_PERMISSIONS = ["ADMIN", "SYMPTOMSEDIT"];
   const hasEditPermssion =
-    (user &&
-      user.permissions.some(({ permission }) =>
-        VALID_PERMISSIONS.includes(permission)
-      )) ||
-    (user && user.role === "Admin");
+    (user && user.permissions.some(({ permission }) => VALID_PERMISSIONS.includes(permission))) || (user && user.role === "Admin");
 
   async function toggleCompleteStatus(id, symptom) {
     setisOpen(true);
@@ -246,21 +218,25 @@ function SymptomsTableNew({ data }) {
     });
     updateModifiedDate(new Date());
   }
-  function filterValues(filter, symptoms, search) {
+  function filterValues(filter, symptoms, search = "") {
+    // console.log(symptoms);
+    let ns = symptoms.filter(({ symptom }) => symptom.toLowerCase().includes(search.toLowerCase()));
+    console.log(ns, search.toLowerCase());
+    // _.includes(sym?.symptom.toUpperCase(), search.toUpperCase()));
     switch (filter) {
       case "Open":
-        return symptoms.filter((s) => s.status === 0); //.filter(s => s.symptom.includes(search));
+        return ns.filter((s) => s.status === 0); //.filter(s => s.symptom.includes(search));
       case "Completed":
-        return symptoms.filter((s) => s.status === 1); //.filter(s => s.symptom.includes(search));
+        return ns.filter((s) => s.status === 1); //.filter(s => s.symptom.includes(search));
 
       default:
-        return symptoms;
+        return ns;
     }
   }
 
   const handleColumnSort = (col) => (name, direction) => {
     const u = direction === "A" ? "asc" : "desc";
-    console.log(requests);
+    // console.log(requests);
     const sorted = _.orderBy(requests, [col], [u]);
     console.log("HandleSort", name, direction, u, sorted);
     setRequests(sorted);
@@ -269,8 +245,9 @@ function SymptomsTableNew({ data }) {
 
   const isCompleteView = filter === "Completed";
 
-  function handleChange(e) {
-    setSearch(e.target.value);
+  function handleSearchChange(value) {
+    console.log("changed");
+    setSearch(value);
   }
   function handleChangeFilter(e) {
     setFilter(e.target.value);
@@ -286,40 +263,28 @@ function SymptomsTableNew({ data }) {
   let maxPages = parseInt(length / PAGE_LENGTH) + 1;
 
   useEffect(() => {
-    const filtered = filterValues(filter, data.symptomrequests);
+    console.log("useEffect called");
+    const filtered = filterValues(filter, data.symptomrequests, search);
     setLength(filtered.length);
     maxPages = parseInt(length / PAGE_LENGTH) + 1;
-    console.log(
-      (currentPage - 1) * PAGE_LENGTH,
-      currentPage * PAGE_LENGTH - 1,
-      filtered,
-      filtered.slice(
-        (currentPage - 1) * PAGE_LENGTH,
-        currentPage * PAGE_LENGTH - 1
-      )
-    );
-    setRequests(
-      filtered.slice(
-        (currentPage - 1) * PAGE_LENGTH,
-        currentPage * PAGE_LENGTH - 1
-      )
-    );
-  }, [filter, currentPage, modifiedDate, data]);
+    // console.log(
+    //   (currentPage - 1) * PAGE_LENGTH,
+    //   currentPage * PAGE_LENGTH - 1,
+    //   filtered,
+    //   filtered.slice((currentPage - 1) * PAGE_LENGTH, currentPage * PAGE_LENGTH - 1)
+    // );
+    setRequests(filtered.slice((currentPage - 1) * PAGE_LENGTH, currentPage * PAGE_LENGTH - 1));
+  }, [filter, currentPage, modifiedDate, data, search]);
 
-  console.log(requests);
+  // console.log(requests);
   return (
     <div className=" bg-gray-200 min-h-full h-screen">
-      <div className="flex flex-row mt-4 justify-between items-center bg-white py-4 px-2">
+      <div className="flex flex-row mt-4 justify-between items-end bg-white py-4 px-2">
         <div className="relative rounded-lg ">
           <label className="block mt-4">
             <span className="text-gray-700 mr-2 ml-2">Status Filter</span>
 
-            <select
-              name="selectfilter"
-              className="form-select "
-              value={filter}
-              onChange={handleChangeFilter}
-            >
+            <select name="selectfilter" className="form-select " value={filter} onChange={handleChangeFilter}>
               <option>All</option>
               <option>Open</option>
               <option>Completed</option>
@@ -335,7 +300,8 @@ function SymptomsTableNew({ data }) {
             </svg>
           </div> */}
         </div>
-        <div className="block relative mt-2">
+        <SearchBar onChange={(value) => handleSearchChange(value)} hintText="type and press enter to match symptoms.." />
+        {/* <div className="block relative mt-2">
           <span className="h-full absolute inset-y-0 left-0 flex items-center pl-2">
             <svg
               viewBox="0 0 24 24"
@@ -351,7 +317,7 @@ function SymptomsTableNew({ data }) {
             placeholder="Search"
             className="appearance-none rounded-r rounded-l sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none"
           />
-        </div>
+        </div> */}
         <div className="mt-2">
           <button
             onClick={() => history.push("/symptoms/add")}
@@ -368,24 +334,12 @@ function SymptomsTableNew({ data }) {
           <table className="shadow-lg rounded-lg w-full leading-normal shadow rounded-lg  mt-4 transition duration-500 ease-in-out ">
             <thead>
               <tr>
-                <ColumnHeader
-                  name="Symptom"
-                  onSort={handleColumnSort("symptom")}
-                />
-                <ColumnHeader
-                  name="Category"
-                  onSort={handleColumnSort("symptom_category")}
-                />
-                <ColumnHeader
-                  name="Incident"
-                  onSort={handleColumnSort("incident")}
-                />
+                <ColumnHeader name="Symptom" onSort={handleColumnSort("symptom")} />
+                <ColumnHeader name="Category" onSort={handleColumnSort("symptom_category")} />
+                <ColumnHeader name="Incident" onSort={handleColumnSort("incident")} />
                 <ColumnHeader name="Note" onSort={handleColumnSort("note")} />
                 <ColumnHeader name="Complete" />
-                <ColumnHeader
-                  name="Updated"
-                  onSort={handleColumnSort("updatedAt")}
-                />
+                <ColumnHeader name="Updated" onSort={handleColumnSort("updatedAt")} />
                 {isCompleteView && <ColumnHeader name="Remove" />}
               </tr>
             </thead>
@@ -393,27 +347,17 @@ function SymptomsTableNew({ data }) {
               {requests.map((item) => (
                 <tr key={item.id}>
                   <Cell value={item.symptom} complete={item.status} />
-                  <NiceCell
-                    value={item.symptom_category}
-                    complete={item.status}
-                  />
+                  <NiceCell value={item.symptom_category} complete={item.status} />
                   <Cell value={item.incident} complete={item.status} />
                   <Cell value={item.note} complete={item.status} />
                   <CompleteCell
                     value={item.status}
                     values={item}
-                    handleClick={() =>
-                      toggleCompleteStatus(item.id, item.symptom)
-                    }
+                    handleClick={() => toggleCompleteStatus(item.id, item.symptom)}
                     canEdit={hasEditPermssion}
                   />
-                  <Cell
-                    value={format(item.updatedAt, "EEE dd MMM yyyy, HH:mm")}
-                    complete={item.status}
-                  />
-                  {isCompleteView && (
-                    <RemoveCell handleDelete={() => handleDelete(item.id)} />
-                  )}
+                  <Cell value={format(item.updatedAt, "EEE dd MMM yyyy, HH:mm")} complete={item.status} />
+                  {isCompleteView && <RemoveCell handleDelete={() => handleDelete(item.id)} />}
                   {/* <Cell value={item.status} /> */}
                 </tr>
               ))}
@@ -421,8 +365,7 @@ function SymptomsTableNew({ data }) {
           </table>
           <div className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between          ">
             <span className="text-xs xs:text-sm text-gray-900">
-              Showing {(currentPage - 1) * PAGE_LENGTH + 1} to{" "}
-              {currentPage * PAGE_LENGTH} of {length} Entries
+              Showing {(currentPage - 1) * PAGE_LENGTH + 1} to {currentPage * PAGE_LENGTH} of {length} Entries
             </span>
             <div className="inline-flex ml-2 xs:mt-0">
               {currentPage}/{maxPages}

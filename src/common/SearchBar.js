@@ -19,12 +19,12 @@ export default ({
 
   const changeSearchFor = _.debounce(setChanged, 1000);
   const handleChange = useCallback(changeSearchFor, []);
-  console.log(val);
+  // console.log(val);
   useEffect(() => {
     onChange(val);
   }, [changed]);
   return (
-    <div className="w-full bg-white py-2 flex shadow pt-1 mt-2">
+    <div className="w-full bg-white py-2 flex  pt-1 mt-2">
       <div className="w-full lg:px-6 xl:w-3/4 xl:px-12 sm:px-4">
         <div className="mt-1 relative rounded-md shadow-sm">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
