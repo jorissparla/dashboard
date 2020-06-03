@@ -17,6 +17,7 @@ export const ALL_SYMPTOMS = gql`
       symptom_category
       status
       note
+      email
       updatedAt
     }
   }
@@ -58,10 +59,7 @@ export const TOGGLE_STATUS_COMPLETE_MUTATION = gql`
   }
 `;
 export const UPDATE_SYMPTOM_REQUEST_MUTATION = gql`
-  mutation UPDATE_SYMPTOM_REQUEST_MUTATION(
-    $where: SymptomRequestWhereInput!
-    $input: SymptomRequestUpdate
-  ) {
+  mutation UPDATE_SYMPTOM_REQUEST_MUTATION($where: SymptomRequestWhereInput!, $input: SymptomRequestUpdate) {
     updateSymptomRequest(where: $where, input: $input) {
       id
       symptom
@@ -71,6 +69,11 @@ export const UPDATE_SYMPTOM_REQUEST_MUTATION = gql`
       note
       updatedAt
     }
+  }
+`;
+export const UPDATE_SYMPTOM_REQUEST_NOTIFY_MUTATION = gql`
+  mutation UPDATE_SYMPTOM_REQUEST_NOTIFY_MUTATION($where: SymptomRequestWhereInput!, $comment: String) {
+    notifySymptomRequest(where: $where, comment: $comment)
   }
 `;
 

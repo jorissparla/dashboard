@@ -1,7 +1,7 @@
 import React from "react";
 import { adopt } from "react-adopt";
 
-import { Query, Mutation } from "react-apollo";
+import { Query, Mutation, useQuery, useMutation } from "react-apollo";
 import gql from "graphql-tag";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -14,36 +14,37 @@ import deepOrange from "@material-ui/core/colors/deepOrange";
 import UserSearchList from "./UserSearchList";
 import { SharedSnackbarConsumer } from "./globalState/SharedSnackbar.context";
 
-import User from "./User";
+import User, { useUser } from "./User";
 import { hasPermission } from "./utils/hasPermission";
+import { useAlert } from "globalState/AlertContext";
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
     flexGrow: 1,
     marginBottom: 10,
-    background: "#eee"
+    background: "#eee",
   },
   paper: {
     margin: 10,
-    height: 1000
+    height: 1000,
   },
   avatar: {
     margin: 10,
     color: "#fff",
-    backgroundColor: deepOrange[500]
+    backgroundColor: deepOrange[500],
   },
   name: {
     marginLeft: 10,
     marginRight: 10,
     alignContent: "center",
     alignSelf: "center",
-    width: 250
+    width: 250,
   },
   button: {
     margin: theme.spacing(1),
     width: 150,
-    marginRight: 50
-  }
+    marginRight: 50,
+  },
 });
 
 const PERMISSIONS_MUTATION = gql`
@@ -79,96 +80,83 @@ const Composed = adopt({
       {render}
     </UserSearchList>
   ),
-  message: ({ render }) => <SharedSnackbarConsumer>{render}</SharedSnackbarConsumer>
+  message: ({ render }) => <SharedSnackbarConsumer>{render}</SharedSnackbarConsumer>,
 });
 
-class UpdatePermissions extends React.Component {
-  handlePermChange = (id, currentPermissions, hasPermission, perm, updatePermissions, openSnackbar) => {
-    const newPermissions = hasPermission ? currentPermissions.filter(p => p !== perm) : [...currentPermissions, perm];
+const UpdatePermissions = (props) => {
+  const handlePermChange = (id, currentPermissions, hasPermission, perm, updatePermissions, openSnackbar) => {
+    const newPermissions = hasPermission ? currentPermissions.filter((p) => p !== perm) : [...currentPermissions, perm];
     updatePermissions({
       variables: {
         where: { id },
-        data: { permissions: newPermissions }
-      }
-    }).then(() =>
-      hasPermission ? openSnackbar(`Permission ${perm} was removed`) : openSnackbar(`Permission ${perm} was added`)
-    );
+        data: { permissions: newPermissions },
+      },
+    }).then(() => (hasPermission ? openSnackbar(`Permission ${perm} was removed`) : openSnackbar(`Permission ${perm} was added`)));
   };
-  render() {
-    const { classes } = this.props;
-    return (
-      <Composed>
-        {({
-          updatePermissions,
-          allPermissions: {
-            data: { allPermissions },
-            loading: alsoloading
-          },
-          user: { data, loading },
-          usersearchList: { users },
-          message: { openSnackbar }
-        }) => {
-          if (loading || alsoloading) {
-            return "Loading";
-          }
-          const { me } = data;
-          const permissionsAr = me.permissions.map(p => p.permission);
-          if (!hasPermission("ADMIN", permissionsAr)) {
-            return "No permission";
-          }
-          return (
-            <div>
-              {users.map(({ id, fullname, permissions, image, firstname, lastname }) => {
-                const current = permissions.map(p => p.permission);
-                const initials = (firstname[0] + lastname[0]).toUpperCase();
-                return (
-                  <React.Fragment key={id}>
-                    <FormGroup row>
-                      {image ? (
-                        <Avatar src={image} className={classes.avatar} />
-                      ) : (
-                        <Avatar className={classes.avatar}>{initials}</Avatar>
-                      )}
-                      <Typography variant="h6" gutterBottom className={classes.name}>
-                        {fullname}
-                      </Typography>
-                      {allPermissions.map(perm => {
-                        const validPermission = hasPermission(perm.permission, current);
-                        return (
-                          <FormControlLabel
-                            key={perm.id}
-                            control={
-                              <Switch
-                                checked={validPermission}
-                                color="primary"
-                                onChange={() =>
-                                  this.handlePermChange(
-                                    id,
-                                    current,
-                                    validPermission,
-                                    perm.permission,
-                                    updatePermissions,
-                                    openSnackbar
-                                  )
-                                }
-                                value={perm.permission}
-                              />
-                            }
-                            label={perm.permission}
-                          />
-                        );
-                      })}
-                    </FormGroup>
-                    <Divider />
-                  </React.Fragment>
-                );
-              })}
-            </div>
-          );
-        }}
-      </Composed>
-    );
-  }
-}
+
+  const { classes } = props;
+
+  return (
+    <Composed>
+      {({
+        updatePermissions,
+        allPermissions: {
+          data: { allPermissions },
+          loading: alsoloading,
+        },
+        user: { data, loading },
+        usersearchList: { users },
+        message: { openSnackbar },
+      }) => {
+        if (loading || alsoloading) {
+          return "Loading";
+        }
+
+        const { me } = data;
+
+        const permissionsAr = me.permissions.map((p) => p.permission);
+        if (!hasPermission("ADMIN", permissionsAr)) {
+          return "No permission";
+        }
+        return (
+          <div>
+            {users.map(({ id, fullname, permissions, image, firstname, lastname }) => {
+              const current = permissions.map((p) => p.permission);
+              const initials = (firstname[0] + lastname[0]).toUpperCase();
+              return (
+                <React.Fragment key={id}>
+                  <FormGroup row>
+                    {image ? <Avatar src={image} className={classes.avatar} /> : <Avatar className={classes.avatar}>{initials}</Avatar>}
+                    <Typography variant="h6" gutterBottom className={classes.name}>
+                      {fullname}
+                    </Typography>
+                    {allPermissions.map((perm) => {
+                      const validPermission = hasPermission(perm.permission, current);
+                      return (
+                        <FormControlLabel
+                          key={perm.id}
+                          control={
+                            <Switch
+                              checked={validPermission}
+                              color="primary"
+                              onChange={() => handlePermChange(id, current, validPermission, perm.permission, updatePermissions, openSnackbar)}
+                              value={perm.permission}
+                            />
+                          }
+                          label={perm.permission}
+                        />
+                      );
+                    })}
+                  </FormGroup>
+                  <Divider />
+                </React.Fragment>
+              );
+            })}
+          </div>
+        );
+      }}
+    </Composed>
+  );
+};
 
 export default withStyles(styles)(UpdatePermissions);

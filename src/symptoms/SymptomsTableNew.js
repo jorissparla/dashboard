@@ -4,13 +4,19 @@ import _ from "lodash";
 import { useMutation } from "react-apollo";
 import { useHistory } from "react-router";
 import { usePersistentState } from "../hooks";
-import { ALL_SYMPTOMS, TOGGLE_STATUS_COMPLETE_MUTATION, DELETE_SYMPTOM_REQUEST_MUTATION, UPDATE_SYMPTOM_REQUEST_MUTATION } from "./Queries";
+import {
+  ALL_SYMPTOMS,
+  TOGGLE_STATUS_COMPLETE_MUTATION,
+  DELETE_SYMPTOM_REQUEST_MUTATION,
+  UPDATE_SYMPTOM_REQUEST_MUTATION,
+  UPDATE_SYMPTOM_REQUEST_NOTIFY_MUTATION,
+} from "./Queries";
 import { format } from "../utils/format";
 import { useAlert } from "globalState/AlertContext";
 import UpdateSymptomDetails from "./UpdateSymptomDetails";
 import SearchBar from "../common/SearchBar";
 
-const PAGE_LENGTH = 10;
+const PAGE_LENGTH = 15;
 
 const ColumnHeader = ({ name, onSort }) => {
   function handleSortUp() {
@@ -35,12 +41,8 @@ const ColumnHeader = ({ name, onSort }) => {
 };
 
 const Cell = ({ value, complete }) => (
-  <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-    {complete === 1 ? (
-      <p className="text-gray-900 whitespace-no-wrap line-through">{value}</p>
-    ) : (
-      <p className="text-gray-900 whitespace-no-wrap">{value}</p>
-    )}
+  <td className="px-5 py-2 border-b border-gray-200 bg-transparent text-sm ">
+    {complete === 1 ? <p className="text-gray-900  line-through ">{value}</p> : <p className="text-gray-900 ">{value}</p>}
   </td>
 );
 const NoteCell = ({ value, complete }) => (
@@ -67,7 +69,7 @@ const NoteCell = ({ value, complete }) => (
   </td>
 );
 const NiceCell = ({ value, complete }) => (
-  <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
+  <td className="px-5 py-2 border-b border-gray-200 bg-transparent text-sm">
     {complete === 1 ? (
       <span className="inline-flex items-center px-2.5 py-0.5 rounded-md text-sm font-medium leading-5 bg-purple-100 text-purple-800 line-through">
         {value}
@@ -77,93 +79,31 @@ const NiceCell = ({ value, complete }) => (
     )}
   </td>
 );
-const CompleteCell = ({ value, values, handleClick, canEdit = false }) => {
-  const [isOpen, setisOpen] = useState(false);
-  const alert = useAlert();
-  const [toggleStatusComplete] = useMutation(TOGGLE_STATUS_COMPLETE_MUTATION);
-  const [updateSymptomRequest] = useMutation(UPDATE_SYMPTOM_REQUEST_MUTATION);
-  const handleOpen = () => {
-    if (canEdit) {
-      setisOpen(true);
-    } else {
-      alert.setError("You do not have permission to change this");
-    }
-  };
-
+const CompleteCell = ({ value }) => {
   return (
-    <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-      {isOpen && (
-        <UpdateSymptomDetails
-          values={values}
-          onCancel={() => setisOpen(false)}
-          onSave={async (note) => {
-            await updateSymptomRequest({
-              variables: {
-                where: { id: values.id },
-                input: { note },
-              },
-              refetchQueries: [{ query: ALL_SYMPTOMS }],
-            });
-
-            alert.setMessage(`symptom note was updated to  ${note}`);
-            setisOpen(false);
-          }}
-          onComplete={async () => {
-            await toggleStatusComplete({
-              variables: { where: { id: values.id } },
-              refetchQueries: [{ query: ALL_SYMPTOMS }],
-            });
-            alert.setMessage(`symptom ${values.symptom} was marked complete/incomplete`);
-            // updateModifiedDate(new Date());
-          }}
-        />
-      )}
+    <td className="px-5 py-2 border-b border-gray-200 bg-transparent text-sm">
       <div className="flex flex-no-wrap">
         <label className="md:w-2/3 block text-gray-500 font-bold">
           {value === 0 ? (
             <input
-              className="mr-2 leading-tight bg-red-300 cursor-pointer transition-colors ease-in-out duration-700 form-checkbox text-green-500"
+              className="mr-2 leading-tight  cursor-pointer transition-colors ease-in-out duration-700 form-checkbox text-green-500"
               defaultChecked={false}
               type="checkbox"
-              onClick={handleOpen}
+              disabled
+              // onClick={handleOpen}
             />
           ) : (
             <input
               className="mr-2 leading-tight cursor-pointer transition-colors ease-in-out duration-200  form-checkbox text-green-500"
               id="x"
               type="checkbox"
-              checked
-              onClick={handleOpen}
+              checked={value}
+              disabled
+              defaultChecked={true}
+              // onClick={handleOpen}
             />
           )}
-          <span className="text-sm">Mark {value === 0 ? "Complete" : "Incomplete"}</span>
-        </label>
-      </div>
-    </td>
-  );
-};
-const CompleteCellOld = ({ value, handleClick, canEdit = false }) => {
-  return (
-    <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
-      <div className="flex flex-no-wrap">
-        <label className="md:w-2/3 block text-gray-500 font-bold">
-          {value === 0 ? (
-            <input
-              className="mr-2 leading-tight bg-red-300 cursor-pointer transition-colors ease-in-out duration-700 form-checkbox text-green-500"
-              checked={false}
-              type="checkbox"
-              onClick={canEdit && handleClick}
-            />
-          ) : (
-            <input
-              className="mr-2 leading-tight cursor-pointer transition-colors ease-in-out duration-200  form-checkbox text-green-500"
-              id="x"
-              type="checkbox"
-              checked
-              onClick={canEdit && handleClick}
-            />
-          )}
-          <span className="text-sm">Mark {value === 0 ? "Complete" : "Incomplete"}</span>
+          {/* <span className="text-sm">{value === 0 ? "Completed" : "Not completed"}</span> */}
         </label>
       </div>
     </td>
@@ -188,9 +128,13 @@ function SymptomsTableNew({ data }) {
   const [toggleStatusComplete] = useMutation(TOGGLE_STATUS_COMPLETE_MUTATION);
   const [isOpen, setisOpen] = useState(false);
   const [handleDeleteSymptomRequest] = useMutation(DELETE_SYMPTOM_REQUEST_MUTATION);
+  const [notifySymptomRequest] = useMutation(UPDATE_SYMPTOM_REQUEST_NOTIFY_MUTATION);
+  const [updateSymptomRequest] = useMutation(UPDATE_SYMPTOM_REQUEST_MUTATION);
   const [filter, setFilter] = usePersistentState("symptomsfilter", "Open");
   const [_, setSortState] = useState({ name: "", direction: "A" });
   const [requests, setRequests] = useState(data.symptomrequests || []);
+  const [values, setValues] = useState(null);
+
   const [length, setLength] = useState((data.symptomrequests || []).length);
   const [modifiedDate, updateModifiedDate] = useState(Date.now());
   const [search, setSearch] = useState("");
@@ -198,19 +142,18 @@ function SymptomsTableNew({ data }) {
   const { user = null } = React.useContext(UserContext);
   // console.log('%c User', 'font-size: 24px', user);
   const VALID_PERMISSIONS = ["ADMIN", "SYMPTOMSEDIT"];
-  const hasEditPermssion =
-    (user && user.permissions.some(({ permission }) => VALID_PERMISSIONS.includes(permission))) || (user && user.role === "Admin");
+  const canEdit = (user && user.permissions.some(({ permission }) => VALID_PERMISSIONS.includes(permission))) || (user && user.role === "Admin");
 
   async function toggleCompleteStatus(id, symptom) {
     setisOpen(true);
-    // await toggleStatusComplete({
-    //   variables: { where: { id } },
-    //   refetchQueries: [{ query: ALL_SYMPTOMS }]
-    // });
-    // alert.setMessage(`symptom ${symptom} was marked complete/incomplete`);
-    // updateModifiedDate(new Date());
   }
 
+  const handleEditClick = (item) => {
+    if (canEdit) {
+      setValues(item);
+      setisOpen(true);
+    }
+  };
   async function handleDelete(id) {
     await handleDeleteSymptomRequest({
       variables: { where: { id } },
@@ -221,7 +164,6 @@ function SymptomsTableNew({ data }) {
   function filterValues(filter, symptoms, search = "") {
     // console.log(symptoms);
     let ns = symptoms.filter(({ symptom }) => symptom.toLowerCase().includes(search.toLowerCase()));
-    console.log(ns, search.toLowerCase());
     // _.includes(sym?.symptom.toUpperCase(), search.toUpperCase()));
     switch (filter) {
       case "Open":
@@ -234,13 +176,21 @@ function SymptomsTableNew({ data }) {
     }
   }
 
+  const orderBy = (collection = [], field, dir = "A") => {
+    return dir.toLowerCase() === "a"
+      ? collection.sort((x, y) => (x[field] > y[field] ? 1 : -1))
+      : collection.sort((x, y) => (x[field] > y[field] ? -1 : 1));
+  };
+
   const handleColumnSort = (col) => (name, direction) => {
     const u = direction === "A" ? "asc" : "desc";
     // console.log(requests);
-    const sorted = _.orderBy(requests, [col], [u]);
-    console.log("HandleSort", name, direction, u, sorted);
-    setRequests(sorted);
-    setSortState({ name, direction });
+    if (requests) {
+      const sorted = orderBy(requests, col, direction);
+      console.log("HandleSort", name, direction, u, sorted);
+      setRequests(sorted);
+      setSortState({ name, direction });
+    }
   };
 
   const isCompleteView = filter === "Completed";
@@ -267,12 +217,7 @@ function SymptomsTableNew({ data }) {
     const filtered = filterValues(filter, data.symptomrequests, search);
     setLength(filtered.length);
     maxPages = parseInt(length / PAGE_LENGTH) + 1;
-    // console.log(
-    //   (currentPage - 1) * PAGE_LENGTH,
-    //   currentPage * PAGE_LENGTH - 1,
-    //   filtered,
-    //   filtered.slice((currentPage - 1) * PAGE_LENGTH, currentPage * PAGE_LENGTH - 1)
-    // );
+
     setRequests(filtered.slice((currentPage - 1) * PAGE_LENGTH, currentPage * PAGE_LENGTH - 1));
   }, [filter, currentPage, modifiedDate, data, search]);
 
@@ -290,34 +235,9 @@ function SymptomsTableNew({ data }) {
               <option>Completed</option>
             </select>
           </label>
-          {/* <div className="pointer-events-none absolute inset-y-0 right-0 flex rounded items-center px-2 text-gray-700">
-            <svg
-              className="fill-current h-4 w-4"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-            >
-              <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-            </svg>
-          </div> */}
         </div>
         <SearchBar onChange={(value) => handleSearchChange(value)} hintText="type and press enter to match symptoms.." />
-        {/* <div className="block relative mt-2">
-          <span className="h-full absolute inset-y-0 left-0 flex items-center pl-2">
-            <svg
-              viewBox="0 0 24 24"
-              className="h-4 w-4 fill-current text-gray-500"
-            >
-              <path d="M10 4a6 6 0 100 12 6 6 0 000-12zm-8 6a8 8 0 1114.32 4.906l5.387 5.387a1 1 0 01-1.414 1.414l-5.387-5.387A8 8 0 012 10z"></path>
-            </svg>
-          </span>
-          <input
-            name="search"
-            value={search}
-            onChange={handleChange}
-            placeholder="Search"
-            className="appearance-none rounded-r rounded-l sm:rounded-l-none border border-gray-400 border-b block pl-8 pr-6 py-2 w-full bg-white text-sm placeholder-gray-400 text-gray-700 focus:bg-white focus:placeholder-gray-600 focus:text-gray-700 focus:outline-none"
-          />
-        </div> */}
+
         <div className="mt-2">
           <button
             onClick={() => history.push("/symptoms/add")}
@@ -336,6 +256,7 @@ function SymptomsTableNew({ data }) {
               <tr>
                 <ColumnHeader name="Symptom" onSort={handleColumnSort("symptom")} />
                 <ColumnHeader name="Category" onSort={handleColumnSort("symptom_category")} />
+                <ColumnHeader name="Email" onSort={handleColumnSort("email")} />
                 <ColumnHeader name="Incident" onSort={handleColumnSort("incident")} />
                 <ColumnHeader name="Note" onSort={handleColumnSort("note")} />
                 <ColumnHeader name="Complete" />
@@ -345,17 +266,18 @@ function SymptomsTableNew({ data }) {
             </thead>
             <tbody>
               {requests.map((item) => (
-                <tr key={item.id}>
+                <tr
+                  key={item.id}
+                  className="bg-white hover:bg-gray-100 cursor-pointer"
+                  title={canEdit ? "Click to Edit" : ""}
+                  onClick={() => handleEditClick(item)}
+                >
                   <Cell value={item.symptom} complete={item.status} />
                   <NiceCell value={item.symptom_category} complete={item.status} />
+                  <Cell value={item?.email} complete={item?.email} />
                   <Cell value={item.incident} complete={item.status} />
                   <Cell value={item.note} complete={item.status} />
-                  <CompleteCell
-                    value={item.status}
-                    values={item}
-                    handleClick={() => toggleCompleteStatus(item.id, item.symptom)}
-                    canEdit={hasEditPermssion}
-                  />
+                  <CompleteCell value={item.status} />
                   <Cell value={format(item.updatedAt, "EEE dd MMM yyyy, HH:mm")} complete={item.status} />
                   {isCompleteView && <RemoveCell handleDelete={() => handleDelete(item.id)} />}
                   {/* <Cell value={item.status} /> */}
@@ -363,6 +285,38 @@ function SymptomsTableNew({ data }) {
               ))}
             </tbody>
           </table>
+          {isOpen && (
+            <UpdateSymptomDetails
+              values={values}
+              onCancel={() => setisOpen(false)}
+              onSave={async (note, status, email) => {
+                await updateSymptomRequest({
+                  variables: {
+                    where: { id: values.id },
+                    input: { note, email, status },
+                  },
+                  refetchQueries: [{ query: ALL_SYMPTOMS }],
+                });
+                const sendResult = await notifySymptomRequest({
+                  variables: {
+                    where: { id: values.id },
+                  },
+                  refetchQueries: [{ query: ALL_SYMPTOMS }],
+                });
+                console.log(sendResult);
+                alert.setMessages([`symptom note was updated to  ${note}`, ` ${sendResult?.data?.notifySymptomRequest}`]);
+                setisOpen(false);
+              }}
+              onComplete={async () => {
+                await toggleStatusComplete({
+                  variables: { where: { id: values.id } },
+                  refetchQueries: [{ query: ALL_SYMPTOMS }],
+                });
+                alert.setMessage(`symptom ${values.symptom} was marked complete/incomplete`);
+                // updateModifiedDate(new Date());
+              }}
+            />
+          )}
           <div className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between          ">
             <span className="text-xs xs:text-sm text-gray-900">
               Showing {(currentPage - 1) * PAGE_LENGTH + 1} to {currentPage * PAGE_LENGTH} of {length} Entries
