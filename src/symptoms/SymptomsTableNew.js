@@ -304,7 +304,7 @@ function SymptomsTableNew({ data }) {
                   refetchQueries: [{ query: ALL_SYMPTOMS }],
                 });
                 console.log(sendResult);
-                alert.setMessages([`symptom note was updated to  ${note}`, ` ${sendResult?.data?.notifySymptomRequest}`]);
+                alert.setMessages(`symptom note was updated to  ${note} ${sendResult?.data?.notifySymptomRequest}`);
                 setisOpen(false);
               }}
               onComplete={async () => {
