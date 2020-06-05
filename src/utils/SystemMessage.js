@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 const SystemMessage = ({ message = "" }) => {
   const [show, setShow] = useState(true);
-  if (!show) return <div />;
+  if (!show ||!message) return <div />;
   return (
     <div className="fixed top-0 inset-x-0 pb-2 sm:pb-5 mt-20">
       <div className="max-w-screen-xl mx-auto px-2 sm:px-6 lg:px-8">

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import gql from "graphql-tag";
 import { useMutation } from "react-apollo";
 import { Link, useHistory } from "react-router-dom";
@@ -25,8 +25,9 @@ const MUTATION_SIGNIN = gql`
 `;
 
 const LoginForm = ({}) => {
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState("");
   const userContext = useUserContext();
   const history = useHistory();
 
@@ -34,14 +35,38 @@ const LoginForm = ({}) => {
   const [signinMutation] = useMutation(MUTATION_SIGNIN);
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (errors) {
+      return;
+    }
     const input = { email, password };
     // let result = await signinMutation({ variables: { input } });
     let result = await login(email, password);
     console.log(result, userContext.user);
+    if (result.data.signinUser.error) {
+      setErrors(" Invalid email / password");
+      return;
+    }
     if (result.data.signinUser.token) {
       await history.push("/");
+    } else {
+      alert("invalid");
     }
   };
+  function handleChange(event) {
+    const { name, value } = event.target;
+    if (name === "email") {
+      setEmail(value);
+    }
+    if (name === "password") {
+      setPassword(value);
+    }
+    if (value === "") {
+      setErrors(`${name} cannot be empty`);
+    } else {
+      setErrors("");
+    }
+  }
   return (
     <div className="pt-10 h-screen ">
       <div className="max-w-lg mx-auto rounded shadow-lg pb-5 flex items-center flex-col justify-center bg-white">
@@ -54,9 +79,10 @@ const LoginForm = ({}) => {
               <input
                 className="relative block w-full px-3 py-2 border border-gray-300 rounded focus:shadow-outline focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
                 type="email"
+                name="email"
                 placeholder="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={handleChange}
               />
             </div>
           </label>
@@ -66,9 +92,10 @@ const LoginForm = ({}) => {
               <input
                 className="relative block w-full px-3 py-2 border border-gray-300 rounded focus:shadow-outline focus:border-blue-300 focus:z-10 sm:text-sm sm:leading-5"
                 type="password"
+                name="password"
                 placeholder="Password"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={handleChange}
               />
             </div>
           </label>
@@ -78,6 +105,7 @@ const LoginForm = ({}) => {
               Forgot Password?
             </a>
           </div>
+          {errors && <p className="mt-2 text-sm font-semibold text-red-600">{errors}</p>}
         </form>
       </div>
     </div>
