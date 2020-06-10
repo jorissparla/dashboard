@@ -9,6 +9,8 @@ import React, { useRef } from "react";
 
 import EditWizardDetails from "./EditWizardDetails";
 import { useStyles } from "./useStyles";
+import { useUser } from "User";
+import { useUserContext } from "globalState/UserProvider";
 
 export const Field = ({ name, label, edit = false, Icon, activeVersion, bigger = false, blue = false }) => {
   const classes = useStyles();
@@ -23,10 +25,15 @@ export const Field = ({ name, label, edit = false, Icon, activeVersion, bigger =
     showCharsCounter: false,
   };
   const { role = "Guest" } = React.useContext(DashBoardContext);
+  const { user } = useUserContext();
   // const { activeVersion } = React.useContext(RootContext);
   // console.log('Field', name, activeVersion);
   const [isOpen, setisOpened] = React.useState(false);
   const [value, setValue] = React.useState(activeVersion[name]);
+  let isValidEditor = false;
+  if (user && user.permissions) {
+    isValidEditor = user.permissions.some(({ permission }) => permission === "WIZARDEDIT") || user.role === "Admin";
+  }
 
   // console.log('refresh', name, value, activeVersion);
   React.useEffect(() => {
@@ -54,7 +61,7 @@ export const Field = ({ name, label, edit = false, Icon, activeVersion, bigger =
           </Typography>
         </Grid>
         <Grid item xs={3} style={{ display: "flex", justifyContent: "flex-end" }}>
-          {role === "Admin" && <EditIcon color="primary" fontSize="small" onClick={() => setisOpened(true)} />}
+          {isValidEditor && <EditIcon color="primary" fontSize="small" onClick={() => setisOpened(true)} />}
         </Grid>
         <Modal
           onClose={() => setisOpened(false)}
