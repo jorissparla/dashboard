@@ -41,26 +41,6 @@ function filterBacklogData(data = [], filterValues = { owner: "", products: ["LN
   }
   return mydata;
 }
-function filterKBData(data = [], filterValues = { owner: "", products: ["LN ERP"], region: "EMEA" }, fieldFilters) {
-  const { owner, products, region } = filterValues;
-  let correctedRegion = region === "All" ? "" : region;
-  let mydata = [...data];
-  if (data?.length > 0) {
-    mydata = data && owner ? data.filter((o) => o.owner === owner) : data;
-    console.log("in filterKB", products, mydata);
-    // mydata = products.length ? mydata.filter((o) => products.includes(o.productline)) : mydata;
-    mydata = correctedRegion ? mydata.filter((o) => o.region === correctedRegion) : mydata;
-    for (let [key, value] of Object.entries(fieldFilters)) {
-      if (value) {
-        mydata = mydata.filter((item) => {
-          if (typeof item[key] === "number") return item[key] >= value;
-          return item[key]?.includes(value);
-        });
-      }
-    }
-  }
-  return mydata;
-}
 
 const BacklogTable = (props) => {
   return (
@@ -75,27 +55,5 @@ const BacklogTable = (props) => {
     />
   );
 };
-
-export const KBTable = (props) => {
-  if (props.data && props.data.length > 0) {
-    let fields = getfieldNamesFromData(props.data[0]);
-    return (
-      <GenericTable
-        fields={fields}
-        ageColumn={"daysSinceCreated"}
-        fnFilterData={filterKBData}
-        filterValues={{ owner: "", products: ["LN"], region: "EMEA" }}
-        {...props}
-      />
-    );
-  } else return <div />;
-};
-// Sanitize field inputs
-
-function fieldMapper(fields) {}
-
-function getfieldNamesFromData(row) {
-  return Object.keys(row).map((fld) => ({ name: fld, title: fld, type: "" }));
-}
 
 export default BacklogTable;

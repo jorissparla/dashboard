@@ -17,7 +17,8 @@ import { DashBoardContext } from "globalState/Provider";
 //   }
 // `;
 
-const VersionList = () => {
+const VersionList = ({ productline = "LN" }) => {
+  console.log("😎", productline);
   const [selectedVersion, setSelectedVersion] = usePersistentState("activeVersion", "INFOR LN 10.7");
 
   const dbctx = React.useContext(DashBoardContext);
@@ -27,13 +28,13 @@ const VersionList = () => {
   const [faqIsVisible, setShowFAQ] = usePersistentState("FAQ", false);
   const [localizationsIsVisible, setLocalizationsVisible] = usePersistentState("Localizations", false);
 
-  const { data, loading } = useQuery(ALL_MAINTENANCE_QUERY);
+  const { data, loading } = useQuery(ALL_MAINTENANCE_QUERY, { variables: { productline } });
   let versions = [];
 
   useEffect(() => {
     const input = {
       username: dbctx.fullname,
-      page: "/maintenancewizard",
+      page: "/maintenancewizard/" + productline,
       linkid: null,
       type: "MaintenanceWizard",
     };
@@ -90,7 +91,7 @@ const VersionList = () => {
             id={maintenanceFAQ.id}
           ></OtherField>
         ) : (
-          <MaintenanceWizard activeVersions={activeVersions} />
+          <MaintenanceWizard activeVersions={activeVersions} productline={productline} />
         )
       ) : (
         <Typography>Select a version</Typography>

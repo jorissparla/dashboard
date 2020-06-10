@@ -30,6 +30,7 @@ import PlannedCourseRequestList from "./pages/PlannedCourseRequestList";
 import Playground from "./pages/Playground";
 import ProfilePage from "./pages/ProfilePage";
 import Stats from "./pages/Stats";
+import KBPage from "./pages/KBPage";
 import { Surveys } from "./pages/Surveys";
 import VideoPage from "./pages/Videos";
 import { Parameters } from "./stats/Parameters";
@@ -112,7 +113,8 @@ function AppRoutes(props) {
       <Route exact path="/playground" component={Playground} />
       <Route exact path="/cloudreadiness" component={CloudReadiness} />
       <Route exact path="/symptoms" component={SymptomsPage} />
-      <Route exact path="/maintenancewizard" component={MaintenanceVersionList} />
+      <Route exact path="/maintenancewizard" component={() => <MaintenanceVersionList productline="LN" />} />
+      <Route exact path="/maintenancewizardauto" component={() => <MaintenanceVersionList productline="AUTO" />} />
       <Route exact path="/tenantlogs" component={TenantLogsWithData} />
       <Route exact path="/tenantview" component={TenantViewList} />
       <Route exact path="/details/:id" component={Details} />
@@ -121,6 +123,7 @@ function AppRoutes(props) {
       <AuthRoute exact path="/profilepage" component={ProfilePage} user={user} />
       <AuthRoute exact path="/profilepage/:id" component={UserPage} user={user} />
       <AuthRoute exact path="/mywork" component={Stats} user={user} history={history} />
+      <AuthRoute exact path="/kbpage" component={KBPage} user={user} history={history} />
       <AuthRoute exact path="/myworkparams" component={Parameters} user={user} history={history} />
       <Route exact path="/" component={DashBoardContainer} user={user} />
       <Route exact path="/newspage" component={NewsPage} />

@@ -201,48 +201,4 @@ const StatsPage = ({ data, classes, owner, isValidSuperUser }) => {
   );
 };
 
-// const Test = () => {
-//   const { user } = React.useContext(UserContext);
-//   const [date] = useState(format(Date.now(), "yyyy-MM-dd"));
-//   const [selectedProducts] = usePersistentState("selectedproducts", ["LN"]);
-//   const [region] = usePersistentState("region", "EMEA");
-//   const owner = user ? (user.fullname ? user.fullname : "") : "";
-//   const history = useHistory();
-//   const [filterValues, setFilterValues] = useState({
-//     owner,
-//     products: selectedProducts,
-//     region,
-//   });
-//   function handleChange(values) {
-//     setFilterValues(values);
-//   }
-//   const classes = useStyles();
-//   // console.log('rendering data');
-//   let enableIt = false;
-//   const isValidSuperUser = ["Admin", "PO"].some((u) =>
-//     user ? u === user.role : false
-//   );
-//   if (user && user.permissions) {
-//     enableIt = user.permissions.some(
-//       ({ permission }) => permission === "STATS"
-//     );
-//   }
-//   return (
-//     <div className="font-sans text-lg  bg-gray-200 min-h-screen flex items-center mb-10 flex-col w-full">
-//       <SelectionForm
-//         classes={classes}
-//         isValidSuperUser={isValidSuperUser}
-//         onChange={handleChange}
-//         onNavigateToParams={() => history.push("/myworkparams")}
-//         initialValue={{
-//           owner,
-//           lastUpdated: null, //mostRecentUpdate,
-//           actionNeeded: true,
-//         }}
-//       />
-//     </div>
-//   );
-// };
-
-// export default Test; //Stats;
 export default Stats;

@@ -111,7 +111,7 @@ function MaintenanceCheck({ versionInfo, handleCustomerHasValidMaintenance, vali
                   }
                   label=""
                 />
-                <span item>Yes</span>
+                <span>Yes</span>
               </div>
             </div>
             <div className="text-sm font-semibold font-sans">Please check entitlement for extended maintenance below</div>

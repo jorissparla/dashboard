@@ -1,9 +1,7 @@
-import React, { useContext, useState } from "react";
-import BacklogTableNewStyle, { KBTable } from "stats/BacklogTableNewStyle";
+import React, { useState } from "react";
+import BacklogTableNewStyle from "stats/BacklogTableNewStyle";
 import { Backlog } from "stats/BacklogType";
-import { SelectionContext } from "../globalState/SelectionContext";
 import { useLocalStorage } from "../utils/useLocalStorage";
-import { useIsValidEditor } from "./../globalState/UserProvider";
 import LoadingDots from "./../utils/LoadingDots";
 
 export function useParams(clean = false) {
@@ -196,7 +194,6 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
     <>
       {loading && <LoadingDots />}
       <div className="w-full mx-4">
-        {/* <KBTable filterValues={filterValues} additionalFields={["ownergroup"]} data={allKB} title="KB Articles" description="KB Articles" /> */}
         <BacklogTableNewStyle
           filterValues={filterValues}
           additionalFields={["ownergroup"]}

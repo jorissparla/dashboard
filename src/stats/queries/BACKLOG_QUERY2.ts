@@ -269,17 +269,21 @@ export const QUERY_BACKLOG_TEXT = `
 `;
 
 export const KBQUERY = `
-    allKB {
-      kbid
-      owner:fullname
-      region
-      daysSinceCreated
-      dayssincelastupdate
-      productline
-      ownergroup: ownerGroupName
-      status
-      viewCount
-      summary
+query allKB {
+
+  allKB {
+    kbid
+    owner:fullname
+    region
+    daysSinceCreated
+    dayssincelastupdate
+    productline
+    ownergroup: ownerGroupName
+    status
+    type: typeName
+    viewCount
+    summary
+  }
     
     }
 `;

@@ -28,7 +28,7 @@ const ColumnHeader = ({ name, onSort }) => {
     onSort(name, "D");
   }
   return (
-    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+    <th className="px-5 py-3 border border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
       {name}{" "}
       <span className="hover:text-green hover: cursor-pointer" onClick={handleSortUp}>
         ▲
@@ -41,7 +41,7 @@ const ColumnHeader = ({ name, onSort }) => {
 };
 
 const Cell = ({ value, complete }) => (
-  <td className="px-5 py-2 border-b border-gray-200 bg-transparent text-sm ">
+  <td className="px-5 py-0 border border-gray-200 bg-transparent text-sm ">
     {complete === 1 ? <p className="text-gray-900  line-through ">{value}</p> : <p className="text-gray-900 ">{value}</p>}
   </td>
 );
@@ -241,14 +241,14 @@ function SymptomsTableNew({ data }) {
         <div className="mt-2">
           <button
             onClick={() => history.push("/symptoms/add")}
-            className="ml-4 rounded-lg px-4 md:px-5 xl:px-4 py-2 md:py-4 xl:py-3 bg-gray-300 hover:bg-gray-200 md:text-md xl:text-base text-gray-800 font-semibold leading-tight shadow-md"
+            className="w-72 ml-4 rounded-lg px-4 md:px-5 xl:px-4 py-2 md:py-4 xl:py-3 bg-teal-300 hover:bg-teal-200 md:text-md xl:text-base text-teal-800 font-semibold leading-tight shadow-md"
           >
             Request new Symptom
           </button>
         </div>
       </div>
       <div className="  flex flex-col my-2">
-        <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto"></div>
+        {/* <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto"></div> */}
 
         <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
           <table className="shadow-lg rounded-lg w-full leading-normal shadow rounded-lg  mt-4 transition duration-500 ease-in-out ">
