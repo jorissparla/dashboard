@@ -8,20 +8,20 @@ const styles: any = (theme: any) => ({
     flexWrap: "wrap",
   },
   formControl: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(2),
     minWidth: 120,
   },
   selectEmpty: {
-    marginTop: theme.spacing.unit * 2,
+    marginTop: theme.spacing(2),
   },
   button: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
     color: "white",
     backgroundColor: "black",
   },
   TextFieldStyle: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
+    marginLeft: theme.spacing,
+    marginRight: theme.spacing,
     width: 300,
   },
 });

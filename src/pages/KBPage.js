@@ -132,6 +132,8 @@ export const KBTable = (props) => {
     return (
       <GenericTable
         fields={fields}
+        linkField="kbid"
+        linkPrefix="https://support.infor.com/espublic/EN/AnswerLinkDotNet/SoHo/Solutions/SoHoViewSolution.aspx?SolutionID="
         ageColumn={"daysSinceCreated"}
         fnFilterData={filterKBData}
         filterValues={{ owner: "", products: ["LN"], region: "EMEA" }}
@@ -160,28 +162,28 @@ const KBMain = ({ data, owner, filterValues }) => {
       {/* <pre className="text-xs">{JSON.stringify(fields, null, 2)}</pre> */}
       <div className="flex flex-col items-center justify-between w-full p-2 font-sansI bg-white rounded shadow-xl  text-gray-600 mb-6">
         <div className="text-xl font-semibold mb-6">Note</div>
-        <div className="text-sm ">
+        <div className="text-sm text-red-500 font-bold">
           If you have a KB that it is not actual and should be removed from the Knowledgebase, please set to “void” and then “publish” once the status
           is changed. Periodically, KBs with status “void” will be completely removed from the Knowledgebase
         </div>
       </div>
       <KBTable
         filterValues={filterValues}
-        additionalFields={["ownergroup"]}
+        // additionalFields={["ownergroup"]}
         data={allKB}
         title="All KB Articles"
         description="KB Articles, unpublished, older than a year"
       />
       <KBTable
         filterValues={filterValues}
-        additionalFields={["ownergroup"]}
+        // additionalFields={["ownergroup"]}
         data={programError}
         title="Progam Error KB Articles"
         description="KB Articles, unpublished, older than a year"
       />
       <KBTable
         filterValues={filterValues}
-        additionalFields={["ownergroup"]}
+        // additionalFields={["ownergroup"]}
         data={knowledge}
         title="Knowledge KB Articles"
         description="KB Articles, unpublished, older than a year"

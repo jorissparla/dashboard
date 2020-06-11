@@ -1,54 +1,49 @@
-import { Button, Paper, TextField, withStyles } from '@material-ui/core';
-import _ from 'lodash';
-import * as React from 'react';
-import { useMutation, useQuery } from 'react-apollo';
-import { CardSection } from '../common';
-import { withRouter } from 'react-router';
-import { format } from '../utils/format';
-import { CategoryBarMultipleSelect } from './CategoryList';
-import {
-  MUTATION_UPDATE_VIDEO,
-  QUERY_SINGLE_VIDEO,
-  MUTATION_ADD_VIDEO,
-  MUTATION_DELETE_VIDEO
-} from './Queries';
-import SafeDeleteButton from './SafeDeleteButton';
+import { Button, Paper, TextField, withStyles } from "@material-ui/core";
+import _ from "lodash";
+import * as React from "react";
+import { useMutation, useQuery } from "react-apollo";
+import { CardSection } from "../common";
+import { withRouter } from "react-router";
+import { format } from "../utils/format";
+import { CategoryBarMultipleSelect } from "./CategoryList";
+import { MUTATION_UPDATE_VIDEO, QUERY_SINGLE_VIDEO, MUTATION_ADD_VIDEO, MUTATION_DELETE_VIDEO } from "./Queries";
+import SafeDeleteButton from "./SafeDeleteButton";
 
 const styles: any = (theme: any) => ({
   root: {
-    display: 'flex',
-    flexWrap: 'wrap'
+    display: "flex",
+    flexWrap: "wrap",
   },
   formControl: {
-    margin: theme.spacing.unit,
-    minWidth: 120
+    margin: theme.spacing,
+    minWidth: 120,
   },
   selectEmpty: {
-    marginTop: theme.spacing.unit * 2
+    marginTop: theme.spacing(2),
   },
   button: {
-    margin: theme.spacing.unit
+    margin: theme.spacing,
   },
   TextFieldStyle: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit
+    marginLeft: theme.spacing,
+    marginRight: theme.spacing,
   },
   button2: {
-    margin: theme.spacing.unit,
-    maxWidth: 200
+    margin: theme.spacing,
+    maxWidth: 200,
   },
 
   buttonStyle: {
-    backgroundColor: '#ffc600',
-    labelColor: 'white',
-    margin: '20px'
+    backgroundColor: "#ffc600",
+    labelColor: "white",
+    margin: "20px",
   },
   buttonDelete: {
-    backgroundColor: 'black',
-    labelColor: 'white',
-    color: 'white',
-    margin: theme.spacing.unit
-  }
+    backgroundColor: "black",
+    labelColor: "white",
+    color: "white",
+    margin: theme.spacing,
+  },
 });
 
 // Type declarations and defaultvalues
@@ -61,11 +56,11 @@ type VideoType = {
 };
 
 const defaultInitialValue = {
-  id: '',
-  title: '',
-  url: '',
+  id: "",
+  title: "",
+  url: "",
   date: Date.now().toString(),
-  category: 'NEW'
+  category: "NEW",
 };
 
 interface AddProps {
@@ -85,7 +80,7 @@ const AddVideoPlain: React.FC<AddProps> = ({ history }) => {
         formTitle="Add Video"
         initialValues={defaultInitialValue}
         onSave={(v: VideoType) => handleSave(v)}
-        onCancel={() => history.push('/videos')}
+        onCancel={() => history.push("/videos")}
       />
     </div>
   );
@@ -105,10 +100,10 @@ const EditVideoPlain: React.FC<EditProps> = ({ match, history }) => {
     id = match.params.id;
   }
   if (!id) {
-    id = '';
+    id = "";
   }
   const { data, loading } = useQuery(QUERY_SINGLE_VIDEO, {
-    variables: { id }
+    variables: { id },
   });
 
   const [updateVideo] = useMutation(MUTATION_UPDATE_VIDEO);
@@ -125,11 +120,11 @@ const EditVideoPlain: React.FC<EditProps> = ({ match, history }) => {
   const { video } = data;
   async function handleSave(video: VideoType) {
     await updateVideo({ variables: { video } });
-    history.push('/videos');
+    history.push("/videos");
   }
   async function handleDelete(video: VideoType) {
     await deleteVideo({ variables: { video } });
-    history.push('/videos');
+    history.push("/videos");
   }
   return (
     <div>
@@ -138,7 +133,7 @@ const EditVideoPlain: React.FC<EditProps> = ({ match, history }) => {
         initialValues={video}
         onSave={(v: VideoType) => handleSave(v)}
         onDelete={(v: VideoType) => handleDelete(v)}
-        onCancel={() => history.push('/videos')}
+        onCancel={() => history.push("/videos")}
       />
     </div>
   );
@@ -165,23 +160,23 @@ interface VideoFormProps {
 const VideoForm: React.FC<VideoFormProps> = ({
   classes,
   initialValues = defaultInitialValue,
-  formTitle = 'Add Video',
-  onSave = (values: any) => console.log('Values', values),
+  formTitle = "Add Video",
+  onSave = (values: any) => console.log("Values", values),
   onDelete = () => null,
-  onCancel = () => null
+  onCancel = () => null,
 }) => {
   const title = useInput(initialValues.title);
   const url = useInput(initialValues.url);
-  const date = useInput(format(initialValues.date, 'yyyy-MM-dd'));
+  const date = useInput(format(initialValues.date, "yyyy-MM-dd"));
   const [categories, setCategories] = React.useState(initialValues.category);
   const id = initialValues.id;
   console.log(date);
   function handleSetCategories(name: string) {
-    let categoriesArray: string[] = categories.split(';');
+    let categoriesArray: string[] = categories.split(";");
     if (_.includes(categories, name)) {
-      setCategories(categoriesArray.filter(cat => cat !== name).join(';'));
+      setCategories(categoriesArray.filter((cat) => cat !== name).join(";"));
     } else {
-      setCategories([...categoriesArray, name].join(';'));
+      setCategories([...categoriesArray, name].join(";"));
     }
   }
   React.useEffect(() => {
@@ -193,7 +188,7 @@ const VideoForm: React.FC<VideoFormProps> = ({
       title: title.value,
       url: url.value,
       date: date.value,
-      category: categories
+      category: categories,
     };
     if (initialValues.id) {
       onSave({ id: initialValues.id, ...values });
@@ -208,42 +203,17 @@ const VideoForm: React.FC<VideoFormProps> = ({
   }
   return (
     <Paper>
-      <CardSection style={{ fontSize: '24px', fontFamily: 'Poppins' }}>{formTitle}</CardSection>
+      <CardSection style={{ fontSize: "24px", fontFamily: "Poppins" }}>{formTitle}</CardSection>
       <form onSubmit={handleSubmit}>
-        <TextField
-          className={classes.TextFieldStyle}
-          name="title"
-          required
-          fullWidth={true}
-          {...title}
-          label="Title"
-        />
-        <TextField
-          className={classes.TextFieldStyle}
-          name="url"
-          required
-          fullWidth={true}
-          {...url}
-          label="URL"
-        />
-        <TextField
-          className={classes.TextFieldStyle}
-          name="date"
-          type="date"
-          {...date}
-          label="date"
-        />
+        <TextField className={classes.TextFieldStyle} name="title" required fullWidth={true} {...title} label="Title" />
+        <TextField className={classes.TextFieldStyle} name="url" required fullWidth={true} {...url} label="URL" />
+        <TextField className={classes.TextFieldStyle} name="date" type="date" {...date} label="date" />
         <CategoryBarMultipleSelect isSelected={categories} setSelected={handleSetCategories} />
         <CardSection>
           <Button className={classes.button} color="primary" variant="contained" type="submit">
             Save
           </Button>
-          <Button
-            className={classes.button}
-            onClick={() => onCancel()}
-            color="secondary"
-            variant="contained"
-          >
+          <Button className={classes.button} onClick={() => onCancel()} color="secondary" variant="contained">
             Cancel
           </Button>
           {id && (

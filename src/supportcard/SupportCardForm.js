@@ -11,7 +11,7 @@ import JoditEditor from "jodit-react";
 import CKEditor from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import React, { useRef, useState } from "react";
-import { withRouter } from "react-router";
+import { withRouter, useHistory } from "react-router";
 import { CardSection } from "../common";
 import { useUser } from "../User";
 //import { format } from 'date-fns';
@@ -19,6 +19,7 @@ import { format } from "../utils/format";
 import SupportCardTags from "./SupportCardTags";
 import TWButton from "elements/TWButton";
 import SafeDeleteButton from "videos/SafeDeleteButton";
+import { TWSelectMenu } from "elements/TWSelectMenu";
 
 const owners = [
   { id: "Ricardo Exposito", name: "Ricardo Exposito" },
@@ -26,82 +27,10 @@ const owners = [
   { id: "Maribel Aguilella", name: "Maribel Aguilella" },
   { id: "Joris Sparla", name: "Joris Sparla" },
   { id: "Luis Casanova", name: "Luis Casanova" },
+  { id: "Ludmilla Kolbowski", name: "Ludmilla Kolbowski" },
 ];
 
-const paperStyle = {
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "space-between",
-  margin: "15px",
-  padding: "10px",
-  minWidth: "200px",
-};
-
-const styles = (theme) => ({
-  container: {
-    display: "flex",
-    flexWrap: "wrap",
-  },
-  button: {
-    margin: theme.spacing(1),
-  },
-  button2: {
-    margin: theme.spacing(1),
-    height: "40px",
-    fontSize: "24px",
-    backgroundColor: "palevioletred",
-  },
-
-  buttonDel: {
-    margin: theme.spacing(1),
-    backgroundColor: "#000",
-  },
-
-  textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: 200,
-    height: "100%",
-  },
-  titleField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    fontSize: "40px",
-    color: "#039BE5",
-    fontWeight: 900,
-  },
-  content: {
-    display: "flex",
-  },
-  contentField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    backgroundColor: "#eeeeee99",
-    fontSize: 40,
-    minHeight: "50vh",
-  },
-  dense: {
-    marginTop: 19,
-  },
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
-  },
-  markdown2: {
-    width: "50vw",
-    marginLeft: 10,
-    height: "70vh",
-    overflow: "scroll",
-  },
-  markdown: {
-    width: "90vw",
-    height: "60vh",
-    overflow: "scroll",
-  },
-  menu: {
-    width: 200,
-  },
-});
+const simpOwners = owners.map((owner) => owner.name);
 
 const SupportCardForm = (props) => {
   const {
@@ -114,14 +43,14 @@ const SupportCardForm = (props) => {
     onSave,
     authenticated,
     onDelete,
-    history,
-    classes,
   } = props;
-  const [category, setCategory] = useState(initialValues.category);
+  // const [category, setCategory] = useState(initialValues.category);
+  const [lbOpen, setlbOpen] = useState(false);
   const readOnly = !authenticated;
   const updatedAt = supportcard?.updatedAt; //: format(new Date(), "yyyy-MM-dd");
   const [values, setValues] = React.useState(initialValues);
-  const currentUser = useUser();
+  const history = useHistory();
+  const simpCategories = categories.map((cat) => cat.name);
 
   const handleChange = (event) => {
     event.persist();
@@ -130,23 +59,18 @@ const SupportCardForm = (props) => {
       [event.target.name]: event.target.value,
     });
   };
+  const handleChangeOwner = (owner) => {
+    setValues({ ...values, owner });
+    // setlbOpen(false);
+  };
+  const handleChangeCategory = (categoryname) => {
+    setValues({ ...values, categoryname });
+    // setlbOpen(false);
+  };
 
   const handleChangeSingle = (event) => {
     setValues({ ...values, owner: event.target.value });
   };
-
-  const config = {
-    readonly: false, // all options from https://xdsoft.net/jodit/doc/,
-    toolbar: true,
-    // theme: 'dark',
-    autoHeight: true,
-    showWordsCounter: false,
-    showXPathInStatusbar: false,
-    showCharsCounter: false,
-  };
-  const editor = useRef(null);
-  const viewer = useRef(null);
-  const config2 = { ...config, toolbar: false, readonly: true };
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -191,42 +115,8 @@ const SupportCardForm = (props) => {
             }
           </div>
           <div className="flex items-center mb-4">
-            <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="category-simple">Category</InputLabel>
-              <Select
-                value={values.categoryname}
-                onChange={handleChange}
-                disabled={readOnly}
-                inputProps={{
-                  name: "categoryname",
-                  id: "category-simple",
-                }}
-              >
-                {categories.map(({ id, name }) => (
-                  <MenuItem key={id} value={name}>
-                    {name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <FormControl className={classes.formControl}>
-              <InputLabel htmlFor="owner">Owner</InputLabel>
-              <Select
-                value={values.owner}
-                onChange={handleChange}
-                disabled={readOnly}
-                inputProps={{
-                  name: "owner",
-                  id: "owner",
-                }}
-              >
-                {owners.map(({ id, name }) => (
-                  <MenuItem key={id} value={name}>
-                    {name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            <TWSelectMenu items={simpCategories} value={values.categoryname} onChange={handleChangeCategory} label="Enter Category" />
+            <TWSelectMenu items={simpOwners} value={values.owner} onChange={handleChangeOwner} />
           </div>
           <div className="w-full mb-4" disabled={readOnly}>
             {supportcard && <SupportCardTags id={supportcard?.id} keywords={supportcard?.keywords} readOnly={readOnly} />}
@@ -248,17 +138,17 @@ const SupportCardForm = (props) => {
           )}
           <CardSection>
             {!readOnly && (
-              <React.Fragment>
-                <TWButton color="primary" type="submit">
-                  Save Card
-                </TWButton>
-              </React.Fragment>
+              <TWButton color="primary" type="submit">
+                Save Card
+              </TWButton>
             )}
             {!readOnly && supportcard && <SafeDeleteButton onDelete={() => onDelete(supportcard)}></SafeDeleteButton>}
             {readOnly && supportcard && (
-              <Button variant="contained" color="primary" className={classes.buttonDel} onClick={() => window.open(initialValues.link)}>
+              <TWButton color="black" onClick={() => window.open(initialValues.link)}>
                 View Link
-              </Button>
+              </TWButton>
+              // <Button variant="contained" color="primary" className={classes.buttonDel} onClick={() => window.open(initialValues.link)}>
+              // </Button>
             )}
             <TWButton variant="contained" color="teal" onClick={() => setTimeout(history.push("/supportcard"), 500)}>
               Cancel
@@ -271,4 +161,4 @@ const SupportCardForm = (props) => {
   );
 };
 
-export default withRouter(withStyles(styles)(SupportCardForm));
+export default SupportCardForm;

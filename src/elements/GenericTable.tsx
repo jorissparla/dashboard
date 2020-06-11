@@ -14,6 +14,8 @@ interface GenericTableProps {
   title: string;
   subtitle: string;
   fields: any[];
+  linkField?: string;
+  linkPrefix?: string;
   description: string;
   additionalFields?: string[];
   whereToInsertAdditionalFieldIndex?: number;
@@ -29,6 +31,8 @@ export const GenericTable = (props: GenericTableProps) => {
     title = "",
     subtitle = "",
     fields,
+    linkField = "",
+    linkPrefix = "",
     description = title,
     additionalFields = [],
     whereToInsertAdditionalFieldIndex = 1,
@@ -98,7 +102,6 @@ export const GenericTable = (props: GenericTableProps) => {
   };
 
   const handleColumnSort = (col: string, tableData: any[]) => (name: string, direction: string) => {
-    console.log(name, direction);
     if (tableData) {
       const sorted = orderBy(tableData, col, direction);
 
@@ -186,13 +189,9 @@ export const GenericTable = (props: GenericTableProps) => {
       <p className="text-gray-900 whitespace-no-wrap">{format(value, "yyyy-MMM-dd")}</p>
     </td>
   );
-  const HyperLinkCell = ({ value }: any) => (
+  const HyperLinkCell = ({ value = "", linkPrefix = "http://navigator.infor.com/n/incident.asp?IncidentID=" }) => (
     <td className="px-5  border border-gray-200  text-sm">
-      <a
-        className="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker"
-        href={`http://navigator.infor.com/n/incident.asp?IncidentID=${value}`}
-        target="_blank"
-      >
+      <a className="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker" href={`${linkPrefix}${value}`} target="_blank">
         {value}
       </a>
     </td>
@@ -343,19 +342,23 @@ export const GenericTable = (props: GenericTableProps) => {
               {tableData.map((item: any, index: number) => (
                 <tr key={item.incident} className={`${index % 2 === 0 && "bg-gray-50"}`}>
                   {fieldList.map(({ name, type }) => {
-                    switch (type) {
-                      case "hl":
-                        return <HyperLinkCell key={name} value={item[name]} />;
-                      case "yn":
-                        return <YesNoCell key={name} value={item[name]} />;
+                    if (name === linkField) {
+                      return <HyperLinkCell key={name} value={item[name]} linkPrefix={linkPrefix} />;
+                    } else {
+                      switch (type) {
+                        case "hl" || name === linkField:
+                          return <HyperLinkCell key={name} value={item[name]} linkPrefix={linkPrefix} />;
+                        case "yn":
+                          return <YesNoCell key={name} value={item[name]} />;
 
-                      case "sev":
-                        return <SeverityCell key={name} value={item[name]} />;
-                      case "dt":
-                        return <DateCell key={name} value={item[name]} />;
+                        case "sev":
+                          return <SeverityCell key={name} value={item[name]} />;
+                        case "dt":
+                          return <DateCell key={name} value={item[name]} />;
 
-                      default:
-                        return <Cell key={name} value={item[name]} />;
+                        default:
+                          return <Cell key={name} value={item[name]} />;
+                      }
                     }
                   })}
                 </tr>
