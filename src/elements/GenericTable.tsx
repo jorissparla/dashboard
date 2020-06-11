@@ -32,7 +32,7 @@ export const GenericTable = (props: GenericTableProps) => {
     subtitle = "",
     fields,
     linkField = "",
-    linkPrefix = "",
+    linkPrefix = "http://navigator.infor.com/n/incident.asp?IncidentID=",
     description = title,
     additionalFields = [],
     whereToInsertAdditionalFieldIndex = 1,
@@ -346,7 +346,7 @@ export const GenericTable = (props: GenericTableProps) => {
                       return <HyperLinkCell key={name} value={item[name]} linkPrefix={linkPrefix} />;
                     } else {
                       switch (type) {
-                        case "hl" || name === linkField:
+                        case "hl":
                           return <HyperLinkCell key={name} value={item[name]} linkPrefix={linkPrefix} />;
                         case "yn":
                           return <YesNoCell key={name} value={item[name]} />;
