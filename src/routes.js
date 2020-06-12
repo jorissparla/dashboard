@@ -46,6 +46,7 @@ import AddSymptomRequest from "symptoms/AddSymptomRequest";
 import UploadImageComponent from "pages/UploadImageComponent";
 import UserPage from "pages/UserPage";
 import CloudInformation from "pages/CloudInformation";
+import TenantLogList from "pages/TenantLogList";
 
 // const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
 const LoggedInUsers = React.lazy(() => import("./pages/loggedinusers"));
@@ -117,6 +118,7 @@ function AppRoutes(props) {
       <Route exact path="/maintenancewizard" component={() => <MaintenanceVersionList productline="LN" />} />
       <Route exact path="/maintenancewizardauto" component={() => <MaintenanceVersionList productline="AUTO" />} />
       <Route exact path="/tenantlogs" component={TenantLogsWithData} />
+      <Route exact path="/tenantlogs1" component={TenantLogList} />
       <Route exact path="/tenantview" component={TenantViewList} />
       <Route exact path="/details/:id" component={Details} />
       <Route exact path="/stats" component={Stats} user={user} history={history} />

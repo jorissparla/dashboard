@@ -27,9 +27,11 @@ function filterBacklogData(data = [], filterValues = { owner: "", products: ["LN
   let correctedRegion = region === "All" ? "" : region;
   let mydata = [...data];
   if (data?.length > 0) {
-    mydata = data && owner ? data.filter((o) => o.owner === owner) : data;
-    mydata = products.length ? mydata.filter((o) => products.includes(o.productline)) : mydata;
-    mydata = correctedRegion ? mydata.filter((o) => o.owner_region === correctedRegion) : mydata;
+    if (filterValues) {
+      mydata = data && owner ? data.filter((o) => o.owner === owner) : data;
+      mydata = products.length ? mydata.filter((o) => products.includes(o.productline)) : mydata;
+      mydata = correctedRegion ? mydata.filter((o) => o.owner_region === correctedRegion) : mydata;
+    }
     for (let [key, value] of Object.entries(fieldFilters)) {
       if (value) {
         mydata = mydata.filter((item) => {

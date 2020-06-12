@@ -17,7 +17,7 @@ import { FilterFieldContext, useFilterField } from "../globalState/FilterContext
 //import format from 'date-fns/format';
 import { formatDistanceToNow, format } from "../utils/format";
 import { DashBoardContext } from "../globalState/Provider";
-import TenantLogs from "./TenantLogs";
+import TenantLogs from "pages/TenantLogList";
 import { ALL_TENANTS, QUERY_ALL_TENANT_DETAILS, TENANT_NOTE } from "./TenantQueries";
 import { Main, Article, TextSpan } from "./TenantStyledElements";
 import { TenantCard } from "./TenantCard";

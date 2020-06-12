@@ -23,6 +23,7 @@ interface GenericTableProps {
   fnFilterData?: (data: any[], filterValues: any, fieldFilters: { key: string; value: string }[] | {}) => any[];
   fnCalculateAverageAgeFromData?: (data: any[], ageColumn?: string) => number;
   filterValues?: any;
+  autoExpand?: boolean;
 }
 
 export const GenericTable = (props: GenericTableProps) => {
@@ -40,8 +41,10 @@ export const GenericTable = (props: GenericTableProps) => {
     ageColumn = "",
     fnFilterData,
     filterValues = null,
+    autoExpand = false,
   } = props;
   const [tableData, setTableData] = useState(data || []);
+  const [isExpanded, setExpanded] = useState(autoExpand);
   const [exportedData, setExportedData] = useState("");
   const [fieldFilters, setFieldFilters] = useState({});
   const [avgAge, setAvgAge] = useState(0);
@@ -236,7 +239,7 @@ export const GenericTable = (props: GenericTableProps) => {
       filterAr.push({ [key]: value });
     }
     return (
-      <>
+      <div className="z-50">
         {filterAr.map((item, index) => {
           let handleDelete = null;
           let text = "";
@@ -272,12 +275,19 @@ export const GenericTable = (props: GenericTableProps) => {
             </span>
           );
         })}
-      </>
+      </div>
     );
   };
   return (
-    <ExpansionPanel TransitionProps={{ unmountOnExit: true }}>
-      <ExpansionPanelSummary className="h-16" expandIcon={<ExpandMoreIcon />}>
+    // <ExpansionPanel TransitionProps={{ unmountOnExit: true }} defaultExpanded={autoExpand}>
+    <div className="bg-white">
+      <ExpansionPanelSummary
+        className="h-16"
+        expandIcon={<ExpandMoreIcon />}
+        onClick={() => {
+          if (!autoExpand) setExpanded(!isExpanded);
+        }}
+      >
         <div className="flex items-center justify-between w-full p-2 font-sansI">
           <div className=" text-gray-500 font-semibold flex items-center">
             <span className=" text-gray-500 text-lg">{title}</span>
@@ -321,52 +331,54 @@ export const GenericTable = (props: GenericTableProps) => {
           </>
         </div>
       </ExpansionPanelSummary>
-      <div>
-        <div className="inline-block min-w-full  overflow-hidden">
-          <div className="w-full mb-2"></div>
-          <table className=" w-full leading-normal   transition duration-500 ease-in-out ">
-            <thead>
-              <tr key={title}>
-                {fieldList.map(({ title, name, type }) => (
-                  <ColumnHeader
-                    name={title}
-                    type={type}
-                    onSort={handleColumnSort(name, tableData)}
-                    key={title}
-                    onFilter={handleColumnFilter(name, type)}
-                  ></ColumnHeader>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {tableData.map((item: any, index: number) => (
-                <tr key={item.incident} className={`${index % 2 === 0 && "bg-gray-50"}`}>
-                  {fieldList.map(({ name, type }) => {
-                    if (name === linkField) {
-                      return <HyperLinkCell key={name} value={item[name]} linkPrefix={linkPrefix} />;
-                    } else {
-                      switch (type) {
-                        case "hl":
-                          return <HyperLinkCell key={name} value={item[name]} linkPrefix={linkPrefix} />;
-                        case "yn":
-                          return <YesNoCell key={name} value={item[name]} />;
-
-                        case "sev":
-                          return <SeverityCell key={name} value={item[name]} />;
-                        case "dt":
-                          return <DateCell key={name} value={item[name]} />;
-
-                        default:
-                          return <Cell key={name} value={item[name]} />;
-                      }
-                    }
-                  })}
+      {isExpanded && (
+        <div>
+          <div className="inline-block min-w-full  overflow-hidden">
+            <div className="w-full mb-2"></div>
+            <table className=" w-full leading-normal   transition duration-500 ease-in-out ">
+              <thead>
+                <tr key={title}>
+                  {fieldList.map(({ title, name, type }) => (
+                    <ColumnHeader
+                      name={title}
+                      type={type}
+                      onSort={handleColumnSort(name, tableData)}
+                      key={title}
+                      onFilter={handleColumnFilter(name, type)}
+                    ></ColumnHeader>
+                  ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {tableData.map((item: any, index: number) => (
+                  <tr key={item.incident} className={`${index % 2 === 0 && "bg-gray-50"}`}>
+                    {fieldList.map(({ name, type }) => {
+                      if (name === linkField) {
+                        return <HyperLinkCell key={name} value={item[name]} linkPrefix={linkPrefix} />;
+                      } else {
+                        switch (type) {
+                          case "hl":
+                            return <HyperLinkCell key={name} value={item[name]} linkPrefix={linkPrefix} />;
+                          case "yn":
+                            return <YesNoCell key={name} value={item[name]} />;
+
+                          case "sev":
+                            return <SeverityCell key={name} value={item[name]} />;
+                          case "dt":
+                            return <DateCell key={name} value={item[name]} />;
+
+                          default:
+                            return <Cell key={name} value={item[name]} />;
+                        }
+                      }
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
-    </ExpansionPanel>
+      )}
+    </div>
   );
 };

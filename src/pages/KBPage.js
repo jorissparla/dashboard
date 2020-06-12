@@ -126,6 +126,32 @@ function filterKBData(data = [], filterValues = { owner: "", products: ["LN ERP"
   return mydata;
 }
 
+function KBType(initData) {
+  const data = initData;
+  let temp = initData;
+  return {
+    overOneYear() {
+      temp = temp.filter((k) => k.daysSinceCreated > 364);
+      return this;
+    },
+    areNew() {
+      temp = temp.filter((item) => item.status === "New");
+      return this;
+    },
+    notNew() {
+      temp = temp.filter((item) => item.status !== "New");
+      return this;
+    },
+    filterType(type) {
+      temp = temp.filter((item) => item.type === type);
+      return this;
+    },
+    getData() {
+      return temp;
+    },
+  };
+}
+
 export const KBTable = (props) => {
   if (props.data && props.data.length > 0) {
     let fields = getfieldNamesFromData(props.data[0]);
@@ -151,13 +177,16 @@ function getfieldNamesFromData(row) {
 }
 
 const KBMain = ({ data, owner, filterValues }) => {
-  const allKB = data.allKB.filter((k) => k.daysSinceCreated > 364);
-  const topKBs = data.allKB.filter((k) => k.status !== "New").sort((x, y) => (x.ViewCount > y.ViewCount ? -1 : 1));
+  const allKB = data.allKB || [];
+  // const allKBMain = KBType(data.allKB);
   if (allKB.length === 0) return <div></div>;
-  let fields = generateFields(allKB[0]);
+  const allOldKB = allKB.filter((k) => k.daysSinceCreated > 364).filter((item) => item.status === "New");
+  //.filter((k) => k.daysSinceCreated > 364);
+  const topKBs = allKB.filter((item) => item.status !== "New").sort((x, y) => (x.ViewCount > y.ViewCount ? -1 : 1));
+  let fields = generateFields(data.allKB[0]);
 
-  const programError = allKB.filter((k) => k.type === "Program Error").filter((k) => k.status === "New");
-  const knowledge = allKB.filter((k) => k.type === "Knowledge").filter((k) => k.status === "New");
+  const programError = allOldKB.filter((k) => k.type === "Program Error");
+  const knowledge = allOldKB.filter((k) => k.type === "Knowledge");
   return (
     <div className=" w-full">
       {/* <pre className="text-xs">{JSON.stringify(fields, null, 2)}</pre> */}
@@ -171,7 +200,7 @@ const KBMain = ({ data, owner, filterValues }) => {
       <KBTable
         filterValues={filterValues}
         // additionalFields={["ownergroup"]}
-        data={allKB}
+        data={allOldKB}
         title="All KB Articles"
         description="KB Articles, unpublished, older than a year"
       />
