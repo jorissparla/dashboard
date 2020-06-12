@@ -280,7 +280,7 @@ export const GenericTable = (props: GenericTableProps) => {
   };
   return (
     // <ExpansionPanel TransitionProps={{ unmountOnExit: true }} defaultExpanded={autoExpand}>
-    <div className="bg-white">
+    <div className="bg-white border-b border-gray-100">
       <ExpansionPanelSummary
         className="h-16"
         expandIcon={<ExpandMoreIcon />}
