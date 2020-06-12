@@ -37,7 +37,7 @@ export const REGION_LIST_2 = [
   },
 ];
 
-const Stats = (props) => {
+const KBPage = (props) => {
   const { user } = React.useContext(UserContext);
   const [date] = useState(format(Date.now(), "yyyy-MM-dd"));
   let enableIt = false;
@@ -151,12 +151,13 @@ function getfieldNamesFromData(row) {
 }
 
 const KBMain = ({ data, owner, filterValues }) => {
-  const allKB = data.allKB;
+  const allKB = data.allKB.filter((k) => k.daysSinceCreated > 364);
+  const topKBs = data.allKB.filter((k) => k.status !== "New").sort((x, y) => (x.ViewCount > y.ViewCount ? -1 : 1));
   if (allKB.length === 0) return <div></div>;
   let fields = generateFields(allKB[0]);
 
-  const programError = allKB.filter((k) => k.type === "Program Error");
-  const knowledge = allKB.filter((k) => k.type === "Knowledge");
+  const programError = allKB.filter((k) => k.type === "Program Error").filter((k) => k.status === "New");
+  const knowledge = allKB.filter((k) => k.type === "Knowledge").filter((k) => k.status === "New");
   return (
     <div className=" w-full">
       {/* <pre className="text-xs">{JSON.stringify(fields, null, 2)}</pre> */}
@@ -188,9 +189,16 @@ const KBMain = ({ data, owner, filterValues }) => {
         title="Knowledge KB Articles"
         description="KB Articles, unpublished, older than a year"
       />
+      <KBTable
+        filterValues={filterValues}
+        // additionalFields={["ownergroup"]}
+        data={topKBs}
+        title="Top KB Articles"
+        description="KB Articles with highest viewCount (Top 5000 extracted only)"
+      />
       {/* <GenericTable data={allKB.slice(0, 100)} owner={owner} fields={fields} description="KB" title="KB" filterValues={filterValues} /> */}
     </div>
   );
 };
 
-export default Stats;
+export default KBPage;

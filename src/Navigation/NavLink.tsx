@@ -1,7 +1,4 @@
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import MenuItem from '@material-ui/core/MenuItem';
-import React from 'react';
+import React from "react";
 
 interface NavLinkProps {
   title: string;
@@ -12,29 +9,24 @@ interface NavLinkProps {
   open?: boolean;
 }
 
-export const NavLink: React.FC<NavLinkProps> = ({
-  title,
-  Icon,
-  navigateTo,
-  history,
-  toggleMenu,
-  open = true
-}) => (
-  <MenuItem
-    onClick={() => {
-      // toggleMenu();
-      setTimeout(() => {
-        toggleMenu();
-        history.push(navigateTo);
-      }, 500);
-      return null;
-    }}
+export const NavLink: React.FC<NavLinkProps> = ({ title, Icon, navigateTo, history, toggleMenu, open = true }) => (
+  <a
+    href={navigateTo}
+    className="flex items-center py-2 text-gray-600 ml-2 cursor-pointer no-underline"
+    // onClick={() => {
+    //   // toggleMenu();
+    //   setTimeout(() => {
+    //     toggleMenu();
+    //     history.push(navigateTo);
+    //   }, 500);
+    //   return null;
+    // }}
   >
     {Icon && (
-      <ListItemIcon>
+      <span className="px-2">
         <Icon />
-      </ListItemIcon>
+      </span>
     )}
-    {open && <ListItemText>{title}</ListItemText>}
-  </MenuItem>
+    {open && <span>{title}</span>}
+  </a>
 );

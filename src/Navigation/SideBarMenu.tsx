@@ -10,6 +10,8 @@ import ExtensionIcon from "@material-ui/icons/ExtensionTwoTone";
 import GoLiveIcon from "@material-ui/icons/FlightTakeoff";
 import ActionHome from "@material-ui/icons/Home";
 import ApplicationIcon from "@material-ui/icons/Launch";
+import CloudQueueIcon from "@material-ui/icons/CloudQueue";
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 // import LinkIcon from "@material-ui/icons/Link";
 import PageIcon from "@material-ui/icons/Pages";
 import PeopleIcon from "@material-ui/icons/People";
@@ -53,10 +55,13 @@ export const SideBarMenu: React.FC<Props> = ({ classes, history, toggleMenu, ope
   return (
     <List>
       <ToggledNavLink title="Home" Icon={ActionHome} navigateTo="/" history={history} />
+      <ToggledNavLink title="Cloud Information Page" Icon={CloudQueueIcon} navigateTo="/cloudinformation" history={history} />
       <ToggledNavLink title="MaintenanceWizard" Icon={SettingsIcon} navigateTo="/maintenancewizard" history={history} />
       <ToggledNavLink title="MultiTenant Customers" Icon={ExtensionIcon} navigateTo="/tenant" history={history} />
       <ToggledNavLink title="Support Cards" Icon={LinkIcon} navigateTo="/supportcard" history={history} />
       <ToggledNavLink title="Request Symptoms" Icon={SymptomsIcon} navigateTo="/symptoms" history={history} />
+      {authenticated && <ToggledNavLink title="My KBPage" Icon={HelpOutlineIcon} navigateTo="/kbpage" history={history} />}
+
       {authenticated && <ToggledNavLink title="WorkList" Icon={MyWorkList} navigateTo="/mywork" history={history} />}
       {isAdmin && <ToggledNavLink title="Permissions" Icon={Person} navigateTo="/bla" history={history} />}
       {isAdmin && <ToggledNavLink title="Logged in Users" Icon={PeopleOutlineIcon} navigateTo="/loggedinusers" history={history} />}
@@ -89,9 +94,9 @@ export const SideBarMenu: React.FC<Props> = ({ classes, history, toggleMenu, ope
             navigateTo="/plannedcourserequestlist"
             history={history}
           />
-          <Divider />
+          {/* <Divider />
           {(isAdmin || isChat) && <ToggledNavLink title="Chat" Icon={ChatIcon} navigateTo="/chat" history={history} />}
-          <Divider />
+          <Divider /> */}
           {authenticated && isAdmin && <ToggledNavLink title="News" Icon={NewsIcon} navigateTo="/news" history={history} />}
           <ToggledNavLink title="NewsPage" Icon={NewsIcon} navigateTo="/newspage" history={history} />
           <Divider />
