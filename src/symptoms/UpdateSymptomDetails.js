@@ -1,16 +1,22 @@
 import React, { useState } from "react";
+import { TWSelectMenu } from "elements/TWSelectMenu";
 
-export default ({ values = { complete: false, note: "", email: "" }, onSave, onCancel, onComplete }) => {
+export default ({ values = { complete: false, note: "", email: "", statusname: "New" }, statuses, onSave, onCancel, onComplete }) => {
   const [complete, setComplete] = useState(values.status);
   const [email, setEmail] = useState(values.email);
   const [note, setNote] = useState(values.note);
-
+  const [statusname, setStatusName] = useState(values.statusname);
+  // window.alert(JSON.stringify(values, null, 2));
   const toggleComplete = () => {
     setComplete((prev) => !complete);
     // onComplete();
   };
   const handleChangeNote = (e) => setNote(e.target.value);
   const handleChangeEmail = (e) => setEmail(e.target.value);
+  const handleChangeStatus = (v) => {
+    console.log(v);
+    setStatusName(v);
+  };
 
   return (
     <div className="fixed bottom-0 inset-x-0 px-4 pb-4 sm:inset-0 sm:flex sm:items-center sm:justify-center">
@@ -38,6 +44,9 @@ export default ({ values = { complete: false, note: "", email: "" }, onSave, onC
                   <input type="checkbox" className="form-checkbox" value={complete} checked={complete} onChange={toggleComplete} />
                   <span className="ml-2">Mark {complete ? "InComplete" : "Complete"}</span>
                 </label>
+              </div>
+              <div className="-mx-4 my-2">
+                <TWSelectMenu items={statuses} value={statusname} label="Status" onChange={handleChangeStatus} />
               </div>
               <label className="block w-full">
                 <span className="text-gray-700 font-sans text-sm font-semibold">Note</span>
@@ -67,7 +76,7 @@ export default ({ values = { complete: false, note: "", email: "" }, onSave, onC
             <button
               type="button"
               onClick={() => {
-                onSave(note, complete ? 1 : 0, email);
+                onSave(note, complete ? 1 : 0, email, statusname);
               }}
               className="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-gray-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-gray-500 focus:outline-none focus:border-gray-700 focus:shadow-outline-red transition ease-in-out duration-150 sm:text-sm sm:leading-5"
             >

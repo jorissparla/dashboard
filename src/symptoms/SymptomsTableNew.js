@@ -148,6 +148,7 @@ function SymptomsTableNew({ data }) {
     setisOpen(true);
   }
 
+  const statuses = data?.statuses.map((s) => s.statusname) || [];
   const handleEditClick = (item) => {
     if (canEdit) {
       setValues(item);
@@ -255,6 +256,7 @@ function SymptomsTableNew({ data }) {
             <thead>
               <tr>
                 <ColumnHeader name="Symptom" onSort={handleColumnSort("symptom")} />
+                <ColumnHeader name="Status" onSort={handleColumnSort("statusname")} />
                 <ColumnHeader name="Category" onSort={handleColumnSort("symptom_category")} />
                 <ColumnHeader name="Email" onSort={handleColumnSort("email")} />
                 <ColumnHeader name="Incident" onSort={handleColumnSort("incident")} />
@@ -273,6 +275,7 @@ function SymptomsTableNew({ data }) {
                   onClick={() => handleEditClick(item)}
                 >
                   <Cell value={item.symptom} complete={item.status} />
+                  <Cell value={item.statusname} complete={item.status} />
                   <NiceCell value={item.symptom_category} complete={item.status} />
                   <Cell value={item?.email} complete={item?.email} />
                   <Cell value={item.incident} complete={item.status} />
@@ -288,12 +291,14 @@ function SymptomsTableNew({ data }) {
           {isOpen && (
             <UpdateSymptomDetails
               values={values}
+              statuses={statuses}
               onCancel={() => setisOpen(false)}
-              onSave={async (note, status, email) => {
+              onSave={async (note, status, email, statusname) => {
+                // console.log()
                 await updateSymptomRequest({
                   variables: {
                     where: { id: values.id },
-                    input: { note, email, status },
+                    input: { note, email, status, statusname },
                   },
                   refetchQueries: [{ query: ALL_SYMPTOMS }],
                 });
@@ -304,7 +309,7 @@ function SymptomsTableNew({ data }) {
                   refetchQueries: [{ query: ALL_SYMPTOMS }],
                 });
                 console.log(sendResult);
-                alert.setMessages(`symptom note was updated to  ${note} ${sendResult?.data?.notifySymptomRequest}`);
+                alert.setMessage(`symptom note with status ${statusname} was updated to  ${note} ${sendResult?.data?.notifySymptomRequest}`);
                 setisOpen(false);
               }}
               onComplete={async () => {

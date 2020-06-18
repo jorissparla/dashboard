@@ -19,14 +19,14 @@ import { DashBoardContext } from "globalState/Provider";
 
 const VersionList = ({ productline = "LN" }) => {
   console.log("😎", productline);
-  const [selectedVersion, setSelectedVersion] = usePersistentState("activeVersion", "INFOR LN 10.7");
+  const [selectedVersion, setSelectedVersion] = usePersistentState(`${productline}_version`, "INFOR LN 10.7");
 
   const dbctx = React.useContext(DashBoardContext);
 
   const [createAudit] = useMutation(CREATE_AUDIT_MUTATION_WIZARD);
 
-  const [faqIsVisible, setShowFAQ] = usePersistentState("FAQ", false);
-  const [localizationsIsVisible, setLocalizationsVisible] = usePersistentState("Localizations", false);
+  const [faqIsVisible, setShowFAQ] = usePersistentState(`${productline}_faq`, false);
+  const [localizationsIsVisible, setLocalizationsVisible] = usePersistentState(`${productline}_local`, false);
 
   const { data, loading } = useQuery(ALL_MAINTENANCE_QUERY, { variables: { productline } });
   let versions = [];
@@ -53,8 +53,8 @@ const VersionList = ({ productline = "LN" }) => {
     // setActiveVersions(allMaintenance.filter(v => v.version === version));
   }
   function handleShowFAQ() {
-    setShowFAQ(true);
-    setLocalizationsVisible(false);
+    setShowFAQ(productline === "LN" && true);
+    setLocalizationsVisible(productline === "LN" && true);
   }
   function handleShowLocalizations() {
     setShowFAQ(false);
@@ -79,11 +79,19 @@ const VersionList = ({ productline = "LN" }) => {
       </BlockNew>
       {/* {JSON.stringify(selectedVersion, null, 2)} */}
       {activeVersions.length > 0 ? (
-        faqIsVisible ? (
+        faqIsVisible && productline === "LN" ? (
           // <h1>{maintenanceFAQ.text}</h1>
-          <OtherField name="text" label="Frequently asked Questions" text={maintenanceFAQ.text} bigger={true} id={maintenanceFAQ.id}></OtherField>
-        ) : localizationsIsVisible ? (
           <OtherField
+            productline={productline}
+            name="text"
+            label="Frequently asked Questions"
+            text={maintenanceFAQ.text}
+            bigger={true}
+            id={maintenanceFAQ.id}
+          ></OtherField>
+        ) : localizationsIsVisible && productline === "LN" ? (
+          <OtherField
+            productline={productline}
             name="localizations"
             label="Localizations"
             text={maintenanceFAQ.localizations}

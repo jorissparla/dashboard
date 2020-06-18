@@ -18,7 +18,12 @@ export const ALL_SYMPTOMS = gql`
       status
       note
       email
+      statusname
       updatedAt
+    }
+    statuses: symptomrequest_statuses {
+      id
+      statusname
     }
   }
 `;
