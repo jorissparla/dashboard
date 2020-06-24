@@ -20,6 +20,7 @@ import SupportCardTags from "./SupportCardTags";
 import TWButton from "elements/TWButton";
 import SafeDeleteButton from "videos/SafeDeleteButton";
 import { TWSelectMenu } from "elements/TWSelectMenu";
+import FavoriteWrapper from "Favorite";
 
 const owners = [
   { id: "Ricardo Exposito", name: "Ricardo Exposito" },
@@ -83,14 +84,17 @@ const SupportCardForm = (props) => {
       <div className="rounded shadow-lg p-4 bg-white mx-2">
         <form onSubmit={handleSubmit}>
           {!readOnly ? (
-            <input
-              id="title"
-              name="title"
-              className="form-input text-blue-400 font-semibold  text-xl w-full"
-              value={values.title}
-              onChange={handleChange}
-              type="text"
-            />
+            <div className="w-full flex justify-between items-center">
+              <input
+                id="title"
+                name="title"
+                className="form-input text-blue-400 font-semibold  text-xl w-full"
+                value={values.title}
+                onChange={handleChange}
+                type="text"
+              />
+              <FavoriteWrapper id={values.id} isFavorite={values.isFavorite} />
+            </div>
           ) : (
             <div className="text-blue-400 font-semibold text-xl w-full">{values.title}</div>
           )}

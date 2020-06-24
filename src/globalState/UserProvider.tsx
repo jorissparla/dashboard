@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { client } from "../index";
-import { MUTATION_SIGNIN } from "./../auth/signin";
+import { MUTATION_SIGNIN, MUTATION_SIGNIN_MICROSOFT } from "./../auth/signin";
 import { MUTATION_SIGNOUT } from "./../auth/signout";
 import { CURRENT_USER_QUERY } from "./../graphql/CURRENT_USER_QUERY";
 
@@ -20,6 +20,7 @@ interface UserContextType {
   user: User | null;
   loading?: Boolean;
   login: (email: string, password: string) => void;
+  loginSSO: (email: string, username: string) => void;
   logout: () => void;
   isAuthenticated: boolean;
   hasPermissions: (user: User, roles: string[]) => boolean;
@@ -28,6 +29,7 @@ export const UserContext = React.createContext<UserContextType>({
   user: null,
   loading: true,
   login: () => null,
+  loginSSO: () => null,
   logout: () => null,
   isAuthenticated: false,
   hasPermissions: () => false,
@@ -89,6 +91,20 @@ export const UserContextProvider: React.FC<{ children: any }> = ({ children }) =
     }
     return result;
   }
+  async function loginSSO(email: string, username: string) {
+    const result = await client.mutate({
+      mutation: MUTATION_SIGNIN_MICROSOFT,
+      variables: { email, username },
+    });
+
+    console.log("login result in global state", result);
+    if (result.data.signinUsingMicrosoft.user) {
+      setUser((old) => result.data.signinUsingMicrosoft.user);
+    } else {
+      setUser(null);
+    }
+    return result;
+  }
   async function logout() {
     client.mutate({ mutation: MUTATION_SIGNOUT }).then((result) => {
       if (result) {
@@ -102,6 +118,7 @@ export const UserContextProvider: React.FC<{ children: any }> = ({ children }) =
         user,
         login,
         logout,
+        loginSSO,
         loading,
         isAuthenticated: isAuthenticated(),
         hasPermissions,

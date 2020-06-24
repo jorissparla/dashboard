@@ -113,7 +113,7 @@ const Header = (props) => {
   const [open, setOpen] = useState(false);
   const { data, loading } = useQuery(SYSTEM_MESSAGE);
   if (loading) return <div></div>;
-  const { getActiveMessage } = data;
+  const getActiveMessage = data?.getActiveMessage;
   const message = getActiveMessage ? getActiveMessage.message : "";
   console.log(data);
   function toggleMenu() {

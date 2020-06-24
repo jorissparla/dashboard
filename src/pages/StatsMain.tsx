@@ -200,6 +200,7 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
           data={incorrectOwnergroups}
           title="Incorrect Owner Group"
           description="Incorrect Owner Group"
+          actionHeader={true}
         />
         <BacklogTableNewStyle
           filterValues={filterValues}
@@ -214,6 +215,7 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
           data={sev12notrestored}
           title="Critical/Major Not restored"
           description="All Incidents with a severity of 'Production Outage / Major Impact' without a restored date"
+          actionHeader={true}
         />
 
         <BacklogTableNewStyle
@@ -221,6 +223,7 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
           data={multitenant}
           title="Multitenant"
           description="All Incidents open for our MT customers not updated > 7 days"
+          actionHeader={true}
         />
 
         <BacklogTableNewStyle
@@ -228,6 +231,7 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
           data={pendingmaintenance}
           title="Pending Maintenance"
           description="All Incidents Solution Pending Maintenance without a valid activity date "
+          actionHeader={true}
         />
         <BacklogTableNewStyle
           filterValues={filterValues}
@@ -255,6 +259,7 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
           data={data.sev1notrestored}
           title="Critical"
           description="All Incidents with a severity of 'Production Outage / Critical Application halted'"
+          actionHeader={true}
         />
         <BacklogTableNewStyle
           filterValues={filterValues}
@@ -262,6 +267,7 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
           // data={data.on_hold}
           title="On Hold"
           description="All Incidents with a status of On Hold By Customer with no or an Expired Action date"
+          actionHeader={true}
         />
 
         <BacklogTableNewStyle
@@ -271,6 +277,7 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
           additionalFields={["ownergroup"]}
           title="Awaiting customer"
           description={`All Incidents with a status of Awaiting Customer not updated for more than ${params["N_AWAITINGCUSTOMER"]} days `}
+          actionHeader={true}
         />
         <BacklogTableNewStyle
           filterValues={filterValues}
@@ -278,6 +285,7 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
           data={researching}
           title="Researching"
           description={`Incidents with status 'Researching' Last updated  ${params["N_RESEARCHING"]} days or more`}
+          actionHeader={true}
         />
         <BacklogTableNewStyle
           filterValues={filterValues}
@@ -285,6 +293,7 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
           data={awaiting_infor}
           title="Awaiting Infor"
           description={`Incidents with status 'Awaiting Infor' Last updated  ${params["N_AWAITINGINFOR"]} days or more`}
+          actionHeader={true}
         />
         <BacklogTableNewStyle
           filterValues={filterValues}
@@ -299,6 +308,7 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
           data={major_impact}
           title="Major Impact"
           description={`Incidents with severity 'Major Impact' Last updated ${params["N_MAJORIMPACT"]} days or more`}
+          actionHeader={true}
           includeservicerestored={true}
         />
 
@@ -308,6 +318,7 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
           // data={data.aging}
           title="Aging- Support"
           description={`Incidents older than ${params["N_AGING"]}  days`}
+          actionHeader={true}
         />
         <BacklogTableNewStyle
           filterValues={filterValues}
@@ -329,6 +340,7 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
           // data={data.new}
           title="New Incidents"
           description={`Incidents with status 'New' not updated for more than  ${params["N_NEW"]} days`}
+          actionHeader={true}
         />
         <BacklogTableNewStyle
           filterValues={filterValues}

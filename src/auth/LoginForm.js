@@ -3,7 +3,8 @@ import gql from "graphql-tag";
 import { useMutation } from "react-apollo";
 import { Link, useHistory } from "react-router-dom";
 import { UserContext, useUserContext } from "../globalState/UserProvider";
-import TWButton from "../elements/TWButton";
+import Button from "../elements/TWButton";
+import { signIn } from "./msAuth";
 
 const MUTATION_SIGNIN = gql`
   mutation loginUser($input: AUTH_PROVIDER_EMAIL) {
@@ -31,8 +32,26 @@ const LoginForm = ({}) => {
   const userContext = useUserContext();
   const history = useHistory();
 
-  const { user, login } = userContext;
+  const { user, login, loginSSO } = userContext;
   const [signinMutation] = useMutation(MUTATION_SIGNIN);
+  const handleLoginInfor = async () => {
+    const auth = await signIn();
+    console.log({ auth });
+    if (auth) {
+      const { userName: email, name: username } = auth;
+      const result = await loginSSO(email, username);
+      console.log(result, userContext.user);
+      if (result.data.signinUsingMicrosoft.error) {
+        setErrors(" Invalid email / password");
+        return;
+      }
+      if (result.data.signinUsingMicrosoft.token) {
+        await history.push("/");
+      } else {
+        alert("invalid");
+      }
+    }
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -100,7 +119,10 @@ const LoginForm = ({}) => {
             </div>
           </label>
           <div className="flex items-center justify-between">
-            <TWButton type="submit">Log In</TWButton>
+            <Button type="submit">Log In</Button>
+            <Button type="button" color="teal" onClick={handleLoginInfor}>
+              Infor Login<span className="text-xs">*experimental</span>
+            </Button>
             <a className="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker" href="/forgot">
               Forgot Password?
             </a>

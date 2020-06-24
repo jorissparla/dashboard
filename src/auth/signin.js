@@ -31,6 +31,26 @@ export const MUTATION_SIGNIN = gql`
     }
   }
 `;
+export const MUTATION_SIGNIN_MICROSOFT = gql`
+  mutation signinUsingMicrosoft($email: String!, $username: String) {
+    signinUsingMicrosoft(email: $email, username: $username) {
+      token
+      user {
+        id
+        fullname
+        email
+        role
+        image
+        navid
+        permissions {
+          permission
+        }
+        lastlogin
+      }
+      error
+    }
+  }
+`;
 
 const useStyles = makeStyles((theme) => ({
   button: {

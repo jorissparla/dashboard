@@ -289,9 +289,9 @@ export const GenericTable = (props: GenericTableProps) => {
         }}
       >
         <div className="flex items-center justify-between w-full p-2 font-sansI">
-          <div className=" text-gray-500 font-semibold flex items-center">
-            <span className=" text-gray-500 text-lg">{title}</span>
-            <span className="ml-2 p-1 text-md ">({tableData.length})</span>
+          <div className=" text-gray-500 font-semibold flex items-center w-1/3">
+            <span className=" text-gray-500 text-base  ">{title}</span>
+            <span className="ml-2 p-1  ">({tableData.length})</span>
 
             <FieldFilterSpans />
             {subtitle && (
@@ -304,7 +304,7 @@ export const GenericTable = (props: GenericTableProps) => {
             )}
           </div>
           <>
-            <p className="w-2/5 text-base  text-gray-500    " title="Click to copy to clipboard">
+            <p className="w-2/5 text-sm  text-gray-500    " title="Click to copy to clipboard">
               {description}
             </p>
             <CopyToClipBoard
