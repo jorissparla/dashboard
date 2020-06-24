@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import gql from "graphql-tag";
 import { useMutation } from "react-apollo";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { UserContext, useUserContext } from "../globalState/UserProvider";
 import Button from "../elements/TWButton";
 import { signIn } from "./msAuth";
@@ -31,7 +31,8 @@ const LoginForm = ({}) => {
   const [errors, setErrors] = useState("");
   const userContext = useUserContext();
   const history = useHistory();
-
+  const location = useLocation();
+  // console.log({ location }, process.env.NODE_ENV);
   const { user, login, loginSSO } = userContext;
   const [signinMutation] = useMutation(MUTATION_SIGNIN);
   const handleLoginInfor = async () => {
@@ -40,8 +41,12 @@ const LoginForm = ({}) => {
     if (auth) {
       const { userName: email, name: username } = auth;
       const result = await loginSSO(email, username);
-      console.log(result, userContext.user);
-      if (result.data.signinUsingMicrosoft.error) {
+      // console.log("sso", result, userContext.user);
+      if (!result) {
+        setErrors(" Unregistered email");
+        return;
+      }
+      if (result.data.signinUsingMicrosoft.error || result.data.signinUsingMicrosoft.errors?.length) {
         setErrors(" Invalid email / password");
         return;
       }
@@ -121,7 +126,7 @@ const LoginForm = ({}) => {
           <div className="flex items-center justify-between">
             <Button type="submit">Log In</Button>
             <Button type="button" color="teal" onClick={handleLoginInfor}>
-              Infor Login<span className="text-xs">*experimental</span>
+              SSO<span className="text-xs mr-1">*experimental</span>
             </Button>
             <a className="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker" href="/forgot">
               Forgot Password?

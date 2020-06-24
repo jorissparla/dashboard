@@ -7,7 +7,7 @@ import { Formik } from "formik";
 import gql from "graphql-tag";
 import React from "react";
 import { useMutation } from "react-apollo";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import { UserContext, useUserContext } from "../globalState/UserProvider";
 import LoginForm from "./LoginForm";
 

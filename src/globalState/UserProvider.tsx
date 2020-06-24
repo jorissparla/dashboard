@@ -92,18 +92,22 @@ export const UserContextProvider: React.FC<{ children: any }> = ({ children }) =
     return result;
   }
   async function loginSSO(email: string, username: string) {
-    const result = await client.mutate({
-      mutation: MUTATION_SIGNIN_MICROSOFT,
-      variables: { email, username },
-    });
+    try {
+      const result = await client.mutate({
+        mutation: MUTATION_SIGNIN_MICROSOFT,
+        variables: { email, username },
+      });
 
-    console.log("login result in global state", result);
-    if (result.data.signinUsingMicrosoft.user) {
-      setUser((old) => result.data.signinUsingMicrosoft.user);
-    } else {
-      setUser(null);
+      console.log("login result in global state", result);
+      if (result.data.signinUsingMicrosoft.user) {
+        setUser((old) => result.data.signinUsingMicrosoft.user);
+      } else {
+        setUser(null);
+      }
+      return result;
+    } catch (e) {
+      return null;
     }
-    return result;
   }
   async function logout() {
     client.mutate({ mutation: MUTATION_SIGNOUT }).then((result) => {

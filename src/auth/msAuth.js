@@ -1,9 +1,10 @@
 var Msal = require("msal");
+
 const msalConfig = {
   auth: {
     clientId: "e56326cc-38b0-4d16-9630-d2d4e265fb7d",
     authority: "https://login.microsoftonline.com/457d5685-0467-4d05-b23b-8f817adda47c",
-    redirectUri: "https://localhost:8762",
+    redirectUri: process.env.NODE_ENV === "development" ? "https://localhost:8762" : "https://nlbavwixs.infor.com:8762",
   },
   cache: {
     cacheLocation: "sessionStorage", // This configures where your cache will be stored
