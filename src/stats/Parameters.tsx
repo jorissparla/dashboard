@@ -109,6 +109,7 @@ export const Parameters: React.FC<Props> = (props) => {
           <Parameter param="N_SOLUTIONPROPOSED" initial={30} label="Solution Proposed" keyUp={handleKeyUp} />
           <Parameter param="N_AGING" initial={90} label="Aging" keyUp={handleKeyUp} color="purple" />
           <Parameter param="C_AGING" initial={30} label="Cloud Aging" keyUp={handleKeyUp} color="teal" />
+          <Parameter param="C_MT" initial={30} label="MT Cloud Not updated" keyUp={handleKeyUp} color="lightblue" />
         </div>
         <div style={{ margin: 5, display: "flex" }}>
           <Button color="primary" style={{ width: 200 }} onClick={() => props.history.push("/mywork")}>

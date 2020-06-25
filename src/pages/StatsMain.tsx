@@ -9,6 +9,7 @@ export function useParams(clean = false) {
   const [C_AWAITINGINFOR] = useLocalStorage("C_AWAITINGINFOR", 1, clean);
   const [C_RESEARCHING] = useLocalStorage("C_RESEARCHING", 3, clean);
   const [C_NEW] = useLocalStorage("C_NEW", 1, clean);
+  const [C_MT] = useLocalStorage("C_MT", 5, clean);
   const [N_AWAITINGCUSTOMER] = useLocalStorage("N_AWAITINGCUSTOMER", 6, clean);
   const [N_RESEARCHING] = useLocalStorage("N_RESEARCHING", 10, clean);
   const [N_AWAITINGINFOR] = useLocalStorage("N_AWAITINGINFOR", 2, clean);
@@ -25,6 +26,7 @@ export function useParams(clean = false) {
     C_AWAITINGINFOR,
     N_AWAITINGINFOR,
     C_NEW,
+    C_MT,
     N_NEW,
     N_SOLUTIONPROPOSED,
     N_AGING,
@@ -108,7 +110,7 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
     )
     .filter((x: any) => x.Tenant !== "Multi-Tenant");
 
-  const multitenant = new Backlog(data.multitenant).isMT().dayssincelastupdate(7).sort("dayssincelastupdate", "D").getData();
+  const multitenant = new Backlog(data.multitenant).isMT().dayssincelastupdate(params.C_MT).sort("dayssincelastupdate", "D").getData();
 
   const awaiting_customer = blBase
     .init()
@@ -196,6 +198,13 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
       <div className="w-full mx-4">
         <BacklogTableNewStyle
           filterValues={filterValues}
+          data={multitenant}
+          title="Multitenant"
+          description={`All Incidents open for our MT customers not updated > ${params.C_MT} days`}
+          actionHeader={true}
+        />
+        <BacklogTableNewStyle
+          filterValues={filterValues}
           additionalFields={["ownergroup"]}
           data={incorrectOwnergroups}
           title="Incorrect Owner Group"
@@ -215,14 +224,6 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
           data={sev12notrestored}
           title="Critical/Major Not restored"
           description="All Incidents with a severity of 'Production Outage / Major Impact' without a restored date"
-          actionHeader={true}
-        />
-
-        <BacklogTableNewStyle
-          filterValues={filterValues}
-          data={multitenant}
-          title="Multitenant"
-          description="All Incidents open for our MT customers not updated > 7 days"
           actionHeader={true}
         />
 
