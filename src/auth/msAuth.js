@@ -33,7 +33,7 @@ function getTokenPopup(request) {
   });
 }
 
-function signOut() {
+export function signOut() {
   myMSALObj.logout();
 }
 export async function signIn() {

@@ -26,6 +26,7 @@ import LinkIcon from "@material-ui/icons/SpeakerNotesTwoTone";
 import React, { useState } from "react";
 // import Signout from '../Signout';
 import { NavLink } from "./NavLink";
+import { signOut } from "auth/msAuth";
 
 interface Props {
   classes: any;
@@ -47,6 +48,10 @@ export const SideBarMenu: React.FC<Props> = ({ classes, history, toggleMenu, ope
     validRole = user.role !== "Guest";
     isAdmin = user.role === "Admin";
     isChat = user.role === "Chat";
+  }
+  async function handleLogout() {
+    logout();
+    signOut();
   }
   // const ToggledNavLink = this.ToggledNavLink;
   function ToggledNavLink(props: any) {
@@ -107,7 +112,7 @@ export const SideBarMenu: React.FC<Props> = ({ classes, history, toggleMenu, ope
             onClick={() => {
               // TODO: replace this
               // openSnackbar('Signing out');
-              logout();
+              handleLogout();
               history.push("/");
             }}
           >
