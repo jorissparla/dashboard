@@ -208,7 +208,7 @@ const KBMain = ({ data, owner, filterValues }) => {
         filterValues={filterValues}
         // additionalFields={["ownergroup"]}
         data={programError}
-        title="Progam Error KB Articles"
+        title="Program Error KB Articles"
         description="KB Articles, unpublished, older than a year"
       />
       <KBTable

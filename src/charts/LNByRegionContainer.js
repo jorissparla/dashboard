@@ -51,13 +51,9 @@ const LNByRegionContainer = ({ color = "#ffb74d" }) => {
     <div className="h-screen bg-gray-100">
       <div className="flex flex-wrap mx-4">
         <div className="m-2 w-full rounded shadow-md bg-white p-2">
-          <label class="block">
-            <span class="text-gray-700">Filter Region</span>
-            <select
-              class="form-select block w-32 mt-1"
-              value={region}
-              onChange={(e) => setRegion(e.target.value)}
-            >
+          <label className="block">
+            <span className="text-gray-700">Filter Region</span>
+            <select className="form-select block w-32 mt-1" value={region} onChange={(e) => setRegion(e.target.value)}>
               <option>EMEA</option>
               <option>NA</option>
               <option>APJ</option>
@@ -66,14 +62,7 @@ const LNByRegionContainer = ({ color = "#ffb74d" }) => {
           </label>
         </div>
         <div className="m-2 rounded shadow-lg bg-orange-400">
-          <HistoryChart
-            data={All}
-            title={`Backlog LN (excl. Sol.Proposed)`}
-            type="area"
-            color={color}
-            xvalue="date"
-            value={`All`}
-          />
+          <HistoryChart data={All} title={`Backlog LN (excl. Sol.Proposed)`} type="area" color={color} xvalue="date" value={`All`} />
         </div>
         <div className="m-2 rounded shadow-lg">
           <HistoryChart
@@ -86,34 +75,13 @@ const LNByRegionContainer = ({ color = "#ffb74d" }) => {
           />
         </div>
         <div className="m-2 rounded shadow-lg">
-          <HistoryChart
-            data={Finance}
-            title={`Backlog LN Finance (excl. Sol.Proposed)`}
-            type="area"
-            color={color}
-            xvalue="date"
-            value={`Finance`}
-          />
+          <HistoryChart data={Finance} title={`Backlog LN Finance (excl. Sol.Proposed)`} type="area" color={color} xvalue="date" value={`Finance`} />
         </div>
         <div className="m-2 rounded shadow-lg">
-          <HistoryChart
-            data={Tools}
-            title={`Backlog LN Tools (excl. Sol.Proposed)`}
-            type="area"
-            color={color}
-            xvalue="date"
-            value={`Tools`}
-          />
+          <HistoryChart data={Tools} title={`Backlog LN Tools (excl. Sol.Proposed)`} type="area" color={color} xvalue="date" value={`Tools`} />
         </div>
         <div className="m-2 rounded shadow-lg">
-          <HistoryChart
-            data={ageAll}
-            title={`Age LN All(excl. Sol.Proposed)`}
-            type="area"
-            color={color}
-            xvalue="date"
-            value={`ageAll`}
-          />
+          <HistoryChart data={ageAll} title={`Age LN All(excl. Sol.Proposed)`} type="area" color={color} xvalue="date" value={`ageAll`} />
         </div>
         <div className="m-2 rounded shadow-lg">
           <HistoryChart
@@ -126,24 +94,10 @@ const LNByRegionContainer = ({ color = "#ffb74d" }) => {
           />
         </div>
         <div className="m-2 rounded shadow-lg">
-          <HistoryChart
-            data={ageFinance}
-            title={`Age LN Finance(excl. Sol.Proposed)`}
-            type="area"
-            color={color}
-            xvalue="date"
-            value={`ageFinance`}
-          />
+          <HistoryChart data={ageFinance} title={`Age LN Finance(excl. Sol.Proposed)`} type="area" color={color} xvalue="date" value={`ageFinance`} />
         </div>
         <div className="m-2 rounded shadow-lg">
-          <HistoryChart
-            data={ageTools}
-            title={`Age LN Tools(excl. Sol.Proposed)`}
-            type="area"
-            color={color}
-            xvalue="date"
-            value={`ageTools`}
-          />
+          <HistoryChart data={ageTools} title={`Age LN Tools(excl. Sol.Proposed)`} type="area" color={color} xvalue="date" value={`ageTools`} />
         </div>
       </div>
     </div>
@@ -154,41 +108,24 @@ const QUERY_HISTORY_LN = gql`
   query QUERY_HISTORY_LN($region: String) {
     All: backlogHistory(
       ownergroup: ""
-      ownergroups: [
-        "LN Tools Support"
-        "LN Finance Support"
-        "LN Logistics Support"
-        "LN Manufacturing Support"
-      ]
+      ownergroups: ["LN Tools Support", "LN Finance Support", "LN Logistics Support", "LN Manufacturing Support"]
       region: $region
     ) {
       date
       number
       age
     }
-    Logistics: backlogHistory(
-      ownergroup: ""
-      ownergroups: ["LN Logistics Support", "LN Manufacturing Support"]
-      region: $region
-    ) {
+    Logistics: backlogHistory(ownergroup: "", ownergroups: ["LN Logistics Support", "LN Manufacturing Support"], region: $region) {
       date
       number
       age
     }
-    Finance: backlogHistory(
-      ownergroup: ""
-      ownergroups: ["LN Finance Support"]
-      region: $region
-    ) {
+    Finance: backlogHistory(ownergroup: "", ownergroups: ["LN Finance Support"], region: $region) {
       date
       number
       age
     }
-    Tools: backlogHistory(
-      ownergroup: ""
-      ownergroups: ["LN Tools Support"]
-      region: $region
-    ) {
+    Tools: backlogHistory(ownergroup: "", ownergroups: ["LN Tools Support"], region: $region) {
       date
       number
       age

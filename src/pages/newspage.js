@@ -68,7 +68,7 @@ function MediaNewsCard({ news: { title, body, img, create_date }, classes }) {
     <div className="rounded bg-white shadow-lg m-2">
       <div className="w-full object-cover">
         <div className="relative">
-          <img class="object-center object-cover h-64 w-full z-10 border-b border-gray-300" src={newImage} alt="newsItem" />
+          <img className="object-center object-cover h-64 w-full z-10 border-b border-gray-300" src={newImage} alt="newsItem" />
           <div className="  bg-gray-100 h-20 overflow-hidden shadow py-1 px-2 rounded-lg bg-white flex ">
             <h1 className="text-black text-xl font-bold font-pop">{title}</h1>
           </div>

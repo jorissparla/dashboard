@@ -73,8 +73,8 @@ const AddSymptomRequest = () => {
             <label className="block text-gray-700 text-sm font-bold mb-2 font-sans" htmlFor="password">
               Category
             </label>
-            <div class="relative rounded ml-2 mr-4 appearance-none border rounded shadow-xs py-2 px-3 text-gray-700 ">
-              <select class="" value={state.symptom_category} name="symptom_category" onChange={handleChange}>
+            <div className="relative rounded ml-2 mr-4 appearance-none border rounded shadow-xs py-2 px-3 text-gray-700 ">
+              <select className="" value={state.symptom_category} name="symptom_category" onChange={handleChange}>
                 {categories.map(({ id, symptom_category }) => (
                   <option key={id}>{symptom_category}</option>
                 ))}

@@ -36,17 +36,10 @@ const EditableMarkDownField = ({ canEdit = true, name, label, value, id, classes
   };
   const viewer = useRef(null);
   return (
-    <Paper
-      className={classes.paper}
-      style={{
-        border: "1px solid rgba(0,0,0,0.1)",
-        borderRadius: 8,
-        background: "aliceblue",
-      }}
-    >
-      <Grid item xs={9}>
-        <Typography variant="h6">{label}</Typography>
-      </Grid>
+    <div className="text-gray-700 px-4 py-4 font-sans bg-gray-50">
+      <div item xs={9}>
+        <span className="text-lg font-semibold font-sans">{label}</span>
+      </div>
       <Grid
         item
         xs={12}
@@ -77,7 +70,8 @@ const EditableMarkDownField = ({ canEdit = true, name, label, value, id, classes
           />
         </div>
       </Modal>
-      <JoditEditor
+      <div className="bg-white px-4 " dangerouslySetInnerHTML={{ __html: fieldValue }}></div>
+      {/* <JoditEditor
         id="description"
         name="description"
         style={{
@@ -91,9 +85,9 @@ const EditableMarkDownField = ({ canEdit = true, name, label, value, id, classes
         onBlur={(e) => console.log(e)}
         config={config}
         tabIndex={2} // tabIndex of textarea
-      />
+      /> */}
       {/* <MarkDown source={fieldValue} escapeHtml={false}></MarkDown> */}
-    </Paper>
+    </div>
   );
 };
 

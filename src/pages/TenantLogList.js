@@ -6,7 +6,7 @@ import { GenericTable } from "elements/GenericTable";
 import { format } from "date-fns";
 
 const QUERY_TENANT_LOGS = gql`
-  query QUERY_TENANT_LOGS {
+  query QUERY_TENANT_LOGS1 {
     tenantlogs {
       id
       date

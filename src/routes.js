@@ -40,13 +40,16 @@ import TestLogin from "./TestLogin";
 // import Test
 import UserPermissions from "./UserPermissions";
 import { AddVideo, EditVideo } from "./videos/VideoOperations";
-import Test from "./pages/Test";
+// import CloudInfo from "./pages/CloudInfo";
 import LoginForm from "./auth/LoginForm";
 import AddSymptomRequest from "symptoms/AddSymptomRequest";
 import UploadImageComponent from "pages/UploadImageComponent";
 import UserPage from "pages/UserPage";
 import CloudInformation from "pages/CloudInformation";
 import TenantLogList from "pages/TenantLogList";
+import Projects from "pages/projects";
+import AddProject from "projects/addproject";
+import UpdateProject from "projects/updateproject";
 
 // const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
 const LoggedInUsers = React.lazy(() => import("./pages/loggedinusers"));
@@ -156,7 +159,12 @@ function AppRoutes(props) {
       <Route exact path="/image_convert" component={ImageConverter} />
       <Route exact path="/anniversaries" component={AnniversaryList} />
 
-      <EnhancedRoute allowed={["Admin", "PO", "SU", "Guest", "Chat"]} user={user} exact path="/test" component={Test} />
+      <EnhancedRoute allowed={["Admin", "PO", "SU", "Guest", "Chat"]} user={user} exact path="/test" component={CloudInformation} />
+      <EnhancedRoute allowed={["Admin", "PO", "SU", "Guest", "Chat"]} user={user} exact path="/projects" component={Projects} />
+      <EnhancedRoute allowed={["Admin", "PO", "SU", "Guest", "Chat"]} user={user} exact path="/projects/add" component={AddProject} />
+      <EnhancedRoute allowed={["Admin", "PO", "SU", "Guest", "Chat"]} user={user} exact path="/projects/update/:id" component={UpdateProject} />
+
+      <EnhancedRoute allowed={["Admin", "PO", "SU", "Guest", "Chat"]} user={user} exact path="/cloudinfo" component={CloudInformation} />
       <EnhancedRoute allowed={["Admin", "PO", "SU", "Guest", "Chat"]} user={user} exact path="/cloudinformation" component={CloudInformation} />
       <EnhancedRoute editors={["Admin", "PO", "SU"]} user={user} exact path="/coursedashboard" component={RequireAuth(CourseDashboard)} />
       <EnhancedRoute editors={["Admin", "PO"]} user={user} exact path="/requestlist" component={RequireAuth(RequestList)} />

@@ -23,6 +23,7 @@ import SymptomsIcon from "@material-ui/icons/ErrorOutline";
 import PeopleOutlineIcon from "@material-ui/icons/PeopleOutlineTwoTone";
 import { UserContext } from "globalState/UserProvider";
 import LinkIcon from "@material-ui/icons/SpeakerNotesTwoTone";
+import AutoExchange from "@material-ui/icons/AirportShuttle";
 import React, { useState } from "react";
 // import Signout from '../Signout';
 import { NavLink } from "./NavLink";
@@ -62,6 +63,7 @@ export const SideBarMenu: React.FC<Props> = ({ classes, history, toggleMenu, ope
       <ToggledNavLink title="Home" Icon={ActionHome} navigateTo="/" history={history} />
       <ToggledNavLink title="Cloud Information Page" Icon={CloudQueueIcon} navigateTo="/cloudinformation" history={history} />
       <ToggledNavLink title="MaintenanceWizard" Icon={SettingsIcon} navigateTo="/maintenancewizard" history={history} />
+      <ToggledNavLink title="MaintenanceWizard AutoExchange" Icon={AutoExchange} navigateTo="/maintenancewizardauto" history={history} />
       <ToggledNavLink title="MultiTenant Customers" Icon={ExtensionIcon} navigateTo="/tenant" history={history} />
       <ToggledNavLink title="Support Cards" Icon={LinkIcon} navigateTo="/supportcard" history={history} />
       <ToggledNavLink title="Request Symptoms" Icon={SymptomsIcon} navigateTo="/symptoms" history={history} />

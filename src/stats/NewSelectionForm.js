@@ -208,7 +208,7 @@ export const SelectionForm = ({ classes, initialValue, valuesChanged, isValidSup
                           >
                             {region.title}
                           </button>
-                          <div class="border-t border-gray-200"></div>
+                          <div className="border-t border-gray-200"></div>
                         </>
                       )}
                     </>

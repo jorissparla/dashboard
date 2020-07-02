@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useMutation } from "react-apollo";
-import { MUTATION_UPDATE_CARD_KEYWORDS } from "pages/SupportCards";
 
-const SupportCardTags = ({ id, keywords, readOnly }) => {
+const Keywords = ({ id, keywords = "", readOnly, updateKeywords }) => {
+  console.log("Keywords", keywords);
   const [keywordsArray, setKeywordsArray] = useState(keywords ? keywords.split(";").map((x) => x.trim()) : []);
   const [newKeyword, setNewkeyword] = useState("");
-  const [updateTags] = useMutation(MUTATION_UPDATE_CARD_KEYWORDS);
 
   useEffect(() => {});
 
@@ -18,7 +17,7 @@ const SupportCardTags = ({ id, keywords, readOnly }) => {
   const SaveKeywords = async (k) => {
     const keywords = k.filter((x) => x !== "").join(";");
     const input = { id, keywords };
-    updateTags({ variables: { input } });
+    updateKeywords(keywords);
   };
 
   const handleKeyDown = (e) => {
@@ -48,7 +47,7 @@ const SupportCardTags = ({ id, keywords, readOnly }) => {
           {keywordsArray.map((keyword, index) => (
             <span
               key={index}
-              className="mx-1 inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-indigo-100 text-indigo-800"
+              className="mx-1 inline-flex items-center px-3 py-0.5 rounded text-xs font-medium leading-5 bg-indigo-100 text-indigo-800"
             >
               {keyword}
             </span>
@@ -59,7 +58,7 @@ const SupportCardTags = ({ id, keywords, readOnly }) => {
   }
   return (
     <div className="flex w-full justify-end px-4 items-center">
-      <label htmlFor="kw" className="mr-3 pr-3 block text-sm font-semibold leading-5 text-gray-700">
+      <label htmlFor="kw" className="mr-3 pr-3 block text-sm  leading-5 text-gray-700">
         Keywords
       </label>
       <div className="mt-1 mr-2 relative rounded-md shadow-sm w-96">
@@ -75,10 +74,7 @@ const SupportCardTags = ({ id, keywords, readOnly }) => {
       </div>
       <div className="w-full flex items-center flex-wrap">
         {keywordsArray.map((keyword, index) => (
-          <span
-            key={index}
-            className="mx-1 inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-indigo-100 text-indigo-800"
-          >
+          <span key={index} className="mx-1 inline-flex items-center px-3 py-0.5 rounded text-xs font-medium leading-5 bg-indigo-100 text-indigo-800">
             {keyword}
             <button
               onClick={() => handleRemove(keyword)}
@@ -96,4 +92,4 @@ const SupportCardTags = ({ id, keywords, readOnly }) => {
   );
 };
 
-export default SupportCardTags;
+export default Keywords;

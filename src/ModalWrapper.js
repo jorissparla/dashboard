@@ -10,10 +10,7 @@ export default class Modal extends Component {
         {on && (
           <ModalWrapper>
             <ModalCard height={height}>
-              <div
-                className="flex justify-end text-3xl text-gray-600 "
-                onClick={toggle}
-              >
+              <div className="flex justify-end text-3xl text-gray-600 " onClick={toggle}>
                 <svg
                   className="text-blue-500 w-8 h-8 fill-current"
                   fill="none"
@@ -22,7 +19,7 @@ export default class Modal extends Component {
                   strokeLinejoin="round"
                   strokeWidth="2"
                   viewBox="0 0 24 24"
-                  class="w-8 h-8"
+                  className="w-8 h-8"
                 >
                   <path d="M6 18L18 6M6 6l12 12"></path>
                 </svg>
@@ -57,7 +54,7 @@ const CloseButton = styled.button`
 
 const ModalWrapper = styled.div`
   position: absolute;
-  top: ${props => `${props.top}rem`};
+  top: ${(props) => `${props.top}rem`};
   left: 0;
   width: 100vw;
   height: 100vh;
@@ -70,7 +67,7 @@ const ModalWrapper = styled.div`
 const ModalCard = styled.div`
   top: 10vh;
   width: 90vw;
-  height: ${props => `${props.height}%`};
+  height: ${(props) => `${props.height}%`};
   position: relative;
   background: white;
   border-radius: 5px;

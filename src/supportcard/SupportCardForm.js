@@ -21,6 +21,8 @@ import TWButton from "elements/TWButton";
 import SafeDeleteButton from "videos/SafeDeleteButton";
 import { TWSelectMenu } from "elements/TWSelectMenu";
 import FavoriteWrapper from "Favorite";
+import { MUTATION_UPDATE_CARD_KEYWORDS } from "pages/SupportCards";
+import { useMutation } from "react-apollo";
 
 const owners = [
   { id: "Ricardo Exposito", name: "Ricardo Exposito" },
@@ -45,6 +47,15 @@ const SupportCardForm = (props) => {
     authenticated,
     onDelete,
   } = props;
+  const [updateKeywords] = useMutation(MUTATION_UPDATE_CARD_KEYWORDS);
+  const handleUpdateKeywords = async (id, keywords) => {
+    const input = { id, keywords };
+    await updateKeywords({
+      variables: {
+        input,
+      },
+    });
+  };
   // const [category, setCategory] = useState(initialValues.category);
   const [lbOpen, setlbOpen] = useState(false);
   const readOnly = !authenticated;
@@ -123,7 +134,9 @@ const SupportCardForm = (props) => {
             <TWSelectMenu items={simpOwners} value={values.owner} onChange={handleChangeOwner} />
           </div>
           <div className="w-full mb-4" disabled={readOnly}>
-            {supportcard && <SupportCardTags id={supportcard?.id} keywords={supportcard?.keywords} readOnly={readOnly} />}
+            {supportcard && (
+              <SupportCardTags updateKeywords={handleUpdateKeywords} id={supportcard?.id} keywords={supportcard?.keywords} readOnly={readOnly} />
+            )}
           </div>
           {!readOnly ? (
             <input
