@@ -39,6 +39,19 @@ export const ALL_TENANTS = gql`
     }
   }
 `;
+export const ALL_TENANTS_SIMPLE = gql`
+  query q {
+    tenants {
+      id
+      farm
+      name
+      version
+      customerid
+      lastupdated
+      live
+    }
+  }
+`;
 
 export const QUERY_TENANT_DETAIL = gql`
   query QUERY_TENANT_DETAIL($input: TenantCustomerDetailsWhereInput) {
@@ -135,6 +148,20 @@ export const MUTATION_MARK_LIVE = gql`
         comments_updated
         updated
       }
+    }
+  }
+`;
+
+export const MUTATION_UPDATE_TENANT_CUSTOMERID = gql`
+  mutation MUTATION_UPDATE_TENANT_CUSTOMERID($id: ID, $customerid: String) {
+    updatetenantcustomerid(id: $id, customerid: $customerid) {
+      id
+      farm
+      name
+      version
+      customerid
+      lastupdated
+      live
     }
   }
 `;

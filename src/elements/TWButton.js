@@ -11,34 +11,34 @@ const purple_class = "bg-purp text-white hover:bg-purple-400";
 const indigo_class =
   "bg-indigo-400 text-indigo-800 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 ";
 
-export default ({ children, ...props }) => {
-  let classes = null;
+export default ({ children, className = null, ...props }) => {
+  let classes = className;
   let color = props?.color || "";
   // console.log(props);
   switch (color) {
     case "teal":
-      classes = clsx(base_class, teal_class);
+      classes = clsx(classes, base_class, teal_class);
       break;
     case "black":
-      classes = clsx(base_class, black_class);
+      classes = clsx(classes, base_class, black_class);
       break;
     case "grey":
-      classes = clsx(base_class, grey_class);
+      classes = clsx(classes, base_class, grey_class);
       break;
     case "greyforbidden":
-      classes = clsx(base_class, grey_forbidden_class);
+      classes = clsx(classes, base_class, grey_forbidden_class);
       break;
     case "pink":
-      classes = clsx(base_class, pink_class);
+      classes = clsx(classes, base_class, pink_class);
       break;
     case "indigo":
-      classes = clsx(base_class, indigo_class);
+      classes = clsx(classes, base_class, indigo_class);
       break;
     case "primary":
-      classes = clsx(base_class, purple_class);
+      classes = clsx(classes, base_class, purple_class);
       break;
     default:
-      classes = clsx(base_class, def_classes);
+      classes = clsx(classes, base_class, def_classes);
       break;
   }
   return (

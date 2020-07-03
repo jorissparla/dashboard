@@ -50,6 +50,7 @@ import TenantLogList from "pages/TenantLogList";
 import Projects from "pages/projects";
 import AddProject from "projects/addproject";
 import UpdateProject from "projects/updateproject";
+import MissingTenants from "tenants/MissingTenants";
 
 // const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
 const LoggedInUsers = React.lazy(() => import("./pages/loggedinusers"));
@@ -139,6 +140,8 @@ function AppRoutes(props) {
       <Route exact path="/cloudsuite/:id" component={CloudSuitePage} history={history} user={user} />
       <EnhancedRoute auth="admin" editors={["Admin", "PO"]} user={user} exact path="/supportcard" component={SupportCards} />
       <Route exact path="/tenant" component={TenantPage} />
+
+      <Route exact path="/tenant/missing" component={MissingTenants} />
       <Route exact path="/region/:region" component={DashBoardContainer} user={user} />
       <Route exact path="/team/:team" component={DashBoardStatsNew} />
       <Route exact path="/team/:team/region/:region" component={DashBoardStats} />

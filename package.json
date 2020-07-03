@@ -52,7 +52,7 @@
     "graphql": "^14.6.0",
     "graphql-request": "^1.8.2",
     "graphql-tag": "^2.10.3",
-    "highcharts": "^8.0.4",
+    "highcharts": "^8.1.2",
     "jodit": "^3.3.24",
     "jodit-react": "^1.0.42",
     "jsonwebtoken": "^8.5.1",
@@ -82,6 +82,7 @@
     "subscriptions-transport-ws": "^0.9.16",
     "swr": "^0.2.2",
     "tailwindcss": "^1.4.6",
+    "tailwindcss-hero-patterns": "0.0.1",
     "victory": "^34.1.3",
     "yup": "^0.28.3"
   },
