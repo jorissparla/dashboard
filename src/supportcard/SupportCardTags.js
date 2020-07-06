@@ -2,13 +2,12 @@ import React, { useState, useEffect } from "react";
 import { useMutation } from "react-apollo";
 
 const Keywords = ({ id, keywords = "", readOnly, updateKeywords }) => {
-  console.log("Keywords", keywords);
   const [keywordsArray, setKeywordsArray] = useState(keywords ? keywords.split(";").map((x) => x.trim()) : []);
   const [newKeyword, setNewkeyword] = useState("");
 
-  useEffect(() => {});
-
-  // console.log("🤳", id, keywordsArray);
+  useEffect(() => {
+    setKeywordsArray((prev) => (keywords ? keywords.split(";").map((x) => x.trim()) : []));
+  }, [keywords]);
 
   const handleInputChange = (e) => {
     setNewkeyword(e.target.value);

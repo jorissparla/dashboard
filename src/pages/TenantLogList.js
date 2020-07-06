@@ -49,7 +49,6 @@ const TenantLogList = () => {
   const { tenantlogs } = data;
 
   let fields = getfieldNamesFromData({ log: "", fmtDate: "", log: "" });
-  console.log(tenantlogs);
   return (
     <div className="min-h-full w-full bg-gray-100 flex  justify-center">
       <div className="m-4 rounded shadow-lg w-2/3">

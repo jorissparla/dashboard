@@ -4,6 +4,8 @@ import Keywords from "supportcard/SupportCardTags";
 import { useQuery, useMutation } from "react-apollo";
 import gql from "graphql-tag";
 import { format } from "date-fns";
+import { useAlert } from "globalState/AlertContext";
+import { useHistory } from "react-router";
 
 const ACCOUNTS = gql`
   query ACCOUNTS {
@@ -73,11 +75,13 @@ const ProjectForm = ({ id = null }) => {
     startdate: defaultDate,
     keywords: "",
   });
+  const history = useHistory();
   const [errors, setErrors] = useState([]);
   // const { data, loading } = useQuery(QUERY_SINGLE_PROJECT);
   const { data, loading } = useQuery(QUERY_SINGLE_PROJECT, { variables: { id } });
   const [updateProject] = useMutation(MUTATION_UPDATE_PROJECT);
   const [addProject] = useMutation(MUTATION_ADD_PROJECT);
+  const alert = useAlert();
   useEffect(() => {
     if (data && data.project) {
       setValues({ ...data?.project });
@@ -86,7 +90,6 @@ const ProjectForm = ({ id = null }) => {
   }, [data]);
 
   if (loading && !data) return <div></div>;
-  console.log(data, loading);
   // const accounts = data.supportfolks;
 
   const handleChange = ({ target: { value, name } }) => {
@@ -101,6 +104,12 @@ const ProjectForm = ({ id = null }) => {
     setValues((prev) => ({ ...prev, keywords }));
   };
 
+  const navToProjectPage = () => {
+    setTimeout(() => {
+      history.push("/projects");
+    }, 2000);
+  };
+
   const handleSave = async () => {
     if (validate()) {
       if (id) {
@@ -113,6 +122,8 @@ const ProjectForm = ({ id = null }) => {
         try {
           const res = await updateProject({ variables: { where, input } });
           console.log(res);
+          alert.setMessage("Project was updated");
+          navToProjectPage();
           if (res.data?.errors) {
           }
         } catch (error) {
@@ -150,7 +161,7 @@ const ProjectForm = ({ id = null }) => {
     }
     return retVal;
   };
-  console.log(values.startdate);
+  console.log("keywords", values.keywords);
   return (
     <div className="bg-gray-100 p-4 h-screen">
       <div>
@@ -272,12 +283,12 @@ const ProjectForm = ({ id = null }) => {
               <TWButton color="teal" onClick={handleSave}>
                 {id ? "Update" : "Save"}
               </TWButton>
-              <a className="px-4 inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker" href="/projects">
+              {/* <a className="px-4 inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker" href="/projects">
                 Cancel
-              </a>
+              </a> */}
               <a
                 href="/projects"
-                class="ml-4 no-underline rounded-lg px-4 md:px-5 xl:px-4 py-3 md:py-4 xl:py-3 bg-white hover:bg-gray-200 md:text-lg xl:text-base text-gray-800 font-semibold leading-tight shadow-md"
+                className="ml-4 no-underline rounded-lg px-4 md:px-5 xl:px-4 py-3 md:py-4 xl:py-3 bg-white hover:bg-gray-200 md:text-lg xl:text-base text-gray-800 font-semibold leading-tight shadow-md"
               >
                 Cancel
               </a>

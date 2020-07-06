@@ -74,7 +74,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Filter = (props) => {
-  const { open, onClose, onFilter, className, ...rest } = props;
+  const { open, onClose, onFilter, className, onhandleSetFilterActive = () => console.log, ...rest } = props;
 
   const classes = useStyles();
 
@@ -87,12 +87,14 @@ const Filter = (props) => {
     csm: "",
     pm: "",
     temperature: "",
+    lastupdated: "999",
   };
 
   const [values, setValues] = usePersistentState("filters", { ...initialValues });
 
   const handleClear = () => {
     setValues({ ...initialValues });
+    onhandleSetFilterActive(false);
     // console.log()
   };
 
@@ -115,6 +117,7 @@ const Filter = (props) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log({ values });
+    onhandleSetFilterActive(true);
     onFilter && onFilter(values);
   };
 
@@ -161,6 +164,18 @@ const Filter = (props) => {
                     name="tenantVersion"
                     onChange={(event) => handleFieldChange(event, "tenantVersion", event.target.value)}
                     value={values.tenantVersion}
+                    variant="outlined"
+                  />
+                </div>
+                <div className={classes.formGroup}>
+                  <TextField
+                    className={classes.field}
+                    fullWidth
+                    label="Last Updated"
+                    margin="dense"
+                    name="lastupdated"
+                    onChange={(event) => handleFieldChange(event, "lastupdated", event.target.value)}
+                    value={values.lastupdated}
                     variant="outlined"
                   />
                 </div>

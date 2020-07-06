@@ -27,6 +27,7 @@ import Loader from "./../utils/Loader";
 
 import { CREATE_AUDIT_MUTATION } from "./Query";
 import "./tenants.css";
+import { differenceInDays, differenceInCalendarDays } from "date-fns";
 
 const styles = (theme) => ({
   root: {
@@ -300,8 +301,25 @@ export const FilterForm = ({ setSearchText, flip }) => {
   );
 };
 
+const applySimpleFilter = (days) => (v) => {
+  const biggerThanX = differenceInCalendarDays(Date.parse(new Date().toString()), parseInt(v.lastupdated)) <= days;
+  return biggerThanX;
+  // return tenants.filter(biggerThanX);
+};
+
 const filterTenantsByCustomerFarmVersion = (tenants, fields, details) => {
-  const { customerName = "", farmName = "", tenantVersion = "", tenantName = "", isLive = false, temperature = "", csm = "", pm = "" } = fields;
+  const {
+    customerName = "",
+    farmName = "",
+    tenantVersion = "",
+    tenantName = "",
+    isLive = false,
+    temperature = "",
+    csm = "",
+    pm = "",
+    lastupdated = "999",
+  } = fields;
+  console.log({ fields });
 
   let filteredCustomerNames = null;
   if (details) {
@@ -311,6 +329,7 @@ const filterTenantsByCustomerFarmVersion = (tenants, fields, details) => {
       .filter((detail) => detail.pm.toUpperCase().includes(pm.toUpperCase()));
   }
 
+  const f = applySimpleFilter(parseInt(lastupdated));
   const retValue = _.chain(tenants)
     .filter((o) => o.customer.name !== "Infor")
 
@@ -319,6 +338,7 @@ const filterTenantsByCustomerFarmVersion = (tenants, fields, details) => {
     .filter((t) => t.version.toUpperCase().includes(tenantVersion.toUpperCase()))
     .filter((t) => t.name.toUpperCase().includes(tenantName.toUpperCase()))
     .filter((t) => (isLive ? t.live === 1 : true))
+    .filter(f)
     .sortBy((o) => o.customer.name)
     .value();
 
@@ -364,6 +384,11 @@ const TenantList = (props) => {
     // clearFields();
   }
 
+  const simpleFilter = {
+    lastupdated: null,
+    farm: "",
+  };
+
   useEffect(() => {
     const input = {
       username: dbctx.fullname,
@@ -388,7 +413,7 @@ const TenantList = (props) => {
   const { tenantcustomerdetails } = details;
   const { updatedAt } = updatestatus;
   const filteredTenants = filterTenantsByCustomerFarmVersion(tenants, fields, details.tenantcustomerdetails);
-
+  // console.log(applySimpleFilter(filteredTenants));
   const uniqueCustomers = filteredTenants.map(({ farm, customer: { name } }) => name).filter((ten, i, all) => all.indexOf(ten) === i);
   return (
     <Main onKeyDown={(e) => {}}>
@@ -463,6 +488,11 @@ const TenantList = (props) => {
 
 export const TenantListHeader = ({ updatedAt, tenants, toggleShowLogs, toggleFilter, applyFilter }) => {
   const max = _.maxBy(tenants, (t) => format(t.lastupdated, "yyyyMMdd")).lastupdated;
+  const [showLast7DaysUpdated, setShowLast7DaysUpdated] = useState(false);
+  const handleChangeLastUpdated = (e) => {
+    console.log(e.target.value);
+    setShowLast7DaysUpdated((prev) => !prev);
+  };
   let tenantcustomersWithFarm = _.countBy(
     tenants.map(({ farm, tenant }) => ({ farm, tenant })),
     "farm"
@@ -505,6 +535,22 @@ export const TenantListHeader = ({ updatedAt, tenants, toggleShowLogs, toggleFil
           >
             Logs
           </Button>
+          <div className=" flex items-start">
+            <div className="absolute flex items-center h-5">
+              <input
+                id="last7"
+                type="checkbox"
+                className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
+                value={showLast7DaysUpdated}
+                onChange={handleChangeLastUpdated}
+              />
+            </div>
+            <div className="pl-7 text-sm leading-5">
+              <label htmlFor="comments" className="font-medium text-gray-600">
+                Only Show Updated last 7 days
+              </label>
+            </div>
+          </div>
           <TenantNote />
         </Typography>
         <FancyFilter onFilter={applyFilter} />

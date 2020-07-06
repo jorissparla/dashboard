@@ -44,7 +44,7 @@ const Projects = () => {
         )}
       </div>
       {/* <pre>{JSON.stringify(user)}</pre> */}
-      <div className="font-sans grid grid-cols-9 col-gap-4  px-2 ">
+      <div className="font-sans grid sm:grid-cols-3 md:grid-cols-6 lg:grid-cols-9 xl:grid-cols-12 col-gap-4 row-gap-2 px-2 ">
         {/* <div className="col-span-5 mb-6">
         <span className="text-lg font-semibold  px-3 py-3 m-4">Projects</span>
       </div> */}
@@ -58,8 +58,8 @@ const Projects = () => {
         ))}
       </div> */}
         {[...projects].map((p) => (
-          <div className="col-span-3 border-blue-300 border-l-8 bg-gray-150">
-            <div className=" rounded shadow-xl bg-white text-gray-600 h-72 heropattern-floatingcogs-cool-gray-100">
+          <div className="col-span-3 border-blue-300 border-l-8 bg-gray-150  " key={p.id}>
+            <div className=" rounded shadow-xl bg-white text-gray-600 h-72 max-h-72 heropattern-floatingcogs-cool-gray-100 overflow-hidden ellipsis pb-2">
               <div className=" font-semibold  -mx-2 px-4 flex pt-2 justify-between">
                 {editable ? <a href={`projects/update/${p.id}`}>{p.title}</a> : <span>{p.title}</span>}
                 <span className="py-2 px-3 border border-gray-300 rounded-md text-sm leading-4 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition duration-150 ease-in-out">
@@ -68,7 +68,7 @@ const Projects = () => {
               </div>
 
               <div label="Details">
-                <div className="pt-2 px-4 text-sm h-18 text-teal-700 overflow-hidden">{p.comments}</div>
+                <div className="pt-2 px-4 text-sm sm:max-h-12 h-12 md:max-h-18 text-teal-700 overflow-hidden">{p.comments}</div>
                 <div className="w-full text-sm">
                   <div className="py-2 px-2 flex flex-wrap">
                     {p.members.split(";").map((m) => (

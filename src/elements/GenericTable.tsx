@@ -351,7 +351,7 @@ export const GenericTable = (props: GenericTableProps) => {
               </thead>
               <tbody>
                 {tableData.map((item: any, index: number) => (
-                  <tr key={item.incident} className={`${index % 2 === 0 && "bg-gray-50"}`}>
+                  <tr key={index} className={`${index % 2 === 0 && "bg-gray-50"}`}>
                     {fieldList.map(({ name, type }) => {
                       if (name === linkField) {
                         return <HyperLinkCell key={name} value={item[name]} linkPrefix={linkPrefix} />;
