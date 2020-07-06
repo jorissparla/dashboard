@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import gql from "graphql-tag";
 import { useQuery } from "react-apollo";
 import Spinner from "utils/spinner";
@@ -23,17 +23,37 @@ const QUERY_ALL_PROJECTS = gql`
 `;
 
 const Projects = () => {
+  const [filteredProjects, setFilteredProjects] = useState([]);
+  const [searchText, setSearchText] = useState("");
   const { data, loading } = useQuery(QUERY_ALL_PROJECTS);
   const { user } = useUserContext();
+  useEffect(() => {
+    if (data) {
+      if (searchText) {
+        setFilteredProjects(
+          data.projects.filter(
+            (p) => p.title.toUpperCase().includes(searchText.toUpperCase()) || p.keywords.toUpperCase().includes(searchText.toUpperCase())
+          )
+        );
+      } else setFilteredProjects(data.projects);
+    }
+    console.log("ue", searchText, filteredProjects);
+  }, [data, searchText]);
   if (loading) return <Spinner />;
   const roles = ["ADMIN", "PROJECTEDIT"];
   const editable = user ? user?.role === "ADMIN" || user.permissions.filter((u) => roles.includes(u.permission)) : false;
   const { projects } = data;
+
+  function handleChangeSearch(text) {
+    setSearchText(text);
+  }
+  console.log(searchText, filteredProjects);
+
   return (
     <div className=" w-full bg-gray-100 max-h-full h-screen ">
       <div className="w-full  bg-white border-b border-gray-300 pb-2 flex items-center mb-2">
         <span className="px-2 font-semibold">Projects</span>{" "}
-        <SearchBar onChange={() => console.log("x")} searchOnEnter={true} hintText="Search Project " />
+        <SearchBar onChange={handleChangeSearch} searchOnEnter={true} hintText="Search Project, press enter to display results " />
         {editable && (
           <a
             href="/projects/add"
@@ -57,7 +77,8 @@ const Projects = () => {
           </div>
         ))}
       </div> */}
-        {[...projects].map((p) => (
+        {filteredProjects.length === 0 && <span>No results</span>}
+        {[...filteredProjects].map((p) => (
           <div className="col-span-3 border-blue-300 border-l-8 bg-gray-150  " key={p.id}>
             <div className=" rounded shadow-xl bg-white text-gray-600 h-72 max-h-72 heropattern-floatingcogs-cool-gray-100 overflow-hidden ellipsis pb-2">
               <div className=" font-semibold  -mx-2 px-4 flex pt-2 justify-between">
@@ -70,6 +91,9 @@ const Projects = () => {
               <div label="Details">
                 <div className="pt-2 px-4 text-sm sm:max-h-12 h-12 md:max-h-18 text-teal-700 overflow-hidden">{p.comments}</div>
                 <div className="w-full text-sm">
+                  <span className="mx-1 inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-gray-200 text-gray-800">
+                    Lead By {p.lead}
+                  </span>
                   <div className="py-2 px-2 flex flex-wrap">
                     {p.members.split(";").map((m) => (
                       <span
