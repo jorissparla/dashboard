@@ -101,7 +101,7 @@ const CustomerDataCard = ({ tenant, update }) => {
         </div>
         <div>
           <label htmlFor="username" className="block text-sm font-medium leading-5 text-gray-700 sm:mt-px sm:pt-2">
-            Customer ID
+            Customer ID ({t.farm})
           </label>
           <input
             className="flex-1 form-input block w-full min-w-0 rounded-none rounded-r-md transition duration-150 ease-in-out sm:text-sm sm:leading-5"
