@@ -537,13 +537,13 @@ export const TenantListHeader = ({ updatedAt, tenants, toggleShowLogs, toggleFil
           </Button>
           <div className=" flex items-start">
             <div className="absolute flex items-center h-5">
-              <input
+              {/* <input
                 id="last7"
                 type="checkbox"
                 className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
                 value={showLast7DaysUpdated}
                 onChange={handleChangeLastUpdated}
-              />
+              /> */}
             </div>
             {/* <div className="pl-7 text-sm leading-5">
               <label htmlFor="comments" className="font-medium text-gray-600">
