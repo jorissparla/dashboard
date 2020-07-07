@@ -545,11 +545,11 @@ export const TenantListHeader = ({ updatedAt, tenants, toggleShowLogs, toggleFil
                 onChange={handleChangeLastUpdated}
               />
             </div>
-            <div className="pl-7 text-sm leading-5">
+            {/* <div className="pl-7 text-sm leading-5">
               <label htmlFor="comments" className="font-medium text-gray-600">
                 Only Show Updated last 7 days
               </label>
-            </div>
+            </div> */}
           </div>
           <TenantNote />
         </Typography>

@@ -18,6 +18,8 @@ const QUERY_ALL_PROJECTS = gql`
       status
       startdate
       keywords
+      link
+      notes
     }
   }
 `;
@@ -64,7 +66,7 @@ const Projects = () => {
         )}
       </div>
       {/* <pre>{JSON.stringify(user)}</pre> */}
-      <div className="font-sans grid sm:grid-cols-3 md:grid-cols-6 lg:grid-cols-9 xl:grid-cols-12 col-gap-4 row-gap-2 px-2 ">
+      <div className="font-sans grid sm:grid-cols-3 md:grid-cols-6 lg:grid-cols-9 xl:grid-cols-12 col-gap-4 row-gap-2 px-2 grid-rows-4 ">
         {/* <div className="col-span-5 mb-6">
         <span className="text-lg font-semibold  px-3 py-3 m-4">Projects</span>
       </div> */}
@@ -79,21 +81,28 @@ const Projects = () => {
       </div> */}
         {filteredProjects.length === 0 && <span>No results</span>}
         {[...filteredProjects].map((p) => (
-          <div className="col-span-3 border-blue-300 border-l-8 bg-gray-150  " key={p.id}>
-            <div className=" rounded shadow-xl bg-white text-gray-600 h-72 max-h-72 heropattern-floatingcogs-cool-gray-100 overflow-hidden ellipsis pb-2">
+          <div style={{ height: "40vh" }} className="col-span-4 border-blue-300 border-l-8 bg-gray-150 relative  " key={p.id}>
+            <div className=" rounded shadow-xl bg-white text-gray-600 h-full heropattern-floatingcogs-cool-gray-100 overflow-hidden ellipsis pb-2">
               <div className=" font-semibold  -mx-2 px-4 flex pt-2 justify-between">
                 {editable ? <a href={`projects/update/${p.id}`}>{p.title}</a> : <span>{p.title}</span>}
-                <span className="py-2 px-3 border border-gray-300 rounded-md text-sm leading-4 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition duration-150 ease-in-out">
+                <span className="py-2 px-3 bg-teal-200 border border-gray-300 rounded-md text-sm leading-4 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition duration-150 ease-in-out">
                   {p.status}
                 </span>
               </div>
-
+              <div className="w-full text-sm">
+                <span className="mx-1 mt-2 inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-gray-200 text-gray-800">
+                  Lead By {p.lead}
+                </span>
+              </div>
               <div label="Details">
-                <div className="pt-2 px-4 text-sm sm:max-h-12 h-12 md:max-h-18 text-teal-700 overflow-hidden">{p.comments}</div>
+                <div className="pt-2 px-4 text-sm sm:max-h-16 h-20 md:max-h-20 text-teal-700 overflow-hidden">{p.comments}</div>
+                <div
+                  className="px-2 mt-2  font-sans w-full border-t border-b bg-white text-gray-700 rounded  text-xs border-gray-300  h-32 overflow-hidden overflow-y-auto"
+                  dangerouslySetInnerHTML={{ __html: p.notes }}
+                ></div>
+              </div>
+              <div className="min-h-24">
                 <div className="w-full text-sm">
-                  <span className="mx-1 inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-gray-200 text-gray-800">
-                    Lead By {p.lead}
-                  </span>
                   <div className="py-2 px-2 flex flex-wrap">
                     {p.members.split(";").map((m) => (
                       <span
@@ -106,34 +115,46 @@ const Projects = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex items-center justify-between">
-                <div className="mx-4 flex items-center text-sm py-1 px-1 rounded w-18 my-3 bg-teal-300 text-teal-600">
-                  <span className="w-4 h-4">
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                  </span>
-                  <span className="mx-1 text-xs font-semibold">{format(parseInt(p.startdate), "dd MMM")}</span>
-                </div>
-              </div>
-              <div>
-                {p.keywords &&
-                  p.keywords?.split(";").map((k) => (
-                    <span
-                      key={k}
-                      className="ml-1 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium leading-4 bg-purple-100 text-purple-800"
-                    >
-                      {k}
+              <div className="absolute bottom-4 flex justify-between items-center">
+                <div className="flex items-center justify-between ">
+                  <div className="mx-4 flex items-center text-sm py-1 px-1 rounded w-18 my-3 bg-teal-300 text-teal-600">
+                    <span className="w-4 h-4">
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                      </svg>
                     </span>
-                  ))}
+                    <span className="mx-1 text-xs font-semibold">{format(parseInt(p.startdate), "dd MMM")}</span>
+                  </div>
+                </div>
+                <div className="flex justify-between">
+                  <div>
+                    {p.keywords &&
+                      p.keywords?.split(";").map((k) => (
+                        <span
+                          key={k}
+                          className="ml-1 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium leading-4 bg-yellow-100 text-yellow-800"
+                        >
+                          {k}
+                        </span>
+                      ))}
+                  </div>
+                  <div>
+                    <a
+                      className=" ml-4 no-underline rounded-lg px-4 md:px-5 xl:px-4 py-3 md:py-4 xl:py-3 bg-gray-100 hover:bg-gray-200 md:text-lg xl:text-base text-gray-800 font-semibold leading-tight shadow-md mr-2"
+                      href={p.link || ""}
+                    >
+                      Link to Attachment
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

@@ -6,6 +6,8 @@ import gql from "graphql-tag";
 import { format } from "date-fns";
 import { useAlert } from "globalState/AlertContext";
 import { useHistory } from "react-router";
+import CKEditor from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 const ACCOUNTS = gql`
   query ACCOUNTS {
@@ -26,6 +28,8 @@ const MUTATION_UPDATE_PROJECT = gql`
       status
       startdate
       keywords
+      link
+      notes
     }
   }
 `;
@@ -41,6 +45,8 @@ const MUTATION_ADD_PROJECT = gql`
       status
       startdate
       keywords
+      link
+      notes
     }
   }
 `;
@@ -60,6 +66,8 @@ const QUERY_SINGLE_PROJECT = gql`
       status
       startdate
       keywords
+      link
+      notes
     }
   }
 `;
@@ -238,11 +246,44 @@ const ProjectForm = ({ id = null }) => {
                       id="comments"
                       name="comments"
                       required
-                      rows="8"
+                      rows="4"
                       onChange={handleChange}
                       value={values.comments}
                       className="mt-1 resize-none form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
                     />
+                  </div>
+                  <div className="col-span-6 sm:col-span-6 ">
+                    <label htmlFor="email_address" className="block text-sm font-medium leading-5 text-gray-700">
+                      Notes
+                    </label>
+                    <div className="flex text-gray-600 mb-4 text-sm">
+                      {
+                        // !readOnly ? (
+                        <CKEditor
+                          editor={ClassicEditor}
+                          // disabled={readOnly}
+                          data={values.notes}
+                          onInit={(editor) => {
+                            // You can store the "editor" and use when it is needed.
+                            console.log("Editor is ready to use!", editor);
+                          }}
+                          onChange={(event, editor) => {
+                            const data = editor.getData();
+                            // console.log("Change", { event, editor, data });
+                            setValues({ ...values, notes: data });
+                          }}
+                        />
+                      }
+                    </div>
+                    {/* <textarea
+                      id="notes"
+                      name="notes"
+                      required
+                      rows="4"
+                      onChange={handleChange}
+                      value={values.notes}
+                      className="mt-1 resize-none form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+                    /> */}
                   </div>
                   <div className="col-span-3 sm:col-span-3">
                     <label htmlFor="first_name" className="block text-sm font-medium leading-5 text-gray-700">
@@ -272,6 +313,18 @@ const ProjectForm = ({ id = null }) => {
                       <option>In Progress</option>
                       <option>Completed</option>
                     </select>
+                  </div>
+                  <div className="col-span-6 sm:col-span-6 w-full">
+                    <a href={values.link} htmlFor="link" className="block text-sm font-medium leading-5 text-gray-700">
+                      Link
+                    </a>
+                    <input
+                      id="link"
+                      name="link"
+                      value={values.link}
+                      onChange={handleChange}
+                      className="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+                    />
                   </div>
                 </div>
               </form>
