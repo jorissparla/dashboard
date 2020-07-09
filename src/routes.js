@@ -51,6 +51,7 @@ import Projects from "pages/projects";
 import AddProject from "projects/addproject";
 import UpdateProject from "projects/updateproject";
 import MissingTenants from "tenants/MissingTenants";
+import Main from "pages/Main";
 
 // const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
 const LoggedInUsers = React.lazy(() => import("./pages/loggedinusers"));
@@ -131,6 +132,8 @@ function AppRoutes(props) {
       <AuthRoute exact path="/profilepage/:id" component={UserPage} user={user} />
       <AuthRoute exact path="/mywork" component={Stats} user={user} history={history} />
       <AuthRoute exact path="/kbpage" component={KBPage} user={user} history={history} />
+      <Route exact path="/main" component={Main} user={user} history={history} />
+
       <AuthRoute exact path="/myworkparams" component={Parameters} user={user} history={history} />
       <Route exact path="/" component={DashBoardContainer} user={user} />
       <Route exact path="/newspage" component={NewsPage} />

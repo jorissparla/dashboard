@@ -12,6 +12,7 @@ import ActionHome from "@material-ui/icons/Home";
 import ApplicationIcon from "@material-ui/icons/Launch";
 import CloudQueueIcon from "@material-ui/icons/CloudQueue";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import BusinessCenterIcon from "@material-ui/icons/BusinessCenter";
 // import LinkIcon from "@material-ui/icons/Link";
 import PageIcon from "@material-ui/icons/Pages";
 import PeopleIcon from "@material-ui/icons/People";
@@ -56,20 +57,21 @@ export const SideBarMenu: React.FC<Props> = ({ classes, history, toggleMenu, ope
   }
   // const ToggledNavLink = this.ToggledNavLink;
   function ToggledNavLink(props: any) {
-    return <NavLink {...props} toggleMenu={toggleMenu} history={history} open={open} />;
+    return <NavLink {...props} toggleMenu={toggleMenu} history={history} open={open} color={props?.color} />;
   }
   return (
     <List>
-      <ToggledNavLink title="Home" Icon={ActionHome} navigateTo="/" history={history} />
+      <ToggledNavLink title="Home" Icon={ActionHome} navigateTo="/" history={history} color="bg-gray-100 text-gray-600" />
       <ToggledNavLink title="Cloud Information Page" Icon={CloudQueueIcon} navigateTo="/cloudinformation" history={history} />
       <ToggledNavLink title="MaintenanceWizard" Icon={SettingsIcon} navigateTo="/maintenancewizard" history={history} />
       <ToggledNavLink title="MaintenanceWizard AutoExchange" Icon={AutoExchange} navigateTo="/maintenancewizardauto" history={history} />
-      <ToggledNavLink title="MultiTenant Customers" Icon={ExtensionIcon} navigateTo="/tenant" history={history} />
-      <ToggledNavLink title="Support Cards" Icon={LinkIcon} navigateTo="/supportcard" history={history} />
+      <ToggledNavLink title="MultiTenant Customers" Icon={ExtensionIcon} navigateTo="/tenant" history={history} color="text-orange-600" />
+      <ToggledNavLink title="Support Cards" Icon={LinkIcon} navigateTo="/supportcard" history={history} color="text-teal-400" />
       <ToggledNavLink title="Request Symptoms" Icon={SymptomsIcon} navigateTo="/symptoms" history={history} />
       {authenticated && <ToggledNavLink title="My KBPage" Icon={HelpOutlineIcon} navigateTo="/kbpage" history={history} />}
 
       {authenticated && <ToggledNavLink title="WorkList" Icon={MyWorkList} navigateTo="/mywork" history={history} />}
+      <ToggledNavLink title="Proactive Projects!" Icon={BusinessCenterIcon} navigateTo="/projects" history={history} color="text-blue-600" />
       {isAdmin && <ToggledNavLink title="Permissions" Icon={Person} navigateTo="/bla" history={history} />}
       {isAdmin && <ToggledNavLink title="Logged in Users" Icon={PeopleOutlineIcon} navigateTo="/loggedinusers" history={history} />}
       <ExpandableMenuItem classes={classes} title="Stats Graphs" Icon={GoLiveIcon}>

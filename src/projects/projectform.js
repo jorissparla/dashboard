@@ -270,7 +270,7 @@ const ProjectForm = ({ id = null }) => {
                           onChange={(event, editor) => {
                             const data = editor.getData();
                             // console.log("Change", { event, editor, data });
-                            setValues({ ...values, notes: data });
+                            setValues((prev) => ({ ...prev, notes: data }));
                           }}
                         />
                       }

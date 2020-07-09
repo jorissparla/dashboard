@@ -2,6 +2,7 @@ import React from "react";
 
 interface NavLinkProps {
   title: string;
+  color?: string;
   Icon: any;
   navigateTo: string;
   history: any;
@@ -9,10 +10,10 @@ interface NavLinkProps {
   open?: boolean;
 }
 
-export const NavLink: React.FC<NavLinkProps> = ({ title, Icon, navigateTo, history, toggleMenu, open = true }) => (
+export const NavLink: React.FC<NavLinkProps> = ({ title, color = "text-gray-600", Icon, navigateTo, history, toggleMenu, open = true }) => (
   <a
     href={navigateTo}
-    className="flex items-center py-2 text-gray-600 ml-2 cursor-pointer no-underline"
+    className={`flex items-center py-2 ml-2 cursor-pointer no-underline ${color}`}
     // onClick={() => {
     //   // toggleMenu();
     //   setTimeout(() => {
