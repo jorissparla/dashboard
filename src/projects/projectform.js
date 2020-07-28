@@ -122,6 +122,7 @@ const ProjectForm = ({ id = null }) => {
     if (validate()) {
       if (id) {
         const input = { ...values };
+
         const where = { id };
         delete input.id;
         delete input.__typename;
@@ -139,6 +140,7 @@ const ProjectForm = ({ id = null }) => {
         }
       } else {
         const input = values;
+        delete input.startdate;
         console.log("add", input);
         try {
           const res = await addProject({ variables: { input } });
