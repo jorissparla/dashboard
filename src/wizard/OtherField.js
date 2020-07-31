@@ -1,26 +1,17 @@
-import { Backdrop, Modal } from '@material-ui/core';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import EditIcon from '@material-ui/icons/Edit';
-import { DashBoardContext } from 'globalState/Provider';
-import React, { useEffect } from 'react';
-import MarkDown from 'react-markdown';
-import EditWizardDetails from './EditWizardDetails';
-import { useStyles } from './useStyles';
+import { Backdrop, Modal } from "@material-ui/core";
+import Grid from "@material-ui/core/Grid";
+import Paper from "@material-ui/core/Paper";
+import Typography from "@material-ui/core/Typography";
+import EditIcon from "@material-ui/icons/Edit";
+import { DashBoardContext } from "globalState/Provider";
+import React, { useEffect } from "react";
+import MarkDown from "react-markdown/with-html";
+import EditWizardDetails from "./EditWizardDetails";
+import { useStyles } from "./useStyles";
 
-export const OtherField = ({
-  name,
-  label,
-  edit = false,
-  Icon,
-  text,
-  id,
-  bigger = false,
-  blue = false
-}) => {
+export const OtherField = ({ name, label, edit = false, Icon, text, id, bigger = false, blue = false, productline = "LN" }) => {
   const classes = useStyles();
-  const { role = 'Guest' } = React.useContext(DashBoardContext);
+  const { role = "Guest" } = React.useContext(DashBoardContext);
   // const { activeVersion } = React.useContext(RootContext);
   const [isOpen, setisOpened] = React.useState(false);
   const [value, setValue] = React.useState(text);
@@ -30,14 +21,13 @@ export const OtherField = ({
 
   useEffect(() => {
     setValue(text);
-    console.log('change', text);
+    console.log("change", text);
   }, [text, name]);
 
+  if (productline !== "LN" && (name === "text" || name === "localizations")) return <div />;
+  console.log("name", name, productline);
   return (
-    <Paper
-      className={classes.paper}
-      style={{ background: `${blue ? 'aliceblue' : 'lightyellow'}` }}
-    >
+    <Paper className={classes.paper} style={{ background: `${blue ? "aliceblue" : "lightyellow"}` }}>
       <Grid
         container
         direction="row"
@@ -45,45 +35,36 @@ export const OtherField = ({
         alignItems="flex-start"
         className={classes.stretch}
         style={{
-          display: 'flex',
-          flex: '1 0 auto',
-          minHeight: '90%',
-          height: '100%'
+          display: "flex",
+          flex: "1 0 auto",
+          minHeight: "90%",
+          height: "100%",
         }}
       >
         <Grid item xs={9}>
           <Typography variant="h6">
-            {Icon ? <Icon color="#73398d" style={{ cursor: 'pointer' }}></Icon> : <div />}
+            {Icon ? <Icon color="#73398d" style={{ cursor: "pointer" }}></Icon> : <div />}
             {label}
           </Typography>
         </Grid>
-        <Grid item xs={3} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          {role === 'Admin' && (
-            <EditIcon color="primary" fontSize="small" onClick={() => setisOpened(true)} />
-          )}
+        <Grid item xs={3} style={{ display: "flex", justifyContent: "flex-end" }}>
+          {role === "Admin" && <EditIcon color="primary" fontSize="small" onClick={() => setisOpened(true)} />}
         </Grid>
         <Modal
           onClose={() => setisOpened(false)}
           open={isOpen}
           BackdropComponent={Backdrop}
           BackdropProps={{
-            timeout: 500
+            timeout: 500,
           }}
         >
           <div>
-            <EditWizardDetails
-              onClose={() => setisOpened(false)}
-              name={name}
-              label={label}
-              value={value}
-              id={id}
-              faq="true"
-            />
+            <EditWizardDetails onClose={() => setisOpened(false)} name={name} label={label} value={value} id={id} faq="true" />
           </div>
         </Modal>
       </Grid>
 
-      <MarkDown source={value}></MarkDown>
+      <MarkDown source={value} escapeHtml={false}></MarkDown>
     </Paper>
   );
 };

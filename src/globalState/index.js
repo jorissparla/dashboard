@@ -1,10 +1,11 @@
-import React from 'react';
-import DashBoardProvider from './Provider';
-import { SelectionProvider } from './SelectionContext';
-import { SharedSnackbarProvider } from './SharedSnackbar.context';
-import { FilterFieldProvider } from './FilterContext';
-import { UserContextProvider } from './UserProvider';
-import { ThemeContextProvider } from './ThemeContext';
+import React from "react";
+import DashBoardProvider from "./Provider";
+import { SelectionProvider } from "./SelectionContext";
+import { SharedSnackbarProvider } from "./SharedSnackbar.context";
+import { FilterFieldProvider } from "./FilterContext";
+import { UserContextProvider } from "./UserProvider";
+import { ThemeContextProvider } from "./ThemeContext";
+import { AlertContextProvider } from "./AlertContext";
 function ProviderComposer({ contexts, children }) {
   return contexts.reduceRight(
     (kids, parent) =>
@@ -24,7 +25,8 @@ export default function ContextProvider({ children }) {
         <SelectionProvider />,
         <SharedSnackbarProvider />,
         <FilterFieldProvider />,
-        <ThemeContextProvider />
+        <ThemeContextProvider />,
+        <AlertContextProvider />
       ]}
     >
       {children}

@@ -1,42 +1,42 @@
-import { Fab } from '@material-ui/core';
-import blue from '@material-ui/core/colors/blue';
-import Paper from '@material-ui/core/Paper';
-import { withStyles } from '@material-ui/core/styles';
-import AddIcon from '@material-ui/icons/Add';
-import React from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
+import { Fab } from "@material-ui/core";
+import blue from "@material-ui/core/colors/blue";
+import Paper from "@material-ui/core/Paper";
+import { withStyles } from "@material-ui/core/styles";
+import AddIcon from "@material-ui/icons/Add";
+import React from "react";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
 
-const styles = theme => ({
+const styles = (theme) => ({
   container: {
-    display: 'flex',
-    flexWrap: 'wrap'
+    display: "flex",
+    flexWrap: "wrap",
   },
   round: {
-    borderRadius: '14px'
+    borderRadius: "14px",
   },
   button: {
     margin: theme.spacing(1),
-    alignContent: 'center',
-    display: 'flex'
+    alignContent: "center",
+    display: "flex",
   },
 
   buttonDel: {
     margin: theme.spacing(1),
-    backgroundColor: '#000'
+    backgroundColor: "#000",
   },
 
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
     width: 200,
-    height: '100%'
+    height: "100%",
   },
   center: {
-    alignContent: 'center',
-    display: 'flex',
-    flexDirection: 'column'
-  }
+    alignContent: "center",
+    display: "flex",
+    flexDirection: "column",
+  },
 });
 
 const StyledContainer = styled(Paper)`
@@ -45,10 +45,10 @@ const StyledContainer = styled(Paper)`
   align-content: center;
   border: 1 px solid blue;
   padding: 10px;
-  width: 17%;
-  height: 200px;
+  width: 18%;
+  // height: 200px;
   margin: 5px;
-  background-color: ${props => props.background};
+  background-color: ${(props) => props.background};
   border-radius: 14px;
 `;
 
@@ -71,25 +71,20 @@ const StyledLink = styled(Link)`
   }
 `;
 
-const AddCard = ({
-  link = 'courses/create',
-  title = 'Add  Course',
-  color = blue,
-  background = 'papayawhip',
-  onClick,
-  classes
-}) => {
+const AddCard = ({ link = "courses/create", title = "Add  Course", color = blue, background = "papayawhip", onClick, classes }) => {
   return (
-    <StyledContainer className={classes.round}>
-      <StyledLink onClick={onClick} to={link || '/'}>
-        <div className={classes.center}>
-          <Fab color="primary" aria-label="Add" className={classes.button}>
-            <AddIcon />
-          </Fab>
-          <Title>{title}</Title>
-        </div>
-      </StyledLink>
-    </StyledContainer>
+    <div className="w-full max-w-sm ">
+      <div className="rounded-lg  m-3  shadow-lg bg-white h-48 flex items-center justify-center">
+        <StyledLink onClick={onClick} to={link || "/"}>
+          <div className={classes.center}>
+            <Fab color="primary" aria-label="Add" className={classes.button}>
+              <AddIcon />
+            </Fab>
+            <Title>{title}</Title>
+          </div>
+        </StyledLink>
+      </div>
+    </div>
   );
 };
 export default withStyles(styles)(AddCard);

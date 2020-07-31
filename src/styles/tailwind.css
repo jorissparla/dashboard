@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.btn-custom {
+  @apply font-pop font-bold py-2 px-4 rounded inline-flex items-center;
+}
+
+.btn-tw {
+  @apply ml-4 rounded-lg px-4  py-3  font-bold   leading-tight shadow-md;
+}
+.btn-tw-l {
+  @apply ml-4 rounded-lg px-4  py-3    text-white  leading-tight shadow-md;
+}
+.btn-tw-u {
+  @apply ml-4 rounded-lg  py-3      leading-tight shadow-md;
+}
+
+.btn-tw:md {
+  @apply px-5 py-4;
+}
+
+.btn-tw:lg {
+  @apply px-4 py-3 text-base;
+}
+.btn-tw:hover {
+  @apply bg-gray-200;
+}
+
+ul {
+  list-style: disc;
+  margin-left: 10px;
+}
+a {
+  text-decoration: underline;
+}
+
+p {
+  margin: 10px;
+}

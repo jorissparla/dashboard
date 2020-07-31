@@ -5,7 +5,7 @@ import { Query } from 'react-apollo';
 import { useQuery } from 'react-apollo';
 
 const CURRENT_USER_QUERY = gql`
-  query CURRENT_USER_QUERY {
+  query CURRENT_USER_QUERY_ME {
     me {
       id
       fullname

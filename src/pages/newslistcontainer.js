@@ -4,9 +4,10 @@ import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import AddIcon from '@material-ui/icons/Add';
 import gql from 'graphql-tag';
-import React, { Component } from 'react';
-import { Query } from 'react-apollo';
-import { withRouter } from 'react-router';
+import React from 'react';
+import { useQuery } from 'react-apollo';
+import { useHistory } from 'react-router';
+import Spinner from 'utils/spinner';
 import NewsList from '../news/newslist';
 import withAuth from '../utils/withAuth';
 
@@ -20,8 +21,8 @@ const styles = theme => ({
   })
 });
 
-const QUERY_NEWS1 = gql`
-  query QUERY_NEWS1 {
+export const QUERY_ALL_NEWS_EDIT_PAGE = gql`
+  query QUERY_ALL_NEWS_EDIT_PAGE {
     news {
       title
       body
@@ -32,47 +33,31 @@ const QUERY_NEWS1 = gql`
   }
 `;
 
-class Test extends Component {
-  state = {};
-
-  onOpen = id => {
-    this.props.history.replace(`/news/edit/${id}`);
+function NewsListContainer({ authenticated, classes }) {
+  const history = useHistory();
+  const onOpen = id => {
+    history.replace(`/news/edit/${id}`);
   };
 
-  onNew() {
-    this.props.history.push(`/news/add`);
-  }
-
-  render() {
-    const { authenticated, classes } = this.props;
-    return (
-      <Query query={QUERY_NEWS1}>
-        {({ loading, error, data }) => {
-          if (loading) return <div>Loading</div>;
-          if (error) return <div>Error! ${error.message}</div>;
-          const { news } = data;
-          return (
-            <React.Fragment>
-              <Paper className={classes.root}>
-                <Typography variant="h3" gutterBottom>
-                  News
-                </Typography>
-                <Fab
-                  color="secondary"
-                  aria-label="add"
-                  className={classes.button}
-                  onClick={() => this.onNew()}
-                >
-                  <AddIcon />
-                </Fab>
-                <NewsList news={news} onEdit={this.onOpen} authenticated={authenticated} />
-              </Paper>
-            </React.Fragment>
-          );
-        }}
-      </Query>
-    );
-  }
+  const onNew = () => {
+    history.push(`/news/add`);
+  };
+  const { data, loading } = useQuery(QUERY_ALL_NEWS_EDIT_PAGE);
+  if (loading) return <Spinner />;
+  const { news } = data;
+  return (
+    <React.Fragment>
+      <Paper className={classes.root}>
+        <Typography variant="h3" gutterBottom>
+          News
+        </Typography>
+        <Fab color="secondary" aria-label="add" className={classes.button} onClick={onNew}>
+          <AddIcon />
+        </Fab>
+        <NewsList news={news} onEdit={onOpen} authenticated={authenticated} />
+      </Paper>
+    </React.Fragment>
+  );
 }
 
-export default withAuth(withRouter(withStyles(styles)(Test)));
+export default withAuth(withStyles(styles)(NewsListContainer));

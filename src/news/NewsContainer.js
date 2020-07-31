@@ -25,7 +25,9 @@ class NewsCardContainer extends Component {
   }
 
   render() {
-    const { news: { loading, error, news } } = this.props;
+    const {
+      news: { loading, error, news }
+    } = this.props;
     if (loading) {
       return (
         <div>
@@ -41,8 +43,8 @@ class NewsCardContainer extends Component {
   }
 }
 
-const newsQuery = gql`
-  query news {
+const ALL_NEWS = gql`
+  query ALL_NEWS {
     news {
       id
       title
@@ -54,4 +56,4 @@ const newsQuery = gql`
   }
 `;
 
-export default graphql(newsQuery, { name: "news" })(NewsCardContainer);
+export default graphql(ALL_NEWS, { name: "news" })(NewsCardContainer);

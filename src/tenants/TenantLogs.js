@@ -1,24 +1,29 @@
-import { TableFooter, TablePagination, Typography, withStyles } from '@material-ui/core';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import { addHours } from 'date-fns';
-import gql from 'graphql-tag';
-import React from 'react';
-import { useQuery } from 'react-apollo';
-import { format } from 'utils/format';
-import Spinner from 'utils/spinner';
+import {
+  TableFooter,
+  TablePagination,
+  Typography,
+  withStyles
+} from "@material-ui/core";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import { addHours } from "date-fns";
+import gql from "graphql-tag";
+import React from "react";
+import { useQuery } from "react-apollo";
+import { format } from "utils/format";
+import Spinner from "utils/spinner";
 
 const TableHeaderCell = withStyles(theme => ({
   head: {
-    backgroundColor: 'rgb(0,0,0, 0.5)',
+    backgroundColor: "rgb(0,0,0, 0.5)",
     color: theme.palette.common.white,
-    fontSize: '1.5rem'
+    fontSize: "1.5rem"
   },
   body: {
-    fontSize: '1rem'
+    fontSize: "1rem"
   }
 }))(TableCell);
 
@@ -52,17 +57,10 @@ export default function TenantLogs({ tenantlogs }) {
 
   return (
     <div>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          padding: 5,
-          marginRight: 20
-        }}
-      >
+      <div className="flex  justify-between items-center p-5 mr-6">
         <Typography variant="h6">
-          Logging - {` page ${currentPage + 1} of ${lastPage === 0 ? 1 : lastPage} pages`}
+          Logging -{" "}
+          {` page ${currentPage + 1} of ${lastPage === 0 ? 1 : lastPage} pages`}
         </Typography>
         <TablePagination
           component="div"
@@ -82,12 +80,18 @@ export default function TenantLogs({ tenantlogs }) {
         </TableHead>
         <TableBody>
           {selectedTenantLogs
-            .slice(currentPage * MAX_PAGE_LENGTH, (currentPage + 1) * MAX_PAGE_LENGTH)
+            .slice(
+              currentPage * MAX_PAGE_LENGTH,
+              (currentPage + 1) * MAX_PAGE_LENGTH
+            )
             .map((log, i) => (
               <TableRow key={log.id}>
                 <TableCell>
                   {/* {console.log(addHours(parseInt(log.date, -2)))} */}
-                  {format(addHours(parseInt(log.date), -2), 'yyyy MMMM dd, EEEE - HH:mm')}
+                  {format(
+                    addHours(parseInt(log.date), -2),
+                    "yyyy MMMM dd, EEEE - HH:mm"
+                  )}
                   {/* {format(log.date, 'hh:mm:ss')} */}
                 </TableCell>
                 <TableCell>{log.log}</TableCell>

@@ -4,8 +4,8 @@ import gql from 'graphql-tag';
 import Button from '@material-ui/core/Button';
 import Signout from './Signout';
 
-const CURRENT_USER_QUERY = gql`
-  query CURRENT_USER_QUERY {
+const MY_CURRENT_USER_QUERY = gql`
+  query MY_CURRENT_USER_QUERY {
     me {
       id
       firstname
@@ -31,11 +31,11 @@ const SIGNIN_MUTATION = gql`
 `;
 
 const User = props => (
-  <Query query={CURRENT_USER_QUERY}>{payload => props.children(payload)}</Query>
+  <Query query={MY_CURRENT_USER_QUERY}>{payload => props.children(payload)}</Query>
 );
 
 const Index = () => (
-  <Mutation mutation={SIGNIN_MUTATION} refetchQueries={[{ query: CURRENT_USER_QUERY }]}>
+  <Mutation mutation={SIGNIN_MUTATION} refetchQueries={[{ query: MY_CURRENT_USER_QUERY }]}>
     {signin => {
       return (
         <div>

@@ -1,7 +1,7 @@
-import gql from 'graphql-tag';
+import gql from "graphql-tag";
 export const ALL_MAINTENANCE_QUERY = gql`
-  query allMaintenance {
-    allMaintenance {
+  query ALL_MAINTENANCE_QUERY($productline: String) {
+    allMaintenance(productline: $productline) {
       id
       version
       date
@@ -21,7 +21,7 @@ export const ALL_MAINTENANCE_QUERY = gql`
       comm_disappointed
       portingset
     }
-    maintenanceFAQ {
+    maintenanceFAQ(productline: $productline) {
       id
       text
       text2
@@ -32,8 +32,8 @@ export const ALL_MAINTENANCE_QUERY = gql`
 `;
 
 export const MAINTENANCE_FAQ_QUERY = gql`
-  query MAINTENANCE_FAQ_QUERY {
-    maintenanceFAQ {
+  query MAINTENANCE_FAQ_QUERY($productline: String) {
+    maintenanceFAQ(productline: $productline) {
       id
       text
       text2

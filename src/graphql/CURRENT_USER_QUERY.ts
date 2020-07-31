@@ -1,4 +1,4 @@
-import gql from 'graphql-tag';
+import gql from "graphql-tag";
 export const CURRENT_USER_QUERY = gql`
   query CURRENT_USER_QUERY {
     me {
@@ -9,9 +9,11 @@ export const CURRENT_USER_QUERY = gql`
       role
       team
       region
+      navid
       permissions {
         permission
       }
+      lastlogin
     }
   }
 `;

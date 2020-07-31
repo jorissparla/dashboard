@@ -64,7 +64,7 @@ export default function FormDialog({
   const handleSubmit = async event => {
     event.preventDefault();
     // console.log('Submitted values', values);
-    const result = await addSymptomRequest({
+    await addSymptomRequest({
       variables: { input: values },
       refetchQueries: [{ query: ALL_SYMPTOMS }]
     });

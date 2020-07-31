@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Formik } from 'formik';
 import React from 'react';
 import { useQuery } from 'react-apollo';
-import ReactMarkdown from 'react-markdown';
+import ReactMarkdown from 'react-markdown/with-html';
 import { withRouter } from 'react-router';
 import Spinner from 'utils/spinner';
 import { CardSection } from '../common';

@@ -5,21 +5,15 @@ import { withRouter } from "react-router";
 import SupportCardForm from "./SupportCardForm";
 import withAuth from "../utils/withAuth";
 
-const SupportCardAdd = ({
-  data: { loading, error, categories },
-  addSupportCard,
-  authenticated,
-  user,
-  history
-}) => {
-  const handleAdd = e => {
+const SupportCardAdd = ({ data: { loading, error, categories }, addSupportCard, authenticated, user, history }) => {
+  const handleAdd = (e) => {
     const { id, title, description, category, link } = e;
     const categoryname = category;
     const createdby = user.email || "system";
 
     addSupportCard({ id, title, description, categoryname, link, createdby })
       .then(() => history.push("/supportcard"))
-      .catch(e => window.alert(JSON.stringify(e, null, 2)));
+      .catch((e) => window.alert(JSON.stringify(e, null, 2)));
   };
   if (loading) {
     return <p>Loading ...</p>;
@@ -27,6 +21,13 @@ const SupportCardAdd = ({
   if (error) {
     return <p>{error.message}</p>;
   }
+
+  const description = `
+  <strong>Content</strong>
+  <p>Contents of the card go here....</P>
+  
+  `;
+
   return (
     <div>
       <SupportCardForm
@@ -34,7 +35,7 @@ const SupportCardAdd = ({
         readOnly={false}
         authenticated={authenticated}
         categories={categories}
-        initialValues={{ category: "IXS" }}
+        initialValues={{ category: "IXS", title: "Title comes here", description, updatedAt: null }}
       />
     </div>
   );
@@ -57,7 +58,7 @@ const addSupportCard = gql`
   }
 `;
 const CategoryQuery = gql`
-  query CategoryQuery {
+  query theCategory {
     categories {
       id
       name
@@ -68,10 +69,10 @@ const CategoryQuery = gql`
 export default graphql(CategoryQuery)(
   graphql(addSupportCard, {
     props: ({ mutate }) => ({
-      addSupportCard: input =>
+      addSupportCard: (input) =>
         mutate({
-          variables: { input }
-        })
-    })
+          variables: { input },
+        }),
+    }),
   })(withAuth(withRouter(SupportCardAdd)))
 );

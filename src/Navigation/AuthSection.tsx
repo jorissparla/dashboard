@@ -1,7 +1,7 @@
-import { Button } from '@material-ui/core';
-import * as React from 'react';
-import UserMenu from '../UserMenu';
-import { UserContext } from './../globalState/UserProvider';
+import { Button } from "@material-ui/core";
+import * as React from "react";
+import UserMenu from "../UserMenu";
+import { UserContext } from "./../globalState/UserProvider";
 
 interface Props {
   history: any;
@@ -62,14 +62,14 @@ export const AuthenticationSection: React.FC<Props> = (props: any) => {
         {user && (
           <Button>
             <>
-              <UserMenu id={user.id} picture={user.image} />
+              <UserMenu id={user?.id} picture={user.image} />
             </>
           </Button>
         )}
         <Button
           onClick={() => {
             logout();
-            history.push('/signout');
+            history.push("/signout");
           }}
           color="inherit"
         >
@@ -79,7 +79,7 @@ export const AuthenticationSection: React.FC<Props> = (props: any) => {
     );
   } else {
     return (
-      <Button onClick={() => history.push('/signin')} color="inherit">
+      <Button onClick={() => history.push("/signin")} color="inherit">
         Login
       </Button>
     );

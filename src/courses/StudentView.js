@@ -1,29 +1,27 @@
-import React, { Component } from "react";
-import { withRouter } from "react-router";
-import gql from "graphql-tag";
-import { graphql } from "react-apollo";
-import styled from "styled-components";
-import Avatar from "@material-ui/core/Avatar";
-import Paper from "@material-ui/core/Paper";
 import { List, ListItem } from "@material-ui/core";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import Divider from "@material-ui/core/Divider";
-import MenuList from "@material-ui/core/MenuList";
-import MenuItem from "@material-ui/core/MenuItem";
-import Icon from "@material-ui/core/Icon";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
-import DownIcon from "@material-ui/icons/ExpandMore";
-import FileFileDownload from "@material-ui/icons/CloudQueue";
+import Avatar from "@material-ui/core/Avatar";
 import Chip from "@material-ui/core/Chip";
-
+import Divider from "@material-ui/core/Divider";
+import Icon from "@material-ui/core/Icon";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import ListItemText from "@material-ui/core/ListItemText";
+import MenuItem from "@material-ui/core/MenuItem";
+import MenuList from "@material-ui/core/MenuList";
+import Paper from "@material-ui/core/Paper";
+import FileFileDownload from "@material-ui/icons/CloudQueue";
+import DownIcon from "@material-ui/icons/ExpandMore";
+import MoreVertIcon from "@material-ui/icons/MoreVert";
 // import { format } from '../utils/format';
 import { format } from "date-fns";
-import _ from "lodash";
+import gql from "graphql-tag";
+import React, { Component } from "react";
+import { graphql } from "react-apollo";
+import { withRouter } from "react-router";
+import styled from "styled-components";
 import SearchBar from "../common/SearchBar";
-import withAuth from "../utils/withAuth";
-import { Title, HeaderRow, HeaderLeft, StyledInitials } from "../styles";
+import { HeaderLeft, HeaderRow, StyledInitials, Title } from "../styles";
 import { initials } from "../utils/misc";
+import withAuth from "../utils/withAuth";
 
 const Container = styled.div`
   display: flex;
@@ -113,7 +111,7 @@ class StudentView extends Component {
     const { updatestatus } = this.props;
     const input = {
       id: enrol.id,
-      status: status
+      status: status,
     };
     console.log("status", enrol);
     updatestatus({ variables: { input } }).then(this.props.data.refetch());
@@ -122,7 +120,7 @@ class StudentView extends Component {
 
   renderCourses(enrollments, navid) {
     const { user } = this.props;
-    let validRole;
+    let validRole = false;
     if (user) {
       validRole = user.role !== "Guest";
     } else {
@@ -149,14 +147,15 @@ class StudentView extends Component {
               <ListItemSecondaryAction>
                 <Chip
                   label={`Start  ${format(
-                    enrol.plannedcourse.startdate,
+                    new Date(enrol.plannedcourse.startdate),
                     "EEE, dd-MMM-yyyy"
                   )}`}
+                  // label={`Start  ${new Date(enrol.plannedcourse.startdate)}`}
                   style={{ margin: 2 }}
                 />
               </ListItemSecondaryAction>
             </ListItem>,
-            <Divider key={i} />
+            <Divider key={i} />,
           ];
         })}
       </List>
@@ -175,7 +174,7 @@ class StudentView extends Component {
     }
     let _ = window._;
     const sortedEnrollments = _.chain(account.enrollments)
-      .map(o =>
+      .map((o) =>
         _.merge({ startdate: Date.parse(o.plannedcourse.startdate) }, o)
       )
       .orderBy(["startdate"], ["desc"])
@@ -209,7 +208,7 @@ class StudentView extends Component {
             hintText="Search on title.."
             style={{
               background: "#F5F5F5",
-              display: "flex"
+              display: "flex",
             }}
           />
           <HeaderRow>
@@ -275,6 +274,6 @@ const updateStatus = gql`
 
 export default graphql(updateStatus, { name: "updatestatus" })(
   graphql(queryProfile, {
-    options: ownProps => ({ variables: { id: ownProps.match.params.id } })
+    options: (ownProps) => ({ variables: { id: ownProps.match.params.id } }),
   })(withRouter(withAuth(StudentView)))
 );

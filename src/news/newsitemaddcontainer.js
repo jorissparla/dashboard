@@ -1,57 +1,24 @@
-import React, { Component } from 'react';
-import { withRouter } from 'react-router';
-import NewsItem from './newsitem';
-import gql from 'graphql-tag';
-import * as R from 'ramda';
-import { Mutation } from 'react-apollo';
+import gql from "graphql-tag";
+import React from "react";
+import { useMutation } from "react-apollo";
+import { useHistory } from "react-router";
+import NewsItem from "./newsitem";
+import { QUERY_ALL_NEWS_EDIT_PAGE } from "pages/newslistcontainer";
 
-class NewsItemAddContainer extends Component {
-  doSubmit = async values => {
-    await this.props.createNews({ variables: { input: values } });
-    setTimeout(() => this.props.history.push('/news'), 500);
+function NewsItemAddContainer() {
+  const [createNews] = useMutation(MUTATION_CREATE_NEWS);
+  const history = useHistory();
+
+  const doSubmit = async values => {
+    await createNews({ variables: { input: values }, refetchQueries: [{ query: QUERY_ALL_NEWS_EDIT_PAGE }] });
+    setTimeout(() => history.push("/news"), 500);
   };
-  render() {
-    return (
-      <Mutation
-        mutation={createNews}
-        update={(cache, { data: { createNews } }) => {
-          const query = ALL_NEWS;
-          const { news } = cache.readQuery({ query });
-          // const idx = R.findIndex(R.propEq("id", news.id), news);
-          cache.writeQuery({
-            query,
-            data: { news: R.concat(news, [createNews]) }
-          });
-        }}
-      >
-        {(createNews, { data }) => {
-          return (
-            <NewsItem
-              initialValues={{}}
-              title="News to Share!"
-              onSave={values => {
-                createNews({ variables: { input: values } });
-                setTimeout(() => this.props.history.push('/newspage'), 500);
-              }}
-            />
-          );
-        }}
-      </Mutation>
-    );
-  }
+  return <NewsItem initialValues={{}} title="News to Share!" onSave={doSubmit} />;
 }
 
-const createNews = gql`
-  mutation createNews($input: NewsInputType) {
+const MUTATION_CREATE_NEWS = gql`
+  mutation MUTATION_CREATE_NEWS($input: NewsInputType) {
     createNews(input: $input) {
-      id
-    }
-  }
-`;
-
-const ALL_NEWS = gql`
-  query ALL_NEWS {
-    news {
       title
       body
       img
@@ -61,4 +28,4 @@ const ALL_NEWS = gql`
   }
 `;
 
-export default withRouter(NewsItemAddContainer);
+export default NewsItemAddContainer;

@@ -2,26 +2,32 @@ import { Backdrop, Modal } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import EditIcon from '@material-ui/icons/Edit';
 import { DashBoardContext } from 'globalState/Provider';
-import React from 'react';
-import MarkDown from 'react-markdown';
+import JoditEditor from 'jodit-react';
+import React, { useRef, useState } from 'react';
+import MarkDown from 'react-markdown/with-html';
 import EditWizardDetails from './EditWizardDetails';
-import { useStyles } from './useStyles';
 
 export const SimpleField = ({ name, label, edit = false, Icon, activeVersion }) => {
-  const classes = useStyles();
   const { role = 'Guest' } = React.useContext(DashBoardContext);
   // const { activeVersion } = React.useContext(RootContext);
   // console.log('Field', name, activeVersion);
   const [isOpen, setisOpened] = React.useState(false);
   const [value, setValue] = React.useState(activeVersion[name]);
-  const [editable, toggleEdit] = React.useState(edit);
-  function handleChange(e) {
-    setValue(e.target.value);
-  }
+  const viewer = useRef(null);
+  const config = {
+    readonly: true, // all options from https://xdsoft.net/jodit/doc/,
+    toolbar: false,
+    // theme: 'dark',
+    autoHeight: true,
+    showWordsCounter: false,
+    showXPathInStatusbar: false,
+    showCharsCounter: false
+  };
+
   // console.log('refresh', name, value, activeVersion);
   React.useEffect(() => {
     setValue(activeVersion[name]);
-  }, [activeVersion]);
+  }, [activeVersion, name]);
   return (
     <div style={{ border: '1px solid rgba(0,0,0,0.1)', borderRadius: 8 }}>
       <Grid
@@ -55,7 +61,18 @@ export const SimpleField = ({ name, label, edit = false, Icon, activeVersion }) 
           />
         </div>
       </Modal>
-      <MarkDown source={activeVersion[name]}></MarkDown>
+      {/* <JoditEditor
+        id="description"
+        name="description"
+        style={{ font: '24px Arial', color: '#000', height: '50px' }}
+        ref={viewer}
+        value={activeVersion[name]}
+        onChange={v => console.log(v)}
+        onBlur={e => console.log(e)}
+        config={config}
+        tabIndex={2} // tabIndex of textarea
+      /> */}
+      <MarkDown source={activeVersion[name]} escapeHtml={false}></MarkDown>
     </div>
   );
 };

@@ -6,24 +6,19 @@ import {
   CardHeader,
   colors,
   Divider,
-  Grid,
-  TextField,
-  Typography
+  Grid
 } from '@material-ui/core';
-import MarkDown from 'react-markdown';
-import ReactMde from 'react-mde';
-import 'react-mde/lib/styles/css/react-mde-all.css';
+import CloseIcon from '@material-ui/icons/Close';
 import { makeStyles } from '@material-ui/styles';
 import clsx from 'clsx';
-import PropTypes from 'prop-types';
-import CloseIcon from '@material-ui/icons/Close';
-import React, { useState } from 'react';
+import JoditEditor from 'jodit-react';
+import React, { useRef, useState } from 'react';
 import { useMutation } from 'react-apollo';
 import {
-  MUTATION_UPDATE_MAINTENANCE,
   ALL_MAINTENANCE_QUERY,
-  MUTATION_UPDATE_MAINTENANCE_FAQ,
-  MAINTENANCE_FAQ_QUERY
+  MAINTENANCE_FAQ_QUERY,
+  MUTATION_UPDATE_MAINTENANCE,
+  MUTATION_UPDATE_MAINTENANCE_FAQ
 } from './Queries';
 
 const useStyles = makeStyles(theme => ({
@@ -50,15 +45,11 @@ const EditWizardDetails = props => {
   const isFAQ = rest && rest.faq;
   console.log('isFAQ', isFAQ, name);
   const classes = useStyles();
-  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const editor = useRef(null);
   const [value, setValue] = useState(defaultValue);
   const mutation = isFAQ ? MUTATION_UPDATE_MAINTENANCE_FAQ : MUTATION_UPDATE_MAINTENANCE;
   const [updateField] = useMutation(mutation);
-  const handleChange = e => {
-    e.persist();
 
-    setValue(e.target.value);
-  };
   const handleSubmit = e => {
     e.preventDefault();
     const input = { id };
@@ -78,31 +69,40 @@ const EditWizardDetails = props => {
     onClose();
   };
   console.log(id);
-  const taprops = { cols: 150, rows: 8, style: { fontFamily: 'roboto', fontSize: 'inherit' } };
+  const config = {
+    readonly: false, // all options from https://xdsoft.net/jodit/doc/,
+    toolbar: true,
+    // theme: 'dark',
+    autoHeight: true,
+    showWordsCounter: false,
+    showXPathInStatusbar: false,
+    showCharsCounter: false
+  };
   return (
     <Card {...rest} className={clsx(classes.root, className)}>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} style={{}}>
         <CardHeader title={`Edit ${label}`} />
         <Divider />
         <CardContent>
           <Grid container spacing={4}>
-            <ReactMde
+            <JoditEditor
+              style={{ font: '24px Arial', color: '#000' }}
+              ref={editor}
+              value={value}
+              config={config}
+              tabIndex={1} // tabIndex of textarea
+              onBlur={newContent => setValue(newContent)} // preferred to use only this option to update the content for performance reasons
+              onChange={newContent => {
+                console.log(newContent);
+              }}
+            />
+
+            {/* <ReactMde
               value={value}
               onChange={setValue}
               selectedTab="write"
               disablePreview={true}
               textAreaProps={taprops}
-            />
-            {/* <TextField
-              fullWidth
-              multiline
-              rows={8}
-              label={label}
-              name={name}
-              onChange={handleChange}
-              // required
-              value={value}
-              variant="outlined"
             /> */}
           </Grid>
         </CardContent>
@@ -116,9 +116,18 @@ const EditWizardDetails = props => {
             Close
           </Button>
         </CardActions>
-        <Typography variant="h4">Preview </Typography>
-        <Divider />
-        <MarkDown source={value} />
+
+        {/* <JoditEditor
+          ref={viewer}
+          value={value}
+          config={config2}
+          tabIndex={2} // tabIndex of textarea
+          // onBlur={newContent => setValue(newContent)} // preferred to use only this option to update the content for performance reasons
+          // onChange={newContent => {
+          //   console.log(newContent);
+          // }}
+        /> */}
+        {/* <MarkDown source={value} escapeHtml={false} /> */}
       </form>
       {/* <SuccessSnackbar onClose={handleSnackbarClose} open={openSnackbar} /> */}
     </Card>

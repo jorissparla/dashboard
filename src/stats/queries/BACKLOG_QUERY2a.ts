@@ -6,7 +6,7 @@ export const QUERY_LAST_UPDATED = gql`
   }
 `;
 
-export const QUERY_BACKLOG = gql`
+export const QUERY_BACKLOG2 = gql`
   # Write your query or mutation here
   fragment backlogfragmentData on DWH {
     incident
@@ -24,7 +24,7 @@ export const QUERY_BACKLOG = gql`
     severityname
     service_restored_date
   }
-  query QUERY_BACKLOG(
+  query QUERY_BACKLOG2(
     $products: [String]
     $C_AWAITINGCUSTOMER: Int
     $N_AWAITINGCUSTOMER: Int

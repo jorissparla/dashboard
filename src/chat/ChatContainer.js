@@ -1,13 +1,14 @@
-import Snackbar from '@material-ui/core/Snackbar';
-import gql from 'graphql-tag';
-import React, { Fragment, useState } from 'react';
-import { useMutation, useQuery } from 'react-apollo';
-import { withRouter } from 'react-router';
-import { Card } from '../common';
-import { SharedSnackbarConsumer } from '../globalState/SharedSnackbar.context';
+import Snackbar from "@material-ui/core/Snackbar";
+import gql from "graphql-tag";
+import React, { Fragment, useState } from "react";
+import { useMutation, useQuery } from "react-apollo";
+import { withRouter } from "react-router";
+import { Card } from "../common";
+import { SharedSnackbarConsumer } from "../globalState/SharedSnackbar.context";
 //import format from 'date-fns/format';
-import { format } from '../utils/format';
-import ChatAdd from './ChatAdd';
+import { format } from "../utils/format";
+import ChatAdd from "./ChatAdd";
+import { useAlert } from "globalState/AlertContext";
 
 window.format = format;
 
@@ -45,25 +46,25 @@ const ALL_CHATS = gql`
   }
 `;
 
-const YMDFORMAT = 'yyyy-MM-dd';
+const YMDFORMAT = "yyyy-MM-dd";
 
 const ChatContainer = props => {
   const { data, loading } = useQuery(ALL_CHATS);
   const [addChat] = useMutation(ADD_CHAT);
-
+  const alert = useAlert();
   const [state] = useState({
     showDialog: false,
-    body: '',
+    body: "",
     values: {},
-    message: 'added',
+    message: "added",
     showMessage: false,
-    err: ''
+    err: ""
   });
   if (loading) return <div>Loading</div>;
 
   const { ranges } = data;
   const doCancel = () => {
-    props.history.push('/chat');
+    props.history.push("/chat");
   };
 
   const findWeekfromDate = (weeknr, ranges) => {
@@ -91,31 +92,21 @@ const ChatContainer = props => {
   };
 
   return (
-    <SharedSnackbarConsumer>
-      {({ openSnackbar }) => {
-        return (
-          <Fragment>
-            <Card>
-              <ChatAdd
-                ranges={ranges}
-                onSave={values => {
-                  handleSubmitAdd(values);
-                  openSnackbar('Entry Added');
-                }}
-                onCancel={doCancel}
-                entry={null}
-              />
-              <Snackbar
-                open={state.showMessage}
-                message={state.err}
-                autoHideDuration={4000}
-                onRequestClose={() => console.log('close')}
-              />
-            </Card>
-          </Fragment>
-        );
-      }}
-    </SharedSnackbarConsumer>
+    <Fragment>
+      <div className="h-screen w-full bg-gray-100 px-2">
+        <ChatAdd
+          ranges={ranges}
+          onSave={values => {
+            handleSubmitAdd(values);
+            alert.setMessage(
+              `Data for ${values.team}, week ${values.weeknr} updated `
+            );
+          }}
+          onCancel={doCancel}
+          entry={null}
+        />
+      </div>
+    </Fragment>
   );
 };
 

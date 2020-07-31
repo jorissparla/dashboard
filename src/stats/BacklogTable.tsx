@@ -1,31 +1,29 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { Typography, withStyles } from '@material-ui/core';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import ExpansionPanel from '@material-ui/core/ExpansionPanel';
-import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
-import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import { SelectionContext } from '../globalState/SelectionContext';
-import SortIcon from '@material-ui/icons/SwapVert';
-import _ from 'lodash';
-import { format } from './../utils/format';
+import { Typography, withStyles } from "@material-ui/core";
+import ExpansionPanel from "@material-ui/core/ExpansionPanel";
+import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import React, { useContext, useState } from "react";
+import { SelectionContext } from "../globalState/SelectionContext";
+import { format } from "./../utils/format";
 
-const CustomTableCell = withStyles(theme => ({
+const CustomTableCell = withStyles((theme) => ({
   head: {
-    backgroundColor: 'rgb(0,0,0, 0.5)',
-    color: theme.palette.common.white
+    backgroundColor: "rgb(0,0,0, 0.5)",
+    color: theme.palette.common.white,
   },
   body: {
-    fontSize: '1rem'
-  }
+    fontSize: "1rem",
+  },
 }))(TableCell);
 
 const capitalize = (s: string): string => {
-  if (typeof s !== 'string') return '';
+  if (typeof s !== "string") return "";
   return s.charAt(0).toUpperCase() + s.slice(1);
 };
 
@@ -36,54 +34,7 @@ interface TableHeaderColumnProps {
   className: string;
 }
 
-const TableHeaderColumn: React.FC<TableHeaderColumnProps> = ({
-  column,
-  title,
-  handleSortChange,
-  className
-}) => (
-  <TableCell
-    style={{
-      fontSize: 16,
-      display: 'flex',
-      justifyContent: 'center',
-      textTransform: 'uppercase',
-      backgroundColor: 'rgb(0,0,0, 0.5)',
-      color: 'white'
-    }}
-    key={title}
-  >
-    <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}>
-      <SortIcon onClick={() => handleSortChange(column)} color="primary" />
-      {title.toUpperCase()}
-    </div>
-  </TableCell>
-);
-
-const AnotherCustomTableCell = ({ title, column, handleSortChange, className }: any) => {
-  return (
-    <TableCell
-      onClick={() => {
-        handleSortChange(column);
-      }}
-      className={className}
-    >
-      {title}
-    </TableCell>
-  );
-};
-
-const STHC = withStyles(theme => ({
-  head: {
-    backgroundColor: 'rgb(0,0,0, 0.5)',
-    color: theme.palette.common.white
-  },
-  body: {
-    fontSize: '1rem'
-  }
-}))(AnotherCustomTableCell);
-
-type sortType = 'desc' | 'asc';
+type sortType = "desc" | "asc";
 
 export const BacklogTable = ({
   backlog,
@@ -91,20 +42,19 @@ export const BacklogTable = ({
   classes,
   title,
   description = title,
-  filterValues = { owner: '', products: ['LN'], region: 'EMEA' },
-  includeservicerestored = false
+  filterValues = { owner: "", products: ["LN"], region: "EMEA" },
+  includeservicerestored = false,
 }: any) => {
   //
   // console.log(filterValues);
-  const initialValue = { name: '', direction: '' };
+  const initialValue = { name: "", direction: "" };
   const { actionNeeded } = useContext(SelectionContext);
-  const [sorted, setSorted] = useState(initialValue);
+  // const [sorted, setSorted] = useState(initialValue);
 
   const { owner, products, region } = filterValues;
 
   function sortUp(leftSide: any, rightSide: any) {
-    const col = 'customername';
-    const order = 'desc';
+    const col = "customername";
     let result = 0;
 
     if (leftSide[col] > rightSide[col]) {
@@ -120,25 +70,12 @@ export const BacklogTable = ({
   }
 
   let mydata = backlog;
-  useEffect(() => {
-    if (sorted.name) {
-      mydata = sorted.direction === 'asc' ? backlog.sort(sortUp) : backlog.sort(sortUp);
-      console.log(sorted);
-    }
-  });
 
   if (!backlog) {
     return <div></div>;
   }
   if (actionNeeded && backlog.length === 0) {
     return <div />;
-  }
-  function handleSortChange(column: string) {
-    if (sorted.name === column) {
-      setSorted({ ...sorted, direction: sorted.direction === 'asc' ? 'desc' : 'asc' });
-    } else {
-      setSorted({ name: column, direction: 'asc' });
-    }
   }
 
   mydata = owner ? mydata.filter((o: any) => o.owner === owner) : mydata;
@@ -201,16 +138,19 @@ export const BacklogTable = ({
             {mydata.sort(sortUp).map((row: any, index: number) => (
               <TableRow key={index} className={classes.row}>
                 <TableCell component="th" scope="row">
-                  <a
-                    href={`http://navigator.infor.com/n/incident.asp?IncidentID=${row.incident}`}
-                    target="_blank"
-                  >
+                  <a href={`http://navigator.infor.com/n/incident.asp?IncidentID=${row.incident}`} target="_blank">
                     {row.incident}
                   </a>
                 </TableCell>
                 <TableCell>{row.severityname}</TableCell>
                 <TableCell className={classes.tableheadernarrow}>
-                  {row.escalated ? 'Yes' : ''}
+                  {row.escalated ? (
+                    <span className="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium leading-5 bg-pink-100 text-pink-800">
+                      Yes
+                    </span>
+                  ) : (
+                    ""
+                  )}
                 </TableCell>
                 <TableCell>{row.customername}</TableCell>
                 <TableCell>{row.owner}</TableCell>
@@ -219,14 +159,8 @@ export const BacklogTable = ({
                 ))}
                 {includeservicerestored && (
                   <>
-                    <TableCell>
-                      {row.incidentcreated ? format(row.incidentcreated, 'yyyy-MM-dd') : ''}
-                    </TableCell>
-                    <TableCell>
-                      {row.service_restored_date
-                        ? format(row.service_restored_date, 'yyyy-MM-dd')
-                        : ''}
-                    </TableCell>
+                    <TableCell>{row.incidentcreated ? format(row.incidentcreated, "yyyy-MM-dd") : ""}</TableCell>
+                    <TableCell>{row.service_restored_date ? format(row.service_restored_date, "yyyy-MM-dd") : ""}</TableCell>
                   </>
                 )}
                 <TableCell>{row.status}</TableCell>

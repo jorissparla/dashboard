@@ -1,4 +1,4 @@
-import gql from 'graphql-tag';
+import gql from "graphql-tag";
 
 export const TENANT_NOTE = gql`
   query TENANT_NOTE {
@@ -19,6 +19,7 @@ export const ALL_TENANTS = gql`
       tenant_status
       operational_status
       process_status
+      updatedAt
       frozen
       customer {
         name
@@ -35,6 +36,19 @@ export const ALL_TENANTS = gql`
       id
       date
       log
+    }
+  }
+`;
+export const ALL_TENANTS_SIMPLE = gql`
+  query q {
+    tenants {
+      id
+      farm
+      name
+      version
+      customerid
+      lastupdated
+      live
     }
   }
 `;
@@ -134,6 +148,20 @@ export const MUTATION_MARK_LIVE = gql`
         comments_updated
         updated
       }
+    }
+  }
+`;
+
+export const MUTATION_UPDATE_TENANT_CUSTOMERID = gql`
+  mutation MUTATION_UPDATE_TENANT_CUSTOMERID($id: ID, $customerid: String) {
+    updatetenantcustomerid(id: $id, customerid: $customerid) {
+      id
+      farm
+      name
+      version
+      customerid
+      lastupdated
+      live
     }
   }
 `;

@@ -1,28 +1,29 @@
-import { Button, TextField, withStyles } from '@material-ui/core';
-import * as React from 'react';
+import { Button, TextField, withStyles } from "@material-ui/core";
+import * as React from "react";
+import TWButton from "elements/TWButton";
 
 const styles: any = (theme: any) => ({
   root: {
-    display: 'flex',
-    flexWrap: 'wrap'
+    display: "flex",
+    flexWrap: "wrap",
   },
   formControl: {
-    margin: theme.spacing.unit,
-    minWidth: 120
+    margin: theme.spacing(2),
+    minWidth: 120,
   },
   selectEmpty: {
-    marginTop: theme.spacing.unit * 2
+    marginTop: theme.spacing(2),
   },
   button: {
-    margin: theme.spacing.unit,
-    color: 'white',
-    backgroundColor: 'black'
+    margin: theme.spacing(1),
+    color: "white",
+    backgroundColor: "black",
   },
   TextFieldStyle: {
-    marginLeft: theme.spacing.unit,
-    marginRight: theme.spacing.unit,
-    width: 300
-  }
+    marginLeft: theme.spacing,
+    marginRight: theme.spacing,
+    width: 300,
+  },
 });
 
 interface Props {
@@ -31,7 +32,7 @@ interface Props {
 }
 const deleteCode = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
 const SafeDeleteButton: React.FC<Props> = ({ onDelete, classes }) => {
-  const [pin, setPin] = React.useState('');
+  const [pin, setPin] = React.useState("");
   const [disabled, setEnabled] = React.useState(true);
 
   React.useEffect(() => {
@@ -42,21 +43,37 @@ const SafeDeleteButton: React.FC<Props> = ({ onDelete, classes }) => {
   }
   return (
     <div className={classes.root}>
-      <Button
-        className={classes.button}
-        variant="contained"
-        disabled={disabled}
-        onClick={() => onDelete()}
-      >
-        {disabled ? `Enter ${deleteCode} to enable delete` : `Delete Item`}
-      </Button>
+      {disabled ? (
+        <TWButton color="greyforbidden" variant="contained" disabled={disabled}>
+          Enter {deleteCode} to enable delete
+        </TWButton>
+      ) : (
+        <TWButton color="grey" onClick={() => onDelete()}>
+          Delete This Item
+        </TWButton>
+      )}
       {disabled && (
-        <TextField
-          value={pin}
-          className={classes.TextFieldStyle}
-          onChange={e => handleChange(e)}
-          label={`Enter ${deleteCode} to show delete button`}
-        />
+        <div className="mt-1 relative rounded-md shadow-sm">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <svg
+              className="h-5 w-5 text-gray-400"
+              fill="none"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+            </svg>
+          </div>
+          <input
+            className="form-input block pl-10 w-48 text-gray-600 sm:text-sm sm:leading-5"
+            value={pin}
+            onChange={(e) => handleChange(e)}
+            placeholder={`Enter ${deleteCode} `}
+          />
+        </div>
       )}
     </div>
   );

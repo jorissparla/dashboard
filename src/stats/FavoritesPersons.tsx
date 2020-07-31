@@ -13,17 +13,15 @@ export const FavoritePersons: React.FC<Props> = ({ persons }) => {
   const { setOwner, setPersons } = React.useContext(SelectionContext);
   const [started, setStarted] = React.useState(false);
   const [currp, setCurrp] = React.useState('');
-  React.useEffect(() => {}, []);
-
-  function handleDelete(name: string) {
-    const newPersons = persons.filter((p: any) => p.name !== name);
-    // setArrayOfPersons(newPersons);
-    setPersons(newPersons);
-  }
 
   React.useEffect(() => {
+    function handleDelete(name: string) {
+      const newPersons = persons.filter((p: any) => p.name !== name);
+      // setArrayOfPersons(newPersons);
+      setPersons(newPersons);
+    }
     setTimeout(() => (started ? handleDelete(currp) : console.log('stopped')), 2500);
-  }, [started]);
+  }, [started, currp, persons, setPersons]);
   function handleClick(name: string) {
     setOwner(name);
     console.log('handleClick');
@@ -47,12 +45,6 @@ export const FavoritePersons: React.FC<Props> = ({ persons }) => {
         >
           {person.name}
         </Block>
-
-        // <RegularChip
-        //   name={person.name}
-        //   handleClick={() => handleClick(person.name)}
-        //   handleDelete={() => handleDelete(person.name)}
-        // />
       ))}
     </div>
   );

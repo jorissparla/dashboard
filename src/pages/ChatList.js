@@ -11,9 +11,8 @@ import { withStyles } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import gql from 'graphql-tag';
 import _ from 'lodash';
-import React, { Component } from 'react';
-import { adopt } from 'react-adopt';
-import { Mutation, Query, useQuery, useMutation } from 'react-apollo';
+import React from 'react';
+import { useMutation, useQuery } from 'react-apollo';
 import { withRouter } from 'react-router';
 import DeleteChat from '../chat/DeleteChat';
 import { colorAr, getColor, WideTitle } from '../styles';
@@ -37,28 +36,6 @@ const ALL_CHATS_QUERY = gql`
     }
   }
 `;
-
-const deleteChat = ({ render }) => (
-  <Mutation mutation={DELETE_CHAT_MUTATION}>
-    {(mutation, result) => render({ mutation, result })}
-  </Mutation>
-);
-
-const myChats = ({ render }) => <Query query={ALL_CHATS_QUERY}>{data => render(data)}</Query>;
-
-const mapper = {
-  myChats,
-  deleteChat
-};
-
-const mapProps = ({ myRanges, myChats, deleteChat }) => ({
-  chats: myChats.data.chats,
-  loading: myChats.loading,
-  deleteChat: deleteChat.mutation,
-  deleteChatResult: deleteChat.result
-});
-
-const MyContainer = adopt(mapper, mapProps);
 
 const styles = theme => ({
   root: {

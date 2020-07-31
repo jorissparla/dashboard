@@ -1,9 +1,9 @@
-import React from 'react';
-import ReactHighCharts from 'react-highcharts';
+import React from "react";
+import ReactHighCharts from "react-highcharts";
 
 const config = {
   chart: {
-    type: 'column'
+    type: "column",
   },
 
   options3d: {
@@ -11,62 +11,67 @@ const config = {
     alpha: 15,
     beta: 15,
     depth: 50,
-    viewDistance: 25
+    viewDistance: 25,
   },
   xAxis: {
-    categories: []
+    categories: [],
   },
 
   yAxis: {
-    categories: []
+    categories: [],
   },
   plotOptions: {
     area: {
-      color: '#b39ddb'
+      color: "#b39ddb",
     },
     series: {
-      pointWidth: 50 // width of the column bars irrespective of the chart size
+      pointWidth: 50, // width of the column bars irrespective of the chart size
     },
     column: {
-      depth: 25
-    }
+      depth: 25,
+    },
   },
   series: [
     {
-      name: 'Tools',
-      type: 'column',
-      color: '#ffb300',
+      name: "Tools",
+      type: "column",
+      color: "#ffb300",
       data: [],
-      dataLabels: { enabled: true }
-    }
+      dataLabels: { enabled: true },
+    },
   ],
   title: {
-    text: 'Hallo'
-  }
+    text: "Hallo",
+  },
 };
 
 var arColors = [];
-arColors['LN'] = '#ffa726';
-arColors['Tools'] = '#90caf9';
-arColors['xpert'] = '#90caf9';
-arColors['auto'] = '#01579b';
-arColors['plm'] = 'var(--mediumpurp)';
-arColors['Logistics'] = '#c62828';
-arColors['Finance'] = '#01579b';
+arColors["LN"] = "#ffa726";
+arColors["All"] = "#ff8a4c";
+arColors["ageAll"] = "#ff8a4c";
+arColors["Tools"] = "#84e1bc";
+arColors["ageTools"] = "#84e1bc";
+arColors["xpert"] = "#90caf9";
+arColors["auto"] = "#01579b";
+arColors["plm"] = "var(--mediumpurp)";
+arColors["Logistics"] = "#c62828";
+arColors["Finance"] = "#01579b";
+arColors["ageLogistics"] = "#c62828";
+arColors["ageFinance"] = "#01579b";
 
 const renderSummary = (config, xval, val, title, color, type, asummary) => {
-  xval = !xval ? 'weekNr' : xval;
+  xval = !xval ? "weekNr" : xval;
   if (!asummary) return config;
   const summary = asummary.slice().reverse();
-  const range = summary.map(item => item[val]);
+  const range = summary.map((item) => item[val]);
   // const filteredSummary = summary.map(item => [].concat(item[xval], item[val]));
-  console.log('Range', title, { val }, range);
+  console.log("Range", title, { val }, range);
   color = arColors[val];
   if (color) {
     config.plotOptions.area.color = color;
   }
 
-  config.xAxis.categories = summary.map(i => i[xval]);
+  config.xAxis.categories = summary.map((i) => i[xval]);
   if (range.length > 0) {
     config.yAxis = {};
     config.yAxis.floor = Math.floor(Math.min(...range) / 10 - 1) * 10;
@@ -78,14 +83,22 @@ const renderSummary = (config, xval, val, title, color, type, asummary) => {
     name: xval,
     color: color,
     type: type,
-    dataLabels: { enabled: true }
+    dataLabels: { enabled: true },
   });
   config.title.text = title;
   return JSON.parse(JSON.stringify(config));
 };
 
 const historyChart = ({ xvalue, value, title, color, type, data }) => {
-  const newConfig = renderSummary(config, xvalue, value, title, color, type, data);
+  const newConfig = renderSummary(
+    config,
+    xvalue,
+    value,
+    title,
+    color,
+    type,
+    data
+  );
   return (
     <div className="col s4">
       <div className="card">

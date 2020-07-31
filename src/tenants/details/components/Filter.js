@@ -1,109 +1,97 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import clsx from 'clsx';
-import { makeStyles } from '@material-ui/styles';
-import {
-  Button,
-  Chip,
-  Collapse,
-  Divider,
-  Drawer,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
-  Slider,
-  TextField,
-  Typography
-} from '@material-ui/core';
+import React, { useState } from "react";
+import PropTypes from "prop-types";
+import clsx from "clsx";
+import { makeStyles } from "@material-ui/styles";
+import { Button, Chip, Collapse, Divider, Drawer, FormControlLabel, Radio, RadioGroup, Slider, TextField, Typography } from "@material-ui/core";
 // import { ToggleButton, ToggleButtonGroup } from '@material-ui/lab';
-import ExpandLessIcon from '@material-ui/icons/ExpandLess';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import CloseIcon from '@material-ui/icons/Close';
-import DeleteIcon from '@material-ui/icons/DeleteOutlined';
-import AddIcon from '@material-ui/icons/Add';
+import ExpandLessIcon from "@material-ui/icons/ExpandLess";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import CloseIcon from "@material-ui/icons/Close";
+import DeleteIcon from "@material-ui/icons/DeleteOutlined";
+import AddIcon from "@material-ui/icons/Add";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column'
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
   },
   drawer: {
     width: 420,
-    maxWidth: '100%'
+    maxWidth: "100%",
   },
   header: {
-    padding: theme.spacing(2, 1),
-    display: 'flex',
-    justifyContent: 'space-between'
+    padding: theme.spacing(2),
+    display: "flex",
+    justifyContent: "space-between",
   },
   buttonIcon: {
-    marginRight: theme.spacing(1)
+    marginRight: theme.spacing(1),
   },
   content: {
-    padding: theme.spacing(0, 3),
-    flexGrow: 1
+    padding: theme.spacing(0),
+    flexGrow: 1,
   },
   contentSection: {
-    padding: theme.spacing(2, 0)
+    padding: theme.spacing(2),
   },
   contentSectionHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    cursor: 'pointer'
+    display: "flex",
+    justifyContent: "space-between",
+    cursor: "pointer",
   },
   contentSectionContent: {},
   formGroup: {
-    padding: theme.spacing(2, 0)
+    padding: theme.spacing(2),
   },
   fieldGroup: {
-    display: 'flex',
-    alignItems: 'center'
+    display: "flex",
+    alignItems: "center",
   },
   field: {
     marginTop: 0,
-    marginBottom: 0
+    marginBottom: 0,
   },
   flexGrow: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   addButton: {
-    marginLeft: theme.spacing(1)
+    marginLeft: theme.spacing(1),
   },
   tags: {
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
   },
   minAmount: {
-    marginRight: theme.spacing(3)
+    marginRight: theme.spacing(3),
   },
   maxAmount: {
-    marginLeft: theme.spacing(3)
+    marginLeft: theme.spacing(3),
   },
   radioGroup: {},
   actions: {
     padding: theme.spacing(3),
-    '& > * + *': {
-      marginTop: theme.spacing(2)
-    }
-  }
+    "& > * + *": {
+      marginTop: theme.spacing(2),
+    },
+  },
 }));
 
-const Filter = props => {
+const Filter = (props) => {
   const { open, onClose, onFilter, className, ...rest } = props;
 
   const classes = useStyles();
 
   const initialValues = {
-    paymentStatus: '',
-    tag: '',
-    tags: ['Full-Time'],
+    paymentStatus: "",
+    tag: "",
+    tags: ["Full-Time"],
     amount: [1, 7],
-    projectStatus: 'ended',
-    customerName: '',
-    customerType: 'freelancer',
-    customerEmail: '',
-    customerPhone: '',
-    customerAge: ''
+    projectStatus: "ended",
+    customerName: "",
+    customerType: "freelancer",
+    customerEmail: "",
+    customerPhone: "",
+    customerAge: "",
   };
 
   const [expandProject, setExpandProject] = useState(true);
@@ -116,14 +104,14 @@ const Filter = props => {
 
   const handleFieldChange = (event, field, value) => {
     event.persist && event.persist();
-    setValues(values => ({
+    setValues((values) => ({
       ...values,
-      [field]: value
+      [field]: value,
     }));
   };
 
   const handleTagAdd = () => {
-    setValues(values => {
+    setValues((values) => {
       const newValues = { ...values };
 
       if (newValues.tag && !newValues.tags.includes(newValues.tag)) {
@@ -131,46 +119,40 @@ const Filter = props => {
         newValues.tags.push(newValues.tag);
       }
 
-      newValues.tag = '';
+      newValues.tag = "";
 
       return newValues;
     });
   };
 
-  const handleTagDelete = tag => {
-    setValues(values => {
+  const handleTagDelete = (tag) => {
+    setValues((values) => {
       const newValues = { ...values };
 
-      newValues.tags = newValues.tags.filter(t => t !== tag);
+      newValues.tags = newValues.tags.filter((t) => t !== tag);
 
       return newValues;
     });
   };
 
   const handleToggleProject = () => {
-    setExpandProject(expandProject => !expandProject);
+    setExpandProject((expandProject) => !expandProject);
   };
 
   const handleToggleCustomer = () => {
-    setExpandCustomer(expandCustomer => !expandCustomer);
+    setExpandCustomer((expandCustomer) => !expandCustomer);
   };
 
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     onFilter && onFilter(values);
   };
 
-  const customerStatus = ['NORMAL', 'WATCH', 'ALERT'];
-  const customerAgeOption = ['18 - 30', '30 - 45', '50 - 60', '60+'];
+  const customerStatus = ["NORMAL", "WATCH", "ALERT"];
+  const customerAgeOption = ["18 - 30", "30 - 45", "50 - 60", "60+"];
 
   return (
-    <Drawer
-      anchor="right"
-      classes={{ paper: classes.drawer }}
-      onClose={onClose}
-      open={open}
-      variant="temporary"
-    >
+    <Drawer anchor="right" classes={{ paper: classes.drawer }} onClose={onClose} open={open} variant="temporary">
       <form {...rest} className={clsx(classes.root, className)} onSubmit={handleSubmit}>
         <div className={classes.header}>
           <Button onClick={onClose} size="small">
@@ -194,9 +176,7 @@ const Filter = props => {
                     label="Payment status"
                     margin="dense"
                     name="paymentStatus"
-                    onChange={event =>
-                      handleFieldChange(event, 'paymentStatus', event.target.value)
-                    }
+                    onChange={(event) => handleFieldChange(event, "paymentStatus", event.target.value)}
                     select
                     // eslint-disable-next-line react/jsx-sort-props
                     SelectProps={{ native: true }}
@@ -204,7 +184,7 @@ const Filter = props => {
                     variant="outlined"
                   >
                     <option disabled value="" />
-                    {paymentStatusOptions.map(option => (
+                    {paymentStatusOptions.map((option) => (
                       <option key={option} value={option}>
                         {option}
                       </option>
@@ -218,7 +198,7 @@ const Filter = props => {
                       label="Filter Tags"
                       margin="dense"
                       name="tag"
-                      onChange={event => handleFieldChange(event, 'tag', event.target.value)}
+                      onChange={(event) => handleFieldChange(event, "tag", event.target.value)}
                       value={values.tag}
                       variant="outlined"
                     />
@@ -228,13 +208,8 @@ const Filter = props => {
                     </Button>
                   </div>
                   <div className={classes.tags}>
-                    {values.tags.map(tag => (
-                      <Chip
-                        deleteIcon={<CloseIcon />}
-                        key={tag}
-                        label={tag}
-                        onDelete={() => handleTagDelete(tag)}
-                      />
+                    {values.tags.map((tag) => (
+                      <Chip deleteIcon={<CloseIcon />} key={tag} label={tag} onDelete={() => handleTagDelete(tag)} />
                     ))}
                   </div>
                 </div>
@@ -250,7 +225,7 @@ const Filter = props => {
                       className={classes.flexGrow}
                       max={20}
                       min={1}
-                      onChange={(event, value) => handleFieldChange(event, 'amount', value)}
+                      onChange={(event, value) => handleFieldChange(event, "amount", value)}
                       value={values.amount}
                       valueLabelDisplay="auto"
                     />
@@ -267,31 +242,13 @@ const Filter = props => {
                     <RadioGroup
                       className={classes.radioGroup}
                       name="projectStatus"
-                      onChange={event =>
-                        handleFieldChange(event, 'projectStatus', event.target.value)
-                      }
+                      onChange={(event) => handleFieldChange(event, "projectStatus", event.target.value)}
                       value={values.projectStatus}
                     >
-                      <FormControlLabel
-                        control={<Radio color="primary" />}
-                        label="Ended"
-                        value="ended"
-                      />
-                      <FormControlLabel
-                        control={<Radio color="primary" />}
-                        label="On-Going"
-                        value="onGoing"
-                      />
-                      <FormControlLabel
-                        control={<Radio color="primary" />}
-                        label="In Review"
-                        value="inReview"
-                      />
-                      <FormControlLabel
-                        control={<Radio color="primary" />}
-                        label="Competed"
-                        value="completed"
-                      />
+                      <FormControlLabel control={<Radio color="primary" />} label="Ended" value="ended" />
+                      <FormControlLabel control={<Radio color="primary" />} label="On-Going" value="onGoing" />
+                      <FormControlLabel control={<Radio color="primary" />} label="In Review" value="inReview" />
+                      <FormControlLabel control={<Radio color="primary" />} label="Competed" value="completed" />
                     </RadioGroup>
                   </div>
                 </div>
@@ -314,9 +271,7 @@ const Filter = props => {
                       label="Customer name"
                       margin="dense"
                       name="customerName"
-                      onChange={event =>
-                        handleFieldChange(event, 'customerName', event.target.value)
-                      }
+                      onChange={(event) => handleFieldChange(event, "customerName", event.target.value)}
                       value={values.customerName}
                       variant="outlined"
                     />
@@ -347,9 +302,7 @@ const Filter = props => {
                       label="Email address"
                       margin="dense"
                       name="customerEmail"
-                      onChange={event =>
-                        handleFieldChange(event, 'customerEmail', event.target.value)
-                      }
+                      onChange={(event) => handleFieldChange(event, "customerEmail", event.target.value)}
                       value={values.customerEmail}
                       variant="outlined"
                     />
@@ -361,9 +314,7 @@ const Filter = props => {
                       label="Phone number"
                       margin="dense"
                       name="customerPhone"
-                      onChange={event =>
-                        handleFieldChange(event, 'customerPhone', event.target.value)
-                      }
+                      onChange={(event) => handleFieldChange(event, "customerPhone", event.target.value)}
                       value={values.customerPhone}
                       variant="outlined"
                     />
@@ -375,9 +326,7 @@ const Filter = props => {
                       label="Age"
                       margin="dense"
                       name="customerAge"
-                      onChange={event =>
-                        handleFieldChange(event, 'customerAge', event.target.value)
-                      }
+                      onChange={(event) => handleFieldChange(event, "customerAge", event.target.value)}
                       select
                       // eslint-disable-next-line react/jsx-sort-props
                       SelectProps={{ native: true }}
@@ -385,7 +334,7 @@ const Filter = props => {
                       variant="outlined"
                     >
                       <option disabled value="" />
-                      {customerAgeOption.map(option => (
+                      {customerAgeOption.map((option) => (
                         <option key={option} value={option}>
                           {option}
                         </option>
@@ -415,7 +364,7 @@ Filter.propTypes = {
   className: PropTypes.string,
   onClose: PropTypes.func,
   onFilter: PropTypes.func,
-  open: PropTypes.bool.isRequired
+  open: PropTypes.bool.isRequired,
 };
 
 export default Filter;

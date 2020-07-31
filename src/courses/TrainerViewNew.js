@@ -1,16 +1,14 @@
-import React from 'react';
-
+import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import gql from 'graphql-tag';
+import React from 'react';
 import { Query } from 'react-apollo';
-import _ from 'lodash';
 //import { format } from 'date-fns';
 import { format } from '../utils/format';
-import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
   headerStyle: {

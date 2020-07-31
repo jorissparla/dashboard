@@ -1,158 +1,129 @@
-import { Button, Divider, Drawer, Switch, TextField, Typography } from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
-import DeleteIcon from '@material-ui/icons/DeleteOutlined';
-import { makeStyles } from '@material-ui/styles';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
-import React, { useState } from 'react';
-import { usePersistentState } from '../../../hooks';
+import { Button, Drawer, Switch, TextField, Typography } from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
+import DeleteIcon from "@material-ui/icons/DeleteOutlined";
+import { makeStyles } from "@material-ui/styles";
+import clsx from "clsx";
+import PropTypes from "prop-types";
+import React from "react";
+import { usePersistentState } from "../../../hooks";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column'
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
   },
   drawer: {
     width: 420,
-    maxWidth: '100%'
+    maxWidth: "100%",
   },
   header: {
-    padding: theme.spacing(2, 1),
-    display: 'flex',
-    justifyContent: 'space-between'
+    padding: theme.spacing(2),
+    display: "flex",
+    justifyContent: "space-between",
   },
   buttonIcon: {
-    marginRight: theme.spacing(1)
+    marginRight: theme.spacing(1),
   },
   content: {
-    padding: theme.spacing(0, 3),
-    flexGrow: 1
+    padding: theme.spacing(3),
+    flexGrow: 1,
   },
   contentSection: {
-    padding: theme.spacing(2, 0)
+    padding: theme.spacing(2),
   },
   contentSectionHeader: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    cursor: 'pointer'
+    display: "flex",
+    justifyContent: "space-between",
+    cursor: "pointer",
   },
   contentSectionContent: {},
   formGroup: {
-    padding: theme.spacing(2, 0)
+    padding: theme.spacing(2),
   },
   fieldGroup: {
-    display: 'flex',
-    alignItems: 'center'
+    display: "flex",
+    alignItems: "center",
   },
   field: {
     marginTop: 0,
-    marginBottom: 0
+    marginBottom: 0,
   },
   flexGrow: {
-    flexGrow: 1
+    flexGrow: 1,
   },
   addButton: {
-    marginLeft: theme.spacing(1)
+    marginLeft: theme.spacing(1),
   },
   tags: {
-    marginTop: theme.spacing(1)
+    marginTop: theme.spacing(1),
   },
   minAmount: {
-    marginRight: theme.spacing(3)
+    marginRight: theme.spacing(3),
   },
   maxAmount: {
-    marginLeft: theme.spacing(3)
+    marginLeft: theme.spacing(3),
   },
   radioGroup: {},
   actions: {
     padding: theme.spacing(3),
-    '& > * + *': {
-      marginTop: theme.spacing(2)
-    }
-  }
+    "& > * + *": {
+      marginTop: theme.spacing(2),
+    },
+  },
 }));
 
-const Filter = props => {
-  const { open, onClose, onFilter, className, ...rest } = props;
+const Filter = (props) => {
+  const { open, onClose, onFilter, className, onhandleSetFilterActive = () => console.log, ...rest } = props;
 
   const classes = useStyles();
 
   const initialValues = {
-    customerName: '',
-    tenantName: '',
-    tenantVersion: '',
-    farmName: '',
+    customerName: "",
+    tenantName: "",
+    tenantVersion: "",
+    farmName: "",
     isLive: false,
-    csm: '',
-    pm: '',
-    temperature: ''
+    csm: "",
+    pm: "",
+    temperature: "",
+    lastupdated: "999",
   };
 
-  const [expandCustomer, setExpandCustomer] = useState(true);
-  const [values, setValues] = usePersistentState('filters', { ...initialValues });
+  const [values, setValues] = usePersistentState("filters", { ...initialValues });
 
   const handleClear = () => {
     setValues({ ...initialValues });
+    onhandleSetFilterActive(false);
     // console.log()
   };
 
   const handleFieldChange = (event, field, value) => {
     event.persist && event.persist();
-    setValues(values => ({
+    setValues((values) => ({
       ...values,
-      [field]: value
+      [field]: value,
     }));
   };
-  const handleChange = event => {
+  const handleChange = (event) => {
     event.persist();
 
     setValues({
       ...values,
-      [event.target.name]:
-        event.target.type === 'checkbox' ? event.target.checked : event.target.value
-    });
-  };
-  const handleTagAdd = () => {
-    setValues(values => {
-      const newValues = { ...values };
-
-      if (newValues.tag && !newValues.tags.includes(newValues.tag)) {
-        newValues.tags = [...newValues.tags];
-        newValues.tags.push(newValues.tag);
-      }
-
-      newValues.tag = '';
-
-      return newValues;
+      [event.target.name]: event.target.type === "checkbox" ? event.target.checked : event.target.value,
     });
   };
 
-  const handleTagDelete = tag => {
-    setValues(values => {
-      const newValues = { ...values };
-
-      newValues.tags = newValues.tags.filter(t => t !== tag);
-
-      return newValues;
-    });
-  };
-
-  const handleSubmit = event => {
+  const handleSubmit = (event) => {
     event.preventDefault();
     console.log({ values });
+    onhandleSetFilterActive(true);
     onFilter && onFilter(values);
   };
 
-  const customerStatusOptions = ['', 'NORMAL', 'WATCH', 'ALERT'];
+  const customerStatusOptions = ["", "NORMAL", "WATCH", "ALERT"];
   return (
-    <Drawer
-      anchor="right"
-      classes={{ paper: classes.drawer }}
-      onClose={onClose}
-      open={open}
-      variant="temporary"
-    >
+    <Drawer anchor="right" classes={{ paper: classes.drawer }} onClose={onClose} open={open} variant="temporary">
       <form {...rest} className={clsx(classes.root, className)} onSubmit={handleSubmit}>
         <div className={classes.header}>
           <Button onClick={onClose} size="small">
@@ -174,7 +145,7 @@ const Filter = props => {
                     label="Customer name"
                     margin="dense"
                     name="customerName"
-                    onChange={event => handleFieldChange(event, 'customerName', event.target.value)}
+                    onChange={(event) => handleFieldChange(event, "customerName", event.target.value)}
                     value={values.customerName}
                     variant="outlined"
                   />
@@ -182,13 +153,7 @@ const Filter = props => {
                 <div className={classes.formGroup}>
                   <Typography variant="h6">Live</Typography>
                   <Typography variant="body2">Shows only customers that are live</Typography>
-                  <Switch
-                    checked={values.isLive}
-                    color="primary"
-                    edge="start"
-                    name="isLive"
-                    onChange={handleChange}
-                  />
+                  <Switch checked={values.isLive} color="primary" edge="start" name="isLive" onChange={handleChange} />
                 </div>
                 <div className={classes.formGroup}>
                   <TextField
@@ -197,10 +162,20 @@ const Filter = props => {
                     label="Tenant Version"
                     margin="dense"
                     name="tenantVersion"
-                    onChange={event =>
-                      handleFieldChange(event, 'tenantVersion', event.target.value)
-                    }
+                    onChange={(event) => handleFieldChange(event, "tenantVersion", event.target.value)}
                     value={values.tenantVersion}
+                    variant="outlined"
+                  />
+                </div>
+                <div className={classes.formGroup}>
+                  <TextField
+                    className={classes.field}
+                    fullWidth
+                    label="Last Updated"
+                    margin="dense"
+                    name="lastupdated"
+                    onChange={(event) => handleFieldChange(event, "lastupdated", event.target.value)}
+                    value={values.lastupdated}
                     variant="outlined"
                   />
                 </div>
@@ -211,7 +186,7 @@ const Filter = props => {
                     label="Tenant name"
                     margin="dense"
                     name="tenantName"
-                    onChange={event => handleFieldChange(event, 'tenantName', event.target.value)}
+                    onChange={(event) => handleFieldChange(event, "tenantName", event.target.value)}
                     value={values.tenantName}
                     variant="outlined"
                   />
@@ -223,7 +198,7 @@ const Filter = props => {
                     label="Farm Name"
                     margin="dense"
                     name="farmName"
-                    onChange={event => handleFieldChange(event, 'farmName', event.target.value)}
+                    onChange={(event) => handleFieldChange(event, "farmName", event.target.value)}
                     value={values.farmName}
                     variant="outlined"
                   />
@@ -235,7 +210,7 @@ const Filter = props => {
                     label="Project Manager"
                     margin="dense"
                     name="pm"
-                    onChange={event => handleFieldChange(event, 'pm', event.target.value)}
+                    onChange={(event) => handleFieldChange(event, "pm", event.target.value)}
                     value={values.pm}
                     variant="outlined"
                   />
@@ -247,7 +222,7 @@ const Filter = props => {
                     label="Customer Success Manager"
                     margin="dense"
                     name="csm"
-                    onChange={event => handleFieldChange(event, 'csm', event.target.value)}
+                    onChange={(event) => handleFieldChange(event, "csm", event.target.value)}
                     value={values.csm}
                     variant="outlined"
                   />
@@ -259,7 +234,7 @@ const Filter = props => {
                     label="Customer Temperature"
                     margin="dense"
                     name="temperature"
-                    onChange={event => handleFieldChange(event, 'temperature', event.target.value)}
+                    onChange={(event) => handleFieldChange(event, "temperature", event.target.value)}
                     select
                     // eslint-disable-next-line react/jsx-sort-props
                     SelectProps={{ native: true }}
@@ -267,7 +242,7 @@ const Filter = props => {
                     variant="outlined"
                   >
                     <option disabled value="" />
-                    {customerStatusOptions.map(option => (
+                    {customerStatusOptions.map((option) => (
                       <option key={option} value={option}>
                         {option}
                       </option>
@@ -296,7 +271,7 @@ Filter.propTypes = {
   className: PropTypes.string,
   onClose: PropTypes.func,
   onFilter: PropTypes.func,
-  open: PropTypes.bool.isRequired
+  open: PropTypes.bool.isRequired,
 };
 
 export default Filter;

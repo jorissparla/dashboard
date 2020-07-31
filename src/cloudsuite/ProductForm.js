@@ -1,6 +1,6 @@
 import { Button, TextField } from '@material-ui/core';
 import React from 'react';
-import ReactMarkdown from 'react-markdown';
+import ReactMarkdown from 'react-markdown/with-html';
 import useInput from '../hooks/useInput';
 import { H1, H2 } from './Styles';
 

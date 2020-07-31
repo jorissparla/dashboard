@@ -1,306 +1,181 @@
-import Button from '@material-ui/core/Button';
-import Chip from '@material-ui/core/Chip';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import Paper from '@material-ui/core/Paper';
-import Select from '@material-ui/core/Select';
-import { withStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import { Formik } from 'formik';
-import React from 'react';
-import ReactMarkdown from 'react-markdown';
-import MarkDown from 'react-markdown';
-import ReactMde from 'react-mde';
-import { withRouter } from 'react-router';
-import { CardSection } from '../common';
-import { useUser } from '../User';
+import Button from "@material-ui/core/Button";
+import Chip from "@material-ui/core/Chip";
+import Paper from "@material-ui/core/Paper";
+import { withStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+import FormControl from "@material-ui/core/FormControl";
+import InputLabel from "@material-ui/core/InputLabel";
+import MenuItem from "@material-ui/core/MenuItem";
+import Select from "@material-ui/core/Select";
+import JoditEditor from "jodit-react";
+import CKEditor from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import React, { useRef, useState } from "react";
+import { withRouter, useHistory } from "react-router";
+import { CardSection } from "../common";
+import { useUser } from "../User";
 //import { format } from 'date-fns';
-import { format } from '../utils/format';
+import { format } from "../utils/format";
+import SupportCardTags from "./SupportCardTags";
+import TWButton from "elements/TWButton";
+import SafeDeleteButton from "videos/SafeDeleteButton";
+import { TWSelectMenu } from "elements/TWSelectMenu";
+import FavoriteWrapper from "Favorite";
+import { MUTATION_UPDATE_CARD_KEYWORDS } from "pages/SupportCards";
+import { useMutation } from "react-apollo";
 
 const owners = [
-  { id: 'Ricardo Exposito', name: 'Ricardo Exposito' },
-  { id: 'Massimo Favaro', name: 'Massimo Favaro' },
-  { id: 'Maribel Aguilella', name: 'Maribel Aguilella' },
-  { id: 'Joris Sparla', name: 'Joris Sparla' },
-  { id: 'Luis Casanova', name: 'Luis Casanova' }
+  { id: "Ricardo Exposito", name: "Ricardo Exposito" },
+  { id: "Massimo Favaro", name: "Massimo Favaro" },
+  { id: "Maribel Aguilella", name: "Maribel Aguilella" },
+  { id: "Joris Sparla", name: "Joris Sparla" },
+  { id: "Luis Casanova", name: "Luis Casanova" },
+  { id: "Ludmilla Kolbowski", name: "Ludmilla Kolbowski" },
 ];
 
-const paperStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'space-between',
-  margin: '15px',
-  padding: '10px',
-  minWidth: '200px'
-};
+const simpOwners = owners.map((owner) => owner.name);
 
-const styles = theme => ({
-  container: {
-    display: 'flex',
-    flexWrap: 'wrap'
-  },
-  button: {
-    margin: theme.spacing(1)
-  },
-  button2: {
-    margin: theme.spacing(1),
-    height: '40px',
-    backgroundColor: 'palevioletred'
-  },
-
-  buttonDel: {
-    margin: theme.spacing(1),
-    backgroundColor: '#000'
-  },
-
-  textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: 200,
-    height: '100%'
-  },
-  titleField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    fontSize: '40px',
-    color: '#039BE5'
-  },
-  content: {
-    display: 'flex'
-  },
-  contentField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    backgroundColor: '#eeeeee99',
-    fontSize: 40,
-    minHeight: '50vh'
-  },
-  dense: {
-    marginTop: 19
-  },
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120
-  },
-  markdown2: {
-    width: '50vw',
-    marginLeft: 10,
-    height: '70vh',
-    overflow: 'scroll'
-  },
-  markdown: {
-    width: '90vw',
-    height: '60vh',
-    overflow: 'scroll'
-  },
-  menu: {
-    width: 200
-  }
-});
-
-const SupportCardForm = props => {
+const SupportCardForm = (props) => {
   const {
     supportcard,
-    categories = [{ id: 1, category: 'Cloud' }, { id: 2, category: 'IXS' }],
+    categories = [
+      { id: 1, category: "Cloud" },
+      { id: 2, category: "IXS" },
+    ],
     initialValues,
     onSave,
     authenticated,
     onDelete,
-    history,
-    classes
   } = props;
-  const readOnly = !authenticated;
-  const [on, toggle] = React.useState(false);
-  const updatedAt = supportcard ? supportcard.updatedAt : format(new Date(), 'yyyy-MM-dd');
-  const currentUser = useUser();
-  console.log('blba', { initialValues }, currentUser);
-  let newInitialValues =
-    currentUser && !initialValues.owner
-      ? { ...initialValues, owner: currentUser.fullname }
-      : initialValues;
-  const [value, setValue] = React.useState(newInitialValues.description);
-  const taprops = {
-    cols: 150,
-    rows: 35,
-    style: { fontFamily: 'roboto', fontSize: 'inherit', marginRight: 10 }
+  const [updateKeywords] = useMutation(MUTATION_UPDATE_CARD_KEYWORDS);
+  const handleUpdateKeywords = async (id, keywords) => {
+    const input = { id, keywords };
+    await updateKeywords({
+      variables: {
+        input,
+      },
+    });
   };
+  // const [category, setCategory] = useState(initialValues.category);
+  const [lbOpen, setlbOpen] = useState(false);
+  const readOnly = !authenticated;
+  const updatedAt = supportcard?.updatedAt; //: format(new Date(), "yyyy-MM-dd");
+  const [values, setValues] = React.useState(initialValues);
+  const history = useHistory();
+  const simpCategories = categories.map((cat) => cat.name);
+
+  const handleChange = (event) => {
+    event.persist();
+    setValues({
+      ...values,
+      [event.target.name]: event.target.value,
+    });
+  };
+  const handleChangeOwner = (owner) => {
+    setValues({ ...values, owner });
+    // setlbOpen(false);
+  };
+  const handleChangeCategory = (categoryname) => {
+    setValues({ ...values, categoryname });
+    // setlbOpen(false);
+  };
+
+  const handleChangeSingle = (event) => {
+    setValues({ ...values, owner: event.target.value });
+  };
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    onSave(values);
+  }
+
+  console.log("🐱‍🏍", supportcard);
   return (
-    <Paper style={paperStyle}>
-      <Formik
-        initialValues={newInitialValues}
-        onSubmit={values => {
-          console.log('Submitting value', values);
-          onSave(values);
-        }}
-      >
-        {({
-          values,
-          touched,
-          errors,
-          dirty,
-          isSubmitting,
-          handleChange,
-          handleBlur,
-          handleSubmit,
-          handleReset
-        }) => {
-          return (
-            <form onSubmit={handleSubmit}>
-              <TextField
+    <div className="bg-gray-200 h-screen w-full p-2">
+      <div className="rounded shadow-lg p-4 bg-white mx-2">
+        <form onSubmit={handleSubmit}>
+          {!readOnly ? (
+            <div className="w-full flex justify-between items-center">
+              <input
                 id="title"
-                label="Title"
-                className={classes.titleField}
+                name="title"
+                className="form-input text-blue-400 font-semibold  text-xl w-full"
                 value={values.title}
                 onChange={handleChange}
-                onBlur={handleBlur}
-                margin="normal"
-                disabled={readOnly}
-                fullWidth
+                type="text"
               />
-              <div className={classes.content}>
-                {!readOnly && on && (
-                  <>
-                    <ReactMde
-                      value={values.description}
-                      onChange={handleChange('description')}
-                      selectedTab="write"
-                      disablePreview={true}
-                      maxEditorHeight={500}
-                      textAreaProps={taprops}
-                    />
-                    <div className={classes.markdown2}>
-                      <ReactMarkdown source={values.description} />
-                    </div>
-                  </>
-                  // <TextField
-                  //   id="description"
-                  //   label="Description"
-                  //   className={classes.contentField}
-                  //   value={values.description}
-                  //   onChange={handleChange}
-                  //   onBlur={handleBlur}
-                  //   margin="normal"
-                  //   fullWidth
-                  //   multiline
-                  //   rows={25}
-                  // />
-                )}
-                {!on && (
-                  <div className={classes.markdown}>
-                    <ReactMarkdown source={values.description} />
-                  </div>
-                )}
-                {!readOnly && (
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    className={classes.button2}
-                    onClick={() => toggle(!on)}
-                  >
-                    {on ? 'Preview' : 'Edit '}
-                  </Button>
-                )}
-              </div>
-              <FormControl className={classes.formControl}>
-                <InputLabel htmlFor="category-simple">Category</InputLabel>
-                <Select
-                  value={values.categoryname}
-                  onChange={handleChange}
-                  disabled={readOnly}
-                  inputProps={{
-                    name: 'categoryname',
-                    id: 'category-simple'
-                  }}
-                >
-                  {categories.map(({ id, name }) => (
-                    <MenuItem key={id} value={name}>
-                      {name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <FormControl className={classes.formControl}>
-                <InputLabel htmlFor="owner">Owner</InputLabel>
-                <Select
-                  value={values.owner}
-                  onChange={handleChange}
-                  disabled={readOnly}
-                  inputProps={{
-                    name: 'owner',
-                    id: 'owner'
-                  }}
-                >
-                  {owners.map(({ id, name }) => (
-                    <MenuItem key={id} value={name}>
-                      {name}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-              <TextField
-                id="link"
-                label="Link to Document"
-                className={classes.linkField}
-                value={values.link}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                margin="normal"
-                fullWidth
-              />
+              <FavoriteWrapper id={values.id} isFavorite={values.isFavorite} />
+            </div>
+          ) : (
+            <div className="text-blue-400 font-semibold text-xl w-full">{values.title}</div>
+          )}
 
-              <CardSection>
-                {!readOnly && (
-                  <React.Fragment>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      className={classes.button}
-                      type="submit"
-                    >
-                      Save
-                    </Button>
-                  </React.Fragment>
-                )}
-                {!readOnly && supportcard && (
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    className={classes.buttonDel}
-                    onClick={() => onDelete(supportcard)}
-                  >
-                    Delete
-                  </Button>
-                )}
-                {readOnly && supportcard && (
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    className={classes.buttonDel}
-                    onClick={() => window.open(initialValues.link)}
-                  >
-                    View Link
-                  </Button>
-                )}
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  className={classes.button}
-                  onClick={() => setTimeout(history.push('/supportcard'), 500)}
-                >
-                  Cancel
-                </Button>
-                <Chip
-                  style={{ margin: 4 }}
-                  label={`Last updated at ${format(updatedAt, 'EEE, dd MMM yyyy')}`}
-                />
-              </CardSection>
-            </form>
-          );
-        }}
-      </Formik>
-    </Paper>
+          <div className="flex text-gray-600 mb-4">
+            {
+              // !readOnly ? (
+              <CKEditor
+                editor={ClassicEditor}
+                disabled={readOnly}
+                data={values.description}
+                onInit={(editor) => {
+                  // You can store the "editor" and use when it is needed.
+                  console.log("Editor is ready to use!", editor);
+                }}
+                onChange={(event, editor) => {
+                  const data = editor.getData();
+                  // console.log("Change", { event, editor, data });
+                  setValues({ ...values, description: data });
+                }}
+              />
+            }
+          </div>
+          <div className="flex items-center mb-4">
+            <TWSelectMenu items={simpCategories} value={values.categoryname} onChange={handleChangeCategory} label="Enter Category" />
+            <TWSelectMenu items={simpOwners} value={values.owner} onChange={handleChangeOwner} />
+          </div>
+          <div className="w-full mb-4" disabled={readOnly}>
+            {supportcard && (
+              <SupportCardTags updateKeywords={handleUpdateKeywords} id={supportcard?.id} keywords={supportcard?.keywords} readOnly={readOnly} />
+            )}
+          </div>
+          {!readOnly ? (
+            <input
+              id="link"
+              name="link"
+              placeholder="Link to Document"
+              className="form-input  text-gray-600 w-full mb-2"
+              value={values.link}
+              onChange={handleChange}
+              onBlur={handleChange}
+            />
+          ) : (
+            <a href={values.link} target="_blank_" className="underline text-gray-600 w-full mb-2">
+              {values.link}
+            </a>
+          )}
+          <CardSection>
+            {!readOnly && (
+              <TWButton color="primary" type="submit">
+                Save Card
+              </TWButton>
+            )}
+            {!readOnly && supportcard && <SafeDeleteButton onDelete={() => onDelete(supportcard)}></SafeDeleteButton>}
+            {readOnly && supportcard && (
+              <TWButton color="black" onClick={() => window.open(initialValues.link)}>
+                View Link
+              </TWButton>
+              // <Button variant="contained" color="primary" className={classes.buttonDel} onClick={() => window.open(initialValues.link)}>
+              // </Button>
+            )}
+            <TWButton variant="contained" color="teal" onClick={() => setTimeout(history.push("/supportcard"), 500)}>
+              Cancel
+            </TWButton>
+            <Chip style={{ margin: 4 }} label={updatedAt ? `Last updated at ${format(updatedAt, "EEE, dd MMM yyyy")}` : `Not saved yet`} />
+          </CardSection>
+        </form>
+      </div>
+    </div>
   );
 };
 
-export default withRouter(withStyles(styles)(SupportCardForm));
+export default SupportCardForm;

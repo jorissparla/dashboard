@@ -6,8 +6,8 @@ import { Mutation } from 'react-apollo';
 import { SharedSnackbarConsumer } from '../globalState/SharedSnackbar.context';
 
 import { ALL_CHATS_QUERY } from '../pages/ChatList';
-const DELETE_CHAT_MUTATION = gql`
-  mutation DELETE_CHAT_MUTATION($input: ChatInputType) {
+const DELETE_SINGLE_CHAT_MUTATION = gql`
+  mutation DELETE_SINGLE_CHAT_MUTATION($input: ChatInputType) {
     deleteChat(input: $input) {
       result
     }
@@ -19,7 +19,7 @@ const DeleteChat = ({ id }) => {
     <SharedSnackbarConsumer>
       {({ openSnackbar }) => (
         <Mutation
-          mutation={DELETE_CHAT_MUTATION}
+          mutation={DELETE_SINGLE_CHAT_MUTATION}
           variables={{ input: { id } }}
           refetchQueries={[{ query: ALL_CHATS_QUERY }]}
         >
