@@ -25,6 +25,7 @@ import PeopleOutlineIcon from "@material-ui/icons/PeopleOutlineTwoTone";
 import { UserContext } from "globalState/UserProvider";
 import LinkIcon from "@material-ui/icons/SpeakerNotesTwoTone";
 import AutoExchange from "@material-ui/icons/AirportShuttle";
+import LNChartsIcon from "@material-ui/icons/AssessmentTwoTone";
 import React, { useState } from "react";
 // import Signout from '../Signout';
 import { NavLink } from "./NavLink";
@@ -74,6 +75,7 @@ export const SideBarMenu: React.FC<Props> = ({ classes, history, toggleMenu, ope
       <ToggledNavLink title="Proactive Projects!" Icon={BusinessCenterIcon} navigateTo="/projects" history={history} color="text-blue-600" />
       {isAdmin && <ToggledNavLink title="Permissions" Icon={Person} navigateTo="/bla" history={history} />}
       {isAdmin && <ToggledNavLink title="Logged in Users" Icon={PeopleOutlineIcon} navigateTo="/loggedinusers" history={history} />}
+      <ToggledNavLink title="LN Charts" Icon={LNChartsIcon} navigateTo="/historyln" history={history} color="text-blue-600" />
       <ExpandableMenuItem classes={classes} title="Stats Graphs" Icon={GoLiveIcon}>
         <ToggledNavLink title="Logistics" Icon={ApplicationIcon} navigateTo="/team/logistics" history={history} />
         <ToggledNavLink title="Finance" Icon={ApplicationIcon} navigateTo="/team/finance" history={history} />
