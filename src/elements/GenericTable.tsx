@@ -16,6 +16,7 @@ interface GenericTableProps {
   fields: any[];
   linkField?: string;
   linkPrefix?: string;
+  linkText?: string;
   description: string;
   additionalFields?: string[];
   whereToInsertAdditionalFieldIndex?: number;
@@ -33,6 +34,7 @@ export const GenericTable = (props: GenericTableProps) => {
     subtitle = "",
     fields,
     linkField = "",
+    linkText = "",
     linkPrefix = "http://navigator.infor.com/n/incident.asp?IncidentID=",
     description = title,
     additionalFields = [],
@@ -148,7 +150,7 @@ export const GenericTable = (props: GenericTableProps) => {
     return (
       <th
         style={{ background: "#5C5C5C", color: "#FFF" }}
-        className="capitalize px-5 py-2 border border-gray-200 bg-gray-100 text-left text-sm font-sans font-semibold text-gray-600 uppercase tracking-wider"
+        className=" px-5 py-2 border border-gray-200 bg-gray-100 text-left text-sm font-sans font-semibold text-gray-600 uppercase tracking-wider"
       >
         <div className="flex items-center text-center  items-baseline">
           {name}
@@ -192,10 +194,10 @@ export const GenericTable = (props: GenericTableProps) => {
       <p className="text-gray-900 whitespace-no-wrap">{format(value, "yyyy-MMM-dd")}</p>
     </td>
   );
-  const HyperLinkCell = ({ value = "", linkPrefix = "http://navigator.infor.com/n/incident.asp?IncidentID=" }) => (
+  const HyperLinkCell = ({ value = "", linkPrefix = "http://navigator.infor.com/n/incident.asp?IncidentID=", linkText = "" }) => (
     <td className="px-5  border border-gray-200  text-sm">
       <a className="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker" href={`${linkPrefix}${value}`} target="_blank">
-        {value}
+        {linkText || value}
       </a>
     </td>
   );
@@ -354,11 +356,11 @@ export const GenericTable = (props: GenericTableProps) => {
                   <tr key={index} className={`${index % 2 === 0 && "bg-gray-50"}`}>
                     {fieldList.map(({ name, type }) => {
                       if (name === linkField) {
-                        return <HyperLinkCell key={name} value={item[name]} linkPrefix={linkPrefix} />;
+                        return <HyperLinkCell key={name} value={item[name]} linkPrefix={linkPrefix} linkText={linkText} />;
                       } else {
                         switch (type) {
                           case "hl":
-                            return <HyperLinkCell key={name} value={item[name]} linkPrefix={linkPrefix} />;
+                            return <HyperLinkCell key={name} value={item[name]} linkPrefix={linkPrefix} linkText={linkText} />;
                           case "yn":
                             return <YesNoCell key={name} value={item[name]} />;
 
