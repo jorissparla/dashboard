@@ -1,7 +1,7 @@
 import Snackbar from "@material-ui/core/Snackbar";
 import gql from "graphql-tag";
 import React, { Fragment, useState } from "react";
-import { useMutation, useQuery } from "react-apollo";
+import { useMutation, useQuery } from "@apollo/client";
 import { withRouter } from "react-router";
 import { Card } from "../common";
 import { SharedSnackbarConsumer } from "../globalState/SharedSnackbar.context";
@@ -48,7 +48,7 @@ const ALL_CHATS = gql`
 
 const YMDFORMAT = "yyyy-MM-dd";
 
-const ChatContainer = props => {
+const ChatContainer = (props) => {
   const { data, loading } = useQuery(ALL_CHATS);
   const [addChat] = useMutation(ADD_CHAT);
   const alert = useAlert();
@@ -58,7 +58,7 @@ const ChatContainer = props => {
     values: {},
     message: "added",
     showMessage: false,
-    err: ""
+    err: "",
   });
   if (loading) return <div>Loading</div>;
 
@@ -68,11 +68,11 @@ const ChatContainer = props => {
   };
 
   const findWeekfromDate = (weeknr, ranges) => {
-    const obj = ranges.find(o => o.Name === weeknr);
+    const obj = ranges.find((o) => o.Name === weeknr);
     return obj.FromDate;
   };
 
-  const handleSubmitAdd = async values => {
+  const handleSubmitAdd = async (values) => {
     const { weeknr, team, nrchats, responseintime } = values;
     const fromDate = findWeekfromDate(weeknr, ranges);
 
@@ -82,12 +82,12 @@ const ChatContainer = props => {
       team,
       nrchats: parseInt(nrchats),
       responseintime: parseInt(responseintime),
-      fromDate: format(parseInt(fromDate), YMDFORMAT)
+      fromDate: format(parseInt(fromDate), YMDFORMAT),
     };
     await addChat({
       variables: {
-        input
-      }
+        input,
+      },
     });
   };
 
@@ -96,11 +96,9 @@ const ChatContainer = props => {
       <div className="h-screen w-full bg-gray-100 px-2">
         <ChatAdd
           ranges={ranges}
-          onSave={values => {
+          onSave={(values) => {
             handleSubmitAdd(values);
-            alert.setMessage(
-              `Data for ${values.team}, week ${values.weeknr} updated `
-            );
+            alert.setMessage(`Data for ${values.team}, week ${values.weeknr} updated `);
           }}
           onCancel={doCancel}
           entry={null}

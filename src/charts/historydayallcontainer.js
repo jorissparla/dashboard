@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
-import HistoryChart from './historychart';
-import styled from 'styled-components';
+import React, { Component } from "react";
+import gql from "graphql-tag";
+import { Query, Mutation } from "@apollo/client/react/components";
+import HistoryChart from "./historychart";
+import styled from "styled-components";
 
 const Flexdiv = styled.div`
   display: flex;
@@ -33,7 +33,7 @@ class HistoryDayAll1 extends Component {
 
 export default class HistoryDayAllContainer extends Component {
   render() {
-    const color = this.props.color || '#ffb74d';
+    const color = this.props.color || "#ffb74d";
     return (
       <Query query={QUERY_HISTORY_DAY}>
         {({ data, loading, error }) => {
@@ -45,14 +45,7 @@ export default class HistoryDayAllContainer extends Component {
           return (
             <Flexdiv>
               <Contdiv>
-                <HistoryChart
-                  data={history}
-                  title={`Backlog LN (excl. Sol.Proposed)`}
-                  type="area"
-                  color={color}
-                  xvalue="day"
-                  value={`LN`}
-                />
+                <HistoryChart data={history} title={`Backlog LN (excl. Sol.Proposed)`} type="area" color={color} xvalue="day" value={`LN`} />
                 <HistoryChart
                   data={history}
                   title={`Backlog Logistics (excl. Sol.Proposed)`}
@@ -72,14 +65,7 @@ export default class HistoryDayAllContainer extends Component {
                   value={`Finance`}
                 />
 
-                <HistoryChart
-                  data={history}
-                  title={`Backlog Tools (excl. Sol.Proposed)`}
-                  type="area"
-                  color={color}
-                  xvalue="day"
-                  value={`Tools`}
-                />
+                <HistoryChart data={history} title={`Backlog Tools (excl. Sol.Proposed)`} type="area" color={color} xvalue="day" value={`Tools`} />
               </Contdiv>
             </Flexdiv>
           );

@@ -22,7 +22,7 @@ import SafeDeleteButton from "videos/SafeDeleteButton";
 import { TWSelectMenu } from "elements/TWSelectMenu";
 import FavoriteWrapper from "Favorite";
 import { MUTATION_UPDATE_CARD_KEYWORDS } from "pages/SupportCards";
-import { useMutation } from "react-apollo";
+import { useMutation } from "@apollo/client";
 
 const owners = [
   { id: "Ricardo Exposito", name: "Ricardo Exposito" },

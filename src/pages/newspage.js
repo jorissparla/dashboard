@@ -8,7 +8,7 @@ import { withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import gql from "graphql-tag";
 import React from "react";
-import { useQuery } from "react-apollo";
+import { useQuery } from "@apollo/client";
 import { CardSection } from "../common";
 //import { format } from 'date-fns';
 import { format } from "../utils/format";

@@ -6,7 +6,7 @@ import gql from "graphql-tag";
 import _ from "lodash";
 import React from "react";
 import { adopt } from "react-adopt";
-import { Mutation, Query } from "react-apollo";
+import { Query, Mutation } from "@apollo/client/react/components";
 import { withRouter } from "react-router";
 //import format from 'date-fns/format';
 import { format } from "../utils/format";

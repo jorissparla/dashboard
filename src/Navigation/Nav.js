@@ -17,7 +17,7 @@ import { AuthenticationSection } from "./AuthSection";
 import { SideBarMenu } from "./SideBarMenu";
 import SystemMessage from "utils/SystemMessage";
 import gql from "graphql-tag";
-import { useQuery } from "react-apollo";
+import { useQuery } from "@apollo/client";
 
 const drawerWidth = 340;
 

@@ -1,19 +1,19 @@
 import React, { Component } from "react";
 import gql from "graphql-tag";
-import { Query, Mutation } from "react-apollo";
+import { Query, Mutation } from "@apollo/client/react/components";
 import AccountFilter from "./AccountFilter";
 import EmployeeList from "./EmployeeList";
 export default class AccountList extends Component {
   state = {
     filtervariables: { firstname: "Guest" },
-    defaults: {}
+    defaults: {},
   };
-  handleApply = v => {
+  handleApply = (v) => {
     console.log(v);
     this.setState({ filtervariables: v });
   };
 
-  handleRemove = v => {};
+  handleRemove = (v) => {};
   static AccountFilter;
   render() {
     return (
@@ -30,15 +30,15 @@ export default class AccountList extends Component {
                   return (
                     <EmployeeList
                       employees={employees}
-                      onRemove={v => {
+                      onRemove={(v) => {
                         console.log(v);
                         removeEmployee({
                           variables: { id: v },
 
-                          refetchQueries: [{ query: ACCOUNT_QUERY, variables: filtervariables }]
+                          refetchQueries: [{ query: ACCOUNT_QUERY, variables: filtervariables }],
                         })
-                          .then(data => console.log("DAata", data))
-                          .catch(err => console.error);
+                          .then((data) => console.log("DAata", data))
+                          .catch((err) => console.error);
                       }}
                     />
                   );

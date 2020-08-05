@@ -1,17 +1,13 @@
-import { CLOUD_READINESS_QUERY, MUTATION_UPDATE_CLOUD_READINESS } from 'cloudsuite/graphql/Queries';
-import EditableMarkDownField from 'common/EditableMarkdownField';
-import React from 'react';
-import { useQuery } from 'react-apollo';
-import useStyles from '../cloudsuite/useCloudFieldStyles';
+import { CLOUD_READINESS_QUERY, MUTATION_UPDATE_CLOUD_READINESS } from "cloudsuite/graphql/Queries";
+import EditableMarkDownField from "common/EditableMarkdownField";
+import React from "react";
+import { useQuery } from "@apollo/client";
+import useStyles from "../cloudsuite/useCloudFieldStyles";
 const Test = ({ user }) => {
-  console.log('user', user);
+  console.log("user", user);
   let canEdit = false;
   if (user && user.permissions) {
-    canEdit =
-      user.role === 'Admin' ||
-      ['CLOUDREADINESS', 'ADMIN'].some(item =>
-        user.permissions.find(perm => perm.permission === item)
-      );
+    canEdit = user.role === "Admin" || ["CLOUDREADINESS", "ADMIN"].some((item) => user.permissions.find((perm) => perm.permission === item));
   }
   const classes = useStyles();
   const { data, loading } = useQuery(CLOUD_READINESS_QUERY);
@@ -21,10 +17,10 @@ const Test = ({ user }) => {
   const { id } = cloudreadiness;
 
   const fields = [
-    { name: 'maintext', title: 'Main' },
-    { name: 'text2', title: 'Knowledge Base Articles' },
-    { name: 'text3', title: 'Training Materials' },
-    { name: 'text4', title: 'Other' }
+    { name: "maintext", title: "Main" },
+    { name: "text2", title: "Knowledge Base Articles" },
+    { name: "text3", title: "Training Materials" },
+    { name: "text4", title: "Other" },
   ];
 
   return (

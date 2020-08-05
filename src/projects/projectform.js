@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import TWButton from "elements/TWButton";
 import Keywords from "supportcard/SupportCardTags";
-import { useQuery, useMutation } from "react-apollo";
+import { useQuery, useMutation } from "@apollo/client";
 import gql from "graphql-tag";
 import { format } from "date-fns";
 import { useAlert } from "globalState/AlertContext";

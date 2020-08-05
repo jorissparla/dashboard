@@ -6,7 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import { Formik } from "formik";
 import gql from "graphql-tag";
 import React from "react";
-import { useMutation } from "react-apollo";
+import { useMutation } from "@apollo/client";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import { UserContext, useUserContext } from "../globalState/UserProvider";
 import LoginForm from "./LoginForm";

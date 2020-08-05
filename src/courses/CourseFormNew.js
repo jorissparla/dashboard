@@ -1,82 +1,82 @@
-import { FormControl, InputLabel, MenuItem, Select, TextField } from '@material-ui/core';
-import Badge from '@material-ui/core/Badge';
-import Button from '@material-ui/core/Button';
-import Chip from '@material-ui/core/Chip';
-import Paper from '@material-ui/core/Paper';
-import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import { formatDistanceToNow } from 'date-fns';
-import { Formik } from 'formik';
-import gql from 'graphql-tag';
-import React from 'react';
-import { Query } from 'react-apollo';
-import { withRouter } from 'react-router';
-import * as yup from 'yup';
+import { FormControl, InputLabel, MenuItem, Select, TextField } from "@material-ui/core";
+import Badge from "@material-ui/core/Badge";
+import Button from "@material-ui/core/Button";
+import Chip from "@material-ui/core/Chip";
+import Paper from "@material-ui/core/Paper";
+import { withStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+import { formatDistanceToNow } from "date-fns";
+import { Formik } from "formik";
+import gql from "graphql-tag";
+import React from "react";
+import { Query, Mutation } from "@apollo/client/react/components";
+import { withRouter } from "react-router";
+import * as yup from "yup";
 
 const validationSchema = yup.object().shape({
   title: yup.string().required(),
   description: yup.string().required(),
-  hours: yup.string().required()
+  hours: yup.string().required(),
 });
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
     ...theme.mixins.gutters(),
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
     padding: theme.spacing(2),
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    margin: '15px',
-    minWidth: '200px',
-    backgroundColor: 'rgba(219, 112, 147, 0.2);'
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    margin: "15px",
+    minWidth: "200px",
+    backgroundColor: "rgba(219, 112, 147, 0.2);",
   },
   margin: {
     margin: theme.spacing(2),
-    color: 'black'
+    color: "black",
   },
   button: {
-    width: 200
+    width: 200,
   },
   button2: {
     margin: theme.spacing(1),
-    width: 200
+    width: 200,
   },
 
   block: {
-    display: 'flex',
+    display: "flex",
     margin: 10,
-    alignItems: 'center'
+    alignItems: "center",
   },
   buttonDel: {
     margin: theme.spacing(1),
-    color: '#FFF',
-    backgroundColor: '#000'
+    color: "#FFF",
+    backgroundColor: "#000",
   },
 
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    marginBottom: 20
+    marginBottom: 20,
   },
   titleField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
     marginBottom: 20,
-    width: '90%'
+    width: "90%",
   },
   hourField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
     marginBottom: 20,
-    width: 50
+    width: 50,
   },
   docnumberfield: {
     marginLeft: 20,
     // marginBottom: -18,
     width: 200,
-    marginTop: 10
-  }
+    marginTop: 10,
+  },
 });
 
 const QUERY_ALL_COURSEFORM_FIELDS = gql`
@@ -115,37 +115,37 @@ const QUERY_PLANNED_COURSES = gql`
 `;
 
 const teams = [
-  { id: 1, name: 'Logistics' },
-  { id: 2, name: 'Finance' },
-  { id: 3, name: 'Tools' },
-  { id: 4, name: 'General' }
+  { id: 1, name: "Logistics" },
+  { id: 2, name: "Finance" },
+  { id: 3, name: "Tools" },
+  { id: 4, name: "General" },
 ];
 
 class CourseForm extends React.Component {
   state = {
     initialValues: this.props.initialValues || {
-      title: '',
+      title: "",
       hours: 4,
-      trainer: 'LN Employee',
-      status: 'Released',
-      team: 'Logistics',
-      type: 'Class Room Training',
-      category: 'Product',
-      description: '',
-      documentnr: '',
-      link: '',
-      lastmodified: Date.now()
-    }
+      trainer: "LN Employee",
+      status: "Released",
+      team: "Logistics",
+      type: "Class Room Training",
+      category: "Product",
+      description: "",
+      documentnr: "",
+      link: "",
+      lastmodified: Date.now(),
+    },
   };
 
   render() {
-    console.log('rendering initialValues', this.state.initialValues);
+    console.log("rendering initialValues", this.state.initialValues);
     const { classes, history, id, view } = this.props;
     return (
       <Query query={QUERY_ALL_COURSEFORM_FIELDS}>
         {({ data, loading }) => {
           if (loading) {
-            return 'Loading...';
+            return "Loading...";
           }
 
           const { coursetypes, coursecategories, statuses, supportfolks } = data;
@@ -153,28 +153,19 @@ class CourseForm extends React.Component {
           return (
             <Formik
               initialValues={this.state.initialValues}
-              onSubmit={async values => {
+              onSubmit={async (values) => {
                 this.setState({
-                  initialValues: { title: values.title, ...this.state.initialValues }
+                  initialValues: { title: values.title, ...this.state.initialValues },
                 });
                 this.props.onSave(values);
               }}
               validationSchema={validationSchema}
             >
-              {({
-                values,
-                handleChange,
-                handleBlur,
-                handleSubmit,
-                setFieldValue,
-                touched,
-                errors,
-                isSubmitting
-              }) => (
+              {({ values, handleChange, handleBlur, handleSubmit, setFieldValue, touched, errors, isSubmitting }) => (
                 <form onSubmit={handleSubmit}>
                   <Paper className={classes.root}>
                     <Typography variant="h5" gutterBottom>
-                      {title ? `Edit ${values.title}` : 'New Course'}
+                      {title ? `Edit ${values.title}` : "New Course"}
                     </Typography>
                     <div className={classes.block}>
                       <TextField
@@ -334,22 +325,11 @@ class CourseForm extends React.Component {
                     </div>
                     <div className={classes.block}>
                       {!view && (
-                        <Button
-                          variant="contained"
-                          color="primary"
-                          className={classes.button}
-                          onClick={handleSubmit}
-                          type="submit"
-                        >
+                        <Button variant="contained" color="primary" className={classes.button} onClick={handleSubmit} type="submit">
                           Save
                         </Button>
                       )}
-                      <Button
-                        variant="contained"
-                        color="secondary"
-                        className={classes.button2}
-                        onClick={() => history.push('/courses')}
-                      >
+                      <Button variant="contained" color="secondary" className={classes.button2} onClick={() => history.push("/courses")}>
                         Back to courses
                       </Button>
                       {id && !view && (
@@ -357,24 +337,16 @@ class CourseForm extends React.Component {
                           <Query query={QUERY_PLANNED_COURSES} variables={{ id }}>
                             {({ data, loading }) => {
                               if (loading) {
-                                return 'loading';
+                                return "loading";
                               } else {
                                 const {
-                                  course: { plannedcourses }
+                                  course: { plannedcourses },
                                 } = data;
                                 console.log(data);
                                 return (
                                   <React.Fragment>
-                                    <Badge
-                                      color="primary"
-                                      badgeContent={plannedcourses.length}
-                                      className={classes.margin}
-                                    >
-                                      <Button
-                                        variant="contained"
-                                        className={classes.button}
-                                        onClick={() => history.push('/scheduledcourses/' + id)}
-                                      >
+                                    <Badge color="primary" badgeContent={plannedcourses.length} className={classes.margin}>
+                                      <Button variant="contained" className={classes.button} onClick={() => history.push("/scheduledcourses/" + id)}>
                                         Scheduled Courses
                                       </Button>
                                     </Badge>
@@ -396,21 +368,13 @@ class CourseForm extends React.Component {
                             variant="contained"
                             color="secondary"
                             className={classes.button2}
-                            onClick={() => history.push('/scheduledcourses/' + id + '/new')}
+                            onClick={() => history.push("/scheduledcourses/" + id + "/new")}
                           >
                             Schedule New Course
                           </Button>
                         </React.Fragment>
                       )}
-                      <Chip
-                        label={
-                          values.id
-                            ? `Last updated  ${formatDistanceToNow(
-                                parseInt(values.lastmodified)
-                              )} ago`
-                            : 'not Saved yet'
-                        }
-                      />
+                      <Chip label={values.id ? `Last updated  ${formatDistanceToNow(parseInt(values.lastmodified))} ago` : "not Saved yet"} />
                     </div>
                   </Paper>
                 </form>

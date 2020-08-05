@@ -1,12 +1,10 @@
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
-import { InMemoryCache } from "apollo-cache-inmemory";
-import ApolloClient from "apollo-client";
-import { split } from "apollo-link";
-import { WebSocketLink } from "apollo-link-ws";
+import { split } from "@apollo/client";
+import { WebSocketLink } from "@apollo/client/link/ws";
 import { createUploadLink } from "apollo-upload-client";
 import { getMainDefinition } from "apollo-utilities";
 import React from "react";
-import { ApolloProvider } from "react-apollo";
+import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
@@ -50,7 +48,7 @@ const wsLink = new WebSocketLink({
   },
 });
 uri = prefix === "https" ? "https://" + uri : "http://" + uri;
-const httpLink = createUploadLink({ uri, credentials: "include" });
+const httpLink: any = createUploadLink({ uri, credentials: "include" });
 interface Definintion {
   kind: string;
   operation?: string;

@@ -1,7 +1,8 @@
 import React from "react";
 import { adopt } from "react-adopt";
 
-import { Query, Mutation, useQuery, useMutation } from "react-apollo";
+// import { Query, Mutation, useQuery, useMutation } from "@apollo/client";
+import { Query, Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";

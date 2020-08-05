@@ -4,7 +4,7 @@ import classNames from "classnames";
 import { UserContext } from "globalState/UserProvider";
 import _ from "lodash";
 import React, { useState, useContext } from "react";
-import { Mutation } from "react-apollo";
+import { Query, Mutation } from "@apollo/client/react/components";
 import { format, formatDistanceToNow } from "../utils/format";
 import { addHours } from "date-fns";
 import EditTenantDetails from "./details/components/EditTenant";

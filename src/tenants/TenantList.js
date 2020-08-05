@@ -8,7 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import _ from "lodash";
 import Modal from "ModalWrapper";
 import React, { useContext, useState, useEffect } from "react";
-import { useQuery, useMutation } from "react-apollo";
+import { useQuery, useMutation } from "@apollo/client";
 import { animated, config, useSpring } from "react-spring";
 import styled from "styled-components";
 import Spinner from "utils/spinner";

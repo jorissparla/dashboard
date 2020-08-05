@@ -1,9 +1,9 @@
-import React from 'react';
-import gql from 'graphql-tag';
-import { Query, Mutation } from 'react-apollo';
-import Component from '../common/component-component';
-import { StyledMultiple } from './StyledDropdowns';
-import { adopt } from 'react-adopt';
+import React from "react";
+import gql from "graphql-tag";
+import { Query, Mutation } from "@apollo/client/react/components";
+import Component from "../common/component-component";
+import { StyledMultiple } from "./StyledDropdowns";
+import { adopt } from "react-adopt";
 
 const QUERY_PLANNEDCOURSE_WITHPARTICIPANTS = gql`
   query QUERY_PLANNEDCOURSE_WITHPARTICIPANTS($id: ID) {
@@ -48,19 +48,16 @@ const Composed = adopt({
     </Query>
   ),
   updatePlannedCourseParticipants: ({ render }) => (
-    <Mutation
-      mutation={ADD_PARTICIPANTS_TO_COURSE}
-      refetchQueries={[{ query: QUERY_PLANNEDCOURSE_WITHPARTICIPANTS }]}
-    >
+    <Mutation mutation={ADD_PARTICIPANTS_TO_COURSE} refetchQueries={[{ query: QUERY_PLANNEDCOURSE_WITHPARTICIPANTS }]}>
       {render}
     </Mutation>
-  )
+  ),
 });
 
 class EditStudentsOnCourse extends React.Component {
   state = {
     plannedCourseId: this.props.id,
-    participants: this.props.initialValues.students || []
+    participants: this.props.initialValues.students || [],
   };
 
   render() {
@@ -74,23 +71,21 @@ class EditStudentsOnCourse extends React.Component {
             {({ updatePlannedCourseParticipants, plannedcoursewithparticipants }) => {
               const { data, loading } = plannedcoursewithparticipants;
               if (loading) {
-                return 'Loading...';
+                return "Loading...";
               }
               const { plannedcourse, supportfolks: suggestions } = data;
               let participants = [];
               if (plannedcourse && plannedcourse.students) {
-                participants = plannedcourse
-                  ? plannedcourse.students.map(({ fullname }) => fullname)
-                  : [];
+                participants = plannedcourse ? plannedcourse.students.map(({ fullname }) => fullname) : [];
               }
 
               return (
                 <Component
                   initialValue={{
                     participants,
-                    inputValue: '',
+                    inputValue: "",
                     selectedItem: [...participants],
-                    suggestions: suggestions
+                    suggestions: suggestions,
                   }}
                 >
                   {({ state, setState }) => {
@@ -100,23 +95,21 @@ class EditStudentsOnCourse extends React.Component {
                           id="participants"
                           name="participants"
                           state={state}
-                          setState={async v => {
+                          setState={async (v) => {
                             await setState(v);
                             //if (v.selectedItem) this.props.onChange(v.selectedItem);
                           }}
                           suggestions={state.suggestions}
-                          onChange={async participants => {
+                          onChange={async (participants) => {
                             const result = await updatePlannedCourseParticipants({
-                              variables: { participants, id: this.props.id }
+                              variables: { participants, id: this.props.id },
                             });
                             this.props.onChange(result);
                           }}
-                          onDelete={async deletedValue => {
-                            const participants = state.selectedItem
-                              .filter(name => name !== deletedValue)
-                              .join(';');
+                          onDelete={async (deletedValue) => {
+                            const participants = state.selectedItem.filter((name) => name !== deletedValue).join(";");
                             const result = await updatePlannedCourseParticipants({
-                              variables: { participants, id: this.props.id }
+                              variables: { participants, id: this.props.id },
                             });
                             this.props.onChange(result);
                           }}

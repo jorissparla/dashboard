@@ -1,7 +1,7 @@
 import { Button, Paper, TextField, withStyles } from "@material-ui/core";
 import _ from "lodash";
 import * as React from "react";
-import { useMutation, useQuery } from "react-apollo";
+import { useMutation, useQuery } from "@apollo/client";
 import { CardSection } from "../common";
 import { withRouter } from "react-router";
 import { format } from "../utils/format";

@@ -1,8 +1,8 @@
-import { UserContext } from 'globalState/UserProvider';
-import gql from 'graphql-tag';
-import React, { FunctionComponent } from 'react';
-import { Query } from 'react-apollo';
-import { useQuery } from 'react-apollo';
+import { UserContext } from "globalState/UserProvider";
+import gql from "graphql-tag";
+import React, { FunctionComponent } from "react";
+import { Query, Mutation } from "@apollo/client/react/components";
+import { useQuery } from "@apollo/client";
 
 const CURRENT_USER_QUERY = gql`
   query CURRENT_USER_QUERY_ME {
@@ -47,11 +47,11 @@ export const UserProfileComponent: FunctionComponent<any> = (props: any) => {
   if (!me) {
     return <div>No user, loading...</div>;
   }
-  const profileImage = me.image ? me.image.replace('http:', 'https:') : '';
+  const profileImage = me.image ? me.image.replace("http:", "https:") : "";
   return (
     <div>
       <h1>Hallo {me.fullname}</h1>
-      <img src={profileImage || ''} alt="user my" />
+      <img src={profileImage || ""} alt="user my" />
     </div>
   );
 };

@@ -1,9 +1,4 @@
-import {
-  TableFooter,
-  TablePagination,
-  Typography,
-  withStyles
-} from "@material-ui/core";
+import { TableFooter, TablePagination, Typography, withStyles } from "@material-ui/core";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -12,19 +7,19 @@ import TableRow from "@material-ui/core/TableRow";
 import { addHours } from "date-fns";
 import gql from "graphql-tag";
 import React from "react";
-import { useQuery } from "react-apollo";
+import { useQuery } from "@apollo/client";
 import { format } from "utils/format";
 import Spinner from "utils/spinner";
 
-const TableHeaderCell = withStyles(theme => ({
+const TableHeaderCell = withStyles((theme) => ({
   head: {
     backgroundColor: "rgb(0,0,0, 0.5)",
     color: theme.palette.common.white,
-    fontSize: "1.5rem"
+    fontSize: "1.5rem",
   },
   body: {
-    fontSize: "1rem"
-  }
+    fontSize: "1rem",
+  },
 }))(TableCell);
 
 const QUERY_TENANT_LOGS = gql`
@@ -58,10 +53,7 @@ export default function TenantLogs({ tenantlogs }) {
   return (
     <div>
       <div className="flex  justify-between items-center p-5 mr-6">
-        <Typography variant="h6">
-          Logging -{" "}
-          {` page ${currentPage + 1} of ${lastPage === 0 ? 1 : lastPage} pages`}
-        </Typography>
+        <Typography variant="h6">Logging - {` page ${currentPage + 1} of ${lastPage === 0 ? 1 : lastPage} pages`}</Typography>
         <TablePagination
           component="div"
           count={selectedTenantLogs.length}
@@ -79,24 +71,16 @@ export default function TenantLogs({ tenantlogs }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {selectedTenantLogs
-            .slice(
-              currentPage * MAX_PAGE_LENGTH,
-              (currentPage + 1) * MAX_PAGE_LENGTH
-            )
-            .map((log, i) => (
-              <TableRow key={log.id}>
-                <TableCell>
-                  {/* {console.log(addHours(parseInt(log.date, -2)))} */}
-                  {format(
-                    addHours(parseInt(log.date), -2),
-                    "yyyy MMMM dd, EEEE - HH:mm"
-                  )}
-                  {/* {format(log.date, 'hh:mm:ss')} */}
-                </TableCell>
-                <TableCell>{log.log}</TableCell>
-              </TableRow>
-            ))}
+          {selectedTenantLogs.slice(currentPage * MAX_PAGE_LENGTH, (currentPage + 1) * MAX_PAGE_LENGTH).map((log, i) => (
+            <TableRow key={log.id}>
+              <TableCell>
+                {/* {console.log(addHours(parseInt(log.date, -2)))} */}
+                {format(addHours(parseInt(log.date), -2), "yyyy MMMM dd, EEEE - HH:mm")}
+                {/* {format(log.date, 'hh:mm:ss')} */}
+              </TableCell>
+              <TableCell>{log.log}</TableCell>
+            </TableRow>
+          ))}
         </TableBody>
         <TableFooter></TableFooter>
       </Table>

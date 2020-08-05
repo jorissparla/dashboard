@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useQuery, useMutation } from "react-apollo";
+import { useQuery, useMutation } from "@apollo/client";
 import { ALL_SYMPTOM_CATEGORIES, ADD_SYMPTOM_REQUEST_MUTATION, ALL_SYMPTOMS } from "./Queries";
 import { useHistory } from "react-router";
 import { useAlert } from "globalState/AlertContext";

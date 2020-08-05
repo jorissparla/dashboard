@@ -1,8 +1,8 @@
-import React from 'react';
-import { useQuery } from 'react-apollo';
-import NiceSpinner from 'utils/NiceSpinner';
-import CloudField from './CloudField';
-import { CLOUD_READINESS_QUERY } from './graphql/Queries';
+import React from "react";
+import { useQuery } from "@apollo/client";
+import NiceSpinner from "utils/NiceSpinner";
+import CloudField from "./CloudField";
+import { CLOUD_READINESS_QUERY } from "./graphql/Queries";
 
 export default () => {
   const { data, loading } = useQuery(CLOUD_READINESS_QUERY);

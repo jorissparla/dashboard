@@ -1,7 +1,7 @@
 // import gql from 'graphql-tag';
-import React from 'react';
-import { withRouter } from 'react-router';
-//import { graphql, compose } from 'react-apollo';
+import React from "react";
+import { withRouter } from "react-router";
+//import { graphql, compose } from '@apollo/client';
 
 // const isRequired = value => (value ? true : false);
 // const isValidemail = value =>

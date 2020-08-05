@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 import React, { useState, useEffect } from "react";
-import { useMutation } from "react-apollo";
+import { useMutation } from "@apollo/client";
 import { useHistory } from "react-router";
 import Button from "../elements/TWButton";
 import { Message } from "../styles";

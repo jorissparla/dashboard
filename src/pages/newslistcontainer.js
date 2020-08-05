@@ -1,24 +1,24 @@
-import { Fab } from '@material-ui/core';
-import Paper from '@material-ui/core/Paper';
-import { withStyles } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
-import AddIcon from '@material-ui/icons/Add';
-import gql from 'graphql-tag';
-import React from 'react';
-import { useQuery } from 'react-apollo';
-import { useHistory } from 'react-router';
-import Spinner from 'utils/spinner';
-import NewsList from '../news/newslist';
-import withAuth from '../utils/withAuth';
+import { Fab } from "@material-ui/core";
+import Paper from "@material-ui/core/Paper";
+import { withStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+import AddIcon from "@material-ui/icons/Add";
+import gql from "graphql-tag";
+import React from "react";
+import { useQuery } from "@apollo/client";
+import { useHistory } from "react-router";
+import Spinner from "utils/spinner";
+import NewsList from "../news/newslist";
+import withAuth from "../utils/withAuth";
 
-const styles = theme => ({
+const styles = (theme) => ({
   button: {
-    margin: theme.spacing(1)
+    margin: theme.spacing(1),
   },
 
   root: theme.mixins.gutters({
-    marginTop: theme.spacing(3)
-  })
+    marginTop: theme.spacing(3),
+  }),
 });
 
 export const QUERY_ALL_NEWS_EDIT_PAGE = gql`
@@ -35,7 +35,7 @@ export const QUERY_ALL_NEWS_EDIT_PAGE = gql`
 
 function NewsListContainer({ authenticated, classes }) {
   const history = useHistory();
-  const onOpen = id => {
+  const onOpen = (id) => {
     history.replace(`/news/edit/${id}`);
   };
 

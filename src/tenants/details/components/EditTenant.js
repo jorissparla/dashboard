@@ -1,68 +1,57 @@
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  colors,
-  Divider,
-  Grid,
-  TextField
-} from '@material-ui/core';
-import { makeStyles } from '@material-ui/styles';
-import clsx from 'clsx';
-import PropTypes from 'prop-types';
-import CloseIcon from '@material-ui/icons/Close';
-import React, { useState } from 'react';
-import { useMutation } from 'react-apollo';
+import { Button, Card, CardActions, CardContent, CardHeader, colors, Divider, Grid, TextField } from "@material-ui/core";
+import { makeStyles } from "@material-ui/styles";
+import clsx from "clsx";
+import PropTypes from "prop-types";
+import CloseIcon from "@material-ui/icons/Close";
+import React, { useState } from "react";
+import { useMutation } from "@apollo/client";
 
-import { MUTATION_UPDATE_DETAIL } from './../../TenantQueries';
-import { format } from 'utils/format';
-import TemperatureSlider from './TemperatureSlider';
+import { MUTATION_UPDATE_DETAIL } from "./../../TenantQueries";
+import { format } from "utils/format";
+import TemperatureSlider from "./TemperatureSlider";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    left: '20%',
-    top: '20%',
-    position: 'absolute',
-    width: '60%'
+    left: "20%",
+    top: "20%",
+    position: "absolute",
+    width: "60%",
   },
   saveButton: {
-    color: 'white',
+    color: "white",
     backgroundColor: colors.green[600],
-    '&:hover': {
-      backgroundColor: colors.green[900]
-    }
-  }
+    "&:hover": {
+      backgroundColor: colors.green[900],
+    },
+  },
 }));
 
-const EditTenantDetails = props => {
+const EditTenantDetails = (props) => {
   const { profile, className, onClose, onView, ...rest } = props;
 
   const classes = useStyles();
   const [values, setValues] = useState({
-    csm: profile.csm || '',
-    pm: profile.pm || '',
+    csm: profile.csm || "",
+    pm: profile.pm || "",
     customerid: profile.customerid,
-    golivedate: format(profile.golivedate, 'yyyy-MM-dd'),
+    golivedate: format(profile.golivedate, "yyyy-MM-dd"),
     golivecomments: profile.golivecomments,
     info: profile.info,
     temperature: profile.temperature,
-    comments: profile.comments
+    comments: profile.comments,
   });
   console.log(profile);
   const [updateTenantDetailsMutation] = useMutation(MUTATION_UPDATE_DETAIL);
-  const handleChange = event => {
+  const handleChange = (event) => {
     event.persist();
 
     setValues({
       ...values,
-      [event.target.name]:
-        event.target.type === 'checkbox' ? event.target.checked : event.target.value
+      [event.target.name]: event.target.type === "checkbox" ? event.target.checked : event.target.value,
     });
   };
 
-  const handleSubmit = async event => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     console.log(values);
     const result = await updateTenantDetailsMutation({ variables: { input: values } });
@@ -71,7 +60,7 @@ const EditTenantDetails = props => {
     // setOpenSnackbar(true);
   };
 
-  const handleTemperatureChange = value => {
+  const handleTemperatureChange = (value) => {
     setValues({ ...values, temperature: value });
   };
 
@@ -157,10 +146,7 @@ const EditTenantDetails = props => {
               />
             </Grid> */}
             <Grid item md={9} xs={12}>
-              <TemperatureSlider
-                initialValue={profile.temperature}
-                onChange={handleTemperatureChange}
-              />
+              <TemperatureSlider initialValue={profile.temperature} onChange={handleTemperatureChange} />
             </Grid>
           </Grid>
         </CardContent>
@@ -182,7 +168,7 @@ const EditTenantDetails = props => {
 
 EditTenantDetails.propTypes = {
   className: PropTypes.string,
-  profile: PropTypes.object.isRequired
+  profile: PropTypes.object.isRequired,
 };
 
 export default EditTenantDetails;

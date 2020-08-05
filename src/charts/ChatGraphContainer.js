@@ -1,13 +1,15 @@
 import React from "react";
 import gql from "graphql-tag";
-import { graphql } from "react-apollo";
+import { graphql } from "@apollo/client/react/hoc";
 import SummaryChart from "./NewSummaryChart";
 
 class ChatGraphContainer extends React.Component {
   componentWillMount() {}
 
   render() {
-    const { data: { loading, error, chats } } = this.props;
+    const {
+      data: { loading, error, chats },
+    } = this.props;
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error</div>;
     //#region initiatialize values
@@ -20,15 +22,7 @@ class ChatGraphContainer extends React.Component {
     //#endregion
     return (
       <div>
-        <SummaryChart
-          data={summary}
-          title={title}
-          type={type}
-          xvalue="weeknr"
-          value={value}
-          color={color}
-          team={team}
-        />
+        <SummaryChart data={summary} title={title} type={type} xvalue="weeknr" value={value} color={color} team={team} />
       </div>
     );
   }
@@ -45,5 +39,5 @@ const querySummaries = gql`
 `;
 
 export default graphql(querySummaries, {
-  options: props => ({ variables: { team: props.team || "Logistics" } })
+  options: (props) => ({ variables: { team: props.team || "Logistics" } }),
 })(ChatGraphContainer);

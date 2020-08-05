@@ -5,7 +5,7 @@ import CourseReducer from "./reducer_courses";
 import AccountReducer from "./reducer_accounts";
 import { reducer as formReducer } from "redux-form";
 
-//import { ApolloClient, createNetworkInterface } from "react-apollo";
+//import { ApolloClient, createNetworkInterface } from "@apollo/client";
 import authReducer from "./auth_reducer";
 
 const rootReducer = combineReducers({
@@ -14,7 +14,7 @@ const rootReducer = combineReducers({
   form: formReducer,
   auth: authReducer,
   courses: CourseReducer,
-  main: AccountReducer
+  main: AccountReducer,
   //apollo: client.reducer()
 });
 

@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import gql from 'graphql-tag';
-import { graphql } from 'react-apollo';
-import { withRouter } from 'react-router';
-import styled from 'styled-components';
-import StudentTable from './StudentTable';
-import CircularProgress from 'material-ui/CircularProgress';
+import React, { Component } from "react";
+import gql from "graphql-tag";
+import { graphql } from "@apollo/client/react/hoc";
+import { withRouter } from "react-router";
+import styled from "styled-components";
+import StudentTable from "./StudentTable";
+import CircularProgress from "material-ui/CircularProgress";
 
 const Div = styled.div`
   display: flex;
@@ -26,13 +26,7 @@ class TrainersListContainer extends Component {
     if (error) {
       return <p>{error.message}</p>;
     }
-    return (
-      <StudentTable
-        accounts={accounts}
-        startdate={this.props.startdate}
-        enddate={this.props.enddate}
-      />
-    );
+    return <StudentTable accounts={accounts} startdate={this.props.startdate} enddate={this.props.enddate} />;
   }
 }
 

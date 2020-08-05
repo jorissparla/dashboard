@@ -6,7 +6,7 @@ import { usePersistentState } from "hooks";
 import _ from "lodash";
 import React, { useState } from "react";
 import { adopt } from "react-adopt";
-import { Mutation, Query } from "react-apollo";
+import { Query, Mutation } from "@apollo/client/react/components";
 //import { SmallCard } from "./SupportCard";
 import ReactMarkdown from "react-markdown/with-html";
 import styled from "styled-components";

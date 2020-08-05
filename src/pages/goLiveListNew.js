@@ -1,6 +1,6 @@
 import React from "react";
 import gql from "graphql-tag";
-import { graphql, useQuery } from "react-apollo";
+import { graphql, useQuery } from "@apollo/client";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";

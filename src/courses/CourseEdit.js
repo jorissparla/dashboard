@@ -1,6 +1,6 @@
 import React from "react";
 import gql from "graphql-tag";
-import { Query, Mutation, useQuery, useMutation } from "react-apollo";
+import { Query, Mutation, useQuery, useMutation } from "@apollo/client";
 import { adopt } from "react-adopt";
 import _ from "lodash";
 import { withRouter, useHistory } from "react-router";

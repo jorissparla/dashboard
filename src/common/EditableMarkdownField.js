@@ -4,7 +4,7 @@ import Paper from "@material-ui/core/Paper";
 import EditIcon from "@material-ui/icons/Edit";
 import JoditEditor from "jodit-react";
 import React, { useRef } from "react";
-import { useMutation } from "react-apollo";
+import { useMutation } from "@apollo/client";
 import MarkDownFieldEditor from "./MarkdownFieldEditor";
 import { useAlert } from "globalState/AlertContext";
 

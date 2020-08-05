@@ -1,6 +1,6 @@
 import React from "react";
 import gql from "graphql-tag";
-import { useQuery } from "react-apollo";
+import { useQuery } from "@apollo/client";
 import SummaryChart from "./NewSummaryChart";
 import shortid from "shortid";
 
@@ -42,18 +42,7 @@ const SummaryChartContainer = ({
   if (loading) return <div>Loading....</div>;
   if (data && data.summaries) {
     const summary = data.summaries;
-    return (
-      <SummaryChart
-        id={shortid.generate()}
-        data={summary}
-        title={title}
-        type={type}
-        xvalue="weekNr"
-        value={value}
-        color={color}
-        team={team}
-      />
-    );
+    return <SummaryChart id={shortid.generate()} data={summary} title={title} type={type} xvalue="weekNr" value={value} color={color} team={team} />;
   } else {
     return "no data returned";
   }

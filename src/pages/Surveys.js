@@ -1,10 +1,10 @@
-import * as React from 'react';
-import { useQuery } from 'react-apollo';
-import gql from 'graphql-tag';
-import { withRouter } from 'react-router';
-import { SurveyComponent } from '../surveys/SurveyComponent';
-import Spinner from '../utils/spinner';
-import SurveyComments from '../surveys/SurveyComments';
+import * as React from "react";
+import { useQuery } from "@apollo/client";
+import gql from "graphql-tag";
+import { withRouter } from "react-router";
+import { SurveyComponent } from "../surveys/SurveyComponent";
+import Spinner from "../utils/spinner";
+import SurveyComments from "../surveys/SurveyComments";
 
 const QUERY_SURVEY_RATIOS = gql`
   query QUERY_SURVEY_RATIOS($region: String) {
@@ -23,12 +23,12 @@ const QUERY_SURVEY_RATIOS = gql`
   }
 `;
 
-const SurveysInner = props => {
-  let region = props.match.params.id || 'EMEA';
-  console.log('🗑🗑', region, props.match.params.id);
+const SurveysInner = (props) => {
+  let region = props.match.params.id || "EMEA";
+  console.log("🗑🗑", region, props.match.params.id);
 
   const { data, loading } = useQuery(QUERY_SURVEY_RATIOS, {
-    variables: { region }
+    variables: { region },
   });
   console.log(data);
   if (loading) {
@@ -45,8 +45,8 @@ const SurveysInner = props => {
       feedback_comments,
       pct_feedback_comments,
       uncategorized,
-      pct_uncategorized
-    }
+      pct_uncategorized,
+    },
   } = data;
   return (
     <div>
@@ -61,7 +61,7 @@ const SurveysInner = props => {
           feedback_comments,
           pct_feedback_comments,
           uncategorized,
-          pct_uncategorized
+          pct_uncategorized,
         }}
       />
       <SurveyComments region={region} />

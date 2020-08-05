@@ -1,12 +1,12 @@
-import React from 'react';
-import gql from 'graphql-tag';
-import { Query, Mutation } from 'react-apollo';
-import Paper from '@material-ui/core/Paper';
-import { Formik } from 'formik';
-import { TextField, Select, FormControl, InputLabel, MenuItem } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
-import { withRouter } from 'react-router';
-import PropTypes from 'prop-types';
+import React from "react";
+import gql from "graphql-tag";
+import { Query, Mutation } from "@apollo/client/react/components";
+import Paper from "@material-ui/core/Paper";
+import { Formik } from "formik";
+import { TextField, Select, FormControl, InputLabel, MenuItem } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
+import { withRouter } from "react-router";
+import PropTypes from "prop-types";
 
 const QUERY_SINGLE_COURSE_WITHDATA = gql`
   query QUERY_SINGLE_COURSE_WITHDATA($id: ID) {
@@ -82,59 +82,47 @@ const QUERY_SINGLE_COURSE_WITHDATA = gql`
   }
 `;
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
     ...theme.mixins.gutters(),
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
     padding: theme.spacing(2),
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    margin: '15px',
-    padding: '10px',
-    minWidth: '200px'
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    margin: "15px",
+    padding: "10px",
+    minWidth: "200px",
   },
   button: {
-    margin: theme.spacing(1)
+    margin: theme.spacing(1),
   },
 
   buttonDel: {
     margin: theme.spacing(1),
-    backgroundColor: '#000'
+    backgroundColor: "#000",
   },
 
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    marginBottom: 20
-  }
+    marginBottom: 20,
+  },
 });
 
 class PlannedCoursesForm extends React.Component {
   static propTypes = {
-    courseid: PropTypes.string.isRequired
+    courseid: PropTypes.string.isRequired,
   };
   render() {
     return (
       <div>
         <Formik
           initialValues={{ courseid: this.props.courseid }}
-          onSubmit={async (
-            values,
-            { setSubmitting, setErrors /* setValues and other goodies */ }
-          ) => {}}
+          onSubmit={async (values, { setSubmitting, setErrors /* setValues and other goodies */ }) => {}}
         >
-          {({
-            values,
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            setFieldValue,
-            touched,
-            errors,
-            isSubmitting
-          }) => (
+          {({ values, handleChange, handleBlur, handleSubmit, setFieldValue, touched, errors, isSubmitting }) => (
             <form onSubmit={handleSubmit}>
               <Paper className={classes.root}>
                 <TextField
@@ -151,8 +139,8 @@ class PlannedCoursesForm extends React.Component {
                     value={values.consultant}
                     onChange={handleChange}
                     inputProps={{
-                      name: 'consultant',
-                      id: 'consultant-simple'
+                      name: "consultant",
+                      id: "consultant-simple",
                     }}
                   >
                     {supportfolks.map(({ id, navid, image, fullname }) => (
@@ -182,20 +170,10 @@ class PlannedCoursesForm extends React.Component {
                 />
 
                 <div>
-                  <Button
-                    variant="contained"
-                    className={classes.button}
-                    color="primary"
-                    type="submit"
-                  >
+                  <Button variant="contained" className={classes.button} color="primary" type="submit">
                     Save
                   </Button>
-                  <Button
-                    variant="contained"
-                    onClick={() => history.push('feedback')}
-                    className={classes.button}
-                    color="secondary"
-                  >
+                  <Button variant="contained" onClick={() => history.push("feedback")} className={classes.button} color="secondary">
                     Cancel
                   </Button>
                 </div>

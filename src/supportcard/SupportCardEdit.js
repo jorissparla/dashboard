@@ -1,5 +1,5 @@
 import gql from "graphql-tag";
-import { graphql } from "react-apollo";
+import { graphql } from "@apollo/client/react/hoc";
 import React from "react";
 import { withRouter, useHistory } from "react-router";
 import SupportCardForm from "./SupportCardForm";

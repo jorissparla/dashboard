@@ -1,11 +1,11 @@
-import Checkbox from '@material-ui/core/Checkbox';
-import { green, red } from '@material-ui/core/colors';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import CheckCircle from '@material-ui/icons/CheckCircle';
-import ErrorOutline from '@material-ui/icons/ErrorOutline';
-import React from 'react';
-import { useMutation } from 'react-apollo';
-import { MUTATION_UPDATE_DETAIL } from './TenantQueries';
+import Checkbox from "@material-ui/core/Checkbox";
+import { green, red } from "@material-ui/core/colors";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import CheckCircle from "@material-ui/icons/CheckCircle";
+import ErrorOutline from "@material-ui/icons/ErrorOutline";
+import React from "react";
+import { useMutation } from "@apollo/client";
+import { MUTATION_UPDATE_DETAIL } from "./TenantQueries";
 
 type Props = {
   id: string;
@@ -33,7 +33,7 @@ export const TenantChecked: React.FC<Props> = ({ id, value }) => {
             onChange={doChange}
           />
         }
-        label={`${checked ? 'Ready' : 'Not ready'}`}
+        label={`${checked ? "Ready" : "Not ready"}`}
       />
     </div>
   );

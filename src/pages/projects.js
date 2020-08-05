@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import gql from "graphql-tag";
-import { useQuery } from "react-apollo";
+import { useQuery } from "@apollo/client";
 import Spinner from "utils/spinner";
 import SearchBar from "common/SearchBar";
 import { format } from "date-fns";

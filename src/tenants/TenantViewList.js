@@ -6,7 +6,7 @@ import classNames from "classnames";
 import { usePersistentState } from "hooks";
 import _ from "lodash";
 import React, { useState } from "react";
-import { useQuery } from "react-apollo";
+import { useQuery } from "@apollo/client";
 import Spinner from "utils/spinner";
 import { DashBoardContext } from "../globalState/Provider";
 import Loader from "../utils/Loader";

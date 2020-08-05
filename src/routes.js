@@ -52,6 +52,7 @@ import AddProject from "projects/addproject";
 import UpdateProject from "projects/updateproject";
 import MissingTenants from "tenants/MissingTenants";
 import Main from "pages/Main";
+import SymptomsKBs from "pages/SymptomsKBs";
 
 // const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
 const LoggedInUsers = React.lazy(() => import("./pages/loggedinusers"));
@@ -113,6 +114,7 @@ function AppRoutes(props) {
 
   return (
     <Switch>
+      <Route exact path="/symptomkbs" component={SymptomsKBs} />
       <Route exact path="/loggedinusers" component={LoggedInUsers} />
       <Route exact path="/uploadimage" component={UploadImageComponent} />
       <Route exact path="/login" component={LoginForm} />

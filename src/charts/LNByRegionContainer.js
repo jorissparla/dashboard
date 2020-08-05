@@ -1,7 +1,7 @@
 import { Grid } from "@material-ui/core";
 import gql from "graphql-tag";
 import React from "react";
-import { useQuery } from "react-apollo";
+import { useQuery } from "@apollo/client";
 import { format } from "utils/format";
 import Spinner from "utils/spinner";
 import HistoryChart from "./historychart";

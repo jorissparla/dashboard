@@ -2,7 +2,7 @@ import { addHours, format } from "date-fns";
 import { useAlert } from "globalState/AlertContext";
 import { useUserContext } from "globalState/UserProvider";
 import React from "react";
-import { useMutation } from "react-apollo";
+import { useMutation } from "@apollo/client";
 import FileUploader from "../common/FileUploaderNew";
 import { UPDATE_PROFILE_PIC_MUTATION } from "../graphql/UPDATE_PROFILE_PIC";
 

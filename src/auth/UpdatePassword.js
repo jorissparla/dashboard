@@ -1,19 +1,19 @@
 import React from "react";
 import { withRouter } from "react-router";
 import gql from "graphql-tag";
-import { graphql } from "react-apollo";
+import { graphql } from "@apollo/client/react/hoc";
 import { Button, Input, Form, Row, Message, Error } from "../styles";
 
 class UpdatePasswordForm extends React.Component {
   state = { success: false, nomatch: false, password: "", confirmpassword: "" };
 
-  doSubmit = async e => {
+  doSubmit = async (e) => {
     e.preventDefault();
     const { password, confirmpassword } = this.state;
     this.setState({ nomatch: password !== confirmpassword });
     if (password === confirmpassword) {
       const result = await this.props.changePassword({
-        variables: { email: this.props.email, password }
+        variables: { email: this.props.email, password },
       });
       this.setState({ success: result.data.changePassword.error === "" });
       // setTimeout(() => this.props.history.push("/signin"), 1500);

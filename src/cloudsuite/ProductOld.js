@@ -1,20 +1,16 @@
-import { Button } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
-import EditIcon from '@material-ui/icons/Edit';
-import React from 'react';
-import { useMutation, useQuery } from 'react-apollo';
-import { withRouter } from 'react-router';
-import styled from 'styled-components';
-import Spinner from 'utils/spinner';
-import useInput from '../hooks/useInput';
-import ContactForm from './ContactForm';
-import {
-  MUTATION_ADD_PRODUCT_CONTACT,
-  MUTATION_REMOVE_PRODUCT_CONTACT,
-  QUERY_SINGLE_PRODUCT
-} from './graphql/Queries';
-import ProductForm from './ProductForm';
-import { Article, H1, Header } from './Styles';
+import { Button } from "@material-ui/core";
+import { withStyles } from "@material-ui/core/styles";
+import EditIcon from "@material-ui/icons/Edit";
+import React from "react";
+import { useMutation, useQuery } from "@apollo/client";
+import { withRouter } from "react-router";
+import styled from "styled-components";
+import Spinner from "utils/spinner";
+import useInput from "../hooks/useInput";
+import ContactForm from "./ContactForm";
+import { MUTATION_ADD_PRODUCT_CONTACT, MUTATION_REMOVE_PRODUCT_CONTACT, QUERY_SINGLE_PRODUCT } from "./graphql/Queries";
+import ProductForm from "./ProductForm";
+import { Article, H1, Header } from "./Styles";
 /*
 const Thead = styled.thead`
   font-weight: 800;
@@ -52,60 +48,60 @@ const OverThePage = styled.div`
   justify-content: space-between;
 `;
 
-const styles = theme => ({
+const styles = (theme) => ({
   button: {
-    margin: theme.spacing(1)
+    margin: theme.spacing(1),
   },
   editField: {
-    display: 'block',
-    width: '800px',
-    backgroundColor: 'lightyellow'
+    display: "block",
+    width: "800px",
+    backgroundColor: "lightyellow",
   },
   input: {
-    display: 'none'
+    display: "none",
   },
   contentField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    backgroundColor: '#eeeeee99',
+    backgroundColor: "#eeeeee99",
     fontSize: 40,
-    maxHeight: '30vh'
+    maxHeight: "30vh",
   },
   dense: {
-    marginTop: 19
+    marginTop: 19,
   },
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 120
+    minWidth: 120,
   },
   markdown: {
-    width: '90vw',
-    maxHeight: '30vh'
+    width: "90vw",
+    maxHeight: "30vh",
   },
   content: {
-    display: 'flex',
-    marginLeft: '2rem',
-    borderTop: 'solid 1px #EEE',
-    borderBottom: 'solid 1px #EEE',
-    height: '200px',
-    border: '1px solid #EEE',
+    display: "flex",
+    marginLeft: "2rem",
+    borderTop: "solid 1px #EEE",
+    borderBottom: "solid 1px #EEE",
+    height: "200px",
+    border: "1px solid #EEE",
     borderRadius: 8,
-    margin: 8
+    margin: 8,
   },
   content2: {
-    display: 'flex',
-    flexDirection: 'column',
-    marginLeft: '2rem'
+    display: "flex",
+    flexDirection: "column",
+    marginLeft: "2rem",
   },
   button2: {
     margin: theme.spacing(1),
-    height: '40px',
-    backgroundColor: 'palevioletred'
+    height: "40px",
+    backgroundColor: "palevioletred",
   },
   button3: {
     margin: theme.spacing(1),
-    height: '40px'
-  }
+    height: "40px",
+  },
 });
 
 const SpanWrapper = styled.span`
@@ -131,15 +127,15 @@ const Right = styled.div`
 function Product({ match, history, classes }) {
   const id = match.params.id;
   const [isEditable, setEditable] = React.useState(false);
-  const contact = useInput('');
-  const value = useInput('');
-  const contentValue = useInput('');
-  const organisation = useInput('Support');
+  const contact = useInput("");
+  const value = useInput("");
+  const contentValue = useInput("");
+  const organisation = useInput("Support");
 
   let content = null;
 
   React.useEffect(() => {
-    console.log('render');
+    console.log("render");
     contentValue.setValue(content);
   });
 
@@ -158,29 +154,15 @@ function Product({ match, history, classes }) {
       <Article>
         <Header>
           <OverThePage>
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={() => history.push('/cloudsuites')}
-            >
+            <Button color="primary" variant="contained" onClick={() => history.push("/cloudsuites")}>
               Back to Suites
             </Button>
             {isEditable ? (
               <SpanWrapper>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  className={classes.button3}
-                  onClick={() => setEditable(!isEditable)}
-                >
+                <Button variant="contained" color="primary" className={classes.button3} onClick={() => setEditable(!isEditable)}>
                   Save
                 </Button>
-                <Button
-                  variant="contained"
-                  color="secondary"
-                  className={classes.button3}
-                  onClick={() => setEditable(!isEditable)}
-                >
+                <Button variant="contained" color="secondary" className={classes.button3} onClick={() => setEditable(!isEditable)}>
                   Cancel
                 </Button>
               </SpanWrapper>

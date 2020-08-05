@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useMutation } from "react-apollo";
+import { useMutation } from "@apollo/client";
 
 const Keywords = ({ id, keywords = "", readOnly, updateKeywords }) => {
   const [keywordsArray, setKeywordsArray] = useState(keywords ? keywords.split(";").map((x) => x.trim()) : []);

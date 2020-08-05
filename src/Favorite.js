@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import { adopt } from "react-adopt";
 import User, { useUser } from "./User";
 import gql from "graphql-tag";
-import { useQuery, useMutation, Mutation, Query } from "react-apollo";
+import { useQuery, useMutation, Mutation, Query } from "@apollo/client";
 import { useUserContext } from "globalState/UserProvider";
 
 const styles = (theme) => ({

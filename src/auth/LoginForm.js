@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import gql from "graphql-tag";
-import { useMutation } from "react-apollo";
+import { useMutation } from "@apollo/client";
 import { Link, useHistory, useLocation } from "react-router-dom";
 import { UserContext, useUserContext } from "../globalState/UserProvider";
 import Button from "../elements/TWButton";

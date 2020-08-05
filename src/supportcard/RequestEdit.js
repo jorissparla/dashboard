@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import gql from "graphql-tag";
-import {  Query, Mutation } from "react-apollo";
+import { Query, Mutation } from "@apollo/client/react/components";
 import { withRouter } from "react-router-dom";
 import { format } from "date-fns";
 import RequestForm from "./RequestForm";
@@ -17,7 +17,7 @@ class RequestEdit extends Component {
       assigned,
       text,
       complete,
-      updatedAt: format(new Date(), "yyyy-MM-dd")
+      updatedAt: format(new Date(), "yyyy-MM-dd"),
     };
     console.log(input);
     const result = await updateRequest({ variables: { input } });
@@ -35,12 +35,12 @@ class RequestEdit extends Component {
           const { request, accounts } = data;
           return (
             <Mutation mutation={UPDATE_REQUEST_MUTATION} refetchQueries={[{ query: ALL_REQUESTS_QUERY }]}>
-              {updateRequest => {
+              {(updateRequest) => {
                 return (
                   <RequestForm
                     request={request}
                     accounts={accounts}
-                    onSave={values => this.handleSave(values, updateRequest)}
+                    onSave={(values) => this.handleSave(values, updateRequest)}
                     onCancel={() => {
                       console.log("cancel");
                       this.props.history.push("/requestlist");

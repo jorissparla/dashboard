@@ -1,7 +1,7 @@
 import { UserContext } from "globalState/UserProvider";
 import React, { useState, useEffect } from "react";
 import _ from "lodash";
-import { useMutation } from "react-apollo";
+import { useMutation } from "@apollo/client";
 import { useHistory } from "react-router";
 import { usePersistentState } from "../hooks";
 import {
