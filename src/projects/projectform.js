@@ -51,6 +51,11 @@ const MUTATION_ADD_PROJECT = gql`
     }
   }
 `;
+const MUTATION_DELETE_PROJECT = gql`
+  mutation MUTATION_DELETE_PROJECT($where: WhereProject) {
+    deleteproject(where: $where)
+  }
+`;
 
 const QUERY_SINGLE_PROJECT = gql`
   query QUERY_SINGLE_PROJECT($id: ID) {
@@ -90,6 +95,7 @@ const ProjectForm = ({ id = null }) => {
   const { data, loading } = useQuery(QUERY_SINGLE_PROJECT, { variables: { id } });
   const [updateProject] = useMutation(MUTATION_UPDATE_PROJECT);
   const [addProject] = useMutation(MUTATION_ADD_PROJECT);
+  const [deleteProject] = useMutation(MUTATION_DELETE_PROJECT);
   const alert = useAlert();
   useEffect(() => {
     if (data && data.project) {
@@ -119,7 +125,16 @@ const ProjectForm = ({ id = null }) => {
     }, 2000);
   };
 
-  const handleDelete = async () => {};
+  const handleDelete = async () => {
+    const where = { id };
+    try {
+      const res = await deleteProject({ variables: { where } });
+      alert.setMessage("Project was Deleted");
+      navToProjectPage();
+    } catch (error) {
+      setErrors((prev) => [...prev, JSON.stringify(error)]);
+    }
+  };
 
   const handleSave = async () => {
     if (validate()) {
@@ -147,6 +162,8 @@ const ProjectForm = ({ id = null }) => {
         console.log("add", input);
         try {
           const res = await addProject({ variables: { input } });
+          alert.setMessage("Project was created");
+          navToProjectPage();
           if (res.data?.errors) {
             setErrors((prev) => [...prev, ...res.data.errors]);
           }
@@ -351,7 +368,7 @@ const ProjectForm = ({ id = null }) => {
                 Cancel
               </a>
             </div>
-            <span class="inline-flex rounded-md shadow-sm">
+            {/* <span class="inline-flex rounded-md shadow-sm">
               <button
                 type="button"
                 class="inline-flex items-center px-4 py-2 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 transition ease-in-out duration-150 cursor-not-allowed"
@@ -367,9 +384,9 @@ const ProjectForm = ({ id = null }) => {
                 </svg>
                 Processing
               </button>
-            </span>
+            </span> */}
 
-            <SafeDeleteButton onClick={handleDelete} />
+            <SafeDeleteButton onClick={handleDelete} onDelete={handleDelete} />
           </div>
         </div>
       </div>
