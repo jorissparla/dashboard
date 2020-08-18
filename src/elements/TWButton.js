@@ -11,7 +11,7 @@ const purple_class = "bg-purp text-white hover:bg-purple-400";
 const indigo_class =
   "bg-indigo-400 text-indigo-800 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 ";
 
-export default ({ children, className = null, ...props }) => {
+const TWButton = ({ children, className = null, ...props }) => {
   let classes = className;
   let color = props?.color || "";
   // console.log(props);
@@ -47,3 +47,44 @@ export default ({ children, className = null, ...props }) => {
     </button>
   );
 };
+export default TWButton;
+
+const TWHyperLink = ({ children, className = null, link = "", ...props }) => {
+  let classes = className;
+  const newBaseClass = base_class+" no-underline "
+  let color = props?.color || "";
+  // console.log(props);
+  switch (color) {
+    case "teal":
+      classes = clsx(classes, newBaseClass, teal_class);
+      break;
+    case "black":
+      classes = clsx(classes, newBaseClass, black_class);
+      break;
+    case "grey":
+      classes = clsx(classes, newBaseClass, grey_class);
+      break;
+    case "greyforbidden":
+      classes = clsx(classes, newBaseClass, grey_forbidden_class);
+      break;
+    case "pink":
+      classes = clsx(classes, newBaseClass, pink_class);
+      break;
+    case "indigo":
+      classes = clsx(classes, newBaseClass, indigo_class);
+      break;
+    case "primary":
+      classes = clsx(classes, newBaseClass, purple_class);
+      break;
+    default:
+      classes = clsx(classes, newBaseClass, def_classes);
+      break;
+  }
+  return (
+    <a href={link} className={classes} {...props} target="_blank_">
+      {children}
+    </a>
+  );
+};
+
+export { TWHyperLink };

@@ -4,6 +4,7 @@ import { useQuery } from "@apollo/client";
 import Spinner from "utils/spinner";
 import SearchBar from "common/SearchBar";
 import _ from "lodash";
+import { TWHyperLink } from "elements/TWButton";
 
 const SYMPTOM_KB_QUERY = gql`
   query SYMPTOM_KB_QUERY {
@@ -67,7 +68,13 @@ const SymptomsKBs = () => {
 
   return (
     <div>
+      <div className="flex items-center justify-between">
+        <div className="w-3/4">
+
       <SearchBar onChange={handleSearchChange} hintText="Type part of a symptom or category to show results" />
+        </div>
+      <div className="w-1/6"><TWHyperLink link="/symptomcategories" color="pink">Symptom Definitions</TWHyperLink></div>
+      </div>
       {groupedSymptoms.length === 0 && (
         <div class="rounded-md bg-yellow-50 p-4">
           <div class="flex">

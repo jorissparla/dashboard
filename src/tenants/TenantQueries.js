@@ -40,7 +40,7 @@ export const ALL_TENANTS = gql`
   }
 `;
 export const ALL_TENANTS_SIMPLE = gql`
-  query q {
+  query ALL_TENANTS_SIMPLE {
     tenants {
       id
       farm
