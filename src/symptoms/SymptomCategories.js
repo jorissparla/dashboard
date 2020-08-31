@@ -52,7 +52,10 @@ const SymptomCategories = () => {
   // const { categories, symptoms } = data;
   return (
     <div class="h-screen  max-w-full">
-      <h1 className=" font-pop font-semibold text-lg mb-4">Symptom Categories</h1>
+      <div className="py-4 flex  ml-8">
+        <h1 className=" font-pop font-semibold text-lg mb-4">Symptom Categories</h1>
+        <span className="ml-8 text-sm text-gray-600">on this page your can find all available symptoms by category</span>
+      </div>
       <div className="pr-8 mx-7 w-full flex items-center justify-between">
         <TWSelectMenu
           items={categories.map((c) => c.symptom_category).sort()}
@@ -61,7 +64,7 @@ const SymptomCategories = () => {
           value={selectedCategory}
           wide
         />
-        
+
         <TWHyperLink link="/symptomkbs">To Symptom KBS</TWHyperLink>
       </div>
       <div>

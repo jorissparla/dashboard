@@ -3,7 +3,6 @@ import CloseIcon from "@material-ui/icons/Close";
 import { makeStyles } from "@material-ui/styles";
 import clsx from "clsx";
 import JoditEditor from "jodit-react";
-import CKEditor from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 import React, { useRef, useState } from "react";

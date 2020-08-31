@@ -13,7 +13,7 @@ interface NavLinkProps {
 export const NavLink: React.FC<NavLinkProps> = ({ title, color = "text-gray-600", Icon, navigateTo, history, toggleMenu, open = true }) => (
   <a
     href={navigateTo}
-    className={`flex items-center py-2 ml-2 cursor-pointer no-underline ${color}`}
+    className={`font-sans font-semibold text-sm flex items-center py-2 ml-2 cursor-pointer no-underline ${color}`}
     // onClick={() => {
     //   // toggleMenu();
     //   setTimeout(() => {

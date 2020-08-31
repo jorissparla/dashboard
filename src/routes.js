@@ -56,6 +56,7 @@ import SymptomsKBs from "pages/SymptomsKBs";
 import Mailerlog from "pages/Mailerlog";
 import MailerLogDetail from "pages/MailerLogDetail";
 import SymptomCategories from "symptoms/SymptomCategories";
+import testActivity from "pages/testActivity";
 
 // const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
 const LoggedInUsers = React.lazy(() => import("./pages/loggedinusers"));
@@ -117,6 +118,7 @@ function AppRoutes(props) {
 
   return (
     <Switch>
+      <Route exact path="/testy" component={testActivity} />
       <Route exact path="/mailerlogs" component={Mailerlog} />
       <Route exact path="/mailerlogs/:id" component={MailerLogDetail} />
       <Route exact path="/symptomkbs" component={SymptomsKBs} />
@@ -139,6 +141,7 @@ function AppRoutes(props) {
       <AuthRoute exact path="/profilepage" component={ProfilePage} user={user} />
       <AuthRoute exact path="/profilepage/:id" component={UserPage} user={user} />
       <AuthRoute exact path="/mywork" component={Stats} user={user} history={history} />
+      <Route exact path="/working" component={Stats} user={user} history={history} />
       <AuthRoute exact path="/kbpage" component={KBPage} user={user} history={history} />
       <Route exact path="/main" component={Main} user={user} history={history} />
 

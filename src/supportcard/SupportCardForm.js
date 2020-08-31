@@ -115,6 +115,12 @@ const SupportCardForm = (props) => {
               // !readOnly ? (
               <CKEditor
                 editor={ClassicEditor}
+                config={{
+                  ckfinder: {
+                    // Upload the images to the server using the CKFinder QuickUpload command.
+                    uploadUrl: "https://nlbavwixs.infor.com/images",
+                  },
+                }}
                 disabled={readOnly}
                 data={values.description}
                 onInit={(editor) => {

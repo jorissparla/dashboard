@@ -69,8 +69,11 @@ export const SideBarMenu: React.FC<Props> = ({ classes, history, toggleMenu, ope
       <ToggledNavLink title="MaintenanceWizard AutoExchange" Icon={AutoExchange} navigateTo="/maintenancewizardauto" history={history} />
       <ToggledNavLink title="MultiTenant Customers" Icon={ExtensionIcon} navigateTo="/tenant" history={history} color="text-orange-600" />
       <ToggledNavLink title="Support Cards" Icon={LinkIcon} navigateTo="/supportcard" history={history} color="text-teal-400" />
-      <ToggledNavLink title="Symptom Definitions" Icon={SymptomDefIcon} navigateTo="/symptomcategories" history={history} color="text-pink-600" />
-      <ToggledNavLink title="Request Symptoms" Icon={SymptomsIcon} navigateTo="/symptoms" history={history} />
+      <ExpandableMenuItem classes={classes} title="Symptoms" Icon={SymptomsIcon} isExpanded={true}>
+        <ToggledNavLink title="Symptom Definitions" navigateTo="/symptomcategories" history={history}  />
+        <ToggledNavLink title="KBs linked to Symptoms" navigateTo="/symptomkbs" history={history}  />
+        <ToggledNavLink title="Request Symptoms" navigateTo="/symptoms" history={history} />
+      </ExpandableMenuItem>
       {authenticated && <ToggledNavLink title="My KBPage" Icon={HelpOutlineIcon} navigateTo="/kbpage" history={history} />}
 
       {authenticated && <ToggledNavLink title="WorkList" Icon={MyWorkList} navigateTo="/mywork" history={history} />}
@@ -138,18 +141,19 @@ interface ExpandableProps {
   Icon: any;
   children: any;
   classes: any;
+  isExpanded?: boolean;
 }
 
-const ExpandableMenuItem: React.FC<ExpandableProps> = ({ title, Icon, children, classes }) => {
+const ExpandableMenuItem: React.FC<ExpandableProps> = ({ title, Icon, children, classes, isExpanded = false }) => {
   //let initialExpand: any
-  const [expanded, toggleExpanded] = useState(false);
+  const [expanded, toggleExpanded] = useState(isExpanded);
   return (
     <ExpansionPanel expanded={expanded} onChange={() => toggleExpanded(!expanded)}>
       <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
         <ListItemIcon>
           <Icon />
         </ListItemIcon>
-        <Typography className={classes.secondaryHeading}>{title}</Typography>
+        <div className="font-sans font-semibold text-gray-600">{title}</div>
       </ExpansionPanelSummary>
       <ExpansionPanelDetails className={classes.panelDetails}>{children}</ExpansionPanelDetails>
     </ExpansionPanel>
