@@ -132,7 +132,8 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
     .notStatus(["Solution Proposed", "Solution Pending Maintenance", "Awaiting Development"])
     .sort("dayssincelastupdate", "D")
     .getData();
-  const on_hold = blBase.init().status("On Hold by customer").valid_actiondate().sort("dayssincelastupdate", "D").getData();
+  const on_hold = blBase.init().status("On Hold by customer").invalid_actiondate().sort("dayssincelastupdate", "D").getData();
+  console.log({ on_hold });
   const aging = blBase
     .init()
     .hasStatus(["Researching", "On Hold by Customer", "Awaiting Infor", "Awaiting Customer"])
