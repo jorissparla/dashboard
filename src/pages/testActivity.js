@@ -29,7 +29,7 @@ const TestActivity = (props) => {
               ckfinder: {
                 // plugins: [ CKFinder ],
                 // Upload the images to the server using the CKFinder QuickUpload command.
-                uploadUrl: "https://localhost:3001/upload",
+                uploadUrl: "https://nlbavwixs.infor.com:3001/upload",
               },
             }}
             // disabled={readOnly}
