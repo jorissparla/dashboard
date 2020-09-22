@@ -1,5 +1,6 @@
 import CKEditor from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+// import CKFinder from "@ckeditor/ckeditor5-ckfinder"
 import React, { useRef, useState } from "react";
 import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
@@ -16,6 +17,7 @@ const UPLOAD_MUTATION = gql`
 
 const TestActivity = (props) => {
   const [values, setValues] = React.useState("");
+  console.log(ClassicEditor.builtinPlugins.map((plugin) => plugin.pluginName));
   return (
     <div>
       <div className="flex text-gray-600 mb-4">
@@ -23,20 +25,21 @@ const TestActivity = (props) => {
           // !readOnly ? (
           <CKEditor
             editor={ClassicEditor}
-            // config={{
-            //   ckfinder: {
-            //     // Upload the images to the server using the CKFinder QuickUpload command.
-            //     uploadUrl: "https://nlbavwixs.infor.com/images",
-            //   },
-            // }}
+            config={{
+              ckfinder: {
+                // plugins: [ CKFinder ],
+                // Upload the images to the server using the CKFinder QuickUpload command.
+                uploadUrl: "https://localhost:3001/upload",
+              },
+            }}
             // disabled={readOnly}
             data={values}
             onInit={(editor) => {
               // You can store the "editor" and use when it is needed.
               console.log("Editor is ready to use!", editor);
-              editor.plugins.get("FileRepository").createUploadAdapter = function (loader) {
-                return new MyUploadAdapter(loader);
-              };
+              // editor.plugins.get("FileRepository").createUploadAdapter = function (loader) {
+              //   return new MyUploadAdapter(loader);
+              // };
             }}
             onChange={(event, editor) => {
               const data = editor.getData();

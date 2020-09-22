@@ -11,6 +11,9 @@ const purple_class = "bg-purp text-white hover:bg-purple-400";
 const indigo_class =
   "bg-indigo-400 text-indigo-800 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 ";
 
+const graybut =
+  "inline-flex items-center  rounded border border-gray-400 px-4 py-1 bg-transparent uppercase text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition ease-in-out duration-150";
+const styl = "";
 const TWButton = ({ children, className = null, ...props }) => {
   let classes = className;
   let color = props?.color || "";
@@ -24,6 +27,9 @@ const TWButton = ({ children, className = null, ...props }) => {
       break;
     case "grey":
       classes = clsx(classes, base_class, grey_class);
+      break;
+    case "transp":
+      classes = clsx( graybut);
       break;
     case "greyforbidden":
       classes = clsx(classes, base_class, grey_forbidden_class);
@@ -51,7 +57,7 @@ export default TWButton;
 
 const TWHyperLink = ({ children, className = null, link = "", ...props }) => {
   let classes = className;
-  const newBaseClass = base_class+" no-underline "
+  const newBaseClass = base_class + " no-underline ";
   let color = props?.color || "";
   // console.log(props);
   switch (color) {

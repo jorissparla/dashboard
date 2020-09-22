@@ -510,8 +510,6 @@ export const TenantListHeader = ({ updatedAt, tenants, toggleShowLogs, toggleFil
   const totalTenants = Object.entries(tenantcustomersWithFarm).reduce((count, item) => count + item[1], 0);
   return (
     <div className="flex flex-col justify-between shadow-lg bg-white p-2 m-2">
-      // display: flex; // flex-direction: column; // justify-content: space-between; // box-shadow: 2px 2px 8px 10px rgba(0, 0, 0, 0.26); // margin:
-      1px; // background: white; // padding: 1rem;
       <div className="flex justify-between tracking-widest  ">
         <Typography gutterBottom variant="h5" component="h2">
           <span className="tracking-wide uppercase">

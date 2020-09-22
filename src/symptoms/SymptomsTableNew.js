@@ -16,7 +16,7 @@ import { useAlert } from "globalState/AlertContext";
 import UpdateSymptomDetails from "./UpdateSymptomDetails";
 import SearchBar from "../common/SearchBar";
 
-const PAGE_LENGTH = 15;
+const PAGE_LENGTH = 200;
 
 const ColumnHeader = ({ name, onSort }) => {
   function handleSortUp() {
@@ -121,6 +121,14 @@ const RemoveCell = ({ handleDelete }) => {
     </td>
   );
 };
+
+const HyperLinkCell = ({ value = "", linkPrefix = "http://navigator.infor.com/n/incident.asp?IncidentID=", linkText = "" }) => (
+  <td className="px-5  border border-gray-200  text-sm">
+    <a className="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker" href={`${linkPrefix}${value}`} target="_blank">
+      {linkText || value}
+    </a>
+  </td>
+);
 
 function SymptomsTableNew({ data }) {
   const history = useHistory();
@@ -252,7 +260,7 @@ function SymptomsTableNew({ data }) {
         {/* <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto"></div> */}
 
         <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
-          <table className="shadow-lg rounded-lg w-full leading-normal shadow rounded-lg  mt-4 transition duration-500 ease-in-out ">
+          <table className=" w-full leading-normal shadow rounded-lg  mt-4 transition duration-500 ease-in-out ">
             <thead>
               <tr>
                 <ColumnHeader name="Symptom" onSort={handleColumnSort("symptom")} />
@@ -278,7 +286,7 @@ function SymptomsTableNew({ data }) {
                   <Cell value={item.statusname} complete={item.status} />
                   <NiceCell value={item.symptom_category} complete={item.status} />
                   <Cell value={item?.email} complete={item?.email} />
-                  <Cell value={item.incident} complete={item.status} />
+                  <HyperLinkCell value={item.incident} complete={item.status} />
                   <Cell value={item.note} complete={item.status} />
                   <CompleteCell value={item.status} />
                   <Cell value={format(item.updatedAt, "EEE dd MMM yyyy, HH:mm")} complete={item.status} />
@@ -323,10 +331,14 @@ function SymptomsTableNew({ data }) {
             />
           )}
           <div className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between          ">
-            <span className="text-xs xs:text-sm text-gray-900">
-              Showing {(currentPage - 1) * PAGE_LENGTH + 1} to {currentPage * PAGE_LENGTH} of {length} Entries
-            </span>
-            <div className="inline-flex ml-2 xs:mt-0">
+            {length < PAGE_LENGTH ? (
+              <span className="text-xs xs:text-sm text-gray-900">Showing {length} Entries</span>
+            ) : (
+              <span className="text-xs xs:text-sm text-gray-900">
+                Showing {(currentPage - 1) * PAGE_LENGTH + 1} to {currentPage * PAGE_LENGTH} of {length} Entries
+              </span>
+            )}
+            {length> PAGE_LENGTH && <div className="inline-flex ml-2 xs:mt-0">
               {currentPage}/{maxPages}
               <button
                 disabled={currentPage === 1}
@@ -342,7 +354,7 @@ function SymptomsTableNew({ data }) {
               >
                 Next
               </button>
-            </div>
+            </div>}
           </div>
         </div>
       </div>

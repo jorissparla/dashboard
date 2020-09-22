@@ -1,16 +1,16 @@
-import { Avatar, Backdrop, Button, Card, CardActions, CardContent, CardHeader, Divider, Grid, Modal, Switch, Typography } from "@material-ui/core";
+import { Mutation } from "@apollo/client/react/components";
+import { Backdrop, CardActions, CardHeader, Divider, Modal, Switch } from "@material-ui/core";
 import ListIcon from "@material-ui/icons/List";
 import classNames from "classnames";
+import { addHours } from "date-fns";
+import Button from "elements/TWButton";
 import { UserContext } from "globalState/UserProvider";
 import _ from "lodash";
-import React, { useState, useContext } from "react";
-import { Query, Mutation } from "@apollo/client/react/components";
+import React, { useContext, useState } from "react";
 import { format, formatDistanceToNow } from "../utils/format";
-import { addHours } from "date-fns";
 import EditTenantDetails from "./details/components/EditTenant";
 import Label from "./details/components/Label";
 import { MUTATION_MARK_LIVE } from "./TenantQueries";
-import TWButton from "elements/TWButton";
 
 export const TenantCard = ({
   classes,
@@ -104,8 +104,8 @@ export const TenantCard = ({
   // console.log(customer, tenants[0]);
   return (
     <>
-      <Card className={customer === "Infor" ? classes.card3 : classes.card}>
-        <CardContent>
+      <div className={customer === "Infor" ? classes.card3 : classes.card}>
+        <div className="p-2 ">
           {/* <Header>
           <H2>{customer}</H2>
 
@@ -121,7 +121,7 @@ export const TenantCard = ({
             }
             // title={customer}
             title={
-              <div title={customer} className=" text-xl font-semibold font-pop text-gray-600 overflow-hidden truncate ellipsis mr-2">
+              <div title={customer} className=" text-xl font-semibold font-sans text-gray-600 overflow-hidden truncate ellipsis mr-2">
                 {customer}
               </div>
             }
@@ -132,22 +132,22 @@ export const TenantCard = ({
                 <svg className="fill-current w-4 h-4 text-gray-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                   <path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-7.59V4h2v5.59l3.95 3.95-1.41 1.41L9 10.41z" />
                 </svg>
-                <span className="text-gray-600 text-sm">Updated {max2} ago</span>
+                <span className="text-gray-600 text-sm font-sans">Updated {max2} ago</span>
               </div>
             }
           />
-          <Typography className={classes.pos} color="textSecondary">
-            {tenants.length > 0 && tenants[0].farm}
+          <div className="mt-2 flex w-full justify-between items-center text-gray-700 font-sans" color="textSecondary">
+          <span className="font-semibold">{tenants.length > 0 && tenants[0].farm}</span>
             <span className={classes.box}>{baseTenantId}</span>
-          </Typography>
+          </div>
           <div className={classes.description}>
-            <Typography color="textSecondary" variant="subtitle2">
+            <div color="textSecondary" variant="subtitle2" className="text-sm font-sans text-gray-600">
               {tenantcustomerdetail.golivecomments.trim() ? (
                 tenantcustomerdetail.golivecomments
               ) : (
                 <span className={classes.descriptionblank}>Customer Information will be shown here</span>
               )}
-            </Typography>
+            </div>
           </div>
           <div className={classes.tags}>
             {tags.map(({ id, name, version, tooltip, tag }) => {
@@ -165,25 +165,24 @@ export const TenantCard = ({
             })}
           </div>
           <Divider />
-          <Grid alignItems="center" container justify="space-between" spacing={3}>
-            <Grid item className={classes.csm}>
-              <Typography variant="h5">PM</Typography>
-              <Typography variant="body2">{tenantcustomerdetail.pm ? tenantcustomerdetail.pm : "PM not entered"}</Typography>
-            </Grid>
-            <Grid item className={classes.csm}>
-              <Typography variant="h5">CSM</Typography>
-              <Typography variant="body2"> {tenantcustomerdetail.csm ? tenantcustomerdetail.csm : "CSM not entered"}</Typography>
-            </Grid>
-            <Grid item>
-              <Typography variant="h5">Go Live Date</Typography>
-              <Typography variant="body2">{golivedate}</Typography>
-            </Grid>
-          </Grid>
-        </CardContent>
-        <CardActions className={classes.spaceFooter}>
+          <div className="flex items-center justify-between" alignItems="center" container justify="space-between" spacing={3}>
+            <div item className={classes.csm}>
+              <div className="font-sans font-semibold text-gray-600">PM</div>
+              <div className="text-sm font-sans" variant="body2">{tenantcustomerdetail.pm ? tenantcustomerdetail.pm : "PM not entered"}</div>
+            </div>
+            <div item className={classes.csm}>
+               <div className="font-sans font-semibold text-gray-600">CSM</div>
+               <div className="text-sm font-sans"> {tenantcustomerdetail.csm ? tenantcustomerdetail.csm : "CSM not entered"}</div>
+            </div>
+            <div item>
+               <div className="font-sans font-semibold text-gray-600">Go Live Date</div>
+               <div className="text-sm font-sans">{golivedate}</div>
+            </div>
+          </div>
+        </div>
+        <div className="p-2 flex justify-between items-center">
           <Button
-            size="small"
-            variant="outlined"
+            color="transp"
             onClick={() => window.open("http://navigator.infor.com/n/incident_list.asp?ListType=CUSTOMERID&Value=" + tenants[0].customerid)}
           >
             <ListIcon className={classes.filterButton} />
@@ -192,11 +191,7 @@ export const TenantCard = ({
           <div className="relative inline-block text-left">
             <div>
               <span className="rounded-md shadow-sm">
-                <button
-                  type="button"
-                  className="inline-flex justify-center w-full rounded border border-gray-400 px-4 py-1 bg-transparent uppercase text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition ease-in-out duration-150"
-                  onClick={() => setShowStatus((prev) => !prev)}
-                >
+                <Button color="transp" onClick={() => setShowStatus((prev) => !prev)}>
                   Status
                   <svg className="-mr-1 ml-2 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
                     <path
@@ -205,7 +200,7 @@ export const TenantCard = ({
                       clipRule="evenodd"
                     />
                   </svg>
-                </button>
+                </Button>
               </span>
             </div>
             {showStatus && (
@@ -298,8 +293,8 @@ export const TenantCard = ({
               )}
             </Mutation>
           )}
-        </CardActions>
-      </Card>
+        </div>
+      </div>
       <Modal
         onClose={() => setisOpened(false)}
         open={isOpen}
