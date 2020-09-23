@@ -20,12 +20,14 @@ const TestActivity = (props) => {
   console.log(ClassicEditor.builtinPlugins.map((plugin) => plugin.pluginName));
   return (
     <div>
+      bla
       <div className="flex text-gray-600 mb-4">
         {
           // !readOnly ? (
           <CKEditor
             editor={ClassicEditor}
             config={{
+              toolbar: "",
               ckfinder: {
                 // plugins: [ CKFinder ],
                 // Upload the images to the server using the CKFinder QuickUpload command.

@@ -89,6 +89,15 @@ const SupportCardForm = (props) => {
     onSave(values);
   }
 
+  const config = readOnly? {
+    toolbar: ""
+  }: {
+    // toolbar: "",
+    ckfinder: {
+      // Upload the images to the server using the CKFinder QuickUpload command.
+      uploadUrl: "https://nlbavwixs.infor.com:3001/upload",
+    },
+  }
   console.log("🐱‍🏍", supportcard);
   return (
     <div className="bg-gray-200 h-screen w-full p-2">
@@ -115,12 +124,7 @@ const SupportCardForm = (props) => {
               // !readOnly ? (
               <CKEditor
                 editor={ClassicEditor}
-                config={{
-                  ckfinder: {
-                    // Upload the images to the server using the CKFinder QuickUpload command.
-                    uploadUrl: "https://nlbavwixs.infor.com:3001/upload",
-                  },
-                }}
+                config={config}
                 disabled={readOnly}
                 data={values.description}
                 onInit={(editor) => {

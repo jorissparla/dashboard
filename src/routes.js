@@ -190,12 +190,19 @@ function AppRoutes(props) {
       <EnhancedRoute editors={["Admin", "PO"]} user={user} path="/supportcard/filter/:text" component={SupportCards} />
       <Route path="award" component={Award} />
       <EnhancedRoute
-        editors={["Admin", "PO"]}
+        editors={["Admin", "PO", ""]}
         allowed={["Admin", "PO"]}
         user={user}
         path="/supportcard/edit/:id"
         component={RequireAuth(SupportCardEdit)}
       />
+      {/* <Route
+        editors={["Admin", "PO", ""]}
+        allowed={["Admin", "PO"]}
+        user={user}
+        path="/supportcard/edit/:id"
+        component={SupportCardEdit}
+      /> */}
       <EnhancedRoute editors={["None"]} user={user} path="/supportcard/view/:id" component={SupportCardEdit} />
       <EnhancedRoute allowed={["Admin"]} editors={["Admin", "PO"]} user={user} exact path="/supportcard/add" component={SupportCardAdd} />
       <AuthRoute allowed={["Admin", "PO", "SU", "Guest", "Chat"]} user={user} exact path="/supportcard/request" component={RequestEditAdd} />
