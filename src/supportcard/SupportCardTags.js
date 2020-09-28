@@ -16,7 +16,7 @@ const Keywords = ({ id, keywords = "", readOnly, updateKeywords }) => {
   const SaveKeywords = async (k) => {
     const keywords = k.filter((x) => x !== "").join(";");
     const input = { id, keywords };
-    updateKeywords(keywords);
+    updateKeywords(id, keywords);
   };
 
   const handleKeyDown = (e) => {

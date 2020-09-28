@@ -58,6 +58,14 @@ class Backlog {
     this.temp = this.temp.filter((item) => !(item.action_date && item.action_date > new Date().getTime()));
     return this;
   }
+  valid_onhold_date() {
+    this.temp = this.temp.filter((item) => item.scheduled_activity_date && item.scheduled_activity_date > new Date().getTime());
+    return this;
+  }
+  invalid_onhold_date() {
+    this.temp = this.temp.filter((item) => !(item.scheduled_activity_date && item.scheduled_activity_date > new Date().getTime()));
+    return this;
+  }
   invalid_activity_date() {
     this.temp = this.temp.filter((item) => !item.scheduled_activity_date);
     return this;

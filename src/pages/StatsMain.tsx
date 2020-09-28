@@ -132,7 +132,7 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
     .notStatus(["Solution Proposed", "Solution Pending Maintenance", "Awaiting Development"])
     .sort("dayssincelastupdate", "D")
     .getData();
-  const on_hold = blBase.init().status("On Hold by customer").invalid_actiondate().sort("dayssincelastupdate", "D").getData();
+  const on_hold = blBase.init().status("On Hold by customer").invalid_onhold_date().sort("dayssincelastupdate", "D").getData();
   console.log({ on_hold });
   const aging = blBase
     .init()
@@ -268,7 +268,7 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
           data={on_hold}
           // data={data.on_hold}
           title="On Hold"
-          description="All Incidents with a status of On Hold By Customer with no or an Expired Action date"
+          description="All Incidents with a status of On Hold By Customer with no or an Expired Activity date"
           actionHeader={true}
         />
 

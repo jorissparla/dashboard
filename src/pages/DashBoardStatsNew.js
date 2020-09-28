@@ -1,8 +1,10 @@
+// @ts-nocheck
 import React from "react";
 import shortid from "shortid";
 import styled from "styled-components";
 import "../App.css";
 import SummaryChartContainer from "../charts/SummaryChartContainer";
+import TestChart from './testchart'
 
 const DashBoardStats = (props) => {
   // const teams = ['Logistics', 'Finance', 'Tools'];
@@ -29,7 +31,8 @@ const DashBoardStats = (props) => {
 
       <SummaryChartContainer id={shortid.generate()} team={team} value="opened" title="Opened" color="#b39ddb" type="area" refreshRate={0} />
       <SummaryChartContainer id={shortid.generate()} team={team} value="Closed" title="Closed" color="#ffc600" type="area" refreshRate={0} />
-      <SummaryChartContainer id={shortid.generate()} team={team} value="chatpct" title="Chat %" color="#ffc600" type="column" refreshRate={0} />
+      {/* <SummaryChartContainer id={shortid.generate()} team={team} value="chatpct" title="Chat %" color="#ffc600" type="column" refreshRate={0} /> */}
+      <TestChart/>
     </div>
   );
 };
