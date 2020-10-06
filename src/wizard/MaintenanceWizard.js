@@ -6,6 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import React from "react";
 import ReleaseInformation, { MaintenanceCheck } from "wizard/ReleaseInformation";
 import { Field } from "./Field";
+import { OtherField } from "./OtherField";
 import { useStyles } from "./useStyles";
 
 let defaultValue = {
@@ -34,6 +35,7 @@ const MaintenanceInformation = ({ activeVersion, checksRequired, validMaintenanc
   if (!activeVersion || activeVersion === {}) return <div />;
   return (
     <Paper className={classes.paper}>
+      
       <Typography variant="h6">Maintenance Information</Typography>
       <Grid container spacing={2} justify="flex-start">
         <Grid item xs={3}>
@@ -111,60 +113,60 @@ const MaintenanceWizard = ({ activeVersions, productline }) => {
   if (activeVersion === {}) return <div />;
   // console.log('👀👀👀', versions, activeVersion);
   return (
-    <div className={classes.root}>
-      <Paper className={classes.paper}>
+    <div className="bg-gray-100 h-screen">
+      <div className="bg-white p-2 rounded shadow">
         <ReleaseInformation
           versionInfo={activeVersion}
           handleCustomerHasValidMaintenance={handleValidMaintenance}
           validMaintenance={validMaintenance}
         />
-      </Paper>
+      </div>
 
       <MaintenanceInformation version={activeVersion} setValidMaintenance={handleValidMaintenance} validMaintenance={validMaintenance} />
-      <Grid container spacing={2} justify="flex-start" style={{ marginTop: 5, marginBottom: 10, paddingLeft: 5 }}>
+      <div className="flex w-1/2" container spacing={2} justify="flex-start" style={{ marginTop: 5, marginBottom: 10, paddingLeft: 5 }}>
         {entitled_extended_maintenance !== "N/A" && (
-          <Grid item xs={6}>
+          <div item xs={6}>
             <MaintenanceCheck
               versionInfo={activeVersion}
               handleCustomerHasValidMaintenance={handleValidMaintenance}
               validMaintenance={validMaintenance}
             />
-          </Grid>
+          </div>
         )}
-      </Grid>
-      <div style={{ display: "flex", flexDirection: "row" }}>
-        <Grid container direction="column">
-          <Grid container item xs={12} spacing={1} justify="flex-start" alignItems="flex-start">
-            <Grid item xs={12}>
+      </div>
+      <div className="flex flex-row w-full">
+        <div className="w-1/2">
+          <div container item xs={12} spacing={1} justify="flex-start" alignItems="flex-start">
+            <div item xs={12}>
               <Field blue={true} name="comm_before" label="Communication before starting" activeVersion={activeVersion} />
-            </Grid>
-            <Grid item xs={12}>
-              <Field blue={true} name="comm_ics" label="Communication - Refer to ICS" activeVersion={activeVersion} />
-              <Grid item xs={12}>
+            </div>
+            <div item xs={12}>
+              <Field blue={true} name="comm_ics" label="Communication - Refer to ICS" activeVersion={activeVersion} text="comm_ics" />
+              <div item xs={12}>
                 <Field blue={true} name="communication" label="Other Communication" activeVersion={activeVersion} />
-              </Grid>
-              <Grid item xs={12}>
+              </div>
+              <div item xs={12}>
                 <Field blue={true} name="comm_disappointed" label="Communication - Customer disappointed" activeVersion={activeVersion} />
-              </Grid>
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid container direction="column">
-          <Grid container item xs={12} spacing={1}>
-            <Grid item xs={12}>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div container direction="column">
+          <div container item xs={12} spacing={1}>
+            <div item xs={12}>
               <Field name="solutions" label="Solutions" activeVersion={activeVersion} />
-            </Grid>
-            <Grid item xs={12}>
+            </div>
+            <div item xs={12}>
               <Field name="defects" label="Defects" activeVersion={activeVersion} />
-            </Grid>
-            <Grid item xs={12}>
+            </div>
+            <div item xs={12}>
               <Field name="portingset" label="Portingsets" activeVersion={activeVersion} />
-            </Grid>
-            <Grid item xs={12}>
+            </div>
+            <div item xs={12}>
               <Field name="data_corruption" label="Data corruption" activeVersion={activeVersion} />
-            </Grid>
-          </Grid>
-        </Grid>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

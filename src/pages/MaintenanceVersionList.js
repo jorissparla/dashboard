@@ -65,7 +65,7 @@ const VersionList = ({ productline = "LN" }) => {
   versions = [...new Set(allMaintenance.map((v) => v.version))];
   // console.log('activeVersion', activeVersions, allMaintenance, selectedVersion);
   return (
-    <div>
+    <div className="h-screen bg-gray-100">
       {versions.map((version, index) => (
         <BlockNew key={index} selected={selectedVersion === version} onClick={() => handleChange(version)}>
           {version}
@@ -102,7 +102,7 @@ const VersionList = ({ productline = "LN" }) => {
           <MaintenanceWizard activeVersions={activeVersions} productline={productline} />
         )
       ) : (
-        <Typography>Select a version</Typography>
+        <div>Select a version</div>
       )}
     </div>
   );

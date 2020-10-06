@@ -58,6 +58,7 @@ import MailerLogDetail from "pages/MailerLogDetail";
 import SymptomCategories from "symptoms/SymptomCategories";
 import testActivity from "pages/testActivity";
 import TestChart from "pages/testchart";
+import TrainingGroups from "pages/TrainingGroups";
 
 // const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
 const LoggedInUsers = React.lazy(() => import("./pages/loggedinusers"));
@@ -120,6 +121,7 @@ function AppRoutes(props) {
   return (
     <Switch>
       <Route exact path="/testy" component={testActivity} />
+      <Route exact path="/trgroups" component={TrainingGroups} />
       <Route exact path="/charts" component={TestChart} />
       <Route exact path="/mailerlogs" component={Mailerlog} />
       <Route exact path="/mailerlogs/:id" component={MailerLogDetail} />

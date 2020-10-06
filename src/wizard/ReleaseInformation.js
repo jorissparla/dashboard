@@ -91,11 +91,11 @@ function MaintenanceCheck({ versionInfo, handleCustomerHasValidMaintenance, vali
 
   if (entitled_extended_maintenance !== "N/A")
     return (
-      <Paper className="p-4 font-sans">
+      <div className="p-4 font-sans bg-white rounded shadow m-2">
         <Grid item xs={12}>
           <Grid component="label" container alignItems="center" spacing={1} style={{ overflow: "hidden" }}>
             <div className="w-full flex items-center justify-between">
-              <span className="px-2 ml-4 pb-4">Does the customer have extended maintenance?</span>
+              <span className="px-2 ml-4 pb-4 text-blue-500 font-sans font-semibold text-xl">Does the customer have extended maintenance?</span>
               <div className="flex items-center mx-10">
                 <span className="mx-2">No</span>
                 <FormControlLabel
@@ -118,7 +118,7 @@ function MaintenanceCheck({ versionInfo, handleCustomerHasValidMaintenance, vali
             <SimpleField name="checklink" label="" activeVersion={versionInfo} />
           </Grid>
         </Grid>
-      </Paper>
+      </div>
     );
   else return <div />;
 }

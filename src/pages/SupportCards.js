@@ -255,7 +255,7 @@ const SupportCards = (props) => {
         const {
           category: { name },
         } = card;
-        return selectedCategory === "" ? true : _.includes(selectedCategory.toUpperCase(), card.category.name.toUpperCase());
+        return selectedCategory === "" ? true : selectedCategory.toUpperCase()===card.category.name.toUpperCase();
       });
     if (showFavorites) {
       filteredCards = filteredCards.filter((card) => card.isfavorite === true);

@@ -1,56 +1,85 @@
-import { Backdrop, Modal } from "@material-ui/core";
-import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
-import Typography from "@material-ui/core/Typography";
-import EditIcon from "@material-ui/icons/Edit";
+import { useMutation } from "@apollo/client";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import CKEditor from "@ckeditor/ckeditor5-react";
+import TWButton from "elements/TWButton";
+import { useAlert } from "globalState/AlertContext";
 import { DashBoardContext } from "globalState/Provider";
 import React, { useEffect } from "react";
-import MarkDown from "react-markdown/with-html";
-import EditWizardDetails from "./EditWizardDetails";
+import { ALL_MAINTENANCE_QUERY, MAINTENANCE_FAQ_QUERY, MUTATION_UPDATE_MAINTENANCE_FAQ } from "./Queries";
 import { useStyles } from "./useStyles";
 
 export const OtherField = ({ name, label, edit = false, Icon, text, id, bigger = false, blue = false, productline = "LN" }) => {
   const classes = useStyles();
   const { role = "Guest" } = React.useContext(DashBoardContext);
+  const canEdit = role === "Admin";
+  const alert = useAlert();
+  const config = !canEdit
+    ? {
+        toolbar: "",
+      }
+    : {
+        // toolbar: "",
+        ckfinder: {
+          // Upload the images to the server using the CKFinder QuickUpload command.
+          uploadUrl: "https://nlbavwixs.infor.com:3001/upload",
+        },
+      };
   // const { activeVersion } = React.useContext(RootContext);
   const [isOpen, setisOpened] = React.useState(false);
   const [value, setValue] = React.useState(text);
-
+  const [values, setValues] = React.useState("");
   // console.log('refresh', name, value, activeVersion);
   // console.log('Field', name, text, value);
-
+  const mutation = MUTATION_UPDATE_MAINTENANCE_FAQ;
+  const [updateField] = useMutation(mutation);
   useEffect(() => {
     setValue(text);
     console.log("change", text);
   }, [text, name]);
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const input = { id };
+    input[name] = value;
+    console.log({ input });
+    updateField({
+      variables: { input },
+      refetchQueries: [
+        {
+          query: ALL_MAINTENANCE_QUERY,
+        },
+        {
+          query: MAINTENANCE_FAQ_QUERY,
+        },
+      ],
+    });
+    alert.setMessage(`Content was updated for field '${name}'`);
+    // onClose();
+  };
+  console.log(id);
+
   if (productline !== "LN" && (name === "text" || name === "localizations")) return <div />;
   console.log("name", name, productline);
+
   return (
-    <Paper className={classes.paper} style={{ background: `${blue ? "aliceblue" : "lightyellow"}` }}>
-      <Grid
-        container
-        direction="row"
-        justifyContent="space-between"
-        alignItems="flex-start"
-        className={classes.stretch}
-        style={{
-          display: "flex",
-          flex: "1 0 auto",
-          minHeight: "90%",
-          height: "100%",
-        }}
-      >
-        <Grid item xs={9}>
-          <Typography variant="h6">
+    <div
+      className="bg-white m-2 p-2 rounded shadow-lg"
+      // style={{ background: `${blue ? "aliceblue" : "lightyellow"}` }}
+    >
+      <div className="flex items-center pb-2">
+        <div>
+          <div className="text-blue-500 font-sans font-semibold text-xl w-full">
             {Icon ? <Icon color="#73398d" style={{ cursor: "pointer" }}></Icon> : <div />}
             {label}
-          </Typography>
-        </Grid>
-        <Grid item xs={3} style={{ display: "flex", justifyContent: "flex-end" }}>
-          {role === "Admin" && <EditIcon color="primary" fontSize="small" onClick={() => setisOpened(true)} />}
-        </Grid>
-        <Modal
+          </div>
+        </div>
+        <div className="flex items-center" item xs={3} style={{ display: "flex", justifyContent: "flex-end" }}>
+          {canEdit && (
+            // <EditIcon color="primary" fontSize="small" onClick={() => setisOpened(true)} />
+            <TWButton color="transp" className="font-sans" onClick={handleSubmit}>Save Content</TWButton>
+          )}
+        </div>
+        {/* <Modal
           onClose={() => setisOpened(false)}
           open={isOpen}
           BackdropComponent={Backdrop}
@@ -61,10 +90,28 @@ export const OtherField = ({ name, label, edit = false, Icon, text, id, bigger =
           <div>
             <EditWizardDetails onClose={() => setisOpened(false)} name={name} label={label} value={value} id={id} faq="true" />
           </div>
-        </Modal>
-      </Grid>
-
-      <MarkDown source={value} escapeHtml={false}></MarkDown>
-    </Paper>
+        </Modal> */}
+      </div>
+      <CKEditor
+        editor={ClassicEditor}
+        config={config}
+        // disabled={!edit}
+        data={value}
+        onInit={(editor) => {
+          // You can store the "editor" and use when it is needed.
+          console.log("Editor is ready to use!", editor);
+          // editor.plugins.get("FileRepository").createUploadAdapter = function (loader) {
+          //   return new MyUploadAdapter(loader);
+          // };
+        }}
+        onChange={(event, editor) => {
+          const data = editor.getData();
+          // console.log("Change", { event, editor, data });
+          setValue(data);
+        }}
+      />
+      {/* <MarkDown source={value} escapeHtml={false}></MarkDown> */}
+    </div>
   );
 };
+// other editor
