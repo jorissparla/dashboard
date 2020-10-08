@@ -186,6 +186,7 @@ export const QUERY_BACKLOG_TEXT = `
   # Write your query or mutation here
   fragment backlogfragment on DWH {
     incident
+    awaitcount
     incidentcreated
     owner
     navid

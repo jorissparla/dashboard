@@ -81,6 +81,10 @@ class Backlog {
     return this;
   }
 
+  fieldNotNull(field) {
+    this.temp = this.temp.filter((item) => item[field]);
+    return this;
+  }
   issupport() {
     this.temp = this.hasStatus(["Researching", "On Hold by Customer", "Awaiting Infor", "Awaiting Customer"]);
     return this;

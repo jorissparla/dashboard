@@ -1,7 +1,9 @@
 import { FormControlLabel, Grid, Paper, Switch, Typography } from "@material-ui/core";
 import { format } from "date-fns";
+
 import React from "react";
 import { SimpleField } from "./SimpleField";
+import { Field } from "./Field";
 import { useStyles } from "./useStyles";
 
 function ReleaseInformation({ versionInfo, handleCustomerHasValidMaintenance, validMaintenance }) {
@@ -25,6 +27,7 @@ function ReleaseInformation({ versionInfo, handleCustomerHasValidMaintenance, va
   // }
   return (
     <div className="font-sans text-gray-600">
+      
       <Grid container>
         <Grid container xs={2} justify="flex-start" alignItems="center" style={{ flexDirection: "column" }}>
           <Grid>
@@ -70,7 +73,7 @@ function ReleaseInformation({ versionInfo, handleCustomerHasValidMaintenance, va
         )}
         <Grid container xs={6} justify="flex-end" alignItems="flex-end" style={{ flexDirection: "column" }}>
           <Grid item xs={12}>
-            <SimpleField name="checksrequired" label="" activeVersion={versionInfo} bigger={true} />
+            <Field name="checksrequired" label="" activeVersion={versionInfo} bigger={true} />
           </Grid>
         </Grid>
       </Grid>

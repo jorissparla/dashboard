@@ -79,18 +79,7 @@ export const OtherField = ({ name, label, edit = false, Icon, text, id, bigger =
             <TWButton color="transp" className="font-sans" onClick={handleSubmit}>Save Content</TWButton>
           )}
         </div>
-        {/* <Modal
-          onClose={() => setisOpened(false)}
-          open={isOpen}
-          BackdropComponent={Backdrop}
-          BackdropProps={{
-            timeout: 500,
-          }}
-        >
-          <div>
-            <EditWizardDetails onClose={() => setisOpened(false)} name={name} label={label} value={value} id={id} faq="true" />
-          </div>
-        </Modal> */}
+
       </div>
       <CKEditor
         editor={ClassicEditor}

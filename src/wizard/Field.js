@@ -1,22 +1,15 @@
-import { Backdrop, Modal } from "@material-ui/core";
-import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
-import Typography from "@material-ui/core/Typography";
-import EditIcon from "@material-ui/icons/Edit";
-import { DashBoardContext } from "globalState/Provider";
-import JoditEditor from "jodit-react";
-import React, { useRef } from "react";
+import { useMutation } from "@apollo/client";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import CKEditor from "@ckeditor/ckeditor5-react";
 import TWButton from "elements/TWButton";
 import { useAlert } from "globalState/AlertContext";
-import { ALL_MAINTENANCE_QUERY, MAINTENANCE_FAQ_QUERY, MUTATION_UPDATE_MAINTENANCE, MUTATION_UPDATE_MAINTENANCE_FAQ } from "./Queries";
-
-import EditWizardDetails from "./EditWizardDetails";
-import { useStyles } from "./useStyles";
-import { useUser } from "User";
-import { useMutation } from "@apollo/client";
+import { DashBoardContext } from "globalState/Provider";
 import { useUserContext } from "globalState/UserProvider";
+import React, { useRef } from "react";
+import { ALL_MAINTENANCE_QUERY, MAINTENANCE_FAQ_QUERY, MUTATION_UPDATE_MAINTENANCE } from "./Queries";
+import { useStyles } from "./useStyles";
+import './field.css'
+
 
 export const Field = ({ name, label, edit = false, Icon, activeVersion, bigger = false, blue = false }) => {
   const classes = useStyles();
@@ -97,24 +90,13 @@ export const Field = ({ name, label, edit = false, Icon, activeVersion, bigger =
             </TWButton>
           )}
         </div>
-        {/* <Modal
-          onClose={() => setisOpened(false)}
-          open={isOpen}
-          BackdropComponent={Backdrop}
-          BackdropProps={{
-            timeout: 500,
-          }}
-        >
-          <div>
-            <EditWizardDetails onClose={() => setisOpened(false)} name={name} label={label} value={value} id={activeVersion.id} />
-          </div>
-        </Modal> */}
+
       </div>
 
       <CKEditor
         editor={ClassicEditor}
         config={config2}
-        // disabled={!edit}
+        disabled={!isValidEditor}
         data={value}
         onInit={(editor) => {
           // You can store the "editor" and use when it is needed.

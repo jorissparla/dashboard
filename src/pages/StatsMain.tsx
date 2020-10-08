@@ -132,6 +132,14 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
     .notStatus(["Solution Proposed", "Solution Pending Maintenance", "Awaiting Development"])
     .sort("dayssincelastupdate", "D")
     .getData();
+  const wait = blBase
+    .init()
+    // .hasStatus(["Researching", "On Hold by Customer", "Awaiting Infor", "Awaiting Customer"])
+    .notStatus(["Solution Proposed", "Solution Pending Maintenance", "Awaiting Development"])
+    .sort("dayssincelastupdate", "D")
+    .fieldNotNull("awaitcount")
+    .sort("awaitcount", "D")
+    .getData();
   const on_hold = blBase.init().status("On Hold by customer").invalid_onhold_date().sort("dayssincelastupdate", "D").getData();
   console.log({ on_hold });
   const aging = blBase
@@ -204,6 +212,7 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
           description={`All Incidents open for our MT customers not updated > ${params.C_MT} days`}
           actionHeader={true}
         />
+
         <BacklogTableNewStyle
           filterValues={filterValues}
           additionalFields={["ownergroup"]}
@@ -227,7 +236,14 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
           description="All Incidents with a severity of 'Production Outage / Major Impact' without a restored date"
           actionHeader={true}
         />
-
+        <BacklogTableNewStyle
+          filterValues={filterValues}
+          data={wait}
+          additionalFields={["awaitcount"]}
+          title="Awaiting counts"
+          description={`All Incidents with more than 5 Awaiting Customer Events`}
+          actionHeader={true}
+        />
         <BacklogTableNewStyle
           filterValues={filterValues}
           data={pendingmaintenance}
