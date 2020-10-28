@@ -10,6 +10,7 @@ import { format } from "../utils/format";
 import { UserContext } from "./../globalState/UserProvider";
 import NiceSpinner from "./../utils/NiceSpinner";
 import { StatsMain, useParams } from "./StatsMain";
+import { useQuery } from "@apollo/client";
 const useStyles = makeStyles((theme) => ({
   root: theme.mixins.gutters({
     marginTop: theme.spacing(3),
@@ -118,6 +119,7 @@ const Stats = (props) => {
   const { user } = React.useContext(UserContext);
   const [date] = useState(format(Date.now(), "yyyy-MM-dd"));
   const classes = useStyles();
+
   // console.log('rendering data');
   let enableIt = false;
   const isValidSuperUser = ["Admin", "PO"].some((u) => (user ? u === user.role : false));
@@ -194,6 +196,7 @@ const StatsPage = ({ data, classes, owner, isValidSuperUser }) => {
           lastUpdated: mostRecentUpdate,
           actionNeeded: true,
         }}
+        accounts={data.accounts}
       />
 
       <StatsMain data={data} classes={classes} owner={owner} filterValues={filterValues} />

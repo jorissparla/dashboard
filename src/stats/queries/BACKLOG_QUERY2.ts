@@ -1,5 +1,13 @@
 import gql from "graphql-tag";
 
+export const ACCOUNTS_QUERY = gql`
+  query ACCOUNTS_QUERY {
+    accounts {
+      fullname
+    }
+  }
+`;
+
 export const QUERY_BACKLOG = gql`
   # Write your query or mutation here
   fragment backlogfragment on DWH {

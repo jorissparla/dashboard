@@ -1,9 +1,10 @@
 import { Switch } from "@material-ui/core";
+import AutoComplete from "elements/AutoComplete";
 import { usePersistentState } from "hooks";
 import { PRODUCT_LIST, REGION_LIST_2 } from "pages/Stats";
 import React, { useState } from "react";
 
-export const SelectionForm = ({ classes, initialValue, valuesChanged, isValidSuperUser, onChange, onNavigateToParams }) => {
+export const SelectionForm = ({ classes, initialValue, valuesChanged, isValidSuperUser, onChange, onNavigateToParams, accounts }) => {
   const [selectedProducts, setSelectedProducts] = usePersistentState("selectedproducts", ["LN"]);
   const [ownerVal, setOwnerVal] = useState(initialValue.owner);
   const [person, setPerson] = useState("");
@@ -65,10 +66,12 @@ export const SelectionForm = ({ classes, initialValue, valuesChanged, isValidSup
   function toggleDropDown() {
     toggle(!showDropDown);
   }
+  const support = accounts ? accounts.map((s) => s.fullname).sort((a, b) => (a > b ? 1 : -1)) : [];
   return (
     // <Paper className={classes.paper2}>
     <div className="mb-4 rounded shadow-lg bg-white px-3 py-2 flex items-center w-full text-gray-700 flex-wrap">
-      <div className="rounded-md shadow-sm">
+      <AutoComplete support={support} value={ownerVal} disabled={!isValidSuperUser} onChangeValue={(name) => setOwnerVal(name)} />
+      {/* <div className="rounded-md shadow-sm">
         <input
           className="form-input"
           type="text"
@@ -85,7 +88,7 @@ export const SelectionForm = ({ classes, initialValue, valuesChanged, isValidSup
             }
           }}
         />
-      </div>
+      </div> */}
       {/* <TextField
         value={ownerVal}
         disabled={!isValidSuperUser}
@@ -230,7 +233,6 @@ export const SelectionForm = ({ classes, initialValue, valuesChanged, isValidSup
         Parameters
       </button>
       {/* )} */}
-
       {persons && persons.length > 0 && (
         <label className="flex mr-4 items-center px-4">
           <span className="text-gray-700">People</span>

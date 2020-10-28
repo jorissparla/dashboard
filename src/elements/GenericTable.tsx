@@ -92,11 +92,11 @@ export const GenericTable = (props: GenericTableProps) => {
   if (!data) {
     return <div></div>;
   }
-  if (data.length === 0) {
+  if (data.length === 0 && Object.entries(fieldFilters).length === 0) {
     return <div />;
   }
 
-  if (!tableData.length) {
+  if (!tableData.length && Object.entries(fieldFilters).length === 0) {
     return <div></div>;
   }
 
@@ -333,7 +333,8 @@ export const GenericTable = (props: GenericTableProps) => {
           </>
         </div>
       </ExpansionPanelSummary>
-      {isExpanded && (
+
+      {isExpanded && tableData.length !== 0 && (
         <div>
           <div className="inline-block min-w-full  overflow-hidden">
             <div className="w-full mb-2"></div>
