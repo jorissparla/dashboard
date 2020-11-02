@@ -12,7 +12,7 @@ class Backlog {
     const response = this.temp.map((item) => {
       let managername = "";
       // console.log("🤦‍♂️", item.navid.toString());
-      const owner = this.accounts.find((account) => account.navid.toString() === item.navid.toString());
+      const owner = this.accounts.find((account) => account?.navid.toString() === item.navid.toString());
       if (owner && owner.managerid) {
         const manager = this.accounts.find((account) => account.navid.toString() === owner.managerid.toString());
         // console.log("🤦‍♂️", owner, manager);
@@ -182,7 +182,7 @@ class Backlog {
   }
 
   filterField(field, value) {
-    this.temp = this.temp.filter((item) => item[field].toLowerCase() === value.toLowerCase());
+    this.temp = this.temp.filter((item) => item[field]?.toLowerCase() === value.toLowerCase());
     return this;
   }
   filterFieldNot(field, value) {

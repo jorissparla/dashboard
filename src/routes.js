@@ -33,6 +33,7 @@ import Stats from "./pages/Stats";
 import KBPage from "./pages/KBPage";
 import { Surveys } from "./pages/Surveys";
 import VideoPage from "./pages/Videos";
+import WorklistSimple from "./pages/WorklistSimple";
 import { Parameters } from "./stats/Parameters";
 import PriorityDashboard from "./stats/PriorityDashboard";
 import Details from "./tenants/details/index";
@@ -120,6 +121,8 @@ function AppRoutes(props) {
 
   return (
     <Switch>
+      <AuthRoute exact path="/essentialworklist" component={WorklistSimple} />
+      <Route exact path="/essentialworklisttest" component={WorklistSimple} />
       <Route exact path="/testy" component={testActivity} />
       <Route exact path="/trgroups" component={TrainingGroups} />
       <Route exact path="/charts" component={TestChart} />

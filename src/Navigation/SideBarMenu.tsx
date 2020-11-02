@@ -1,4 +1,14 @@
-import { Divider, ExpansionPanel, ExpansionPanelDetails, ExpansionPanelSummary, List, ListItemIcon } from "@material-ui/core";
+import {
+  Divider,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  ExpansionPanel,
+  ExpansionPanelDetails,
+  ExpansionPanelSummary,
+  List,
+  ListItemIcon,
+} from "@material-ui/core";
 import XpertIcon from "@material-ui/icons/Commute";
 import MenuItem from "@material-ui/core/MenuItem";
 import Typography from "@material-ui/core/Typography";
@@ -70,13 +80,16 @@ export const SideBarMenu: React.FC<Props> = ({ classes, history, toggleMenu, ope
       <ToggledNavLink title="MultiTenant Customers" Icon={ExtensionIcon} navigateTo="/tenant" history={history} color="text-orange-600" />
       <ToggledNavLink title="Support Cards" Icon={LinkIcon} navigateTo="/supportcard" history={history} color="text-teal-400" />
       <ExpandableMenuItem classes={classes} title="Symptoms" Icon={SymptomsIcon} isExpanded={true}>
-        <ToggledNavLink title="Symptom Definitions" navigateTo="/symptomcategories" history={history}  />
-        <ToggledNavLink title="KBs linked to Symptoms" navigateTo="/symptomkbs" history={history}  />
+        <ToggledNavLink title="Symptom Definitions" navigateTo="/symptomcategories" history={history} />
+        <ToggledNavLink title="KBs linked to Symptoms" navigateTo="/symptomkbs" history={history} />
         <ToggledNavLink title="Request Symptoms" navigateTo="/symptoms" history={history} />
       </ExpandableMenuItem>
       {authenticated && <ToggledNavLink title="My KBPage" Icon={HelpOutlineIcon} navigateTo="/kbpage" history={history} />}
 
-      {authenticated && <ToggledNavLink title="WorkList" Icon={MyWorkList} navigateTo="/mywork" history={history} />}
+      {authenticated && <ToggledNavLink title="Essential WorkList" Icon={MyWorkList} navigateTo="/essentialworklist" history={history} />}
+
+      {authenticated && !isAdmin && <ToggledNavLink title="Worklist" Icon={MyWorkList} navigateTo="/mywork" history={history} />}
+      {isAdmin && <ToggledNavLink title="Admin WorkList" Icon={MyWorkList} navigateTo="/mywork" history={history} />}
       <ToggledNavLink title="Proactive Projects!" Icon={BusinessCenterIcon} navigateTo="/projects" history={history} color="text-blue-600" />
       {isAdmin && <ToggledNavLink title="Permissions" Icon={Person} navigateTo="/bla" history={history} />}
       {isAdmin && <ToggledNavLink title="Logged in Users" Icon={PeopleOutlineIcon} navigateTo="/loggedinusers" history={history} />}
@@ -148,14 +161,14 @@ const ExpandableMenuItem: React.FC<ExpandableProps> = ({ title, Icon, children, 
   //let initialExpand: any
   const [expanded, toggleExpanded] = useState(isExpanded);
   return (
-    <ExpansionPanel expanded={expanded} onChange={() => toggleExpanded(!expanded)}>
-      <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+    <Accordion expanded={expanded} onChange={() => toggleExpanded(!expanded)}>
+      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
         <ListItemIcon>
           <Icon />
         </ListItemIcon>
         <div className="font-sans font-semibold text-gray-600">{title}</div>
-      </ExpansionPanelSummary>
-      <ExpansionPanelDetails className={classes.panelDetails}>{children}</ExpansionPanelDetails>
-    </ExpansionPanel>
+      </AccordionSummary>
+      <AccordionDetails className={classes.panelDetails}>{children}</AccordionDetails>
+    </Accordion>
   );
 };

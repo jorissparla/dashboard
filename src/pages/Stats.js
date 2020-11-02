@@ -1,16 +1,15 @@
 import { makeStyles } from "@material-ui/core/styles";
+import { request } from "graphql-request";
 import { usePersistentState } from "hooks";
 import React, { useState } from "react";
-import { withRouter, useHistory } from "react-router-dom";
-import { SelectionForm } from "../stats/NewSelectionForm";
-import { QUERY_BACKLOG, QUERY_BACKLOG_TEXT } from "../stats/queries/BACKLOG_QUERY2";
-import { request } from "graphql-request";
+import { useHistory } from "react-router-dom";
 import useSWR from "swr";
+import { SelectionForm } from "../stats/NewSelectionForm";
+import { QUERY_BACKLOG_TEXT } from "../stats/queries/BACKLOG_QUERY2";
 import { format } from "../utils/format";
 import { UserContext } from "./../globalState/UserProvider";
 import NiceSpinner from "./../utils/NiceSpinner";
 import { StatsMain, useParams } from "./StatsMain";
-import { useQuery } from "@apollo/client";
 const useStyles = makeStyles((theme) => ({
   root: theme.mixins.gutters({
     marginTop: theme.spacing(3),
@@ -149,24 +148,8 @@ const Stats = (props) => {
 
   // return <div>Hallo</div>;
   {
-    /*
-  
-  // console.log('user permissions', user, enableIt);
-  const { loading, data } = useQuery(QUERY_BACKLOG, {
-    variables: {
-      date,
-      owner: "",
-      products: PRODUCT_LIST,
-      deployment: "ALL",
-      ...useParams(!isValidSuperUser),
-    },
-  });
-
-  if (loading) return <NiceSpinner />;
-  // console.log('🤷‍♂️🤷‍♂️', user);
-  */
     const owner = user ? (user.fullname ? user.fullname : "") : "";
-    console.log(owner, data);
+    // console.log(owner, data);
     return <StatsPage data={data} classes={classes} isValidSuperUser={isValidSuperUser || enableIt} owner={owner} />;
   }
 };
