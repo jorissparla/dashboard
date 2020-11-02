@@ -151,9 +151,9 @@ const WorklistSimple = ({ owner = "" }) => {
 
   return (
     <div className="px-2 pt-2 grid grid-cols-2 gap-x-2 gap-y-2">
-      <Widget data={major_impact} title="Major Impact incidents" />
-      <Widget data={escalated} title="Escalated" />
-      <Widget data={mtincidents} title="Multitenant Customer issues" />
+      <Widget data={major_impact} title="Major Impact incidents" mark={true} />
+      <Widget data={escalated} title="Escalated" mark={true} />
+      <Widget data={mtincidents} title="Multitenant Customer issues" mark={true} />
       <Widget data={researching} title="Researching Not updated" />
       <Widget data={all} title={`All incidents - average age: ${avgAge} days`} />
       <Widget data={callback} title={`Callbacks and new issues`} />
@@ -161,7 +161,7 @@ const WorklistSimple = ({ owner = "" }) => {
   );
 };
 
-const Widget = ({ data = [], title }) => {
+const Widget = ({ data = [], title, mark = false }) => {
   const len = data.length;
   const MAX_LEN = 5;
   const [currPage, setCurrPage] = useState(len > 0 ? 1 : 0);
@@ -173,30 +173,27 @@ const Widget = ({ data = [], title }) => {
     if (currPage > 1) setCurrPage((old) => old - 1);
   };
   useEffect(() => {}, [currPage]);
+  const prevDisabled = currPage <= 0;
+  const nextDisabled = currPage >= nrPages || nrPages === 0;
   return (
     <div className="p-2 rounded-lg shadow-lg bg-white">
-      <h1 className="flex justify-items-center py-1 font-semibold items-center">
+      <h1 className={`flex justify-items-center py-1 font-semibold items-center ${mark ? "text-red-700" : "text-gray-700"}`}>
         {title} - ({len})
         <div className="flex-1 flex justify-between sm:justify-end">
           <span>
             page {currPage} of {nrPages}
           </span>
-          {currPage > 1 && (
-            <TWButton onClick={handlePrevPage} color="grey">
-              Prev
-            </TWButton>
-          )}
 
-          {currPage !== nrPages && nrPages !== 0 && (
-            <>
-              <TWButton onClick={handleNextPage} color="grey">
-                Next
-              </TWButton>
-            </>
-          )}
+          <TWButton onClick={handlePrevPage} color="pink" disabled={prevDisabled}>
+            Prev
+          </TWButton>
+
+          <TWButton onClick={handleNextPage} color="pink" disabled={nextDisabled}>
+            Next
+          </TWButton>
         </div>
       </h1>
-      {data.length === 0 ? <h2>No {title} incidents </h2> : <Table data={data.slice((currPage - 1) * MAX_LEN, currPage * MAX_LEN - 1)} />}
+      {data.length === 0 ? <h2>No {title} incidents </h2> : <Table data={data.slice((currPage - 1) * MAX_LEN, currPage * MAX_LEN - 1)} mark={mark} />}
     </div>
   );
 };
@@ -209,14 +206,25 @@ const HeaderCell = ({ children }) => (
 
 const HyperLinkCell = ({ value = "", linkPrefix = "http://navigator.infor.com/n/incident.asp?IncidentID=", linkText = "" }) => (
   <td className="p-2 font-sans text-sm font-semibold text-blue-700">
-    <a className="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker" href={`${linkPrefix}${value}`} target="_blank">
+    <a className="inline-block align-baseline font-bold text-sm " href={`${linkPrefix}${value}`} target="_blank">
+      {linkText || value}
+    </a>
+  </td>
+);
+const HyperLinkCellRed = ({ value = "", linkPrefix = "http://navigator.infor.com/n/incident.asp?IncidentID=", linkText = "" }) => (
+  <td className="p-2 font-sans text-sm font-semibold text-red-700">
+    <a
+      className="inline-block align-baseline font-bold text-sm bg-red-200 rounded-lg no-underline px-2 text-red-700"
+      href={`${linkPrefix}${value}`}
+      target="_blank"
+    >
       {linkText || value}
     </a>
   </td>
 );
 const DataCell = ({ children }) => <td className="p-2 font-sans text-sm font-semibold text-blue-700 ">{children}</td>;
 
-const Table = ({ data }) => (
+const Table = ({ data, mark }) => (
   <div className="overflow-y-auto scrollbar-w-2 scrollbar-track-gray-lighter scrollbar-thumb-rounded scrollbar-thumb-gray scrolling-touch">
     <table className="w-full text-left table-collapse">
       <thead>
@@ -237,7 +245,11 @@ const Table = ({ data }) => (
         ) : (
           data.map((item) => (
             <tr key={item.incident}>
-              <HyperLinkCell value={item.incident} linkText={item.incident}></HyperLinkCell>
+              {mark ? (
+                <HyperLinkCellRed value={item.incident} linkText={item.incident} />
+              ) : (
+                <HyperLinkCell value={item.incident} linkText={item.incident} />
+              )}
               <DataCell>{item.customername}</DataCell>
               <DataCell>{item.severityname}</DataCell>
               <DataCell>{item.status}</DataCell>
