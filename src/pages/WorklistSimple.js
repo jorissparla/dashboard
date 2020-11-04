@@ -274,7 +274,6 @@ const Table = ({ data, mark }) => {
                 <DataCell>{item.customername}</DataCell>
                 <DataCell>{item.severityname}</DataCell>
                 <DataCell>{item.status}</DataCell>
-                <DataCell>{isStatusToMark(item.status) ? "Ja" : "Mee"}</DataCell>
                 <DataCell>{item.title}</DataCell>
                 <DataCell>{item.dayssincelastupdate}</DataCell>
               </tr>
