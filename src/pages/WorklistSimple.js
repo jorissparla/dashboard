@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { Backlog } from "stats/BacklogType";
 import Spinner from "utils/spinner";
 import { useParams } from "./StatsMain";
+import { usePersistentState } from "hooks";
 
 const MY_BACKLOG_QUERY = gql`
   fragment backlogfragment on DWH {
@@ -69,9 +70,10 @@ const ACCOUNTS_QUERY = gql`
 
 const WorklistSimpleWrapper = () => {
   const [support, setSupport] = useState([]);
+  const [includeDevelopment, setIncludeDevelopment] = usePersistentState("includeDevelopment", false);
   const { user } = React.useContext(UserContext);
   const owner = user ? (user.fullname ? user.fullname : "") : "";
-  const [name, setName] = useState(owner || "Joris Sparla");
+  const [name, setName] = useState(owner || "Eelco Mulder");
   const { data, loading } = useQuery(ACCOUNTS_QUERY);
   useEffect(() => {
     if (data) {
@@ -88,25 +90,39 @@ const WorklistSimpleWrapper = () => {
   // console.log("WorklistSimple", { support });
   if (loading) return <Spinner />;
   if (data.accounts.length === 0) return "loading";
-  console.log({ data });
   const x = data.accounts ? data.accounts.map((s) => s.fullname).sort((a, b) => (a > b ? 1 : -1)) : [];
   return (
     <div className="bg-gray-100 h-screen">
       <div className="flex items-center mb-4">
         <span className="mx-4 text-lg font-sans font-semibold">Essential Worklist for </span>{" "}
         <AutoComplete disabled={false} support={x} onChangeValue={(e) => setName(e)} value={name}></AutoComplete>
+        <div className="ml-4">
+          <label className="inline-flex items-center">
+            <input
+              type="checkbox"
+              className="form-checkbox"
+              checked={includeDevelopment}
+              onChange={() => setIncludeDevelopment(!includeDevelopment)}
+            />
+            <span className="ml-2">Include Development issues</span>
+            {/* {includeDevelopment ? "Ja" : "Nee"} */}
+          </label>
+        </div>
       </div>
-      <WorklistSimple owner={name} />
+      <WorklistSimple owner={name} includeDevelopment={includeDevelopment} />
     </div>
   );
 };
 
-const WorklistSimple = ({ owner = "" }) => {
+const WorklistSimple = ({ owner = "", includeDevelopment }) => {
   const params = useParams();
   const { data, loading } = useQuery(MY_BACKLOG_QUERY, { variables: { owner } });
   if (loading) return <Spinner />;
-  const blBase = new Backlog(data.backlog, data.accounts);
-  const multitenantcustomers = data.multitenantcustomers;
+  let blBase = new Backlog(data.backlog, data.accounts, includeDevelopment);
+  // console.log(includeDevelopment, blBase.getData().length);
+
+  // const multitenantcustomers = data.multitenantcustomers;
+
   const mtincidents = blBase.filterField("Tenant", "Multi-Tenant").notStatus(["Solution Proposed", "Solution Pending Maintenance"]).getData();
 
   // .filter(
@@ -224,42 +240,49 @@ const HyperLinkCellRed = ({ value = "", linkPrefix = "http://navigator.infor.com
 );
 const DataCell = ({ children }) => <td className="p-2 font-sans text-sm font-semibold text-blue-700 ">{children}</td>;
 
-const Table = ({ data, mark }) => (
-  <div className="overflow-y-auto scrollbar-w-2 scrollbar-track-gray-lighter scrollbar-thumb-rounded scrollbar-thumb-gray scrolling-touch">
-    <table className="w-full text-left table-collapse">
-      <thead>
-        <tr>
-          <HeaderCell>Incident</HeaderCell>
-          <HeaderCell>Customer</HeaderCell>
-          <HeaderCell>Severity</HeaderCell>
-          <HeaderCell>Status</HeaderCell>
-          <HeaderCell>Summary</HeaderCell>
-          <HeaderCell>Updated</HeaderCell>
-        </tr>
-      </thead>
-      <tbody className="align-baseline">
-        {data.length === 0 ? (
+const Table = ({ data, mark }) => {
+  function isStatusToMark(status, mark) {
+    return ["New", "Awaiting Infor", "Researching"].includes(status);
+  }
+
+  return (
+    <div className="overflow-y-auto scrollbar-w-2 scrollbar-track-gray-lighter scrollbar-thumb-rounded scrollbar-thumb-gray scrolling-touch">
+      <table className="w-full text-left table-collapse">
+        <thead>
           <tr>
-            <DataCell>No incidents..</DataCell>
+            <HeaderCell>Incident</HeaderCell>
+            <HeaderCell>Customer</HeaderCell>
+            <HeaderCell>Severity</HeaderCell>
+            <HeaderCell>Status</HeaderCell>
+            <HeaderCell>Summary</HeaderCell>
+            <HeaderCell>Updated</HeaderCell>
           </tr>
-        ) : (
-          data.map((item) => (
-            <tr key={item.incident}>
-              {mark ? (
-                <HyperLinkCellRed value={item.incident} linkText={item.incident} />
-              ) : (
-                <HyperLinkCell value={item.incident} linkText={item.incident} />
-              )}
-              <DataCell>{item.customername}</DataCell>
-              <DataCell>{item.severityname}</DataCell>
-              <DataCell>{item.status}</DataCell>
-              <DataCell>{item.title}</DataCell>
-              <DataCell>{item.dayssincelastupdate}</DataCell>
+        </thead>
+        <tbody className="align-baseline">
+          {data.length === 0 ? (
+            <tr>
+              <DataCell>No incidents..</DataCell>
             </tr>
-          ))
-        )}
-      </tbody>
-    </table>
-  </div>
-);
+          ) : (
+            data.map((item) => (
+              <tr key={item.incident}>
+                {isStatusToMark(item.status) ? (
+                  <HyperLinkCellRed value={item.incident} linkText={item.incident} />
+                ) : (
+                  <HyperLinkCell value={item.incident} linkText={item.incident} />
+                )}
+                <DataCell>{item.customername}</DataCell>
+                <DataCell>{item.severityname}</DataCell>
+                <DataCell>{item.status}</DataCell>
+                <DataCell>{isStatusToMark(item.status) ? "Ja" : "Mee"}</DataCell>
+                <DataCell>{item.title}</DataCell>
+                <DataCell>{item.dayssincelastupdate}</DataCell>
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
+    </div>
+  );
+};
 export default WorklistSimpleWrapper;
