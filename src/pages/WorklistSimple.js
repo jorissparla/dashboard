@@ -167,7 +167,7 @@ const WorklistSimple = ({ owner = "", includeDevelopment }) => {
 
   return (
     <div className="px-2 pt-2 grid grid-cols-2 gap-x-2 gap-y-2">
-      <Widget data={major_impact} title="Major Impact incidents" mark={true} />
+      <Widget data={major_impact} title="Major Impact incidents not updated" mark={true} />
       <Widget data={escalated} title="Escalated" mark={true} />
       <Widget data={mtincidents} title="Multitenant Customer issues" mark={true} />
       <Widget data={researching} title="Researching Not updated" />
@@ -177,7 +177,7 @@ const WorklistSimple = ({ owner = "", includeDevelopment }) => {
   );
 };
 
-const Widget = ({ data = [], title, mark = false }) => {
+export const Widget = ({ data = [], title, mark = false }) => {
   const len = data.length;
   const MAX_LEN = 5;
   const [currPage, setCurrPage] = useState(len > 0 ? 1 : 0);
@@ -214,20 +214,20 @@ const Widget = ({ data = [], title, mark = false }) => {
   );
 };
 
-const HeaderCell = ({ children }) => (
+export const HeaderCell = ({ children }) => (
   <th className="z-20 sticky top-0 text-sm font-semibold text-gray-700 bg-gray-100 p-0">
     <div className="p-2 border-b border-gray-300">{children}</div>
   </th>
 );
 
-const HyperLinkCell = ({ value = "", linkPrefix = "http://navigator.infor.com/n/incident.asp?IncidentID=", linkText = "" }) => (
+export const HyperLinkCell = ({ value = "", linkPrefix = "http://navigator.infor.com/n/incident.asp?IncidentID=", linkText = "" }) => (
   <td className="p-2 font-sans text-sm font-semibold text-blue-700">
     <a className="inline-block align-baseline font-bold text-sm " href={`${linkPrefix}${value}`} target="_blank">
       {linkText || value}
     </a>
   </td>
 );
-const HyperLinkCellRed = ({ value = "", linkPrefix = "http://navigator.infor.com/n/incident.asp?IncidentID=", linkText = "" }) => (
+export const HyperLinkCellRed = ({ value = "", linkPrefix = "http://navigator.infor.com/n/incident.asp?IncidentID=", linkText = "" }) => (
   <td className="p-2 font-sans text-sm font-semibold text-red-700">
     <a
       className="inline-block align-baseline font-bold text-sm bg-red-200 rounded-lg no-underline px-2 text-red-700"
@@ -238,7 +238,7 @@ const HyperLinkCellRed = ({ value = "", linkPrefix = "http://navigator.infor.com
     </a>
   </td>
 );
-const DataCell = ({ children }) => <td className="p-2 font-sans text-sm font-semibold text-blue-700 ">{children}</td>;
+export const DataCell = ({ children }) => <td className="p-2 font-sans text-sm font-semibold text-blue-700 ">{children}</td>;
 
 const Table = ({ data, mark }) => {
   function isStatusToMark(status, mark) {

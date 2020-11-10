@@ -11,6 +11,7 @@ import _ from "lodash";
 import { format } from "../utils/format";
 import { withStyles } from "@material-ui/core/styles";
 import clsx from "clsx";
+import { NoData } from "./NoData";
 const colors = ["#BA68C8", "#81D4FA", "#FF7043", "#8BC34A", "#ec407a", "#1da1f2", "#E57373"];
 
 const styles = (theme) => ({
@@ -100,7 +101,15 @@ const GoLivesContainer = () => {
   if (loading) {
     return <div>Loading...</div>;
   }
-  const { golives } = data;
+  console.log("data", data);
+  if (!data) {
+    return (
+      <NoData>
+        <p>No Data Found. contact your system administrator</p>
+      </NoData>
+    );
+  }
+  const { golives = null } = data;
   const goLivesByMonth = _.chain(golives)
     .sortBy((o) => Date.parse(o.date))
     .groupBy(function (g) {

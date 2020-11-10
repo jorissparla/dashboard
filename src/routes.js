@@ -60,6 +60,7 @@ import SymptomCategories from "symptoms/SymptomCategories";
 import testActivity from "pages/testActivity";
 import TestChart from "pages/testchart";
 import TrainingGroups from "pages/TrainingGroups";
+import WhatDoesDev from "pages/WhatDoesDev";
 
 // const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
 const LoggedInUsers = React.lazy(() => import("./pages/loggedinusers"));
@@ -122,6 +123,7 @@ function AppRoutes(props) {
   return (
     <Switch>
       <AuthRoute exact path="/essentialworklist" component={WorklistSimple} />
+      <Route exact path="/whatdoesdev" component={WhatDoesDev} />
       <Route exact path="/essentialworklisttest" component={WorklistSimple} />
       <Route exact path="/testy" component={testActivity} />
       <Route exact path="/trgroups" component={TrainingGroups} />
