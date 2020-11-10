@@ -1,14 +1,13 @@
 import { gql, useQuery } from "@apollo/client";
+import React, { useEffect, useState } from "react";
 import AutoComplete from "../elements/AutoComplete";
 import TWButton from "../elements/TWButton";
-import { UserContext } from "./../globalState/UserProvider";
-import React, { useEffect, useState } from "react";
+import { usePersistentState } from "../hooks";
 import { Defect } from "../stats/DefectType";
 import Spinner from "../utils/spinner";
-import { useParams } from "./StatsMain";
-import { usePersistentState } from "../hooks";
+import { UserContext } from "./../globalState/UserProvider";
 import { NoData } from "./NoData";
-import { HeaderCell, DataCell, HyperLinkCell, HyperLinkCellRed } from "./WorklistSimple";
+import { DataCell, HeaderCell, HyperLinkCell, HyperLinkCellRed } from "./WorklistSimple";
 
 const ALL_DEFECTS = gql`
   query ALL_DEFECTS {
