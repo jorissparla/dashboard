@@ -1,12 +1,12 @@
 import { gql, useQuery } from "@apollo/client";
-import AutoComplete from "elements/AutoComplete";
-import TWButton from "elements/TWButton";
+import AutoComplete from "../elements/AutoComplete";
+import TWButton from "../elements/TWButton";
 import { UserContext } from "./../globalState/UserProvider";
 import React, { useEffect, useState } from "react";
-import { Defect } from "stats/DefectType";
-import Spinner from "utils/spinner";
+import { Defect } from "../stats/DefectType";
+import Spinner from "../utils/spinner";
 import { useParams } from "./StatsMain";
-import { usePersistentState } from "hooks";
+import { usePersistentState } from "../hooks";
 import { NoData } from "./NoData";
 import { HeaderCell, DataCell, HyperLinkCell, HyperLinkCellRed } from "./WorklistSimple";
 
@@ -107,9 +107,7 @@ const WhatDoesDevWrapper = () => {
 
 const WhatDoesDev = ({ name, severities, cloudOnly, severityList }) => {
   const { data, loading } = useQuery(ALL_DEFECTS);
-  useEffect(() => {
-    console.log(name);
-  }, [data, name]);
+  useEffect(() => {}, [data, name]);
   if (loading) {
     return <Spinner />;
   }

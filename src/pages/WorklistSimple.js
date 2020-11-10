@@ -1,12 +1,12 @@
 import { gql, useQuery } from "@apollo/client";
-import AutoComplete from "elements/AutoComplete";
-import TWButton from "elements/TWButton";
+import AutoComplete from "../elements/AutoComplete";
+import TWButton from "../elements/TWButton";
 import { UserContext } from "./../globalState/UserProvider";
 import React, { useEffect, useState } from "react";
-import { Backlog } from "stats/BacklogType";
-import Spinner from "utils/spinner";
+import { Backlog } from "../stats/BacklogType";
+import Spinner from "../utils/spinner";
 import { useParams } from "./StatsMain";
-import { usePersistentState } from "hooks";
+import { usePersistentState } from "../hooks";
 
 const MY_BACKLOG_QUERY = gql`
   fragment backlogfragment on DWH {

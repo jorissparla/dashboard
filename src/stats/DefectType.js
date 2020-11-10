@@ -7,7 +7,6 @@ export function Defect(defects) {
       return this;
     },
     addTargetMet(severityList, col) {
-      console.log(severityList);
       let result = tmp.map((item) => {
         severityList.map((s) => {
           // console.log("kiep", s.id, item.severity_id);
