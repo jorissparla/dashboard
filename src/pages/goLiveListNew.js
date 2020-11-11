@@ -117,6 +117,7 @@ const GoLivesContainer = () => {
     })
     .map((o) => _.map(o, (i) => _.merge({ day: dayPart(i.date), month: monthPart(i.date) }, i)))
     .value();
+  console.log({ goLivesByMonth });
   return (
     <List style={{ backgroundColor: "white" }}>
       {goLivesByMonth.map((m, index) => (

@@ -95,7 +95,7 @@ const WorklistSimpleWrapper = () => {
     <div className="bg-gray-100 h-screen">
       <div className="flex items-center mb-4">
         <span className="mx-4 text-lg font-sans font-semibold">Essential Worklist for </span>{" "}
-        <AutoComplete disabled={false} support={x} onChangeValue={(e) => setName(e)} value={name}></AutoComplete>
+        <AutoComplete disabled={!isValidSuperUser} support={x} onChangeValue={(e) => setName(e)} value={name}></AutoComplete>
         <div className="ml-4">
           <label className="inline-flex items-center">
             <input
@@ -215,7 +215,7 @@ export const Widget = ({ data = [], title, mark = false }) => {
 };
 
 export const HeaderCell = ({ children }) => (
-  <th className="z-20 sticky top-0 text-sm font-semibold text-gray-700 bg-gray-100 p-0">
+  <th className="  top-0 text-sm font-semibold text-gray-700 bg-gray-100 p-0">
     <div className="p-2 border-b border-gray-300">{children}</div>
   </th>
 );

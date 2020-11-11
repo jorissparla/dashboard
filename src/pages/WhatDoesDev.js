@@ -8,6 +8,15 @@ import Spinner from "../utils/spinner";
 import { UserContext } from "./../globalState/UserProvider";
 import { NoData } from "./NoData";
 import { DataCell, HeaderCell, HyperLinkCell, HyperLinkCellRed } from "./WorklistSimple";
+import GenericFilter from "../elements/GenericFilter";
+import _ from "lodash";
+import { useSpring, animated } from "react-spring";
+import { motion } from "framer-motion";
+
+const variants = {
+  open: { opacity: 1, x: 0 },
+  closed: { opacity: 0, x: "-100%" },
+};
 
 const ALL_DEFECTS = gql`
   query ALL_DEFECTS {
@@ -40,14 +49,19 @@ const ALL_QUEUES = gql`
 `;
 
 const WhatDoesDevWrapper = () => {
+  // animation
+
   const { user } = React.useContext(UserContext);
   const [name, setName] = usePersistentState("DefectGroupOwner", owner || "");
+  const [groupsSelected, setGroupsSelected] = usePersistentState("OG_filter", []);
+  const [showFilter, setShowFilter] = useState(false);
   const owner = user ? (user.fullname ? user.fullname : "") : "";
   const [severities, setSeverities] = usePersistentState("defectseverities", [2, 3]);
   const [cloudOnly, setCloudOnly] = usePersistentState("defectCloudOnly", false);
   const { data, loading } = useQuery(ALL_QUEUES);
+  const animationFilterProps = useSpring({ opacity: showFilter ? 1 : 0 });
   if (loading) return <Spinner />;
-  let x = data.allDefectQueues.map((item) => item.groupname);
+  let defectQueues = data.allDefectQueues.map((item) => item.groupname);
 
   function changeSevChecked(sev) {
     const x = severities.findIndex((s) => s === sev);
@@ -72,11 +86,39 @@ const WhatDoesDevWrapper = () => {
     return severities.findIndex((s) => s === id) > -1;
   }
 
+  function changeGroupsSelected(values) {
+    setGroupsSelected(values);
+  }
+  function clearGroupsSelected() {
+    setGroupsSelected([]);
+  }
+  function handleDeleteGroupSelected(item) {
+    let newValue = groupsSelected.filter((sel) => sel !== item);
+    setGroupsSelected(newValue);
+  }
   return (
     <div className="bg-gray-100 h-screen">
+      {showFilter && (
+        <motion.nav animate={showFilter ? "open" : "closed"} variants={variants}>
+          <GenericFilter open={true} onClose={() => setShowFilter((prev) => !prev)} onClear={clearGroupsSelected}>
+            Filter here
+            <DefectQueuesFilterList defectQueues={data.allDefectQueues} onChange={changeGroupsSelected} values={groupsSelected} />
+          </GenericFilter>
+        </motion.nav>
+      )}
+
       <div className="flex items-center mb-4">
+        <TWButton color="pink" onClick={() => setShowFilter((prev) => !prev)}>
+          Filter
+        </TWButton>
         <span className="mx-4 text-lg font-sans font-semibold">Essential Defect List </span>{" "}
-        <AutoComplete disabled={false} support={x} onChangeValue={(e) => setName(e)} value={name} searchTextFromStart={false}></AutoComplete>
+        {/* <AutoComplete
+          disabled={false}
+          support={defectQueues}
+          onChangeValue={(e) => setName(e)}
+          value={name}
+          searchTextFromStart={false}
+        ></AutoComplete> */}
         <div className="ml-8 flex items-center">
           <div className="flex items-center flex-no-wrap">
             <span className="text-gray-700 font-semibold mr-2">severity</span>
@@ -99,12 +141,41 @@ const WhatDoesDevWrapper = () => {
           </div>
         </div>
       </div>
-      <WhatDoesDev name={name} severities={severities} cloudOnly={cloudOnly} severityList={severityList} />
+      {groupsSelected.length > 0 ? (
+        <div>
+          {groupsSelected.map((g, index) => (
+            <SelectedBadge key={index} handleDelete={() => handleDeleteGroupSelected(g)}>
+              {g}
+            </SelectedBadge>
+          ))}
+        </div>
+      ) : (
+        <div>No groups selected, please press Filter to select groups</div>
+      )}
+      <WhatDoesDev name={name} severities={severities} cloudOnly={cloudOnly} severityList={severityList} groups={groupsSelected} />
     </div>
   );
 };
 
-const WhatDoesDev = ({ name, severities, cloudOnly, severityList }) => {
+const SelectedBadge = ({ children, index, handleDelete = () => null }) => (
+  <span
+    key={index}
+    className="inline-flex items-center my-0.5 mx-2 px-3 py-1.5 rounded-lg text-xs font-sans font-medium leading-4 bg-blue-200 text-blue-800"
+  >
+    {children}
+    <button
+      type="button"
+      onClick={handleDelete ? handleDelete : () => null}
+      className="flex-shrink-0 ml-1.5 inline-flex text-gray-500 focus:outline-none focus:text-gray-700"
+    >
+      <svg className="h-2 w-2" stroke="currentColor" fill="none" viewBox="0 0 8 8">
+        <path strokeLinecap="round" strokeWidth="1.5" d="M1 1l6 6m0-6L1 7" />
+      </svg>
+    </button>
+  </span>
+);
+
+const WhatDoesDev = ({ name, severities, cloudOnly, severityList, groups }) => {
   const { data, loading } = useQuery(ALL_DEFECTS);
   useEffect(() => {}, [data, name]);
   if (loading) {
@@ -124,7 +195,8 @@ const WhatDoesDev = ({ name, severities, cloudOnly, severityList }) => {
   //.filterOwnerGroup(name).filterSeverities(severityList).filterCloudOnly(cloudOnly);
   let [avgUnassigned, unassigned] = defBase
     .init()
-    .filterOwnerGroup(name)
+    // .filterOwnerGroup(name)
+    .filterGroups(groups)
     .filterDev("Unassigned, ")
     .sort("ageDays", "D")
     .addTargetMet(severityList, "unassigned")
@@ -133,14 +205,15 @@ const WhatDoesDev = ({ name, severities, cloudOnly, severityList }) => {
     .getAvgAndData();
   let [avgResolved, resolved] = defBase
     .init()
-    .filterOwnerGroup(name)
+    // .filterOwnerGroup(name)
+    .filterGroups(groups)
     .filterSeverities(severities)
     .filterCloudOnly(cloudOnly)
     .addTargetMet(severityList, "resolved")
     .getAvgAndData();
 
   const replaceFieldUnassigned = { name: "Developer", title: "OwnerGroup", toField: "groupOwner" };
-
+  console.log({ unassigned });
   return (
     <div className="px-2 pt-2 grid grid-cols-2 gap-x-2 gap-y-2">
       <Widget
@@ -279,6 +352,95 @@ const DefectTable = ({ data, replaceField = null, mark = false }) => {
           )}
         </tbody>
       </table>
+    </div>
+  );
+};
+
+const DefectQueuesFilterList = ({ defectQueues = [], onChange = () => console.log("change"), values = [] }) => {
+  const [selectedGroupNames, setSelectedGroupNames] = useState(values);
+  const [selectedDomains, setSelectedDomains] = useState(["Technology"]);
+  // let currentGroupSet = "";
+  const groupedQueues = _.chain(defectQueues)
+    .sortBy((o) => o.groupset)
+    .groupBy(function (g) {
+      return g.groupset;
+    })
+    .map((o) => o)
+    .value()
+    .sort((x, y) => (x.length > y.length ? -1 : 1));
+
+  function onHandleCheckItem(item) {
+    let newItems = selectedGroupNames;
+    if (selectedGroupNames.findIndex((s) => s === item) > -1) {
+      // Remove
+      newItems = selectedGroupNames.filter((name) => name === item);
+    } else {
+      newItems = [...selectedGroupNames, item];
+    }
+    setSelectedGroupNames(newItems);
+    onChange(newItems);
+  }
+
+  function onHandleDomainCheck(item) {
+    console.log({ item });
+    let newDomains = selectedDomains;
+    let newItems = selectedGroupNames;
+    let queuesToHandle = defectQueues.filter((g) => g.groupset === item).map((item) => item.groupname);
+    console.log({ queuesToHandle });
+    if (selectedDomains.findIndex((d) => d === item) > -1) {
+      // clear everything
+      newDomains = selectedDomains.filter((name) => name !== item);
+      newItems = selectedGroupNames.filter((name) => !queuesToHandle.includes(name));
+    } else {
+      newDomains = [...selectedDomains, item];
+      // add everything
+      newItems = [...selectedGroupNames, ...queuesToHandle];
+    }
+    setSelectedGroupNames(newItems);
+    setSelectedDomains(newDomains);
+    onChange(newItems);
+  }
+
+  function isDomainChecked(domain) {
+    return selectedDomains.findIndex((s) => s === domain) > -1;
+  }
+  function isValueChecked(item) {
+    return selectedGroupNames.findIndex((s) => s === item) > -1;
+  }
+  console.log({ selectedDomains });
+  return (
+    <div className="h-full">
+      <span className="text-gray-700">Queues</span>
+      <div className="mt-2 grid col-gap-2 grid-cols-3 grid-rows-smaller " style={{ height: "80%" }}>
+        {groupedQueues.map((queue, index) => {
+          return (
+            <div key={queue[0].groupset} className="border rounded-lg border-blue-100 min-h-96">
+              <label className="inline-flex items-center">
+                <input
+                  type="checkbox"
+                  onChange={() => onHandleDomainCheck(queue[0].groupset)}
+                  className="form-checkbox text-green-600"
+                  checked={isDomainChecked(queue[0].groupset)}
+                />
+                <span className="font-bold py-3">{queue[0].groupset}</span>
+              </label>
+              {queue.map((item) => (
+                <div key={item.groupname}>
+                  <label className="inline-flex items-center">
+                    <input
+                      type="checkbox"
+                      className="form-checkbox"
+                      onChange={() => onHandleCheckItem(item.groupname)}
+                      checked={isValueChecked(item.groupname)}
+                    />
+                    <span className="ml-2">{item.groupname}</span>
+                  </label>
+                </div>
+              ))}
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };

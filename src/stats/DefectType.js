@@ -22,6 +22,11 @@ export function Defect(defects) {
     getData() {
       return tmp;
     },
+    filterGroups(listOfGroups) {
+      tmp = tmp.filter((def) => listOfGroups.includes(def.groupOwner));
+      console.log("length", tmp.length);
+      return this;
+    },
     filterStatus(status) {
       tmp = tmp.filter((def) => def.Status === status);
       return this;
