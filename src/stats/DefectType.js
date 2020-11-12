@@ -24,7 +24,7 @@ export function Defect(defects) {
     },
     filterGroups(listOfGroups) {
       tmp = tmp.filter((def) => listOfGroups.includes(def.groupOwner));
-      console.log("length", tmp.length);
+      // console.log("length", tmp.length);
       return this;
     },
     filterStatus(status) {

@@ -11,12 +11,7 @@ import { DataCell, HeaderCell, HyperLinkCell, HyperLinkCellRed } from "./Worklis
 import GenericFilter from "../elements/GenericFilter";
 import _ from "lodash";
 import { useSpring, animated } from "react-spring";
-import { motion } from "framer-motion";
-
-const variants = {
-  open: { opacity: 1, x: 0 },
-  closed: { opacity: 0, x: "-100%" },
-};
+import { format } from "date-fns";
 
 const ALL_DEFECTS = gql`
   query ALL_DEFECTS {
@@ -32,6 +27,7 @@ const ALL_DEFECTS = gql`
       severity_name
       severity_id
       hascloud
+      lastupdated
     }
     allDefectQueues {
       groupname
@@ -59,7 +55,7 @@ const WhatDoesDevWrapper = () => {
   const [severities, setSeverities] = usePersistentState("defectseverities", [2, 3]);
   const [cloudOnly, setCloudOnly] = usePersistentState("defectCloudOnly", false);
   const { data, loading } = useQuery(ALL_QUEUES);
-  const animationFilterProps = useSpring({ opacity: showFilter ? 1 : 0 });
+  const props = useSpring({ opacity: showFilter ? 1 : 0 });
   if (loading) return <Spinner />;
   let defectQueues = data.allDefectQueues.map((item) => item.groupname);
 
@@ -96,15 +92,16 @@ const WhatDoesDevWrapper = () => {
     let newValue = groupsSelected.filter((sel) => sel !== item);
     setGroupsSelected(newValue);
   }
+
   return (
     <div className="bg-gray-100 h-screen">
       {showFilter && (
-        <motion.nav animate={showFilter ? "open" : "closed"} variants={variants}>
+        <animated.div style={props}>
           <GenericFilter open={true} onClose={() => setShowFilter((prev) => !prev)} onClear={clearGroupsSelected}>
             Filter here
             <DefectQueuesFilterList defectQueues={data.allDefectQueues} onChange={changeGroupsSelected} values={groupsSelected} />
           </GenericFilter>
-        </motion.nav>
+        </animated.div>
       )}
 
       <div className="flex items-center mb-4">
@@ -191,6 +188,10 @@ const WhatDoesDev = ({ name, severities, cloudOnly, severityList, groups }) => {
   }
 
   let defectsx = data.openDefects;
+  let lastupdated = null;
+  if (defectsx?.length > 0) {
+    lastupdated = defectsx[0].lastupdated;
+  }
   let defBase = Defect(defectsx);
   //.filterOwnerGroup(name).filterSeverities(severityList).filterCloudOnly(cloudOnly);
   let [avgUnassigned, unassigned] = defBase
@@ -213,17 +214,22 @@ const WhatDoesDev = ({ name, severities, cloudOnly, severityList, groups }) => {
     .getAvgAndData();
 
   const replaceFieldUnassigned = { name: "Developer", title: "OwnerGroup", toField: "groupOwner" };
-  console.log({ unassigned });
+  // console.log({ unassigned });
   return (
-    <div className="px-2 pt-2 grid grid-cols-2 gap-x-2 gap-y-2">
-      <Widget
-        data={unassigned}
-        title={`Response Target - Unassigned defects - avg. age ${avgUnassigned} days `}
-        replaceField={replaceFieldUnassigned}
-        mark={true}
-      />
-      <Widget data={resolved} title={`Resolution Time Target– Open Defects - avg. age ${avgResolved} days`} mark={true} />
-      {/* <DefectTable data={defects} /> */}
+    <div>
+      <span className="rounded-lg bg-grey-400 text-grey-700 ml-2 px-2 py-0.5 text-sm shadow">
+        last update: {format(parseInt(lastupdated), "EEE, dd MMMM yyyy HH:m")}
+      </span>
+      <div className="px-2 pt-2 grid grid-cols-2 gap-x-2 gap-y-2">
+        <Widget
+          data={unassigned}
+          title={`Response Target - Unassigned defects - avg. age ${avgUnassigned} days `}
+          replaceField={replaceFieldUnassigned}
+          mark={true}
+        />
+        <Widget data={resolved} title={`Resolution Time Target– Open Defects - avg. age ${avgResolved} days`} mark={true} />
+        {/* <DefectTable data={defects} /> */}
+      </div>
     </div>
   );
 };
@@ -271,7 +277,7 @@ export const Widget = ({ data = [], title, mark = false, replaceField }) => {
       {data.length === 0 ? (
         <h2>No {title} incidents </h2>
       ) : (
-        <DefectTable data={data.slice((currPage - 1) * MAX_LEN, currPage * MAX_LEN - 1)} mark={mark} replaceField={replaceField} mark={mark} />
+        <DefectTable data={data.slice((currPage - 1) * MAX_LEN, currPage * MAX_LEN)} mark={mark} replaceField={replaceField} mark={mark} />
       )}
     </div>
   );
@@ -370,10 +376,11 @@ const DefectQueuesFilterList = ({ defectQueues = [], onChange = () => console.lo
     .sort((x, y) => (x.length > y.length ? -1 : 1));
 
   function onHandleCheckItem(item) {
+    console.log({ item });
     let newItems = selectedGroupNames;
     if (selectedGroupNames.findIndex((s) => s === item) > -1) {
       // Remove
-      newItems = selectedGroupNames.filter((name) => name === item);
+      newItems = selectedGroupNames.filter((name) => name !== item);
     } else {
       newItems = [...selectedGroupNames, item];
     }
@@ -382,7 +389,6 @@ const DefectQueuesFilterList = ({ defectQueues = [], onChange = () => console.lo
   }
 
   function onHandleDomainCheck(item) {
-    console.log({ item });
     let newDomains = selectedDomains;
     let newItems = selectedGroupNames;
     let queuesToHandle = defectQueues.filter((g) => g.groupset === item).map((item) => item.groupname);
@@ -407,7 +413,7 @@ const DefectQueuesFilterList = ({ defectQueues = [], onChange = () => console.lo
   function isValueChecked(item) {
     return selectedGroupNames.findIndex((s) => s === item) > -1;
   }
-  console.log({ selectedDomains });
+  console.log({ selectedGroupNames });
   return (
     <div className="h-full">
       <span className="text-gray-700">Queues</span>

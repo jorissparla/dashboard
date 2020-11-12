@@ -209,7 +209,8 @@ export const Widget = ({ data = [], title, mark = false }) => {
           </TWButton>
         </div>
       </h1>
-      {data.length === 0 ? <h2>No {title} incidents </h2> : <Table data={data.slice((currPage - 1) * MAX_LEN, currPage * MAX_LEN - 1)} mark={mark} />}
+      <span></span>
+      {data.length === 0 ? <h2>No {title} incidents </h2> : <Table data={data.slice((currPage - 1) * MAX_LEN, currPage * MAX_LEN)} mark={mark} />}
     </div>
   );
 };

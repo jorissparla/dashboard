@@ -1,10 +1,8 @@
-import { Button, Drawer } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 import DeleteIcon from "@material-ui/icons/DeleteOutlined";
 import { makeStyles } from "@material-ui/styles";
 import clsx from "clsx";
 import React, { useState } from "react";
-import { usePersistentState } from "../hooks";
 import TWButton from "./TWButton";
 
 const useStyles = makeStyles((theme) => ({
@@ -119,27 +117,31 @@ const Filter = (props) => {
     onFilter && onFilter(values);
   };
 
+  // {/* <Drawer anchor="right" classes={{ paper: classes.drawer }} onClose={onClose} open={open}> */}
+
   return (
-    <Drawer anchor="right" classes={{ paper: classes.drawer }} onClose={onClose} open={open} variant="temporary">
-      <form {...rest} className={clsx(classes.root, className)} onSubmit={handleSubmit}>
-        <div className="flex items-center ml-2 mt-4">
-          <TWButton onClick={onClose} color="transp">
-            <CloseIcon className={classes.buttonIcon} />
-            Close
-          </TWButton>
-          <TWButton color="teal" onClick={handleClear} variant="contained">
-            <DeleteIcon className={classes.buttonIcon} />
-            Clear
-          </TWButton>
-          <TWButton color="primary" type="submit" variant="contained">
-            Apply filters
-          </TWButton>
-        </div>
-        <div className={classes.content}>
-          <div className={classes.contentSection}>{children}</div>
-        </div>
-      </form>
-    </Drawer>
+    <div className="inset-y-0 right-0 flex z-50 bg-gray-700 bg-opacity-50 absolute w-full">
+      <div className="w-2/3 flex h-full bg-white fixed z-50 shadow-lg rounded pt-20 flex-col">
+        <form {...rest} className={clsx(classes.root, className)} onSubmit={handleSubmit}>
+          <div className="flex items-center ml-2 mt-4">
+            <TWButton onClick={onClose} color="transp">
+              <CloseIcon className={classes.buttonIcon} />
+              Close
+            </TWButton>
+            <TWButton color="teal" onClick={handleClear} variant="contained">
+              <DeleteIcon className={classes.buttonIcon} />
+              Clear
+            </TWButton>
+            {/* <TWButton color="primary" type="submit" variant="contained">
+              Apply filters
+            </TWButton> */}
+          </div>
+          <div className={classes.content}>
+            <div className={classes.contentSection}>{children}</div>
+          </div>
+        </form>
+      </div>
+    </div>
   );
 };
 
