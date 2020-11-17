@@ -4,6 +4,9 @@ import { Backlog } from "stats/BacklogType";
 import { useLocalStorage } from "../utils/useLocalStorage";
 import LoadingDots from "./../utils/LoadingDots";
 
+export function useParam(name = "", initialValue = 0) {
+  return useLocalStorage(name, initialValue, false);
+}
 export function useParams(clean = false) {
   const [C_AWAITINGCUSTOMER] = useLocalStorage("C_AWAITINGCUSTOMER", 6, clean);
   const [C_AWAITINGINFOR] = useLocalStorage("C_AWAITINGINFOR", 1, clean);

@@ -1,19 +1,26 @@
 export function Defect(defects) {
   let data = defects;
   let tmp = defects;
+  let targetAdded = false;
   return {
     init() {
       tmp = data;
       return this;
     },
     addTargetMet(severityList, col) {
+      console.log("reload", severityList);
+      this.targetAdded = true;
       let result = tmp.map((item) => {
         severityList.map((s) => {
           // console.log("kiep", s.id, item.severity_id);
         });
-        const row = severityList.filter((s) => s.id === item.severity_id);
-        const targetVal = row[col];
-        return { ...item, targetMet: item.ageDays <= targetVal };
+        const row = severityList.find((s) => s.id === item.severity_id);
+        if (!row) {
+          console.log("jier");
+        }
+        const targetVal = parseInt(row[col]);
+
+        return { ...item, targetMet: item.ageDays <= targetVal, target: targetVal };
       });
       tmp = result;
       return this;
@@ -63,8 +70,9 @@ export function Defect(defects) {
     },
     getAvgAndData() {
       const sum = tmp.reduce((total, item) => total + item.ageDays, 0);
+      const met = this.targetAdded && tmp.length > 0 ? ((tmp.filter((item) => item.targetMet).length * 100) / tmp.length).toFixed(0) : 0;
       const avg = (sum / (tmp.length || 0 + 1)).toFixed(0);
-      return [avg, tmp];
+      return [avg, tmp, met];
     },
   };
 }

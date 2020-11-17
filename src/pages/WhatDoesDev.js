@@ -12,10 +12,26 @@ import GenericFilter from "../elements/GenericFilter";
 import _ from "lodash";
 import { useSpring, animated } from "react-spring";
 import { format } from "date-fns";
+import { Parameter } from "stats/Parameters";
+import { useParam } from "./StatsMain";
 
 const ALL_DEFECTS = gql`
   query ALL_DEFECTS {
     openDefects {
+      defect_id
+      summary
+      company_name
+      Status
+      Developer
+      groupOwner
+      ageDays
+      ageCompleted
+      severity_name
+      severity_id
+      hascloud
+      lastupdated
+    }
+    closedDefects {
       defect_id
       summary
       company_name
@@ -51,11 +67,45 @@ const WhatDoesDevWrapper = () => {
   const [name, setName] = usePersistentState("DefectGroupOwner", owner || "");
   const [groupsSelected, setGroupsSelected] = usePersistentState("OG_filter", []);
   const [showFilter, setShowFilter] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const owner = user ? (user.fullname ? user.fullname : "") : "";
   const [severities, setSeverities] = usePersistentState("defectseverities", [2, 3]);
   const [cloudOnly, setCloudOnly] = usePersistentState("defectCloudOnly", false);
+  const [severityList, setSeverityList] = useState([]);
+  const [sevUpdated, setSevUpdated] = useState(new Date());
   const { data, loading } = useQuery(ALL_QUEUES);
   const props = useSpring({ opacity: showFilter ? 1 : 0 });
+  const propsSettings = useSpring({ opacity: showSettings ? 1 : 0 });
+  const { x: xsettings } = useSpring({
+    x: showSettings ? 0 : 100,
+  });
+  const { x: fi } = useSpring({
+    x: showFilter ? 0 : 100,
+  });
+  function getFromLS(value, defaultVal) {
+    const x = window.localStorage.getItem(value);
+    return x ? x : defaultVal;
+  }
+  useEffect(() => {
+    const S1_UNRESOLVED = getFromLS("DEV_S1_UNRESOLVED", 5);
+    const S2_UNRESOLVED = getFromLS("DEV_S2_UNRESOLVED", 15);
+    const S3_UNRESOLVED = getFromLS("DEV_S3_UNRESOLVED", 45);
+    const S4_UNRESOLVED = getFromLS("DEV_S4_UNRESOLVED", 90);
+
+    const S1_UNASSIGNED = getFromLS("DEV_S1_UNASSIGNED", 1);
+    const S2_UNASSIGNED = getFromLS("DEV_S2_UNASSIGNED", 1);
+    const S3_UNASSIGNED = getFromLS("DEV_S3_UNASSIGNED", 7);
+    const S4_UNASSIGNED = getFromLS("DEV_S4_UNASSIGNED", 14);
+    setSeverityList([
+      { id: 4, name: "Critical Production Service Unusable", unassigned: S1_UNASSIGNED, resolved: S1_UNRESOLVED },
+      { id: 3, name: "Major Impact", unassigned: S2_UNASSIGNED, resolved: S2_UNRESOLVED },
+      { id: 2, name: "Medium Impact", unassigned: S3_UNASSIGNED, resolved: S3_UNRESOLVED },
+      { id: 1, name: "Standard", unassigned: S4_UNASSIGNED, resolved: S4_UNRESOLVED },
+      { id: 7, name: "Minor Issue or Enhancement Request", unassigned: S4_UNASSIGNED, resolved: S4_UNRESOLVED },
+    ]);
+    // console.log({ sevUpdated, S2_UNASSIGNED, S2_UNRESOLVED });
+  }, [sevUpdated]);
+
   if (loading) return <Spinner />;
   let defectQueues = data.allDefectQueues.map((item) => item.groupname);
 
@@ -71,12 +121,7 @@ const WhatDoesDevWrapper = () => {
     setSeverities(results);
   }
 
-  const severityList = [
-    { id: 4, name: "Critical Production Service Unusable", unassigned: 1, resolved: 5 },
-    { id: 3, name: "Major Impact", unassigned: 1, resolved: 15 },
-    { id: 2, name: "Medium Impact", unassigned: 7, resolved: 45 },
-    { id: 1, name: "Standard", unassigned: 14, resolved: 90 },
-  ];
+  // const [x] = useParam
 
   function isSevChecked(id) {
     return severities.findIndex((s) => s === id) > -1;
@@ -92,30 +137,32 @@ const WhatDoesDevWrapper = () => {
     let newValue = groupsSelected.filter((sel) => sel !== item);
     setGroupsSelected(newValue);
   }
-
+  function handleCloseAndApplySettings() {
+    setShowSettings((prev) => !prev);
+    setSevUpdated(new Date());
+  }
   return (
     <div className="bg-gray-100 h-screen">
       {showFilter && (
-        <animated.div style={props}>
-          <GenericFilter open={true} onClose={() => setShowFilter((prev) => !prev)} onClear={clearGroupsSelected}>
-            Filter here
+        <animated.div style={{ transform: fi.interpolate((x) => `translate3d(${x * -1}%, 0,0)`) }}>
+          <GenericFilter open={true} onClose={() => setShowFilter((prev) => !prev)} onClear={clearGroupsSelected} showRight={false}>
             <DefectQueuesFilterList defectQueues={data.allDefectQueues} onChange={changeGroupsSelected} values={groupsSelected} />
           </GenericFilter>
         </animated.div>
       )}
-
-      <div className="flex items-center mb-4">
+      {/* {showSettings && ( */}
+      {/* // <animated.div style={propsSettings}> */}
+      <animated.div style={{ transform: xsettings.interpolate((x) => `translate3d(${x}%, 0,0)`) }}>
+        <GenericFilter open={true} onClose={handleCloseAndApplySettings} onClear={null}>
+          <TargetSettingsList onChange={() => setSevUpdated(new Date())} />
+        </GenericFilter>
+      </animated.div>
+      {/* )} */}
+      <div className="bg-white shadow pb-4 flex items-center mb-2">
         <TWButton color="pink" onClick={() => setShowFilter((prev) => !prev)}>
           Filter
         </TWButton>
-        <span className="mx-4 text-lg font-sans font-semibold">Essential Defect List </span>{" "}
-        {/* <AutoComplete
-          disabled={false}
-          support={defectQueues}
-          onChangeValue={(e) => setName(e)}
-          value={name}
-          searchTextFromStart={false}
-        ></AutoComplete> */}
+        <span className="mx-4 text-lg font-sans font-semibold">Essential Defect List 1</span>{" "}
         <div className="ml-8 flex items-center">
           <div className="flex items-center flex-no-wrap">
             <span className="text-gray-700 font-semibold mr-2">severity</span>
@@ -136,6 +183,17 @@ const WhatDoesDevWrapper = () => {
               <span className="ml-2">Cloud Only</span>
             </label>
           </div>
+        </div>
+        <div title="Settings" className="fixed right-0 pr-4" onClick={() => setShowSettings((prev) => !prev)}>
+          <svg className="w-6 h-6 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+            ></path>
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+          </svg>
         </div>
       </div>
       {groupsSelected.length > 0 ? (
@@ -174,7 +232,49 @@ const SelectedBadge = ({ children, index, handleDelete = () => null }) => (
 
 const WhatDoesDev = ({ name, severities, cloudOnly, severityList, groups }) => {
   const { data, loading } = useQuery(ALL_DEFECTS);
-  useEffect(() => {}, [data, name]);
+  const [unassignedData, setUnassignedData] = useState([]);
+  const [resolvedData, setResolvedData] = useState([]);
+  const [closedData, setClosedData] = useState([]);
+  useEffect(() => {
+    console.log("WhatDoesDev changed");
+    if (data) {
+      let defBase = Defect(defectsx);
+      let defClosed = Defect(defectsy);
+      // console.log("log", defBase.getData(), defClosed.getData());
+      setUnassignedData(
+        defBase
+          .init()
+          // .filterOwnerGroup(name)
+          .filterGroups(groups)
+          .filterDev("Unassigned, ")
+          .sort("ageDays", "D")
+          .addTargetMet(severityList, "unassigned")
+          .filterCloudOnly(cloudOnly)
+          .filterSeverities(severities)
+          .getAvgAndData()
+      );
+      setResolvedData(
+        defBase
+          .init()
+          // .filterOwnerGroup(name)
+          .filterGroups(groups)
+          .filterSeverities(severities)
+          .filterCloudOnly(cloudOnly)
+          .addTargetMet(severityList, "resolved")
+          .getAvgAndData()
+      );
+      setClosedData(
+        defClosed
+          .init()
+          // .filterOwnerGroup(name)
+          .filterGroups(groups)
+          .filterSeverities(severities)
+          .filterCloudOnly(cloudOnly)
+          .addTargetMet(severityList, "resolved")
+          .getAvgAndData()
+      );
+    }
+  }, [data, name, severityList, severities, groups]);
   if (loading) {
     return <Spinner />;
   }
@@ -188,38 +288,24 @@ const WhatDoesDev = ({ name, severities, cloudOnly, severityList, groups }) => {
   }
 
   let defectsx = data.openDefects;
+  let defectsy = data.closedDefects;
   let lastupdated = null;
   if (defectsx?.length > 0) {
     lastupdated = defectsx[0].lastupdated;
   }
-  let defBase = Defect(defectsx);
-  //.filterOwnerGroup(name).filterSeverities(severityList).filterCloudOnly(cloudOnly);
-  let [avgUnassigned, unassigned] = defBase
-    .init()
-    // .filterOwnerGroup(name)
-    .filterGroups(groups)
-    .filterDev("Unassigned, ")
-    .sort("ageDays", "D")
-    .addTargetMet(severityList, "unassigned")
-    .filterCloudOnly(cloudOnly)
-    .filterSeverities(severities)
-    .getAvgAndData();
-  let [avgResolved, resolved] = defBase
-    .init()
-    // .filterOwnerGroup(name)
-    .filterGroups(groups)
-    .filterSeverities(severities)
-    .filterCloudOnly(cloudOnly)
-    .addTargetMet(severityList, "resolved")
-    .getAvgAndData();
 
+  let [avgUnassigned, unassigned] = unassignedData;
+  let [avgResolved, resolved] = resolvedData;
+  let [avgClosed, closed, met] = closedData;
+
+  console.log({ resolved });
   const replaceFieldUnassigned = { name: "Developer", title: "OwnerGroup", toField: "groupOwner" };
   // console.log({ unassigned });
   return (
     <div>
-      <span className="rounded-lg bg-grey-400 text-grey-700 ml-2 px-2 py-0.5 text-sm shadow">
+      <div className=" bg-white pl-2 w-full text-grey-700 ml-2  py-0.5 text-sm shadow font-semibold">
         last update: {format(parseInt(lastupdated), "EEE, dd MMMM yyyy HH:m")}
-      </span>
+      </div>
       <div className="px-2 pt-2 grid grid-cols-2 gap-x-2 gap-y-2">
         <Widget
           data={unassigned}
@@ -228,6 +314,21 @@ const WhatDoesDev = ({ name, severities, cloudOnly, severityList, groups }) => {
           mark={true}
         />
         <Widget data={resolved} title={`Resolution Time Target– Open Defects - avg. age ${avgResolved} days`} mark={true} />
+        {/* <div className="col-span-2">
+          <Widget data={closed} title={`Resolution Time Target– closed - avg. age ${avgClosed} days - ${met}%`} mark={true} />
+        </div> */}
+        <div className="col-span-2">
+          <Widget
+            data={closed}
+            title={
+              <div>
+                Resolution Time Target– closed last 31 days- avg. age {avgClosed} days -{" "}
+                <span className="bg-teal-600 text-white font-light text-sm rounded-lg p-1 mx-1">{met}% </span>
+              </div>
+            }
+            mark={true}
+          />
+        </div>
         {/* <DefectTable data={defects} /> */}
       </div>
     </div>
@@ -275,7 +376,7 @@ export const Widget = ({ data = [], title, mark = false, replaceField }) => {
         </div>
       </h1>
       {data.length === 0 ? (
-        <h2>No {title} incidents </h2>
+        <h2>No defects </h2>
       ) : (
         <DefectTable data={data.slice((currPage - 1) * MAX_LEN, currPage * MAX_LEN)} mark={mark} replaceField={replaceField} mark={mark} />
       )}
@@ -303,6 +404,7 @@ const DefectTable = ({ data, replaceField = null, mark = false }) => {
     { title: "Company", fld: "company_name" },
     { title: "Summary", fld: "summary" },
     { title: "Age", fld: "ageDays" },
+    { title: "Target", fld: "target" },
   ];
   if (replaceField && replaceField.name && replaceField.toField) {
     fields = replaceList(fields, replaceField);
@@ -364,7 +466,7 @@ const DefectTable = ({ data, replaceField = null, mark = false }) => {
 
 const DefectQueuesFilterList = ({ defectQueues = [], onChange = () => console.log("change"), values = [] }) => {
   const [selectedGroupNames, setSelectedGroupNames] = useState(values);
-  const [selectedDomains, setSelectedDomains] = useState(["Technology"]);
+  const [selectedDomains, setSelectedDomains] = useState([""]);
   // let currentGroupSet = "";
   const groupedQueues = _.chain(defectQueues)
     .sortBy((o) => o.groupset)
@@ -447,6 +549,23 @@ const DefectQueuesFilterList = ({ defectQueues = [], onChange = () => console.lo
           );
         })}
       </div>
+    </div>
+  );
+};
+
+const TargetSettingsList = () => {
+  return (
+    <div className="grid grid-cols-5 gap-4 w-full pt-10 items-center">
+      <span className="font-bold px-2 py-1">Not Resolved</span>
+      <Parameter param="DEV_S1_UNRESOLVED" initial={5} label="Sev1" color="red" />
+      <Parameter param="DEV_S2_UNRESOLVED" initial={15} label="Major Impact" color="pink" />
+      <Parameter param="DEV_S3_UNRESOLVED" initial={45} label="Medium Impact" color="purple" />
+      <Parameter param="DEV_S4_UNRESOLVED" initial={90} label="Standard" color="teal" />
+      <span className="font-bold px-2 py-1">Unassigned</span>
+      <Parameter param="DEV_S1_UNASSIGNED" initial={1} label="Sev1" color="red" />
+      <Parameter param="DEV_S2_UNASSIGNED" initial={1} label="Major Impact" color="pink" />
+      <Parameter param="DEV_S3_UNASSIGNED" initial={7} label="Medium Impact" color="purple" />
+      <Parameter param="DEV_S4_UNASSIGNED" initial={14} color="teal" label="Standard" />
     </div>
   );
 };

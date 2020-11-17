@@ -212,30 +212,6 @@ export const GenericTable = (props: GenericTableProps) => {
     </td>
   );
 
-  const severityColors: { [index: string]: any } = {
-    "Production Outage / Critical Application halted": "text-white bg-red-700",
-    "Major impact": "text-red-800 bg-red-300",
-    "High impact": "text-gray-800 font-bold",
-
-    Standard: "text-gray-600",
-  };
-  const SeverityCell = ({ value = "" }) => {
-    let sevClass: any = severityColors[value] || "";
-    let classes = classNames({
-      "w-28 inline-flex items-center px-3 py-0.5 rounded-full text-xs font-semibold leading-5  ": true,
-      [sevClass]: true,
-    });
-    const tv = value === "Production Outage / Critical Application halted" ? "Production down" : value;
-    return (
-      <td className="px-5 py-2 border-b border-gray-200  text-sm text">
-        <span className={classes}>
-          {/* {value} */}
-          {tv}
-        </span>
-      </td>
-    );
-  };
-
   const FieldFilterSpans: React.FC<{}> = ({}) => {
     const filterAr = [];
     if (Object.keys(fieldFilters).length === 0) return <div />;
@@ -385,5 +361,43 @@ export const GenericTable = (props: GenericTableProps) => {
         </div>
       )}
     </div>
+  );
+};
+
+export const severityColors: { [index: string]: any } = {
+  "Production Outage / Critical Application halted": "text-white bg-red-700",
+  "Major impact": "text-red-700 bg-red-100",
+  "Medium impact": "text-gray-800 font-bold",
+  "High impact": "text-gray-800 font-bold",
+  Standard: "text-gray-600",
+};
+export const SeverityCell = ({ value = "" }) => {
+  let sevClass: any = severityColors[value] || "";
+  let classes = classNames({
+    "w-28 inline-flex items-center px-3 py-0.5 rounded-full text-xs font-semibold leading-5  ": true,
+    [sevClass]: true,
+  });
+  const tv = value === "Production Outage / Critical Application halted" ? "Production down" : value;
+  return (
+    <td className="px-5 py-2 border-b border-gray-200  text-sm text">
+      <span className={classes}>
+        {/* {value} */}
+        {tv}
+      </span>
+    </td>
+  );
+};
+export const SeverityCell2 = ({ value = "" }) => {
+  let sevClass: any = severityColors[value] || "";
+  let classes = classNames({
+    "w-28 inline-flex items-center px-3 py-0.5 rounded-full text-xs font-semibold leading-5  ": true,
+    [sevClass]: true,
+  });
+  const tv = value === "Production Outage / Critical Application halted" ? "Production down" : value;
+  return (
+    <span className={classes}>
+      {/* {value} */}
+      {tv}
+    </span>
   );
 };
