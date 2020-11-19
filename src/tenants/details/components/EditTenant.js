@@ -1,35 +1,19 @@
-import { Button, Card, CardActions, CardContent, CardHeader, colors, Divider, Grid, TextField } from "@material-ui/core";
+import { useMutation } from "@apollo/client";
+import { colors } from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
 import { makeStyles } from "@material-ui/styles";
 import clsx from "clsx";
+import Button from "elements/TWButton";
+import { useAlert } from "globalState/AlertContext";
 import PropTypes from "prop-types";
-import CloseIcon from "@material-ui/icons/Close";
 import React, { useState } from "react";
-import { useMutation } from "@apollo/client";
-
-import { MUTATION_UPDATE_DETAIL } from "./../../TenantQueries";
 import { format } from "utils/format";
+import { MUTATION_UPDATE_DETAIL } from "./../../TenantQueries";
 import TemperatureSlider from "./TemperatureSlider";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    left: "20%",
-    top: "20%",
-    position: "absolute",
-    width: "60%",
-  },
-  saveButton: {
-    color: "white",
-    backgroundColor: colors.green[600],
-    "&:hover": {
-      backgroundColor: colors.green[900],
-    },
-  },
-}));
-
 const EditTenantDetails = (props) => {
-  const { profile, className, onClose, onView, ...rest } = props;
+  const { profile, className, onClose, onView, isTenantEditor = false, ...rest } = props;
 
-  const classes = useStyles();
   const [values, setValues] = useState({
     csm: profile.csm || "",
     pm: profile.pm || "",
@@ -39,6 +23,7 @@ const EditTenantDetails = (props) => {
     info: profile.info,
     temperature: profile.temperature,
     comments: profile.comments,
+    proxyUser: true,
   });
   console.log(profile);
   const [updateTenantDetailsMutation] = useMutation(MUTATION_UPDATE_DETAIL);
@@ -51,12 +36,17 @@ const EditTenantDetails = (props) => {
     });
   };
 
+  const [proxyUser, setProxyUser] = useState(true);
+
+  const alert = useAlert();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     console.log(values);
     const result = await updateTenantDetailsMutation({ variables: { input: values } });
     console.log(result);
     onClose();
+    alert.setMessage("Saving content...");
     // setOpenSnackbar(true);
   };
 
@@ -64,41 +54,62 @@ const EditTenantDetails = (props) => {
     setValues({ ...values, temperature: value });
   };
 
+  const handleTChange = (e) => {
+    handleTemperatureChange(e.target.value);
+  };
   // const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:11:54'));
-  return (
-    <Card {...rest} className={clsx(classes.root, className)}>
-      <form onSubmit={handleSubmit}>
-        <CardHeader title={`Details for ${profile.customer.name}"`} />
-        <Divider />
-        <CardContent>
-          <Grid container spacing={4}>
-            <Grid item md={6} xs={12}>
-              <TextField
-                fullWidth
-                helperText="Please specify name of Project Manager"
-                label="Project Manager"
-                name="pm"
-                onChange={handleChange}
-                // required
-                value={values.pm}
-                variant="outlined"
-              />
-            </Grid>
-            <Grid item md={6} xs={12}>
-              <TextField
-                fullWidth
-                helperText="Please specify name of Customer Success Manager"
-                label="Customer Success Manager"
-                name="csm"
-                onChange={handleChange}
-                // required
-                value={values.csm}
-                variant="outlined"
-              />
-            </Grid>
 
-            <Grid item md={6} xs={12}>
-              <TextField
+  const TempIsChecked = (v) => v === values.temperature;
+  return (
+    <div {...rest} className="bg-white  px-4 font-sans right-0 w-2/3 flex h-full fixed z-50 shadow-lg rounded  flex-col">
+      <form onSubmit={handleSubmit} className="mt-12 ml-4">
+        {/* <CardHeader title={`Details for ${profile.customer.name}"`} /> */}
+        <div className="mt-5 py-4">
+          {isTenantEditor && (
+            <Button color="teal" type="submit" variant="contained">
+              Save Changes
+            </Button>
+          )}
+          <Button onClick={onClose} size="small">
+            <CloseIcon />
+            Close
+          </Button>
+        </div>
+        <div className="text-lg font-semibold font-sans p-2">{`Details for ${profile.customer.name}"`}</div>
+        <hr className="bg-grey-100 mb-2" />
+        <div>
+          <div className="grid grid-cols-3 gap-6">
+            <div className="col-span-3 space-y-1 sm:col-span-2">
+              <label for="pm" className="block text-sm font-medium leading-5 text-gray-700">
+                Project Manager
+              </label>
+              <input
+                className="form-input flex-grow block w-full min-w-0 rounded-none rounded-r-md transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+                name="pm"
+                placeholder="Please specify name of Project Manager"
+                label="Project Manager"
+                onChange={handleChange}
+                value={values.pm}
+              />
+            </div>
+
+            <div className="col-span-3 space-y-1 sm:col-span-2">
+              <label for="pm" className="block text-sm font-medium leading-5 text-gray-700">
+                Customer Success Manager
+              </label>
+              <input
+                className="form-input flex-grow block w-full min-w-0 rounded-none rounded-r-md transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+                name="csm"
+                placeholder="Please specify name of Customer Success Manager"
+                label="Customer Success Manager"
+                onChange={handleChange}
+                value={values.csm}
+              />
+            </div>
+
+            <div className="col-span-3 space-y-1 sm:col-span-2">
+              <input
+                className="form-input flex-grow block w-full min-w-0 rounded-none rounded-r-md transition duration-150 ease-in-out sm:text-sm sm:leading-5"
                 fullWidth
                 type="date"
                 defaultValue="2019-12-12"
@@ -108,61 +119,50 @@ const EditTenantDetails = (props) => {
                 value={values.golivedate}
                 variant="outlined"
               />
-            </Grid>
-            <Grid item md={6} xs={12}>
-              <TextField
-                fullWidth
-                label="Go Live Comments"
+            </div>
+            <div className="col-span-3 space-y-1 sm:col-span-2">
+              <label for="pm" className="block text-sm font-medium leading-5 text-gray-700">
+                Go Live Comments
+              </label>
+              <input
+                className="form-input flex-grow block w-full min-w-0 rounded-none rounded-r-md transition duration-150 ease-in-out sm:text-sm sm:leading-5"
                 name="golivecomments"
+                placeholder="Go Live Comments"
                 onChange={handleChange}
                 value={values.golivecomments}
-                variant="outlined"
               />
-            </Grid>
-            <Grid item md={6} xs={12}>
-              <TextField
-                fullWidth
-                label="Comments"
+            </div>
+            <div className="col-span-3 col-start-1 space-y-1 sm:col-span-2">
+              <label for="pm" className="block text-sm font-medium leading-5 text-gray-700">
+                Customer Comments
+              </label>
+              <textarea
+                className="form-textarea mt-1 block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"
                 name="comments"
                 onChange={handleChange}
                 multiline
-                rows="6"
+                rows="8"
                 value={values.comments}
-                variant="outlined"
               />
-            </Grid>
-
-            {/* <Grid item md={9} xs={12}>
-              <TextField
-                fullWidth
-                label="Info"
-                name="info"
-                onChange={handleChange}
-                multiline
-                rows="4"
-                rowsMax="4"
-                value={values.info}
-                variant="outlined"
-              />
-            </Grid> */}
-            <Grid item md={9} xs={12}>
-              <TemperatureSlider initialValue={profile.temperature} onChange={handleTemperatureChange} />
-            </Grid>
-          </Grid>
-        </CardContent>
-        <Divider />
-        <CardActions>
-          <Button className={classes.saveButton} type="submit" variant="contained">
-            Save Changes
-          </Button>
-          <Button onClick={onClose} size="small">
-            <CloseIcon className={classes.buttonIcon} />
-            Close
-          </Button>
-        </CardActions>
+            </div>
+            <div className="col-span-3 col-start-1 space-y-1 sm:col-span-2 ">
+              <label className="inline-flex items-center">
+                <input type="checkbox" className="form-checkbox text-purp" checked={proxyUser} onChange={() => setProxyUser((prev) => !prev)} />
+                <span className="ml-2">Proxy User agreement signed</span>
+              </label>
+            </div>
+            <div className="col-span-3 col-start-1 space-y-1 sm:col-span-2">
+              <div className="px-4">
+                <TemperatureSlider initialValue={profile.temperature} onChange={handleTemperatureChange} />
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* <Divider /> */}
+        {/* <hr className="bg-grey-100 mt-2" /> */}
       </form>
       {/* <SuccessSnackbar onClose={handleSnackbarClose} open={openSnackbar} /> */}
-    </Card>
+    </div>
   );
 };
 

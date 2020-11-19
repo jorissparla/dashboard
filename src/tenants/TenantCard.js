@@ -11,6 +11,7 @@ import { format, formatDistanceToNow } from "../utils/format";
 import EditTenantDetails from "./details/components/EditTenant";
 import Label from "./details/components/Label";
 import { MUTATION_MARK_LIVE } from "./TenantQueries";
+import { useSpring, animated } from "react-spring";
 
 export const TenantCard = ({
   classes,
@@ -28,7 +29,10 @@ export const TenantCard = ({
   const [showStatus, setShowStatus] = useState(false);
   const userContext = useContext(UserContext);
   const { user, hasPermissions } = userContext;
-
+  const { x } = useSpring({
+    x: isOpen ? 0 : 100,
+  });
+  const props = useSpring({ opacity: isOpen ? 1 : 0 });
   const isTenantEditor = hasPermissions(user, ["TENANTEDIT", "ADMIN"]);
   // const isAdmin = hasPermissions(user, ['ADMIN']);
 
@@ -137,7 +141,7 @@ export const TenantCard = ({
             }
           />
           <div className="mt-2 flex w-full justify-between items-center text-gray-700 font-sans" color="textSecondary">
-          <span className="font-semibold">{tenants.length > 0 && tenants[0].farm}</span>
+            <span className="font-semibold">{tenants.length > 0 && tenants[0].farm}</span>
             <span className={classes.box}>{baseTenantId}</span>
           </div>
           <div className={classes.description}>
@@ -168,15 +172,17 @@ export const TenantCard = ({
           <div className="flex items-center justify-between" alignItems="center" container justify="space-between" spacing={3}>
             <div item className={classes.csm}>
               <div className="font-sans font-semibold text-gray-600">PM</div>
-              <div className="text-sm font-sans" variant="body2">{tenantcustomerdetail.pm ? tenantcustomerdetail.pm : "PM not entered"}</div>
+              <div className="text-sm font-sans" variant="body2">
+                {tenantcustomerdetail.pm ? tenantcustomerdetail.pm : "PM not entered"}
+              </div>
             </div>
             <div item className={classes.csm}>
-               <div className="font-sans font-semibold text-gray-600">CSM</div>
-               <div className="text-sm font-sans"> {tenantcustomerdetail.csm ? tenantcustomerdetail.csm : "CSM not entered"}</div>
+              <div className="font-sans font-semibold text-gray-600">CSM</div>
+              <div className="text-sm font-sans"> {tenantcustomerdetail.csm ? tenantcustomerdetail.csm : "CSM not entered"}</div>
             </div>
             <div item>
-               <div className="font-sans font-semibold text-gray-600">Go Live Date</div>
-               <div className="text-sm font-sans">{golivedate}</div>
+              <div className="font-sans font-semibold text-gray-600">Go Live Date</div>
+              <div className="text-sm font-sans">{golivedate}</div>
             </div>
           </div>
         </div>
@@ -263,11 +269,11 @@ export const TenantCard = ({
               </div>
             )}
           </div>
-          {isTenantEditor && (
-            <Button variant="outlined" color="primary" onClick={() => setisOpened(true)}>
-              Edit
-            </Button>
-          )}
+          {/* {isTenantEditor && ( */}
+          <Button variant="outlined" color="primary" onClick={() => setisOpened(true)}>
+            {isTenantEditor ? "Edit" : "View"}
+          </Button>
+          {/* )} */}
           {isTenantEditor && (
             <Mutation mutation={MUTATION_MARK_LIVE}>
               {(mutate) => (
@@ -295,17 +301,23 @@ export const TenantCard = ({
           )}
         </div>
       </div>
-      <Modal
+      {/* <Modal
         onClose={() => setisOpened(false)}
         open={isOpen}
         BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500,
         }}
-      >
-        <EditTenantDetails profile={tenantcustomerdetail} onClose={() => setisOpened(false)} />
-        {/* </Grid> */}
-      </Modal>
+      > */}
+      {isOpen && (
+        <animated.div style={props}>
+          <div className="inset-0 flex z-50 bg-gray-700  bg-opacity-50 absolute w-2/3 ">
+            <EditTenantDetails profile={tenantcustomerdetail} onClose={() => setisOpened(false)} isTenantEditor={isTenantEditor} />
+          </div>
+        </animated.div>
+      )}
+      {/* </Grid> */}
+      {/* </Modal> */}
     </>
   );
 };
