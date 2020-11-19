@@ -216,7 +216,7 @@ export const Widget = ({ data = [], title, mark = false }) => {
 };
 
 export const HeaderCell = ({ children }) => (
-  <th className="  top-0 text-sm font-semibold text-gray-700 bg-gray-100 p-0">
+  <th className="  top-0 min-w-28 text-sm font-semibold text-gray-700 bg-gray-100 p-0">
     <div className="p-2 border-b border-gray-300">{children}</div>
   </th>
 );

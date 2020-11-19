@@ -1,5 +1,5 @@
 import { Mutation } from "@apollo/client/react/components";
-import { Backdrop, CardActions, CardHeader, Divider, Modal, Switch } from "@material-ui/core";
+import { CardHeader, Divider, Switch } from "@material-ui/core";
 import ListIcon from "@material-ui/icons/List";
 import classNames from "classnames";
 import { addHours } from "date-fns";
@@ -7,11 +7,11 @@ import Button from "elements/TWButton";
 import { UserContext } from "globalState/UserProvider";
 import _ from "lodash";
 import React, { useContext, useState } from "react";
+import { animated, useSpring } from "react-spring";
 import { format, formatDistanceToNow } from "../utils/format";
 import EditTenantDetails from "./details/components/EditTenant";
 import Label from "./details/components/Label";
 import { MUTATION_MARK_LIVE } from "./TenantQueries";
-import { useSpring, animated } from "react-spring";
 
 export const TenantCard = ({
   classes,

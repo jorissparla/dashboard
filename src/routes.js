@@ -84,10 +84,8 @@ const CourseList = DynamicImport(() => import("./pages/CourseList"));
 
 const AccountList = DynamicImport(() => import("./Account/AccountList"));
 
-const ChatContainer = DynamicImport(() => import("./chat/ChatContainer"));
-const ChatList = DynamicImport(() => import("./pages/ChatList"));
 const SmallCard = DynamicImport(() => import("./supportcard/SupportCard"));
-const DashBoardStats = DynamicImport(() => import("./pages/dashboardstats"));
+// const DashBoardStats = DynamicImport(() => import("./pages/dashboardstats"));
 
 const HistoryDayContainer = DynamicImport(() => import("./charts/historydaycontainer"));
 const HistoryDayAll = DynamicImport(() => import("./charts/historydayallcontainer"));
@@ -167,12 +165,12 @@ function AppRoutes(props) {
       <Route exact path="/tenant/missing" component={MissingTenants} />
       <Route exact path="/region/:region" component={DashBoardContainer} user={user} />
       <Route exact path="/team/:team" component={DashBoardStatsNew} />
-      <Route exact path="/team/:team/region/:region" component={DashBoardStats} />
+      {/* <Route exact path="/team/:team/region/:region" component={DashBoardStats} /> */}
       <Route exact path="/fileupload" component={CourseFileUpload} />
       <EnhancedRoute exact path="/scheduledcourses/:id" component={PlannedCourses} user={user} />
       <Route exact path="/plannedcourserequestlist" component={PlannedCourseRequestList} />
-      <EnhancedRoute exact path="/bla" component={UserPermissions} user={user} />
-      <EnhancedRoute exact path="/setpermissions" component={UserPermissions} user={user} />
+      <EnhancedRoute exact path="/bla" component={RequireAuth(UserPermissions)} user={user} />
+      <EnhancedRoute exact path="/setpermissions" component={RequireAuth(UserPermissions)} user={user} />
       <EnhancedRoute exact path="/xyz/:id" component={CourseEdit} user={user} />
       <EnhancedRoute exact path="/xyz/edit/:id" component={CourseEdit} user={user} />
       <EnhancedRoute exact path="/xyz/view/:id" component={CourseEdit} user={user} view={true} />
@@ -217,8 +215,6 @@ function AppRoutes(props) {
       <AuthRoute allowed={["Admin", "PO", "SU", "Guest", "Chat"]} user={user} exact path="/supportcard/request" component={RequestEditAdd} />
       <Route exact path="/news" component={NewsListContainer} />
       <AuthRoute allowed={["Admin", "PO", "SU"]} user={user} exact path="/news/edit/:id" component={RequireAuth(NewsItemContainer)} />
-      <AuthRoute allowed={["Admin", "PO", "SU", "Chat"]} user={user} exact path="/chat" component={RequireAuth(ChatList)} />
-      <AuthRoute allowed={["Admin", "PO", "SU", "Chat"]} user={user} exact path="/chat/new" component={RequireAuth(ChatContainer)} />
       <AuthRoute allowed={["Admin", "PO", "SU", "Guest"]} user={user} exact path="/news/add" component={RequireAuth(NewsItemAddContainer)} />
       <Route path="/golivelist" component={GoLiveListNew} />
       <Route path="/golives" component={GoLiveListNew} />

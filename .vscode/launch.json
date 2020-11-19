@@ -5,7 +5,7 @@
       "type": "chrome",
       "request": "launch",
       "name": "Launch Chrome",
-      "url": "https://localhost:8762/whatdoesdev",
+      "url": "https://localhost:8762/team/logistics",
       "webRoot": "${workspaceFolder}/src"
     }
   ]

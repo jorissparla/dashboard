@@ -25,7 +25,7 @@ const EditTenantDetails = (props) => {
     comments: profile.comments,
     proxyUser: true,
   });
-  console.log(profile);
+  console.log({ profile });
   const [updateTenantDetailsMutation] = useMutation(MUTATION_UPDATE_DETAIL);
   const handleChange = (event) => {
     event.persist();
@@ -40,10 +40,11 @@ const EditTenantDetails = (props) => {
 
   const alert = useAlert();
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    console.log(values);
-    const result = await updateTenantDetailsMutation({ variables: { input: values } });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    let x = values;
+    delete x.proxyUser;
+    const result = await updateTenantDetailsMutation({ variables: { input: x } });
     console.log(result);
     onClose();
     alert.setMessage("Saving content...");
@@ -62,11 +63,11 @@ const EditTenantDetails = (props) => {
   const TempIsChecked = (v) => v === values.temperature;
   return (
     <div {...rest} className="bg-white  px-4 font-sans right-0 w-2/3 flex h-full fixed z-50 shadow-lg rounded  flex-col">
-      <form onSubmit={handleSubmit} className="mt-12 ml-4">
+      <form className="mt-12 ml-4" onSubmit={handleSubmit}>
         {/* <CardHeader title={`Details for ${profile.customer.name}"`} /> */}
         <div className="mt-5 py-4">
           {isTenantEditor && (
-            <Button color="teal" type="submit" variant="contained">
+            <Button type="submit" color="teal" variant="contained">
               Save Changes
             </Button>
           )}
@@ -140,7 +141,7 @@ const EditTenantDetails = (props) => {
                 className="form-textarea mt-1 block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"
                 name="comments"
                 onChange={handleChange}
-                multiline
+                // multiline
                 rows="8"
                 value={values.comments}
               />

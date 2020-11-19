@@ -13,12 +13,12 @@ import promise from "redux-promise";
 import reduxThunk from "redux-thunk";
 import { createGlobalStyle } from "styled-components";
 import Spinner from "utils/spinner";
-import { AUTH_USER } from "./actions";
+// import { AUTH_USER } from "./actions";
 import ContextProvider from "./globalState";
 import "./index.css";
 import "./styles/app.css";
 import App from "./Navigation/Nav";
-import reducers from "./reducers";
+// import reducers from "./reducers";
 import AppRoutes from "./routes";
 import { main } from "./styles/globalstyles";
 
@@ -68,8 +68,8 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-const createStoreWithMiddleware = applyMiddleware(promise, reduxThunk)(createStore);
-const store = createStoreWithMiddleware(reducers);
+// const createStoreWithMiddleware = applyMiddleware(promise, reduxThunk)(createStore);
+// const store = createStoreWithMiddleware(reducers);
 
 const token = localStorage.getItem("token");
 const user = {
@@ -79,10 +79,10 @@ const user = {
   fullname: localStorage.getItem("name"),
 };
 // If we have a token, consider the user to be signed in
-if (token) {
-  // we need to update application state
-  store.dispatch({ type: AUTH_USER, user });
-}
+// if (token) {
+//   // we need to update application state
+//   store.dispatch({ type: AUTH_USER, user });
+// }
 
 const muiTheme = createMuiTheme({
   palette: {
@@ -123,22 +123,22 @@ const muiTheme = createMuiTheme({
 const Main = () => (
   <ApolloProvider client={client}>
     <Global />
-    <Provider store={store}>
-      <MuiThemeProvider theme={muiTheme}>
-        <ContextProvider>
-          <BrowserRouter>
-            {/* <SharedSnackbarProvider> */}
-            <>
-              <App />
-              <React.Suspense fallback={<Spinner loadingMessage="Loading data" />}>
-                <AppRoutes />
-              </React.Suspense>
-            </>
-            {/* </SharedSnackbarProvider> */}
-          </BrowserRouter>
-        </ContextProvider>
-      </MuiThemeProvider>
-    </Provider>
+    {/* <Provider store={store}> */}
+    <MuiThemeProvider theme={muiTheme}>
+      <ContextProvider>
+        <BrowserRouter>
+          {/* <SharedSnackbarProvider> */}
+          <>
+            <App />
+            <React.Suspense fallback={<Spinner loadingMessage="Loading data" />}>
+              <AppRoutes />
+            </React.Suspense>
+          </>
+          {/* </SharedSnackbarProvider> */}
+        </BrowserRouter>
+      </ContextProvider>
+    </MuiThemeProvider>
+    {/* </Provider> */}
   </ApolloProvider>
 );
 
