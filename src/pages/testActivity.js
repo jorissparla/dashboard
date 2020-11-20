@@ -19,39 +19,47 @@ const TestActivity = (props) => {
   const [values, setValues] = React.useState("");
   console.log(ClassicEditor.builtinPlugins.map((plugin) => plugin.pluginName));
   return (
-    <div>
-      bla
-      <div className="flex text-gray-600 mb-4">
-        {
-          // !readOnly ? (
-          <CKEditor
-            editor={ClassicEditor}
-            config={{
-              toolbar: "",
-              ckfinder: {
-                // plugins: [ CKFinder ],
-                // Upload the images to the server using the CKFinder QuickUpload command.
-                uploadUrl: "https://nlbavwixs.infor.com:3001/upload",
-              },
-            }}
-            // disabled={readOnly}
-            data={values}
-            onInit={(editor) => {
-              // You can store the "editor" and use when it is needed.
-              console.log("Editor is ready to use!", editor);
-              // editor.plugins.get("FileRepository").createUploadAdapter = function (loader) {
-              //   return new MyUploadAdapter(loader);
-              // };
-            }}
-            onChange={(event, editor) => {
-              const data = editor.getData();
-              // console.log("Change", { event, editor, data });
-              setValues(data);
-            }}
-          />
-        }
+    <div className="p-10 min-h-screen flex items-center justify-center bg-green-500">
+      <div className="px-4 box-content border-l-8 border-r-8 border-green-400 border-opacity-50 group space-y-4 w-80 mx-auto">
+        <div className="h-16 w-16 bg-white opacity-25 rounded-lg shadow-xl transform group-hover:opacity-100 group-hover:translate-x-64 transition ease-in-out duration-700"></div>
+        <div className="h-16 w-16 bg-white opacity-25 rounded-lg shadow-xl transform group-hover:opacity-100 group-hover:translate-x-64 transition ease-in-out duration-700 delay-200"></div>
+        <div className="h-16 w-16 bg-white opacity-25 rounded-lg shadow-xl transform group-hover:opacity-100 group-hover:translate-x-64 transition ease-in-out duration-700 delay-500"></div>
+        <div className="h-16 w-16 bg-white opacity-25 rounded-lg shadow-xl transform group-hover:opacity-100 group-hover:translate-x-64 transition ease-in-out duration-700 delay-1000"></div>
       </div>
     </div>
+    // <div>
+    //   bla
+    //   <div className="flex text-gray-600 mb-4">
+    //     {
+    //       // !readOnly ? (
+    //       <CKEditor
+    //         editor={ClassicEditor}
+    //         config={{
+    //           toolbar: "",
+    //           ckfinder: {
+    //             // plugins: [ CKFinder ],
+    //             // Upload the images to the server using the CKFinder QuickUpload command.
+    //             uploadUrl: "https://nlbavwixs.infor.com:3001/upload",
+    //           },
+    //         }}
+    //         // disabled={readOnly}
+    //         data={values}
+    //         onInit={(editor) => {
+    //           // You can store the "editor" and use when it is needed.
+    //           console.log("Editor is ready to use!", editor);
+    //           // editor.plugins.get("FileRepository").createUploadAdapter = function (loader) {
+    //           //   return new MyUploadAdapter(loader);
+    //           // };
+    //         }}
+    //         onChange={(event, editor) => {
+    //           const data = editor.getData();
+    //           // console.log("Change", { event, editor, data });
+    //           setValues(data);
+    //         }}
+    //       />
+    //     }
+    //   </div>
+    // </div>
   );
 };
 

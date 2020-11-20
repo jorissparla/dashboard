@@ -188,12 +188,12 @@ export const GenericTable = (props: GenericTableProps) => {
 
   const Cell = ({ value }: any) => (
     <td className="px-5  border border-gray-200  text-sm break-words w-full whitespace-normal">
-      <p className="text-gray-900 whitespace-no-wrap">{value}</p>
+      <p className="text-gray-900 whitespace-nowrap">{value}</p>
     </td>
   );
   const DateCell = ({ value }: any) => (
     <td className="px-5  border-b border-gray-200  text-sm break-words w-full whitespace-normal">
-      <p className="text-gray-900 whitespace-no-wrap">{format(value, "yyyy-MMM-dd")}</p>
+      <p className="text-gray-900 whitespace-nowrap">{format(value, "yyyy-MMM-dd")}</p>
     </td>
   );
   const HyperLinkCell = ({ value = "", linkPrefix = "http://navigator.infor.com/n/incident.asp?IncidentID=", linkText = "" }) => (

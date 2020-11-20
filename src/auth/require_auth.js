@@ -33,11 +33,16 @@ export const AuthRoute = ({ component: Component, allowed, xuser, ...rest }) => 
   );
 };
 
-export const EnhancedRoute = ({ component: Component, editors = [], user, ...rest }) => {
+export const EnhancedRoute = ({ component: Component, permissions = [], editors = [], user, ...rest }) => {
   let isEditor = false;
+  let hasPerm;
   if (user) {
     isEditor = editors.indexOf(user.role) !== -1;
+    if (permissions.length > 0 && user?.permissions) {
+      hasPerm = user.permissions.some(({ permission }) => permissions.includes(permission));
+    }
   }
+  isEditor = isEditor || hasPerm;
   return (
     <Route
       {...rest}

@@ -60,7 +60,7 @@ const TableHeader = ({ label }) => (
   </th>
 );
 
-const TableCell = ({ value }) => <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5  text-gray-900">{value}</td>;
+const TableCell = ({ value }) => <td className="px-6 py-4 whitespace-nowrap text-sm leading-5  text-gray-900">{value}</td>;
 
 const TableRow = ({ children, odd }) => {
   console.log(odd);

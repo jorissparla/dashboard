@@ -1,99 +1,16 @@
-import { Avatar, Backdrop, Grid, Modal, Paper, Switch, Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
-import classNames from "classnames";
+import { useQuery } from "@apollo/client";
+import SearchBar from "common/SearchBar";
+import Button from "elements/TWButton";
 import { usePersistentState } from "hooks";
 import _ from "lodash";
-import React, { useState, useEffect } from "react";
-import { useQuery } from "@apollo/client";
+import { DataCell, HeaderCell } from "pages/WorklistSimple";
+import React, { useEffect, useState } from "react";
+import { animated, useSpring } from "react-spring";
 import Spinner from "utils/spinner";
 import { DashBoardContext } from "../globalState/Provider";
 import Loader from "../utils/Loader";
 import EditTenantDetails from "./details/components/EditTenant";
-import { TenantChecked } from "./TenantChecked";
 import { QUERY_ALL_TENANT_DETAILS } from "./TenantQueries";
-import { Main } from "./TenantStyledElements";
-import { DataCell, HeaderCell, HyperLinkCell, HyperLinkCellRed } from "pages/WorklistSimple";
-import Button from "elements/TWButton";
-import { animated, useSpring } from "react-spring";
-import SearchBar from "common/SearchBar";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: "90vw",
-    margin: "10px",
-    backgroundColor: theme.palette.background.paper,
-  },
-  live: {
-    background: "rgb(46, 202, 19)",
-    border: "5px solid rgba(46, 202, 19, 1)",
-  },
-  "@keyframes blinker": {
-    from: { opacity: 1 },
-    to: { opacity: 0 },
-  },
-  watch: {
-    background: "rgb(251, 221, 0) !important",
-    border: "10px solid rgb(251, 221, 0) !important",
-  },
-  alert: {
-    background: "rgb(229, 57, 53) !important",
-    border: "10px solid rgb(229, 57, 53) !important",
-  },
-
-  tableheader: {
-    fontFamily: "Poppins",
-    fontSize: 18,
-    backgroundColor: "rgb(0,0,0, 0.5)",
-    color: "white",
-  },
-  tablecell: {
-    fontSize: "1rem",
-  },
-  tableheadernarrow: {
-    fontFamily: "Poppins",
-    fontSize: 18,
-    width: 20,
-  },
-
-  main: {
-    display: "flex",
-  },
-  spaceFooter: {
-    justifyContent: "space-between",
-  },
-  csm: {
-    maxWidth: 120,
-  },
-  oldVersion: {
-    color: "red;",
-    fontWeight: 600,
-    fontFamily: "Poppins",
-    fontSize: "1rem",
-  },
-  newerVersion: {
-    fontFamily: "Poppins",
-    fontSize: "1rem",
-    "&:hover": {
-      backgroundColor: "rgb(7, 177, 77, 0.12)",
-      cursor: "pointer",
-    },
-  },
-}));
-
-const TableHeaderCell = withStyles((theme) => ({
-  head: {
-    backgroundColor: "rgb(0,0,0, 0.5)",
-    color: theme.palette.common.white,
-    // fontSize: '1rem',
-    // fontWeight: 800,
-    textTransform: "uppercase",
-  },
-  body: {
-    fontSize: "1rem",
-  },
-}))(TableCell);
 
 const TenantViewList = (props) => {
   const dbctx = React.useContext(DashBoardContext);
@@ -103,7 +20,6 @@ const TenantViewList = (props) => {
   const [showNotReady, setShowNotReady] = usePersistentState("not ready", false);
   const [sortedByCSM, setSortedByCSM] = usePersistentState("sort by csm", false);
   const [showLive, setShowLive] = usePersistentState("customers live", false);
-  const classes = useStyles();
   const [currentId, setCurrentId] = useState("");
   const [searchText, setSearchText] = useState("");
   // const [showFilterDialog, toggleShowFilterDialog] = useState(false);
@@ -117,6 +33,7 @@ const TenantViewList = (props) => {
   useEffect(() => {
     if (details) {
       const { tenantcustomerdetails } = details;
+
       setCustomerDetails(tenantcustomerdetails);
       let allCustomers;
       if (!sortedByCSM) {
@@ -134,8 +51,6 @@ const TenantViewList = (props) => {
           .sortBy((o) => o.csm)
           .value();
       }
-      if (showLive) {
-      }
 
       let x = [];
       allCustomers.map((o) => {
@@ -145,23 +60,25 @@ const TenantViewList = (props) => {
         }
         return 0;
       });
-      x = x.map((currcustomer) => {
-        const sub = currcustomer.tenants || [];
-        const ar = { PRD: "", TRN: "", TST: "", DEV: "", DEM: "" };
-        sub.map((tenantInstance) => {
-          const type = tenantInstance.name.split("_")[1];
-          ar[type] = tenantInstance.version;
-        });
-        const live = sub && sub.length > 0 ? (sub[0].live === 1 ? "Yes" : "No") : "No";
-        const customerid = currcustomer.customerid;
-        const farm = sub && sub.length > 0 ? sub[0].farm : "";
-        const customer = currcustomer.customer.name;
-        const temp = currcustomer.temperature;
-        return { ...currcustomer, ...ar, customerid, live, temp, customer, farm };
-      });
-      if (showLive) {
-        x = x.filter((t) => t.live === "Yes");
-      }
+      // if (showLive) {
+      //   x = x.filter((t) => t.live === "Yes");
+      // }
+      x = x
+        .map((currcustomer) => {
+          const sub = currcustomer.tenants || [];
+          const ar = { PRD: "", TRN: "", TST: "", DEV: "", DEM: "" };
+          sub.map((tenantInstance) => {
+            const type = tenantInstance.name.split("_")[1];
+            ar[type] = tenantInstance.version;
+          });
+          const live = sub && sub.length > 0 ? (sub[0].live === 1 ? "Yes" : "No") : "No";
+          const customerid = currcustomer.customerid;
+          const farm = sub && sub.length > 0 ? sub[0].farm : "";
+          const customer = currcustomer.customer.name;
+          const temp = currcustomer.temperature;
+          return { ...currcustomer, ...ar, customerid, live, temp, customer, farm };
+        })
+        .filter((c) => (showLive ? c.live === "Yes" : true));
       setFilteredCustomers(x);
     }
   }, [details, sortedByCSM, showNotReady, searchText, showLive]);
@@ -189,18 +106,18 @@ const TenantViewList = (props) => {
       <div>
         <div className="rounded shadow-lg bg-white p-2 m-2" style={{ marginBottom: 10, padding: 20 }}>
           <div className="flex items-center ">
-            <Grid item xs={4}>
-              <FormControlLabel
-                control={<Switch value={showNotReady} checked={showNotReady} onChange={doChange} />}
-                label={`${showNotReady ? "Uncheck to show all customers" : "Check to show all customers that are not ready"}`}
-              />
-            </Grid>
-            <Grid item xs={4}>
-              <FormControlLabel
-                control={<Switch value={sortedByCSM} checked={sortedByCSM} onChange={doChangeSort} />}
-                label={`${sortedByCSM ? "Uncheck to sort by customer name" : "Check to sort by CSM"}`}
-              />
-            </Grid>
+            <div className="ml-12 flex items-center ">
+              <label className="inline-flex items-center">
+                <input type="checkbox" className="form-checkbox text-blue-500" checked={showNotReady} onChange={doChange} />
+                <span className="ml-2">{`${showNotReady ? "Uncheck to show all customers" : "Check to show all customers that are not ready"}`}</span>
+              </label>
+            </div>
+            <div className="ml-12 flex items-center ">
+              <label className="inline-flex items-center">
+                <input type="checkbox" className="form-checkbox text-pink-500" checked={sortedByCSM} onChange={doChangeSort} />
+                <span className="ml-2">{`${sortedByCSM ? "Uncheck to sort by customer name" : "Check to sort by CSM"}`}</span>
+              </label>
+            </div>
             <div className="ml-12 flex items-center ">
               <label className="inline-flex items-center">
                 <input type="checkbox" className="form-checkbox text-green-500" checked={showLive} onChange={() => setShowLive((prev) => !prev)} />
@@ -323,7 +240,7 @@ const TenantTable = ({ data, replaceField = null, mark = false, onSelect }) => {
         <tbody className="align-baseline">
           {!data || data.length === 0 ? (
             <tr>
-              <DataCell>No Defects..</DataCell>
+              <DataCell>No Data..</DataCell>
             </tr>
           ) : (
             data?.map((items) => (

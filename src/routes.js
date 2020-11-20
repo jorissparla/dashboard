@@ -199,6 +199,7 @@ function AppRoutes(props) {
       <EnhancedRoute
         editors={["Admin", "PO", ""]}
         allowed={["Admin", "PO"]}
+        permissions={["SUPPCARDEDIT", "ADMIN"]}
         user={user}
         path="/supportcard/edit/:id"
         component={RequireAuth(SupportCardEdit)}

@@ -164,7 +164,7 @@ const WhatDoesDevWrapper = () => {
         </TWButton>
         <span className="mx-4 text-lg font-sans font-semibold">Essential Defect List 1</span>{" "}
         <div className="ml-8 flex items-center">
-          <div className="flex items-center flex-no-wrap">
+          <div className="flex items-center flex-nowrap">
             <span className="text-gray-700 font-semibold mr-2">severity</span>
             <div className="mt-2 ml-4 flex items-center">
               {severityList.map((sev) => (
@@ -519,7 +519,7 @@ const DefectQueuesFilterList = ({ defectQueues = [], onChange = () => console.lo
   return (
     <div className="h-full">
       <span className="text-gray-700">Queues</span>
-      <div className="mt-2 grid col-gap-2 grid-cols-3 grid-rows-smaller " style={{ height: "80%" }}>
+      <div className="mt-2 grid gap-x-2 grid-cols-3 grid-rows-smaller " style={{ height: "80%" }}>
         {groupedQueues.map((queue, index) => {
           return (
             <div key={queue[0].groupset} className="border rounded-lg border-blue-100 min-h-96">

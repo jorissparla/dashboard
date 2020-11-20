@@ -1,26 +1,22 @@
+import { useMutation, useQuery } from "@apollo/client";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
-import { withStyles } from "@material-ui/core/styles";
+import { useUserContext } from "globalState/UserProvider";
 import gql from "graphql-tag";
 import { usePersistentState } from "hooks";
 import _ from "lodash";
 import React, { useState } from "react";
-import { adopt } from "react-adopt";
-import { Query, Mutation } from "@apollo/client/react/components";
 //import { SmallCard } from "./SupportCard";
 import ReactMarkdown from "react-markdown/with-html";
-import styled from "styled-components";
 import SearchBar from "../common/SearchBar";
 import { SmallCard } from "../common/SmallCard";
+import TWButton from "../elements/TWButton";
 import Modal from "../ModalWrapper";
 import AddCard from "../supportcard/AddCard";
 import CategoryTabs from "../supportcard/CategoryTabs";
-import TWButton from "../elements/TWButton";
 // import Typography from '@material-ui/core/Typography';
 import NewRequestForm from "../supportcard/Request";
-import User from "../User";
 import Spinner from "../utils/spinner";
-import withAuth from "../utils/withAuth";
 
 const cardColors = [
   { back: "#7fbadb", front: "#000" },
@@ -100,102 +96,45 @@ const MUTATION_UNFAVORITE_CARD = gql`
   }
 `;
 
-const styles = (theme) => ({
-  card: {
-    maxWidth: 320,
-    padding: 10,
-    height: 250,
-    margin: 10,
-    display: "flex",
-    flexDirection: "column",
-    alignContent: "space-between",
-  },
-  media: {
-    height: 100,
-  },
-  smallText: {
-    fontSize: 12,
-  },
-  button: {
-    height: "2rem",
-  },
-});
-
-// String.prototype.includes2 = function(search, start) {
-//   if (typeof start !== 'number') {
-//     start = 0;
-//   }
-
-//   if (start + search.length > this.length) {
-//     return false;
-//   } else {
-//     return this.indexOf(search, start) !== -1;
-//   }
-// };
-
 const customContentStyle = {
   height: "100%",
 };
 
-const Div = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  margin: 10px;
-  background: #eeeeee;
-  height: 100vh;
-`;
-
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 5px;
-  margin-top: 10px;
-  background: #eeeeee;
-`;
-
-const Composed = adopt({
-  supportcards: ({ render }) => <Query query={QUERY_ALL_SUPPORTCARDS}>{render}</Query>,
-  createAudit: ({ render }) => <Mutation mutation={MUTATION_CREATE_AUDIT}>{render}</Mutation>,
-  favoriteCard: ({ render }) => (
-    <Mutation mutation={MUTATION_FAVORITE_CARD} refetchQueries={[{ query: QUERY_ALL_SUPPORTCARDS }]}>
-      {render}
-    </Mutation>
-  ),
-  unfavoriteCard: ({ render }) => (
-    <Mutation mutation={MUTATION_UNFAVORITE_CARD} refetchQueries={[{ query: QUERY_ALL_SUPPORTCARDS }]}>
-      {render}
-    </Mutation>
-  ),
-  user: ({ render }) => <User>{render}</User>,
-});
-
 export default function SupportCardContainer(props) {
   const { text = "" } = props;
+  const { user, isAuthenticated } = useUserContext();
+  const { data, loading } = useQuery(QUERY_ALL_SUPPORTCARDS);
+  const [createAudit] = useMutation(MUTATION_CREATE_AUDIT);
+  const [favoriteCard] = useMutation(MUTATION_FAVORITE_CARD);
+  const [unfavoriteCard] = useMutation(MUTATION_UNFAVORITE_CARD);
+
+  if (loading) return <Spinner />;
+  console.log("🎉🎉", user, user?.permissions);
+  const { supportcards } = data;
+  const authenticated = isAuthenticated;
+  let isEditor = ["Admin", "PO"].some((u) => (user ? u === user.role : false));
+  let hasperm;
+  if (user?.permissions) {
+    hasperm = user.permissions.some(({ permission }) => ["SUPPCARDEDIT", "ADMIN"].includes(permission));
+  }
+  isEditor = isEditor || hasperm;
+  console.log("☀", isEditor, hasperm);
   return (
-    <Composed>
-      {({ supportcards, createAudit, favoriteCard, unfavoriteCard, user }) => {
-        const { data, loading } = supportcards;
-        if (loading) return <Spinner />;
-        console.log("🎉🎉", user);
-        return (
-          <StyledSupportCards
-            supportcards={data.supportcards}
-            createAudit={createAudit}
-            favoriteCard={favoriteCard}
-            unfavoriteCard={unfavoriteCard}
-            currentUser={user}
-            {...props}
-            filter={text}
-          />
-        );
-      }}
-    </Composed>
+    <SupportCards
+      supportcards={data.supportcards}
+      createAudit={createAudit}
+      favoriteCard={favoriteCard}
+      unfavoriteCard={unfavoriteCard}
+      currentUser={user}
+      authenticated={authenticated}
+      isEditor={isEditor}
+      filter={text}
+    />
   );
 }
 
-const SupportCards = (props) => {
-  const [searchText, setSearchText] = useState(props.filter || "");
+const SupportCards = ({ authenticated = false, isEditor = false, supportcards, currentUser, favoriteCard, unfavoriteCard, filter = "" }) => {
+  const [searchText, setSearchText] = useState(filter || "");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedProduct] = usePersistentState("supp_card_product", "LN");
   const [showFavorites, setShowFavorites] = useState(false);
@@ -209,8 +148,8 @@ const SupportCards = (props) => {
     const splitAr = e.split("/");
     const page = splitAr.slice(0, 3).join("/");
     const linkid = splitAr.slice(3, 4)[0];
-    const input = { page, linkid, username: props.user ? props.user.fullname : "", type };
-    props.createAudit({ variables: { input } }).then((res) => console.log("RES::", res));
+    const input = { page, linkid, username: currentUser ? currentUser.fullname : "", type };
+    createAudit({ variables: { input } }).then((res) => console.log("RES::", res));
   };
 
   const togglePortal = (text) => {
@@ -218,8 +157,8 @@ const SupportCards = (props) => {
     setShowPortal(true);
   };
 
-  const { authenticated, isEditor, supportcards, currentUser, favoriteCard, unfavoriteCard, classes } = props;
-  console.log("Auth", props);
+  const p = { authenticated, isEditor, supportcards, currentUser, favoriteCard, unfavoriteCard };
+  console.log("Auth", p);
   const actions = [
     <Button variant="contained" color="secondary" onClick={handleClose}>
       Cancel
@@ -255,7 +194,7 @@ const SupportCards = (props) => {
         const {
           category: { name },
         } = card;
-        return selectedCategory === "" ? true : selectedCategory.toUpperCase()===card.category.name.toUpperCase();
+        return selectedCategory === "" ? true : selectedCategory.toUpperCase() === card.category.name.toUpperCase();
       });
     if (showFavorites) {
       filteredCards = filteredCards.filter((card) => card.isfavorite === true);
@@ -275,16 +214,9 @@ const SupportCards = (props) => {
         onRequestClose={() => setShowRequest(false)}
         autoScrollBodyContent={false}
       >
-        <NewRequestForm user={props.user} onSubmit={() => setShowRequest(false)} />
+        <NewRequestForm user={currentUser} onSubmit={() => setShowRequest(false)} />
       </Dialog>
       <div className="flex w-full justify-between pr-6 flex-wrap">
-        {/* <Div2>
-          <CategoryTabsNew
-            onChange={value => setSelectedCategory(value)}
-            onSave={v => console.log(v)}
-          />
-          <ProductsTab onChange={prod => setSelectedProduct(prod)} />
-        </Div2> */}
         <CategoryTabs onChange={(value) => setSelectedCategory(value)} onSave={(v) => console.log(v)} />
         <TWButton color="tea1l" onClick={() => setShowFavorites(!showFavorites)}>
           Show {showFavorites ? `All` : `Favorites`}
@@ -295,7 +227,7 @@ const SupportCards = (props) => {
       </div>
       <SearchBar onChange={(value) => setSearchText(value)} hintText="Start typing to match title, category or keywords..." />
 
-      <Div>
+      <div className="flex justify-start flex-wrap bg-gray-100 h-screen m-2">
         {authenticated && isEditor ? (
           <AddCard link="/supportcard/add" title="Add a New Card" background="papayawhip" />
         ) : (
@@ -349,7 +281,7 @@ const SupportCards = (props) => {
             );
           }
         )}
-      </Div>
+      </div>
       <Modal on={showPortal} toggle={() => setShowPortal(!showPortal)}>
         <ReactMarkdown source={portalText} escapeHtml={false}></ReactMarkdown>
       </Modal>
@@ -357,4 +289,5 @@ const SupportCards = (props) => {
   );
 };
 
-const StyledSupportCards = withAuth(withStyles(styles)(SupportCards));
+// const StyledSupportCards = withAuth(withStyles(styles)(SupportCards));
+const StyledSupportCards = SupportCards;
