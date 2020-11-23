@@ -73,6 +73,7 @@ export default function AutoComplete({
           placeholder="type name to enter"
           className="form-input w-96"
           autoComplete="off"
+          type="text"
           disabled={disabled}
           onInput={filterNames}
           value={name}

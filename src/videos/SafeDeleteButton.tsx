@@ -70,6 +70,7 @@ const SafeDeleteButton: React.FC<Props> = ({ onDelete, classes }) => {
           <input
             className="form-input block pl-10 w-48 text-gray-600 sm:text-sm sm:leading-5"
             value={pin}
+            type="text"
             onChange={(e) => handleChange(e)}
             placeholder={`Enter ${deleteCode} `}
           />

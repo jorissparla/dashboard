@@ -61,6 +61,7 @@ const RequestResetPassword = () => {
               <div className="mt-1 relative rounded-md shadow-sm">
                 <input
                   id="email"
+                  type="text"
                   className="form-input block w-full pr-10 border-red-300 text-red-900 placeholder-red-300 focus:border-red-300 focus:shadow-outline-red sm:text-sm sm:leading-5"
                   placeholder="email address"
                   onChange={onChangeEmail}

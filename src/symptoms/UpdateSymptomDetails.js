@@ -62,7 +62,13 @@ export default ({ values = { complete: false, note: "", email: "", statusname: "
             <div>
               <label className="block w-full">
                 <span className="text-gray-700 font-sans text-sm font-semibold">email</span>
-                <input className="form-input mt-1 block w-full" placeholder="Enter email address." value={email} onChange={handleChangeEmail} />
+                <input
+                  className="form-input mt-1 block w-full"
+                  placeholder="Enter email address."
+                  type="email"
+                  value={email}
+                  onChange={handleChangeEmail}
+                />
               </label>
             </div>
             <div className="mt-2">

@@ -71,42 +71,7 @@ export const SelectionForm = ({ classes, initialValue, valuesChanged, isValidSup
     // <Paper className={classes.paper2}>
     <div className="mb-4 rounded shadow-lg bg-white px-3 py-2 flex items-center w-full text-gray-700 flex-wrap">
       <AutoComplete support={support} value={ownerVal} disabled={!isValidSuperUser} onChangeValue={(name) => setOwnerVal(name)} />
-      {/* <div className="rounded-md shadow-sm">
-        <input
-          className="form-input"
-          type="text"
-          placeholder="enter name of person"
-          value={ownerVal}
-          disabled={!isValidSuperUser}
-          onChange={(event) => {
-            setOwnerVal(event.target.value);
-          }}
-          onMouseDown={(e) => {
-            console.log(e);
-            if (e.nativeEvent.which === 3) {
-              doAddPersonToLocalStorage(ownerVal);
-            }
-          }}
-        />
-      </div> */}
-      {/* <TextField
-        value={ownerVal}
-        disabled={!isValidSuperUser}
-        onMouseDown={(e) => {
-          if (e.nativeEvent.which === 3) {
-            doAddPersonToLocalStorage(ownerVal);
-          }
-        }}
-        onChange={(event) => {
-          setOwnerVal(event.target.value);
-        }}
-        onKeyDown={(event) => {
-          if (event.keyCode === 13) {
-            console.log(event.target);
-          }
-        }}
-        placeholder="name of person"
-      /> */}
+
       {/* {isValidSuperUser && <FormLabel>Clear Owner / All Owners</FormLabel>} */}
       {isValidSuperUser && (
         <label className="ml-2">

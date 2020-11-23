@@ -87,6 +87,7 @@ const EditTenantDetails = (props) => {
               <input
                 className="form-input flex-grow block w-full min-w-0 rounded-none rounded-r-md transition duration-150 ease-in-out sm:text-sm sm:leading-5"
                 name="pm"
+                type="text"
                 placeholder="Please specify name of Project Manager"
                 label="Project Manager"
                 onChange={handleChange}
@@ -101,6 +102,7 @@ const EditTenantDetails = (props) => {
               <input
                 className="form-input flex-grow block w-full min-w-0 rounded-none rounded-r-md transition duration-150 ease-in-out sm:text-sm sm:leading-5"
                 name="csm"
+                type="text"
                 placeholder="Please specify name of Customer Success Manager"
                 label="Customer Success Manager"
                 onChange={handleChange}
@@ -129,6 +131,7 @@ const EditTenantDetails = (props) => {
                 className="form-input flex-grow block w-full min-w-0 rounded-none rounded-r-md transition duration-150 ease-in-out sm:text-sm sm:leading-5"
                 name="golivecomments"
                 placeholder="Go Live Comments"
+                type="text"
                 onChange={handleChange}
                 value={values.golivecomments}
               />

@@ -79,15 +79,17 @@ const SupportCardForm = (props) => {
     onSave(values);
   }
 
-  const config = readOnly? {
-    toolbar: ""
-  }: {
-    // toolbar: "",
-    ckfinder: {
-      // Upload the images to the server using the CKFinder QuickUpload command.
-      uploadUrl: "https://nlbavwixs.infor.com:3001/upload",
-    },
-  }
+  const config = readOnly
+    ? {
+        toolbar: "",
+      }
+    : {
+        // toolbar: "",
+        ckfinder: {
+          // Upload the images to the server using the CKFinder QuickUpload command.
+          uploadUrl: "https://nlbavwixs.infor.com:3001/upload",
+        },
+      };
   console.log("🐱‍🏍", supportcard);
   return (
     <div className="bg-gray-200 h-screen w-full p-2">
@@ -98,6 +100,7 @@ const SupportCardForm = (props) => {
               <input
                 id="title"
                 name="title"
+                type="text"
                 className="form-input text-blue-400 font-semibold  text-xl w-full"
                 value={values.title}
                 onChange={handleChange}
@@ -142,6 +145,7 @@ const SupportCardForm = (props) => {
             <input
               id="link"
               name="link"
+              type="text"
               placeholder="Link to Document"
               className="form-input  text-gray-600 w-full mb-2"
               value={values.link}

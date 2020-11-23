@@ -254,6 +254,7 @@ const ProjectForm = ({ id = null }) => {
                     <input
                       id="title"
                       name="title"
+                      type="text"
                       required
                       value={values.title}
                       onChange={handleChange}
@@ -314,6 +315,7 @@ const ProjectForm = ({ id = null }) => {
                     <input
                       id="lead"
                       name="lead"
+                      type="text"
                       value={values.lead}
                       onChange={handleChange}
                       className="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
@@ -343,6 +345,7 @@ const ProjectForm = ({ id = null }) => {
                     <input
                       id="link"
                       name="link"
+                      type="text"
                       value={values.link}
                       onChange={handleChange}
                       className="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"
@@ -437,6 +440,7 @@ const Members = ({ value, onChange }) => {
           id="members"
           name="members"
           value={newMember}
+          type="text"
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           placeholder="type name and press enter to add"

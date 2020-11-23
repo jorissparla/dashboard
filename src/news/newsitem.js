@@ -1,56 +1,48 @@
-import { withStyles } from '@material-ui/core/styles';
-import React, { useState } from 'react';
-import { withRouter } from 'react-router';
-import FileUploaderNew from '../common/FileUploaderNew';
-import SafeDeleteButton from '../videos/SafeDeleteButton';
+import { withStyles } from "@material-ui/core/styles";
+import React, { useState } from "react";
+import { withRouter } from "react-router";
+import FileUploaderNew from "../common/FileUploaderNew";
+import SafeDeleteButton from "../videos/SafeDeleteButton";
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
     ...theme.mixins.gutters(),
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
     padding: theme.spacing(2),
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    margin: '15px',
-    minWidth: '200px'
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    margin: "15px",
+    minWidth: "200px",
   },
   button: {
-    margin: theme.spacing(1)
+    margin: theme.spacing(1),
   },
 
   buttonDel: {
     margin: theme.spacing(1),
-    backgroundColor: '#000'
+    backgroundColor: "#000",
   },
 
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    marginBottom: 20
+    marginBottom: 20,
   },
   textField2: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
     marginBottom: 20,
-    width: '60vw'
-  }
+    width: "60vw",
+  },
 });
 
-const NewsItem = ({
-  initialValues: newsitem,
-  onSave,
-  onDelete,
-  onCancel,
-  title,
-  history,
-  classes
-}) => {
-  const handleDelete = e => {
+const NewsItem = ({ initialValues: newsitem, onSave, onDelete, onCancel, title, history, classes }) => {
+  const handleDelete = (e) => {
     onDelete(newsitem.id);
   };
-  const [imageFile, setImageFile] = useState(newsitem.img || '');
+  const [imageFile, setImageFile] = useState(newsitem.img || "");
   const [values, setValues] = useState(newsitem);
 
   function handleChange(event) {
@@ -61,7 +53,7 @@ const NewsItem = ({
   function handleSubmit(e) {
     e.preventDefault();
     const res = { ...values, img: imageFile };
-    console.log('onSubmit', { ...values, img: imageFile });
+    console.log("onSubmit", { ...values, img: imageFile });
     onSave(res);
   }
   return (
@@ -75,13 +67,13 @@ const NewsItem = ({
             <FileUploaderNew
               link={`\\\\nlbavwixs.infor.com\\images\\news\\`}
               httpLinkPrefix={`https://nlbavwixs.infor.com/images/news/`}
-              setFile={async value => {
-                console.log('NewsItem:::', value);
+              setFile={async (value) => {
+                console.log("NewsItem:::", value);
                 setImageFile(value);
               }}
             />
             <div
-              style={{ width: '70vw' }}
+              style={{ width: "70vw" }}
               name="img"
               className="text-gray-600  border-b border-cool-gray-100 mt-2 mb-2"
               // onChange={e => setImageFile(e.target.value)}
@@ -89,10 +81,10 @@ const NewsItem = ({
               // value={values.img}
               label="Link to Image File"
             >
-              {imageFile || 'Link to image file will be found here'}
+              {imageFile || "Link to image file will be found here"}
             </div>
             <img
-              src={imageFile || 'https://nlbavwixs.infor.com/images/news/Imagewillbehere.png'}
+              src={imageFile || "https://nlbavwixs.infor.com/images/news/Imagewillbehere.png"}
               alt=""
               className=" max-h-96 w-full object-cover mb-2"
             />
@@ -103,6 +95,7 @@ const NewsItem = ({
               <input
                 className="w-32 appearance-none border rounded shadow-xs py-2 px-3 text-gray-700 w-full mb-3 leading-tight focus:outline-none focus:shadow-outline"
                 // <TextField
+                type="text"
                 name="title"
                 // className={classes.textField}
                 value={values.title}
@@ -130,15 +123,12 @@ const NewsItem = ({
           </div>
           <div className="mt-4 flex justify-between items-center">
             {onDelete && <SafeDeleteButton onDelete={handleDelete} />}
-            <button
-              className=" bg-blue-500 text-white  py-2 px-6 shadow-md rounded-lg hover:bg-blue-700"
-              type="submit"
-            >
+            <button className=" bg-blue-500 text-white  py-2 px-6 shadow-md rounded-lg hover:bg-blue-700" type="submit">
               Save News
             </button>
             <button
               className="ml-4 rounded-lg px-6 py-2  bg-gray-300 hover:bg-gray-200  text-gray-800 font-semibold leading-tight shadow-md"
-              onClick={() => history.push('/news')}
+              onClick={() => history.push("/news")}
             >
               Cancel
             </button>

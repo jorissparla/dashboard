@@ -1,72 +1,14 @@
-import React from "react";
-import gql from "graphql-tag";
-import { graphql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import Avatar from "@material-ui/core/Avatar";
-import styled from "styled-components";
+import clsx from "clsx";
+import gql from "graphql-tag";
 import _ from "lodash";
+import React from "react";
+import Spinner from "utils/spinner";
 //import { format } from "date-fns";
 import { format } from "../utils/format";
-import { withStyles } from "@material-ui/core/styles";
-import clsx from "clsx";
 import { NoData } from "./NoData";
 const colors = ["#BA68C8", "#81D4FA", "#FF7043", "#8BC34A", "#ec407a", "#1da1f2", "#E57373"];
-
-const styles = (theme) => ({
-  root: {
-    backgroundColor: theme.palette.background.paper,
-    width: 500,
-  },
-  color0: {
-    backgroundColor: "#1da1f2",
-  },
-  color1: {
-    backgroundColor: "#BA68C8",
-  },
-  color2: {
-    backgroundColor: "#81D4FA",
-  },
-  color3: {
-    backgroundColor: "#FF7043",
-  },
-});
-
-const Div = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const Span = styled.div`
-  display: flex;
-  flex-grow: 1;
-
-  font-family: sans-serif;
-  color: rgba(0, 0, 0, 0.75);
-  letter-spacing: 0.1rem;
-  font-size: 16px;
-  font-wwidth: 52%;
-`;
-
-const Mid = styled.div`
-  flex-grow: 1;
-  font-weight: bold;
-  font-size: 16px;
-  color: black;
-  border-radius: 2px;
-  width: 5%;
-`;
-
-const Right = styled.div`
-  display: flex;
-  flex-grow: 1;
-  font-weight: bold;
-  font-size: 16px;
-  color: black;
-  width: 33%;
-  justify-content: flex-end;
-`;
 
 const dayPart = (d) => format(d, "dd");
 const monthPart = (d) => format(d, "MMMM");
@@ -99,7 +41,7 @@ const RenderMonthItems = ({ items }) => items.map((item, index) => <GoLiveItem k
 const GoLivesContainer = () => {
   const { data, loading } = useQuery(UPCOMING_GOLIVES_QUERY);
   if (loading) {
-    return <div>Loading...</div>;
+    return <Spinner loadingMessage="fetching data" />;
   }
   console.log("data", data);
   if (!data) {
@@ -119,14 +61,15 @@ const GoLivesContainer = () => {
     .value();
   console.log({ goLivesByMonth });
   return (
-    <List style={{ backgroundColor: "white" }}>
+    <div className="bg-white">
+      <div className="w-full text-sm text-gray-500 font-sans ml-2 py-2">data was last updated: {format(golives[0].lastupdated, "EEEE, d MMMM ")}</div>
       {goLivesByMonth.map((m, index) => (
         <div key={index}>
           <div className="flex bg-gray-200 text-lg py-3 pl-6 items-center text-gray-700 font-semibold font-pop shadow-lg">{m[0].month}</div>
           <RenderMonthItems items={m} />
         </div>
       ))}
-    </List>
+    </div>
   );
 };
 
@@ -141,6 +84,7 @@ const UPCOMING_GOLIVES_QUERY = gql`
       version
       comments
       date
+      lastupdated
     }
   }
 `;

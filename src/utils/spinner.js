@@ -1,9 +1,9 @@
-import React from 'react';
-import './Spinner.css';
+import React, { useState, useEffect } from "react";
+import "./Spinner.css";
 
 // const texts = ['Just a few seconds more...', 'working on it...', 'Almost there..'];
 
-const Spinner = ({ loadingMessage = '' }) => {
+const Spinner = ({ loadingMessage = "" }) => {
   return (
     <>
       <div className="spinner">
