@@ -274,7 +274,7 @@ const WhatDoesDev = ({ name, severities, cloudOnly, severityList, groups }) => {
           .getAvgAndData()
       );
     }
-  }, [data, name, severityList, severities, groups]);
+  }, [data, name, severityList, severities, groups, cloudOnly]);
   if (loading) {
     return <Spinner />;
   }

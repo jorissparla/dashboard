@@ -8,8 +8,7 @@ import { useUserContext } from "globalState/UserProvider";
 import React, { useRef } from "react";
 import { ALL_MAINTENANCE_QUERY, MAINTENANCE_FAQ_QUERY, MUTATION_UPDATE_MAINTENANCE } from "./Queries";
 import { useStyles } from "./useStyles";
-import './field.css'
-
+import "./field.css";
 
 export const Field = ({ name, label, edit = false, Icon, activeVersion, bigger = false, blue = false }) => {
   const classes = useStyles();
@@ -72,15 +71,15 @@ export const Field = ({ name, label, edit = false, Icon, activeVersion, bigger =
     setValue(activeVersion[name]);
   }, [activeVersion, name]);
   return (
-    <div className="p-4 font-sans text-gray-600 bg-white" style={{ background: `${blue ? "aliceblue" : "lightyellow"}` }}>
+    <div className="p-4 font-sans text-gray-600  bg-blue-200" style={{ background: `${blue ? "aliceblue" : "lightyellow"}` }}>
       <div container direction="row" justifyContent="space-between" alignItems="flex-start" className="flex justify-between pb-2">
         <div item xs={9}>
-          <div className="text-blue-500 font-sans font-semibold text-xl w-full">
+          <div className="text-blue-400 font-sans font-semibold text-xl w-full">
             {Icon ? <Icon color="#73398d" style={{ cursor: "pointer" }}></Icon> : <div />}
             {label}
           </div>
         </div>
-        <div className="flex" >
+        <div className="flex">
           {isValidEditor && (
             // <EditIcon color="primary" fontSize="small" onClick={() => setisOpened(true)} />
 
@@ -90,7 +89,6 @@ export const Field = ({ name, label, edit = false, Icon, activeVersion, bigger =
             </TWButton>
           )}
         </div>
-
       </div>
 
       <CKEditor

@@ -1,5 +1,5 @@
 import { Typography } from "@material-ui/core";
-import { BlockNew } from "elements/Block";
+import { BlockNewer as BlockNew } from "elements/Block";
 import { usePersistentState } from "hooks";
 import React, { useEffect } from "react";
 import { useQuery, useMutation } from "@apollo/client";

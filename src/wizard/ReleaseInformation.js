@@ -27,54 +27,53 @@ function ReleaseInformation({ versionInfo, handleCustomerHasValidMaintenance, va
   // }
   return (
     <div className="font-sans text-gray-600">
-      
       <Grid container>
         <Grid container xs={2} justify="flex-start" alignItems="center" style={{ flexDirection: "column" }}>
-          <Grid>
-            <Typography variant="subtitle1">{`${version} was Released on `}</Typography>
-          </Grid>
-          <Grid>
-            <Typography variant="h3">{`${format(versionDate, "yyyy")}`}</Typography>
-          </Grid>
-          <Grid>
-            <Typography variant="h4">{`${format(versionDate, "MMMM")}`}</Typography>
-          </Grid>
-          <Grid>
-            <Typography variant="h5">{`${format(versionDate, "EEEE, dd")}`}</Typography>
-          </Grid>
+          <div>
+            <span variant="subtitle1">{`${version} was Released on `}</span>
+          </div>
+          <div>
+            <span className="text-6xl font-semibold">{`${format(versionDate, "yyyy")}`}</span>
+          </div>
+          <div>
+            <span className="text-lg font-semibold">{`${format(versionDate, "MMMM")}`}</span>
+          </div>
+          <div>
+            <span className="h5">{`${format(versionDate, "EEEE, dd")}`}</span>
+          </div>
         </Grid>
 
         <Grid container xs={2} justify="flex-start" alignItems="center" style={{ flexDirection: "column" }}>
-          <Grid>
-            <div className="font-semibold">This was</div>
-          </Grid>
-          <Grid>
-            <div className="text-5xl font-semibold">{`${nryears}`}</div>
-          </Grid>
-          <Grid>
-            <div variant="h4">{` years ago`}</div>
-          </Grid>
+          <div>
+            <span className="font-semibold">This was</span>
+          </div>
+          <div>
+            <span className="text-6xl font-semibold">{`${nryears}`}</span>
+          </div>
+          <div>
+            <span className="font-sans">{` years ago`}</span>
+          </div>
         </Grid>
 
         {entitled_extended_maintenance !== "N/A" && (
           <Grid container xs={2} justify="flex-start" alignItems="center" style={{ flexDirection: "column" }}>
-            <Grid>
-              <div className="font-semibold" variant="h4">
+            <div>
+              <span className="font-semibold mb-1" variant="h4">
                 Extended Maintenance
-              </div>
-            </Grid>
-            <Grid>
-              <div>{`Start: ${format(parseInt(xm_date_since), "dd-MMM-yyyy")}`}</div>
-            </Grid>
-            <Grid>
-              <div>{`End: ${format(parseInt(xm_end_date), "dd-MMM-yyyy")}`}</div>
-            </Grid>
+              </span>
+            </div>
+            <div>
+              <span>{`Start: ${format(parseInt(xm_date_since), "dd-MMM-yyyy")}`}</span>
+            </div>
+            <div>
+              <span>{`End: ${format(parseInt(xm_end_date), "dd-MMM-yyyy")}`}</span>
+            </div>
           </Grid>
         )}
         <Grid container xs={6} justify="flex-end" alignItems="flex-end" style={{ flexDirection: "column" }}>
-          <Grid item xs={12}>
+          <div item xs={12}>
             <Field name="checksrequired" label="" activeVersion={versionInfo} bigger={true} />
-          </Grid>
+          </div>
         </Grid>
       </Grid>
     </div>

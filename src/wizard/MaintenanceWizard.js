@@ -35,7 +35,6 @@ const MaintenanceInformation = ({ activeVersion, checksRequired, validMaintenanc
   if (!activeVersion || activeVersion === {}) return <div />;
   return (
     <Paper className={classes.paper}>
-      
       <Typography variant="h6">Maintenance Information</Typography>
       <Grid container spacing={2} justify="flex-start">
         <Grid item xs={3}>
@@ -90,8 +89,6 @@ const MaintenanceInformation = ({ activeVersion, checksRequired, validMaintenanc
 };
 
 const MaintenanceWizard = ({ activeVersions, productline }) => {
-  const classes = useStyles();
-
   const [validMaintenance, toggleValidMaintenance] = React.useState(true);
   let activeVersion = checkActiveVersion(activeVersions, validMaintenance);
   const { entitled_extended_maintenance } = activeVersion;

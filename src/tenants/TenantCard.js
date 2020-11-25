@@ -90,13 +90,14 @@ export const TenantCard = ({
       const { tenant_status, operational_status, process_status } = t;
       let tag = "";
       let tooltip = "";
+      let title = t.farm;
       if (tenant_status) {
         if (!(tenant_status === "active" && operational_status === "online" && process_status === "idle")) {
           tag = `${tenant_status[0].toUpperCase()}-${operational_status[0].toUpperCase()}-${process_status.slice(0, 2).toUpperCase()}`;
         }
         tooltip = `${tenant_status}-${operational_status}-${process_status}`;
       }
-      return { index, ...t, tag, tooltip };
+      return { index, ...t, tag, title, tooltip };
     })
     .sort((a, b) => (a.index > b.index ? 1 : -1));
 
@@ -104,6 +105,17 @@ export const TenantCard = ({
     tags = tags.sort((a, b) => (a.name > b.name ? 1 : -1));
   }
 
+  let farms = [];
+
+  if (tenants.length) {
+    tenants.forEach((tenant) => {
+      const { farm } = tenant;
+      if (!farms.includes(farm)) {
+        farms = [...farms, farm];
+      }
+    });
+  }
+  // console.log(customer, tags);
   const baseTenantId = tenants && tenants.length && tenants.length > 0 ? tenants[0].name.split("_")[0] : "";
   // console.log(customer, tenants[0]);
   return (
@@ -140,11 +152,13 @@ export const TenantCard = ({
               </div>
             }
           />
-          <div className="mt-2 flex w-full justify-between items-center text-gray-700 font-sans" color="textSecondary">
-            <span className="font-semibold">{tenants.length > 0 && tenants[0].farm}</span>
-            <span className={classes.box}>{baseTenantId}</span>
+          <div className="mt-2 pt-1 flex w-full justify-between items-center text-gray-700 font-sans" color="textSecondary">
+            {farms.map((farm) => (
+              <span className=" py-0.5 px-2 text-gray-600 rounded  font-semibold mr-1">{farm}</span>
+            ))}
+            <span className="tracking-widest font-semibold text-blue-800 text-sm font-sans">{baseTenantId}</span>
           </div>
-          <div className={classes.description}>
+          <div className="font-sans mb-2">
             <div color="textSecondary" variant="subtitle2" className="text-sm font-sans text-gray-600">
               {tenantcustomerdetail.golivecomments.trim() ? (
                 tenantcustomerdetail.golivecomments
@@ -153,30 +167,42 @@ export const TenantCard = ({
               )}
             </div>
           </div>
-          <div className={classes.tags}>
-            {tags.map(({ id, name, version, tooltip, tag }) => {
+          <div className="grid grid-cols-3 gap-x-1 gap-y-1 mb-1">
+            {tags.map(({ id, name, version, tooltip, tag, title }) => {
               let shortname = "";
               if (customer === "Infor") {
                 shortname = name;
               } else shortname = name.split("_")[1];
-              const color = shortname.endsWith("PRD") ? "rgba(46, 202, 19, 1)" : shortname.endsWith("TRN") ? "#1da1f2" : "rgba(0,0,0,0.5)";
+              const color = shortname.endsWith("PRD")
+                ? "bg-green-400 text-green-800 font-semibold"
+                : shortname.endsWith("TRN")
+                ? "bg-blue-500"
+                : "bg-gray-600";
               return (
-                <div className={classes.tagContent} key={id}>
-                  <Label key={id} color={color}>{`${shortname}:${version}`}</Label>
-                  {/* {tag && <Chip className={classes.tagtooltip} label={tooltip} />} */}
-                </div>
+                <span
+                  title={title}
+                  style={{ fontSize: "10.5px" }}
+                  key={id}
+                  className={` px-1.5 py-1  ${color} tracking-wider text-center font-pop  shadow text-white   rounded`}
+                >{`${shortname.toUpperCase()}:${version}`}</span>
               );
+              {
+                /* <Label key={id} color={color}>{`${shortname}:${version}`}</Label> */
+              }
+              {
+                /* {tag && <Chip className={classes.tagtooltip} label={tooltip} />} */
+              }
             })}
           </div>
           <Divider />
           <div className="flex items-center justify-between" alignItems="center" container justify="space-between" spacing={3}>
-            <div item className={classes.csm}>
+            <div item className="max-w-md">
               <div className="font-sans font-semibold text-gray-600">PM</div>
               <div className="text-sm font-sans" variant="body2">
                 {tenantcustomerdetail.pm ? tenantcustomerdetail.pm : "PM not entered"}
               </div>
             </div>
-            <div item className={classes.csm}>
+            <div item className="max-w-md">
               <div className="font-sans font-semibold text-gray-600">CSM</div>
               <div className="text-sm font-sans"> {tenantcustomerdetail.csm ? tenantcustomerdetail.csm : "CSM not entered"}</div>
             </div>
