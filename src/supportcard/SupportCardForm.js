@@ -164,7 +164,7 @@ const SupportCardForm = (props) => {
               </TWButton>
             )}
             {!readOnly && supportcard && <SafeDeleteButton onDelete={() => onDelete(supportcard)}></SafeDeleteButton>}
-            {readOnly && supportcard && (
+            {supportcard && (
               <TWButton color="black" onClick={() => window.open(initialValues.link)}>
                 View Link
               </TWButton>
