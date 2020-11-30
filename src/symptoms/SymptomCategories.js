@@ -24,6 +24,7 @@ const SYMPTOM_CAT_QUERY = gql`
 
 const SymptomCategories = () => {
   const [selectedCategory, setSelectedCategory] = usePersistentState("");
+
   const [searchText, setSearchText] = useState("");
   const [displayData, setDisplayData] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -33,14 +34,18 @@ const SymptomCategories = () => {
     let initialSelectedCategory;
     if (data && data.categories) {
       if (categories?.length === 0) {
-        setCategories(data.categories);
+        setCategories([{ id: -1, symptom_category: "All" }, ...data.categories]);
         initialSelectedCategory = data.categories[0]?.symptom_category;
         setSelectedCategory(initialSelectedCategory);
       }
 
-      const filteredData = data.symptoms
-        .filter((symptom) => symptom.symptom_category === selectedCategory || initialSelectedCategory)
+      let filteredData = data.symptoms
+        .filter((s) => !s.symptom.startsWith("zz"))
+
         .filter((symptom) => symptom.symptom.toUpperCase().includes(searchText.toUpperCase()));
+      if (selectedCategory !== "All") {
+        filteredData = filteredData.filter((symptom) => symptom.symptom_category === selectedCategory || initialSelectedCategory);
+      }
       console.log({ filteredData });
       setDisplayData(filteredData);
     }
@@ -60,7 +65,7 @@ const SymptomCategories = () => {
         <span className="ml-8 text-sm text-gray-600">on this page your can find all available symptoms by category</span>
       </div>
       <div className="pr-8 mx-7 w-full flex items-center justify-between">
-        {displayData?.length > 0 ? (
+        {data?.categories?.length > 0 ? (
           <>
             <TWSelectMenu
               items={categories.map((c) => c.symptom_category).sort()}
@@ -92,9 +97,9 @@ const SymptomCategories = () => {
               <div class="flex-shrink-0">
                 <svg class="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
                   <path
-                    fill-rule="evenodd"
+                    fillRule="evenodd"
                     d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z"
-                    clip-rule="evenodd"
+                    clipRule="evenodd"
                   />
                 </svg>
               </div>
