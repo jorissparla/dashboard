@@ -98,6 +98,7 @@ export const QUERY_ALL_TENANT_DETAILS = gql`
       comments
       comments_updated
       updated
+      useproxy
       tenants {
         id
         farm

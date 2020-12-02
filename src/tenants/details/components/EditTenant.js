@@ -23,7 +23,7 @@ const EditTenantDetails = (props) => {
     info: profile.info,
     temperature: profile.temperature,
     comments: profile.comments,
-    proxyUser: true,
+    useproxy: true,
   });
   console.log({ profile });
   const [updateTenantDetailsMutation] = useMutation(MUTATION_UPDATE_DETAIL);
@@ -36,14 +36,14 @@ const EditTenantDetails = (props) => {
     });
   };
 
-  const [proxyUser, setProxyUser] = useState(true);
+  const [useproxy, setProxyUser] = useState(profile.useproxy);
 
   const alert = useAlert();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     let x = values;
-    delete x.proxyUser;
+    delete x.useproxy;
     const result = await updateTenantDetailsMutation({ variables: { input: x } });
     console.log(result);
     onClose();
@@ -151,7 +151,7 @@ const EditTenantDetails = (props) => {
             </div>
             <div className="col-span-3 col-start-1 space-y-1 sm:col-span-2 ">
               <label className="inline-flex items-center">
-                <input type="checkbox" className="form-checkbox text-purp" checked={proxyUser} onChange={() => setProxyUser((prev) => !prev)} />
+                <input type="checkbox" className="form-checkbox text-purp" checked={useproxy} onChange={() => setProxyUser((prev) => !prev)} />
                 <span className="ml-2">Proxy User agreement signed</span>
               </label>
             </div>

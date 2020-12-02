@@ -35,7 +35,7 @@ const SymptomCategories = () => {
     if (data && data.categories) {
       if (categories?.length === 0) {
         setCategories([{ id: -1, symptom_category: "All" }, ...data.categories]);
-        initialSelectedCategory = data.categories[0]?.symptom_category;
+        initialSelectedCategory = "All"; //data.categories[0]?.symptom_category;
         setSelectedCategory(initialSelectedCategory);
       }
 
@@ -119,7 +119,10 @@ const SymptomCategories = () => {
       </div>
       <div className="mt-4 mx-7 bg-gray-50 h-screen w-full">
         {displayData.map((item) => (
-          <div className="ml-4 font-sans text-gray-600">{item.symptom}</div>
+          <div className="ml-4 font-sans text-gray-600">
+            {item.symptom}
+            <span className="italic text-xs pl-2"> [{item.symptom_category}]</span>
+          </div>
         ))}
       </div>
     </div>
