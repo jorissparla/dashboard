@@ -4,6 +4,10 @@ module.exports = {
   purge: ["./public/**/*.html", "./public/**/*.html", "./src/**/*.js", "./src/**/*.tsx"],
   theme: {
     extend: {
+      inset: {
+        "-1": "-0.25rem",
+        "-2": "-0.5rem",
+      },
       minWidth: {
         20: "5rem",
         24: "6rem",
@@ -49,6 +53,7 @@ module.exports = {
         white: "#ffffff",
         black: "#000000",
         gray: colors.blueGray,
+        wiep: colors.pink,
         emerald: colors.emerald,
         // gray: {
         //   50: "#f9fafb",
@@ -176,7 +181,7 @@ module.exports = {
   variants: {
     extend: {
       backgroundColor: ["group-focus", "active"],
-      borderColor: ["group-focus"],
+      borderColor: ["group-focus", "responsive", "last", "hover", "focus"],
       boxShadow: ["group-focus"],
       opacity: ["group-focus"],
       textColor: ["group-focus", "active"],

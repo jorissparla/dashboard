@@ -21,6 +21,7 @@ const owners = [
   { id: "Joris Sparla", name: "Joris Sparla" },
   { id: "Luis Casanova", name: "Luis Casanova" },
   { id: "Ludmilla Kolbowski", name: "Ludmilla Kolbowski" },
+  { id: "Other LN", name: "Other LN" },
 ];
 
 const simpOwners = owners.map((owner) => owner.name);

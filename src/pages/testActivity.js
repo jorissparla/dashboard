@@ -17,10 +17,23 @@ const UPLOAD_MUTATION = gql`
 
 const TestActivity = (props) => {
   const [values, setValues] = React.useState("");
-  console.log(ClassicEditor.builtinPlugins.map((plugin) => plugin.pluginName));
+  const events = [1, 21, 12, 9, 8, 34, 7, 5, 6];
   const ar = [100, 150, 200, 300, 500, 700, 1000];
   return (
     <div>
+      <ol className="p-4">
+        {events.map((event, i) => (
+          <li className="feed-item relative pb-5 pl-6 border-l-2 border-red-300 last:border-transparent" key={`event${i}`}>
+            <time className="block text-gray-500 relative uppercase text-sm -top-1" dateTime="9-25">
+              Sep 25
+            </time>
+            <span className="text">
+              Responded to need{"{"}" "{"}"}
+              <a href="single-need.php">“Volunteer opportunity”</a>
+            </span>
+          </li>
+        ))}
+      </ol>
       <div className="px-4 box-content border-l-8 border-r-8 border-blue-400 border-opacity-50 group space-y-4 w-80 mx-auto">
         {ar.map((x, i) => (
           <div className={`h-16 w-16 bg-blue-200  rounded-lg shadow-xl transform opacity-100  transition ease-in-out delay-${x} duration-100`}></div>

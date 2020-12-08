@@ -133,7 +133,7 @@ function AppRoutes(props) {
       <Route exact path="/loggedinusers" component={LoggedInUsers} />
       <Route exact path="/uploadimage" component={UploadImageComponent} />
       <Route exact path="/login" component={LoginForm} />
-      <Route exact path="/symptoms/add" component={AddSymptomRequest} />
+      {/* <Route exact path="/symptoms/add" component={AddSymptomRequest} /> */}
       <Route exact path="/playground" component={Playground} />
       <Route exact path="/cloudreadiness" component={CloudReadiness} />
       <Route exact path="/symptoms" component={SymptomsPage} />

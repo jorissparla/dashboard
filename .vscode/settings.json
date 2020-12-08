@@ -4,6 +4,7 @@
   "editor.fontLigatures": true,
   "editor.fontFamily": "'Cascadia Mono PL'",
   "editor.fontSize": 15,
+
   "workbench.colorCustomizations": {
     "titleBar.activeForeground": "#fff",
     "titleBar.inactiveForeground": "#ffffffCC",
