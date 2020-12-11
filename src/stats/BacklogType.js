@@ -2,10 +2,11 @@ import { differenceInDays } from "date-fns";
 const lower = (item) => item.toLowerCase();
 
 class Backlog {
-  constructor(data, accounts = [], includeDevelopment = true) {
+  constructor(data, accounts = [], includeDevelopment = true, includePending = true) {
     this.data = data;
     this.temp = data;
     this.includeDevelopment = includeDevelopment;
+    this.includePending = includePending;
     if (data) {
       this.temp = this.temp.filter((item) => item.status !== "Awaiting Development");
     }
@@ -47,6 +48,7 @@ class Backlog {
 
   init() {
     this.temp = this.includeDevelopment ? this.data : this.data.filter((item) => item.status !== "Awaiting Development");
+    this.temp = this.includePending ? this.temp : this.temp.filter((item) => item.status !== "Solution Pending Maintenance");
     return this;
   }
 

@@ -71,9 +71,10 @@ const ACCOUNTS_QUERY = gql`
 const WorklistSimpleWrapper = () => {
   const [support, setSupport] = useState([]);
   const [includeDevelopment, setIncludeDevelopment] = usePersistentState("includeDevelopment", false);
+  const [includePending, setIncludePending] = usePersistentState("includePending", false);
   const { user } = React.useContext(UserContext);
   const owner = user ? (user.fullname ? user.fullname : "") : "";
-  const [name, setName] = useState(owner || "Eelco Mulder");
+  const [name, setName] = useState(owner || "Ron Bleser");
   const { data, loading } = useQuery(ACCOUNTS_QUERY);
   useEffect(() => {
     if (data) {
@@ -96,29 +97,37 @@ const WorklistSimpleWrapper = () => {
       <div className="flex items-center mb-4">
         <span className="mx-4 text-lg font-sans font-semibold">Essential Worklist for </span>{" "}
         <AutoComplete disabled={!isValidSuperUser} support={x} onChangeValue={(e) => setName(e)} value={name}></AutoComplete>
-        <div className="ml-4">
-          <label className="inline-flex items-center">
-            <input
-              type="checkbox"
-              className="form-checkbox"
-              checked={includeDevelopment}
-              onChange={() => setIncludeDevelopment(!includeDevelopment)}
-            />
-            <span className="ml-2">Include Development issues</span>
-            {/* {includeDevelopment ? "Ja" : "Nee"} */}
-          </label>
+        <div className="ml-7">
+          <div className="flex flex-col space-y-2 justify-start mt-2">
+            <label className="inline-flex items-center">
+              <input
+                type="checkbox"
+                className="form-checkbox"
+                checked={includeDevelopment}
+                onChange={() => setIncludeDevelopment(!includeDevelopment)}
+              />
+              <span className="ml-2">Include Development issues</span>
+              {/* {includeDevelopment ? "Ja" : "Nee"} */}
+            </label>
+
+            <label className="inline-flex items-center">
+              <input type="checkbox" className="form-checkbox" checked={includePending} onChange={() => setIncludePending(!includePending)} />
+              <span className="ml-2">Include Solution Pending Maintenance</span>
+              {/* {includeDevelopment ? "Ja" : "Nee"} */}
+            </label>
+          </div>
         </div>
       </div>
-      <WorklistSimple owner={name} includeDevelopment={includeDevelopment} />
+      <WorklistSimple owner={name} includeDevelopment={includeDevelopment} includePending={includePending} />
     </div>
   );
 };
 
-const WorklistSimple = ({ owner = "", includeDevelopment }) => {
+const WorklistSimple = ({ owner = "", includeDevelopment, includePending }) => {
   const params = useParams();
   const { data, loading } = useQuery(MY_BACKLOG_QUERY, { variables: { owner } });
   if (loading) return <Spinner />;
-  let blBase = new Backlog(data.backlog, data.accounts, includeDevelopment);
+  let blBase = new Backlog(data.backlog, data.accounts, includeDevelopment, includePending);
   // console.log(includeDevelopment, blBase.getData().length);
 
   // const multitenantcustomers = data.multitenantcustomers;

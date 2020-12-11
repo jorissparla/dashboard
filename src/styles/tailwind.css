@@ -13,12 +13,22 @@
   .btn-custom {
     @apply font-pop font-bold py-2 px-4 rounded inline-flex items-center;
   }
+  .btn-base {
+    @apply mx-2 rounded px-4  py-2  font-semibold font-sans   leading-tight shadow-md cursor-pointer;
+  }
 
   .form-input {
-    @apply border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm;
+    @apply mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md;
   }
   .form-textarea {
-    @apply border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm;
+    @apply shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md;
+  }
+
+  .form-input2 {
+    @apply border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500;
+  }
+  .form-textarea2 {
+    @apply border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500;
   }
   .form-checkbox {
     @apply focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded;

@@ -100,7 +100,7 @@ const Filter = ({
   };
 
   return (
-    <div className="inset-0 flex z-50 bg-gray-700  bg-opacity-50 absolute w-full ">
+    <div className="inset-0 flex z-50 bg-gray-700  bg-opacity-50 absolute w-full max-h-full">
       <div
         className={` h-screen inset-y-0 ${showRight ? "right-0" : "left-0"} flex h-full bg-white fixed z-50 shadow-lg rounded pt-10 flex-col  -mt-12`}
       >
