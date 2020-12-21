@@ -1,5 +1,5 @@
 var Msal = require("msal");
-
+// https://docs.microsoft.com/nl-nl/azure/active-directory/develop/scenario-web-app-sign-user-app-registration?tabs=aspnetcore#register-an-app-by-using-the-quickstarts
 const msalConfig = {
   auth: {
     clientId: "e56326cc-38b0-4d16-9630-d2d4e265fb7d",

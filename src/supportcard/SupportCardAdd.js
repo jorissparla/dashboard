@@ -35,7 +35,7 @@ const SupportCardAdd = ({ data: { loading, error, categories }, addSupportCard, 
         readOnly={false}
         authenticated={authenticated}
         categories={categories}
-        initialValues={{ category: "IXS", title: "Title comes here", description, updatedAt: null }}
+        initialValues={{ category: "Portal", title: "Title comes here", description, updatedAt: null }}
       />
     </div>
   );

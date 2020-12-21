@@ -1,7 +1,7 @@
 import React from "react";
 import ReactHighCharts from "react-highcharts";
 
-const config = {
+const baseConfiguration = {
   chart: {
     type: "column",
   },
@@ -59,48 +59,54 @@ arColors["Finance"] = "#01579b";
 arColors["ageLogistics"] = "#c62828";
 arColors["ageFinance"] = "#01579b";
 
-const renderSummary = (config, xval, val, title, color, type, asummary) => {
+function configureChart(config, xval, nameOfValueToShow, chartTitle, providedColor, chartType, allDataPoints) {
+  let nameOfHorizontalVariable = !xval ? "weekNr" : xval;
   xval = !xval ? "weekNr" : xval;
-  if (!asummary) return config;
-  const summary = asummary.slice().reverse();
-  const range = summary.map((item) => item[val]);
-  // const filteredSummary = summary.map(item => [].concat(item[xval], item[val]));
-  console.log("Range", title, { val }, range);
-  color = arColors[val];
-  if (color) {
-    config.plotOptions.area.color = color;
+  if (!allDataPoints) return config;
+  // const dataPoints =
+  const selectedDataPoints = allDataPoints
+    .slice()
+    .reverse()
+    .map((item) => item[nameOfValueToShow]);
+  let areaColor = arColors[nameOfValueToShow];
+  if (providedColor) {
+    config.plotOptions.area.color = providedColor;
   }
 
-  config.xAxis.categories = summary.map((i) => i[xval]);
-  if (range.length > 0) {
+  config.xAxis.categories = allDataPoints
+    .slice()
+    .reverse()
+    .map((item) => item[nameOfHorizontalVariable]);
+  if (selectedDataPoints.length > 0) {
     config.yAxis = {};
-    config.yAxis.floor = Math.floor(Math.min(...range) / 10 - 1) * 10;
-    config.yAxis.ceiling = Math.floor(Math.max(...range) / 10 + 1) * 10;
+    config.yAxis.floor = Math.floor(Math.min(...selectedDataPoints) / 10 - 1) * 10;
+    config.yAxis.ceiling = Math.floor(Math.max(...selectedDataPoints) / 10 + 1) * 10;
   }
-  config.series = [];
-  config.series.push({
-    data: range, //filteredSummary.data,
-    name: xval,
-    color: color,
-    type: type,
-    dataLabels: { enabled: true },
-  });
-  config.title.text = title;
+  config.series = [
+    {
+      data: selectedDataPoints, //filteredSummary.data,
+      name: nameOfHorizontalVariable,
+      color: areaColor,
+      type: chartType,
+      dataLabels: { enabled: true },
+    },
+  ];
+  // config.series.push();
+  config.title.text = chartTitle;
   return JSON.parse(JSON.stringify(config));
-};
+}
 
-const historyChart = ({ xvalue, value, title, color, type, data }) => {
-  const newConfig = renderSummary(
-    config,
-    xvalue,
-    value,
-    title,
-    color,
-    type,
-    data
-  );
+const historyChart = ({
+  xvalue, //name of Horizontal variable
+  value, //name of variable to display
+  title, //title of Chart
+  color,
+  type,
+  data,
+}) => {
+  const newConfig = configureChart(baseConfiguration, xvalue, value, title, color, type, data);
   return (
-    <div className="col s4">
+    <div className="rounded shadow-md p-4">
       <div className="card">
         <ReactHighCharts config={newConfig} />
       </div>

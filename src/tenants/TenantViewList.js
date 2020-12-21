@@ -9,6 +9,7 @@ import { animated, useSpring } from "react-spring";
 import Spinner from "utils/spinner";
 import { DashBoardContext } from "../globalState/Provider";
 import Loader from "../utils/Loader";
+import CustomerHistory from "./CustomerHistory";
 import EditTenantDetails from "./details/components/EditTenant";
 import { QUERY_ALL_TENANT_DETAILS } from "./TenantQueries";
 
@@ -24,6 +25,7 @@ const TenantViewList = (props) => {
   const [searchText, setSearchText] = useState("");
   // const [showFilterDialog, toggleShowFilterDialog] = useState(false);
   const [isShowingDetails, toggleShowDetails] = useState(false);
+  const [isShowingEvents, toggleShowEvents] = useState(false);
   const [filteredCustomers, setFilteredCustomers] = useState([]);
   const [customerDetails, setCustomerDetails] = useState([]);
 
@@ -132,7 +134,7 @@ const TenantViewList = (props) => {
         </div>
         {isShowingDetails && (
           <animated.div style={tenantProps}>
-            <div className="inset-0 flex z-50 bg-gray-700  bg-opacity-50 absolute w-2/3 ">
+            <div className="inset-0 flex z-50 bg-gray-700  bg-opacity-50 absolute w-5/6 ">
               <EditTenantDetails
                 profile={customerDetails.find((d) => d.customerid === currentId)}
                 onClose={() => toggleShowDetails((prev) => false)}
@@ -141,10 +143,13 @@ const TenantViewList = (props) => {
             </div>
           </animated.div>
         )}
-        {/* 
-          <div className="flex font-sans">
-            <Table style={{ fontSize: "1rem", background: "#fff" }}></Table>
-          </div> */}
+        {isShowingEvents && (
+          <animated.div style={tenantProps}>
+            <div className="inset-0 flex z-50 bg-gray-700  bg-opacity-50 absolute w-5/6 ">
+              <CustomerHistory />
+            </div>
+          </animated.div>
+        )}
       </div>
 
       {/* <Modal
@@ -250,6 +255,12 @@ const TenantTable = ({ data, replaceField = null, mark = false, onSelect }) => {
                     return <ActionCell key={index} value={items.customerid} fn={onSelect} />;
                   } else if (field.live) {
                     return <LiveCell key={index} value={items[field.fld]} />;
+                  } else if (field.display) {
+                    return (
+                      <svg className="fill-current w-4 h-4 text-gray-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-7.59V4h2v5.59l3.95 3.95-1.41 1.41L9 10.41z" />
+                      </svg>
+                    );
                   } else return <DataCell key={`${items.customerid}${index}}`}>{items[field.fld]}</DataCell>;
                 })}
               </tr>

@@ -79,8 +79,8 @@ const EditTenantDetails = (props) => {
         <div className="text-lg font-semibold font-sans p-2">{`Details for ${profile.customer.name}"`}</div>
         <hr className="bg-grey-100 mb-2" />
         <div>
-          <div className="grid grid-cols-3 gap-6">
-            <div className="col-span-3 space-y-1 sm:col-span-2">
+          <div className="grid grid-cols-6 gap-6">
+            <div className="col-span-3 row-start-1 space-y-1 sm:col-span-2">
               <label for="pm" className="block text-sm font-medium leading-5 text-gray-700">
                 Project Manager
               </label>
@@ -95,7 +95,7 @@ const EditTenantDetails = (props) => {
               />
             </div>
 
-            <div className="col-span-3 space-y-1 sm:col-span-2">
+            <div className="col-span-3 row-start-2 space-y-1 sm:col-span-2">
               <label for="pm" className="block text-sm font-medium leading-5 text-gray-700">
                 Customer Success Manager
               </label>
@@ -110,7 +110,10 @@ const EditTenantDetails = (props) => {
               />
             </div>
 
-            <div className="col-span-3 space-y-1 sm:col-span-2">
+            <div className="col-span-3 row-start-3 space-y-1 sm:col-span-2">
+              <label for="pm" className="block text-sm font-medium leading-5 text-gray-700">
+                Go Live Date
+              </label>
               <input
                 className="form-input flex-grow block w-full min-w-0 rounded-none rounded-r-md transition duration-150 ease-in-out sm:text-sm sm:leading-5"
                 fullWidth
@@ -123,7 +126,7 @@ const EditTenantDetails = (props) => {
                 variant="outlined"
               />
             </div>
-            <div className="col-span-3 space-y-1 sm:col-span-2">
+            <div className="col-span-3 row-start-4 space-y-1 sm:col-span-3">
               <label for="pm" className="block text-sm font-medium leading-5 text-gray-700">
                 Go Live Comments
               </label>
@@ -136,7 +139,7 @@ const EditTenantDetails = (props) => {
                 value={values.golivecomments}
               />
             </div>
-            <div className="col-span-3 col-start-1 space-y-1 sm:col-span-2">
+            <div className="col-span-3 row-start-5 space-y-1 sm:col-span-3">
               <label for="pm" className="block text-sm font-medium leading-5 text-gray-700">
                 Customer Comments
               </label>
@@ -149,13 +152,13 @@ const EditTenantDetails = (props) => {
                 value={values.comments}
               />
             </div>
-            <div className="col-span-3 col-start-1 space-y-1 sm:col-span-2 ">
+            <div className="col-span-3 row-start-6 space-y-1 sm:col-span-2 ">
               <label className="inline-flex items-center">
                 <input type="checkbox" className="form-checkbox text-purp" checked={useproxy} onChange={() => setProxyUser((prev) => !prev)} />
                 <span className="ml-2">Proxy User agreement signed</span>
               </label>
             </div>
-            <div className="col-span-3 col-start-1 space-y-1 sm:col-span-2">
+            <div className="col-span-3 row-start-7 space-y-1 sm:col-span-2">
               <div className="px-4">
                 <TemperatureSlider initialValue={profile.temperature} onChange={handleTemperatureChange} />
               </div>

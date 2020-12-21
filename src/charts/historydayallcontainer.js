@@ -1,78 +1,24 @@
-import React, { Component } from "react";
-import gql from "graphql-tag";
-import { Query, Mutation } from "@apollo/client/react/components";
+import { gql, useQuery } from "@apollo/client";
+import React from "react";
+import Spinner from "utils/spinner";
 import HistoryChart from "./historychart";
-import styled from "styled-components";
 
-const Flexdiv = styled.div`
-  display: flex;
-  height: 800px;
-`;
-const Contdiv = styled.div`
-  flex: row;
-  width: 50%;
-  height: 80%;
-`;
-/* 
-class HistoryDayAll1 extends Component {
+export default function HistoryDayAllContainer(props) {
+  const color = props.color || "#ffb74d";
+  const { data, loading } = useQuery(QUERY_HISTORY_DAY);
+  if (loading) return <Spinner />;
 
-  render() {
-    //const data = (!this.props.data) ? [ 'LN', 'Logistics',  'Finance', 'Tools','LN','LN'] : this.props.data
+  if (!data) return <div>No data</div>;
+  const history = data.historyday;
+  return (
+    <div className="grid grid-cols-2 grid-rows-2 h-screen pb-4">
+      <HistoryChart data={history} title={`Backlog LN (excl. Sol.Proposed)`} type="area" color={color} xvalue="day" value={`LN`} />
+      <HistoryChart data={history} title={`Backlog Logistics (excl. Sol.Proposed)`} type="area" color={color} xvalue="day" value={`Logistics`} />
+      <HistoryChart data={history} title={`Backlog Finance (excl. Sol.Proposed)`} type="area" color={color} xvalue="day" value={`Finance`} />
 
-    //const column = data[this.state.index || 0]
-
-    const color = this.props.color || "#ffb74d";
-    //const title = 'Backlog '.concat(column)
-    //if (!history) return <div> Loading....</div>;
-    return (
-             
-          )
-  }
-}
- */
-
-export default class HistoryDayAllContainer extends Component {
-  render() {
-    const color = this.props.color || "#ffb74d";
-    return (
-      <Query query={QUERY_HISTORY_DAY}>
-        {({ data, loading, error }) => {
-          if (loading) return <h2>Loading....</h2>;
-          if (error) return <div>error...</div>;
-          console.log(data);
-          if (!data) return <div>No data</div>;
-          const history = data.historyday;
-          return (
-            <Flexdiv>
-              <Contdiv>
-                <HistoryChart data={history} title={`Backlog LN (excl. Sol.Proposed)`} type="area" color={color} xvalue="day" value={`LN`} />
-                <HistoryChart
-                  data={history}
-                  title={`Backlog Logistics (excl. Sol.Proposed)`}
-                  type="area"
-                  color={color}
-                  xvalue="day"
-                  value={`Logistics`}
-                />
-              </Contdiv>
-              <Contdiv>
-                <HistoryChart
-                  data={history}
-                  title={`Backlog Finance (excl. Sol.Proposed)`}
-                  type="area"
-                  color={color}
-                  xvalue="day"
-                  value={`Finance`}
-                />
-
-                <HistoryChart data={history} title={`Backlog Tools (excl. Sol.Proposed)`} type="area" color={color} xvalue="day" value={`Tools`} />
-              </Contdiv>
-            </Flexdiv>
-          );
-        }}
-      </Query>
-    );
-  }
+      <HistoryChart data={history} title={`Backlog Tools (excl. Sol.Proposed)`} type="area" color={color} xvalue="day" value={`Tools`} />
+    </div>
+  );
 }
 
 const QUERY_HISTORY_DAY = gql`

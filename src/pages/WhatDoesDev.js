@@ -246,7 +246,7 @@ const WhatDoesDev = ({ name, severities, cloudOnly, severityList, groups }) => {
           .init()
           // .filterOwnerGroup(name)
           .filterGroups(groups)
-          .filterDev("Unassigned, ")
+          .filterUnassigned("Unassigned, ")
           .sort("ageDays", "D")
           .addTargetMet(severityList, "unassigned")
           .filterCloudOnly(cloudOnly)

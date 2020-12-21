@@ -42,6 +42,10 @@ export function Defect(defects) {
       tmp = tmp.filter((def) => def.Developer === dev);
       return this;
     },
+    filterUnassigned(dev) {
+      tmp = tmp.filter((def) => def.Developer === dev || def.status !== "Approved");
+      return this;
+    },
     filterSeverity(sev) {
       tmp = tmp.filter((def) => def.severity_name === sev);
       return this;
