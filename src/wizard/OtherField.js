@@ -6,10 +6,8 @@ import { useAlert } from "globalState/AlertContext";
 import { DashBoardContext } from "globalState/Provider";
 import React, { useEffect } from "react";
 import { ALL_MAINTENANCE_QUERY, MAINTENANCE_FAQ_QUERY, MUTATION_UPDATE_MAINTENANCE_FAQ } from "./Queries";
-import { useStyles } from "./useStyles";
 
 export const OtherField = ({ name, label, edit = false, Icon, text, id, bigger = false, blue = false, productline = "LN" }) => {
-  const classes = useStyles();
   const { role = "Guest" } = React.useContext(DashBoardContext);
   const canEdit = role === "Admin";
   const alert = useAlert();
@@ -25,9 +23,7 @@ export const OtherField = ({ name, label, edit = false, Icon, text, id, bigger =
         },
       };
   // const { activeVersion } = React.useContext(RootContext);
-  const [isOpen, setisOpened] = React.useState(false);
   const [value, setValue] = React.useState(text);
-  const [values, setValues] = React.useState("");
   // console.log('refresh', name, value, activeVersion);
   // console.log('Field', name, text, value);
   const mutation = MUTATION_UPDATE_MAINTENANCE_FAQ;
@@ -76,10 +72,11 @@ export const OtherField = ({ name, label, edit = false, Icon, text, id, bigger =
         <div className="flex items-center" item xs={3} style={{ display: "flex", justifyContent: "flex-end" }}>
           {canEdit && (
             // <EditIcon color="primary" fontSize="small" onClick={() => setisOpened(true)} />
-            <TWButton color="transp" className="font-sans" onClick={handleSubmit}>Save Content</TWButton>
+            <TWButton color="transp" className="font-sans" onClick={handleSubmit}>
+              Save Content
+            </TWButton>
           )}
         </div>
-
       </div>
       <CKEditor
         editor={ClassicEditor}

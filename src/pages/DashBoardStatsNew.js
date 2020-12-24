@@ -1,7 +1,6 @@
 // @ts-nocheck
 import React from "react";
 import shortid from "shortid";
-import styled from "styled-components";
 import "../App.css";
 import SummaryChartContainer from "../charts/SummaryChartContainer";
 import TestChart from "./testchart";

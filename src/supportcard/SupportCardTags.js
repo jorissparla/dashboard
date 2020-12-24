@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { useMutation } from "@apollo/client";
+import React, { useEffect, useState } from "react";
 
 const Keywords = ({ id, keywords = "", readOnly, updateKeywords }) => {
   const [keywordsArray, setKeywordsArray] = useState(keywords ? keywords.split(";").map((x) => x.trim()) : []);
@@ -15,7 +14,6 @@ const Keywords = ({ id, keywords = "", readOnly, updateKeywords }) => {
 
   const SaveKeywords = async (k) => {
     const keywords = k.filter((x) => x !== "").join(";");
-    const input = { id, keywords };
     updateKeywords(id, keywords);
   };
 

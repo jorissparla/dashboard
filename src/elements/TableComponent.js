@@ -1,33 +1,6 @@
 import React from "react";
 import _ from "lodash";
 
-const data = [
-  {
-    name: "ABernardB Lane",
-    title: "Director, Human Resources",
-    email: "bernardlane@example.com",
-    number: 12,
-  },
-  {
-    name: "Bernard Lane",
-    title: "Director, Human Resources",
-    email: "bernardlane@example.com",
-    number: 15,
-  },
-  {
-    name: "CBernard Lane",
-    title: "Zirector, Human Resources",
-    email: "bernardlane@example.com",
-    number: 8,
-  },
-  {
-    name: "DBernard Lane",
-    title: "Airector, Human Resources",
-    email: "bernardlane@example.com",
-    number: 33,
-  },
-];
-
 export function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }

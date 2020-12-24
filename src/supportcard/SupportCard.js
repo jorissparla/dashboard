@@ -1,21 +1,20 @@
-import React from "react";
-import gql from "graphql-tag";
-import { Query, Mutation } from "@apollo/client/react/components";
-import styled from "styled-components";
-import classnames from "classnames";
-import { Link } from "react-router-dom";
-import { withStyles } from "@material-ui/core/styles";
-import red from "@material-ui/core/colors/red";
+import { Query } from "@apollo/client/react/components";
+import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
-import Button from "@material-ui/core/Button";
 import Collapse from "@material-ui/core/Collapse";
-import Typography from "@material-ui/core/Typography";
+import red from "@material-ui/core/colors/red";
 import IconButton from "@material-ui/core/IconButton";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import { withStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
 import ModeEdit from "@material-ui/icons/Edit";
-
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import classnames from "classnames";
+import gql from "graphql-tag";
+import React from "react";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
 import "./my.css";
 
 const Outer = styled.div`

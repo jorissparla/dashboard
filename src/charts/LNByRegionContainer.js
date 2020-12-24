@@ -1,11 +1,10 @@
-import { Grid } from "@material-ui/core";
-import gql from "graphql-tag";
-import React from "react";
 import { useQuery } from "@apollo/client";
+import gql from "graphql-tag";
+import { usePersistentState } from "hooks";
+import React from "react";
 import { format } from "utils/format";
 import Spinner from "utils/spinner";
 import HistoryChart from "./historychart";
-import { usePersistentState } from "hooks";
 
 const transform = (data, value) =>
   data.map(({ date, number }) => ({

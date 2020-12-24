@@ -6,7 +6,7 @@ import TWButton from "elements/TWButton";
 import { TWSelectMenu } from "elements/TWSelectMenu";
 import FavoriteWrapper from "Favorite";
 import { MUTATION_UPDATE_CARD_KEYWORDS } from "pages/SupportCards";
-import React, { useState } from "react";
+import React from "react";
 import { useHistory } from "react-router";
 import SafeDeleteButton from "videos/SafeDeleteButton";
 import { CardSection } from "../common";
@@ -36,7 +36,7 @@ const SupportCardForm = (props) => {
     initialValues,
     onSave,
     authenticated,
-    onDelete,
+    onDelete: handleDelete,
   } = props;
   const [updateKeywords] = useMutation(MUTATION_UPDATE_CARD_KEYWORDS);
   const handleUpdateKeywords = async (id, keywords) => {
@@ -48,7 +48,6 @@ const SupportCardForm = (props) => {
     });
   };
   // const [category, setCategory] = useState(initialValues.category);
-  const [lbOpen, setlbOpen] = useState(false);
   const readOnly = !authenticated;
   const updatedAt = supportcard?.updatedAt; //: format(new Date(), "yyyy-MM-dd");
   const [values, setValues] = React.useState(initialValues);
@@ -71,9 +70,9 @@ const SupportCardForm = (props) => {
     // setlbOpen(false);
   };
 
-  const handleChangeSingle = (event) => {
-    setValues({ ...values, owner: event.target.value });
-  };
+  // const handleChangeSingle = (event) => {
+  //   setValues({ ...values, owner: event.target.value });
+  // };
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -164,13 +163,11 @@ const SupportCardForm = (props) => {
                 Save Card
               </TWButton>
             )}
-            {!readOnly && supportcard && <SafeDeleteButton onDelete={() => onDelete(supportcard)}></SafeDeleteButton>}
+            {!readOnly && supportcard && <SafeDeleteButton onDelete={() => handleDelete(supportcard)}></SafeDeleteButton>}
             {supportcard && (
               <TWButton color="black" onClick={() => window.open(initialValues.link)}>
                 View Link
               </TWButton>
-              // <Button variant="contained" color="primary" className={classes.buttonDel} onClick={() => window.open(initialValues.link)}>
-              // </Button>
             )}
             <TWButton variant="contained" color="teal" onClick={() => setTimeout(history.push("/supportcard"), 500)}>
               Cancel

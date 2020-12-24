@@ -3,7 +3,7 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import React, { useState } from "react";
-import { withRouter, useHistory } from "react-router";
+import { useHistory } from "react-router";
 
 function UserMenu({ id = "", picture = "" }) {
   const history = useHistory();

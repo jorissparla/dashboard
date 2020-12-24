@@ -1,12 +1,6 @@
-import React from "react";
-import { useMutation } from "@apollo/client";
-import FileUploader from "../common/FileUploaderNew";
-import { UPDATE_PROFILE_PIC_MUTATION } from "../graphql/UPDATE_PROFILE_PIC";
-import { DashBoardContext } from "../globalState/Provider";
-import { useUserContext } from "globalState/UserProvider";
-import { useAlert } from "globalState/AlertContext";
 import { useQuery } from "@apollo/client";
 import gql from "graphql-tag";
+import React from "react";
 import ProfilePage from "./ProfilePage";
 
 const USER_QUERY = gql`

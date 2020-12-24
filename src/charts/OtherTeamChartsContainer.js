@@ -24,6 +24,7 @@ const transform2 = (data, value) =>
   }));
 
 const OtherTeamChartsContainer = ({ color = "#ffb74d" }) => {
+  console.log("loading");
   const { data, loading } = useQuery(QUERY_HISTORY_OTHER);
 
   if (loading) return <Spinner />;

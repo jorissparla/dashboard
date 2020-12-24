@@ -7,10 +7,6 @@ export default function AutoComplete({
   onChangeValue = (v) => console.log(v),
   searchTextFromStart = true,
 }) {
-  const x = support
-    // map((s) => s.fullname).
-    .sort((a, b) => (a > b ? 1 : -1));
-
   useEffect(() => {
     const x = support
       // map((s) => s.fullname).
@@ -18,7 +14,7 @@ export default function AutoComplete({
     setNames(x);
     // console.log("useeffect", support);
     // setFilteredNames(x.filter((n) => n.toLowerCase().startsWith(x.toLowerCase())).slice(0, 9));
-  }, []);
+  }, [support]);
 
   const [name, setName] = useState(value);
   const [names, setNames] = useState(
@@ -39,7 +35,9 @@ export default function AutoComplete({
   const filterNames = (e) => {
     const x = e.target.value;
     if (searchTextFromStart) {
-      console.log("bla");
+      if (selected) {
+        console.log("bla");
+      }
       setFilteredNames(searchFromStart(names, x).slice(0, 9));
     } else {
       setFilteredNames(searchInText(names, x).slice(0, 9));

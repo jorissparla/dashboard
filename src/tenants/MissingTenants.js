@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from "react";
-import gql from "graphql-tag";
-import { useQuery, useMutation } from "@apollo/client";
-import { ALL_TENANTS_SIMPLE, MUTATION_UPDATE_TENANT_CUSTOMERID } from "./TenantQueries";
-import Spinner from "utils/spinner";
+import { useMutation, useQuery } from "@apollo/client";
 import TWButton from "elements/TWButton";
 import { useAlert } from "globalState/AlertContext";
+import React, { useEffect, useState } from "react";
+import Spinner from "utils/spinner";
+import { ALL_TENANTS_SIMPLE, MUTATION_UPDATE_TENANT_CUSTOMERID } from "./TenantQueries";
 
 const MissingTenants = () => {
   const [updateTenantCustomerId] = useMutation(MUTATION_UPDATE_TENANT_CUSTOMERID);

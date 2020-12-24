@@ -1,10 +1,10 @@
-import React from "react";
+import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
-import { Query, Mutation } from "@apollo/client/react/components";
 import _ from "lodash";
+import React from "react";
 import { withRouter } from "react-router";
-import CourseFormNew from "./CourseFormNew";
 import { QUERY_ALL_COURSES } from "../pages/CourseList";
+import CourseFormNew from "./CourseFormNew";
 
 const ADD_COURSE_MUTATION = gql`
   mutation ADD_COURSE_MUTATION($input: InputCourseType) {

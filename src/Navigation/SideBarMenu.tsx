@@ -1,10 +1,10 @@
-import { Accordion, AccordionDetails, AccordionSummary, Divider, List, ListItemIcon } from "@material-ui/core";
+import { Accordion, AccordionDetails, AccordionSummary, List, ListItemIcon } from "@material-ui/core";
 import MenuItem from "@material-ui/core/MenuItem";
 import AutoExchange from "@material-ui/icons/AirportShuttle";
 import LNChartsIcon from "@material-ui/icons/AssessmentTwoTone";
 import BusinessCenterIcon from "@material-ui/icons/BusinessCenter";
-import CloudQueueIcon from "@material-ui/icons/CloudQueue";
 import XpertIcon from "@material-ui/icons/Commute";
+import CodeIcon from "@material-ui/icons/DeveloperMode";
 import SymptomsIcon from "@material-ui/icons/ErrorOutline";
 import NewsIcon from "@material-ui/icons/Event";
 import MyWorkList from "@material-ui/icons/EventNote";
@@ -23,13 +23,11 @@ import RequestListIcon from "@material-ui/icons/PlaylistAdd";
 import SettingsIcon from "@material-ui/icons/Settings";
 import LinkIcon from "@material-ui/icons/SpeakerNotesTwoTone";
 import SurveysIcon from "@material-ui/icons/Whatshot";
-import CodeIcon from "@material-ui/icons/DeveloperMode";
 import { signOut } from "auth/msAuth";
 import { UserContext } from "globalState/UserProvider";
 import React, { useState } from "react";
 // import Signout from '../Signout';
 import { NavLink } from "./NavLink";
-import { LinkedCamera } from "@material-ui/icons";
 
 interface Props {
   classes: any;
@@ -89,7 +87,7 @@ export const SideBarMenu: React.FC<Props> = ({ classes, history, toggleMenu, ope
       {isAdmin && <ToggledNavLink title="Admin WorkList" Icon={MyWorkList} navigateTo="/mywork" history={history} />}
       <Divider />
       <ToggledNavLink title="Proactive Projects!" Icon={BusinessCenterIcon} navigateTo="/projects" history={history} color="text-blue-800" />
-      {isAdmin && <ToggledNavLink title="Permissions" Icon={Person} navigateTo="/bla" history={history} />}
+      {isAdmin && <ToggledNavLink title="Permissions" Icon={Person} navigateTo="/userpermissions" history={history} />}
       {isAdmin && <ToggledNavLink title="Logged in Users" Icon={PeopleOutlineIcon} navigateTo="/loggedinusers" history={history} />}
       <ToggledNavLink title="LN Charts" Icon={LNChartsIcon} navigateTo="/historyln" history={history} color="text-blue-800" />
       <ExpandableMenuItem classes={classes} title="Stats Graphs" Icon={GoLiveIcon}>

@@ -61,12 +61,12 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
     .hasSeverity(["Major Impact", "Production Outage / Critical Application halted"])
     .notStatus(["Solution Proposed"])
     .getData();
-  const critical = blBase
-    .init()
-    .severity("Production Outage / Critical Application halted")
-    .notServicedRestored()
-    .notStatus(["Solution Proposed"])
-    .getData();
+  // const critical = blBase
+  //   .init()
+  //   .severity("Production Outage / Critical Application halted")
+  //   .notServicedRestored()
+  //   .notStatus(["Solution Proposed"])
+  //   .getData();
 
   const [loading, setLoading] = useState(true);
   const [avgAgeSupport, all] = blBase

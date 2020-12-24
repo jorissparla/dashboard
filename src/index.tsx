@@ -1,25 +1,20 @@
-import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
-import { split } from "@apollo/client";
+import { ApolloClient, ApolloProvider, InMemoryCache, split } from "@apollo/client";
 import { WebSocketLink } from "@apollo/client/link/ws";
-import { createUploadLink } from "apollo-upload-client";
 import { getMainDefinition } from "@apollo/client/utilities";
+import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
+import { createUploadLink } from "apollo-upload-client";
 import React from "react";
-import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 import ReactDOM from "react-dom";
-import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
-import { applyMiddleware, createStore } from "redux";
-import promise from "redux-promise";
-import reduxThunk from "redux-thunk";
 import { createGlobalStyle } from "styled-components";
 import Spinner from "utils/spinner";
 // import { AUTH_USER } from "./actions";
 import ContextProvider from "./globalState";
 import "./index.css";
-import "./styles/app.css";
 import App from "./Navigation/Nav";
 // import reducers from "./reducers";
 import AppRoutes from "./routes";
+import "./styles/app.css";
 import { main } from "./styles/globalstyles";
 
 // import { SharedSnackbarProvider } from './globalState/SharedSnackbar.context';
@@ -68,21 +63,13 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-// const createStoreWithMiddleware = applyMiddleware(promise, reduxThunk)(createStore);
-// const store = createStoreWithMiddleware(reducers);
-
-const token = localStorage.getItem("token");
-const user = {
-  email: localStorage.getItem("email"),
-  picture: localStorage.getItem("picture"),
-  role: localStorage.getItem("role"),
-  fullname: localStorage.getItem("name"),
-};
-// If we have a token, consider the user to be signed in
-// if (token) {
-//   // we need to update application state
-//   store.dispatch({ type: AUTH_USER, user });
-// }
+// const token = localStorage.getItem("token");
+// const user = {
+//   email: localStorage.getItem("email"),
+//   picture: localStorage.getItem("picture"),
+//   role: localStorage.getItem("role"),
+//   fullname: localStorage.getItem("name"),
+// };
 
 const muiTheme = createMuiTheme({
   palette: {

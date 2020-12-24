@@ -1,3 +1,4 @@
+import { Mutation } from "@apollo/client/react/components";
 import { Button } from "@material-ui/core";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -8,7 +9,6 @@ import TextField from "@material-ui/core/TextField";
 import ClearIcon from "@material-ui/icons/Clear";
 import React, { useState } from "react";
 import { adopt } from "react-adopt";
-import { Query, Mutation } from "@apollo/client/react/components";
 import { SharedSnackbarConsumer } from "../globalState/SharedSnackbar.context";
 import { QUERY_PLANNEDCOURSEREQUESTS } from "../pages/PlannedCourseRequestList";
 import { CONVERT_TO_PLANNED_COURSE_MUTATION, DELETE_PLANNING_REQUEST_MUTATION } from "./AcceptPlannedCourseRequest";

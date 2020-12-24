@@ -108,13 +108,8 @@ class StudentView extends Component {
   }
 
   renderCourses(enrollments, navid) {
-    const { user } = this.props;
-    let validRole = false;
-    if (user) {
-      validRole = user.role !== "Guest";
-    } else {
-      validRole = false;
-    }
+    // const { user } = this.props;
+
     if (!enrollments) return <div>Loading...</div>;
 
     return (

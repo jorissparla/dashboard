@@ -7,11 +7,11 @@ import FileUploader from "../common/FileUploaderNew";
 import { UPDATE_PROFILE_PIC_MUTATION } from "../graphql/UPDATE_PROFILE_PIC";
 
 const ProfilePage = ({ active = null }) => {
-  const { user: current, setProfilePic } = useUserContext();
+  const { user: current } = useUserContext();
   const alert = useAlert();
 
   let user = active || current;
-  const { email, fullname, navid } = user;
+  const { email, fullname } = user;
   console.log(user);
   const [updateProfilePicture] = useMutation(UPDATE_PROFILE_PIC_MUTATION);
   const [image, setImage] = React.useState(user.image);

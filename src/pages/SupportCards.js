@@ -109,8 +109,6 @@ export default function SupportCardContainer(props) {
   const [unfavoriteCard] = useMutation(MUTATION_UNFAVORITE_CARD);
 
   if (loading) return <Spinner />;
-  console.log("🎉🎉", user, user?.permissions);
-  const { supportcards } = data;
   const authenticated = isAuthenticated;
   let isEditor = ["Admin", "PO"].some((u) => (user ? u === user.role : false));
   let hasperm;
@@ -288,6 +286,3 @@ const SupportCards = ({ authenticated = false, isEditor = false, supportcards, c
     </div>
   );
 };
-
-// const StyledSupportCards = withAuth(withStyles(styles)(SupportCards));
-const StyledSupportCards = SupportCards;

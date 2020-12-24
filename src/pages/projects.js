@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
-import gql from "graphql-tag";
 import { useQuery } from "@apollo/client";
-import Spinner from "utils/spinner";
 import SearchBar from "common/SearchBar";
 import { format } from "date-fns";
 import { useUserContext } from "globalState/UserProvider";
-import TWButton from "elements/TWButton";
+import gql from "graphql-tag";
+import React, { useEffect, useState } from "react";
+import Spinner from "utils/spinner";
 
 const QUERY_ALL_PROJECTS = gql`
   query QUERY_ALL_PROJECTS {
@@ -44,7 +43,6 @@ const Projects = () => {
   if (loading) return <Spinner />;
   const roles = ["ADMIN", "PROJECTEDIT"];
   const editable = user ? user?.role === "ADMIN" || user.permissions.filter((u) => roles.includes(u.permission)) : false;
-  const { projects } = data;
 
   function handleChangeSearch(text) {
     setSearchText(text);

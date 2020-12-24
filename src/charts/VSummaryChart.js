@@ -1,7 +1,7 @@
-import React from "react";
+import { Query } from "@apollo/client/react/components";
 import gql from "graphql-tag";
-import { Query, Mutation } from "@apollo/client/react/components";
-import { VictoryLabel, VictoryArea, VictoryTheme, VictoryChart } from "victory";
+import React from "react";
+import { VictoryArea, VictoryChart, VictoryLabel, VictoryTheme } from "victory";
 
 const querySummariesv2 = gql`
   query summaries2($team: String) {

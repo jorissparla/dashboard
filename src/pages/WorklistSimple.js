@@ -76,6 +76,9 @@ const WorklistSimpleWrapper = () => {
   const owner = user ? (user.fullname ? user.fullname : "") : "";
   const [name, setName] = useState(owner || "Ron Bleser");
   const { data, loading } = useQuery(ACCOUNTS_QUERY);
+  if (support) {
+    console.log("");
+  }
   useEffect(() => {
     if (data) {
       const x = data.accounts ? data.accounts.map((s) => s.fullname).sort((a, b) => (a > b ? 1 : -1)) : [];
@@ -88,7 +91,6 @@ const WorklistSimpleWrapper = () => {
     enableIt = user.permissions.some(({ permission }) => permission === "STATS");
   }
   isValidSuperUser = isValidSuperUser || enableIt;
-  // console.log("WorklistSimple", { support });
   if (loading) return <Spinner />;
   if (data.accounts.length === 0) return "loading";
   const x = data.accounts ? data.accounts.map((s) => s.fullname).sort((a, b) => (a > b ? 1 : -1)) : [];

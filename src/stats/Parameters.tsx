@@ -1,31 +1,9 @@
-import * as React from "react";
-import { Paper, withStyles, createStyles } from "@material-ui/core";
-import TextField, { TextFieldProps } from "@material-ui/core/TextField";
-import { useLocalStorage } from "../utils/useLocalStorage";
-import { SharedSnackbarContext } from "../globalState/SharedSnackbar.context";
+import { TextFieldProps } from "@material-ui/core/TextField";
+import clsx from "clsx";
 import Button from "elements/TWButton";
 import { useAlert } from "globalState/AlertContext";
-import { useCounter } from "hooks/useNumericUpDown";
-import clsx from "clsx";
-
-const styles = createStyles({
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-  },
-  textField: {
-    margin: 5,
-    width: 50,
-    padding: "0.5rem",
-    fontSize: "16px",
-    display: "flex",
-    borderRadius: 4,
-  },
-  flex: {
-    display: "flex",
-    margin: 10,
-  },
-});
+import * as React from "react";
+import { useLocalStorage } from "../utils/useLocalStorage";
 
 interface Props {
   param: string;

@@ -61,6 +61,8 @@ import testActivity from "pages/testActivity";
 import TestChart from "pages/testchart";
 import TrainingGroups from "pages/TrainingGroups";
 import WhatDoesDev from "pages/WhatDoesDev";
+import UserAdmin from "UserAdmin";
+import FullTenantEdit from "tenants/details/components/FullTenantEdit";
 
 // const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
 const LoggedInUsers = React.lazy(() => import("./pages/loggedinusers"));
@@ -147,6 +149,7 @@ function AppRoutes(props) {
       <AuthRoute exact path="/statstest" component={Stats} user={user} history={history} />
       <AuthRoute exact path="/profilepage" component={ProfilePage} user={user} />
       <AuthRoute exact path="/profilepage/:id" component={UserPage} user={user} />
+      <Route exact path="/profilepagex/:id" component={UserPage} user={user} />
       <AuthRoute exact path="/mywork" component={Stats} user={user} history={history} />
       <Route exact path="/working" component={Stats} user={user} history={history} />
       <AuthRoute exact path="/kbpage" component={KBPage} user={user} history={history} />
@@ -161,6 +164,7 @@ function AppRoutes(props) {
       <Route exact path="/cloudsuite/:id" component={CloudSuitePage} history={history} user={user} />
       <EnhancedRoute auth="admin" editors={["Admin", "PO"]} user={user} exact path="/supportcard" component={SupportCards} />
       <Route exact path="/tenant" component={TenantPage} />
+      <Route exact path="/tenant/:customerid" component={FullTenantEdit} />
 
       <Route exact path="/tenant/missing" component={MissingTenants} />
       <Route exact path="/region/:region" component={DashBoardContainer} user={user} />
@@ -169,7 +173,9 @@ function AppRoutes(props) {
       <Route exact path="/fileupload" component={CourseFileUpload} />
       <EnhancedRoute exact path="/scheduledcourses/:id" component={PlannedCourses} user={user} />
       <Route exact path="/plannedcourserequestlist" component={PlannedCourseRequestList} />
-      <EnhancedRoute exact path="/bla" component={RequireAuth(UserPermissions)} user={user} />
+      {/* <EnhancedRoute exact path="/bla" component={RequireAuth(UserPermissions)} user={user} /> */}
+      <EnhancedRoute exact path="/userpermissions" component={RequireAuth(UserPermissions)} user={user} />
+      <EnhancedRoute exact path="/b52" component={UserAdmin} user={user} />
       <EnhancedRoute exact path="/setpermissions" component={RequireAuth(UserPermissions)} user={user} />
       <EnhancedRoute exact path="/xyz/:id" component={CourseEdit} user={user} />
       <EnhancedRoute exact path="/xyz/edit/:id" component={CourseEdit} user={user} />

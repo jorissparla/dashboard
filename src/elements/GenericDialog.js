@@ -1,7 +1,4 @@
 import CloseIcon from "@material-ui/icons/Close";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import { makeStyles } from "@material-ui/styles";
-import clsx from "clsx";
 import React, { useState } from "react";
 import TWButton from "./TWButton";
 

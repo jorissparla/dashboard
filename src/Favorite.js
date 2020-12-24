@@ -1,13 +1,11 @@
+import { useMutation, useQuery } from "@apollo/client";
 import Grid from "@material-ui/core/Grid";
 import { withStyles } from "@material-ui/core/styles";
 import FavoriteIcon from "@material-ui/icons/Star";
 import FavoriteBorderIcon from "@material-ui/icons/StarBorder";
-import React, { useEffect, useState } from "react";
-import { adopt } from "react-adopt";
-import User, { useUser } from "./User";
-import gql from "graphql-tag";
-import { useQuery, useMutation, Mutation, Query } from "@apollo/client";
 import { useUserContext } from "globalState/UserProvider";
+import gql from "graphql-tag";
+import React, { useEffect, useState } from "react";
 
 const styles = (theme) => ({
   root: {
@@ -43,13 +41,6 @@ const QUERY_SUPPORTCARD = gql`
     }
   }
 `;
-
-const Composed = adopt({
-  favorite: ({ render }) => <Mutation mutation={MUTATION_FAVORITE}>{render}</Mutation>,
-  unfavorite: ({ render }) => <Mutation mutation={MUTATION_UNFAVORITE}>{render}</Mutation>,
-  user: ({ render }) => <User>{render}</User>,
-  supportcard: ({ render }) => <Query query={QUERY_SUPPORTCARD}>{render}</Query>,
-});
 
 // class FavoriteWrapper extends React.Component {
 //   render() {

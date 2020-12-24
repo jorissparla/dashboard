@@ -10,14 +10,6 @@ import CKEditor from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import SafeDeleteButton from "videos/SafeDeleteButton";
 
-const ACCOUNTS = gql`
-  query ACCOUNTS {
-    supportfolks {
-      fullname
-      image
-    }
-  }
-`;
 const MUTATION_UPDATE_PROJECT = gql`
   mutation MUTATION_UPDATE_PROJECT($input: UpdateProjectType, $where: WhereProject) {
     updateproject(where: $where, input: $input) {

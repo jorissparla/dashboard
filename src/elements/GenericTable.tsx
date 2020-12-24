@@ -1,15 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { useAlert } from "globalState/AlertContext";
-import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-import Accordion from "@material-ui/core/Accordion";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import classNames from "classnames";
-import { SelectionContext } from "../globalState/SelectionContext";
+import { useAlert } from "globalState/AlertContext";
+import React, { useEffect, useState } from "react";
 import CopyToClipBoard from "react-copy-to-clipboard";
 import { format } from "./../utils/format";
-import TWButton from "elements/TWButton";
 
 interface GenericTableProps {
   data: any[] | null;

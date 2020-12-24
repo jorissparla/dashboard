@@ -1,10 +1,8 @@
-import { FormControlLabel, Grid, Paper, Switch, Typography } from "@material-ui/core";
+import { FormControlLabel, Grid, Switch } from "@material-ui/core";
 import { format } from "date-fns";
-
 import React from "react";
-import { SimpleField } from "./SimpleField";
 import { Field } from "./Field";
-import { useStyles } from "./useStyles";
+import { SimpleField } from "./SimpleField";
 
 function ReleaseInformation({ versionInfo, handleCustomerHasValidMaintenance, validMaintenance }) {
   // const [valid, setValid] = React.useState(validMaintenance);
@@ -81,7 +79,7 @@ function ReleaseInformation({ versionInfo, handleCustomerHasValidMaintenance, va
 }
 function MaintenanceCheck({ versionInfo, handleCustomerHasValidMaintenance, validMaintenance }) {
   const [valid, setValid] = React.useState(validMaintenance);
-  const classes = useStyles();
+
   if (versionInfo === {} || !versionInfo) return <div />;
   // const { version: versionInfo } = useContext(RootContext);
   const { checksrequired, entitled_extended_maintenance } = versionInfo;

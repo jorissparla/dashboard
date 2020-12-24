@@ -1,11 +1,9 @@
 import { useMutation, useQuery } from "@apollo/client";
 import Button from "@material-ui/core/Button";
-import Chip from "@material-ui/core/Chip";
 import deepOrange from "@material-ui/core/colors/deepOrange";
 import deepPurple from "@material-ui/core/colors/deepPurple";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
 import { differenceInCalendarDays } from "date-fns";
 import TWButton from "elements/TWButton";
 import _ from "lodash";
@@ -27,7 +25,6 @@ import { TenantCard } from "./TenantCard";
 import TenantCustomerDetailsForm from "./TenantCustomerDetailsForm";
 import { ALL_TENANTS, QUERY_ALL_TENANT_DETAILS, TENANT_NOTE } from "./TenantQueries";
 import "./tenants.css";
-import { Main } from "./TenantStyledElements";
 
 const styles = (theme) => ({
   root: {
@@ -47,7 +44,6 @@ const styles = (theme) => ({
   },
   card: {
     minWidth: 390,
-    margin: 10,
     width: 380,
     // height: 350,
     display: "flex",

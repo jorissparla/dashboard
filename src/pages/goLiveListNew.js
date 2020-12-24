@@ -1,16 +1,14 @@
 import { useQuery } from "@apollo/client";
-import List from "@material-ui/core/List";
 import clsx from "clsx";
-import Button, { TWHyperLink } from "elements/TWButton";
+import Button from "elements/TWButton";
 import gql from "graphql-tag";
 import _ from "lodash";
 import React, { useState } from "react";
+import { animated, useSpring } from "react-spring";
 import Spinner from "utils/spinner";
-import GenericDialog from "../elements/GenericDialog";
 //import { format } from "date-fns";
 import { format } from "../utils/format";
 import { NoData } from "./NoData";
-import { useSpring, animated } from "react-spring";
 const colors = ["#BA68C8", "#81D4FA", "#FF7043", "#8BC34A", "#ec407a", "#1da1f2", "#E57373"];
 
 const dayPart = (d) => format(d, "dd");

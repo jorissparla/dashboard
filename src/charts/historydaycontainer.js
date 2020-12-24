@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import { Query } from "@apollo/client/react/components";
 import gql from "graphql-tag";
-import { Query, Mutation } from "@apollo/client/react/components";
+import React, { Component } from "react";
 import HistoryChart from "./historychart";
 
 class HistoryChartDayContainer extends Component {

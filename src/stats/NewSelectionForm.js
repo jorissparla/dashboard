@@ -7,10 +7,8 @@ import React, { useState } from "react";
 export const SelectionForm = ({ classes, initialValue, valuesChanged, isValidSuperUser, onChange, onNavigateToParams, accounts }) => {
   const [selectedProducts, setSelectedProducts] = usePersistentState("selectedproducts", ["LN"]);
   const [ownerVal, setOwnerVal] = useState(initialValue.owner);
-  const [person, setPerson] = useState("");
   const [region, setRegion] = usePersistentState("region", "EMEA");
   const [showDropDown, toggle] = useState(false);
-  const [actionNeeded, setActionNeeded] = useState(false);
   const [allOwners, toggleAllOwners] = useState(false);
 
   // const [labelWidth, setLabelWidth] = React.useState(0);
@@ -28,21 +26,21 @@ export const SelectionForm = ({ classes, initialValue, valuesChanged, isValidSup
   //   doAddPersonToLocalStorage(initialValue.owner);
   // }, []);
 
-  const doAddPersonToLocalStorage = (newPerson) => {
-    const item = window.localStorage.getItem("worklist.favorite.persons");
-    let persons = [];
-    if (!item || item.length === 0) {
-      persons = [];
-    } else {
-      persons = JSON.parse(item);
-      console.log("do", item, persons, typeof persons);
-    }
-    persons = persons.filter((person) => newPerson !== person.name).concat({ name: newPerson });
+  // const doAddPersonToLocalStorage = (newPerson) => {
+  //   const item = window.localStorage.getItem("worklist.favorite.persons");
+  //   let persons = [];
+  //   if (!item || item.length === 0) {
+  //     persons = [];
+  //   } else {
+  //     persons = JSON.parse(item);
+  //     console.log("do", item, persons, typeof persons);
+  //   }
+  //   persons = persons.filter((person) => newPerson !== person.name).concat({ name: newPerson });
 
-    window.localStorage.setItem("worklist.favorite.persons", JSON.stringify(persons));
-    // setPersons(persons);
-    return persons;
-  };
+  //   window.localStorage.setItem("worklist.favorite.persons", JSON.stringify(persons));
+  //   // setPersons(persons);
+  //   return persons;
+  // };
 
   function toggleSet(value) {
     console.log("toggle selectedProducts", selectedProducts, value);
@@ -106,15 +104,7 @@ export const SelectionForm = ({ classes, initialValue, valuesChanged, isValidSup
       >
         Search
       </button>
-      {/* <FormLabel> Only Actions Needed</FormLabel>
-      <Switch
-        checked={actionNeeded}
-        onChange={(e) => {
-          setActionNeeded(!actionNeeded);
-        }}
-        value={actionNeeded}
-        color="secondary"
-      /> */}
+
       <div className="border border-gray-200 p-2 m-2 rounded">
         {PRODUCT_LIST.map((product) => (
           <label className="inline-flex items-center" key={product}>

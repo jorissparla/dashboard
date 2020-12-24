@@ -1,3 +1,4 @@
+import { Query } from "@apollo/client/react/components";
 import { withStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -6,7 +7,6 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import gql from "graphql-tag";
 import React from "react";
-import { Query, Mutation } from "@apollo/client/react/components";
 //import { format } from 'date-fns';
 import { format } from "../utils/format";
 

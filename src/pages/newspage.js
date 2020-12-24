@@ -1,14 +1,7 @@
-import Button from "@material-ui/core/Button";
-import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
+import { useQuery } from "@apollo/client";
 import { withStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
 import gql from "graphql-tag";
 import React from "react";
-import { useQuery } from "@apollo/client";
 import { CardSection } from "../common";
 //import { format } from 'date-fns';
 import { format } from "../utils/format";

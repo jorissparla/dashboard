@@ -1,23 +1,10 @@
 import { format } from "date-fns";
 import { GenericTable } from "elements/GenericTable";
 import { request } from "graphql-request";
-import gql from "graphql-tag";
+import _ from "lodash";
 import React, { useEffect, useState } from "react";
 import useSWR from "swr";
 import Spinner from "utils/spinner";
-import _ from "lodash";
-
-const ALL_MAILER_LOGS = gql`
-  query ALL_MAILER_LOGS {
-    mailerlogs {
-      id
-      date
-      dest
-      subject
-      message
-    }
-  }
-`;
 
 const ALL_MAILER_LOGS_TEXT = `
   query ALL_MAILER_LOGS_TEXT {
@@ -54,7 +41,7 @@ const API = "https://nlbavwixs.infor.com:4001";
 
 function Mailerlog() {
   // const { data, loading } = useQuery(ALL_MAILER_LOGS);
-  const { data, error } = useSWR(
+  const { data } = useSWR(
     ALL_MAILER_LOGS_TEXT,
 
     (query) => request(API, query),
@@ -69,7 +56,7 @@ function Mailerlog() {
       const fmtData = _.sortBy(temp, [{ date: "desc" }]);
       setFormattedData(fmtData);
     }
-  }, [data]);
+  }, [data, mailerlogs]);
 
   if (!data) {
     return <Spinner></Spinner>;

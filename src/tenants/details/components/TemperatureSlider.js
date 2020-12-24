@@ -1,19 +1,8 @@
 import Slider from "@material-ui/core/Slider";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
-import Typography from "@material-ui/core/Typography";
 import PropTypes from "prop-types";
 import React from "react";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: 300 + theme.spacing(3) * 2,
-    padding: theme.spacing(3),
-  },
-  margin: {
-    height: theme.spacing(3),
-  },
-}));
 
 function ValueLabelComponent(props) {
   const { children, open, value } = props;
@@ -93,7 +82,6 @@ const TemperatureSlider = withStyles({
 })(Slider);
 
 export default function CustomizedSlider({ initialValue = "NORMAL", onChange }) {
-  const classes = useStyles();
   const [value, setValue] = React.useState(0);
   React.useEffect(() => {
     const temp = marks.find((m) => m.label === initialValue);

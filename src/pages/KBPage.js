@@ -1,16 +1,13 @@
-import { makeStyles } from "@material-ui/core/styles";
+import { GenericTable } from "elements/GenericTable";
+import { request } from "graphql-request";
 import { usePersistentState } from "hooks";
 import React, { useState } from "react";
-import { withRouter, useHistory } from "react-router-dom";
-import { SelectionForm } from "../stats/NewSelectionForm";
-import { QUERY_BACKLOG, KBQUERY } from "../stats/queries/BACKLOG_QUERY2";
-import { request } from "graphql-request";
+import { useHistory } from "react-router-dom";
 import useSWR from "swr";
-import { format } from "../utils/format";
+import { SelectionForm } from "../stats/NewSelectionForm";
+import { KBQUERY } from "../stats/queries/BACKLOG_QUERY2";
 import { UserContext } from "./../globalState/UserProvider";
 import NiceSpinner from "./../utils/NiceSpinner";
-import { StatsMain, useParams } from "./StatsMain";
-import { GenericTable } from "elements/GenericTable";
 
 export const PRODUCT_LIST = ["LN", "PLM", "Protean", "InforOS", "Xpert", "Swan", "AutoConnect", "AutoRelease", "SupplyWeb", "TRANS4M"];
 export const REGION_LIST = ["APJ", "EMEA", "NA", "LA"];
@@ -39,14 +36,14 @@ export const REGION_LIST_2 = [
 
 const KBPage = (props) => {
   const { user } = React.useContext(UserContext);
-  const [date] = useState(format(Date.now(), "yyyy-MM-dd"));
+  // const [date] = useState(format(Date.now(), "yyyy-MM-dd"));
   let enableIt = false;
   const isValidSuperUser = ["Admin", "PO"].some((u) => (user ? u === user.role : false));
   if (user && user.permissions) {
     enableIt = user.permissions.some(({ permission }) => permission === "STATS");
   }
   console.log("Start:", new Date());
-  const parms = useParams(!isValidSuperUser && !enableIt);
+  // const parms = useParams(!isValidSuperUser && !enableIt);
   const API = "https://nlbavwixs.infor.com:4001";
   const { data, error } = useSWR(
     KBQUERY,
@@ -99,7 +96,7 @@ const KBMainPage = ({ data, classes, owner, isValidSuperUser }) => {
 
 function generateFields(record) {
   let fields = [];
-  for (let [key, value] of Object.entries(record)) {
+  for (let [key] of Object.entries(record)) {
     fields = [...fields, { name: key, title: key, type: "" }];
   }
   return fields;
@@ -124,32 +121,6 @@ function filterKBData(data = [], filterValues = { owner: "", products: ["LN ERP"
     }
   }
   return mydata;
-}
-
-function KBType(initData) {
-  const data = initData;
-  let temp = initData;
-  return {
-    overOneYear() {
-      temp = temp.filter((k) => k.daysSinceCreated > 364);
-      return this;
-    },
-    areNew() {
-      temp = temp.filter((item) => item.status === "New");
-      return this;
-    },
-    notNew() {
-      temp = temp.filter((item) => item.status !== "New");
-      return this;
-    },
-    filterType(type) {
-      temp = temp.filter((item) => item.type === type);
-      return this;
-    },
-    getData() {
-      return temp;
-    },
-  };
 }
 
 export const KBTable = (props) => {

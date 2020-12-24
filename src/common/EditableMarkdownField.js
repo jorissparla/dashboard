@@ -1,12 +1,10 @@
-import { Backdrop, Modal, Typography } from "@material-ui/core";
-import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
-import EditIcon from "@material-ui/icons/Edit";
-import JoditEditor from "jodit-react";
-import React, { useRef } from "react";
 import { useMutation } from "@apollo/client";
-import MarkDownFieldEditor from "./MarkdownFieldEditor";
+import { Backdrop, Modal } from "@material-ui/core";
+import Grid from "@material-ui/core/Grid";
+import EditIcon from "@material-ui/icons/Edit";
 import { useAlert } from "globalState/AlertContext";
+import React, { useRef } from "react";
+import MarkDownFieldEditor from "./MarkdownFieldEditor";
 
 const EditableMarkDownField = ({ canEdit = true, name, label, value, id, classes, updateQuery, requeryFunction }) => {
   const [isOpen, setisOpened] = React.useState(false);

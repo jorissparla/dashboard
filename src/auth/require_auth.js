@@ -1,10 +1,7 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { withRouter, Redirect, useHistory } from "react-router";
+import React, { useContext } from "react";
+import { Redirect } from "react-router";
 import { Route } from "react-router-dom";
-import { useContext } from "react";
 import { UserContext } from "./../globalState/UserProvider";
-import { NotAuthorized } from "./NotAuthorized";
 
 export const AuthRoute = ({ component: Component, allowed, xuser, ...rest }) => {
   const { user } = useContext(UserContext);
@@ -81,7 +78,6 @@ export const EnhancedRoute = ({ component: Component, permissions = [], editors 
 
 const withAuth = (ComposedComponent) => (props) => {
   const { user } = useContext(UserContext);
-  const history = useHistory();
   if (!user) {
     // return <NotAuthorized />;
     return <Redirect to={{ pathname: "/" }} />;

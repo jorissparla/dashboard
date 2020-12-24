@@ -6,7 +6,6 @@ import Typography from "@material-ui/core/Typography";
 import React from "react";
 import ReleaseInformation, { MaintenanceCheck } from "wizard/ReleaseInformation";
 import { Field } from "./Field";
-import { OtherField } from "./OtherField";
 import { useStyles } from "./useStyles";
 
 let defaultValue = {

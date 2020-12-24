@@ -1,19 +1,6 @@
-import CKEditor from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-// import CKFinder from "@ckeditor/ckeditor5-ckfinder"
-import React, { useRef, useState } from "react";
-import { Mutation } from "@apollo/client/react/components";
 import gql from "graphql-tag";
-
-const UPLOAD_MUTATION = gql`
-  mutation UPLOAD_MUTATION_1($files: [Upload!]!, $folder: String) {
-    multipleUpload(files: $files, folder: $folder) {
-      id
-      path
-      filename
-    }
-  }
-`;
+// import CKFinder from "@ckeditor/ckeditor5-ckfinder"
+import React from "react";
 
 const TestActivity = (props) => {
   const [values, setValues] = React.useState("");

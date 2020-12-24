@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { useQuery, gql } from "@apollo/client";
-import Spinner from "utils/spinner";
-import { TWSelectMenu } from "elements/TWSelectMenu";
+import { gql, useQuery } from "@apollo/client";
 import SearchBar from "common/SearchBar";
+import { TWHyperLink } from "elements/TWButton";
+import { TWSelectMenu } from "elements/TWSelectMenu";
 import { usePersistentState } from "hooks";
-import TWButton, { TWHyperLink } from "elements/TWButton";
+import React, { useEffect, useState } from "react";
 import { format } from "utils/format";
+import Spinner from "utils/spinner";
 
 const SYMPTOM_CAT_QUERY = gql`
   query SYMPTOM_CAT_QUERY {

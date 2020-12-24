@@ -53,6 +53,42 @@ export const ALL_TENANTS_SIMPLE = gql`
   }
 `;
 
+export const QUERY_CUSTOMER_EVENTS = gql`
+  query QUERY_CUSTOMER_EVENTS($customerid: String) {
+    customerEvents(customerid: $customerid) {
+      id
+      date
+      comment
+      eventtype
+      nrusers
+    }
+  }
+`;
+
+export const MUTATION_ADD_CUSTOMER_EVENT = gql`
+  mutation MUTATION_ADD_CUSTOMER_EVENT($input: CustomerEventInput) {
+    addCustomerEvent(input: $input) {
+      id
+      date
+      comment
+      eventtype
+      nrusers
+    }
+  }
+`;
+
+export const DELETE_CUSTOMER_EVENT = gql`
+  mutation DELETE_CUSTOMER_EVENT($where: CustomerEventWhere) {
+    deleteCustomerEvent(where: $where) {
+      id
+      date
+      comment
+      eventtype
+      nrusers
+    }
+  }
+`;
+
 export const QUERY_TENANT_DETAIL = gql`
   query QUERY_TENANT_DETAIL($input: TenantCustomerDetailsWhereInput) {
     tenantcustomerdetail(input: $input) {

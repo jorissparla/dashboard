@@ -11,7 +11,16 @@ import { format } from "utils/format";
 import { MUTATION_UPDATE_DETAIL } from "./../../TenantQueries";
 import TemperatureSlider from "./TemperatureSlider";
 
-const EditTenantDetails = (props) => {
+function EditTenantDetails(props) {
+  const { profile, className, onClose, onView, isTenantEditor = false, ...rest } = props;
+  return (
+    <div {...rest} className="bg-white  px-4 font-sans right-0 w-2/3 flex h-full fixed z-50 shadow-lg rounded  flex-col">
+      <EditTenantDetailsWrapped {...props} />
+    </div>
+  );
+}
+
+export const EditTenantDetailsWrapped = (props) => {
   const { profile, className, onClose, onView, isTenantEditor = false, ...rest } = props;
 
   const [values, setValues] = useState({
@@ -62,120 +71,110 @@ const EditTenantDetails = (props) => {
 
   const TempIsChecked = (v) => v === values.temperature;
   return (
-    <div {...rest} className="bg-white  px-4 font-sans right-0 w-2/3 flex h-full fixed z-50 shadow-lg rounded  flex-col">
-      <form className="mt-12 ml-4" onSubmit={handleSubmit}>
-        {/* <CardHeader title={`Details for ${profile.customer.name}"`} /> */}
-        <div className="mt-5 py-4">
-          {isTenantEditor && (
-            <Button type="submit" color="teal" variant="contained">
-              Save Changes
-            </Button>
-          )}
-          <Button onClick={onClose} size="small">
-            <CloseIcon />
-            Close
+    <form className="mt-12 ml-4" onSubmit={handleSubmit}>
+      {/* <CardHeader title={`Details for ${profile.customer.name}"`} /> */}
+      <div className="mt-5 py-4">
+        {isTenantEditor && (
+          <Button type="submit" color="teal" variant="contained">
+            Save Changes
           </Button>
-        </div>
-        <div className="text-lg font-semibold font-sans p-2">{`Details for ${profile.customer.name}"`}</div>
-        <hr className="bg-grey-100 mb-2" />
-        <div>
-          <div className="grid grid-cols-6 gap-6">
-            <div className="col-span-3 row-start-1 space-y-1 sm:col-span-2">
-              <label for="pm" className="block text-sm font-medium leading-5 text-gray-700">
-                Project Manager
-              </label>
-              <input
-                className="form-input flex-grow block w-full min-w-0 rounded-none rounded-r-md transition duration-150 ease-in-out sm:text-sm sm:leading-5"
-                name="pm"
-                type="text"
-                placeholder="Please specify name of Project Manager"
-                label="Project Manager"
-                onChange={handleChange}
-                value={values.pm}
-              />
-            </div>
+        )}
+        <Button onClick={onClose} size="small">
+          <CloseIcon />
+          Close
+        </Button>
+      </div>
+      <div className="text-lg font-semibold font-sans p-2">{`Details for ${profile.customer.name}"`}</div>
+      <hr className="bg-grey-100 mb-2" />
+      <div>
+        <div className="grid grid-cols-6 gap-6">
+          <div className="col-span-3 row-start-1 space-y-1 sm:col-span-2">
+            <label htmlFor="pm" className="block text-sm font-medium leading-5 text-gray-700">
+              Project Manager
+            </label>
+            <input
+              className="form-input flex-grow block w-full min-w-0 rounded-none rounded-r-md transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+              name="pm"
+              type="text"
+              placeholder="Please specify name of Project Manager"
+              label="Project Manager"
+              onChange={handleChange}
+              value={values.pm}
+            />
+          </div>
 
-            <div className="col-span-3 row-start-2 space-y-1 sm:col-span-2">
-              <label for="pm" className="block text-sm font-medium leading-5 text-gray-700">
-                Customer Success Manager
-              </label>
-              <input
-                className="form-input flex-grow block w-full min-w-0 rounded-none rounded-r-md transition duration-150 ease-in-out sm:text-sm sm:leading-5"
-                name="csm"
-                type="text"
-                placeholder="Please specify name of Customer Success Manager"
-                label="Customer Success Manager"
-                onChange={handleChange}
-                value={values.csm}
-              />
-            </div>
+          <div className="col-span-3 row-start-2 space-y-1 sm:col-span-2">
+            <label htmlFor="pm" className="block text-sm font-medium leading-5 text-gray-700">
+              Customer Success Manager
+            </label>
+            <input
+              className="form-input flex-grow block w-full min-w-0 rounded-none rounded-r-md transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+              name="csm"
+              type="text"
+              placeholder="Please specify name of Customer Success Manager"
+              label="Customer Success Manager"
+              onChange={handleChange}
+              value={values.csm}
+            />
+          </div>
 
-            <div className="col-span-3 row-start-3 space-y-1 sm:col-span-2">
-              <label for="pm" className="block text-sm font-medium leading-5 text-gray-700">
-                Go Live Date
-              </label>
-              <input
-                className="form-input flex-grow block w-full min-w-0 rounded-none rounded-r-md transition duration-150 ease-in-out sm:text-sm sm:leading-5"
-                fullWidth
-                type="date"
-                defaultValue="2019-12-12"
-                label="Go live date"
-                name="golivedate"
-                onChange={handleChange}
-                value={values.golivedate}
-                variant="outlined"
-              />
-            </div>
-            <div className="col-span-3 row-start-4 space-y-1 sm:col-span-3">
-              <label for="pm" className="block text-sm font-medium leading-5 text-gray-700">
-                Go Live Comments
-              </label>
-              <input
-                className="form-input flex-grow block w-full min-w-0 rounded-none rounded-r-md transition duration-150 ease-in-out sm:text-sm sm:leading-5"
-                name="golivecomments"
-                placeholder="Go Live Comments"
-                type="text"
-                onChange={handleChange}
-                value={values.golivecomments}
-              />
-            </div>
-            <div className="col-span-3 row-start-5 space-y-1 sm:col-span-3">
-              <label for="pm" className="block text-sm font-medium leading-5 text-gray-700">
-                Customer Comments
-              </label>
-              <textarea
-                className="form-textarea mt-1 block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5"
-                name="comments"
-                onChange={handleChange}
-                // multiline
-                rows="8"
-                value={values.comments}
-              />
-            </div>
-            <div className="col-span-3 row-start-6 space-y-1 sm:col-span-2 ">
-              <label className="inline-flex items-center">
-                <input type="checkbox" className="form-checkbox text-purp" checked={useproxy} onChange={() => setProxyUser((prev) => !prev)} />
-                <span className="ml-2">Proxy User agreement signed</span>
-              </label>
-            </div>
-            <div className="col-span-3 row-start-7 space-y-1 sm:col-span-2">
-              <div className="px-4">
-                <TemperatureSlider initialValue={profile.temperature} onChange={handleTemperatureChange} />
-              </div>
+          <div className="col-span-3 row-start-3 space-y-1 sm:col-span-2">
+            <label htmlFor="pm" className="block text-sm font-medium leading-5 text-gray-700">
+              Go Live Date
+            </label>
+            <input
+              className="form-input flex-grow block w-full min-w-0 rounded-none rounded-r-md transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+              fullWidth
+              type="date"
+              defaultValue="2019-12-12"
+              label="Go live date"
+              name="golivedate"
+              onChange={handleChange}
+              value={values.golivedate}
+              variant="outlined"
+            />
+          </div>
+          <div className="col-span-3 row-start-4 space-y-1 sm:col-span-3">
+            <label htmlFor="pm" className="block text-sm font-medium leading-5 text-gray-700">
+              Go Live Comments
+            </label>
+            <input
+              className="form-input flex-grow block w-full min-w-0 rounded-none rounded-r-md transition duration-150 ease-in-out sm:text-sm sm:leading-5"
+              name="golivecomments"
+              placeholder="Go Live Comments"
+              type="text"
+              onChange={handleChange}
+              value={values.golivecomments}
+            />
+          </div>
+          <div className="col-span-3 row-start-5 space-y-1 sm:col-span-3">
+            <label htmlFor="pm" className="block text-sm font-medium leading-5 text-gray-700">
+              Customer Comments
+            </label>
+            <textarea
+              className="form-textarea mt-1 block w-full transition duration-150 ease-in-out sm:text-sm sm:leading-5 resize-none"
+              name="comments"
+              onChange={handleChange}
+              // multiline
+              rows="8"
+              value={values.comments}
+            />
+          </div>
+          <div className="col-span-3 row-start-6 space-y-1 sm:col-span-2 ">
+            <label className="inline-flex items-center">
+              <input type="checkbox" className="form-checkbox text-purp" checked={useproxy} onChange={() => setProxyUser((prev) => !prev)} />
+              <span className="ml-2">Proxy User agreement signed</span>
+            </label>
+          </div>
+          <div className="col-span-3 row-start-7 space-y-1 sm:col-span-2">
+            <div className="px-4">
+              <TemperatureSlider initialValue={profile.temperature} onChange={handleTemperatureChange} />
             </div>
           </div>
         </div>
-        {/* <Divider /> */}
-        {/* <hr className="bg-grey-100 mt-2" /> */}
-      </form>
-      {/* <SuccessSnackbar onClose={handleSnackbarClose} open={openSnackbar} /> */}
-    </div>
+      </div>
+    </form>
   );
-};
-
-EditTenantDetails.propTypes = {
-  className: PropTypes.string,
-  profile: PropTypes.object.isRequired,
 };
 
 export default EditTenantDetails;

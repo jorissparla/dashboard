@@ -1,3 +1,4 @@
+import { Query } from "@apollo/client/react/components";
 import { FormControl, InputLabel, MenuItem, Select, TextField } from "@material-ui/core";
 import Badge from "@material-ui/core/Badge";
 import Button from "@material-ui/core/Button";
@@ -9,7 +10,6 @@ import { formatDistanceToNow } from "date-fns";
 import { Formik } from "formik";
 import gql from "graphql-tag";
 import React from "react";
-import { Query, Mutation } from "@apollo/client/react/components";
 import { withRouter } from "react-router";
 import * as yup from "yup";
 

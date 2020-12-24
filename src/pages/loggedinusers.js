@@ -34,16 +34,17 @@ const query = `
 
 `;
 
-const Loggedinusers = () => {
+const Loggedinusers = ({ admin = false }) => {
   const { data, error } = useSWR(
     query,
 
     (query) => request(uri, query)
   );
 
+  console.log({ admin });
   const { user: current } = useUserContext();
   const history = useHistory();
-  let isAdmin = current?.role === "Admin";
+  let isAdmin = admin || current?.role === "Admin";
   const [searchText, setSearchText] = useState("");
 
   const addManager = (data = [], refField = "managerid", idField = "navid", asFieldName = "managerName") => {
@@ -87,7 +88,7 @@ const Loggedinusers = () => {
                   <h1 className="font-pop cursor-pointer font-semibold overflow-hidden">{acc.fullname}</h1>
                   <button onClick={() => (isAdmin ? history.push("/profilepage/" + acc.id) : null)}>
                     {acc.image ? (
-                      <img className="h-12 w-12 shadow rounded-full" src={acc.image} alt="Profile Picture" />
+                      <img className="h-12 w-12 shadow rounded-full" src={acc.image} alt="Profile " />
                     ) : (
                       // <div className="h-12 w-12 shadow rounded-full bg-teal-200 text-teal-800 text-xl flex items-center justify-center font-semibold">
                       <div className={avaClass}>{getInitials(acc.fullname)}</div>

@@ -1,9 +1,8 @@
-import { useParams } from "react-router";
-import React, { useState, useEffect } from "react";
-import gql from "graphql-tag";
 import { useQuery } from "@apollo/client";
+import gql from "graphql-tag";
+import React from "react";
+import { useParams } from "react-router";
 import Spinner from "utils/spinner";
-import TWButton from "elements/TWButton";
 
 const MAILER_LOG_DETAIL = gql`
   query MAILER_LOG_DETAIL($id: ID) {

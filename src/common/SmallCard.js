@@ -1,22 +1,7 @@
-import Divider from "@material-ui/core/Divider";
-import Icon from "@material-ui/core/Icon";
-import ModeEdit from "@material-ui/icons/Edit";
-import NewIcon from "@material-ui/icons/NewReleases";
-import ViewIcon from "@material-ui/icons/Pageview";
 import React from "react";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
-import { Block } from "../elements/Block";
 import Button from "../elements/TWButton";
 import NumberOfViews from "../pages/NumberOfViews";
-import { HR, Papier } from "../styles/index.js";
-import { ToggleFavorite } from "../supportcard/Favorite";
 import { format } from "../utils/format";
-
-const Outer = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-`;
 
 const SmallCard = ({
   title = "Procedure",
@@ -116,11 +101,11 @@ const SmallCard = ({
 
 export default () => {
   return (
-    <Outer>
+    <div>
       <SmallCard />
       <SmallCard />
       <SmallCard />
-    </Outer>
+    </div>
   );
 };
 
