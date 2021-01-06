@@ -3,7 +3,7 @@ import SearchBar from "common/SearchBar";
 import Button from "elements/TWButton";
 import { usePersistentState } from "hooks";
 import _ from "lodash";
-import { DataCell, HeaderCell } from "pages/WorklistSimple";
+import { DataCell, HeaderCell } from "pages/Cells";
 import React, { useEffect, useState } from "react";
 import { animated, useSpring } from "react-spring";
 import Spinner from "utils/spinner";

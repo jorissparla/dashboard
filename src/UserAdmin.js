@@ -32,8 +32,8 @@ const styles = (theme) => ({
   },
 });
 
-const PERMISSIONS_MUTATION = gql`
-  mutation PERMISSIONS_MUTATION($where: WhereAccountInput, $data: UpdateAccountDataPermissionsInput) {
+const UPDATE_PERMISSIONS_MUTATION = gql`
+  mutation UPDATE_PERMISSIONS_MUTATION($where: WhereAccountInput, $data: UpdateAccountDataPermissionsInput) {
     updatePermissions(where: $where, data: $data) {
       id
       permissions {

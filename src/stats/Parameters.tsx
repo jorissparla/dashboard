@@ -1,4 +1,3 @@
-import { TextFieldProps } from "@material-ui/core/TextField";
 import clsx from "clsx";
 import Button from "elements/TWButton";
 import { useAlert } from "globalState/AlertContext";
@@ -12,11 +11,11 @@ interface Props {
   label: string;
   color?: string;
   keyUp: any;
-  other?: TextFieldProps;
+  // other?: TextFieldProps;
   onChange?: any;
 }
 
-export const Parameter: React.FC<Props> = ({ param, initial, classes = "", label, other, keyUp, color = "blue", onChange }) => {
+export const Parameter: React.FC<Props> = ({ param, initial, classes = "", label, keyUp, color = "blue", onChange }) => {
   // const { param, initial } = props;
   const baseClass = "rounded w-8 font-normal shadow-md cursor-pointer flex items-center justify-center text-lg ";
   function getColorClasses(color: string) {

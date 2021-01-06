@@ -106,6 +106,7 @@ export const QUERY_TENANT_DETAIL = gql`
       comments
       comments_updated
       updated
+      useproxy
       tenants {
         id
         farm
@@ -164,6 +165,7 @@ export const MUTATION_UPDATE_DETAIL = gql`
       comments
       comments_updated
       updated
+      useproxy
     }
   }
 `;

@@ -7,7 +7,7 @@ import { Defect } from "../stats/DefectType";
 import Spinner from "../utils/spinner";
 import { UserContext } from "./../globalState/UserProvider";
 import { NoData } from "./NoData";
-import { DataCell, HeaderCell, HyperLinkCell, HyperLinkCellRed } from "./WorklistSimple";
+import { DataCell, HeaderCell, HyperLinkCell, HyperLinkCellRed } from "./Cells";
 import GenericFilter from "../elements/GenericFilter";
 import _ from "lodash";
 import { useSpring, animated } from "react-spring";

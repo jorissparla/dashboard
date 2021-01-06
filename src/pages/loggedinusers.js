@@ -88,7 +88,7 @@ const Loggedinusers = ({ admin = false }) => {
                   <h1 className="font-pop cursor-pointer font-semibold overflow-hidden">{acc.fullname}</h1>
                   <button onClick={() => (isAdmin ? history.push("/profilepage/" + acc.id) : null)}>
                     {acc.image ? (
-                      <img className="h-12 w-12 shadow rounded-full" src={acc.image} alt="Profile " />
+                      <img className="min-w-12 h-12 w-12 shadow rounded-full" src={acc.image} alt="Profile " />
                     ) : (
                       // <div className="h-12 w-12 shadow rounded-full bg-teal-200 text-teal-800 text-xl flex items-center justify-center font-semibold">
                       <div className={avaClass}>{getInitials(acc.fullname)}</div>

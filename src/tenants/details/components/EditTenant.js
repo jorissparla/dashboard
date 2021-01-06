@@ -4,6 +4,7 @@ import CloseIcon from "@material-ui/icons/Close";
 import { makeStyles } from "@material-ui/styles";
 import clsx from "clsx";
 import Button from "elements/TWButton";
+import { TWSelectMenu } from "elements/TWSelectMenu";
 import { useAlert } from "globalState/AlertContext";
 import PropTypes from "prop-types";
 import React, { useState } from "react";
@@ -12,7 +13,7 @@ import { MUTATION_UPDATE_DETAIL } from "./../../TenantQueries";
 import TemperatureSlider from "./TemperatureSlider";
 
 function EditTenantDetails(props) {
-  const { profile, className, onClose, onView, isTenantEditor = false, ...rest } = props;
+  const { profile, className, onClose, onView, isTenantEditor = true, ...rest } = props;
   return (
     <div {...rest} className="bg-white  px-4 font-sans right-0 w-2/3 flex h-full fixed z-50 shadow-lg rounded  flex-col">
       <EditTenantDetailsWrapped {...props} />
@@ -21,7 +22,7 @@ function EditTenantDetails(props) {
 }
 
 export const EditTenantDetailsWrapped = (props) => {
-  const { profile, className, onClose, onView, isTenantEditor = false, ...rest } = props;
+  const { profile, className, onClose, onView, isTenantEditor = true, ...rest } = props;
 
   const [values, setValues] = useState({
     csm: profile.csm || "",
@@ -34,7 +35,7 @@ export const EditTenantDetailsWrapped = (props) => {
     comments: profile.comments,
     useproxy: true,
   });
-  console.log({ profile });
+  console.log({ props });
   const [updateTenantDetailsMutation] = useMutation(MUTATION_UPDATE_DETAIL);
   const handleChange = (event) => {
     event.persist();
@@ -44,15 +45,24 @@ export const EditTenantDetailsWrapped = (props) => {
       [event.target.name]: event.target.type === "checkbox" ? event.target.checked : event.target.value,
     });
   };
-
   const [useproxy, setProxyUser] = useState(profile.useproxy);
+  const handleToggleProxy = () => {
+    const newproxyValue = !useproxy;
+    setValues({
+      ...values,
+      useproxy: newproxyValue,
+    });
+    setProxyUser((prev) => newproxyValue);
+  };
 
   const alert = useAlert();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let x = values;
-    delete x.useproxy;
+    let useproxyVal = useproxy ? 1 : 0;
+    let x = { ...values };
+    // delete x.useproxy;
+
     const result = await updateTenantDetailsMutation({ variables: { input: x } });
     console.log(result);
     onClose();
@@ -61,6 +71,7 @@ export const EditTenantDetailsWrapped = (props) => {
   };
 
   const handleTemperatureChange = (value) => {
+    console.log({ value });
     setValues({ ...values, temperature: value });
   };
 
@@ -124,7 +135,6 @@ export const EditTenantDetailsWrapped = (props) => {
             </label>
             <input
               className="form-input flex-grow block w-full min-w-0 rounded-none rounded-r-md transition duration-150 ease-in-out sm:text-sm sm:leading-5"
-              fullWidth
               type="date"
               defaultValue="2019-12-12"
               label="Go live date"
@@ -162,15 +172,25 @@ export const EditTenantDetailsWrapped = (props) => {
           </div>
           <div className="col-span-3 row-start-6 space-y-1 sm:col-span-2 ">
             <label className="inline-flex items-center">
-              <input type="checkbox" className="form-checkbox text-purp" checked={useproxy} onChange={() => setProxyUser((prev) => !prev)} />
+              <input type="checkbox" className="form-checkbox text-purp" checked={useproxy} onChange={() => handleToggleProxy()} />
               <span className="ml-2">Proxy User agreement signed</span>
             </label>
           </div>
           <div className="col-span-3 row-start-7 space-y-1 sm:col-span-2">
             <div className="px-4">
-              <TemperatureSlider initialValue={profile.temperature} onChange={handleTemperatureChange} />
+              <TWSelectMenu
+                items={["NORMAL", "WATCH", "ALERT"]}
+                value={values.temperature}
+                label="Customer Temperature"
+                onChange={handleTemperatureChange}
+              />
             </div>
           </div>
+          {/* <div className="col-span-3 row-start-7 space-y-1 sm:col-span-2">
+            <div className="px-4">
+              <TemperatureSlider initialValue={profile.temperature} onChange={handleTemperatureChange} />
+            </div>
+          </div> */}
         </div>
       </div>
     </form>

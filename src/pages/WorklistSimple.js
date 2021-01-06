@@ -5,8 +5,9 @@ import { UserContext } from "./../globalState/UserProvider";
 import React, { useEffect, useState } from "react";
 import { Backlog } from "../stats/BacklogType";
 import Spinner from "../utils/spinner";
-import { useParams } from "./StatsMain";
+import { useParams } from "./useParam";
 import { usePersistentState } from "../hooks";
+import { HeaderCell, DataCell, HyperLinkCellRed, HyperLinkCell } from "./Cells";
 
 const MY_BACKLOG_QUERY = gql`
   fragment backlogfragment on DWH {
@@ -225,32 +226,6 @@ export const Widget = ({ data = [], title, mark = false }) => {
     </div>
   );
 };
-
-export const HeaderCell = ({ children }) => (
-  <th className="  top-0 min-w-28 text-sm font-semibold text-gray-700 bg-gray-100 p-0">
-    <div className="p-2 border-b border-gray-300">{children}</div>
-  </th>
-);
-
-export const HyperLinkCell = ({ value = "", linkPrefix = "http://navigator.infor.com/n/incident.asp?IncidentID=", linkText = "" }) => (
-  <td className="p-2 font-sans text-sm font-semibold text-blue-700">
-    <a className="inline-block align-baseline font-bold text-sm " href={`${linkPrefix}${value}`} target="_blank">
-      {linkText || value}
-    </a>
-  </td>
-);
-export const HyperLinkCellRed = ({ value = "", linkPrefix = "http://navigator.infor.com/n/incident.asp?IncidentID=", linkText = "" }) => (
-  <td className="p-2 font-sans text-sm font-semibold text-red-700">
-    <a
-      className="inline-block align-baseline font-bold text-sm bg-red-200 rounded-lg no-underline px-2 text-red-700"
-      href={`${linkPrefix}${value}`}
-      target="_blank"
-    >
-      {linkText || value}
-    </a>
-  </td>
-);
-export const DataCell = ({ children }) => <td className="p-2 font-sans text-sm font-semibold text-blue-700 ">{children}</td>;
 
 const Table = ({ data, mark }) => {
   function isStatusToMark(status, mark) {

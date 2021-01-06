@@ -9,7 +9,8 @@ import { QUERY_BACKLOG_TEXT } from "../stats/queries/BACKLOG_QUERY2";
 import { format } from "../utils/format";
 import { UserContext } from "./../globalState/UserProvider";
 import NiceSpinner from "./../utils/NiceSpinner";
-import { StatsMain, useParams } from "./StatsMain";
+import { StatsMain } from "./StatsMain";
+import { useParams } from "./useParam";
 const useStyles = makeStyles((theme) => ({
   root: theme.mixins.gutters({
     marginTop: theme.spacing(3),

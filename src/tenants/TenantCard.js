@@ -51,6 +51,7 @@ export const TenantCard = ({
       pm: "",
       info: "",
       temperature: "NORMAL",
+      useproxy: false,
     };
   }
   let golivedate = tenantcustomerdetail.golivedate;

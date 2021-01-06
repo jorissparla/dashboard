@@ -297,8 +297,8 @@ const filterTenantsByCustomerFarmVersion = (tenants, fields, details) => {
     csm = "",
     pm = "",
     lastupdated = "999",
+    useproxy = false,
   } = fields;
-  console.log({ fields });
 
   let filteredCustomerNames = null;
   if (details) {
