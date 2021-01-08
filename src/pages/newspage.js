@@ -1,5 +1,4 @@
 import { useQuery } from "@apollo/client";
-import { withStyles } from "@material-ui/core/styles";
 import gql from "graphql-tag";
 import React from "react";
 import { CardSection } from "../common";
@@ -17,60 +16,18 @@ const QUERY_NEWSITEMS = gql`
   }
 `;
 
-const styles = (theme) => ({
-  root: {
-    display: "flex",
-    margin: 30,
-    flexWrap: "wrap",
-  },
-  card: {
-    maxWidth: 345,
-    margin: 10,
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-    transition: "0.5s ease all",
-    "&:hover": {
-      transform: "rotateZ(-5deg)",
-      maxWidth: 400,
-    },
-  },
-  media: {
-    height: 380,
-    objectFit: "cover",
-    display: "flex",
-    flexDirection: "column-reverse",
-  },
-  title: {
-    color: "white",
-    justifyContent: "flex-end",
-    fontWeight: 500,
-    padding: 10,
-    fontSize: 24,
-    background: "#00000099",
-  },
-  details: {
-    display: "flex",
-    flexDirection: "column",
-  },
-});
-
-function MediaNewsCard({ news: { title, body, img, create_date }, classes }) {
+function MediaNewsCard({ news: { title, body, img, create_date } }) {
   const newImage = img.replace("http:", "https:");
   return (
     <div className="rounded bg-white shadow-lg m-2">
       <div className="w-full object-cover">
         <div className="relative">
           <img className="object-center object-cover h-64 w-full z-10 border-b border-gray-300" src={newImage} alt="newsItem" />
-          <div className="  bg-gray-100 h-20 overflow-hidden shadow py-1 px-2 rounded-lg bg-white flex ">
+          <div className="  bg-gray-100 h-20 overflow-hidden shadow py-1 px-2 rounded-lg flex ">
             <h1 className="text-black text-xl font-bold font-pop">{title}</h1>
           </div>
         </div>
-        {/* <CardMedia className={classes.media} image={newImage} title={title}>
-          <Typography gutterBottom variant="h5" component="h2" className={classes.title}>
-            {title}
-          </Typography>
-        </CardMedia> */}
+
         <div className="flex flex-col items-between justify-between">
           <div className="">
             <p className="text-sm text-grey-600 font-open  h-48 overflow-hidden ">{body}</p>
@@ -100,9 +57,9 @@ const NewsPage = (props) => {
   return (
     <div className="h-full bg-gray-100">
       {" "}
-      <CardSection>
+      <div className="flex mt-1 p bg-white items-center ">
         <div className="text-xl font-pop font-semibold mb-2 px-2 text-gray-600">#ProudToWorkInSupport</div>
-      </CardSection>
+      </div>
       <div className="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-4 gap-1">
         {news.map((item) => (
           <MediaNewsCard news={item} key={item.id} classes={classes} />
@@ -112,4 +69,4 @@ const NewsPage = (props) => {
   );
 };
 
-export default withStyles(styles)(NewsPage);
+export default NewsPage;

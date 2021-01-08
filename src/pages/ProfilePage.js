@@ -32,15 +32,16 @@ const ProfilePage = ({ active = null }) => {
           <img className=" w-full rounded object-cover " src={image.replace("http:", "https:")} alt="" />
         </div>
         <a href={image}>{image}</a>
-        {current.role === "Admin" && (
-          <FileUploader
-            link={`\\\\nlbavwixs.infor.com\\images\\profilepics\\${email}`}
-            httpLinkPrefix={`https://nlbavwixs.infor.com/images/profilepics/${email}/`}
-            readOnly={false}
-            setFile={handleSetFile}
-            title="Profile Picture"
-          />
-        )}
+        {current?.role === "Admin" ||
+          (true && (
+            <FileUploader
+              link={`\\\\nlbavwixs.infor.com\\images\\profilepics\\${email}`}
+              httpLinkPrefix={`https://nlbavwixs.infor.com/images/profilepics/${email}/`}
+              readOnly={false}
+              setFile={handleSetFile}
+              title="Profile Picture"
+            />
+          ))}
         <div className="mt-4 flex">
           <div className="font-semibold flex items-start">
             Role:

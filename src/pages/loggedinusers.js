@@ -46,7 +46,6 @@ const Loggedinusers = ({ admin = false }) => {
   const history = useHistory();
   let isAdmin = admin || current?.role === "Admin";
   const [searchText, setSearchText] = useState("");
-
   const addManager = (data = [], refField = "managerid", idField = "navid", asFieldName = "managerName") => {
     return data.map((item) => {
       let managerName = "Manager";

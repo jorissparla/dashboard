@@ -13,7 +13,7 @@ import _ from "lodash";
 import { useSpring, animated } from "react-spring";
 import { format } from "date-fns";
 import { Parameter } from "stats/Parameters";
-import { useParam } from "./StatsMain";
+import { useParam } from "./useParam";
 
 const ALL_DEFECTS = gql`
   query ALL_DEFECTS {
