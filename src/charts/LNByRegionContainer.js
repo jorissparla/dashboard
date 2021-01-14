@@ -8,7 +8,7 @@ import HistoryChart from "./historychart";
 
 const transform = (data, value) =>
   data.map(({ date, number }) => ({
-    date: format(parseInt(date), "dd"),
+    date: format(new Date(date), "dd"),
     odate: format(parseInt(date), "yyyyMMdd"),
     [value]: number,
     label: number,
@@ -16,7 +16,7 @@ const transform = (data, value) =>
   }));
 const transform2 = (data, value) =>
   data.map(({ date, number, age }) => ({
-    date: format(parseInt(date), "dd"),
+    date: format(new Date(date), "dd"),
     odate: format(parseInt(date), "yyyyMMdd"),
     [value]: age,
     label: age,
@@ -24,15 +24,25 @@ const transform2 = (data, value) =>
   }));
 
 const LNByRegionContainer = ({ color = "#ffb74d" }) => {
-  const [region, setRegion] = usePersistentState("EMEA");
+  const [region, setRegion] = usePersistentState("");
+  const [displayRegion, setDisplayRegion] = usePersistentState("ALL");
   const { data, loading } = useQuery(QUERY_HISTORY_LN, {
     variables: { region },
   });
   if (loading) return <Spinner />;
   console.log(data);
 
+  function changeRegion(val) {
+    setDisplayRegion(val);
+    if (val === "ALL") {
+      setRegion("");
+    } else {
+      setRegion(val);
+    }
+  }
   // return <div>{JSON.stringify(data, null, 2)}</div>;
   // const { All, Logistics, Finance, Tools } = data;
+  if (!data) return <div>No data</div>;
   const All = transform(data.All, "All");
   const Logistics = transform(data.Logistics, "Logistics");
   const Finance = transform(data.Finance, "Finance");
@@ -41,8 +51,7 @@ const LNByRegionContainer = ({ color = "#ffb74d" }) => {
   const ageLogistics = transform2(data.Logistics, "ageLogistics");
   const ageFinance = transform2(data.Finance, "ageFinance");
   const ageTools = transform2(data.Tools, "ageTools");
-  if (!data) return <div>No data</div>;
-
+  console.log(All);
   // const historyPLM = transform(data.PLM, 'plm');
   // return <div>Data</div>;
 
@@ -52,7 +61,8 @@ const LNByRegionContainer = ({ color = "#ffb74d" }) => {
         <div className="m-2 w-full rounded shadow-md bg-white p-2">
           <label className="block">
             <span className="text-gray-700">Filter Region</span>
-            <select className="form-select block w-32 mt-1" value={region} onChange={(e) => setRegion(e.target.value)}>
+            <select className="form-select block w-32 mt-1" value={displayRegion} onChange={(e) => changeRegion(e.target.value)}>
+              <option>ALL</option>
               <option>EMEA</option>
               <option>NA</option>
               <option>APJ</option>
@@ -60,7 +70,7 @@ const LNByRegionContainer = ({ color = "#ffb74d" }) => {
             </select>
           </label>
         </div>
-        <div className="m-2 rounded shadow-lg bg-orange-400">
+        <div className="m-2 rounded shadow-lg ">
           <HistoryChart data={All} title={`Backlog LN (excl. Sol.Proposed)`} type="area" color={color} xvalue="date" value={`All`} />
         </div>
         <div className="m-2 rounded shadow-lg">
@@ -68,7 +78,7 @@ const LNByRegionContainer = ({ color = "#ffb74d" }) => {
             data={Logistics}
             title={`Backlog LN Logistics (excl. Sol.Proposed)`}
             type="area"
-            color="#90caf9"
+            // color="#90caf9"
             xvalue="date"
             value={`Logistics`}
           />

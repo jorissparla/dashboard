@@ -95,6 +95,7 @@ export const SideBarMenu: React.FC<Props> = ({ classes, history, toggleMenu, ope
         <ToggledNavLink title="Finance" Icon={ApplicationIcon} navigateTo="/team/finance" history={history} />
         <ToggledNavLink title="Tools" Icon={ApplicationIcon} navigateTo="/team/tools" history={history} />
         <ToggledNavLink title="Backlog" Icon={ApplicationIcon} navigateTo="/historyall" history={history} />
+        <ToggledNavLink title="Backlog LN " Icon={ApplicationIcon} navigateTo="/historyln" history={history} />
         <ToggledNavLink title="Backlog Xpert" Icon={XpertIcon} navigateTo="/historyother" history={history} />
       </ExpandableMenuItem>
       <hr className="border-t-1  bg-grey-200" />
@@ -162,7 +163,7 @@ const ExpandableMenuItem: React.FC<ExpandableProps> = ({ title, Icon, children, 
         <ListItemIcon>
           <Icon />
         </ListItemIcon>
-        <div className="font-sans font-semibold text-gray-600">{title}</div>
+        <div className="font-sans text-xs font-semibold text-gray-600">{title}</div>
       </AccordionSummary>
       <AccordionDetails className={classes.panelDetails}>{children}</AccordionDetails>
     </Accordion>

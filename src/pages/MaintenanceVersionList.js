@@ -62,7 +62,8 @@ const VersionList = ({ productline = "LN" }) => {
 
   let activeVersions = allMaintenance.filter((v) => v.version === selectedVersion);
   versions = [...new Set(allMaintenance.map((v) => v.version))];
-  // console.log('activeVersion', activeVersions, allMaintenance, selectedVersion);
+  console.log({ versions });
+  console.log("activeVersion", activeVersions, allMaintenance, selectedVersion);
   return (
     <div className="h-screen bg-gray-100">
       {versions.map((version, index) => (
