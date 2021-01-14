@@ -8,7 +8,7 @@ import red from "@material-ui/core/colors/red";
 import { withStyles } from "@material-ui/core/styles";
 import _ from "lodash";
 import React, { useEffect, useState } from "react";
-import { useMutation, useQuery } from "react-apollo";
+import { useMutation, useQuery } from "@apollo/client";
 import { withRouter } from "react-router";
 import SearchBar from "../common/SearchBar";
 import { format } from "../utils/format";

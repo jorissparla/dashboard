@@ -1,39 +1,8 @@
 import React, { useState } from "react";
 import BacklogTableNewStyle from "stats/BacklogTableNewStyle";
 import { Backlog } from "stats/BacklogType";
-import { useLocalStorage } from "../utils/useLocalStorage";
 import LoadingDots from "./../utils/LoadingDots";
-
-export function useParams(clean = false) {
-  const [C_AWAITINGCUSTOMER] = useLocalStorage("C_AWAITINGCUSTOMER", 6, clean);
-  const [C_AWAITINGINFOR] = useLocalStorage("C_AWAITINGINFOR", 1, clean);
-  const [C_RESEARCHING] = useLocalStorage("C_RESEARCHING", 3, clean);
-  const [C_NEW] = useLocalStorage("C_NEW", 1, clean);
-  const [C_MT] = useLocalStorage("C_MT", 5, clean);
-  const [N_AWAITINGCUSTOMER] = useLocalStorage("N_AWAITINGCUSTOMER", 6, clean);
-  const [N_RESEARCHING] = useLocalStorage("N_RESEARCHING", 10, clean);
-  const [N_AWAITINGINFOR] = useLocalStorage("N_AWAITINGINFOR", 2, clean);
-  const [N_NEW] = useLocalStorage("N_NEW", 1, clean);
-  const [N_SOLUTIONPROPOSED] = useLocalStorage("N_SOLUTIONPROPOSED", 30, clean);
-  const [N_AGING] = useLocalStorage("N_AGING", 90, clean);
-  const [C_AGING] = useLocalStorage("C_AGING", 30, clean);
-  const [N_MAJORIMPACT] = useLocalStorage("N_MAJORIMPACT", 2, clean);
-  return {
-    C_AWAITINGCUSTOMER,
-    N_AWAITINGCUSTOMER,
-    C_RESEARCHING,
-    N_RESEARCHING,
-    C_AWAITINGINFOR,
-    N_AWAITINGINFOR,
-    C_NEW,
-    C_MT,
-    N_NEW,
-    N_SOLUTIONPROPOSED,
-    N_AGING,
-    C_AGING,
-    N_MAJORIMPACT,
-  };
-}
+import { useParams } from "./useParam";
 
 interface Props {
   classes?: any;
@@ -58,12 +27,12 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
     .hasSeverity(["Major Impact", "Production Outage / Critical Application halted"])
     .notStatus(["Solution Proposed"])
     .getData();
-  const critical = blBase
-    .init()
-    .severity("Production Outage / Critical Application halted")
-    .notServicedRestored()
-    .notStatus(["Solution Proposed"])
-    .getData();
+  // const critical = blBase
+  //   .init()
+  //   .severity("Production Outage / Critical Application halted")
+  //   .notServicedRestored()
+  //   .notStatus(["Solution Proposed"])
+  //   .getData();
 
   const [loading, setLoading] = useState(true);
   const [avgAgeSupport, all] = blBase
@@ -132,7 +101,16 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
     .notStatus(["Solution Proposed", "Solution Pending Maintenance", "Awaiting Development"])
     .sort("dayssincelastupdate", "D")
     .getData();
-  const on_hold = blBase.init().status("On hold by customer").valid_actiondate().sort("dayssincelastupdate", "D").getData();
+  const wait = blBase
+    .init()
+    // .hasStatus(["Researching", "On Hold by Customer", "Awaiting Infor", "Awaiting Customer"])
+    .notStatus(["Solution Proposed", "Solution Pending Maintenance", "Awaiting Development"])
+    .sort("dayssincelastupdate", "D")
+    .fieldNotNull("awaitcount")
+    .sort("awaitcount", "D")
+    .getData();
+  const on_hold = blBase.init().status("On Hold by customer").invalid_onhold_date().sort("dayssincelastupdate", "D").getData();
+  console.log({ on_hold });
   const aging = blBase
     .init()
     .hasStatus(["Researching", "On Hold by Customer", "Awaiting Infor", "Awaiting Customer"])
@@ -203,6 +181,7 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
           description={`All Incidents open for our MT customers not updated > ${params.C_MT} days`}
           actionHeader={true}
         />
+
         <BacklogTableNewStyle
           filterValues={filterValues}
           additionalFields={["ownergroup"]}
@@ -226,7 +205,14 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
           description="All Incidents with a severity of 'Production Outage / Major Impact' without a restored date"
           actionHeader={true}
         />
-
+        <BacklogTableNewStyle
+          filterValues={filterValues}
+          data={wait}
+          additionalFields={["awaitcount"]}
+          title="Awaiting counts"
+          description={`All Incidents with more than 5 Awaiting Customer Events`}
+          actionHeader={true}
+        />
         <BacklogTableNewStyle
           filterValues={filterValues}
           data={pendingmaintenance}
@@ -267,7 +253,7 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
           data={on_hold}
           // data={data.on_hold}
           title="On Hold"
-          description="All Incidents with a status of On Hold By Customer with no or an Expired Action date"
+          description="All Incidents with a status of On Hold By Customer with no or an Expired Activity date"
           actionHeader={true}
         />
 

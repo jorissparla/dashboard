@@ -1,56 +1,42 @@
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  colors,
-  Divider,
-  Grid
-} from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
-import { makeStyles } from '@material-ui/styles';
-import clsx from 'clsx';
-import JoditEditor from 'jodit-react';
-import React, { useRef, useState } from 'react';
-import { useMutation } from 'react-apollo';
-import {
-  ALL_MAINTENANCE_QUERY,
-  MAINTENANCE_FAQ_QUERY,
-  MUTATION_UPDATE_MAINTENANCE,
-  MUTATION_UPDATE_MAINTENANCE_FAQ
-} from './Queries';
+import { Button, Card, CardActions, CardContent, CardHeader, colors, Divider, Grid } from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
+import { makeStyles } from "@material-ui/styles";
+import clsx from "clsx";
+import JoditEditor from "jodit-react";
+import React, { useRef, useState } from "react";
+import { useMutation } from "@apollo/client";
+import { ALL_MAINTENANCE_QUERY, MAINTENANCE_FAQ_QUERY, MUTATION_UPDATE_MAINTENANCE, MUTATION_UPDATE_MAINTENANCE_FAQ } from "./Queries";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    left: '20%',
-    top: '20%',
-    position: 'absolute',
-    width: '60%',
-    height: '70%',
-    padding: 20
+    left: "20%",
+    top: "20%",
+    position: "absolute",
+    width: "60%",
+    height: "70%",
+    padding: 20,
   },
   saveButton: {
-    color: 'white',
+    color: "white",
     backgroundColor: colors.green[600],
-    '&:hover': {
-      backgroundColor: colors.green[900]
-    }
-  }
+    "&:hover": {
+      backgroundColor: colors.green[900],
+    },
+  },
 }));
 
-const EditWizardDetails = props => {
+const EditWizardDetails = (props) => {
   const { data, value: defaultValue, className, onClose, onView, label, id, name, ...rest } = props;
   console.log(id);
   const isFAQ = rest && rest.faq;
-  console.log('isFAQ', isFAQ, name);
+  console.log("isFAQ", isFAQ, name);
   const classes = useStyles();
   const editor = useRef(null);
   const [value, setValue] = useState(defaultValue);
   const mutation = isFAQ ? MUTATION_UPDATE_MAINTENANCE_FAQ : MUTATION_UPDATE_MAINTENANCE;
   const [updateField] = useMutation(mutation);
 
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     const input = { id };
     input[name] = value;
@@ -59,12 +45,12 @@ const EditWizardDetails = props => {
       variables: { input },
       refetchQueries: [
         {
-          query: ALL_MAINTENANCE_QUERY
+          query: ALL_MAINTENANCE_QUERY,
         },
         {
-          query: MAINTENANCE_FAQ_QUERY
-        }
-      ]
+          query: MAINTENANCE_FAQ_QUERY,
+        },
+      ],
     });
     onClose();
   };
@@ -76,7 +62,7 @@ const EditWizardDetails = props => {
     autoHeight: true,
     showWordsCounter: false,
     showXPathInStatusbar: false,
-    showCharsCounter: false
+    showCharsCounter: false,
   };
   return (
     <Card {...rest} className={clsx(classes.root, className)}>
@@ -86,13 +72,13 @@ const EditWizardDetails = props => {
         <CardContent>
           <Grid container spacing={4}>
             <JoditEditor
-              style={{ font: '24px Arial', color: '#000' }}
+              style={{ font: "24px Arial", color: "#000" }}
               ref={editor}
               value={value}
               config={config}
               tabIndex={1} // tabIndex of textarea
-              onBlur={newContent => setValue(newContent)} // preferred to use only this option to update the content for performance reasons
-              onChange={newContent => {
+              onBlur={(newContent) => setValue(newContent)} // preferred to use only this option to update the content for performance reasons
+              onChange={(newContent) => {
                 console.log(newContent);
               }}
             />

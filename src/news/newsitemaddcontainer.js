@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 import React from "react";
-import { useMutation } from "react-apollo";
+import { useMutation } from "@apollo/client";
 import { useHistory } from "react-router";
 import NewsItem from "./newsitem";
 import { QUERY_ALL_NEWS_EDIT_PAGE } from "pages/newslistcontainer";
@@ -9,7 +9,7 @@ function NewsItemAddContainer() {
   const [createNews] = useMutation(MUTATION_CREATE_NEWS);
   const history = useHistory();
 
-  const doSubmit = async values => {
+  const doSubmit = async (values) => {
     await createNews({ variables: { input: values }, refetchQueries: [{ query: QUERY_ALL_NEWS_EDIT_PAGE }] });
     setTimeout(() => history.push("/news"), 500);
   };

@@ -1,5 +1,5 @@
 import gql from "graphql-tag";
-import { graphql } from "react-apollo";
+import { graphql } from "@apollo/client/react/hoc";
 import React from "react";
 import { withRouter } from "react-router";
 import SupportCardForm from "./SupportCardForm";
@@ -35,7 +35,7 @@ const SupportCardAdd = ({ data: { loading, error, categories }, addSupportCard, 
         readOnly={false}
         authenticated={authenticated}
         categories={categories}
-        initialValues={{ category: "IXS", title: "Title comes here", description, updatedAt: null }}
+        initialValues={{ category: "Portal", title: "Title comes here", description, updatedAt: null }}
       />
     </div>
   );

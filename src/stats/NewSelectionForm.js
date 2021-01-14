@@ -1,15 +1,14 @@
 import { Switch } from "@material-ui/core";
+import AutoComplete from "elements/AutoComplete";
 import { usePersistentState } from "hooks";
 import { PRODUCT_LIST, REGION_LIST_2 } from "pages/Stats";
 import React, { useState } from "react";
 
-export const SelectionForm = ({ classes, initialValue, valuesChanged, isValidSuperUser, onChange, onNavigateToParams }) => {
+export const SelectionForm = ({ classes, initialValue, valuesChanged, isValidSuperUser, onChange, onNavigateToParams, accounts }) => {
   const [selectedProducts, setSelectedProducts] = usePersistentState("selectedproducts", ["LN"]);
   const [ownerVal, setOwnerVal] = useState(initialValue.owner);
-  const [person, setPerson] = useState("");
   const [region, setRegion] = usePersistentState("region", "EMEA");
   const [showDropDown, toggle] = useState(false);
-  const [actionNeeded, setActionNeeded] = useState(false);
   const [allOwners, toggleAllOwners] = useState(false);
 
   // const [labelWidth, setLabelWidth] = React.useState(0);
@@ -27,21 +26,21 @@ export const SelectionForm = ({ classes, initialValue, valuesChanged, isValidSup
   //   doAddPersonToLocalStorage(initialValue.owner);
   // }, []);
 
-  const doAddPersonToLocalStorage = (newPerson) => {
-    const item = window.localStorage.getItem("worklist.favorite.persons");
-    let persons = [];
-    if (!item || item.length === 0) {
-      persons = [];
-    } else {
-      persons = JSON.parse(item);
-      console.log("do", item, persons, typeof persons);
-    }
-    persons = persons.filter((person) => newPerson !== person.name).concat({ name: newPerson });
+  // const doAddPersonToLocalStorage = (newPerson) => {
+  //   const item = window.localStorage.getItem("worklist.favorite.persons");
+  //   let persons = [];
+  //   if (!item || item.length === 0) {
+  //     persons = [];
+  //   } else {
+  //     persons = JSON.parse(item);
+  //     console.log("do", item, persons, typeof persons);
+  //   }
+  //   persons = persons.filter((person) => newPerson !== person.name).concat({ name: newPerson });
 
-    window.localStorage.setItem("worklist.favorite.persons", JSON.stringify(persons));
-    // setPersons(persons);
-    return persons;
-  };
+  //   window.localStorage.setItem("worklist.favorite.persons", JSON.stringify(persons));
+  //   // setPersons(persons);
+  //   return persons;
+  // };
 
   function toggleSet(value) {
     console.log("toggle selectedProducts", selectedProducts, value);
@@ -65,45 +64,12 @@ export const SelectionForm = ({ classes, initialValue, valuesChanged, isValidSup
   function toggleDropDown() {
     toggle(!showDropDown);
   }
+  const support = accounts ? accounts.map((s) => s.fullname).sort((a, b) => (a > b ? 1 : -1)) : [];
   return (
     // <Paper className={classes.paper2}>
     <div className="mb-4 rounded shadow-lg bg-white px-3 py-2 flex items-center w-full text-gray-700 flex-wrap">
-      <div className="rounded-md shadow-sm">
-        <input
-          className="form-input"
-          type="text"
-          placeholder="enter name of person"
-          value={ownerVal}
-          disabled={!isValidSuperUser}
-          onChange={(event) => {
-            setOwnerVal(event.target.value);
-          }}
-          onMouseDown={(e) => {
-            console.log(e);
-            if (e.nativeEvent.which === 3) {
-              doAddPersonToLocalStorage(ownerVal);
-            }
-          }}
-        />
-      </div>
-      {/* <TextField
-        value={ownerVal}
-        disabled={!isValidSuperUser}
-        onMouseDown={(e) => {
-          if (e.nativeEvent.which === 3) {
-            doAddPersonToLocalStorage(ownerVal);
-          }
-        }}
-        onChange={(event) => {
-          setOwnerVal(event.target.value);
-        }}
-        onKeyDown={(event) => {
-          if (event.keyCode === 13) {
-            console.log(event.target);
-          }
-        }}
-        placeholder="name of person"
-      /> */}
+      <AutoComplete support={support} value={ownerVal} disabled={!isValidSuperUser} onChangeValue={(name) => setOwnerVal(name)} />
+
       {/* {isValidSuperUser && <FormLabel>Clear Owner / All Owners</FormLabel>} */}
       {isValidSuperUser && (
         <label className="ml-2">
@@ -138,15 +104,7 @@ export const SelectionForm = ({ classes, initialValue, valuesChanged, isValidSup
       >
         Search
       </button>
-      {/* <FormLabel> Only Actions Needed</FormLabel>
-      <Switch
-        checked={actionNeeded}
-        onChange={(e) => {
-          setActionNeeded(!actionNeeded);
-        }}
-        value={actionNeeded}
-        color="secondary"
-      /> */}
+
       <div className="border border-gray-200 p-2 m-2 rounded">
         {PRODUCT_LIST.map((product) => (
           <label className="inline-flex items-center" key={product}>
@@ -230,7 +188,6 @@ export const SelectionForm = ({ classes, initialValue, valuesChanged, isValidSup
         Parameters
       </button>
       {/* )} */}
-
       {persons && persons.length > 0 && (
         <label className="flex mr-4 items-center px-4">
           <span className="text-gray-700">People</span>

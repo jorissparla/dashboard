@@ -1,6 +1,6 @@
 import { usePersistentState } from "hooks";
 import React from "react";
-import { useQuery } from "react-apollo";
+import { useQuery } from "@apollo/client";
 import styled from "styled-components";
 import Spinner from "../utils/spinner";
 import { format } from "./../utils/format";
@@ -27,13 +27,11 @@ const Box = styled.div`
   color: ${(props) => (props.textcolor ? props.textcolor : "#4a5568")};
   background-color: ${(props) => (props.color ? props.color : "lightblue")};
   border-radius: 0.5rem;
-  background-image: ${(props) =>
-    `linear-gradient(to bottom right, ${props.color || "black"}, white)`};
+  background-image: ${(props) => `linear-gradient(to bottom right, ${props.color || "black"}, white)`};
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
   padding: 1rem;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
-    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
 `;
 
 const P = styled.div`
@@ -77,16 +75,12 @@ export default function PriorityDashboard() {
     } else return incidents;
   }
   console.log(all.length, filterByRegion(all.length));
-  const escalated = filterByRegion(
-    active.filter((item) => item.escalated !== 0)
-  );
+  const escalated = filterByRegion(active.filter((item) => item.escalated !== 0));
   const sev2 = filterByRegion(
     active
       .filter((item) => item.severity === 3)
       .map((item) => {
-        const account = accounts.find(
-          (account) => account.fullname === item.owner
-        );
+        const account = accounts.find((account) => account.fullname === item.owner);
         let image;
         if (account) {
           image = account.image || "";
@@ -98,9 +92,7 @@ export default function PriorityDashboard() {
     all
       .filter((item) => item.severity === 4)
       .map((item) => {
-        const account = accounts.find(
-          (account) => account.fullname === item.owner
-        );
+        const account = accounts.find((account) => account.fullname === item.owner);
         let image;
         if (account) {
           image = account.image || "";
@@ -142,15 +134,9 @@ export default function PriorityDashboard() {
             bgclass = "bg-red-100 shadow-xl-red";
           }
           console.log(item.severity);
-          const statusColor =
-            item.status === "Awaiting Infor"
-              ? "bg-orange-700 text-orange-200 "
-              : "bg-teal-700 text-teal-100 ";
+          const statusColor = item.status === "Awaiting Infor" ? "bg-orange-700 text-orange-200 " : "bg-teal-700 text-teal-100 ";
           return (
-            <div
-              key={item.incident}
-              className={`flex w-1/4 max-w-xs flex-col m-2 justify-end border ${bgclass} rounded-lg  overflow-hidden`}
-            >
+            <div key={item.incident} className={`flex w-1/4 max-w-xs flex-col m-2 justify-end border ${bgclass} rounded-lg  overflow-hidden`}>
               <img
                 className="h-32 w-full object-cover"
                 src={
@@ -161,40 +147,25 @@ export default function PriorityDashboard() {
               />
               <div className="p-2">
                 <div className="flex items-baseline">
-                  <div className="ml-2 text-gray-600  uppercase font-semibold tracking-wider">
-                    {item.owner}
-                  </div>
+                  <div className="ml-2 text-gray-600  uppercase font-semibold tracking-wider">{item.owner}</div>
                 </div>
               </div>
               <h3 className="align-text-bottom bt-2 px-2 border-gray-700 font-semibold text-gray-700 mb-2 text-left overflow-hidden font-pop uppercase">
                 {item.customername}
               </h3>
-              <div className="mb-2 mr-2 px-4 h-8 max-w-sm text-gray-600 flex items-baseline text-xs overflow-hidden">
-                {item.title}
-              </div>
+              <div className="mb-2 mr-2 px-4 h-8 max-w-sm text-gray-600 flex items-baseline text-xs overflow-hidden">{item.title}</div>
               <div className="flex items-baseline px-2">
-                <span
-                  className={`mb-2  inline-block  ${statusColor} text-xs px-2 py-1 rounded-full  font-semibold tracking-wide`}
-                >
+                <span className={`mb-2  inline-block  ${statusColor} text-xs px-2 py-1 rounded-full  font-semibold tracking-wide`}>
                   {item.status}
                 </span>
-                <div className="ml-2 text-gray-600 text-xs uppercase font-semibold tracking-wide">
-                  {item.incident}
-                </div>
+                <div className="ml-2 text-gray-600 text-xs uppercase font-semibold tracking-wide">{item.incident}</div>
               </div>
 
               <div className="flex  mb-2 px-1">
-                <svg
-                  className="fill-current w-4 h-4 text-gray-500 mr-2"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                >
+                <svg className="fill-current w-4 h-4 text-gray-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                   <path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-7.59V4h2v5.59l3.95 3.95-1.41 1.41L9 10.41z" />
                 </svg>
-                <span className="text-xs tracking-widest">
-                  Last updated:{" "}
-                  {format(item.lastupdated, "EEE, dd-MMM-yyyy hh:mm")}
-                </span>
+                <span className="text-xs tracking-widest">Last updated: {format(item.lastupdated, "EEE, dd-MMM-yyyy hh:mm")}</span>
               </div>
             </div>
           );

@@ -14,7 +14,7 @@ const Percentage = styled.div<{ percentage: any }>`
   grid-row: 3;
 
   .perc_in {
-    width: ${props => (props.percentage ? `props.percentage` : `50%`)};
+    width: ${(props) => (props.percentage ? `props.percentage` : `50%`)};
     font-size: 20px;
     background: rgb(16, 180, 79);
   }
@@ -47,21 +47,13 @@ interface IPapier {
   backgroundColor?: string;
 }
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-`;
-
 const StyledPapier = styled.div`
   color: black;
-  background-color: ${(props: IPapier) =>
-    props.backgroundColor ? props.backgroundColor : "rgb(127, 186, 219)"};
+  background-color: ${(props: IPapier) => (props.backgroundColor ? props.backgroundColor : "rgb(127, 186, 219)")};
   transition: all 450ms cubic-bezier(0.23, 1, 0.32, 1) 0ms;
   box-sizing: border-box;
   font-family: Roboto, sans-serif;
-  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 30px,
-    rgba(0, 0, 0, 0.23) 0px 6px 10px;
+  box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 30px, rgba(0, 0, 0, 0.23) 0px 6px 10px;
   border-radius: 2px;
   display: flex;
   flex-direction: column;
@@ -134,16 +126,14 @@ export const SurveyComponent: React.FC<Props> = ({
   feedback_comments,
   pct_feedback_comments,
   uncategorized,
-  pct_uncategorized
+  pct_uncategorized,
 }) => {
   const pct = Math.round((100 * responded) / sent);
   return (
     <div className="bg-gray-100 pt-2 ">
       <div className="max-w-screen-xl mx-auto px-4 ">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl leading-9 font-extrabold text-gray-900 ">
-            Quick Satisfaction Survey Results
-          </h2>
+          <h2 className="text-3xl leading-9 font-extrabold text-gray-900 ">Quick Satisfaction Survey Results</h2>
           {/* <p className="mt-3 text-xl leading-7 text-gray-500 ">
        Quick Satisfaction Survey Results
       </p> */}
@@ -156,52 +146,28 @@ export const SurveyComponent: React.FC<Props> = ({
             <div className="max-w-6xl mx-auto">
               <div className="rounded-lg bg-white shadow-lg flex items-center justify-between">
                 <div className="border-r border-gray-200 p-6 text-center ">
-                  <p className="text-5xl leading-none font-extrabold text-indigo-600">
-                    {sent}
-                  </p>
-                  <p className="mt-2 text-lg leading-6 font-medium text-gray-500">
-                    Invitations Sent
-                  </p>
+                  <p className="text-5xl leading-none font-extrabold text-indigo-600">{sent}</p>
+                  <p className="mt-2 text-lg leading-6 font-medium text-gray-500">Invitations Sent</p>
                 </div>
                 <div className="border-r border-gray-200 p-6 text-center ">
-                  <p className="text-5xl leading-none font-extrabold text-indigo-600">
-                    {responded}
-                  </p>
-                  <p className="mt-2 text-lg leading-6 font-medium text-gray-500">
-                    Responses
-                  </p>
+                  <p className="text-5xl leading-none font-extrabold text-indigo-600">{responded}</p>
+                  <p className="mt-2 text-lg leading-6 font-medium text-gray-500">Responses</p>
                 </div>
                 <div className="border-r border-gray-200 p-6 text-center ">
-                  <p className="text-5xl leading-none font-extrabold text-teal-600">
-                    {pct}%
-                  </p>
-                  <p className="mt-2 text-lg leading-6 font-medium text-gray-500">
-                    Responded
-                  </p>
+                  <p className="text-5xl leading-none font-extrabold text-teal-600">{pct}%</p>
+                  <p className="mt-2 text-lg leading-6 font-medium text-gray-500">Responded</p>
                 </div>
                 <div className="border-t border-r border-gray-100 p-6 text-center ">
-                  <p className="text-5xl leading-none font-extrabold text-indigo-600">
-                    {pct_satisfied}%
-                  </p>
-                  <p className="mt-2 text-lg leading-6 font-medium text-gray-500">
-                    Satisfied
-                  </p>
+                  <p className="text-5xl leading-none font-extrabold text-indigo-600">{pct_satisfied}%</p>
+                  <p className="mt-2 text-lg leading-6 font-medium text-gray-500">Satisfied</p>
                 </div>
                 <div className="border-r border-gray-100 p-6 text-center ">
-                  <p className="text-5xl leading-none font-extrabold text-indigo-600">
-                    {satisfied_feedback}
-                  </p>
-                  <p className="mt-2 text-lg leading-6 font-medium text-gray-500">
-                    Satisfied feedback
-                  </p>
+                  <p className="text-5xl leading-none font-extrabold text-indigo-600">{satisfied_feedback}</p>
+                  <p className="mt-2 text-lg leading-6 font-medium text-gray-500">Satisfied feedback</p>
                 </div>
                 <div className="border-r border-gray-100 p-6 text-center ">
-                  <p className="text-5xl leading-none font-extrabold text-indigo-600">
-                    {pct_feedback_comments}%
-                  </p>
-                  <p className="mt-2 text-lg leading-6 font-medium text-gray-500">
-                    Left Comments
-                  </p>
+                  <p className="text-5xl leading-none font-extrabold text-indigo-600">{pct_feedback_comments}%</p>
+                  <p className="mt-2 text-lg leading-6 font-medium text-gray-500">Left Comments</p>
                 </div>
               </div>
             </div>
@@ -240,75 +206,3 @@ export const SurveyComponent: React.FC<Props> = ({
   //   </div>
   // );
 };
-
-interface RRProps {
-  sent: number;
-  responded: number;
-  pct: number;
-}
-const ResponseRate: React.FC<RRProps> = ({ sent, responded, pct }) => (
-  <StyledPapier width="30%" backgroundColor="#EEE;">
-    <TitlesRow>
-      <div style={{ paddingRight: 10 }}>Sent</div>
-      <div style={{ paddingLeft: 10 }}>Responded</div>
-    </TitlesRow>
-    <ResultsRow>
-      <div style={{ paddingRight: 10 }}>{sent}</div>
-      <div style={{ paddingLeft: 10 }}>{responded}</div>
-    </ResultsRow>
-    <BottomBar>
-      <PercentageComponent percentage={pct} />
-    </BottomBar>
-  </StyledPapier>
-);
-
-interface SatisfactionProps {
-  pct_satisfied: number;
-  pct_dissatisfied: number;
-}
-const Satisfaction: React.FC<SatisfactionProps> = ({
-  pct_satisfied,
-  pct_dissatisfied
-}) => (
-  <StyledPapier width="30%" backgroundColor="#EEE;">
-    <TitlesRow>
-      <div>Overall Satisfaction</div>
-    </TitlesRow>
-    <ResultsRow>
-      <GreenBox />
-      <div>{pct_satisfied}%</div>
-      <NormalText>{"    "}Satisfied</NormalText>
-    </ResultsRow>
-    <ResultsRow>
-      <RedBox />
-      <div>{pct_dissatisfied}%</div>
-      <NormalText>Unsatisfied</NormalText>
-    </ResultsRow>
-  </StyledPapier>
-);
-interface FeedbackProps {
-  satisfied_feedback: number;
-  feedback_comments: number;
-  pct_feedback_comments: number;
-}
-const Feedback: React.FC<FeedbackProps> = ({
-  satisfied_feedback,
-  feedback_comments,
-  pct_feedback_comments
-}) => (
-  <StyledPapier width="30%" backgroundColor="#EEE;">
-    <TitlesRow>
-      <div>Satisfied Feedback</div>
-    </TitlesRow>
-    <ResultsRow>
-      <GreenBox />
-      <div>{satisfied_feedback}</div>
-      <UnNormalText>Comments({pct_feedback_comments}%)</UnNormalText>
-    </ResultsRow>
-    <ResultsRow>
-      <GreenBox />
-      <div>{feedback_comments}</div>
-      <NormalText>Comments({pct_feedback_comments}%)</NormalText>
-    </ResultsRow>
-  </StyledPapier>
-);

@@ -1,27 +1,20 @@
+import { ApolloClient, ApolloProvider, InMemoryCache, split } from "@apollo/client";
+import { WebSocketLink } from "@apollo/client/link/ws";
+import { getMainDefinition } from "@apollo/client/utilities";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
-import { InMemoryCache } from "apollo-cache-inmemory";
-import ApolloClient from "apollo-client";
-import { split } from "apollo-link";
-import { WebSocketLink } from "apollo-link-ws";
 import { createUploadLink } from "apollo-upload-client";
-import { getMainDefinition } from "apollo-utilities";
 import React from "react";
-import { ApolloProvider } from "react-apollo";
 import ReactDOM from "react-dom";
-import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
-import { applyMiddleware, createStore } from "redux";
-import promise from "redux-promise";
-import reduxThunk from "redux-thunk";
 import { createGlobalStyle } from "styled-components";
 import Spinner from "utils/spinner";
-import { AUTH_USER } from "./actions";
+// import { AUTH_USER } from "./actions";
 import ContextProvider from "./globalState";
 import "./index.css";
-import "./styles/app.css";
 import App from "./Navigation/Nav";
-import reducers from "./reducers";
+// import reducers from "./reducers";
 import AppRoutes from "./routes";
+import "./styles/app.css";
 import { main } from "./styles/globalstyles";
 
 // import { SharedSnackbarProvider } from './globalState/SharedSnackbar.context';
@@ -50,7 +43,7 @@ const wsLink = new WebSocketLink({
   },
 });
 uri = prefix === "https" ? "https://" + uri : "http://" + uri;
-const httpLink = createUploadLink({ uri, credentials: "include" });
+const httpLink: any = createUploadLink({ uri, credentials: "include" });
 interface Definintion {
   kind: string;
   operation?: string;
@@ -70,21 +63,13 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-const createStoreWithMiddleware = applyMiddleware(promise, reduxThunk)(createStore);
-const store = createStoreWithMiddleware(reducers);
-
-const token = localStorage.getItem("token");
-const user = {
-  email: localStorage.getItem("email"),
-  picture: localStorage.getItem("picture"),
-  role: localStorage.getItem("role"),
-  fullname: localStorage.getItem("name"),
-};
-// If we have a token, consider the user to be signed in
-if (token) {
-  // we need to update application state
-  store.dispatch({ type: AUTH_USER, user });
-}
+// const token = localStorage.getItem("token");
+// const user = {
+//   email: localStorage.getItem("email"),
+//   picture: localStorage.getItem("picture"),
+//   role: localStorage.getItem("role"),
+//   fullname: localStorage.getItem("name"),
+// };
 
 const muiTheme = createMuiTheme({
   palette: {
@@ -125,22 +110,22 @@ const muiTheme = createMuiTheme({
 const Main = () => (
   <ApolloProvider client={client}>
     <Global />
-    <Provider store={store}>
-      <MuiThemeProvider theme={muiTheme}>
-        <ContextProvider>
-          <BrowserRouter>
-            {/* <SharedSnackbarProvider> */}
-            <>
-              <App />
-              <React.Suspense fallback={<Spinner loadingMessage="Loading data" />}>
-                <AppRoutes />
-              </React.Suspense>
-            </>
-            {/* </SharedSnackbarProvider> */}
-          </BrowserRouter>
-        </ContextProvider>
-      </MuiThemeProvider>
-    </Provider>
+    {/* <Provider store={store}> */}
+    <MuiThemeProvider theme={muiTheme}>
+      <ContextProvider>
+        <BrowserRouter>
+          {/* <SharedSnackbarProvider> */}
+          <>
+            <App />
+            <React.Suspense fallback={<Spinner loadingMessage="Loading data" />}>
+              <AppRoutes />
+            </React.Suspense>
+          </>
+          {/* </SharedSnackbarProvider> */}
+        </BrowserRouter>
+      </ContextProvider>
+    </MuiThemeProvider>
+    {/* </Provider> */}
   </ApolloProvider>
 );
 

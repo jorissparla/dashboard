@@ -10,54 +10,48 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  TextField
-} from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
-import { makeStyles } from '@material-ui/styles';
-import clsx from 'clsx';
-import React, { useEffect, useState } from 'react';
-import { useMutation } from 'react-apollo';
-import { ALL_SYMPTOMS, UPDATE_SYMPTOM_REQUEST_MUTATION } from './Queries';
+  TextField,
+} from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
+import { makeStyles } from "@material-ui/styles";
+import clsx from "clsx";
+import React, { useEffect, useState } from "react";
+import { useMutation } from "@apollo/client";
+import { ALL_SYMPTOMS, UPDATE_SYMPTOM_REQUEST_MUTATION } from "./Queries";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    left: '20%',
-    top: '20%',
-    position: 'absolute',
-    width: '60%'
+    left: "20%",
+    top: "20%",
+    position: "absolute",
+    width: "60%",
   },
   formControl: {
     margin: theme.spacing(1),
-    minWidth: 120
+    minWidth: 120,
   },
   saveButton: {
-    color: 'white'
+    color: "white",
     // backgroundColor: colors.green[600],
     // '&:hover': {
     //   backgroundColor: colors.green[900]
     // }
-  }
+  },
 }));
 
-export default function FormDialog({
-  onClose,
-  className,
-  defaultValues = null,
-  categories = [],
-  ...rest
-}) {
+export default function FormDialog({ onClose, className, defaultValues = null, categories = [], ...rest }) {
   const [values, setValues] = useState({
-    symptom_category: '',
+    symptom_category: "",
     id: null,
-    symptom: '',
-    incident: ''
+    symptom: "",
+    incident: "",
   });
 
-  console.log('Rendering defaultsEdit', values, defaultValues);
+  console.log("Rendering defaultsEdit", values, defaultValues);
   useEffect(() => {
     if (defaultValues) {
       setValues(defaultValues);
-      console.log('defaultValues', defaultValues);
+      console.log("defaultValues", defaultValues);
     }
   }, [defaultValues]);
 
@@ -69,7 +63,7 @@ export default function FormDialog({
   const classes = useStyles();
   const [updateSymptomRequest] = useMutation(UPDATE_SYMPTOM_REQUEST_MUTATION);
 
-  const handleSubmit = async event => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     // console.log('Submitted values', values);
     const { symptom, incident, symptom_category, status } = values;
@@ -78,19 +72,19 @@ export default function FormDialog({
     console.log(input);
     const result = await updateSymptomRequest({
       variables: { where: { id: values.id }, input },
-      refetchQueries: [{ query: ALL_SYMPTOMS }]
+      refetchQueries: [{ query: ALL_SYMPTOMS }],
     });
-    console.log('The result is ', result);
+    console.log("The result is ", result);
     onClose();
     // setOpenSnackbar(true);
   };
-  const handleChange = event => {
+  const handleChange = (event) => {
     event.persist();
     setValues({
       ...values,
-      [event.target.name]: event.target.value
+      [event.target.name]: event.target.value,
     });
-    console.log('Editing values', event.target.name, event.target.value);
+    console.log("Editing values", event.target.name, event.target.value);
   };
   return (
     <Card {...rest} className={clsx(classes.root, className)}>
@@ -114,11 +108,7 @@ export default function FormDialog({
             <Grid item md={12} xs={12}>
               <FormControl className={classes.formControl}>
                 <InputLabel htmlFor="category">Category</InputLabel>
-                <Select
-                  value={values.symptom_category}
-                  onChange={handleChange}
-                  name="symptom_category"
-                >
+                <Select value={values.symptom_category} onChange={handleChange} name="symptom_category">
                   {categories.map(({ id, symptom_category }) => {
                     return (
                       <MenuItem key={id} value={symptom_category}>
@@ -147,13 +137,8 @@ export default function FormDialog({
         </CardContent>
         <Divider />
         <CardActions>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Button
-              className={classes.saveButton}
-              type="submit"
-              variant="contained"
-              color="primary"
-            >
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <Button className={classes.saveButton} type="submit" variant="contained" color="primary">
               Save Changes
             </Button>
             <Button className={classes.saveButton} variant="contained" color="#000">

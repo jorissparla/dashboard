@@ -1,76 +1,20 @@
-import React from "react";
+import { useQuery } from "@apollo/client";
+import clsx from "clsx";
+import Button from "elements/TWButton";
 import gql from "graphql-tag";
-import { graphql, useQuery } from "react-apollo";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import Avatar from "@material-ui/core/Avatar";
-import styled from "styled-components";
 import _ from "lodash";
+import React, { useState } from "react";
+import { animated, useSpring } from "react-spring";
+import Spinner from "utils/spinner";
 //import { format } from "date-fns";
 import { format } from "../utils/format";
-import { withStyles } from "@material-ui/core/styles";
-import clsx from "clsx";
+import { NoData } from "./NoData";
 const colors = ["#BA68C8", "#81D4FA", "#FF7043", "#8BC34A", "#ec407a", "#1da1f2", "#E57373"];
-
-const styles = (theme) => ({
-  root: {
-    backgroundColor: theme.palette.background.paper,
-    width: 500,
-  },
-  color0: {
-    backgroundColor: "#1da1f2",
-  },
-  color1: {
-    backgroundColor: "#BA68C8",
-  },
-  color2: {
-    backgroundColor: "#81D4FA",
-  },
-  color3: {
-    backgroundColor: "#FF7043",
-  },
-});
-
-const Div = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const Span = styled.div`
-  display: flex;
-  flex-grow: 1;
-
-  font-family: sans-serif;
-  color: rgba(0, 0, 0, 0.75);
-  letter-spacing: 0.1rem;
-  font-size: 16px;
-  font-wwidth: 52%;
-`;
-
-const Mid = styled.div`
-  flex-grow: 1;
-  font-weight: bold;
-  font-size: 16px;
-  color: black;
-  border-radius: 2px;
-  width: 5%;
-`;
-
-const Right = styled.div`
-  display: flex;
-  flex-grow: 1;
-  font-weight: bold;
-  font-size: 16px;
-  color: black;
-  width: 33%;
-  justify-content: flex-end;
-`;
 
 const dayPart = (d) => format(d, "dd");
 const monthPart = (d) => format(d, "MMMM");
 
-const GoLiveItem = ({ item, bg = "#ec407a", index }) => {
+const GoLiveItem = ({ item, bg = "#ec407a", index, handleSetActive }) => {
   const { id, day, customername, customerid, region, version, comments } = item;
   const nr = index % 3;
   const baseClass = `w-12 h-12 p-2 mt-2 ml-2 flex items-center justify-center text-xl rounded-full shadow-xl col-span-1 row-span-2 `;
@@ -78,9 +22,9 @@ const GoLiveItem = ({ item, bg = "#ec407a", index }) => {
   const cls = clsx(baseClass, colorClass);
   return (
     <div
-      className="grid grid-cols-10 grid-rows-2 mt-2 border-b border-gray-200"
+      className="grid grid-cols-11 grid-rows-2  border-b border-gray-200 hover:bg-gray-200 cursor-pointer"
       key={id}
-      onClick={() => window.open(`http://navigator.infor.com/n/incident_list.asp?ListType=CUSTOMERID&Value=${customerid}`)}
+      onClick={() => handleSetActive(item)}
     >
       <div className={cls}>{day}</div>
       <div className="col-span-6 row-span-2">
@@ -89,18 +33,42 @@ const GoLiveItem = ({ item, bg = "#ec407a", index }) => {
       </div>
       <div className="col-span-1 row-span-2 font-semibold flex items-center justify-center">{`${region}`}</div>
       <div className="col-span-2 row-span-2 flex items-center justify-start text-sm">{version}</div>
+      <div className="col-span-1 flex items-center pt-2">
+        <Button color="transp" onClick={() => window.open(`http://navigator.infor.com/n/incident_list.asp?ListType=CUSTOMERID&Value=${customerid}`)}>
+          Incidents
+        </Button>
+      </div>
     </div>
   );
 };
 
-const RenderMonthItems = ({ items }) => items.map((item, index) => <GoLiveItem key={index} item={item} bg={colors[index % 6]} index={index} />);
-
 const GoLivesContainer = () => {
+  const [editDialogVisible, setEditDialogVisible] = useState(false);
+  const [activeEvent, setActiveEvent] = useState(null);
   const { data, loading } = useQuery(UPCOMING_GOLIVES_QUERY);
+  const { x: fi } = useSpring({
+    x: editDialogVisible ? 0 : 100,
+  });
+  const { x: xsettings } = useSpring({
+    x: editDialogVisible ? 0 : 100,
+  });
+  const editProps = useSpring({ opacity: editDialogVisible ? 1 : 0 });
   if (loading) {
-    return <div>Loading...</div>;
+    return <Spinner loadingMessage="fetching data" />;
   }
-  const { golives } = data;
+  console.log("data", data);
+  if (!data) {
+    return (
+      <NoData>
+        <p>No Data Found. contact your system administrator</p>
+      </NoData>
+    );
+  }
+  const editItem = (item) => {
+    setActiveEvent(item);
+    setEditDialogVisible(true);
+  };
+  const { golives = null } = data;
   const goLivesByMonth = _.chain(golives)
     .sortBy((o) => Date.parse(o.date))
     .groupBy(function (g) {
@@ -108,17 +76,80 @@ const GoLivesContainer = () => {
     })
     .map((o) => _.map(o, (i) => _.merge({ day: dayPart(i.date), month: monthPart(i.date) }, i)))
     .value();
+  console.log({ goLivesByMonth });
   return (
-    <List style={{ backgroundColor: "white" }}>
-      {goLivesByMonth.map((m, index) => (
+    <div className="bg-white h-screen">
+      <div className="w-full text-sm text-gray-500 font-sans ml-2 py-2">data was last updated: {format(golives[0].lastupdated, "EEEE, d MMMM ")}</div>
+      {goLivesByMonth.map((events, index) => (
         <div key={index}>
-          <div className="flex bg-gray-200 text-lg py-3 pl-6 items-center text-gray-700 font-semibold font-pop shadow-lg">{m[0].month}</div>
-          <RenderMonthItems items={m} />
+          <div className="flex bg-gray-200 text-lg py-3 pl-6 items-center text-gray-700 font-semibold font-pop shadow-lg">{events[0].month}</div>
+          {events.map((item, index) => (
+            <GoLiveItem key={index} item={item} bg={colors[index % 6]} index={index} handleSetActive={editItem} />
+          ))}
         </div>
       ))}
-    </List>
+      {editDialogVisible && (
+        <animated.div style={editProps}>
+          <div className="inset-x-0 inset-y-2 flex z-50 bg-gray-700  bg-opacity-50 absolute w-2/3 ">
+            <EditEventDialogDetails activeEvent={activeEvent} onClose={() => setEditDialogVisible(false)} />
+          </div>
+        </animated.div>
+      )}
+    </div>
   );
 };
+
+function EditEventDialogDetails({ activeEvent, onClose }) {
+  const [values, setValues] = useState(activeEvent);
+  if (!activeEvent) {
+    return <div>No data</div>;
+  }
+
+  const handleChange = (event) => {
+    event.persist();
+    console.log(event.target, values);
+
+    setValues({
+      ...values,
+      [event.target.name]: event.target.type === "checkbox" ? event.target.checked : event.target.value,
+    });
+  };
+  const { customername, id, comments } = activeEvent;
+  return (
+    <div className="bg-white  px-4 font-sans right-0 w-2/3 flex h-full fixed z-50 shadow-lg rounded  flex-col mt-12">
+      <div className="mt-5 py-4">
+        <Button type="submit" color="teal" variant="contained">
+          Save Changes
+        </Button>
+        <Button onClick={onClose} size="small">
+          Close
+        </Button>
+        <button className="btn-base">Base</button>
+      </div>
+      <h1 className="text-2xl font-bold text-blue-500 mb-2">{customername}</h1>
+      <div>
+        <label for="pm" className="block text-sm font-medium leading-5 text-gray-700">
+          Version
+        </label>
+        <input className="form-input w-full" name="version" placeholder="Enter Comments here..." value={values.version} onChange={handleChange} />
+      </div>
+      <div>
+        <label for="pm" className="block text-sm font-medium leading-5 text-gray-700">
+          Update Comments
+        </label>
+        <textarea
+          className="form-textarea w-full resize-none"
+          placeholder="Enter Comments here..."
+          name="comments"
+          cols={150}
+          rows={20}
+          value={values.comments}
+          onChange={handleChange}
+        />
+      </div>
+    </div>
+  );
+}
 
 const UPCOMING_GOLIVES_QUERY = gql`
   query UPCOMING_GOLIVES_QUERY {
@@ -131,6 +162,7 @@ const UPCOMING_GOLIVES_QUERY = gql`
       version
       comments
       date
+      lastupdated
     }
   }
 `;

@@ -1,0 +1,14 @@
+.ck-editor__editable_inline {
+  padding: 1rem;
+}
+.ck.ck-editor__main > .ck-editor__editable:not(.ck-focused) {
+  border: none;
+  /* box-shadow: 2px 5px 8px rgba(0, 0, 0, 0.2); */
+  --tw-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+  border-radius: 4px;
+}
+.ck.ck-reset_all,
+.ck.ck-reset_all * {
+  border: none;
+}

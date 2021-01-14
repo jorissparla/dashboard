@@ -4,12 +4,13 @@
   "editor.fontLigatures": true,
   "editor.fontFamily": "'Cascadia Mono PL'",
   "editor.fontSize": 15,
+
   "workbench.colorCustomizations": {
     "titleBar.activeForeground": "#fff",
     "titleBar.inactiveForeground": "#ffffffCC",
     "titleBar.activeBackground": "#5e4052",
     "titleBar.inactiveBackground": "#5e4052"
   },
-  "workbench.colorTheme": "Cobalt Next",
+  "workbench.colorTheme": "Solarized Light",
   "markdown.preview.fontSize": 15
 }

@@ -1,11 +1,10 @@
-import React, { useState, useEffect } from "react";
-import gql from "graphql-tag";
-import { useQuery } from "react-apollo";
-import Spinner from "utils/spinner";
+import { useQuery } from "@apollo/client";
 import SearchBar from "common/SearchBar";
 import { format } from "date-fns";
 import { useUserContext } from "globalState/UserProvider";
-import TWButton from "elements/TWButton";
+import gql from "graphql-tag";
+import React, { useEffect, useState } from "react";
+import Spinner from "utils/spinner";
 
 const QUERY_ALL_PROJECTS = gql`
   query QUERY_ALL_PROJECTS {
@@ -44,7 +43,6 @@ const Projects = () => {
   if (loading) return <Spinner />;
   const roles = ["ADMIN", "PROJECTEDIT"];
   const editable = user ? user?.role === "ADMIN" || user.permissions.filter((u) => roles.includes(u.permission)) : false;
-  const { projects } = data;
 
   function handleChangeSearch(text) {
     setSearchText(text);
@@ -66,7 +64,7 @@ const Projects = () => {
         )}
       </div>
       {/* <pre>{JSON.stringify(user)}</pre> */}
-      <div className="font-sans grid sm:grid-cols-3 md:grid-cols-6 lg:grid-cols-9 xl:grid-cols-12 col-gap-4 row-gap-2 px-2 grid-rows-4 ">
+      <div className="font-sans grid sm:grid-cols-3 md:grid-cols-6 lg:grid-cols-9 xl:grid-cols-12 gap-x-4 gap-y-2 px-2 grid-rows-4 ">
         {/* <div className="col-span-5 mb-6">
         <span className="text-lg font-semibold  px-3 py-3 m-4">Projects</span>
       </div> */}

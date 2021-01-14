@@ -2,8 +2,7 @@ import { Backdrop, Modal } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import EditIcon from '@material-ui/icons/Edit';
 import { DashBoardContext } from 'globalState/Provider';
-import JoditEditor from 'jodit-react';
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import MarkDown from 'react-markdown/with-html';
 import EditWizardDetails from './EditWizardDetails';
 

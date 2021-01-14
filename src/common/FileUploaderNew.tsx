@@ -1,7 +1,7 @@
 import { withStyles } from "@material-ui/core/styles";
 import gql from "graphql-tag";
 import React, { useRef } from "react";
-import { useMutation } from "react-apollo";
+import { useMutation } from "@apollo/client";
 import styled from "styled-components";
 const PATH_PREFIX = "\\\\nlbavwixs.infor.com\\images\\news\\";
 // const LINK_PREFIX = 'https://nlbavwdocsup1.infor.com:5001/';

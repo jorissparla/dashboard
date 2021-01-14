@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import gql from "graphql-tag";
-import { graphql } from "react-apollo";
+import { graphql } from "@apollo/client/react/hoc";
 import NewsCard from "./newscard";
 import Spinner from "../utils/spinner";
 
@@ -9,13 +9,13 @@ class NewsCardContainer extends Component {
     const { nrNewsItems, index } = this.state;
     this.setState({
       index: index === nrNewsItems - 1 ? 0 : index + 1,
-      nrNewsItems: this.props.news.news.length
+      nrNewsItems: this.props.news.news.length,
     });
   };
 
   componentWillMount() {
     this.setState({
-      index: 0
+      index: 0,
     });
   }
 
@@ -26,7 +26,7 @@ class NewsCardContainer extends Component {
 
   render() {
     const {
-      news: { loading, error, news }
+      news: { loading, error, news },
     } = this.props;
     if (loading) {
       return (

@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import gql from 'graphql-tag';
-import { Mutation, Query } from 'react-apollo';
-import { withRouter } from 'react-router';
-import NewsItem from './newsitem';
-import { SharedSnackbarConsumer } from '../globalState/SharedSnackbar.context';
+import React, { Component } from "react";
+import gql from "graphql-tag";
+import { Query, Mutation } from "@apollo/client/react/components";
+import { withRouter } from "react-router";
+import NewsItem from "./newsitem";
+import { SharedSnackbarConsumer } from "../globalState/SharedSnackbar.context";
 
 const ALL_NEWS = gql`
   query news($id: ID) {
@@ -41,10 +41,10 @@ const DELETE_NEWS = gql`
 class NewsItemContainer extends Component {
   state = {
     showMessage: false,
-    err: 'No error'
+    err: "No error",
   };
 
-  handleDelete = async id => {};
+  handleDelete = async (id) => {};
 
   render() {
     const id = this.props.match.params.id;
@@ -52,34 +52,34 @@ class NewsItemContainer extends Component {
       <Query query={ALL_NEWS} variables={{ id }}>
         {({ data, loading }) => {
           if (loading) {
-            return 'Loading';
+            return "Loading";
           }
           const defaultValues = data.news[0];
           return (
             <Mutation mutation={UPDATE_NEWS} refetchQueries={[{ query: ALL_NEWS }]}>
-              {updateNews => {
+              {(updateNews) => {
                 return (
                   <Mutation mutation={DELETE_NEWS} refetchQueries={[{ query: ALL_NEWS }]}>
-                    {deleteNews => {
+                    {(deleteNews) => {
                       return (
                         <React.Fragment>
                           <SharedSnackbarConsumer>
                             {({ openSnackbar }) => (
                               <NewsItem
                                 initialValues={defaultValues}
-                                onSave={async values => {
-                                  console.log('onSave', values);
+                                onSave={async (values) => {
+                                  console.log("onSave", values);
                                   const { id, title, body, link, link_text, img } = values;
                                   const input = { id, title, body, link, link_text, img };
                                   await updateNews({ variables: { input } });
-                                  openSnackbar('Item updated');
-                                  setTimeout(() => this.props.history.push('/news'), 500);
+                                  openSnackbar("Item updated");
+                                  setTimeout(() => this.props.history.push("/news"), 500);
                                 }}
-                                onDelete={async id => {
+                                onDelete={async (id) => {
                                   const input = { id };
                                   await deleteNews({ variables: { input } });
-                                  openSnackbar('Item Deleted');
-                                  setTimeout(() => this.props.history.push('/news'), 500);
+                                  openSnackbar("Item Deleted");
+                                  setTimeout(() => this.props.history.push("/news"), 500);
                                 }}
                                 title="Edit news item"
                               />

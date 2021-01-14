@@ -1,12 +1,11 @@
-import React from "react";
+import { useMutation, useQuery } from "@apollo/client";
 import gql from "graphql-tag";
-import { Query, Mutation, useQuery, useMutation } from "react-apollo";
-import { adopt } from "react-adopt";
 import _ from "lodash";
-import { withRouter, useHistory } from "react-router";
-import CourseFormNew from "./CourseFormNew";
-import { QUERY_ALL_COURSES } from "../pages/CourseList";
+import React from "react";
+import { useHistory } from "react-router";
 import Spinner from "utils/spinner";
+import { QUERY_ALL_COURSES } from "../pages/CourseList";
+import CourseFormNew from "./CourseFormNew";
 
 const COURSE_DELETE_MUTATION = gql`
   mutation COURSE_DELETE_MUTATION($input: InputCourseType) {
@@ -47,19 +46,6 @@ const QUERY_SINGLE_COURSE = gql`
     }
   }
 `;
-
-const Composed = adopt({
-  updateCourse: ({ render }) => (
-    <Mutation mutation={COURSE_UPDATE_MUTATION} awaitRefetchQueries={true} refetchQueries={[{ query: QUERY_SINGLE_COURSE }]}>
-      {render}
-    </Mutation>
-  ),
-  deleteCourse: ({ render }) => (
-    <Mutation mutation={COURSE_DELETE_MUTATION} refetchQueries={[{ query: QUERY_ALL_COURSES }]}>
-      {render}
-    </Mutation>
-  ),
-});
 
 const CourseEdit = (props) => {
   const id = props.match.params.id;

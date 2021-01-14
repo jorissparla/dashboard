@@ -1,7 +1,7 @@
 import { UserContext } from "globalState/UserProvider";
 import React, { useState, useEffect } from "react";
 import _ from "lodash";
-import { useMutation } from "react-apollo";
+import { useMutation } from "@apollo/client";
 import { useHistory } from "react-router";
 import { usePersistentState } from "../hooks";
 import {
@@ -16,7 +16,7 @@ import { useAlert } from "globalState/AlertContext";
 import UpdateSymptomDetails from "./UpdateSymptomDetails";
 import SearchBar from "../common/SearchBar";
 
-const PAGE_LENGTH = 15;
+const PAGE_LENGTH = 200;
 
 const ColumnHeader = ({ name, onSort }) => {
   function handleSortUp() {
@@ -49,9 +49,9 @@ const NoteCell = ({ value, complete }) => (
   <td className="px-5 py-2 border-b border-gray-200 bg-white text-sm">
     <div className="flex text-gray-500 justify-between pointer">
       {complete === 1 ? (
-        <p className="text-gray-900 whitespace-no-wrap line-through">{value}</p>
+        <p className="text-gray-900 whitespace-nowrap line-through">{value}</p>
       ) : (
-        <p className="text-gray-900 whitespace-no-wrap">{value}</p>
+        <p className="text-gray-900 whitespace-nowrap">{value}</p>
       )}
       <svg
         className="fill-current h-4 w-4 "
@@ -82,7 +82,7 @@ const NiceCell = ({ value, complete }) => (
 const CompleteCell = ({ value }) => {
   return (
     <td className="px-5 py-2 border-b border-gray-200 bg-transparent text-sm">
-      <div className="flex flex-no-wrap">
+      <div className="flex flex-nowrap">
         <label className="md:w-2/3 block text-gray-500 font-bold">
           {value === 0 ? (
             <input
@@ -121,6 +121,14 @@ const RemoveCell = ({ handleDelete }) => {
     </td>
   );
 };
+
+const HyperLinkCell = ({ value = "", linkPrefix = "http://navigator.infor.com/n/incident.asp?IncidentID=", linkText = "" }) => (
+  <td className="px-5  border border-gray-200  text-sm">
+    <a className="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker" href={`${linkPrefix}${value}`} target="_blank">
+      {linkText || value}
+    </a>
+  </td>
+);
 
 function SymptomsTableNew({ data }) {
   const history = useHistory();
@@ -252,7 +260,7 @@ function SymptomsTableNew({ data }) {
         {/* <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto"></div> */}
 
         <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
-          <table className="shadow-lg rounded-lg w-full leading-normal shadow rounded-lg  mt-4 transition duration-500 ease-in-out ">
+          <table className=" w-full leading-normal shadow rounded-lg  mt-4 transition duration-500 ease-in-out ">
             <thead>
               <tr>
                 <ColumnHeader name="Symptom" onSort={handleColumnSort("symptom")} />
@@ -278,7 +286,7 @@ function SymptomsTableNew({ data }) {
                   <Cell value={item.statusname} complete={item.status} />
                   <NiceCell value={item.symptom_category} complete={item.status} />
                   <Cell value={item?.email} complete={item?.email} />
-                  <Cell value={item.incident} complete={item.status} />
+                  <HyperLinkCell value={item.incident} complete={item.status} />
                   <Cell value={item.note} complete={item.status} />
                   <CompleteCell value={item.status} />
                   <Cell value={format(item.updatedAt, "EEE dd MMM yyyy, HH:mm")} complete={item.status} />
@@ -323,26 +331,32 @@ function SymptomsTableNew({ data }) {
             />
           )}
           <div className="px-5 py-5 bg-white border-t flex flex-col xs:flex-row items-center xs:justify-between          ">
-            <span className="text-xs xs:text-sm text-gray-900">
-              Showing {(currentPage - 1) * PAGE_LENGTH + 1} to {currentPage * PAGE_LENGTH} of {length} Entries
-            </span>
-            <div className="inline-flex ml-2 xs:mt-0">
-              {currentPage}/{maxPages}
-              <button
-                disabled={currentPage === 1}
-                className="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 btn-tw font-semibold font-sansI"
-                onClick={handlePrev}
-              >
-                Previous
-              </button>
-              <button
-                disabled={currentPage >= maxPages}
-                className="text-sm bg-teal-300 ml-2 hover:bg-gray-400 text-teal-800 btn-tw "
-                onClick={handleNext}
-              >
-                Next
-              </button>
-            </div>
+            {length < PAGE_LENGTH ? (
+              <span className="text-xs xs:text-sm text-gray-900">Showing {length} Entries</span>
+            ) : (
+              <span className="text-xs xs:text-sm text-gray-900">
+                Showing {(currentPage - 1) * PAGE_LENGTH + 1} to {currentPage * PAGE_LENGTH} of {length} Entries
+              </span>
+            )}
+            {length > PAGE_LENGTH && (
+              <div className="inline-flex ml-2 xs:mt-0">
+                {currentPage}/{maxPages}
+                <button
+                  disabled={currentPage === 1}
+                  className="text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 btn-tw font-semibold font-sansI"
+                  onClick={handlePrev}
+                >
+                  Previous
+                </button>
+                <button
+                  disabled={currentPage >= maxPages}
+                  className="text-sm bg-teal-300 ml-2 hover:bg-gray-400 text-teal-800 btn-tw "
+                  onClick={handleNext}
+                >
+                  Next
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

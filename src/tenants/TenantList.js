@@ -1,33 +1,30 @@
+import { useMutation, useQuery } from "@apollo/client";
 import Button from "@material-ui/core/Button";
-import Chip from "@material-ui/core/Chip";
 import deepOrange from "@material-ui/core/colors/deepOrange";
 import deepPurple from "@material-ui/core/colors/deepPurple";
 import { withStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
+import { differenceInCalendarDays } from "date-fns";
+import TWButton from "elements/TWButton";
 import _ from "lodash";
 import Modal from "ModalWrapper";
-import React, { useContext, useState, useEffect } from "react";
-import { useQuery, useMutation } from "react-apollo";
+import TenantLogs from "pages/TenantLogList";
+import React, { useContext, useEffect, useState } from "react";
 import { animated, config, useSpring } from "react-spring";
 import styled from "styled-components";
 import Spinner from "utils/spinner";
 import FavoriteBadge from "../elements/Badge";
 import { FilterFieldContext, useFilterField } from "../globalState/FilterContext";
-//import format from 'date-fns/format';
-import { formatDistanceToNow, format } from "../utils/format";
 import { DashBoardContext } from "../globalState/Provider";
-import TenantLogs from "pages/TenantLogList";
-import { ALL_TENANTS, QUERY_ALL_TENANT_DETAILS, TENANT_NOTE } from "./TenantQueries";
-import { Main, Article, TextSpan } from "./TenantStyledElements";
+//import format from 'date-fns/format';
+import { format, formatDistanceToNow } from "../utils/format";
+import Loader from "./../utils/Loader";
+import FancyFilter from "./new/FancyFilter";
+import { CREATE_AUDIT_MUTATION } from "./Query";
 import { TenantCard } from "./TenantCard";
 import TenantCustomerDetailsForm from "./TenantCustomerDetailsForm";
-import FancyFilter from "./new/FancyFilter";
-import Loader from "./../utils/Loader";
-
-import { CREATE_AUDIT_MUTATION } from "./Query";
+import { ALL_TENANTS, QUERY_ALL_TENANT_DETAILS, TENANT_NOTE } from "./TenantQueries";
 import "./tenants.css";
-import { differenceInDays, differenceInCalendarDays } from "date-fns";
 
 const styles = (theme) => ({
   root: {
@@ -40,31 +37,13 @@ const styles = (theme) => ({
     fontSize: 20,
     fontWeight: 800,
   },
-  box: {
-    marginLeft: 20,
-    color: " rgb(57, 73, 171)",
-    border: "none",
-    height: "20px",
-    display: "inline-flex",
-    padding: "4px 8px",
-    flexGrow: "0",
-    fontSize: "10px",
-    minWidth: "20px",
-    alignItems: "center",
-    letterSpacing: "0.2rem",
-    flexShrink: "0",
-    lineHeight: "10px",
-    whiteSpace: "nowrap",
-    borderRadius: "4px",
-    justifyContent: "center",
-  },
+
   pos: {
     display: "flex",
     justifyContent: "space-between",
   },
   card: {
     minWidth: 390,
-    margin: 10,
     width: 380,
     // height: 350,
     display: "flex",
@@ -318,8 +297,8 @@ const filterTenantsByCustomerFarmVersion = (tenants, fields, details) => {
     csm = "",
     pm = "",
     lastupdated = "999",
+    useproxy = false,
   } = fields;
-  console.log({ fields });
 
   let filteredCustomerNames = null;
   if (details) {
@@ -416,7 +395,7 @@ const TenantList = (props) => {
   // console.log(applySimpleFilter(filteredTenants));
   const uniqueCustomers = filteredTenants.map(({ farm, customer: { name } }) => name).filter((ten, i, all) => all.indexOf(ten) === i);
   return (
-    <Main onKeyDown={(e) => {}}>
+    <div className="bg-gray-100 h-screen">
       <Loader loading={loading} />
       <animated.div
         style={{
@@ -430,8 +409,8 @@ const TenantList = (props) => {
           toggleFilter={() => toggleShowFilterDialog(!showFilterDialog)}
           tenants={tenants}
         />
-
-        <div className={classes.flex} onKeyDown={(e) => {}}>
+        {/* <div className="mt-8 mx-4 px-4 rounded-lg ">Filter</div> */}
+        <div className="flex flex-wrap" onKeyDown={(e) => {}}>
           {uniqueCustomers.map((customer, index) => {
             const sub = filteredTenants.filter((o) => o.customer.name === customer);
             const liveCust = sub[0].live === 1 ? true : false;
@@ -482,7 +461,7 @@ const TenantList = (props) => {
       <Modal on={isShowingDetails} toggle={() => toggleShowDetails(!isShowingDetails)} height={80}>
         <TenantCustomerDetailsForm closeForm={() => toggleShowDetails(false)} />
       </Modal>
-    </Main>
+    </div>
   );
 };
 
@@ -509,50 +488,21 @@ export const TenantListHeader = ({ updatedAt, tenants, toggleShowLogs, toggleFil
   // const nrOfLiveCustomers = uniqueCustomers.filter(t => t.live).length;
   const totalTenants = Object.entries(tenantcustomersWithFarm).reduce((count, item) => count + item[1], 0);
   return (
-    <Article>
+    <div className="flex flex-col justify-between shadow-lg bg-white p-2 m-2">
       <div className="flex justify-between tracking-widest  ">
-        <Typography gutterBottom variant="h5" component="h2">
-          <span className="tracking-wide uppercase">
-            {/* {` Multitenant customers - last change -${format(max, 'dd MMM yyyy')}`} */}
-            {` Multitenant customers `}
-          </span>
-          <Chip
-            label={
-              updatedAt ? `Last check:  ${formatDistanceToNow(updatedAt)} ago,  Last change made ${format(max, "dd MMM yyyy")} ` : "not Saved yet"
-            }
-            style={{
-              marginRight: 10,
-            }}
-          />
-          <Button
-            variant="outlined"
-            color="primary"
-            // style={{
-            //   color: 'white',
-            //   backgroundColor: 'black'
-            // }}
-            onClick={toggleShowLogs}
-          >
+        <div className="flex font-sans tracking-normal mb-2">
+          <div className="text-sm px-2 items-center flex font-semibold py-0.5 rounded-lg bg-gray-300 mr-4 text-gray-600">
+            {updatedAt ? `Last check:  ${formatDistanceToNow(updatedAt)} ago,  Last change made ${format(max, "dd MMM yyyy")} ` : "not Saved yet"}
+          </div>
+          <TWButton variant="outlined" color="transp" onClick={toggleShowLogs}>
             Logs
-          </Button>
+          </TWButton>
+          <span className="tracking-wide  mx-4 font-sans font-semibold text-2xl text-gray-600">{` Multitenant customers `}</span>
           <div className=" flex items-start">
-            <div className="absolute flex items-center h-5">
-              {/* <input
-                id="last7"
-                type="checkbox"
-                className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out"
-                value={showLast7DaysUpdated}
-                onChange={handleChangeLastUpdated}
-              /> */}
-            </div>
-            {/* <div className="pl-7 text-sm leading-5">
-              <label htmlFor="comments" className="font-medium text-gray-600">
-                Only Show Updated last 7 days
-              </label>
-            </div> */}
+            <div className="absolute flex items-center h-5"></div>
           </div>
           <TenantNote />
-        </Typography>
+        </div>
         <FancyFilter onFilter={applyFilter} />
         {/* <Button variant="contained" onClick={toggleFilter}>
           Filter
@@ -566,27 +516,38 @@ export const TenantListHeader = ({ updatedAt, tenants, toggleShowLogs, toggleFil
           letterSpacing: "0.2rem",
         }}
       >
-        <TextSpan>TENANTS: ({totalTenants})</TextSpan>
+        <div className="flex flex-col items-center  text-gray-600 mr-4">
+          <span className="font-semibold font-pop">Tenants</span>
+          <span className="text-4xl font-bold text-gray-600">{totalTenants}</span>
+        </div>
         {Object.entries(tenantcustomersWithFarm).map((item) => {
+          const [farmName, number] = item;
           const text = `${item[0]} : ${item[1]}`;
           return (
-            <FavoriteBadge key={text} isVisible={true} color="#40a5ed" style={{ margin: 3 }}>
-              {text}
+            <FavoriteBadge title={farmName} key={text} isVisible={true} color="bg-blue-400">
+              {number}
             </FavoriteBadge>
           );
         })}
-        <TextSpan>CUSTOMERS:({totalCustomers})</TextSpan>
+        <div className="flex flex-col items-center  text-gray-600 mx-4">
+          <span className="font-semibold font-pop">Customers</span>
+          <span className="text-4xl font-bold text-gray-600">{totalCustomers}</span>
+        </div>
         {Object.entries(custFarms).map((item) => {
+          const [farmName, number] = item;
           const text = `${item[0]} : ${item[1]}`;
           return (
-            <FavoriteBadge key={text} isVisible={true} color="purple" style={{ margin: 3 }}>
-              {text}
+            <FavoriteBadge title={farmName} key={text} isVisible={true} color="bg-green-400">
+              {number}
             </FavoriteBadge>
           );
         })}
-        <TextSpan>LIVE: ({liveCustomers.length})</TextSpan>
+        <div className="flex flex-col items-center  text-gray-600 mx-4">
+          <span className="font-semibold font-pop">Live</span>
+          <span className="text-4xl font-bold text-green-600">{liveCustomers.length}</span>
+        </div>
       </div>
-    </Article>
+    </div>
   );
 };
 

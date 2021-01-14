@@ -1,5 +1,13 @@
 import gql from "graphql-tag";
 
+export const ACCOUNTS_QUERY = gql`
+  query ACCOUNTS_QUERY {
+    accounts {
+      fullname
+    }
+  }
+`;
+
 export const QUERY_BACKLOG = gql`
   # Write your query or mutation here
   fragment backlogfragment on DWH {
@@ -186,6 +194,7 @@ export const QUERY_BACKLOG_TEXT = `
   # Write your query or mutation here
   fragment backlogfragment on DWH {
     incident
+    awaitcount
     incidentcreated
     owner
     navid
@@ -210,6 +219,7 @@ export const QUERY_BACKLOG_TEXT = `
     service_restored_date
     scheduled_activity_date
     escalation_time
+    action_date
   }
   query QUERY_BACKLOG(
     $date: String

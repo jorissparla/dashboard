@@ -1,83 +1,83 @@
-import React from 'react';
-import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
-import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
-import Chip from '@material-ui/core/Chip';
-import Typography from '@material-ui/core/Typography';
-import { Formik } from 'formik';
-import { TextField, Select, FormControl, InputLabel, MenuItem } from '@material-ui/core';
-import Badge from '@material-ui/core/Badge';
-import { withStyles } from '@material-ui/core/styles';
-import { withRouter } from 'react-router';
-import * as yup from 'yup';
-//import format from "date-fns/format";
-import { format, formatDistanceToNow } from '../utils/format';
-import {addHours} from 'date-fns';
+import { Query } from "@apollo/client/react/components";
+import { FormControl, InputLabel, MenuItem, Select, TextField } from "@material-ui/core";
+import Badge from "@material-ui/core/Badge";
+import Button from "@material-ui/core/Button";
+import Chip from "@material-ui/core/Chip";
+import Paper from "@material-ui/core/Paper";
+import { withStyles } from "@material-ui/core/styles";
+import Typography from "@material-ui/core/Typography";
+import { addHours } from "date-fns";
+import { Formik } from "formik";
+import gql from "graphql-tag";
+import React from "react";
 //import { formatDistanceToNow } from "date-fns";
-import { adopt } from 'react-adopt';
-import { QUERY_PLANNED_COURSES } from './CourseFormNew';
+import { adopt } from "react-adopt";
+import { withRouter } from "react-router";
+import * as yup from "yup";
+//import format from "date-fns/format";
+import { format, formatDistanceToNow } from "../utils/format";
+import { QUERY_PLANNED_COURSES } from "./CourseFormNew";
 
 const validationSchema = yup.object().shape({
   startdate: yup.string().required(),
   enddate: yup.string().required(),
-  hours: yup.string().required()
+  hours: yup.string().required(),
 });
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
     ...theme.mixins.gutters(),
     paddingTop: theme.spacing(2),
     paddingBottom: theme.spacing(2),
     padding: theme.spacing(2),
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-between',
-    margin: '15px',
-    minWidth: '200px',
-    backgroundColor: 'rgba(33, 150, 243, 0.22)'
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+    margin: "15px",
+    minWidth: "200px",
+    backgroundColor: "rgba(33, 150, 243, 0.22)",
   },
   button2: {
     margin: theme.spacing(1),
-    maxWidth: 200
+    maxWidth: 200,
   },
   button: {
-    width: 200
+    width: 200,
   },
   margin: {
     margin: theme.spacing(2),
-    color: 'black'
+    color: "black",
   },
   block: {
-    display: 'flex',
+    display: "flex",
     margin: 10,
-    alignItems: 'center'
+    alignItems: "center",
   },
   buttonDel: {
     margin: theme.spacing(1),
-    color: '#FFF',
-    backgroundColor: '#000'
+    color: "#FFF",
+    backgroundColor: "#000",
   },
 
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    marginBottom: 20
+    marginBottom: 20,
   },
   titleField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
     marginBottom: 20,
-    width: '90%'
+    width: "90%",
   },
   hourField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
     marginBottom: 20,
-    width: 50
+    width: 50,
   },
   error: {
-    color: '#f44336'
-  }
+    color: "#f44336",
+  },
 });
 
 const QUERY_ALL_FIELDS = gql`
@@ -110,14 +110,14 @@ const Composed = adopt({
     <Query query={QUERY_PLANNED_COURSES} variables={{ id }}>
       {render}
     </Query>
-  )
+  ),
 });
 
 const teams = [
-  { id: 1, name: 'Logistics' },
-  { id: 2, name: 'Finance' },
-  { id: 3, name: 'Tools' },
-  { id: 4, name: 'General' }
+  { id: 1, name: "Logistics" },
+  { id: 2, name: "Finance" },
+  { id: 3, name: "Tools" },
+  { id: 4, name: "General" },
 ];
 
 class PlannedCourseForm extends React.Component {
@@ -125,31 +125,28 @@ class PlannedCourseForm extends React.Component {
     initialValues: this.props.initialValues || {
       courseid: this.props.course.id,
       hours: 4,
-      trainer: 'LN Employee',
-      status: 'Released',
-      team: 'Logistics',
-      details: '',
-      type: 'Class Room Training',
-      category: 'Product',
-      startdate: format(addHours(Date.now(), 24), 'yyyy-MM-dd'),
-      enddate: format(addHours(Date.now(), 24), 'yyyy-MM-dd'),
-      updatedAt: ''
-    }
+      trainer: "LN Employee",
+      status: "Released",
+      team: "Logistics",
+      details: "",
+      type: "Class Room Training",
+      category: "Product",
+      startdate: format(addHours(Date.now(), 24), "yyyy-MM-dd"),
+      enddate: format(addHours(Date.now(), 24), "yyyy-MM-dd"),
+      updatedAt: "",
+    },
   };
 
   render() {
     const { classes, history, id } = this.props;
     return (
       <Composed id={id}>
-        {({
-          coursedata: { data, loading, error },
-          plannedcourses: { data: plannedcoursedata, loading: loading2 }
-        }) => {
+        {({ coursedata: { data, loading, error }, plannedcourses: { data: plannedcoursedata, loading: loading2 } }) => {
           if (loading || loading2) {
-            return 'Loading...';
+            return "Loading...";
           }
           const {
-            course: { plannedcourses }
+            course: { plannedcourses },
           } = plannedcoursedata;
           const { coursetypes, statuses, supportfolks } = data;
           const { course, id } = this.props;
@@ -158,27 +155,16 @@ class PlannedCourseForm extends React.Component {
           return (
             <Formik
               initialValues={this.state.initialValues}
-              onSubmit={async values => {
+              onSubmit={async (values) => {
                 this.props.onSave(values);
               }}
               validationSchema={validationSchema}
             >
-              {({
-                values,
-                handleChange,
-                handleBlur,
-                handleSubmit,
-                setFieldValue,
-                touched,
-                errors,
-                isSubmitting
-              }) => (
+              {({ values, handleChange, handleBlur, handleSubmit, setFieldValue, touched, errors, isSubmitting }) => (
                 <form onSubmit={handleSubmit}>
                   <Paper className={classes.root}>
                     <Typography variant="h5" gutterBottom>
-                      {id
-                        ? `Edit Scheduled Training for ${course.title}`
-                        : `New Scheduled Training for ${course.title}`}
+                      {id ? `Edit Scheduled Training for ${course.title}` : `New Scheduled Training for ${course.title}`}
                     </Typography>
                     <div className={classes.block}>
                       <TextField
@@ -191,7 +177,7 @@ class PlannedCourseForm extends React.Component {
                         value={values.startdate}
                         className={classes.textField}
                         InputLabelProps={{
-                          shrink: true
+                          shrink: true,
                         }}
                       />
                       <TextField
@@ -204,7 +190,7 @@ class PlannedCourseForm extends React.Component {
                         value={values.enddate}
                         className={classes.textField}
                         InputLabelProps={{
-                          shrink: true
+                          shrink: true,
                         }}
                       />
                       <TextField
@@ -229,29 +215,16 @@ class PlannedCourseForm extends React.Component {
                       />
                     </div>
 
-                    {touched.startdate && errors.startdate && (
-                      <div className={classes.error}>{errors.startdate}</div>
-                    )}
-                    {touched.enddate && errors.enddate && (
-                      <div className={classes.error}>{errors.enddate}</div>
-                    )}
-                    {touched.hours && errors.hours && (
-                      <div className={classes.error}>{errors.hours}</div>
-                    )}
+                    {touched.startdate && errors.startdate && <div className={classes.error}>{errors.startdate}</div>}
+                    {touched.enddate && errors.enddate && <div className={classes.error}>{errors.enddate}</div>}
+                    {touched.hours && errors.hours && <div className={classes.error}>{errors.hours}</div>}
 
                     <div className={classes.block}>
                       <FormControl className={classes.formControl}>
                         <InputLabel shrink htmlFor="type">
                           Course Type
                         </InputLabel>
-                        <Select
-                          id="type"
-                          name="type"
-                          value={values.type}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          className={classes.button}
-                        >
+                        <Select id="type" name="type" value={values.type} onChange={handleChange} onBlur={handleBlur} className={classes.button}>
                           {coursetypes.map(({ name }) => (
                             <MenuItem key={name} value={name}>
                               {name}
@@ -301,14 +274,7 @@ class PlannedCourseForm extends React.Component {
                         <InputLabel shrink htmlFor="team">
                           Team
                         </InputLabel>
-                        <Select
-                          id="team"
-                          name="team"
-                          value={values.team}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          className={classes.button}
-                        >
+                        <Select id="team" name="team" value={values.team} onChange={handleChange} onBlur={handleBlur} className={classes.button}>
                           {teams.map(({ name }) => (
                             <MenuItem key={name} value={name}>
                               {name}
@@ -332,33 +298,18 @@ class PlannedCourseForm extends React.Component {
                         fullWidth
                         className={classes.textField}
                         InputLabelProps={{
-                          shrink: true
+                          shrink: true,
                         }}
                       />
                     </div>
                     <div className={classes.block}>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        className={classes.button2}
-                        onClick={handleSubmit}
-                        type="submit"
-                      >
+                      <Button variant="contained" color="primary" className={classes.button2} onClick={handleSubmit} type="submit">
                         Save
                       </Button>
-                      <Button
-                        variant="contained"
-                        className={classes.buttonDel}
-                        onClick={() => history.push(`/courses/edit/${id}`)}
-                      >
+                      <Button variant="contained" className={classes.buttonDel} onClick={() => history.push(`/courses/edit/${id}`)}>
                         Back to course
                       </Button>
-                      <Button
-                        variant="contained"
-                        color="secondary"
-                        className={classes.button2}
-                        onClick={() => history.push('/courses')}
-                      >
+                      <Button variant="contained" color="secondary" className={classes.button2} onClick={() => history.push("/courses")}>
                         Back to courses
                       </Button>
                       {id && (
@@ -373,35 +324,17 @@ class PlannedCourseForm extends React.Component {
                           >
                             Delete Scheduled course
                           </Button>
-                          <Badge
-                            color="primary"
-                            badgeContent={plannedcourses.length}
-                            className={classes.margin}
-                          >
-                            <Button
-                              variant="contained"
-                              className={classes.button}
-                              onClick={() => history.push('/scheduledcourses/' + id)}
-                            >
+                          <Badge color="primary" badgeContent={plannedcourses.length} className={classes.margin}>
+                            <Button variant="contained" className={classes.button} onClick={() => history.push("/scheduledcourses/" + id)}>
                               Scheduled Courses
                             </Button>
                           </Badge>
-                          <Button
-                            variant="contained"
-                            className={classes.button2}
-                            onClick={() => history.push('/scheduledcourses/' + id + '/new')}
-                          >
+                          <Button variant="contained" className={classes.button2} onClick={() => history.push("/scheduledcourses/" + id + "/new")}>
                             Schedule New Course
                           </Button>
                         </React.Fragment>
                       )}
-                      <Chip
-                        label={
-                          values.updatedAt
-                            ? `Last updated  ${formatDistanceToNow(values.updatedAt)} ago`
-                            : 'not Saved yet'
-                        }
-                      />
+                      <Chip label={values.updatedAt ? `Last updated  ${formatDistanceToNow(values.updatedAt)} ago` : "not Saved yet"} />
                     </div>
                   </Paper>
                 </form>

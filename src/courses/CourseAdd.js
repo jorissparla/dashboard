@@ -1,10 +1,10 @@
-import React from 'react';
-import gql from 'graphql-tag';
-import { Mutation } from 'react-apollo';
-import _ from 'lodash';
-import { withRouter } from 'react-router';
-import CourseFormNew from './CourseFormNew';
-import { QUERY_ALL_COURSES } from '../pages/CourseList';
+import { Mutation } from "@apollo/client/react/components";
+import gql from "graphql-tag";
+import _ from "lodash";
+import React from "react";
+import { withRouter } from "react-router";
+import { QUERY_ALL_COURSES } from "../pages/CourseList";
+import CourseFormNew from "./CourseFormNew";
 
 const ADD_COURSE_MUTATION = gql`
   mutation ADD_COURSE_MUTATION($input: InputCourseType) {
@@ -14,27 +14,17 @@ const ADD_COURSE_MUTATION = gql`
   }
 `;
 
-const CourseAdd = props => (
+const CourseAdd = (props) => (
   <Mutation mutation={ADD_COURSE_MUTATION} refetchQueries={[{ query: QUERY_ALL_COURSES }]}>
-    {addCourse => {
+    {(addCourse) => {
       return (
         <CourseFormNew
-          onSave={async values => {
-            const input = _.pick(values, [
-              'team',
-              'title',
-              'description',
-              'link',
-              'type',
-              'hours',
-              'status',
-              'applicable',
-              'trainer'
-            ]);
+          onSave={async (values) => {
+            const input = _.pick(values, ["team", "title", "description", "link", "type", "hours", "status", "applicable", "trainer"]);
 
             const result = await addCourse({ variables: { input } });
-            console.log('Result', result);
-            props.history.push('/courses/edit/' + result.data.addCourse.id);
+            console.log("Result", result);
+            props.history.push("/courses/edit/" + result.data.addCourse.id);
           }}
         />
       );

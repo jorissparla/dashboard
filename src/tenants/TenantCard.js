@@ -1,16 +1,16 @@
-import { Avatar, Backdrop, Button, Card, CardActions, CardContent, CardHeader, Divider, Grid, Modal, Switch, Typography } from "@material-ui/core";
+import { Mutation } from "@apollo/client/react/components";
+import { CardHeader, Divider, Switch } from "@material-ui/core";
 import ListIcon from "@material-ui/icons/List";
 import classNames from "classnames";
+import { addHours } from "date-fns";
+import Button from "elements/TWButton";
 import { UserContext } from "globalState/UserProvider";
 import _ from "lodash";
-import React, { useState, useContext } from "react";
-import { Mutation } from "react-apollo";
+import React, { useContext, useState } from "react";
+import { animated, useSpring } from "react-spring";
 import { format, formatDistanceToNow } from "../utils/format";
-import { addHours } from "date-fns";
 import EditTenantDetails from "./details/components/EditTenant";
-import Label from "./details/components/Label";
 import { MUTATION_MARK_LIVE } from "./TenantQueries";
-import TWButton from "elements/TWButton";
 
 export const TenantCard = ({
   classes,
@@ -28,7 +28,10 @@ export const TenantCard = ({
   const [showStatus, setShowStatus] = useState(false);
   const userContext = useContext(UserContext);
   const { user, hasPermissions } = userContext;
-
+  const { x } = useSpring({
+    x: isOpen ? 0 : 100,
+  });
+  const props = useSpring({ opacity: isOpen ? 1 : 0 });
   const isTenantEditor = hasPermissions(user, ["TENANTEDIT", "ADMIN"]);
   // const isAdmin = hasPermissions(user, ['ADMIN']);
 
@@ -48,6 +51,7 @@ export const TenantCard = ({
       pm: "",
       info: "",
       temperature: "NORMAL",
+      useproxy: false,
     };
   }
   let golivedate = tenantcustomerdetail.golivedate;
@@ -86,13 +90,14 @@ export const TenantCard = ({
       const { tenant_status, operational_status, process_status } = t;
       let tag = "";
       let tooltip = "";
+      let title = t.farm;
       if (tenant_status) {
         if (!(tenant_status === "active" && operational_status === "online" && process_status === "idle")) {
           tag = `${tenant_status[0].toUpperCase()}-${operational_status[0].toUpperCase()}-${process_status.slice(0, 2).toUpperCase()}`;
         }
         tooltip = `${tenant_status}-${operational_status}-${process_status}`;
       }
-      return { index, ...t, tag, tooltip };
+      return { index, ...t, tag, title, tooltip };
     })
     .sort((a, b) => (a.index > b.index ? 1 : -1));
 
@@ -100,12 +105,23 @@ export const TenantCard = ({
     tags = tags.sort((a, b) => (a.name > b.name ? 1 : -1));
   }
 
+  let farms = [];
+
+  if (tenants.length) {
+    tenants.forEach((tenant) => {
+      const { farm } = tenant;
+      if (!farms.includes(farm)) {
+        farms = [...farms, farm];
+      }
+    });
+  }
+  // console.log(customer, tags);
   const baseTenantId = tenants && tenants.length && tenants.length > 0 ? tenants[0].name.split("_")[0] : "";
   // console.log(customer, tenants[0]);
   return (
     <>
-      <Card className={customer === "Infor" ? classes.card3 : classes.card}>
-        <CardContent>
+      <div className={customer === "Infor" ? classes.card3 : classes.card}>
+        <div className="p-2 ">
           {/* <Header>
           <H2>{customer}</H2>
 
@@ -121,7 +137,7 @@ export const TenantCard = ({
             }
             // title={customer}
             title={
-              <div title={customer} className=" text-xl font-semibold font-pop text-gray-600 overflow-hidden truncate ellipsis mr-2">
+              <div title={customer} className=" text-xl font-semibold font-sans text-gray-600 overflow-hidden truncate ellipsis mr-2">
                 {customer}
               </div>
             }
@@ -132,58 +148,73 @@ export const TenantCard = ({
                 <svg className="fill-current w-4 h-4 text-gray-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
                   <path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-7.59V4h2v5.59l3.95 3.95-1.41 1.41L9 10.41z" />
                 </svg>
-                <span className="text-gray-600 text-sm">Updated {max2} ago</span>
+                <span className="text-gray-600 text-sm font-sans">Updated {max2} ago</span>
               </div>
             }
           />
-          <Typography className={classes.pos} color="textSecondary">
-            {tenants.length > 0 && tenants[0].farm}
-            <span className={classes.box}>{baseTenantId}</span>
-          </Typography>
-          <div className={classes.description}>
-            <Typography color="textSecondary" variant="subtitle2">
+          <div className="mt-2 pt-1 flex w-full justify-between items-center text-gray-700 font-sans" color="textSecondary">
+            {farms.map((farm) => (
+              <span className=" py-0.5 px-2 text-gray-600 rounded  font-semibold mr-1">{farm}</span>
+            ))}
+            <span className="tracking-widest font-semibold text-blue-800 text-sm font-sans">{baseTenantId}</span>
+          </div>
+          <div className="font-sans mb-2">
+            <div color="textSecondary" variant="subtitle2" className="text-sm font-sans text-gray-600">
               {tenantcustomerdetail.golivecomments.trim() ? (
                 tenantcustomerdetail.golivecomments
               ) : (
                 <span className={classes.descriptionblank}>Customer Information will be shown here</span>
               )}
-            </Typography>
+            </div>
           </div>
-          <div className={classes.tags}>
-            {tags.map(({ id, name, version, tooltip, tag }) => {
+          <div className="grid grid-cols-3 gap-x-1 gap-y-1 mb-1">
+            {tags.map(({ id, name, version, tooltip, tag, title }) => {
               let shortname = "";
               if (customer === "Infor") {
                 shortname = name;
               } else shortname = name.split("_")[1];
-              const color = shortname.endsWith("PRD") ? "rgba(46, 202, 19, 1)" : shortname.endsWith("TRN") ? "#1da1f2" : "rgba(0,0,0,0.5)";
+              const color = shortname.endsWith("PRD")
+                ? "bg-green-400 text-green-800 font-semibold"
+                : shortname.endsWith("TRN")
+                ? "bg-blue-500"
+                : "bg-gray-600";
               return (
-                <div className={classes.tagContent} key={id}>
-                  <Label key={id} color={color}>{`${shortname}:${version}`}</Label>
-                  {/* {tag && <Chip className={classes.tagtooltip} label={tooltip} />} */}
-                </div>
+                <span
+                  title={title}
+                  style={{ fontSize: "10.5px" }}
+                  key={id}
+                  className={` px-1.5 py-1  ${color} tracking-wider text-center font-pop  shadow text-white   rounded`}
+                >{`${shortname.toUpperCase()}:${version}`}</span>
               );
+              {
+                /* <Label key={id} color={color}>{`${shortname}:${version}`}</Label> */
+              }
+              {
+                /* {tag && <Chip className={classes.tagtooltip} label={tooltip} />} */
+              }
             })}
           </div>
           <Divider />
-          <Grid alignItems="center" container justify="space-between" spacing={3}>
-            <Grid item className={classes.csm}>
-              <Typography variant="h5">PM</Typography>
-              <Typography variant="body2">{tenantcustomerdetail.pm ? tenantcustomerdetail.pm : "PM not entered"}</Typography>
-            </Grid>
-            <Grid item className={classes.csm}>
-              <Typography variant="h5">CSM</Typography>
-              <Typography variant="body2"> {tenantcustomerdetail.csm ? tenantcustomerdetail.csm : "CSM not entered"}</Typography>
-            </Grid>
-            <Grid item>
-              <Typography variant="h5">Go Live Date</Typography>
-              <Typography variant="body2">{golivedate}</Typography>
-            </Grid>
-          </Grid>
-        </CardContent>
-        <CardActions className={classes.spaceFooter}>
+          <div className="flex items-center justify-between" alignItems="center" container justify="space-between" spacing={3}>
+            <div item className="max-w-md">
+              <div className="font-sans font-semibold text-gray-600">PM</div>
+              <div className="text-sm font-sans" variant="body2">
+                {tenantcustomerdetail.pm ? tenantcustomerdetail.pm : "PM not entered"}
+              </div>
+            </div>
+            <div item className="max-w-md">
+              <div className="font-sans font-semibold text-gray-600">CSM</div>
+              <div className="text-sm font-sans"> {tenantcustomerdetail.csm ? tenantcustomerdetail.csm : "CSM not entered"}</div>
+            </div>
+            <div item>
+              <div className="font-sans font-semibold text-gray-600">Go Live Date</div>
+              <div className="text-sm font-sans">{golivedate}</div>
+            </div>
+          </div>
+        </div>
+        <div className="p-2 flex justify-between items-center">
           <Button
-            size="small"
-            variant="outlined"
+            color="transp"
             onClick={() => window.open("http://navigator.infor.com/n/incident_list.asp?ListType=CUSTOMERID&Value=" + tenants[0].customerid)}
           >
             <ListIcon className={classes.filterButton} />
@@ -192,11 +223,7 @@ export const TenantCard = ({
           <div className="relative inline-block text-left">
             <div>
               <span className="rounded-md shadow-sm">
-                <button
-                  type="button"
-                  className="inline-flex justify-center w-full rounded border border-gray-400 px-4 py-1 bg-transparent uppercase text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition ease-in-out duration-150"
-                  onClick={() => setShowStatus((prev) => !prev)}
-                >
+                <Button color="transp" onClick={() => setShowStatus((prev) => !prev)}>
                   Status
                   <svg className="-mr-1 ml-2 h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
                     <path
@@ -205,7 +232,7 @@ export const TenantCard = ({
                       clipRule="evenodd"
                     />
                   </svg>
-                </button>
+                </Button>
               </span>
             </div>
             {showStatus && (
@@ -268,11 +295,11 @@ export const TenantCard = ({
               </div>
             )}
           </div>
-          {isTenantEditor && (
-            <Button variant="outlined" color="primary" onClick={() => setisOpened(true)}>
-              Edit
-            </Button>
-          )}
+          {/* {isTenantEditor && ( */}
+          <Button variant="outlined" color="primary" onClick={() => setisOpened(true)}>
+            {isTenantEditor ? "Edit" : "View"}
+          </Button>
+          {/* )} */}
           {isTenantEditor && (
             <Mutation mutation={MUTATION_MARK_LIVE}>
               {(mutate) => (
@@ -298,19 +325,25 @@ export const TenantCard = ({
               )}
             </Mutation>
           )}
-        </CardActions>
-      </Card>
-      <Modal
+        </div>
+      </div>
+      {/* <Modal
         onClose={() => setisOpened(false)}
         open={isOpen}
         BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500,
         }}
-      >
-        <EditTenantDetails profile={tenantcustomerdetail} onClose={() => setisOpened(false)} />
-        {/* </Grid> */}
-      </Modal>
+      > */}
+      {isOpen && (
+        <animated.div style={props}>
+          <div className="inset-0 flex z-50 bg-gray-700  bg-opacity-50 absolute w-2/3 ">
+            <EditTenantDetails profile={tenantcustomerdetail} onClose={() => setisOpened(false)} isTenantEditor={isTenantEditor} />
+          </div>
+        </animated.div>
+      )}
+      {/* </Grid> */}
+      {/* </Modal> */}
     </>
   );
 };

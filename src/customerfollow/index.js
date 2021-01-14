@@ -1,90 +1,81 @@
-import {
-  Button,
-  Card,
-  CardContent,
-  CardHeader,
-  Divider,
-  Grid,
-  Input,
-  Typography
-} from '@material-ui/core';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import { makeStyles } from '@material-ui/core/styles';
-import SearchIcon from '@material-ui/icons/Search';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import TimeLine from './components/TimeLineLoaded';
-import events from './events';
-import { ALL_FOLLOWED_QUERY } from './queries';
-import { useQuery } from 'react-apollo';
-import Spinner from 'utils/spinner';
+import { Button, Card, CardContent, CardHeader, Divider, Grid, Input, Typography } from "@material-ui/core";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import { makeStyles } from "@material-ui/core/styles";
+import SearchIcon from "@material-ui/icons/Search";
+import React from "react";
+import ReactDOM from "react-dom";
+import TimeLine from "./components/TimeLineLoaded";
+import events from "./events";
+import { ALL_FOLLOWED_QUERY } from "./queries";
+import { useQuery } from "@apollo/client";
+import Spinner from "utils/spinner";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   App: {
-    textAlign: 'center',
-    background: 'rgba(0, 0, 0, 0.05)',
-    height: '100vh'
+    textAlign: "center",
+    background: "rgba(0, 0, 0, 0.05)",
+    height: "100vh",
   },
   root: {
-    width: '100%',
+    width: "100%",
     maxWidth: 360,
     backgroundColor: theme.palette.background.paper,
-    borderRight: '1px solid lightgrey'
+    borderRight: "1px solid lightgrey",
   },
   header: {
-    paddingBottom: 0
+    paddingBottom: 0,
   },
   content: {
     padding: 0,
-    '&:last-child': {
-      paddingBottom: 0
-    }
+    "&:last-child": {
+      paddingBottom: 0,
+    },
   },
   keywords: {
     padding: theme.spacing(2),
-    display: 'flex',
-    alignItems: 'center'
+    display: "flex",
+    alignItems: "center",
   },
   searchIcon: {
     color: theme.palette.icon,
-    marginRight: theme.spacing(2)
+    marginRight: theme.spacing(2),
   },
   border: {
-    borderRight: '1px solid black'
+    borderRight: "1px solid black",
   },
   inline: {
-    display: 'inline'
+    display: "inline",
   },
   learnMoreButton: {
-    marginLeft: theme.spacing(2)
+    marginLeft: theme.spacing(2),
   },
   details: {
-    padding: theme.spacing(1, 3)
+    padding: theme.spacing(1, 3),
   },
   card: {
     marginLeft: theme.spacing(1),
-    width: '70%'
-  }
+    width: "70%",
+  },
 }));
 
 const customers = [
-  { name: 'BAE systems', followed: 'Ricardo', number: '12345' },
-  { name: 'Elbit', followed: 'Massimo', number: '12345' },
-  { name: 'Motip Dupli', followed: 'Joris', number: '12345' },
-  { name: 'Nedschroef', followed: 'Maribel', number: '12345' },
-  { name: 'Elbit', followed: 'Massimo', number: '12345' },
-  { name: 'Motip Dupli', followed: 'Joris', number: '12345' },
-  { name: 'Nedschroef', followed: 'Maribel', number: '12345' },
-  { name: 'Elbit', followed: 'Massimo', number: '12345' },
-  { name: 'Motip Dupli', followed: 'Joris', number: '12345' },
-  { name: 'Nedschroef', followed: 'Maribel', number: '12345' }
+  { name: "BAE systems", followed: "Ricardo", number: "12345" },
+  { name: "Elbit", followed: "Massimo", number: "12345" },
+  { name: "Motip Dupli", followed: "Joris", number: "12345" },
+  { name: "Nedschroef", followed: "Maribel", number: "12345" },
+  { name: "Elbit", followed: "Massimo", number: "12345" },
+  { name: "Motip Dupli", followed: "Joris", number: "12345" },
+  { name: "Nedschroef", followed: "Maribel", number: "12345" },
+  { name: "Elbit", followed: "Massimo", number: "12345" },
+  { name: "Motip Dupli", followed: "Joris", number: "12345" },
+  { name: "Nedschroef", followed: "Maribel", number: "12345" },
 ];
 
 function CustomerFollow() {
   const classes = useStyles();
-  const [inputValue, setInputValue] = React.useState('');
+  const [inputValue, setInputValue] = React.useState("");
   const [selectedCustomer, setSelectedCustomer] = React.useState(null);
   const [customers, setCustomers] = React.useState([]);
 
@@ -100,19 +91,17 @@ function CustomerFollow() {
     console.log(loading);
   }, [loading]);
 
-  const handleInputChange = event => {
+  const handleInputChange = (event) => {
     event.persist();
     setInputValue(event.target.value);
   };
 
-  const handleInputKeyup = event => {
+  const handleInputKeyup = (event) => {
     event.persist();
   };
-  const filteredCustomers = customers.filter(c =>
-    c.name.toUpperCase().startsWith(inputValue.toUpperCase())
-  );
+  const filteredCustomers = customers.filter((c) => c.name.toUpperCase().startsWith(inputValue.toUpperCase()));
 
-  const selectItem = item => setSelectedCustomer(item);
+  const selectItem = (item) => setSelectedCustomer(item);
   if (loading) return <Spinner />;
   return (
     <div className={classes.App}>
@@ -123,33 +112,22 @@ function CustomerFollow() {
             <ListItem>
               <div className={classes.keywords}>
                 <SearchIcon className={classes.searchIcon} />
-                <Input
-                  disableUnderline
-                  onChange={handleInputChange}
-                  onKeyUp={handleInputKeyup}
-                  placeholder="Enter a customer"
-                  value={inputValue}
-                />
+                <Input disableUnderline onChange={handleInputChange} onKeyUp={handleInputKeyup} placeholder="Enter a customer" value={inputValue} />
               </div>
             </ListItem>
             <Divider />
-            {filteredCustomers.map(c => (
+            {filteredCustomers.map((c) => (
               <div key={c.id}>
                 <ListItem alignItems="flex-start" onClick={() => selectItem(c)} key={c.id}>
                   <ListItemText
                     primary={c.name}
                     secondary={
                       <React.Fragment>
-                        <Typography
-                          component="span"
-                          variant="body2"
-                          className={classes.inline}
-                          color="textPrimary"
-                        >
+                        <Typography component="span" variant="body2" className={classes.inline} color="textPrimary">
                           followed by {c.followedBy}
                         </Typography>
-                        {' — '}
-                        {c.number}{' '}
+                        {" — "}
+                        {c.number}{" "}
                       </React.Fragment>
                     }
                   />
@@ -165,11 +143,7 @@ function CustomerFollow() {
               <Card className={classes.card}>
                 <CardHeader
                   title={selectedCustomer.name}
-                  subheader={
-                    <Typography variant="body2">
-                      by {selectedCustomer.followed} at Updated: 21 September 2019
-                    </Typography>
-                  }
+                  subheader={<Typography variant="body2">by {selectedCustomer.followed} at Updated: 21 September 2019</Typography>}
                   className={classes.header}
                   disableTypography
                 />
@@ -207,7 +181,7 @@ function CustomerFollow() {
               </Card>
             </Grid>
           ) : (
-            'No customer selected'
+            "No customer selected"
           )}
           <Grid item>
             <TimeLine events={events} />

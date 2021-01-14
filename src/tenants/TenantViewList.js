@@ -1,170 +1,93 @@
-import { Avatar, Backdrop, Grid, Modal, Paper, Switch, Table, TableBody, TableCell, TableHead, TableRow } from "@material-ui/core";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
-import classNames from "classnames";
+import { useQuery } from "@apollo/client";
+import SearchBar from "common/SearchBar";
+import Button from "elements/TWButton";
 import { usePersistentState } from "hooks";
 import _ from "lodash";
-import React, { useState } from "react";
-import { useQuery } from "react-apollo";
+import { DataCell, HeaderCell } from "pages/Cells";
+import React, { useEffect, useState } from "react";
+import { animated, useSpring } from "react-spring";
 import Spinner from "utils/spinner";
 import { DashBoardContext } from "../globalState/Provider";
 import Loader from "../utils/Loader";
+import CustomerHistory from "./CustomerHistory";
 import EditTenantDetails from "./details/components/EditTenant";
-import { TenantChecked } from "./TenantChecked";
 import { QUERY_ALL_TENANT_DETAILS } from "./TenantQueries";
-import { Main } from "./TenantStyledElements";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: "90vw",
-    margin: "10px",
-    backgroundColor: theme.palette.background.paper,
-  },
-  live: {
-    background: "rgb(46, 202, 19)",
-    border: "5px solid rgba(46, 202, 19, 1)",
-  },
-  "@keyframes blinker": {
-    from: { opacity: 1 },
-    to: { opacity: 0 },
-  },
-  watch: {
-    background: "rgb(251, 221, 0) !important",
-    border: "10px solid rgb(251, 221, 0) !important",
-  },
-  alert: {
-    background: "rgb(229, 57, 53) !important",
-    border: "10px solid rgb(229, 57, 53) !important",
-  },
-
-  tableheader: {
-    fontFamily: "Poppins",
-    fontSize: 18,
-    backgroundColor: "rgb(0,0,0, 0.5)",
-    color: "white",
-  },
-  tablecell: {
-    fontSize: "1rem",
-  },
-  tableheadernarrow: {
-    fontFamily: "Poppins",
-    fontSize: 18,
-    width: 20,
-  },
-
-  main: {
-    display: "flex",
-  },
-  spaceFooter: {
-    justifyContent: "space-between",
-  },
-  csm: {
-    maxWidth: 120,
-  },
-  oldVersion: {
-    color: "red;",
-    fontWeight: 600,
-    fontFamily: "Poppins",
-    fontSize: "1rem",
-  },
-  newerVersion: {
-    fontFamily: "Poppins",
-    fontSize: "1rem",
-    "&:hover": {
-      backgroundColor: "rgb(7, 177, 77, 0.12)",
-      cursor: "pointer",
-    },
-  },
-}));
-
-// const filterTenantsByCustomerFarmVersion = (tenants, fields, details, sortField = 'customer') => {
-//   let filteredCustomerNames = null;
-
-//   if (details) {
-//     filteredCustomerNames = details;
-//   }
-//   console.log({ filteredCustomerNames });
-
-//   let retValue = _.chain(tenants).filter(o => o.customer.name !== 'Infor');
-
-//   if (sortField === 'customer') {
-//     retValue = _.chain(tenants)
-//       .filter(o => o.customer.name !== 'Infor')
-//       .sortBy(o => o.customer.name)
-//       .value();
-//   } else {
-//     retValue = _.chain(tenants)
-//       .filter(o => o.customer.name !== 'Infor')
-//       .sortBy(o => o.csm);
-//   }
-
-//   if (details) {
-//     return retValue.filter(t =>
-//       filteredCustomerNames.find(cn => cn.customer.name === t.customer.name)
-//     );
-//   } else return retValue;
-// };
-
-const TableHeaderCell = withStyles((theme) => ({
-  head: {
-    backgroundColor: "rgb(0,0,0, 0.5)",
-    color: theme.palette.common.white,
-    // fontSize: '1rem',
-    // fontWeight: 800,
-    textTransform: "uppercase",
-  },
-  body: {
-    fontSize: "1rem",
-  },
-}))(TableCell);
 
 const TenantViewList = (props) => {
   const dbctx = React.useContext(DashBoardContext);
+
   let role = dbctx && dbctx.role ? dbctx.role : "Guest";
 
   const [showNotReady, setShowNotReady] = usePersistentState("not ready", false);
   const [sortedByCSM, setSortedByCSM] = usePersistentState("sort by csm", false);
-  const classes = useStyles();
+  const [showLive, setShowLive] = usePersistentState("customers live", false);
   const [currentId, setCurrentId] = useState("");
+  const [searchText, setSearchText] = useState("");
   // const [showFilterDialog, toggleShowFilterDialog] = useState(false);
   const [isShowingDetails, toggleShowDetails] = useState(false);
+  const [isShowingEvents, toggleShowEvents] = useState(false);
+  const [filteredCustomers, setFilteredCustomers] = useState([]);
+  const [customerDetails, setCustomerDetails] = useState([]);
 
   const { data: details, loading: detailsloading } = useQuery(QUERY_ALL_TENANT_DETAILS);
+  const tenantProps = useSpring({ opacity: isShowingDetails ? 1 : 0 });
+
+  useEffect(() => {
+    if (details) {
+      const { tenantcustomerdetails } = details;
+
+      setCustomerDetails(tenantcustomerdetails);
+      let allCustomers;
+      if (!sortedByCSM) {
+        allCustomers = _.chain(tenantcustomerdetails)
+          .filter(
+            (o) =>
+              o.customer.name !== "Infor" &&
+              (o.customer.name.toLowerCase().includes(searchText.toLowerCase()) || o.csm.toLowerCase().includes(searchText.toLowerCase()))
+          )
+          .sortBy((o) => o.customer.name)
+          .value();
+      } else {
+        allCustomers = _.chain(tenantcustomerdetails)
+          .filter((o) => o.customer.name !== "Infor" && o.customer.name.toLowerCase().includes(searchText.toLowerCase()))
+          .sortBy((o) => o.csm)
+          .value();
+      }
+
+      let x = [];
+      allCustomers.map((o) => {
+        const found = x.find((n) => n.customerid === o.customerid);
+        if (!found) {
+          x.push(o);
+        }
+        return 0;
+      });
+      // if (showLive) {
+      //   x = x.filter((t) => t.live === "Yes");
+      // }
+      x = x
+        .map((currcustomer) => {
+          const sub = currcustomer.tenants || [];
+          const ar = { PRD: "", TRN: "", TST: "", DEV: "", DEM: "" };
+          sub.map((tenantInstance) => {
+            const type = tenantInstance.name.split("_")[1];
+            ar[type] = tenantInstance.version;
+          });
+          const live = sub && sub.length > 0 ? (sub[0].live === 1 ? "Yes" : "No") : "No";
+          const customerid = currcustomer.customerid;
+          const farm = sub && sub.length > 0 ? sub[0].farm : "";
+          const customer = currcustomer.customer.name;
+          const temp = currcustomer.temperature;
+          return { ...currcustomer, ...ar, customerid, live, temp, customer, farm };
+        })
+        .filter((c) => (showLive ? c.live === "Yes" : true));
+      setFilteredCustomers(x);
+    }
+  }, [details, sortedByCSM, showNotReady, searchText, showLive]);
 
   if (detailsloading) {
     return <Spinner />;
   }
-
-  // if (loading || detailsloading) {
-  //   return <Loader loading={loading} />;
-  // }
-  // const { tenants, updatestatus, tenantlogs } = data;
-  const { tenantcustomerdetails } = details;
-
-  let allCustomers;
-  if (!sortedByCSM) {
-    allCustomers = _.chain(tenantcustomerdetails)
-      .filter((o) => o.customer.name !== "Infor")
-      .sortBy((o) => o.customer.name)
-      .value();
-  } else {
-    allCustomers = _.chain(tenantcustomerdetails)
-      .filter((o) => o.customer.name !== "Infor")
-      .sortBy((o) => o.csm)
-      .value();
-  }
-
-  let filteredCustomers = [];
-  allCustomers.map((o) => {
-    const found = filteredCustomers.find((n) => n.customerid === o.customerid);
-    console.log({ found });
-    if (!found) {
-      filteredCustomers.push(o);
-    }
-    return 0;
-  });
-  console.log("filterTenants", filteredCustomers);
 
   const doChange = async () => {
     setShowNotReady(!showNotReady);
@@ -173,153 +96,178 @@ const TenantViewList = (props) => {
     setSortedByCSM(!sortedByCSM);
   };
   // console.log(uniqueCustomers);
+
+  const handleSelect = (id) => {
+    console.log(id);
+    toggleShowDetails((prev) => !prev);
+    setCurrentId(id);
+  };
   return (
     <div style={{ margin: 5, background: "#EEE" }}>
-      <Main
-        onKeyDown={(e) => {
-          // console.log(e, e.keyCode);
+      <Loader loading={detailsloading} />
+      <div>
+        <div className="rounded shadow-lg bg-white p-2 m-2" style={{ marginBottom: 10, padding: 20 }}>
+          <div className="flex items-center ">
+            <div className="ml-12 flex items-center ">
+              <label className="inline-flex items-center">
+                <input type="checkbox" className="form-checkbox text-blue-500" checked={showNotReady} onChange={doChange} />
+                <span className="ml-2">{`${showNotReady ? "Uncheck to show all customers" : "Check to show all customers that are not ready"}`}</span>
+              </label>
+            </div>
+            <div className="ml-12 flex items-center ">
+              <label className="inline-flex items-center">
+                <input type="checkbox" className="form-checkbox text-pink-500" checked={sortedByCSM} onChange={doChangeSort} />
+                <span className="ml-2">{`${sortedByCSM ? "Uncheck to sort by customer name" : "Check to sort by CSM"}`}</span>
+              </label>
+            </div>
+            <div className="ml-12 flex items-center ">
+              <label className="inline-flex items-center">
+                <input type="checkbox" className="form-checkbox text-green-500" checked={showLive} onChange={() => setShowLive((prev) => !prev)} />
+                <span className="ml-2">Show Live Customers</span>
+              </label>
+            </div>
+          </div>
+          <SearchBar hintText="type part of customer name or csm" onChange={(v) => setSearchText(v)} className="bg-teal-200" />
+        </div>
+        <div className="p-2 rounded-lg shadow-lg bg-white mx-2">
+          <TenantTable data={filteredCustomers} onSelect={handleSelect} />
+        </div>
+        {isShowingDetails && (
+          <animated.div style={tenantProps}>
+            <div className="inset-0 flex z-50 bg-gray-700  bg-opacity-50 absolute w-5/6 ">
+              <EditTenantDetails
+                profile={customerDetails.find((d) => d.customerid === currentId)}
+                onClose={() => toggleShowDetails((prev) => false)}
+                isTenantEditor={true}
+              />
+            </div>
+          </animated.div>
+        )}
+        {isShowingEvents && (
+          <animated.div style={tenantProps}>
+            <div className="inset-0 flex z-50 bg-gray-700  bg-opacity-50 absolute w-5/6 ">
+              <CustomerHistory />
+            </div>
+          </animated.div>
+        )}
+      </div>
+
+      {/* <Modal
+        onClose={() => toggleShowDetails(false)}
+        open={isShowingDetails}
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
         }}
       >
-        <Loader loading={detailsloading} />
-        <div>
-          <Paper style={{ marginBottom: 10, padding: 20 }}>
-            <Grid container>
-              <Grid item xs={4}>
-                <FormControlLabel
-                  control={<Switch value={showNotReady} checked={showNotReady} onChange={doChange} />}
-                  label={`${showNotReady ? "Uncheck to show all customers" : "Check to show all customers that are not ready"}`}
-                />
-              </Grid>
-              <Grid item xs={4}>
-                <FormControlLabel
-                  control={<Switch value={sortedByCSM} checked={sortedByCSM} onChange={doChangeSort} />}
-                  label={`${sortedByCSM ? "Uncheck to sort by customer name" : "Check to sort by CSM"}`}
-                />
-              </Grid>
-            </Grid>
-          </Paper>
-          <div className={classes.flex}>
-            <Table style={{ fontSize: "1rem", background: "#fff" }}>
-              <TableHead>
-                <TableRow>
-                  <TableHeaderCell>ID</TableHeaderCell>
-                  <TableHeaderCell>Status</TableHeaderCell>
-                  <TableHeaderCell>Ready</TableHeaderCell>
-
-                  <TableHeaderCell className={classes.tableheader}>Customer</TableHeaderCell>
-                  <TableHeaderCell className={classes.tableheader} style={{ width: 100 }}>
-                    Farm
-                  </TableHeaderCell>
-
-                  <TableHeaderCell className={classes.tableheader} style={{ width: 100 }}>
-                    PRD
-                  </TableHeaderCell>
-                  <TableHeaderCell>TRN</TableHeaderCell>
-                  <TableHeaderCell>TST</TableHeaderCell>
-                  <TableHeaderCell>DEV</TableHeaderCell>
-                  <TableHeaderCell>DEM</TableHeaderCell>
-                  <TableHeaderCell className={classes.tableheader}>PM</TableHeaderCell>
-                  <TableHeaderCell className={classes.tableheader}>CSM</TableHeaderCell>
-                  <TableHeaderCell className={classes.tableheader}>Comments</TableHeaderCell>
-                  <TableHeaderCell></TableHeaderCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {filteredCustomers.map((currCustomer, index) => {
-                  const sub = currCustomer.tenants || [];
-                  const ar = { PRD: "", TRN: "", TST: "", DEV: "", DEM: "" };
-                  sub.map((tenantInstance) => {
-                    const type = tenantInstance.name.split("_")[1];
-                    ar[type] = tenantInstance.version;
-                  });
-                  const live = sub && sub.length > 0 ? (sub[0].live === 1 ? true : false) : false;
-                  const customerid = currCustomer.customerid;
-                  const farm = sub && sub.length > 0 ? sub[0].farm : "";
-                  const customer = currCustomer.customer.name;
-                  const updated = currCustomer.updated;
-                  if (showNotReady && updated === 1) return <div />;
-                  // console.log(customer, updated);
-                  const temp = currCustomer.temperature;
-                  const avaclass = classNames({
-                    [classes.alert]: temp === "ALERT" ? true : false,
-                    [classes.watch]: temp === "WATCH" ? true : false,
-                    [classes.live]: live,
-                    [classes.notlive]: !live,
-                  });
-
-                  let isTen6 = ar["PRD"].indexOf("10.6") >= 0;
-                  const posOfCEVersion = ar["PRD"].indexOf("2019.");
-                  if (posOfCEVersion >= 0) {
-                    isTen6 = isTen6 || ar["PRD"].slice(posOfCEVersion) < "2019.11";
-                  }
-
-                  return (
-                    <TableRow key={index}>
-                      <TableCell
-                        onClick={() => window.open("http://navigator.infor.com/n/incident_list.asp?ListType=CUSTOMERID&Value=" + customerid)}
-                        className={classes.newerVersion}
-                      >
-                        {customerid}
-                      </TableCell>
-                      <TableCell>
-                        <Avatar className={avaclass} alt="Author" title={temp}>
-                          {live ? "Live" : ""}
-                        </Avatar>
-                      </TableCell>
-                      <TableCell>
-                        <TenantChecked id={customerid} value={updated === 1}></TenantChecked>
-                      </TableCell>
-                      <TableCell className={classes.tablecell}>{customer}</TableCell>
-                      <TableCell className={classes.tablecell}>{farm}</TableCell>
-                      {isTen6 ? (
-                        <TableCell className={classes.oldVersion}>{ar["PRD"]}</TableCell>
-                      ) : (
-                        <TableCell className={classes.newerVersion}>{ar["PRD"]}</TableCell>
-                      )}
-                      <TableCell>{ar["TRN"]}</TableCell>
-                      <TableCell>{ar["TST"]}</TableCell>
-                      <TableCell>{ar["DEV"]}</TableCell>
-                      <TableCell>{ar["DEM"]}</TableCell>
-                      <TableCell className={classes.tablecell}>{currCustomer.pm}</TableCell>
-                      <TableCell className={classes.tablecell}>{currCustomer.csm}</TableCell>
-                      <TableCell className={classes.tablecell}>{currCustomer.comments}</TableCell>
-                      <TableCell>
-                        {" "}
-                        <MoreVertIcon
-                          onClick={() => {
-                            setCurrentId(customerid);
-                            toggleShowDetails(true);
-                          }}
-                        ></MoreVertIcon>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </div>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            boxShadow: "0px 1px 3px 0px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 2px 1px -1px rgba(0,0,0,0.12)",
-          }}
-        >
-          {/* <SearchBar onChange={e => setSearchText(e)} /> */}
-        </div>
-
-        <Modal
+        <EditTenantDetails
+          profile={filteredCustomers.find((d) => d.customerid === currentId)}
           onClose={() => toggleShowDetails(false)}
-          open={isShowingDetails}
-          BackdropComponent={Backdrop}
-          BackdropProps={{
-            timeout: 500,
-          }}
-        >
-          <EditTenantDetails profile={tenantcustomerdetails.find((d) => d.customerid === currentId)} onClose={() => toggleShowDetails(false)} />
-        </Modal>
-      </Main>
+          isTenantEditor={true}
+        />
+      </Modal> */}
+    </div>
+  );
+};
+
+export const ActionCell = ({ value, fn }) => (
+  <td className="p-2 font-sans text-sm font-semibold text-blue-700 ">
+    <Button
+      className="w-24"
+      color="teal"
+      onClick={() => {
+        console.log(value);
+        fn(value);
+      }}
+    >
+      {value}
+    </Button>
+  </td>
+);
+
+export const LiveCell = ({ value }) => {
+  if (value === "Yes") {
+    return (
+      <div className="bg-green-200 text-green-800 flex font-semibold items-center justify-center rounded-full text-sm h-10 w-10 p-3 shadow-lg">
+        Live
+      </div>
+    );
+  } else {
+    return <div></div>;
+  }
+};
+
+const TenantTable = ({ data, replaceField = null, mark = false, onSelect }) => {
+  function replaceList(fields, replaceField) {
+    let replacing = [];
+    fields.forEach((item) => {
+      if (item.title === replaceField.name) {
+        replacing = [...replacing, { title: replaceField.title, fld: replaceField.toField }];
+      } else {
+        replacing = [...replacing, item];
+      }
+    });
+    return replacing;
+  }
+  let fields = [
+    { title: "ID", fld: "customerid", ac: true },
+    { title: "Live", fld: "live", live: true },
+    // { title: "Live", fld: "live" },
+    { title: "Customer", fld: "customer" },
+    { title: "Farm", fld: "farm" },
+    { title: "PRD", fld: "PRD" },
+    { title: "TRN", fld: "TRN" },
+    { title: "TST", fld: "TST" },
+    { title: "DEV", fld: "DEV" },
+    { title: "DEM", fld: "DEM" },
+    { title: "PM", fld: "pm" },
+    { title: "CSM", fld: "csm" },
+    { title: "comments", fld: "comments" },
+  ];
+  if (replaceField && replaceField.name && replaceField.toField) {
+    fields = replaceList(fields, replaceField);
+  }
+
+  const handleAction = (value) => {
+    console.log(value);
+    onSelect(value);
+  };
+  return (
+    <div className="overflow-y-auto scrollbar-w-2 scrollbar-track-gray-lighter scrollbar-thumb-rounded scrollbar-thumb-gray scrolling-touch">
+      <table className="w-full text-left table-collapse">
+        <thead>
+          <tr className="">
+            {fields.map((field) => (
+              <HeaderCell key={field.fld}>{field.title}</HeaderCell>
+            ))}
+          </tr>
+        </thead>
+        <tbody className="align-baseline">
+          {!data || data.length === 0 ? (
+            <tr>
+              <DataCell>No Data..</DataCell>
+            </tr>
+          ) : (
+            data?.map((items) => (
+              <tr key={items.customerid}>
+                {fields.map((field, index) => {
+                  if (field.ac) {
+                    return <ActionCell key={index} value={items.customerid} fn={onSelect} />;
+                  } else if (field.live) {
+                    return <LiveCell key={index} value={items[field.fld]} />;
+                  } else if (field.display) {
+                    return (
+                      <svg className="fill-current w-4 h-4 text-gray-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                        <path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-7.59V4h2v5.59l3.95 3.95-1.41 1.41L9 10.41z" />
+                      </svg>
+                    );
+                  } else return <DataCell key={`${items.customerid}${index}}`}>{items[field.fld]}</DataCell>;
+                })}
+              </tr>
+            ))
+          )}
+        </tbody>
+      </table>
     </div>
   );
 };

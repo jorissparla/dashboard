@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import gql from "graphql-tag";
-import { graphql } from "react-apollo";
+import { graphql } from "@apollo/client/react/hoc";
 import SummaryChart from "./NewSummaryChart";
 
 class HistoryChartContainer extends Component {
   render() {
     const {
       data: { loading, error, history },
-      region = "EMEAs"
+      region = "EMEAs",
     } = this.props;
     console.log("HistoryChartContainer", this.props);
     if (loading) return <div>Loading...</div>;
@@ -21,16 +21,7 @@ class HistoryChartContainer extends Component {
     const color = this.props.color;
     return (
       <div>
-        <SummaryChart
-          data={summary}
-          title={title}
-          type={type}
-          xvalue="hour"
-          value={value}
-          color={color}
-          team={team}
-          region={region}
-        />
+        <SummaryChart data={summary} title={title} type={type} xvalue="hour" value={value} color={color} team={team} region={region} />
       </div>
     );
   }
@@ -49,5 +40,5 @@ const queryHistory = gql`
 `;
 
 export default graphql(queryHistory, {
-  options: props => ({ variables: { team: props.team || "Logistics" } })
+  options: (props) => ({ variables: { team: props.team || "Logistics" } }),
 })(HistoryChartContainer);

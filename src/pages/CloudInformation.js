@@ -1,7 +1,7 @@
 import { CLOUD_READINESS_QUERY, MUTATION_UPDATE_CLOUD_READINESS } from "cloudsuite/graphql/Queries";
 import EditableMarkDownField from "common/EditableMarkdownField";
 import React from "react";
-import { useQuery } from "react-apollo";
+import { useQuery } from "@apollo/client";
 import useStyles from "../cloudsuite/useCloudFieldStyles";
 const CloudInformation = ({ user }) => {
   console.log("user", user);

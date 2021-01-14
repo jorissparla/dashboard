@@ -1,4 +1,4 @@
-import { Button, Grid } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import { makeStyles } from "@material-ui/styles";
 import PropTypes from "prop-types";
@@ -41,9 +41,9 @@ const FancyFilter = (props) => {
     setOpenFilter(false);
   };
 
-  function handleSetFilterActive(value) {
-    setFilterActive(value);
-  }
+  // function handleSetFilterActive(value) {
+  //   setFilterActive(value);
+  // }
   return (
     <>
       <div className="flex flex-col">

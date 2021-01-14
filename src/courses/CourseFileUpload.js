@@ -1,22 +1,22 @@
-import React, { Component } from 'react';
-import { withStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import IconButton from '@material-ui/core/IconButton';
-import FolderOpen from '@material-ui/icons/FolderOpen';
-import FileUpload from '@material-ui/icons/FileCopy';
-import gql from 'graphql-tag';
-import { Mutation } from 'react-apollo';
-import styled from 'styled-components';
-const PATH_PREFIX = '\\\\nlbavwdocsup1\\Training\\';
-const LINK_PREFIX = 'https://nlbavwdocsup1:5001/';
+import { Mutation } from "@apollo/client/react/components";
+import IconButton from "@material-ui/core/IconButton";
+import Paper from "@material-ui/core/Paper";
+import { withStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
+import FileUpload from "@material-ui/icons/FileCopy";
+import FolderOpen from "@material-ui/icons/FolderOpen";
+import gql from "graphql-tag";
+import React, { Component } from "react";
+import styled from "styled-components";
+const PATH_PREFIX = "\\\\nlbavwdocsup1\\Training\\";
+const LINK_PREFIX = "https://nlbavwdocsup1:5001/";
 
 const UploadButtonWrapper = styled.div`
   position: relative;
   overflow: hidden;
   display: inline-block;
-  input[type='file'] {
+  input[type="file"] {
     font-size: 100px;
     position: absolute;
     left: 0;
@@ -34,41 +34,37 @@ const FILE_UPLOAD_MUTATION = gql`
     }
   }
 `;
-const viewLink = path => path.replace(PATH_PREFIX, LINK_PREFIX);
+const viewLink = (path) => path.replace(PATH_PREFIX, LINK_PREFIX);
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
-    width: '100%'
+    width: "100%",
   },
   container: {
-    display: 'flex',
-    flexWrap: 'wrap'
+    display: "flex",
+    flexWrap: "wrap",
   },
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    width: 500
+    width: 500,
   },
   button: {
-    margin: -10
+    margin: -10,
   },
   button2: {
-    marginBottom: -20
-  }
+    marginBottom: -20,
+  },
 });
 
 class CourseFileUploader extends Component {
   state = {};
   render() {
-    const {
-      link = '\\\\nlbavwixs.infor.com\\images\\oeps',
-      classes,
-      readOnly = false
-    } = this.props;
+    const { link = "\\\\nlbavwixs.infor.com\\images\\oeps", classes, readOnly = false } = this.props;
     return (
       <Mutation mutation={FILE_UPLOAD_MUTATION}>
         {(mutation, { data }) => {
-          console.log('DATA', data);
+          console.log("DATA", data);
           return (
             <React.Fragment>
               <Paper className={classes.root} elevation={2}>
@@ -76,14 +72,7 @@ class CourseFileUploader extends Component {
                   Course Files
                 </Typography>
                 <div>
-                  <TextField
-                    id="path"
-                    label="path"
-                    className={classes.textField}
-                    value={link}
-                    margin="normal"
-                    disabled={true}
-                  />
+                  <TextField id="path" label="path" className={classes.textField} value={link} margin="normal" disabled={true} />
                   {!readOnly && (
                     <React.Fragment>
                       upload Files
@@ -96,11 +85,11 @@ class CourseFileUploader extends Component {
                           multiple
                           required
                           onChange={({ target: { validity, files } }) => {
-                            console.log('files', files, link);
+                            console.log("files", files, link);
                             return (
                               validity.valid &&
                               mutation({
-                                variables: { files, folder: link }
+                                variables: { files, folder: link },
                               })
                             );
                           }}
@@ -109,12 +98,7 @@ class CourseFileUploader extends Component {
                     </React.Fragment>
                   )}
                   View files
-                  <IconButton
-                    className={classes.button}
-                    aria-label="Delete"
-                    color="secondary"
-                    onClick={() => window.open(viewLink(link))}
-                  >
+                  <IconButton className={classes.button} aria-label="Delete" color="secondary" onClick={() => window.open(viewLink(link))}>
                     <FolderOpen />
                   </IconButton>
                 </div>

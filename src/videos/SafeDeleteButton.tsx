@@ -1,37 +1,11 @@
-import { Button, TextField, withStyles } from "@material-ui/core";
-import * as React from "react";
 import TWButton from "elements/TWButton";
-
-const styles: any = (theme: any) => ({
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-  },
-  formControl: {
-    margin: theme.spacing(2),
-    minWidth: 120,
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
-  },
-  button: {
-    margin: theme.spacing(1),
-    color: "white",
-    backgroundColor: "black",
-  },
-  TextFieldStyle: {
-    marginLeft: theme.spacing,
-    marginRight: theme.spacing,
-    width: 300,
-  },
-});
+import * as React from "react";
 
 interface Props {
   onDelete: Function;
-  classes: any;
 }
 const deleteCode = (Math.floor(Math.random() * 10000) + 10000).toString().substring(1);
-const SafeDeleteButton: React.FC<Props> = ({ onDelete, classes }) => {
+const SafeDeleteButton: React.FC<Props> = ({ onDelete }) => {
   const [pin, setPin] = React.useState("");
   const [disabled, setEnabled] = React.useState(true);
 
@@ -42,7 +16,7 @@ const SafeDeleteButton: React.FC<Props> = ({ onDelete, classes }) => {
     await setPin(e.target.value);
   }
   return (
-    <div className={classes.root}>
+    <div className="flex flex-wrap">
       {disabled ? (
         <TWButton color="greyforbidden" variant="contained" disabled={disabled}>
           Enter {deleteCode} to enable delete
@@ -70,6 +44,7 @@ const SafeDeleteButton: React.FC<Props> = ({ onDelete, classes }) => {
           <input
             className="form-input block pl-10 w-48 text-gray-600 sm:text-sm sm:leading-5"
             value={pin}
+            type="text"
             onChange={(e) => handleChange(e)}
             placeholder={`Enter ${deleteCode} `}
           />
@@ -79,4 +54,4 @@ const SafeDeleteButton: React.FC<Props> = ({ onDelete, classes }) => {
   );
 };
 
-export default withStyles(styles)(SafeDeleteButton);
+export default SafeDeleteButton;

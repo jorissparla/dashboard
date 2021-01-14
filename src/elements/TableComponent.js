@@ -1,33 +1,6 @@
 import React from "react";
 import _ from "lodash";
 
-const data = [
-  {
-    name: "ABernardB Lane",
-    title: "Director, Human Resources",
-    email: "bernardlane@example.com",
-    number: 12,
-  },
-  {
-    name: "Bernard Lane",
-    title: "Director, Human Resources",
-    email: "bernardlane@example.com",
-    number: 15,
-  },
-  {
-    name: "CBernard Lane",
-    title: "Zirector, Human Resources",
-    email: "bernardlane@example.com",
-    number: 8,
-  },
-  {
-    name: "DBernard Lane",
-    title: "Airector, Human Resources",
-    email: "bernardlane@example.com",
-    number: 33,
-  },
-];
-
 export function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
@@ -60,7 +33,7 @@ const TableHeader = ({ label }) => (
   </th>
 );
 
-const TableCell = ({ value }) => <td className="px-6 py-4 whitespace-no-wrap text-sm leading-5  text-gray-900">{value}</td>;
+const TableCell = ({ value }) => <td className="px-6 py-4 whitespace-nowrap text-sm leading-5  text-gray-900">{value}</td>;
 
 const TableRow = ({ children, odd }) => {
   console.log(odd);

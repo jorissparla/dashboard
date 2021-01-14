@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
-
 import { GenericTable } from "elements/GenericTable";
+import React from "react";
 
 const defaultFields = [
   { name: "incident", title: "Incident", type: "hl" },

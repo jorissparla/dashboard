@@ -1,20 +1,20 @@
-import React from 'react';
-import gql from 'graphql-tag';
-import { withRouter } from 'react-router';
-import { Query } from 'react-apollo';
-import { withStyles } from '@material-ui/core/styles';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import Divider from '@material-ui/core/Divider';
+import { Query } from "@apollo/client/react/components";
+import { Button } from "@material-ui/core";
+import Divider from "@material-ui/core/Divider";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import ListItemText from "@material-ui/core/ListItemText";
+import { withStyles } from "@material-ui/core/styles";
+import gql from "graphql-tag";
+import React from "react";
+import { withRouter } from "react-router";
+import styled from "styled-components";
+import AcceptPlannedCourseRequest from "../courses/AcceptPlannedCourseRequest";
+import DeletePlannedCourseRequest from "../courses/DeletePlannedCourseRequest";
+import User from "../User";
 //import { format } from "date-fns";
-import { format } from '../utils/format';
-import styled from 'styled-components';
-import User from '../User';
-import AcceptPlannedCourseRequest from '../courses/AcceptPlannedCourseRequest';
-import DeletePlannedCourseRequest from '../courses/DeletePlannedCourseRequest';
-import { Button } from '@material-ui/core';
+import { format } from "../utils/format";
 
 const Header = styled.div`
   display: flex;
@@ -27,18 +27,18 @@ const Header = styled.div`
   background-color: #eeeeee;
 `;
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {},
   headerStyle: {
-    fontSize: 18
+    fontSize: 18,
   },
   button: {
     margin: 12,
-    background: '#2196f3'
+    background: "#2196f3",
   },
   listItem: {
-    minWidth: '45vw'
-  }
+    minWidth: "45vw",
+  },
 });
 
 export const QUERY_PLANNEDCOURSEREQUESTS = gql`
@@ -70,18 +70,18 @@ class PlannedCourseRequestList extends React.Component {
       <Query query={QUERY_PLANNEDCOURSEREQUESTS}>
         {({ data, loading }) => {
           if (loading) {
-            return 'loading';
+            return "loading";
           }
           const { plannedcourserequests } = data;
-          let approver = '';
+          let approver = "";
           return (
             <User>
               {({ data, loading }) => {
                 if (loading) {
-                  return 'loading';
+                  return "loading";
                 }
                 if (data && data.me) {
-                  enabled = ['Admin', 'PO'].some(item => item === data.me.role);
+                  enabled = ["Admin", "PO"].some((item) => item === data.me.role);
                   approver = data.me.email;
                 }
 
@@ -93,54 +93,32 @@ class PlannedCourseRequestList extends React.Component {
                         variant="contained"
                         color="secondary"
                         className={classes.button}
-                        onClick={() => this.props.history.push('/addplannedcourserequest')}
+                        onClick={() => this.props.history.push("/addplannedcourserequest")}
                       >
                         Add
                       </Button>
                     </Header>
                     <List>
-                      {plannedcourserequests.map(
-                        ({
-                          course,
-                          id,
-                          startdate,
-                          hours,
-                          details,
-                          course: { title },
-                          students
-                        }) => {
-                          const courseid = course.id;
-                          const partipants = students.map(st => st.fullname).join(';');
-                          const date = format(startdate, ' EEE, dd MMM yyyy');
-                          return (
-                            <React.Fragment key={id}>
-                              <ListItem key={id}>
-                                <ListItemText
-                                  primary={title}
-                                  secondary={details || title}
-                                  className={classes.listItem}
-                                />
-                                <ListItemText
-                                  primary={`⏰: ${hours} Hours, 📅 Date: ${date}`}
-                                  secondary={partipants}
-                                  className={classes.listItem}
-                                />
-                                {enabled && (
-                                  <ListItemSecondaryAction>
-                                    <AcceptPlannedCourseRequest
-                                      id={id}
-                                      courseid={courseid}
-                                      approver={approver}
-                                    />
-                                    <DeletePlannedCourseRequest id={id} />
-                                  </ListItemSecondaryAction>
-                                )}
-                              </ListItem>
-                              <Divider />
-                            </React.Fragment>
-                          );
-                        }
-                      )}
+                      {plannedcourserequests.map(({ course, id, startdate, hours, details, course: { title }, students }) => {
+                        const courseid = course.id;
+                        const partipants = students.map((st) => st.fullname).join(";");
+                        const date = format(startdate, " EEE, dd MMM yyyy");
+                        return (
+                          <React.Fragment key={id}>
+                            <ListItem key={id}>
+                              <ListItemText primary={title} secondary={details || title} className={classes.listItem} />
+                              <ListItemText primary={`⏰: ${hours} Hours, 📅 Date: ${date}`} secondary={partipants} className={classes.listItem} />
+                              {enabled && (
+                                <ListItemSecondaryAction>
+                                  <AcceptPlannedCourseRequest id={id} courseid={courseid} approver={approver} />
+                                  <DeletePlannedCourseRequest id={id} />
+                                </ListItemSecondaryAction>
+                              )}
+                            </ListItem>
+                            <Divider />
+                          </React.Fragment>
+                        );
+                      })}
                     </List>
                   </React.Fragment>
                 );

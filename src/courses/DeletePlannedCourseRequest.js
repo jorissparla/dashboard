@@ -1,43 +1,34 @@
-import { Button } from '@material-ui/core';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import TextField from '@material-ui/core/TextField';
-import ClearIcon from '@material-ui/icons/Clear';
-import React, { useState } from 'react';
-import { adopt } from 'react-adopt';
-import { Mutation } from 'react-apollo';
-import { SharedSnackbarConsumer } from '../globalState/SharedSnackbar.context';
-import { QUERY_PLANNEDCOURSEREQUESTS } from '../pages/PlannedCourseRequestList';
-import {
-  CONVERT_TO_PLANNED_COURSE_MUTATION,
-  DELETE_PLANNING_REQUEST_MUTATION
-} from './AcceptPlannedCourseRequest';
+import { Mutation } from "@apollo/client/react/components";
+import { Button } from "@material-ui/core";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import TextField from "@material-ui/core/TextField";
+import ClearIcon from "@material-ui/icons/Clear";
+import React, { useState } from "react";
+import { adopt } from "react-adopt";
+import { SharedSnackbarConsumer } from "../globalState/SharedSnackbar.context";
+import { QUERY_PLANNEDCOURSEREQUESTS } from "../pages/PlannedCourseRequestList";
+import { CONVERT_TO_PLANNED_COURSE_MUTATION, DELETE_PLANNING_REQUEST_MUTATION } from "./AcceptPlannedCourseRequest";
 
 const Composed = adopt({
   converttoplannedcourse: ({ render }) => (
-    <Mutation
-      mutation={CONVERT_TO_PLANNED_COURSE_MUTATION}
-      refetchQueries={[{ query: QUERY_PLANNEDCOURSEREQUESTS }]}
-    >
+    <Mutation mutation={CONVERT_TO_PLANNED_COURSE_MUTATION} refetchQueries={[{ query: QUERY_PLANNEDCOURSEREQUESTS }]}>
       {render}
     </Mutation>
   ),
   deleteplannedcourserequest: ({ render }) => (
-    <Mutation
-      mutation={DELETE_PLANNING_REQUEST_MUTATION}
-      refetchQueries={[{ query: QUERY_PLANNEDCOURSEREQUESTS }]}
-    >
+    <Mutation mutation={DELETE_PLANNING_REQUEST_MUTATION} refetchQueries={[{ query: QUERY_PLANNEDCOURSEREQUESTS }]}>
       {render}
     </Mutation>
-  )
+  ),
 });
 
 function DeletePlannedCourseRequest({ id }) {
   const [show, setShow] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const handleClose = () => {
     setShow(false);
   };
@@ -51,9 +42,7 @@ function DeletePlannedCourseRequest({ id }) {
                 <Dialog open={show} onClose={handleClose} aria-labelledby="form-dialog-title">
                   <DialogTitle id="form-dialog-title">Reject</DialogTitle>
                   <DialogContent>
-                    <DialogContentText>
-                      To reject this request, type a reason that will be send to the recipient
-                    </DialogContentText>
+                    <DialogContentText>To reject this request, type a reason that will be send to the recipient</DialogContentText>
                     <TextField
                       autoFocus
                       margin="dense"
@@ -72,10 +61,10 @@ function DeletePlannedCourseRequest({ id }) {
                     <Button
                       onClick={async () => {
                         const response = await deleteplannedcourserequest({
-                          variables: { input: { id } }
+                          variables: { input: { id } },
                         });
                         console.log(response);
-                        openSnackbar('Item Deleted');
+                        openSnackbar("Item Deleted");
                         handleClose();
                       }}
                       color="primary"

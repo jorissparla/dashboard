@@ -1,6 +1,6 @@
 import gql from "graphql-tag";
 import React from "react";
-import { Query } from "react-apollo";
+import { Query, Mutation } from "@apollo/client/react/components";
 
 const QUERY_PLANNEDCOURSE_WITHPARTICIPANTS_1 = gql`
   query QUERY_PLANNEDCOURSE_WITHPARTICIPANTS_1($id: ID) {
@@ -26,23 +26,23 @@ const QUERY_PLANNEDCOURSE_WITHPARTICIPANTS_1 = gql`
 class DownshiftMultiple extends React.Component {
   state = {
     inputValue: "",
-    selectedItem: []
+    selectedItem: [],
   };
 
-  handleKeyDown = event => {
+  handleKeyDown = (event) => {
     const { inputValue, selectedItem } = this.state;
     if (selectedItem.length && !inputValue.length && keycode(event) === "backspace") {
       this.setState({
-        selectedItem: selectedItem.slice(0, selectedItem.length - 1)
+        selectedItem: selectedItem.slice(0, selectedItem.length - 1),
       });
     }
   };
 
-  handleInputChange = event => {
+  handleInputChange = (event) => {
     this.setState({ inputValue: event.target.value });
   };
 
-  handleChange = item => {
+  handleChange = (item) => {
     let { selectedItem } = this.state;
 
     if (selectedItem.indexOf(item) === -1) {
@@ -51,12 +51,12 @@ class DownshiftMultiple extends React.Component {
 
     this.setState({
       inputValue: "",
-      selectedItem
+      selectedItem,
     });
   };
 
-  handleDelete = item => () => {
-    this.setState(state => {
+  handleDelete = (item) => () => {
+    this.setState((state) => {
       const selectedItem = [...state.selectedItem];
       selectedItem.splice(selectedItem.indexOf(item), 1);
       return { selectedItem };
@@ -88,14 +88,14 @@ class DownshiftMultiple extends React.Component {
                     fullWidth: true,
                     classes,
                     InputProps: getInputProps({
-                      startAdornment: selectedItem.map(item => (
+                      startAdornment: selectedItem.map((item) => (
                         <Chip key={item} tabIndex={-1} label={item} className={classes.chip} onDelete={this.handleDelete(item)} />
                       )),
                       onChange: this.handleInputChange,
                       onKeyDown: this.handleKeyDown,
-                      placeholder: "Select multiple countries"
+                      placeholder: "Select multiple countries",
                     }),
-                    label: "Label"
+                    label: "Label",
                   })}
                   {isOpen ? (
                     <Paper className={classes.paper} square>
@@ -105,7 +105,7 @@ class DownshiftMultiple extends React.Component {
                           index,
                           itemProps: getItemProps({ item: suggestion.label }),
                           highlightedIndex,
-                          selectedItem: selectedItem2
+                          selectedItem: selectedItem2,
                         })
                       )}
                     </Paper>
@@ -121,5 +121,5 @@ class DownshiftMultiple extends React.Component {
 }
 
 DownshiftMultiple.propTypes = {
-  classes: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired,
 };

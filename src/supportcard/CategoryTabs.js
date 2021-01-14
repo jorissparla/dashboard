@@ -1,14 +1,12 @@
-import gql from "graphql-tag";
-import { graphql } from "react-apollo";
-import React, { useState } from "react";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
+import { useQuery } from "@apollo/client";
+import ReprodPin from "@material-ui/icons/Build";
+import AllPin from "@material-ui/icons/ClearAll";
 import CloudPin from "@material-ui/icons/Cloud";
 import DeveloperPin from "@material-ui/icons/DeveloperMode";
-import ReprodPin from "@material-ui/icons/Build";
-import SatPin from "@material-ui/icons/ThumbUp";
-import AllPin from "@material-ui/icons/ClearAll";
 import FlagIcon from "@material-ui/icons/Flag";
+import SatPin from "@material-ui/icons/ThumbUp";
+import gql from "graphql-tag";
+import React, { useState } from "react";
 
 const IconMapper = (label) => {
   switch (label) {
@@ -29,11 +27,14 @@ const IconMapper = (label) => {
   }
 };
 
-const CategoryTabs = ({ data: { loading, error, categories }, onChange, onSave }) => {
+const CategoryTabs = ({ onChange, onSave }) => {
   const [selected, setSelected] = useState("All");
+  const { data, loading } = useQuery(CategoryQuery);
+
   if (loading) {
     return <p>Loading ...</p>;
   }
+  const { error, categories } = data;
   if (error) {
     return <p>{error.message}</p>;
   }
@@ -134,4 +135,4 @@ const CategoryQuery = gql`
     }
   }
 `;
-export default graphql(CategoryQuery)(CategoryTabs);
+export default CategoryTabs;

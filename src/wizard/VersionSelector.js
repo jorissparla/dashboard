@@ -1,16 +1,16 @@
-import React from 'react';
-import { Grid, InputLabel, Typography, Select, MenuItem, Chip } from '@material-ui/core';
-import { useQuery } from 'react-apollo';
-import { ALL_MAINTENANCE_QUERY } from './Queries';
+import React from "react";
+import { Grid, InputLabel, Typography, Select, MenuItem, Chip } from "@material-ui/core";
+import { useQuery } from "@apollo/client";
+import { ALL_MAINTENANCE_QUERY } from "./Queries";
 
-const VersionSelect = ({ versions = [''], onChange = () => {} }) => {
+const VersionSelect = ({ versions = [""], onChange = () => {} }) => {
   const { data, loading } = useQuery(ALL_MAINTENANCE_QUERY);
 
   const [version, setVersion] = React.useState(versions[0]);
 
   React.useEffect(() => {
     if (data && data.allMaintenance) {
-      console.log('version set');
+      console.log("version set");
       setVersion(data.allMaintenance[0]);
     }
   }, [data]);
@@ -19,7 +19,7 @@ const VersionSelect = ({ versions = [''], onChange = () => {} }) => {
     return <div />;
   }
 
-  const handleChange = event => {
+  const handleChange = (event) => {
     setVersion(event.target.value);
     // ctx.setVersionByName(event.target.value, ctx.validMaintenance);
   };
@@ -47,7 +47,7 @@ const VersionSelect = ({ versions = [''], onChange = () => {} }) => {
         <Chip label={`${ctx.activeVersion.nryears} years old`} />
       </Grid>
       <Grid item xs={12} alignContent="flex-start">
-        <Typography>{ctx.activeVersion['Are checks Required?']}</Typography>
+        <Typography>{ctx.activeVersion["Are checks Required?"]}</Typography>
       </Grid>
     </Grid>
   );

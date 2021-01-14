@@ -5,7 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import gql from "graphql-tag";
-import { Mutation } from "react-apollo";
+import { Query, Mutation } from "@apollo/client/react/components";
 import { adopt } from "react-adopt";
 
 const PATH_PREFIX = "\\\\nlbavwdocsup1\\Training\\";
@@ -33,47 +33,43 @@ const UPDATE_COURSE = gql`
   }
 `;
 
-const createFolderMutation = ({ render }) => (
-  <Mutation mutation={CREATE_FOLDER}>{(mutation, result) => render({ mutation, result })}</Mutation>
-);
+const createFolderMutation = ({ render }) => <Mutation mutation={CREATE_FOLDER}>{(mutation, result) => render({ mutation, result })}</Mutation>;
 
-const updateCourseMutation = ({ render }) => (
-  <Mutation mutation={UPDATE_COURSE}>{(mutation, result) => render({ mutation, result })}</Mutation>
-);
+const updateCourseMutation = ({ render }) => <Mutation mutation={UPDATE_COURSE}>{(mutation, result) => render({ mutation, result })}</Mutation>;
 
 const mapper = {
   createFolderMutation,
-  updateCourseMutation
+  updateCourseMutation,
 };
 
 const mapProps = ({ createFolderMutation, updateCourseMutation }) => ({
   createFolder: createFolderMutation.mutation,
-  updateCourse: updateCourseMutation.mutation
+  updateCourse: updateCourseMutation.mutation,
 });
 
 const Updater = adopt(mapper, mapProps);
 
-const styles = theme => ({
+const styles = (theme) => ({
   container: {
     display: "flex",
-    flexWrap: "wrap"
+    flexWrap: "wrap",
   },
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    width: 400
+    width: 400,
   },
   button: {
-    margin: theme.spacing(1)
-  }
+    margin: theme.spacing(1),
+  },
 });
 
 class CreateFolder extends Component {
   state = { folderName: "" };
 
-  handleChange = name => event => {
+  handleChange = (name) => (event) => {
     this.setState({
-      [name]: event.target.value
+      [name]: event.target.value,
     });
   };
 
@@ -82,7 +78,7 @@ class CreateFolder extends Component {
     return (
       <Updater>
         {({ createFolder, updateCourse }) => {
-          const onCreate = async name => {
+          const onCreate = async (name) => {
             await createFolder({ variables: { name } });
             await updateCourse({ variables: { input: { id, link: name } } });
             if (this.props.reRender) {

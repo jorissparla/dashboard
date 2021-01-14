@@ -1,33 +1,33 @@
-import { FormControl, FormHelperText, NativeSelect } from '@material-ui/core';
-import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
-import { withStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-import {addHours} from 'date-fns';
-import { Formik } from 'formik';
-import gql from 'graphql-tag';
-import _ from 'lodash';
-import React from 'react';
-import { Mutation, Query } from 'react-apollo';
-import { withRouter } from 'react-router';
-import * as yup from 'yup';
-import Component from '../common/component-component';
-import { QUERY_PLANNEDCOURSEREQUESTS } from '../pages/PlannedCourseRequestList';
-import User from '../User';
+import { FormControl, FormHelperText, NativeSelect } from "@material-ui/core";
+import Button from "@material-ui/core/Button";
+import Paper from "@material-ui/core/Paper";
+import { withStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
+import { addHours } from "date-fns";
+import { Formik } from "formik";
+import gql from "graphql-tag";
+import _ from "lodash";
+import React from "react";
+import { Query, Mutation } from "@apollo/client/react/components";
+import { withRouter } from "react-router";
+import * as yup from "yup";
+import Component from "../common/component-component";
+import { QUERY_PLANNEDCOURSEREQUESTS } from "../pages/PlannedCourseRequestList";
+import User from "../User";
 //import format from "date-fns/format";
-import { format } from '../utils/format';
-import { StyledMultiple, StyledSelect } from './StyledDropdowns';
+import { format } from "../utils/format";
+import { StyledMultiple, StyledSelect } from "./StyledDropdowns";
 
 const validationSchema = yup.object().shape({
   course: yup.string().required(),
   hours: yup.string().required(),
   type: yup.string().required(),
-  participants: yup.string().required()
+  participants: yup.string().required(),
 });
 
 const ALL_USERS = gql`
-  query ALL_USERS{
+  query ALL_USERS {
     supportfolks {
       id
       fullname
@@ -50,133 +50,119 @@ const ADD_PLANNEDCOURSEREQUEST = gql`
   }
 `;
 
-const styles = theme => ({
+const styles = (theme) => ({
   root: {
     flexGrow: 1,
     marginBottom: 10,
-    marginLeft: 200
+    marginLeft: 200,
   },
   button: {
     margin: theme.spacing(1),
     width: 150,
-    marginRight: 50
+    marginRight: 50,
   },
   container: {
     flexGrow: 1,
-    position: 'relative'
+    position: "relative",
   },
   paper: {
-    position: 'relative',
+    position: "relative",
     zIndex: 1,
     marginTop: theme.spacing(1),
     left: 0,
-    right: 0
+    right: 0,
   },
   paper2: {
     padding: 10,
-    margin: 10
+    margin: 10,
   },
   chip: {
-    margin: `${theme.spacing(0.5)}px ${theme.spacing(0.25)}px`
+    margin: `${theme.spacing(0.5)}px ${theme.spacing(0.25)}px`,
   },
   inputRoot: {
-    flexWrap: 'wrap'
+    flexWrap: "wrap",
   },
   textField: {
     margin: 10,
-    width: 200
+    width: 200,
   },
   largetextField: {
     marginTop: 10,
     marginBottom: 10,
-    width: '90%'
+    width: "90%",
   },
   selectEmpty: {
-    width: '90vw',
-    marginBottom: 10
+    width: "90vw",
+    marginBottom: 10,
   },
   column: {
-    display: 'flex',
-    flexDirection: 'column'
+    display: "flex",
+    flexDirection: "column",
   },
   divider: {
-    height: theme.spacing(2)
-  }
+    height: theme.spacing(2),
+  },
 });
 
 class AddPlannedCourseRequest extends React.Component {
   state = {
-    age: ''
+    age: "",
   };
 
   getCourseId = (courses, title) => {
-    const filteredcourse = courses.filter(c => c.title === title);
+    const filteredcourse = courses.filter((c) => c.title === title);
     if (filteredcourse.length > 0) {
       return filteredcourse[0].id;
     } else return null;
   };
-  handleChange = name => event => {
+  handleChange = (name) => (event) => {
     this.setState({ [name]: event.target.value });
   };
   render() {
     const { classes } = this.props;
-    let defaultUser = '';
-    let submittedBy = '';
+    let defaultUser = "";
+    let submittedBy = "";
     return (
       <User>
         {({ data, loading }) => {
           if (loading) {
-            return 'loading...';
+            return "loading...";
           }
 
           if (data && data.me) {
             const { me } = data;
-            console.log('Me', me);
+            console.log("Me", me);
             defaultUser = me.fullname;
             submittedBy = me.email;
           }
           return (
-            <Mutation
-              mutation={ADD_PLANNEDCOURSEREQUEST}
-              refetchQueries={[{ query: QUERY_PLANNEDCOURSEREQUESTS }]}
-            >
-              {addPlannedCourseRequest => {
+            <Mutation mutation={ADD_PLANNEDCOURSEREQUEST} refetchQueries={[{ query: QUERY_PLANNEDCOURSEREQUESTS }]}>
+              {(addPlannedCourseRequest) => {
                 return (
                   <Query query={ALL_USERS}>
                     {({ data, loading }) => {
-                      if (loading) return 'Loading....';
+                      if (loading) return "Loading....";
                       const suggestions = data.supportfolks;
-                      const courses = _.sortBy(data.courses, 'title');
+                      const courses = _.sortBy(data.courses, "title");
 
                       const coursetypes = data.coursetypes;
 
                       return (
                         <Formik
                           initialValues={{
-                            course: courses ? courses[0].title : '',
-                            trainer: courses ? courses[0].trainer : 'A',
-                            course2: '',
+                            course: courses ? courses[0].title : "",
+                            trainer: courses ? courses[0].trainer : "A",
+                            course2: "",
                             participants: defaultUser,
-                            startdate: format(addHours(Date.now(), 24), 'yyyy-MM-dd'),
-                            enddate: format(addHours(Date.now(), 24), 'yyyy-MM-dd'),
+                            startdate: format(addHours(Date.now(), 24), "yyyy-MM-dd"),
+                            enddate: format(addHours(Date.now(), 24), "yyyy-MM-dd"),
                             hours: 4,
-                            details: '',
-                            type: 'Self Study'
+                            details: "",
+                            type: "Self Study",
                           }}
                           validationSchema={validationSchema}
-                          onSubmit={async (
-                            values,
-                            { setSubmitting, setErrors /* setValues and other goodies */ }
-                          ) => {
-                            const {
-                              startdate,
-                              enddate,
-                              participants,
-                              trainer,
-                              hours,
-                              details,
-                              type
-                            } = values;
+                          onSubmit={async (values, { setSubmitting, setErrors /* setValues and other goodies */ }) => {
+                            const { startdate, enddate, participants, trainer, hours, details, type } = values;
                             const input = {
                               courseid: this.getCourseId(courses, values.course),
                               startdate, //: format(startdate, 'yyyy-MM-dd'),
@@ -187,28 +173,19 @@ class AddPlannedCourseRequest extends React.Component {
                               participants,
                               submittedBy,
 
-                              type
+                              type,
                               //  submittedBy: fullname
                             };
-                            console.log('input', JSON.stringify(input));
+                            console.log("input", JSON.stringify(input));
                             const result = await addPlannedCourseRequest({
-                              variables: { input }
+                              variables: { input },
                             });
-                            console.log('result', result);
-                            this.props.history.push('/plannedcourserequestlist');
+                            console.log("result", result);
+                            this.props.history.push("/plannedcourserequestlist");
                           }}
                         >
-                          {({
-                            values,
-                            handleChange,
-                            handleBlur,
-                            handleSubmit,
-                            setFieldValue,
-                            touched,
-                            errors,
-                            isSubmitting
-                          }) => {
-                            console.log('values', values);
+                          {({ values, handleChange, handleBlur, handleSubmit, setFieldValue, touched, errors, isSubmitting }) => {
+                            console.log("values", values);
                             return (
                               <Paper className={classes.paper2} elevation={1}>
                                 <Typography variant="h5" gutterBottom>
@@ -225,12 +202,10 @@ class AddPlannedCourseRequest extends React.Component {
                                     value={values.startdate}
                                     className={classes.textField}
                                     InputLabelProps={{
-                                      shrink: true
+                                      shrink: true,
                                     }}
                                   />
-                                  {touched.startdate && errors.startdate && (
-                                    <div>{errors.startdate}</div>
-                                  )}
+                                  {touched.startdate && errors.startdate && <div>{errors.startdate}</div>}
                                   <TextField
                                     id="enddate"
                                     label="EndDate"
@@ -241,7 +216,7 @@ class AddPlannedCourseRequest extends React.Component {
                                     value={values.enddate}
                                     className={classes.textField}
                                     InputLabelProps={{
-                                      shrink: true
+                                      shrink: true,
                                     }}
                                   />
                                   {touched.enddate && errors.enddate && <div>{errors.enddate}</div>}
@@ -255,7 +230,7 @@ class AddPlannedCourseRequest extends React.Component {
                                     value={values.hours}
                                     className={classes.textField}
                                     InputLabelProps={{
-                                      shrink: true
+                                      shrink: true,
                                     }}
                                   />
                                   {touched.hours && errors.hours && <div>{errors.hours}</div>}
@@ -269,7 +244,7 @@ class AddPlannedCourseRequest extends React.Component {
                                     value={values.trainer}
                                     className={classes.textField}
                                     InputLabelProps={{
-                                      shrink: true
+                                      shrink: true,
                                     }}
                                   />
                                 </div>
@@ -298,10 +273,10 @@ class AddPlannedCourseRequest extends React.Component {
                                 <div className={classes.column}>
                                   <Component
                                     initialValue={{
-                                      inputValue: '',
-                                      selectedItem: 'Self Study',
-                                      type: 'Self Study',
-                                      suggestions: []
+                                      inputValue: "",
+                                      selectedItem: "Self Study",
+                                      type: "Self Study",
+                                      suggestions: [],
                                     }}
                                   >
                                     {({ state, setState }) => {
@@ -310,9 +285,9 @@ class AddPlannedCourseRequest extends React.Component {
                                           id="coursetype"
                                           name="coursetype"
                                           state={state}
-                                          onChange={item => {
-                                            console.log('OnChange', item);
-                                            setFieldValue('type', item);
+                                          onChange={(item) => {
+                                            console.log("OnChange", item);
+                                            setFieldValue("type", item);
                                           }}
                                           onBlur={handleBlur}
                                           setState={setState}
@@ -339,15 +314,15 @@ class AddPlannedCourseRequest extends React.Component {
                                     value={values.details}
                                     className={classes.largetextField}
                                     InputLabelProps={{
-                                      shrink: true
+                                      shrink: true,
                                     }}
                                   />
                                 </div>
                                 <Component
                                   initialValue={{
-                                    inputValue: '',
+                                    inputValue: "",
                                     selectedItem: [defaultUser],
-                                    suggestions: []
+                                    suggestions: [],
                                   }}
                                 >
                                   {({ state, setState }) => {
@@ -358,8 +333,8 @@ class AddPlannedCourseRequest extends React.Component {
                                         state={state}
                                         setState={setState}
                                         suggestions={suggestions}
-                                        onChange={item => {
-                                          setFieldValue('participants', item);
+                                        onChange={(item) => {
+                                          setFieldValue("participants", item);
                                         }}
                                         onBlur={handleBlur}
                                         label="participants"
@@ -369,26 +344,18 @@ class AddPlannedCourseRequest extends React.Component {
                                     );
                                   }}
                                 </Component>
-                                {touched.participants && errors.participants && (
-                                  <div>{errors.participants}</div>
-                                )}
+                                {touched.participants && errors.participants && <div>{errors.participants}</div>}
 
                                 <React.Fragment>
-                                  <Button
-                                    variant="contained"
-                                    color="primary"
-                                    className={classes.button}
-                                    onClick={handleSubmit}
-                                    type="submit"
-                                  >
-                                    Save{' '}
+                                  <Button variant="contained" color="primary" className={classes.button} onClick={handleSubmit} type="submit">
+                                    Save{" "}
                                   </Button>
 
                                   <Button
                                     variant="contained"
                                     color="secondary"
                                     className={classes.button}
-                                    onClick={() => this.props.history.push('/')}
+                                    onClick={() => this.props.history.push("/")}
                                     type="submit"
                                   >
                                     Cancel
@@ -396,9 +363,7 @@ class AddPlannedCourseRequest extends React.Component {
                                   <Button
                                     variant="contained"
                                     className={classes.button}
-                                    onClick={() =>
-                                      this.props.history.push('/plannedcourserequestlist')
-                                    }
+                                    onClick={() => this.props.history.push("/plannedcourserequestlist")}
                                   >
                                     To List
                                   </Button>

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Query, useQuery } from "react-apollo";
+import { Query, useQuery } from "@apollo/client";
 import gql from "graphql-tag";
 
 import SearchBar from "./common/SearchBar";

@@ -1,13 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { useAlert } from "globalState/AlertContext";
-import ExpansionPanel from "@material-ui/core/ExpansionPanel";
-import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import classNames from "classnames";
-import { SelectionContext } from "../globalState/SelectionContext";
+import { useAlert } from "globalState/AlertContext";
+import React, { useEffect, useState } from "react";
 import CopyToClipBoard from "react-copy-to-clipboard";
 import { format } from "./../utils/format";
-import TWButton from "elements/TWButton";
 
 interface GenericTableProps {
   data: any[] | null;
@@ -16,6 +13,7 @@ interface GenericTableProps {
   fields: any[];
   linkField?: string;
   linkPrefix?: string;
+  linkText?: string;
   description: string;
   additionalFields?: string[];
   whereToInsertAdditionalFieldIndex?: number;
@@ -33,6 +31,7 @@ export const GenericTable = (props: GenericTableProps) => {
     subtitle = "",
     fields,
     linkField = "",
+    linkText = "",
     linkPrefix = "http://navigator.infor.com/n/incident.asp?IncidentID=",
     description = title,
     additionalFields = [],
@@ -90,11 +89,11 @@ export const GenericTable = (props: GenericTableProps) => {
   if (!data) {
     return <div></div>;
   }
-  if (data.length === 0) {
+  if (data.length === 0 && Object.entries(fieldFilters).length === 0) {
     return <div />;
   }
 
-  if (!tableData.length) {
+  if (!tableData.length && Object.entries(fieldFilters).length === 0) {
     return <div></div>;
   }
 
@@ -148,7 +147,7 @@ export const GenericTable = (props: GenericTableProps) => {
     return (
       <th
         style={{ background: "#5C5C5C", color: "#FFF" }}
-        className="capitalize px-5 py-2 border border-gray-200 bg-gray-100 text-left text-sm font-sans font-semibold text-gray-600 uppercase tracking-wider"
+        className=" px-5 py-2 border border-gray-200 bg-gray-100 text-left text-sm font-sans font-semibold text-gray-600 uppercase tracking-wider"
       >
         <div className="flex items-center text-center  items-baseline">
           {name}
@@ -184,18 +183,18 @@ export const GenericTable = (props: GenericTableProps) => {
 
   const Cell = ({ value }: any) => (
     <td className="px-5  border border-gray-200  text-sm break-words w-full whitespace-normal">
-      <p className="text-gray-900 whitespace-no-wrap">{value}</p>
+      <p className="text-gray-900 whitespace-nowrap">{value}</p>
     </td>
   );
   const DateCell = ({ value }: any) => (
     <td className="px-5  border-b border-gray-200  text-sm break-words w-full whitespace-normal">
-      <p className="text-gray-900 whitespace-no-wrap">{format(value, "yyyy-MMM-dd")}</p>
+      <p className="text-gray-900 whitespace-nowrap">{format(value, "yyyy-MMM-dd")}</p>
     </td>
   );
-  const HyperLinkCell = ({ value = "", linkPrefix = "http://navigator.infor.com/n/incident.asp?IncidentID=" }) => (
+  const HyperLinkCell = ({ value = "", linkPrefix = "http://navigator.infor.com/n/incident.asp?IncidentID=", linkText = "" }) => (
     <td className="px-5  border border-gray-200  text-sm">
       <a className="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker" href={`${linkPrefix}${value}`} target="_blank">
-        {value}
+        {linkText || value}
       </a>
     </td>
   );
@@ -207,30 +206,6 @@ export const GenericTable = (props: GenericTableProps) => {
       )}
     </td>
   );
-
-  const severityColors: { [index: string]: any } = {
-    "Production Outage / Critical Application halted": "text-white bg-red-700",
-    "Major impact": "text-red-800 bg-red-300",
-    "High impact": "text-gray-800 font-bold",
-
-    Standard: "text-gray-600",
-  };
-  const SeverityCell = ({ value = "" }) => {
-    let sevClass: any = severityColors[value] || "";
-    let classes = classNames({
-      "w-28 inline-flex items-center px-3 py-0.5 rounded-full text-xs font-semibold leading-5  ": true,
-      [sevClass]: true,
-    });
-    const tv = value === "Production Outage / Critical Application halted" ? "Production down" : value;
-    return (
-      <td className="px-5 py-2 border-b border-gray-200  text-sm text">
-        <span className={classes}>
-          {/* {value} */}
-          {tv}
-        </span>
-      </td>
-    );
-  };
 
   const FieldFilterSpans: React.FC<{}> = ({}) => {
     const filterAr = [];
@@ -281,7 +256,7 @@ export const GenericTable = (props: GenericTableProps) => {
   return (
     // <ExpansionPanel TransitionProps={{ unmountOnExit: true }} defaultExpanded={autoExpand}>
     <div className="bg-white border-b border-gray-100">
-      <ExpansionPanelSummary
+      <AccordionSummary
         className="h-16"
         expandIcon={<ExpandMoreIcon />}
         onClick={() => {
@@ -330,8 +305,9 @@ export const GenericTable = (props: GenericTableProps) => {
             </CopyToClipBoard>
           </>
         </div>
-      </ExpansionPanelSummary>
-      {isExpanded && (
+      </AccordionSummary>
+
+      {isExpanded && tableData.length !== 0 && (
         <div>
           <div className="inline-block min-w-full  overflow-hidden">
             <div className="w-full mb-2"></div>
@@ -354,11 +330,11 @@ export const GenericTable = (props: GenericTableProps) => {
                   <tr key={index} className={`${index % 2 === 0 && "bg-gray-50"}`}>
                     {fieldList.map(({ name, type }) => {
                       if (name === linkField) {
-                        return <HyperLinkCell key={name} value={item[name]} linkPrefix={linkPrefix} />;
+                        return <HyperLinkCell key={name} value={item[name]} linkPrefix={linkPrefix} linkText={linkText} />;
                       } else {
                         switch (type) {
                           case "hl":
-                            return <HyperLinkCell key={name} value={item[name]} linkPrefix={linkPrefix} />;
+                            return <HyperLinkCell key={name} value={item[name]} linkPrefix={linkPrefix} linkText={linkText} />;
                           case "yn":
                             return <YesNoCell key={name} value={item[name]} />;
 
@@ -380,5 +356,43 @@ export const GenericTable = (props: GenericTableProps) => {
         </div>
       )}
     </div>
+  );
+};
+
+export const severityColors: { [index: string]: any } = {
+  "Production Outage / Critical Application halted": "text-white bg-red-700",
+  "Major impact": "text-red-700 bg-red-100",
+  "Medium impact": "text-gray-800 font-bold",
+  "High impact": "text-gray-800 font-bold",
+  Standard: "text-gray-600",
+};
+export const SeverityCell = ({ value = "" }) => {
+  let sevClass: any = severityColors[value] || "";
+  let classes = classNames({
+    "w-28 inline-flex items-center px-3 py-0.5 rounded-full text-xs font-semibold leading-5  ": true,
+    [sevClass]: true,
+  });
+  const tv = value === "Production Outage / Critical Application halted" ? "Production down" : value;
+  return (
+    <td className="px-5 py-2 border-b border-gray-200  text-sm text">
+      <span className={classes}>
+        {/* {value} */}
+        {tv}
+      </span>
+    </td>
+  );
+};
+export const SeverityCell2 = ({ value = "" }) => {
+  let sevClass: any = severityColors[value] || "";
+  let classes = classNames({
+    "w-28 inline-flex items-center px-3 py-0.5 rounded-full text-xs font-semibold leading-5  ": true,
+    [sevClass]: true,
+  });
+  const tv = value === "Production Outage / Critical Application halted" ? "Production down" : value;
+  return (
+    <span className={classes}>
+      {/* {value} */}
+      {tv}
+    </span>
   );
 };

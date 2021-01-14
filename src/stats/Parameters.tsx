@@ -1,31 +1,8 @@
-import * as React from "react";
-import { Paper, withStyles, createStyles } from "@material-ui/core";
-import TextField, { TextFieldProps } from "@material-ui/core/TextField";
-import { useLocalStorage } from "../utils/useLocalStorage";
-import { SharedSnackbarContext } from "../globalState/SharedSnackbar.context";
+import clsx from "clsx";
 import Button from "elements/TWButton";
 import { useAlert } from "globalState/AlertContext";
-import { useCounter } from "hooks/useNumericUpDown";
-import clsx from "clsx";
-
-const styles = createStyles({
-  root: {
-    display: "flex",
-    flexWrap: "wrap",
-  },
-  textField: {
-    margin: 5,
-    width: 50,
-    padding: "0.5rem",
-    fontSize: "16px",
-    display: "flex",
-    borderRadius: 4,
-  },
-  flex: {
-    display: "flex",
-    margin: 10,
-  },
-});
+import * as React from "react";
+import { useLocalStorage } from "../utils/useLocalStorage";
 
 interface Props {
   param: string;
@@ -34,10 +11,11 @@ interface Props {
   label: string;
   color?: string;
   keyUp: any;
-  other?: TextFieldProps;
+  // other?: TextFieldProps;
+  onChange?: any;
 }
 
-const Parameter: React.FC<Props> = ({ param, initial, classes = "", label, other, keyUp, color = "blue" }) => {
+export const Parameter: React.FC<Props> = ({ param, initial, classes = "", label, keyUp, color = "blue", onChange }) => {
   // const { param, initial } = props;
   const baseClass = "rounded w-8 font-normal shadow-md cursor-pointer flex items-center justify-center text-lg ";
   function getColorClasses(color: string) {

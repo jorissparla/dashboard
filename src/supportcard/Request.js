@@ -1,59 +1,59 @@
-import React, { Component } from 'react';
-import gql from 'graphql-tag';
-import { graphql } from 'react-apollo';
-import styled from 'styled-components';
-import { withRouter } from 'react-router';
-import TextField from '@material-ui/core/TextField';
-import Paper from '@material-ui/core/Paper';
-import Button from '@material-ui/core/Button';
-import { withStyles } from '@material-ui/core/styles';
-import { ViewText } from '../styles';
-export const niceblue = '#40a5ed';
-export const babyblue = '#ecf6fd';
-export const twitterblue = '#1da1f2';
+import React, { Component } from "react";
+import gql from "graphql-tag";
+import { graphql } from "@apollo/client/react/hoc";
+import styled from "styled-components";
+import { withRouter } from "react-router";
+import TextField from "@material-ui/core/TextField";
+import Paper from "@material-ui/core/Paper";
+import Button from "@material-ui/core/Button";
+import { withStyles } from "@material-ui/core/styles";
+import { ViewText } from "../styles";
+export const niceblue = "#40a5ed";
+export const babyblue = "#ecf6fd";
+export const twitterblue = "#1da1f2";
 
 const paperStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'space-between',
-  margin: '15px',
-  padding: '10px',
-  minWidth: '200px'
+  display: "flex",
+  flexDirection: "column",
+  justifyContent: "space-between",
+  margin: "15px",
+  padding: "10px",
+  minWidth: "200px",
 };
 
-const styles = theme => ({
+const styles = (theme) => ({
   container: {
-    display: 'flex',
-    flexWrap: 'wrap'
+    display: "flex",
+    flexWrap: "wrap",
   },
   button: {
     margin: theme.spacing(1),
-    width: 250
+    width: 250,
   },
 
   buttonDel: {
     margin: theme.spacing(1),
-    backgroundColor: '#000'
+    backgroundColor: "#000",
   },
 
   textField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
     width: 200,
-    height: '100%'
+    height: "100%",
   },
   titleField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    fontSize: '40px',
-    color: '#039BE5'
+    fontSize: "40px",
+    color: "#039BE5",
   },
   contentField: {
     marginLeft: theme.spacing(1),
     marginRight: theme.spacing(1),
-    backgroundColor: '#eeeeee99',
-    fontSize: 40
-  }
+    backgroundColor: "#eeeeee99",
+    fontSize: 40,
+  },
 });
 
 const H3 = styled.h3`
@@ -91,42 +91,41 @@ const Error = styled.div`
   margin-left: 8px;
 `;
 
-
 class Request extends Component {
   state = {
     name: this.props.user.name,
     email: this.props.user.email,
-    text: '',
-    page: 'SupportCard',
-    error: '',
-    buttonText: 'Enter Request'
+    text: "",
+    page: "SupportCard",
+    error: "",
+    buttonText: "Enter Request",
   };
 
-  isNotEmpty = value => (value ? true : false);
-  isValidEmail = email => /\S+@\S+\.\S+/.test(email);
+  isNotEmpty = (value) => (value ? true : false);
+  isValidEmail = (email) => /\S+@\S+\.\S+/.test(email);
 
   checkErrors = ({ email, name, text }) => {
-    let error = '';
+    let error = "";
     if (!this.isValidEmail(email)) {
-      error += ' Invalid email address ';
+      error += " Invalid email address ";
     }
     if (!this.isNotEmpty(name)) {
-      error += ' - Name cannot be empty ';
+      error += " - Name cannot be empty ";
     }
     if (!this.isNotEmpty(text)) {
-      error += ' - Text  cannot be empty ';
+      error += " - Text  cannot be empty ";
     }
     this.setState({ error });
-    return error === '';
+    return error === "";
   };
 
   componentWillMount() {
     if (this.props.user) {
-      console.log('request', this.props);
+      console.log("request", this.props);
       this.setState({
         ...this.state,
         email: this.props.user.email,
-        name: this.props.user.fullname
+        name: this.props.user.fullname,
       });
     }
   }
@@ -147,20 +146,10 @@ class Request extends Component {
         <FlexCol>
           {/*<H1>{this.state.page} Request</H1> */}
           <FlexRow>
-            <ViewText
-              placeholder="Enter Name"
-              name="name"
-              onChange={this.onChangeName}
-              value={this.state.name}
-            >
+            <ViewText placeholder="Enter Name" name="name" onChange={this.onChangeName} value={this.state.name}>
               {this.state.name}
             </ViewText>
-            <ViewText
-              placeholder="Enter email"
-              name="email"
-              onChange={this.onChangeEmail}
-              value={this.state.email}
-            >
+            <ViewText placeholder="Enter email" name="email" onChange={this.onChangeEmail} value={this.state.email}>
               {this.state.email}
             </ViewText>
           </FlexRow>
@@ -173,12 +162,7 @@ class Request extends Component {
             fullWidth
             onChange={this.onChangeText}
           />
-          <Button
-            className={classes.button}
-            variant="contained"
-            type="submit"
-            onClick={this._onSubmit}
-          >
+          <Button className={classes.button} variant="contained" type="submit" onClick={this._onSubmit}>
             {this.state.buttonText}
           </Button>
           {this.state.error && <Error>{this.state.error}</Error>}
@@ -187,15 +171,15 @@ class Request extends Component {
     );
   }
 
-  _onSubmit = async e => {
+  _onSubmit = async (e) => {
     e.preventDefault();
     if (!this.checkErrors(this.state)) {
       return;
     } else {
-      this.setState({ buttonText: 'submitting..' });
+      this.setState({ buttonText: "submitting.." });
       await this.props.createRequest({ variables: this.state });
       setTimeout(() => {
-        this.props.onSubmit ? this.props.onSubmit() : this.props.history.push('/supportcard');
+        this.props.onSubmit ? this.props.onSubmit() : this.props.history.push("/supportcard");
       }, 2000);
     }
   };
@@ -209,6 +193,4 @@ const createRequestMutation = gql`
   }
 `;
 
-export default graphql(createRequestMutation, { name: 'createRequest' })(
-  withRouter(withStyles(styles)(Request))
-);
+export default graphql(createRequestMutation, { name: "createRequest" })(withRouter(withStyles(styles)(Request)));

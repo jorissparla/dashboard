@@ -2,9 +2,14 @@ import { differenceInDays } from "date-fns";
 const lower = (item) => item.toLowerCase();
 
 class Backlog {
-  constructor(data, accounts = []) {
+  constructor(data, accounts = [], includeDevelopment = true, includePending = true) {
     this.data = data;
     this.temp = data;
+    this.includeDevelopment = includeDevelopment;
+    this.includePending = includePending;
+    if (data) {
+      this.temp = this.temp.filter((item) => item.status !== "Awaiting Development");
+    }
     this.accounts = accounts;
   }
 
@@ -12,7 +17,7 @@ class Backlog {
     const response = this.temp.map((item) => {
       let managername = "";
       // console.log("🤦‍♂️", item.navid.toString());
-      const owner = this.accounts.find((account) => account.navid.toString() === item.navid.toString());
+      const owner = this.accounts.find((account) => account?.navid.toString() === item.navid.toString());
       if (owner && owner.managerid) {
         const manager = this.accounts.find((account) => account.navid.toString() === owner.managerid.toString());
         // console.log("🤦‍♂️", owner, manager);
@@ -42,7 +47,8 @@ class Backlog {
   }
 
   init() {
-    this.temp = this.data;
+    this.temp = this.includeDevelopment ? this.data : this.data.filter((item) => item.status !== "Awaiting Development");
+    this.temp = this.includePending ? this.temp : this.temp.filter((item) => item.status !== "Solution Pending Maintenance");
     return this;
   }
 
@@ -52,6 +58,18 @@ class Backlog {
   }
   valid_actiondate() {
     this.temp = this.temp.filter((item) => item.action_date && item.action_date > new Date().getTime());
+    return this;
+  }
+  invalid_actiondate() {
+    this.temp = this.temp.filter((item) => !(item.action_date && item.action_date > new Date().getTime()));
+    return this;
+  }
+  valid_onhold_date() {
+    this.temp = this.temp.filter((item) => item.scheduled_activity_date && item.scheduled_activity_date > new Date().getTime());
+    return this;
+  }
+  invalid_onhold_date() {
+    this.temp = this.temp.filter((item) => !(item.scheduled_activity_date && item.scheduled_activity_date > new Date().getTime()));
     return this;
   }
   invalid_activity_date() {
@@ -69,6 +87,10 @@ class Backlog {
     return this;
   }
 
+  fieldNotNull(field) {
+    this.temp = this.temp.filter((item) => item[field]);
+    return this;
+  }
   issupport() {
     this.temp = this.hasStatus(["Researching", "On Hold by Customer", "Awaiting Infor", "Awaiting Customer"]);
     return this;
@@ -166,7 +188,7 @@ class Backlog {
   }
 
   filterField(field, value) {
-    this.temp = this.temp.filter((item) => item[field].toLowerCase() === value.toLowerCase());
+    this.temp = this.temp.filter((item) => item[field]?.toLowerCase() === value.toLowerCase());
     return this;
   }
   filterFieldNot(field, value) {

@@ -3,7 +3,7 @@ import BusinessCenterIcon from "@material-ui/icons/BusinessCenter";
 
 const Main = () => {
   return (
-    <div className="ml-12 grid grid-cols-4 grid-rows-5 col-gap-3 row-gap-1 h-screen mt-5 ">
+    <div className="ml-12 grid grid-cols-4 grid-rows-5 gap-x-3 gap-y-1 h-screen mt-5 ">
       <NavItem color="text-teal-400">
         <BusinessCenterIcon />
       </NavItem>

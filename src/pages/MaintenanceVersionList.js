@@ -1,13 +1,12 @@
-import { Typography } from "@material-ui/core";
-import { BlockNew } from "elements/Block";
+import { useMutation, useQuery } from "@apollo/client";
+import { BlockNewer as BlockNew } from "elements/Block";
+import { DashBoardContext } from "globalState/Provider";
 import { usePersistentState } from "hooks";
 import React, { useEffect } from "react";
-import { useQuery, useMutation } from "react-apollo";
 import Spinner from "utils/spinner";
 import MaintenanceWizard from "wizard/MaintenanceWizard";
 import { OtherField } from "wizard/OtherField";
 import { ALL_MAINTENANCE_QUERY, CREATE_AUDIT_MUTATION_WIZARD } from "../wizard/Queries";
-import { DashBoardContext } from "globalState/Provider";
 
 // const ALL_VERSIONS = gql`
 //   query ALL_VERSIONS {
@@ -63,9 +62,10 @@ const VersionList = ({ productline = "LN" }) => {
 
   let activeVersions = allMaintenance.filter((v) => v.version === selectedVersion);
   versions = [...new Set(allMaintenance.map((v) => v.version))];
-  // console.log('activeVersion', activeVersions, allMaintenance, selectedVersion);
+  console.log({ versions });
+  console.log("activeVersion", activeVersions, allMaintenance, selectedVersion);
   return (
-    <div>
+    <div className="h-screen bg-gray-100">
       {versions.map((version, index) => (
         <BlockNew key={index} selected={selectedVersion === version} onClick={() => handleChange(version)}>
           {version}
@@ -102,7 +102,7 @@ const VersionList = ({ productline = "LN" }) => {
           <MaintenanceWizard activeVersions={activeVersions} productline={productline} />
         )
       ) : (
-        <Typography>Select a version</Typography>
+        <div>Select a version</div>
       )}
     </div>
   );

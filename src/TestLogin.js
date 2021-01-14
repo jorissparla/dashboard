@@ -1,8 +1,8 @@
-import React from 'react';
-import { Query, Mutation } from 'react-apollo';
-import gql from 'graphql-tag';
-import Button from '@material-ui/core/Button';
-import Signout from './Signout';
+import React from "react";
+import { Query, Mutation } from "@apollo/client/react/components";
+import gql from "graphql-tag";
+import Button from "@material-ui/core/Button";
+import Signout from "./Signout";
 
 const MY_CURRENT_USER_QUERY = gql`
   query MY_CURRENT_USER_QUERY {
@@ -30,13 +30,11 @@ const SIGNIN_MUTATION = gql`
   }
 `;
 
-const User = props => (
-  <Query query={MY_CURRENT_USER_QUERY}>{payload => props.children(payload)}</Query>
-);
+const User = (props) => <Query query={MY_CURRENT_USER_QUERY}>{(payload) => props.children(payload)}</Query>;
 
 const Index = () => (
   <Mutation mutation={SIGNIN_MUTATION} refetchQueries={[{ query: MY_CURRENT_USER_QUERY }]}>
-    {signin => {
+    {(signin) => {
       return (
         <div>
           <h1>Hallo Joris</h1>
@@ -46,13 +44,13 @@ const Index = () => (
           <User>
             {({ data, loading, error }) => {
               if (loading) {
-                return 'Loading.console..';
+                return "Loading.console..";
               }
               if (error) {
-                return 'Error ' + error;
+                return "Error " + error;
               }
               if (!data) {
-                return 'no data';
+                return "no data";
               }
               console.log(data);
 
@@ -61,29 +59,22 @@ const Index = () => (
               return (
                 <React.Fragment>
                   {!me ? (
-                    <Button
-                      variant="contained"
-                      onClick={() => signin().then(data => console.log(data))}
-                    >
-                      Sign Me in{' '}
+                    <Button variant="contained" onClick={() => signin().then((data) => console.log(data))}>
+                      Sign Me in{" "}
                     </Button>
                   ) : (
                     <Signout>
-                      {signout => {
+                      {(signout) => {
                         return (
                           <div
                             style={{
-                              display: 'flex',
-                              flexDirection: 'column',
+                              display: "flex",
+                              flexDirection: "column",
                               margin: 10,
-                              width: 200
+                              width: 200,
                             }}
                           >
-                            <img
-                              src={me.image}
-                              style={{ borderRadius: '50%', width: 48 }}
-                              alt="me"
-                            />
+                            <img src={me.image} style={{ borderRadius: "50%", width: 48 }} alt="me" />
                             <Button variant="contained" onClick={signout}>
                               Sign you out
                               {me.fullname}

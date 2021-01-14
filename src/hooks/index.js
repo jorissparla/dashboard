@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from "react";
 
 export function useLogging(message) {
   useEffect(() => {
@@ -21,7 +21,7 @@ function setLocalStorage(key, value) {
 }
 
 export function usePersistentState(key, defaultState) {
-  const [state, setState] = useState(getLocalStorageValue(key) || defaultState || '');
+  const [state, setState] = useState(getLocalStorageValue(key) || defaultState || "");
 
   useEffect(() => {
     setLocalStorage(key, state);
@@ -55,7 +55,7 @@ export function useUndo([state, setState]) {
 export function useLogger([state, dispatch]) {
   const actionRef = useRef();
 
-  const newDispatchRef = useRef(action => {
+  const newDispatchRef = useRef((action) => {
     actionRef.current = action;
     dispatch(action);
   });
@@ -64,9 +64,9 @@ export function useLogger([state, dispatch]) {
     const action = actionRef.current;
 
     if (action) {
-      console.group('Dispatch');
-      console.log('Action:', action);
-      console.log('State:', state);
+      console.group("Dispatch");
+      console.log("Action:", action);
+      console.log("State:", state);
       console.groupEnd();
     }
   }, [state]);
@@ -80,8 +80,8 @@ export function useThunk([state, dispatch]) {
 
   const getStateRef = useRef(() => stateRef.current);
 
-  const newDispatchRef = useRef(action => {
-    if (typeof action === 'function') {
+  const newDispatchRef = useRef((action) => {
+    if (typeof action === "function") {
       action(newDispatchRef.current, getStateRef.current);
     } else {
       dispatch(action);

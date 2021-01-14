@@ -1,8 +1,7 @@
-import { UserContext, useUserContext } from "globalState/UserProvider";
+import { useUserContext } from "globalState/UserProvider";
 import gql from "graphql-tag";
 import * as React from "react";
-import { StaticContext } from "react-router";
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 export const MUTATION_SIGNOUT = gql`
   mutation MUTATION_SIGNOUT {

@@ -1,14 +1,7 @@
-import Button from "@material-ui/core/Button";
-import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
-import Typography from "@material-ui/core/Typography";
-import { Formik } from "formik";
 import gql from "graphql-tag";
 import React from "react";
-import { useMutation } from "react-apollo";
-import { Link, useHistory, useLocation } from "react-router-dom";
-import { UserContext, useUserContext } from "../globalState/UserProvider";
+import { useUserContext } from "../globalState/UserProvider";
 import LoginForm from "./LoginForm";
 
 export const MUTATION_SIGNIN = gql`
@@ -87,19 +80,7 @@ const useStyles = makeStyles((theme) => ({
 const Signin = (props) => {
   const userContext = useUserContext();
 
-  const { user, login } = userContext;
-  let history = useHistory();
-  // const setLogin = (user, token) => {
-  //   localStorage.setItem('id', user.id);
-  //   localStorage.setItem('token', token || 'PIN01');
-  //   localStorage.setItem('email', user.email);
-  //   localStorage.setItem('name', user.fullname);
-  //   localStorage.setItem('picture', user.image);
-  //   localStorage.setItem('role', user.role);
-  // };
-
-  const classes = useStyles();
-  const [signinMutation] = useMutation(MUTATION_SIGNIN);
+  // const [signinMutation] = useMutation(MUTATION_SIGNIN);
   return (
     <div className="font-sans text-lg  bg-gray-200 min-h-screen flex items-center mb-10 flex-col w-full">
       <LoginForm />

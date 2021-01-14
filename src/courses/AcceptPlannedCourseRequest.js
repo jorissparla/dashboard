@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
-import { withRouter } from 'react-router';
-import Check from '@material-ui/icons/CheckCircleOutline';
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import { adopt } from 'react-adopt';
-import { Button } from '@material-ui/core';
+import React, { useState } from "react";
+import { withRouter } from "react-router";
+import Check from "@material-ui/icons/CheckCircleOutline";
+import TextField from "@material-ui/core/TextField";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import { adopt } from "react-adopt";
+import { Button } from "@material-ui/core";
 
-import gql from 'graphql-tag';
-import { Mutation } from 'react-apollo';
-import { SharedSnackbarConsumer } from '../globalState/SharedSnackbar.context';
-import { QUERY_PLANNEDCOURSEREQUESTS } from '../pages/PlannedCourseRequestList';
-import { QUERY_SCHEDULED_COURSES } from './PlannedCoursesNew';
+import gql from "graphql-tag";
+import { Query, Mutation } from "@apollo/client/react/components";
+import { SharedSnackbarConsumer } from "../globalState/SharedSnackbar.context";
+import { QUERY_PLANNEDCOURSEREQUESTS } from "../pages/PlannedCourseRequestList";
+import { QUERY_SCHEDULED_COURSES } from "./PlannedCoursesNew";
 
 export const CONVERT_TO_PLANNED_COURSE_MUTATION = gql`
   mutation CONVERT_TO_PLANNED_COURSE_MUTATION($input: PlannedCourseRequestInput) {
@@ -46,12 +46,12 @@ const Composed = adopt({
     >
       {render}
     </Mutation>
-  )
+  ),
 });
 
 function AcceptPlannedCourseRequest({ id, history, courseid, approver }) {
   const [show, setShow] = useState(false);
-  const [message, setMessage] = useState('Thank you');
+  const [message, setMessage] = useState("Thank you");
   const handleClose = () => {
     setShow(false);
   };
@@ -61,32 +61,27 @@ function AcceptPlannedCourseRequest({ id, history, courseid, approver }) {
       {({ openSnackbar }) => (
         <Composed>
           {({ converttoplannedcourse, deleteplannedcourserequest }) => {
-            const accept = async goto => {
+            const accept = async (goto) => {
               setShow(true);
               const res = await converttoplannedcourse({
-                variables: { input: { id, approver } }
+                variables: { input: { id, approver } },
               });
               console.log(res);
               const response = await deleteplannedcourserequest({
-                variables: { input: { id } }
+                variables: { input: { id } },
               });
               console.log(response);
               if (goto && res && res.data && res.data.converttoplannedcourse) {
-                history.push(
-                  `/scheduledcourses/${courseid}/edit/${res.data.converttoplannedcourse.id}`
-                );
+                history.push(`/scheduledcourses/${courseid}/edit/${res.data.converttoplannedcourse.id}`);
               }
-              openSnackbar('Item converted');
+              openSnackbar("Item converted");
             };
             return (
               <div>
                 <Dialog open={show} onClose={handleClose} aria-labelledby="form-dialog-title">
                   <DialogTitle id="form-dialog-title">Accept</DialogTitle>
                   <DialogContent>
-                    <DialogContentText>
-                      To accept this request, type any extra information that be send to the
-                      recipient
-                    </DialogContentText>
+                    <DialogContentText>To accept this request, type any extra information that be send to the recipient</DialogContentText>
                     <TextField
                       autoFocus
                       margin="dense"

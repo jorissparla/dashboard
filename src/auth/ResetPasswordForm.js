@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import gql from "graphql-tag";
-import { graphql } from "react-apollo";
+import { graphql } from "@apollo/client/react/hoc";
 import jwt from "jsonwebtoken";
 import { emailsecret } from "./config";
 import UpdatePassword from "./UpdatePassword";
@@ -8,7 +8,7 @@ import UpdatePassword from "./UpdatePassword";
 class ResetPasswordForm extends Component {
   state = { id: null };
 
-  checkisValid = token => {
+  checkisValid = (token) => {
     try {
       const res = jwt.verify(token, emailsecret);
 
@@ -50,7 +50,7 @@ const userquery = gql`
   }
 `;
 
-const ResetPassword = props => {
+const ResetPassword = (props) => {
   const { account, loading } = props.data;
   if (loading) return <div>Loading</div>;
   console.log(props);
@@ -64,7 +64,7 @@ const ResetPassword = props => {
 };
 
 const WrappedPW = graphql(userquery, {
-  options: ownProps => ({ variables: { id: ownProps.token } })
+  options: (ownProps) => ({ variables: { id: ownProps.token } }),
 })(ResetPassword);
 
 export default ResetPasswordForm;

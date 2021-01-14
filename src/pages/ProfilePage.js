@@ -2,16 +2,16 @@ import { addHours, format } from "date-fns";
 import { useAlert } from "globalState/AlertContext";
 import { useUserContext } from "globalState/UserProvider";
 import React from "react";
-import { useMutation } from "react-apollo";
+import { useMutation } from "@apollo/client";
 import FileUploader from "../common/FileUploaderNew";
 import { UPDATE_PROFILE_PIC_MUTATION } from "../graphql/UPDATE_PROFILE_PIC";
 
 const ProfilePage = ({ active = null }) => {
-  const { user: current, setProfilePic } = useUserContext();
+  const { user: current } = useUserContext();
   const alert = useAlert();
 
   let user = active || current;
-  const { email, fullname, navid } = user;
+  const { email, fullname } = user;
   console.log(user);
   const [updateProfilePicture] = useMutation(UPDATE_PROFILE_PIC_MUTATION);
   const [image, setImage] = React.useState(user.image);
@@ -32,15 +32,16 @@ const ProfilePage = ({ active = null }) => {
           <img className=" w-full rounded object-cover " src={image.replace("http:", "https:")} alt="" />
         </div>
         <a href={image}>{image}</a>
-        {current.role === "Admin" && (
-          <FileUploader
-            link={`\\\\nlbavwixs.infor.com\\images\\profilepics\\${email}`}
-            httpLinkPrefix={`https://nlbavwixs.infor.com/images/profilepics/${email}/`}
-            readOnly={false}
-            setFile={handleSetFile}
-            title="Profile Picture"
-          />
-        )}
+        {current?.role === "Admin" ||
+          (true && (
+            <FileUploader
+              link={`\\\\nlbavwixs.infor.com\\images\\profilepics\\${email}`}
+              httpLinkPrefix={`https://nlbavwixs.infor.com/images/profilepics/${email}/`}
+              readOnly={false}
+              setFile={handleSetFile}
+              title="Profile Picture"
+            />
+          ))}
         <div className="mt-4 flex">
           <div className="font-semibold flex items-start">
             Role:

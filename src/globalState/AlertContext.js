@@ -4,17 +4,15 @@ import Notification from "./Notification";
 const AlertContext = createContext(null);
 
 export const AlertContextProvider = ({ children }) => {
-  const initialState = { message: "", title: "", error: "" };
   const [message, setMessage] = useState("");
   // const [messages, setMessages] = useState([]);
   const [error, setError] = useState("");
   const [visible, setIsVisible] = useState(false);
-  const [moreVisible, setMoreVisible] = useState(false);
   useEffect(() => {
     if (message) setIsVisible(true);
     // if (messages.length > 0) setMoreVisible(true);
     if (error) setIsVisible(true);
-  }, [message || error]);
+  }, [message, error]);
 
   useEffect(() => {
     const handler = setTimeout(() => {

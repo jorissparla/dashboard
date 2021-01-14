@@ -1,9 +1,7 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { withRouter, Redirect } from 'react-router';
-import { Route } from 'react-router-dom';
-import { useContext } from 'react';
-import { UserContext } from './../globalState/UserProvider';
+import React, { useContext } from "react";
+import { Redirect } from "react-router";
+import { Route } from "react-router-dom";
+import { UserContext } from "./../globalState/UserProvider";
 
 export const AuthRoute = ({ component: Component, allowed, xuser, ...rest }) => {
   const { user } = useContext(UserContext);
@@ -14,61 +12,75 @@ export const AuthRoute = ({ component: Component, allowed, xuser, ...rest }) => 
   return (
     <Route
       {...rest}
-      render={props => {
+      render={(props) => {
         // console.log('🙈🙈🙈🙈', props, { user }, { xuser });
         if (!user) {
-          return <Redirect to={{ pathname: '/' }} />;
+          return <Redirect to={{ pathname: "/" }} />;
         }
         // console.log('allowed', allowed, user);
         // console.dir(user);
         if (!allowed || allowed.indexOf(user.role || []) >= 0) {
           return <Component {...props} user={user} />;
         } else {
-          console.log('not allowed user ', user.role);
-          return <Redirect to={{ pathname: '/' }} />;
+          console.log("not allowed user ", user.role);
+          return <Redirect to={{ pathname: "/" }} />;
         }
       }}
     />
   );
 };
 
-export const EnhancedRoute = ({ component: Component, editors = [], user, ...rest }) => {
+export const EnhancedRoute = ({ component: Component, permissions = [], editors = [], user, ...rest }) => {
   let isEditor = false;
+  let hasPerm;
   if (user) {
     isEditor = editors.indexOf(user.role) !== -1;
+    if (permissions.length > 0 && user?.permissions) {
+      hasPerm = user.permissions.some(({ permission }) => permissions.includes(permission));
+    }
   }
+  isEditor = isEditor || hasPerm;
   return (
     <Route
       {...rest}
-      render={props => {
+      render={(props) => {
         return <Component {...props} user={user} isEditor={isEditor} {...rest} />;
       }}
     />
   );
 };
 
-export default function(ComposedComponent) {
-  class Authentication extends Component {
-    componentWillMount() {
-      if (!this.props.authenticated) {
-        this.props.history.push('/');
-      }
-    }
+// export default function (ComposedComponent) {
+//   class Authentication extends Component {
+//     componentWillMount() {
+//       if (!this.props.authenticated) {
+//         this.props.history.push("/");
+//       }
+//     }
 
-    componentWillUpdate(nextProps) {
-      if (!nextProps.authenticated) {
-        this.props.history.push('/');
-      }
-    }
+//     componentWillUpdate(nextProps) {
+//       if (!nextProps.authenticated) {
+//         this.props.history.push("/");
+//       }
+//     }
 
-    render() {
-      return <ComposedComponent {...this.props} />;
-    }
-  }
+//     render() {
+//       return <ComposedComponent {...this.props} />;
+//     }
+//   }
 
-  function mapStateToProps(state) {
-    return { authenticated: state.auth.authenticated, user: state.auth.user };
-  }
+//   function mapStateToProps(state) {
+//     return { authenticated: state.auth.authenticated, user: state.auth.user };
+//   }
 
-  return connect(mapStateToProps)(withRouter(Authentication));
-}
+//   return connect(mapStateToProps)(withRouter(Authentication));
+// }
+
+const withAuth = (ComposedComponent) => (props) => {
+  const { user } = useContext(UserContext);
+  if (!user) {
+    // return <NotAuthorized />;
+    return <Redirect to={{ pathname: "/" }} />;
+  } else return <ComposedComponent {...props} />;
+};
+export default withAuth;

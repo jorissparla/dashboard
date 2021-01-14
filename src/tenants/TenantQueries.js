@@ -40,7 +40,7 @@ export const ALL_TENANTS = gql`
   }
 `;
 export const ALL_TENANTS_SIMPLE = gql`
-  query q {
+  query ALL_TENANTS_SIMPLE {
     tenants {
       id
       farm
@@ -49,6 +49,42 @@ export const ALL_TENANTS_SIMPLE = gql`
       customerid
       lastupdated
       live
+    }
+  }
+`;
+
+export const QUERY_CUSTOMER_EVENTS = gql`
+  query QUERY_CUSTOMER_EVENTS($customerid: String) {
+    customerEvents(customerid: $customerid) {
+      id
+      date
+      comment
+      eventtype
+      nrusers
+    }
+  }
+`;
+
+export const MUTATION_ADD_CUSTOMER_EVENT = gql`
+  mutation MUTATION_ADD_CUSTOMER_EVENT($input: CustomerEventInput) {
+    addCustomerEvent(input: $input) {
+      id
+      date
+      comment
+      eventtype
+      nrusers
+    }
+  }
+`;
+
+export const DELETE_CUSTOMER_EVENT = gql`
+  mutation DELETE_CUSTOMER_EVENT($where: CustomerEventWhere) {
+    deleteCustomerEvent(where: $where) {
+      id
+      date
+      comment
+      eventtype
+      nrusers
     }
   }
 `;
@@ -70,6 +106,7 @@ export const QUERY_TENANT_DETAIL = gql`
       comments
       comments_updated
       updated
+      useproxy
       tenants {
         id
         farm
@@ -98,6 +135,7 @@ export const QUERY_ALL_TENANT_DETAILS = gql`
       comments
       comments_updated
       updated
+      useproxy
       tenants {
         id
         farm
@@ -127,6 +165,7 @@ export const MUTATION_UPDATE_DETAIL = gql`
       comments
       comments_updated
       updated
+      useproxy
     }
   }
 `;

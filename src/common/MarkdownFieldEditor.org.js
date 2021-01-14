@@ -1,54 +1,33 @@
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  colors,
-  Divider,
-  Grid,
-  Typography
-} from '@material-ui/core';
-import CloseIcon from '@material-ui/icons/Close';
-import { makeStyles } from '@material-ui/styles';
-import clsx from 'clsx';
-import React, { useState } from 'react';
-import { useMutation } from 'react-apollo';
-import MarkDown from 'react-markdown/with-html';
-import ReactMde from 'react-mde';
-import 'react-mde/lib/styles/css/react-mde-all.css';
+import { Button, Card, CardActions, CardContent, CardHeader, colors, Divider, Grid, Typography } from "@material-ui/core";
+import CloseIcon from "@material-ui/icons/Close";
+import { makeStyles } from "@material-ui/styles";
+import clsx from "clsx";
+import React, { useState } from "react";
+import { useMutation } from "@apollo/client";
+import MarkDown from "react-markdown/with-html";
+import ReactMde from "react-mde";
+import "react-mde/lib/styles/css/react-mde-all.css";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
-    left: '10%',
-    top: '5%',
-    position: 'absolute',
-    width: '80%',
-    height: '90%',
-    padding: 20
+    left: "10%",
+    top: "5%",
+    position: "absolute",
+    width: "80%",
+    height: "90%",
+    padding: 20,
   },
   saveButton: {
-    color: 'white',
+    color: "white",
     backgroundColor: colors.green[600],
-    '&:hover': {
-      backgroundColor: colors.green[900]
-    }
-  }
+    "&:hover": {
+      backgroundColor: colors.green[900],
+    },
+  },
 }));
 
-const MarkDownFieldEditor = props => {
-  const {
-    data,
-    value: defaultValue,
-    className,
-    onClose,
-    onSaveAndClose,
-    onView,
-    label,
-    id,
-    name,
-    ...rest
-  } = props;
+const MarkDownFieldEditor = (props) => {
+  const { data, value: defaultValue, className, onClose, onSaveAndClose, onView, label, id, name, ...rest } = props;
   const classes = useStyles();
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [value, setValue] = useState(defaultValue);
@@ -57,7 +36,7 @@ const MarkDownFieldEditor = props => {
   // e.persist();
 
   // setValue(e.target.value);
-  const handleSubmit = e => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     // const input = { id };
     // input[name] = value;
@@ -76,7 +55,7 @@ const MarkDownFieldEditor = props => {
     onSaveAndClose(value);
   };
   console.log(id);
-  const taprops = { cols: 180, rows: 10, style: { fontFamily: 'roboto', fontSize: 'inherit' } };
+  const taprops = { cols: 180, rows: 10, style: { fontFamily: "roboto", fontSize: "inherit" } };
   return (
     <Card {...rest} className={clsx(classes.root, className)}>
       <form onSubmit={handleSubmit}>
@@ -84,13 +63,7 @@ const MarkDownFieldEditor = props => {
         <Divider />
         <CardContent>
           <Grid container spacing={4}>
-            <ReactMde
-              value={value}
-              onChange={setValue}
-              selectedTab="write"
-              disablePreview={true}
-              textAreaProps={taprops}
-            />
+            <ReactMde value={value} onChange={setValue} selectedTab="write" disablePreview={true} textAreaProps={taprops} />
             {/* <TextField
                 fullWidth
                 multiline
@@ -116,11 +89,7 @@ const MarkDownFieldEditor = props => {
         </CardActions>
         <Typography variant="h4">Preview </Typography>
         <Divider />
-        <MarkDown
-          source={value}
-          escapeHtml={false}
-          className="bg-white border shadow-lg px-4 ml-2"
-        />
+        <MarkDown source={value} escapeHtml={false} className="bg-white border shadow-lg px-4 ml-2" />
       </form>
       {/* <SuccessSnackbar onClose={handleSnackbarClose} open={openSnackbar} /> */}
     </Card>

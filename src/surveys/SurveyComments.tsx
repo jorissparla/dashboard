@@ -1,8 +1,8 @@
-import * as React from 'react';
-import { useQuery } from 'react-apollo';
-import gql from 'graphql-tag';
-import Spinner from '../utils/spinner';
-import { SurveyTable } from './SurveyTable';
+import * as React from "react";
+import { useQuery } from "@apollo/client";
+import gql from "graphql-tag";
+import Spinner from "../utils/spinner";
+import { SurveyTable } from "./SurveyTable";
 
 const QUERY_SURVEY_COMMENTS = gql`
   query QUERY_SURVEY_COMMENTS($region: String) {
@@ -30,7 +30,7 @@ interface UCProps {
 
 const useComments = ({ region }: UCProps) => {
   const { loading, data } = useQuery(QUERY_SURVEY_COMMENTS, {
-    variables: { region }
+    variables: { region },
   });
   if (loading) return null;
   if (!data) return null;

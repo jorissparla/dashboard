@@ -15,7 +15,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { format } from "date-fns";
 import gql from "graphql-tag";
 import React, { Component } from "react";
-import { graphql } from "react-apollo";
+import { graphql } from "@apollo/client/react/hoc";
 import { withRouter } from "react-router";
 import styled from "styled-components";
 import SearchBar from "../common/SearchBar";
@@ -84,24 +84,13 @@ class StudentView extends Component {
         anchorOrigin={{ horizontal: "left", vertical: "top" }}
         targetOrigin={{ horizontal: "left", vertical: "top" }}
       >
-        <MenuItem
-          primaryText="in Progress"
-          onClick={() => this.updateEnrollStatus(enrol, navid, "In Progress")}
-        />
-        <MenuItem
-          primaryText="Completed"
-          onClick={() => this.updateEnrollStatus(enrol, navid, "Completed")}
-        />
-        <MenuItem
-          primaryText="Planned"
-          onClick={() => this.updateEnrollStatus(enrol, navid, "Planned")}
-        />
+        <MenuItem primaryText="in Progress" onClick={() => this.updateEnrollStatus(enrol, navid, "In Progress")} />
+        <MenuItem primaryText="Completed" onClick={() => this.updateEnrollStatus(enrol, navid, "Completed")} />
+        <MenuItem primaryText="Planned" onClick={() => this.updateEnrollStatus(enrol, navid, "Planned")} />
         <MenuItem
           primaryText="View Course"
           leftIcon={<FileFileDownload />}
-          onClick={() =>
-            this.props.history.push(`/courses/edit/${enrol.course.id}`)
-          }
+          onClick={() => this.props.history.push(`/courses/edit/${enrol.course.id}`)}
         />
       </MenuList>
     );
@@ -119,13 +108,8 @@ class StudentView extends Component {
   }
 
   renderCourses(enrollments, navid) {
-    const { user } = this.props;
-    let validRole = false;
-    if (user) {
-      validRole = user.role !== "Guest";
-    } else {
-      validRole = false;
-    }
+    // const { user } = this.props;
+
     if (!enrollments) return <div>Loading...</div>;
 
     return (
@@ -146,10 +130,7 @@ class StudentView extends Component {
               />
               <ListItemSecondaryAction>
                 <Chip
-                  label={`Start  ${format(
-                    new Date(enrol.plannedcourse.startdate),
-                    "EEE, dd-MMM-yyyy"
-                  )}`}
+                  label={`Start  ${format(new Date(enrol.plannedcourse.startdate), "EEE, dd-MMM-yyyy")}`}
                   // label={`Start  ${new Date(enrol.plannedcourse.startdate)}`}
                   style={{ margin: 2 }}
                 />
@@ -174,9 +155,7 @@ class StudentView extends Component {
     }
     let _ = window._;
     const sortedEnrollments = _.chain(account.enrollments)
-      .map((o) =>
-        _.merge({ startdate: Date.parse(o.plannedcourse.startdate) }, o)
-      )
+      .map((o) => _.merge({ startdate: Date.parse(o.plannedcourse.startdate) }, o))
       .orderBy(["startdate"], ["desc"])
       .value();
     //console.log(sortedEnrollments);
@@ -184,22 +163,12 @@ class StudentView extends Component {
       <div>
         <Container>
           <ProfilePicture>
-            {account.image ? (
-              <Avatar src={account.image} size={80} />
-            ) : (
-              <StyledInitials>{initials(account.fullname)}</StyledInitials>
-            )}
+            {account.image ? <Avatar src={account.image} size={80} /> : <StyledInitials>{initials(account.fullname)}</StyledInitials>}
           </ProfilePicture>
 
           <Details>
             <Title>{account.fullname}</Title>
-            <Content>
-              {`in Team ${account.team}, Location ${
-                account.locationdetail
-                  ? account.locationdetail.location
-                  : account.location
-              }`}
-            </Content>
+            <Content>{`in Team ${account.team}, Location ${account.locationdetail ? account.locationdetail.location : account.location}`}</Content>
           </Details>
         </Container>
         <Paper style={{ marginTop: 10 }}>
@@ -218,9 +187,7 @@ class StudentView extends Component {
           </HeaderRow>
 
           <Container />
-          <Content>
-            {this.renderCourses(sortedEnrollments, account.navid)}
-          </Content>
+          <Content>{this.renderCourses(sortedEnrollments, account.navid)}</Content>
         </Paper>
       </div>
     );

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import gql from "graphql-tag";
-import { useQuery } from "react-apollo";
+import { useQuery } from "@apollo/client";
 import Spinner from "utils/spinner";
 import { GenericTable } from "elements/GenericTable";
 import { format } from "date-fns";
@@ -40,7 +40,7 @@ const TenantLogList = () => {
 
   useEffect(() => {
     if (tenantlogs) {
-      const fmtData = tenantlogs.map((l) => ({ ...l, fmtDate: format(parseInt(l.date), "dd MMM yyyy, hh:mm") }));
+      const fmtData = tenantlogs.map((l) => ({ ...l, fmtDate: format(parseInt(l.date), "dd MMM yyyy, hh:mm") })).slice(0, 1000);
       // console.log(fmtData);
       setFormattedData(fmtData);
     }
@@ -50,8 +50,8 @@ const TenantLogList = () => {
 
   let fields = getfieldNamesFromData({ log: "", fmtDate: "", log: "" });
   return (
-    <div className="min-h-full w-full bg-gray-100 flex  justify-center">
-      <div className="m-4 rounded shadow-lg w-2/3">
+    <div className=" w-full bg-gray-100 flex  justify-center">
+      <div className="m-4 rounded shadow-lg ">
         <GenericTable fields={fields} data={formattedData} autoExpand={true} fnFilterData={filterLogs} />
       </div>
     </div>

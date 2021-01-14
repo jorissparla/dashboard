@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import { useMutation } from "@apollo/client";
 import gql from "graphql-tag";
-import { useMutation } from "react-apollo";
-import { Link, useHistory, useLocation } from "react-router-dom";
-import { UserContext, useUserContext } from "../globalState/UserProvider";
+import React, { useState } from "react";
+import { useHistory, useLocation } from "react-router-dom";
 import Button from "../elements/TWButton";
+import { useUserContext } from "../globalState/UserProvider";
 import { signIn } from "./msAuth";
 
 const MUTATION_SIGNIN = gql`
