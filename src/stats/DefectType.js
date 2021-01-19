@@ -43,7 +43,7 @@ export function Defect(defects) {
       return this;
     },
     filterUnassigned(dev) {
-      tmp = tmp.filter((def) => def.Developer === dev || def.status !== "Approved");
+      tmp = tmp.filter((def) => def.Developer === dev && (def.status !== "Approved" || def.status !== "Assigned"));
       return this;
     },
     filterSeverity(sev) {

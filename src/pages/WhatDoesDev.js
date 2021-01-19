@@ -247,10 +247,10 @@ const WhatDoesDev = ({ name, severities, cloudOnly, severityList, groups }) => {
           // .filterOwnerGroup(name)
           .filterGroups(groups)
           .filterUnassigned("Unassigned, ")
-          .sort("ageDays", "D")
-          .addTargetMet(severityList, "unassigned")
           .filterCloudOnly(cloudOnly)
           .filterSeverities(severities)
+          .addTargetMet(severityList, "unassigned")
+          .sort("ageDays", "D")
           .getAvgAndData()
       );
       setResolvedData(
@@ -278,7 +278,7 @@ const WhatDoesDev = ({ name, severities, cloudOnly, severityList, groups }) => {
   if (loading) {
     return <Spinner />;
   }
-
+  console.log({ unassignedData });
   if (!data) {
     return (
       <NoData>
@@ -298,7 +298,7 @@ const WhatDoesDev = ({ name, severities, cloudOnly, severityList, groups }) => {
   let [avgResolved, resolved] = resolvedData;
   let [avgClosed, closed, met] = closedData;
 
-  console.log({ resolved });
+  console.log({ unassigned });
   const replaceFieldUnassigned = { name: "Developer", title: "OwnerGroup", toField: "groupOwner" };
   // console.log({ unassigned });
   return (

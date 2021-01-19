@@ -36,7 +36,7 @@ const SummaryChartContainer = ({
   const { data, loading } = useQuery(QUERY_SUMMARY_DATA, {
     variables: { team },
   });
-  console.log("TEAM", team, data);
+  // console.log("TEAM", team, data);
   //  const summary = summaries; // .reverse()
   // const color = props.color;
   if (loading) return <div>Loading....</div>;
