@@ -17,6 +17,7 @@ import CourseFileUpload from "./courses/CourseFileUpload";
 import PlannedCourseAdd from "./courses/PlannedCourseAdd";
 import PlannedCourseEdit from "./courses/PlannedCourseEdit";
 import PlannedCourses from "./courses/PlannedCoursesNew";
+import AddSumo from "./sumo/AddSumo";
 import DynamicImport from "./DynamicImport";
 import { withDashBoardContext } from "./globalState/Provider";
 import { UserContext } from "./globalState/UserProvider";
@@ -63,6 +64,8 @@ import TrainingGroups from "pages/TrainingGroups";
 import WhatDoesDev from "pages/WhatDoesDev";
 import UserAdmin from "UserAdmin";
 import FullTenantEdit from "tenants/details/components/FullTenantEdit";
+import Sumo from "pages/sumo";
+import { subMonths } from "date-fns/esm";
 
 // const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
 const LoggedInUsers = React.lazy(() => import("./pages/loggedinusers"));
@@ -137,6 +140,9 @@ function AppRoutes(props) {
       <Route exact path="/login" component={LoginForm} />
       {/* <Route exact path="/symptoms/add" component={AddSymptomRequest} /> */}
       <Route exact path="/playground" component={Playground} />
+      <Route exact path="/sumo" component={Sumo} />
+      <Route exact path="/addsumo" component={AddSumo} />
+
       <Route exact path="/cloudreadiness" component={CloudReadiness} />
       <Route exact path="/symptoms" component={SymptomsPage} />
       <Route exact path="/maintenancewizard" component={() => <MaintenanceVersionList productline="LN" />} />

@@ -43,8 +43,8 @@ const UPDATE_PERMISSIONS_MUTATION = gql`
   }
 `;
 
-const QUERY_ALL_PERMISSIONS = gql`
-  query QUERY_ALL_PERMISSIONS {
+const QUERY_ALL_USER_PERMISSIONS = gql`
+  query QUERY_ALL_USER_PERMISSIONS {
     allPermissions {
       id
       permission
@@ -84,7 +84,7 @@ const UpdatePermissions = (props) => {
   const [searchText, setSearchText] = useState("");
   const [selectedUsers, setSelectedUsers] = useState([]);
   const alert = useAlert();
-  const { data, loading } = useQuery(QUERY_ALL_PERMISSIONS);
+  const { data, loading } = useQuery(QUERY_ALL_USER_PERMISSIONS);
 
   useEffect(() => {
     if (data) {

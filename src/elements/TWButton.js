@@ -56,7 +56,6 @@ const TWButton = ({ children, className = null, ...props }) => {
     </button>
   );
 };
-export default TWButton;
 
 const TWHyperLink = ({ children, className = null, link = "", ...props }) => {
   let classes = className;
@@ -97,3 +96,4 @@ const TWHyperLink = ({ children, className = null, link = "", ...props }) => {
 };
 
 export { TWHyperLink };
+export default TWButton;

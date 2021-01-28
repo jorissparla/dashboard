@@ -48,6 +48,11 @@ module.exports = {
         open: ["Open Sans"],
         sansI: ["Inter var"],
       },
+      fontSize: {
+        xsm: "0.675rem",
+        xxs: "0.625rem",
+        "2xs": "0.5rem",
+      },
       colors: {
         purp: "#524763",
         current: "currentColor",
@@ -55,6 +60,8 @@ module.exports = {
         white: "#ffffff",
         black: "#000000",
         gray: colors.blueGray,
+        paleblue: colors.lightBlue,
+        "light-blue": colors.lightBlue,
         wiep: colors.pink,
         emerald: colors.emerald,
         // gray: {
