@@ -66,6 +66,7 @@ import UserAdmin from "UserAdmin";
 import FullTenantEdit from "tenants/details/components/FullTenantEdit";
 import Sumo from "pages/sumo";
 import { subMonths } from "date-fns/esm";
+import EditSumo from "sumo/EditSumo";
 
 // const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
 const LoggedInUsers = React.lazy(() => import("./pages/loggedinusers"));
@@ -142,6 +143,7 @@ function AppRoutes(props) {
       <Route exact path="/playground" component={Playground} />
       <Route exact path="/sumo" component={Sumo} />
       <Route exact path="/addsumo" component={AddSumo} />
+      <Route exact path="/editsumo/:id" component={EditSumo} />
 
       <Route exact path="/cloudreadiness" component={CloudReadiness} />
       <Route exact path="/symptoms" component={SymptomsPage} />

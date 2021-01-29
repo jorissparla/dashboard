@@ -22,7 +22,6 @@ const CustomerEvents = ({ customerid }) => {
                   comment
                   eventtype
                   nrusers
-                  type
                 }
               `,
             });

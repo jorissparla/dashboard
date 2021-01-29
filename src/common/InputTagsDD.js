@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 
-const InputTags = ({ label = "Label", placeholder = "start typing", values = [], onChange = (v) => console.log(v), readOnly = true }) => {
-  const [items, setItems] = useState([]);
+const InputTagsDropDown = ({ label = "Label", placeholder = "start typing", values = "", onChange = (v) => console.log(v), readOnly = true }) => {
+  const [items, setItems] = useState("");
   const [value, setValue] = useState("");
 
   useEffect(() => {
@@ -12,17 +12,18 @@ const InputTags = ({ label = "Label", placeholder = "start typing", values = [],
     setValue(evt.target.value);
   }
   function handleInputKeyDown(evt) {
+    const ar = items.split(";");
     if (evt.keyCode === 13) {
       const { value } = evt.target;
 
       setValue("");
-      const newItems = [...items, value];
+      const newItems = [...ar.filter((it) => it !== value), value].join(";");
       setItems(newItems);
       onChange(newItems);
     }
 
-    if (items.length && evt.keyCode === 8 && !value.length) {
-      const newItems = items.slice(0, items.length - 1);
+    if (ar.length && evt.keyCode === 8 && !value.length) {
+      const newItems = items.slice(0, items.length - 1).join(";");
       setItems(newItems);
       onChange(newItems);
     }
@@ -30,7 +31,8 @@ const InputTags = ({ label = "Label", placeholder = "start typing", values = [],
 
   function handleRemoveItem(itemToDelete) {
     return () => {
-      const newItems = items.filter((item, i) => item !== itemToDelete);
+      const ar = items.split(";");
+      const newItems = ar.filter((item, i) => item !== itemToDelete).join(";");
       setItems(newItems);
       onChange(newItems);
     };
@@ -41,7 +43,7 @@ const InputTags = ({ label = "Label", placeholder = "start typing", values = [],
         {label}
       </label>
       <div className="px-1 py-1 placeholder-gray-400 text-gray-700 relative bg-white rounded text-sm outline-none focus:outline-none border border-light-blue-200 w-full ">
-        {items.map((item) => (
+        {items?.split(";").map((item) => (
           <span className="inline-block items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-light-blue-200 text-light-blue-800 mx-1">
             {item}
             {!readOnly && (
@@ -59,18 +61,22 @@ const InputTags = ({ label = "Label", placeholder = "start typing", values = [],
           </span>
         ))}
         {!readOnly && (
-          <input
-            name="tag"
-            placeholder={placeholder}
+          <select
+            name="Farms"
+            id="farms"
             value={value}
-            className=" ml-2 rounded font-sans p-1 "
+            className=" form-select ml-2 font-sans p-1 w-32 "
             onChange={handleChange}
             onKeyDown={handleInputKeyDown}
-          />
+          >
+            <option value="Frankfurt">Frankfurt</option>
+            <option value="Sydney">Sydney</option>
+            <option value="US-East01">US-East-1</option>
+          </select>
         )}
       </div>
     </div>
   );
 };
 
-export default InputTags;
+export default InputTagsDropDown;

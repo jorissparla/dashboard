@@ -101,9 +101,8 @@ const WhatDoesDevWrapper = () => {
       { id: 3, name: "Major Impact", unassigned: S2_UNASSIGNED, resolved: S2_UNRESOLVED },
       { id: 2, name: "Medium Impact", unassigned: S3_UNASSIGNED, resolved: S3_UNRESOLVED },
       { id: 1, name: "Standard", unassigned: S4_UNASSIGNED, resolved: S4_UNRESOLVED },
-      { id: 7, name: "Minor Issue or Enhancement Request", unassigned: S4_UNASSIGNED, resolved: S4_UNRESOLVED },
+      // { id: 7, name: "Minor Issue or Enhancement Request", unassigned: S4_UNASSIGNED, resolved: S4_UNRESOLVED },
     ]);
-    // console.log({ sevUpdated, S2_UNASSIGNED, S2_UNRESOLVED });
   }, [sevUpdated]);
 
   if (loading) return <Spinner />;
@@ -184,7 +183,7 @@ const WhatDoesDevWrapper = () => {
             </label>
           </div>
         </div>
-        <div title="Settings" className="fixed right-0 pr-4" onClick={() => setShowSettings((prev) => !prev)}>
+        <div title="Settings" className="fixed right-0 pr-4 text-gray-500" onClick={() => setShowSettings((prev) => !prev)}>
           <svg className="w-6 h-6 cursor-pointer" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path
               strokeLinecap="round"
@@ -236,11 +235,9 @@ const WhatDoesDev = ({ name, severities, cloudOnly, severityList, groups }) => {
   const [resolvedData, setResolvedData] = useState([]);
   const [closedData, setClosedData] = useState([]);
   useEffect(() => {
-    console.log("WhatDoesDev changed");
     if (data) {
       let defBase = Defect(defectsx);
       let defClosed = Defect(defectsy);
-      // console.log("log", defBase.getData(), defClosed.getData());
       setUnassignedData(
         defBase
           .init()
@@ -278,7 +275,6 @@ const WhatDoesDev = ({ name, severities, cloudOnly, severityList, groups }) => {
   if (loading) {
     return <Spinner />;
   }
-  console.log({ unassignedData });
   if (!data) {
     return (
       <NoData>
@@ -298,9 +294,7 @@ const WhatDoesDev = ({ name, severities, cloudOnly, severityList, groups }) => {
   let [avgResolved, resolved] = resolvedData;
   let [avgClosed, closed, met] = closedData;
 
-  console.log({ unassigned });
   const replaceFieldUnassigned = { name: "Developer", title: "OwnerGroup", toField: "groupOwner" };
-  // console.log({ unassigned });
   return (
     <div>
       <div className=" bg-white pl-2 w-full text-grey-700 ml-2  py-0.5 text-sm shadow font-semibold">
@@ -309,7 +303,7 @@ const WhatDoesDev = ({ name, severities, cloudOnly, severityList, groups }) => {
       <div className="px-2 pt-2 grid grid-cols-2 gap-x-2 gap-y-2">
         <Widget
           data={unassigned}
-          title={`Response Target - Unassigned defects - avg. age ${avgUnassigned} days `}
+          title={`Response Target - Unassigned defects - avg. age ${avgUnassigned} days`}
           replaceField={replaceFieldUnassigned}
           mark={true}
         />
@@ -360,7 +354,7 @@ export const Widget = ({ data = [], title, mark = false, replaceField }) => {
   return (
     <div className="p-2 rounded-lg shadow-lg bg-white">
       <h1 className={`flex justify-items-center py-1 font-semibold items-center ${mark ? "text-red-700" : "text-gray-700"}`}>
-        {title} - ({len} )
+        {title} - ({len})
         <div className="flex-1 flex justify-between sm:justify-end">
           <span>
             page {currPage} of {nrPages}
@@ -478,7 +472,6 @@ const DefectQueuesFilterList = ({ defectQueues = [], onChange = () => console.lo
     .sort((x, y) => (x.length > y.length ? -1 : 1));
 
   function onHandleCheckItem(item) {
-    console.log({ item });
     let newItems = selectedGroupNames;
     if (selectedGroupNames.findIndex((s) => s === item) > -1) {
       // Remove
@@ -494,7 +487,6 @@ const DefectQueuesFilterList = ({ defectQueues = [], onChange = () => console.lo
     let newDomains = selectedDomains;
     let newItems = selectedGroupNames;
     let queuesToHandle = defectQueues.filter((g) => g.groupset === item).map((item) => item.groupname);
-    console.log({ queuesToHandle });
     if (selectedDomains.findIndex((d) => d === item) > -1) {
       // clear everything
       newDomains = selectedDomains.filter((name) => name !== item);
@@ -515,7 +507,6 @@ const DefectQueuesFilterList = ({ defectQueues = [], onChange = () => console.lo
   function isValueChecked(item) {
     return selectedGroupNames.findIndex((s) => s === item) > -1;
   }
-  console.log({ selectedGroupNames });
   return (
     <div className="h-full">
       <span className="text-gray-700">Queues</span>
@@ -555,17 +546,29 @@ const DefectQueuesFilterList = ({ defectQueues = [], onChange = () => console.lo
 
 const TargetSettingsList = () => {
   return (
-    <div className="grid grid-cols-5 gap-4 w-full pt-10 items-center">
-      <span className="font-bold px-2 py-1">Not Resolved</span>
-      <Parameter param="DEV_S1_UNRESOLVED" initial={5} label="Sev1" color="red" />
-      <Parameter param="DEV_S2_UNRESOLVED" initial={15} label="Major Impact" color="pink" />
-      <Parameter param="DEV_S3_UNRESOLVED" initial={45} label="Medium Impact" color="purple" />
-      <Parameter param="DEV_S4_UNRESOLVED" initial={90} label="Standard" color="teal" />
-      <span className="font-bold px-2 py-1">Unassigned</span>
-      <Parameter param="DEV_S1_UNASSIGNED" initial={1} label="Sev1" color="red" />
-      <Parameter param="DEV_S2_UNASSIGNED" initial={1} label="Major Impact" color="pink" />
-      <Parameter param="DEV_S3_UNASSIGNED" initial={7} label="Medium Impact" color="purple" />
-      <Parameter param="DEV_S4_UNASSIGNED" initial={14} color="teal" label="Standard" />
+    <div>
+      <header className="flex items-center justify-between">
+        <h2 className="text-lg leading-6 font-medium text-gray-600 mt-3">Target Settings</h2>
+      </header>
+      <div className="border border-gray-200 border-t mt-2"></div>
+      <div className="grid grid-cols-5 gap-4 w-full pt-10 items-center">
+        <div className="flex flex-col">
+          <span className="font-bold px-2 py-1">Defect Not Resolved</span>
+          <span className="px-2  text-gray-500">in days</span>
+        </div>
+        <Parameter param="DEV_S1_UNRESOLVED" initial={5} label="Sev1" color="red" />
+        <Parameter param="DEV_S2_UNRESOLVED" initial={15} label="Major Impact" color="pink" />
+        <Parameter param="DEV_S3_UNRESOLVED" initial={45} label="Medium Impact" color="purple" />
+        <Parameter param="DEV_S4_UNRESOLVED" initial={90} label="Standard" color="teal" />
+        <div className="flex flex-col">
+          <span className="font-bold px-2 py-1">Defect Unassigned</span>
+          <span className="px-2  text-gray-500">in days</span>
+        </div>
+        <Parameter param="DEV_S1_UNASSIGNED" initial={1} label="Sev1" color="red" />
+        <Parameter param="DEV_S2_UNASSIGNED" initial={1} label="Major Impact" color="pink" />
+        <Parameter param="DEV_S3_UNASSIGNED" initial={7} label="Medium Impact" color="purple" />
+        <Parameter param="DEV_S4_UNASSIGNED" initial={14} color="teal" label="Standard" />
+      </div>
     </div>
   );
 };

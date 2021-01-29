@@ -8,15 +8,11 @@ export function Defect(defects) {
       return this;
     },
     addTargetMet(severityList, col) {
-      console.log("reload", severityList);
       this.targetAdded = true;
       let result = tmp.map((item) => {
-        severityList.map((s) => {
-          // console.log("kiep", s.id, item.severity_id);
-        });
+        severityList.map((s) => {});
         const row = severityList.find((s) => s.id === item.severity_id);
         if (!row) {
-          console.log("jier");
         }
         const targetVal = parseInt(row[col]);
 
@@ -31,7 +27,6 @@ export function Defect(defects) {
     },
     filterGroups(listOfGroups) {
       tmp = tmp.filter((def) => listOfGroups.includes(def.groupOwner));
-      // console.log("length", tmp.length);
       return this;
     },
     filterStatus(status) {
@@ -43,7 +38,10 @@ export function Defect(defects) {
       return this;
     },
     filterUnassigned(dev) {
-      tmp = tmp.filter((def) => def.Developer === dev && (def.status !== "Approved" || def.status !== "Assigned"));
+      tmp = tmp
+        .filter((def) => def.Developer === dev)
+        .filter((def) => def.Status !== "Approved")
+        .filter((def) => def.Status !== "Assigned");
       return this;
     },
     filterSeverity(sev) {
