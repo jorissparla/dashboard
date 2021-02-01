@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 
-const InputTags = ({ label = "Label", placeholder = "start typing", values = [], onChange = (v) => console.log(v), readOnly = true }) => {
+const InputTags = ({
+  label = "Label",
+  placeholder = "start typing",
+  values = [],
+  onChange = (v) => console.log(v),
+  readOnly = true,
+  className = "",
+}) => {
   const [items, setItems] = useState([]);
   const [value, setValue] = useState("");
 
@@ -40,7 +47,9 @@ const InputTags = ({ label = "Label", placeholder = "start typing", values = [],
       <label for="email" className="block text-sm font-medium text-gray-700">
         {label}
       </label>
-      <div className="px-1 py-1 placeholder-gray-400 text-gray-700 relative bg-white rounded text-sm outline-none focus:outline-none border border-light-blue-200 w-full ">
+      <div
+        className={`px-1 py-1 placeholder-gray-400 text-gray-700 relative bg-white rounded text-sm outline-none focus:outline-none border border-light-blue-200 w-full ${className}`}
+      >
         {items.map((item) => (
           <span className="inline-block items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-light-blue-200 text-light-blue-800 mx-1">
             {item}

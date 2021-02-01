@@ -65,6 +65,8 @@ import WhatDoesDev from "pages/WhatDoesDev";
 import UserAdmin from "UserAdmin";
 import FullTenantEdit from "tenants/details/components/FullTenantEdit";
 import Sumo from "pages/sumo";
+import SumoAlerts from "pages/sumoalerts";
+import SumoIncidents from "pages/sumoincidents";
 import { subMonths } from "date-fns/esm";
 import EditSumo from "sumo/EditSumo";
 
@@ -142,6 +144,9 @@ function AppRoutes(props) {
       {/* <Route exact path="/symptoms/add" component={AddSymptomRequest} /> */}
       <Route exact path="/playground" component={Playground} />
       <Route exact path="/sumo" component={Sumo} />
+      <Route exact path="/sumoalerts" component={SumoAlerts} />
+      <Route exact path="/sumoincidents" component={SumoIncidents} />
+
       <Route exact path="/addsumo" component={AddSumo} />
       <Route exact path="/editsumo/:id" component={EditSumo} />
 

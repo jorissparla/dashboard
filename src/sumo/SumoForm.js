@@ -14,8 +14,13 @@ export const ADDSUMO_MUTATION = gql`
       id
       creator
       created
+      week
+      comments
+      customername
+      created
       query
       farms
+      incident
       sessioncode
       errormessage
       module
@@ -27,11 +32,14 @@ export const UPDATE_SUMO_MUTATION = gql`
     updateSumolog(where: $where, input: $input) {
       id
       creator
+      created
       week
       comments
+      customername
       created
       query
       farms
+      incident
       sessioncode
       errormessage
       module
@@ -43,8 +51,10 @@ function SumoForm({ initialValues = null }) {
   const defaults = initialValues || {
     id: null,
     creator: "",
+    customername: "",
     created: getCurrentDate(),
     week: getWeek(),
+    incident: "",
     query: "",
     comments: "",
     errormessage: "",
@@ -73,12 +83,13 @@ function SumoForm({ initialValues = null }) {
     setValues({ ...values, farms });
   }
   async function addSumoEntry() {
-    const newDate = values.date ? new Date(values.date).toISOString() : new Date().toISOString();
+    const newDate = values.created ? new Date(values.created).toISOString() : new Date().toISOString();
     if (values.id) {
       const where = { id: values.id };
       const input = { ...values, created: newDate };
       delete input.__typename;
       delete input.id;
+      console.log(values);
       const result = await updateSumoInput({ variables: { where, input } });
       console.log(result);
       if (result?.data?.updateSumolog) {
@@ -108,20 +119,9 @@ function SumoForm({ initialValues = null }) {
           <header className="flex items-center justify-between">
             <h2 className="text-lg leading-6 font-medium text-black">{values.id ? "Edit" : "Add"} Entry for Sumo</h2>
             <TWButton onClick={() => history.push("/sumo")}>Back to List</TWButton>
-            <button
-              className="hover:bg-light-blue-200 hover:text-light-blue-800 group flex items-center rounded-md bg-light-blue-100 text-light-blue-600 text-sm font-medium px-4 py-2 mx-2"
-              onClick={addSumoEntry}
-            >
-              <svg className="w-6 h-6 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"
-                />
-              </svg>
+            <TWButton color="pink" onClick={addSumoEntry}>
               Save
-            </button>
+            </TWButton>
           </header>
         </section>
         <div className="flex space-x-2">
@@ -136,20 +136,18 @@ function SumoForm({ initialValues = null }) {
               name="created"
               onChange={handleChange}
               type="date"
-              className="form-input"
+              className="form-input max-w-44"
               onChange={handleChange}
             />
           </div>
-          <div>
-            <label htmlFor="week" className="block text-sm font-medium text-gray-700">
-              Week
-            </label>
-            <input id="week" value={values.week} name="week" onChange={handleChange} type="week" className="form-input" onChange={handleChange} />
-          </div>
-          <TextInput label="Sessioncode" name="sessioncode" value={values.sessioncode} onChange={handleChange} className="w-48" />
-          <TextInput label="Module" name="module" value={values.module} onChange={handleChange} className="w-48" />
+
+          <TextInput label="Incident" name="incident" value={values.incident} onChange={handleChange} className="max-w-32" />
+          <TextInput label="Customer" name="customername" value={values.customername} onChange={handleChange} className="min-w-80" />
+          <TextInput label="Sessioncode" name="sessioncode" value={values.sessioncode} onChange={handleChange} className="max-w-32" />
+          <TextInput label="Module" name="module" value={values.module} onChange={handleChange} className="max-w-16" />
           <InputTagsDropDown values={values.farms} name="farms" readOnly={false} label="Farms" onChange={handleFarmsInputChange} />
         </div>
+        <pre>{JSON.stringify(values, null, -2)}</pre>
         <div className="mt-2">
           <label htmlFor="comments" className="block text-sm font-medium text-gray-700">
             Comments

@@ -7,11 +7,14 @@ const ONE_SUMOLOGS_QUERY = gql`
     sumolog(id: $id) {
       id
       creator
+      created
+      customername
       week
       comments
       created
       query
       farms
+      incident
       sessioncode
       errormessage
       module
