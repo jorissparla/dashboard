@@ -39,20 +39,7 @@ const MarkDownFieldEditor = (props) => {
   // setValue(e.target.value);
   const handleSubmit = (e) => {
     e.preventDefault();
-    // const input = { id };
-    // input[name] = value;
-    // console.log({ input });
-    // updateField({
-    //   variables: { input },
-    //   refetchQueries: [
-    //     {
-    //       query: ALL_MAINTENANCE_QUERY
-    //     },
-    //     {
-    //       query: MAINTENANCE_FAQ_QUERY
-    //     }
-    //   ]
-    // });
+
     onSaveAndClose(value);
   };
   console.log(id);
@@ -74,20 +61,6 @@ const MarkDownFieldEditor = (props) => {
       <form onSubmit={handleSubmit}>
         <div title={`Edit ${label}`} />
         <div className="flex items-center justify-start mt-4 w-full z-50 flex-1 flex-col">
-          {/* <CKEditor
-            editor={ClassicEditor}
-            // disabled={readOnly}
-            data={value}
-            onInit={(editor) => {
-              // You can store the "editor" and use when it is needed.
-              console.log("Editor is ready to use!", editor);
-            }}
-            onChange={(event, editor) => {
-              const data = editor.getData();
-              // console.log("Change", { event, editor, data });
-              setValue(data);
-            }}
-          /> */}
           <JoditEditor
             style={{ font: "24px Arial", color: "#000", height: "100%" }}
             ref={editor}
@@ -99,24 +72,6 @@ const MarkDownFieldEditor = (props) => {
               console.log(newContent);
             }}
           />
-          {/* <ReactMde
-              value={value}
-              onChange={setValue}
-              selectedTab="write"
-              disablePreview={true}
-              textAreaProps={taprops}
-            /> */}
-          {/* <TextField
-                fullWidth
-                multiline
-                rows={8}
-                label={label}
-                name={name}
-                onChange={handleChange}
-                // required
-                value={value}
-                variant="outlined"
-              /> */}
         </div>
         <div className="flex mt-2 w-1/5 justify-between items-center">
           <TWButton color="primary" type="submit" variant="contained">
@@ -128,7 +83,6 @@ const MarkDownFieldEditor = (props) => {
           </TWButton>
         </div>
       </form>
-      {/* <SuccessSnackbar onClose={handleSnackbarClose} open={openSnackbar} /> */}
     </Card>
   );
 };

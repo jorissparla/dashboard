@@ -9,7 +9,6 @@ const CloudInformation = ({ user }) => {
   if (user && user.permissions) {
     canEdit = user.role === "Admin" || ["CLOUDREADINESS", "ADMIN"].some((item) => user.permissions.find((perm) => perm.permission === item));
   }
-  const classes = useStyles();
   const { data, loading } = useQuery(CLOUD_READINESS_QUERY);
   if (loading) return <div></div>;
   const { cloudreadiness } = data;
@@ -28,7 +27,6 @@ const CloudInformation = ({ user }) => {
       {fields.map(({ name, title }) => (
         <EditableMarkDownField
           key={name}
-          classes={classes}
           name={name}
           label={title}
           value={cloudreadiness[name]}

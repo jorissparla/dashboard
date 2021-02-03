@@ -109,7 +109,7 @@ const muiTheme = createMuiTheme({
 
 const Main = () => (
   <ApolloProvider client={client}>
-    <Global />
+    {/* <Global /> */}
     {/* <Provider store={store}> */}
     <MuiThemeProvider theme={muiTheme}>
       <ContextProvider>

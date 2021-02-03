@@ -6,7 +6,6 @@ import Typography from "@material-ui/core/Typography";
 import React from "react";
 import ReleaseInformation, { MaintenanceCheck } from "wizard/ReleaseInformation";
 import { Field } from "./Field";
-import { useStyles } from "./useStyles";
 
 let defaultValue = {
   version: "",
@@ -24,7 +23,6 @@ defaultValue["Are checks Required?"] = ".";
 defaultValue["Check if Customer is entitled for Extended Maintenance?"] = "N/A";
 
 const MaintenanceInformation = ({ activeVersion, checksRequired, validMaintenance, setValidMaintenance }) => {
-  const classes = useStyles();
   // const { activeVersion, checksRequired, validMaintenance, setValidMaintenance } = React.useContext(
   //   RootContext
   // );
@@ -33,7 +31,7 @@ const MaintenanceInformation = ({ activeVersion, checksRequired, validMaintenanc
   };
   if (!activeVersion || activeVersion === {}) return <div />;
   return (
-    <Paper className={classes.paper}>
+    <div className="">
       <Typography variant="h6">Maintenance Information</Typography>
       <Grid container spacing={2} justify="flex-start">
         <Grid item xs={3}>
@@ -83,7 +81,7 @@ const MaintenanceInformation = ({ activeVersion, checksRequired, validMaintenanc
           </Typography>
         </Grid>
       </Grid>
-    </Paper>
+    </div>
   );
 };
 

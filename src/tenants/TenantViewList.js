@@ -127,7 +127,7 @@ const TenantViewList = (props) => {
               </label>
             </div>
           </div>
-          <SearchBar hintText="type part of customer name or csm" onChange={(v) => setSearchText(v)} className="bg-teal-200" />
+          <SearchBar hintText="type part of customer name or csm" onChange={(v) => setSearchText(v)} className="bg-white" />
         </div>
         <div className="p-2 rounded-lg shadow-lg bg-white mx-2">
           <TenantTable data={filteredCustomers} onSelect={handleSelect} />

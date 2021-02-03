@@ -10,7 +10,7 @@ import SigninWithPIN from "./auth/SigninWithPIN";
 import Signout from "./auth/signout";
 import OtherTeamsChartContainer from "./charts/OtherTeamChartsContainer";
 import LNByRegionContainer from "./charts/LNByRegionContainer";
-import Product from "./cloudsuite/Product";
+// import Product from "./cloudsuite/Product";
 import CourseAdd from "./courses/CourseAdd";
 import CourseEdit from "./courses/CourseEdit";
 import CourseFileUpload from "./courses/CourseFileUpload";
@@ -23,7 +23,7 @@ import { withDashBoardContext } from "./globalState/Provider";
 import { UserContext } from "./globalState/UserProvider";
 import NewsItemContainer from "./news/newsitemcontainer";
 import CloudReadiness from "./pages/CloudReadiness";
-import CloudSuites, { CloudSuitePage } from "./pages/CloudSuites";
+import CloudSuites from "./pages/CloudSuites";
 import DashBoardContainer from "./pages/dashboardcontainer";
 import MaintenanceVersionList from "./pages/MaintenanceVersionList";
 import NewsPage from "./pages/newspage";
@@ -37,14 +37,13 @@ import VideoPage from "./pages/Videos";
 import WorklistSimple from "./pages/WorklistSimple";
 import { Parameters } from "./stats/Parameters";
 import PriorityDashboard from "./stats/PriorityDashboard";
-import Details from "./tenants/details/index";
+// import Details from "./tenants/details/index";
 import TestLogin from "./TestLogin";
 // import Test
 import UserPermissions from "./UserPermissions";
 import { AddVideo, EditVideo } from "./videos/VideoOperations";
 // import CloudInfo from "./pages/CloudInfo";
 import LoginForm from "./auth/LoginForm";
-import AddSymptomRequest from "symptoms/AddSymptomRequest";
 import UploadImageComponent from "pages/UploadImageComponent";
 import UserPage from "pages/UserPage";
 import CloudInformation from "pages/CloudInformation";
@@ -141,7 +140,6 @@ function AppRoutes(props) {
       <Route exact path="/loggedinusers" component={LoggedInUsers} />
       <Route exact path="/uploadimage" component={UploadImageComponent} />
       <Route exact path="/login" component={LoginForm} />
-      {/* <Route exact path="/symptoms/add" component={AddSymptomRequest} /> */}
       <Route exact path="/playground" component={Playground} />
       <Route exact path="/sumo" component={Sumo} />
       <Route exact path="/sumoalerts" component={SumoAlerts} />
@@ -157,7 +155,7 @@ function AppRoutes(props) {
       <Route exact path="/tenantlogs" component={TenantLogsWithData} />
       <Route exact path="/tenantlogs1" component={TenantLogList} />
       <Route exact path="/tenantview" component={TenantViewList} />
-      <Route exact path="/details/:id" component={Details} />
+      {/* <Route exact path="/details/:id" component={Details} /> */}
       <Route exact path="/stats" component={Stats} user={user} history={history} />
       <AuthRoute exact path="/statstest" component={Stats} user={user} history={history} />
       <AuthRoute exact path="/profilepage" component={ProfilePage} user={user} />
@@ -172,9 +170,9 @@ function AppRoutes(props) {
       <Route exact path="/" component={DashBoardContainer} user={user} />
       <Route exact path="/newspage" component={NewsPage} />
       <Route exact path="/cloudsuites" component={CloudSuites} history={history} user={user} />
-      <Route exact path="/cloudsuites/product/:id" component={Product} history={history} user={user} />
+      {/* <Route exact path="/cloudsuites/product/:id" component={Product} history={history} user={user} /> */}
       <Route exact path="/priority" component={PriorityDashboard} history={history} user={user} />
-      <Route exact path="/cloudsuite/:id" component={CloudSuitePage} history={history} user={user} />
+
       <EnhancedRoute auth="admin" editors={["Admin", "PO"]} user={user} exact path="/supportcard" component={SupportCards} />
       <Route exact path="/tenant" component={TenantPage} />
       <Route exact path="/tenant/:customerid" component={FullTenantEdit} />

@@ -99,11 +99,12 @@ const Sumo = () => {
   );
 };
 const SumoListItem = ({ item }) => {
+  const history = useHistory();
   console.log(item, item.farms?.split(";"));
   return (
     <li>
-      <a
-        href={`/editsumo/${item.id}`}
+      <button
+        onClick={() => history.push(`/editsumo/${item.id}`)}
         className="hover:bg-light-blue-500 hover:border-transparent hover:shadow-lg group block rounded-lg p-4 border border-gray-200 no-underline overflow-hidden bg-light-blue-100 shadow-lg"
       >
         <dl className="grid sm:block lg:grid xl:block grid-cols-2 grid-rows-2 items-center">
@@ -136,7 +137,7 @@ const SumoListItem = ({ item }) => {
             </dd>
           </div>
         </dl>
-      </a>
+      </button>
     </li>
   );
 };

@@ -7,12 +7,9 @@ import { DashBoardContext } from "globalState/Provider";
 import { useUserContext } from "globalState/UserProvider";
 import React, { useRef } from "react";
 import { ALL_MAINTENANCE_QUERY, MAINTENANCE_FAQ_QUERY, MUTATION_UPDATE_MAINTENANCE } from "./Queries";
-import { useStyles } from "./useStyles";
 import "./field.css";
 
 export const Field = ({ name, label, edit = false, Icon, activeVersion, bigger = false, blue = false }) => {
-  const classes = useStyles();
-  const viewer = useRef(null);
   const mutation = MUTATION_UPDATE_MAINTENANCE;
   const [updateField] = useMutation(mutation);
   const alert = useAlert();

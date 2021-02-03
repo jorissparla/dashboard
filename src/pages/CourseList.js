@@ -1,25 +1,14 @@
-import React, { useState } from "react";
-import gql from "graphql-tag";
-import { useQuery } from "@apollo/client";
-import { withRouter } from "react-router";
-import styled from "styled-components";
+import { useQuery, gql } from "@apollo/client";
+import TWButton from "elements/TWButton";
+import { useIsValidEditor } from "globalState/UserProvider";
 import _ from "lodash";
-//import format from 'date-fns/format';
-import { format } from "../utils/format";
-import Card from "../courses/NewCard";
+import React, { useState } from "react";
+import { useHistory, withRouter } from "react-router";
 import SearchBar from "../common/SearchBar";
-import AddCard from "../courses/AddCard";
+import Card from "../courses/NewCard";
+import { format } from "../utils/format";
 import withAuth from "../utils/withAuth";
-import { useUserContext, useIsValidEditor } from "globalState/UserProvider";
-const StyledContainer = styled.div`
-  margin-top: 10px;
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: flex-start;
 
-  pointer-events: ${(props) => (props.readonly === true ? "none" : "all")};
-`;
 const QUERY_ALL_COURSES = gql`
   query QUERY_ALL_COURSES {
     courses {
@@ -50,6 +39,7 @@ const QUERY_ALL_COURSES = gql`
 `;
 
 const CourseList = (props) => {
+  const history = useHistory();
   const [searchText, setSearchText] = useState("");
   // const { user } = useUserContext();
   let [validRole, user] = useIsValidEditor("COURSEEDIT");
@@ -68,14 +58,17 @@ const CourseList = (props) => {
     .orderBy((o) => (o.plannedcourses[0] ? format(o.plannedcourses[0].startdate, "yyyyMMdd") : o.lastmodified), "desc")
     .value();
   return (
-    <div className="w-full bg-gray-200">
-      <SearchBar style={{ display: "flex" }} onChange={handleSearchTextChange} hintText="Search for title or team...." />
-      <StyledContainer readonly={!user}>
-        {validRole && <AddCard />}
+    <div className="w-full ">
+      <header class="flex items-center justify-between bg-white mx-2">
+        <h2 class="text-lg leading-6 font-medium text-black">Courses</h2>
+        {validRole && <TWButton onClick={() => history.push("/courses/create")}>New</TWButton>}
+      </header>
+      <SearchBar style={{ display: "flex" }} onChange={handleSearchTextChange} hintText="Search for title or team...." className="-ml-10 w-5/6" />
+      <div className="flex flex-wrap justify-start mt-4 bg-grey-100" readonly={!user}>
         {filteredCourses.map((course, i) => (
           <Card key={course.id} course={course} index={i} count={course._studentsMeta.count} validRole={validRole} />
         ))}
-      </StyledContainer>
+      </div>
     </div>
   );
 };
