@@ -102,20 +102,7 @@ const EditWizardDetails = (props) => {
             Close
           </Button>
         </CardActions>
-
-        {/* <JoditEditor
-          ref={viewer}
-          value={value}
-          config={config2}
-          tabIndex={2} // tabIndex of textarea
-          // onBlur={newContent => setValue(newContent)} // preferred to use only this option to update the content for performance reasons
-          // onChange={newContent => {
-          //   console.log(newContent);
-          // }}
-        /> */}
-        {/* <MarkDown source={value} escapeHtml={false} /> */}
       </form>
-      {/* <SuccessSnackbar onClose={handleSnackbarClose} open={openSnackbar} /> */}
     </Card>
   );
 };

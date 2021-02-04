@@ -1,6 +1,6 @@
 import { useMutation } from "@apollo/client";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import CKEditor from "@ckeditor/ckeditor5-react";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
 import Chip from "@material-ui/core/Chip";
 import TWButton from "elements/TWButton";
 import { TWSelectMenu } from "elements/TWSelectMenu";
@@ -120,7 +120,7 @@ const SupportCardForm = (props) => {
                 config={config}
                 disabled={readOnly}
                 data={values.description}
-                onInit={(editor) => {
+                onReady={(editor) => {
                   // You can store the "editor" and use when it is needed.
                   console.log("Editor is ready to use!", editor);
                 }}

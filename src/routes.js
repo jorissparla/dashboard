@@ -1,23 +1,40 @@
+import CloudInformation from "pages/CloudInformation";
+import Mailerlog from "pages/Mailerlog";
+import MailerLogDetail from "pages/MailerLogDetail";
+import Main from "pages/Main";
+import Projects from "pages/projects";
+import Sumo from "pages/sumo";
+import SumoAlerts from "pages/sumoalerts";
+import SumoIncidents from "pages/sumoincidents";
 import SymptomsPage from "pages/Symptoms";
+import SymptomsKBs from "pages/SymptomsKBs";
+import TenantLogList from "pages/TenantLogList";
+import testActivity from "pages/testActivity";
+import TestChart from "pages/testchart";
+import TrainingGroups from "pages/TrainingGroups";
+import UploadImageComponent from "pages/UploadImageComponent";
+import UserPage from "pages/UserPage";
+import WhatDoesDev from "pages/WhatDoesDev";
+import AddProject from "projects/addproject";
+import UpdateProject from "projects/updateproject";
 import React from "react";
 import { Route, Switch, useHistory } from "react-router-dom";
+import EditSumo from "sumo/EditSumo";
+import SymptomCategories from "symptoms/SymptomCategories";
+import FullTenantEdit from "tenants/details/components/FullTenantEdit";
+import MissingTenants from "tenants/MissingTenants";
 import { TenantLogsWithData } from "tenants/TenantLogs";
 import TenantViewList from "tenants/TenantViewList";
+import UserAdmin from "UserAdmin";
 import NiceSpinner from "utils/NiceSpinner";
+// import CloudInfo from "./pages/CloudInfo";
+import LoginForm from "./auth/LoginForm";
 import RequireAuth, { AuthRoute, EnhancedRoute } from "./auth/require_auth";
 import Signin from "./auth/signin";
 import SigninWithPIN from "./auth/SigninWithPIN";
 import Signout from "./auth/signout";
-import OtherTeamsChartContainer from "./charts/OtherTeamChartsContainer";
 import LNByRegionContainer from "./charts/LNByRegionContainer";
-// import Product from "./cloudsuite/Product";
-import CourseAdd from "./courses/CourseAdd";
-import CourseEdit from "./courses/CourseEdit";
-import CourseFileUpload from "./courses/CourseFileUpload";
-import PlannedCourseAdd from "./courses/PlannedCourseAdd";
-import PlannedCourseEdit from "./courses/PlannedCourseEdit";
-import PlannedCourses from "./courses/PlannedCoursesNew";
-import AddSumo from "./sumo/AddSumo";
+import OtherTeamsChartContainer from "./charts/OtherTeamChartsContainer";
 import DynamicImport from "./DynamicImport";
 import { withDashBoardContext } from "./globalState/Provider";
 import { UserContext } from "./globalState/UserProvider";
@@ -25,49 +42,23 @@ import NewsItemContainer from "./news/newsitemcontainer";
 import CloudReadiness from "./pages/CloudReadiness";
 import CloudSuites from "./pages/CloudSuites";
 import DashBoardContainer from "./pages/dashboardcontainer";
+import KBPage from "./pages/KBPage";
 import MaintenanceVersionList from "./pages/MaintenanceVersionList";
 import NewsPage from "./pages/newspage";
-import PlannedCourseRequestList from "./pages/PlannedCourseRequestList";
 import Playground from "./pages/Playground";
 import ProfilePage from "./pages/ProfilePage";
 import Stats from "./pages/Stats";
-import KBPage from "./pages/KBPage";
 import { Surveys } from "./pages/Surveys";
 import VideoPage from "./pages/Videos";
 import WorklistSimple from "./pages/WorklistSimple";
 import { Parameters } from "./stats/Parameters";
 import PriorityDashboard from "./stats/PriorityDashboard";
+import AddSumo from "./sumo/AddSumo";
 // import Details from "./tenants/details/index";
 import TestLogin from "./TestLogin";
 // import Test
 import UserPermissions from "./UserPermissions";
 import { AddVideo, EditVideo } from "./videos/VideoOperations";
-// import CloudInfo from "./pages/CloudInfo";
-import LoginForm from "./auth/LoginForm";
-import UploadImageComponent from "pages/UploadImageComponent";
-import UserPage from "pages/UserPage";
-import CloudInformation from "pages/CloudInformation";
-import TenantLogList from "pages/TenantLogList";
-import Projects from "pages/projects";
-import AddProject from "projects/addproject";
-import UpdateProject from "projects/updateproject";
-import MissingTenants from "tenants/MissingTenants";
-import Main from "pages/Main";
-import SymptomsKBs from "pages/SymptomsKBs";
-import Mailerlog from "pages/Mailerlog";
-import MailerLogDetail from "pages/MailerLogDetail";
-import SymptomCategories from "symptoms/SymptomCategories";
-import testActivity from "pages/testActivity";
-import TestChart from "pages/testchart";
-import TrainingGroups from "pages/TrainingGroups";
-import WhatDoesDev from "pages/WhatDoesDev";
-import UserAdmin from "UserAdmin";
-import FullTenantEdit from "tenants/details/components/FullTenantEdit";
-import Sumo from "pages/sumo";
-import SumoAlerts from "pages/sumoalerts";
-import SumoIncidents from "pages/sumoincidents";
-import { subMonths } from "date-fns/esm";
-import EditSumo from "sumo/EditSumo";
 
 // const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
 const LoggedInUsers = React.lazy(() => import("./pages/loggedinusers"));
@@ -87,8 +78,6 @@ const AnniversaryList = DynamicImport(() => import("./awards/Anniversaries"));
 
 //const ResolutionChart = DynamicImport(() => import('./charts/ResolutionChart'));
 
-const CourseList = DynamicImport(() => import("./pages/CourseList"));
-
 const AccountList = DynamicImport(() => import("./Account/AccountList"));
 
 const SmallCard = DynamicImport(() => import("./supportcard/SupportCard"));
@@ -104,22 +93,19 @@ const SupportCards = DynamicImport(() => import("./pages/SupportCards"));
 const RequestEditAdd = DynamicImport(() => import("./supportcard/Request"));
 const SupportCardEdit = DynamicImport(() => import("./supportcard/SupportCardEdit"));
 const SupportCardAdd = DynamicImport(() => import("./supportcard/SupportCardAdd"));
-const CourseDashboard = DynamicImport(() => import("./pages/CourseDashboard"));
-const StudentListContainer = DynamicImport(() => import("./courses/StudentTableNew"));
-const StudentView = DynamicImport(() => import("./courses/StudentView"));
+
 /*  */
-const AddPlannedCourseRequest = DynamicImport(() => import("./courses/AddPlannedCourseRequest"));
 const TenantPage = DynamicImport(() => import("./pages/TenantPage"));
 const VSummaryChart = DynamicImport(() => import("./charts/VSummaryChart"));
 
-const NotFound = (props) => {
+const NotFound = () => {
   //withDashBoardContext(props => {
   return <h2>Not Found</h2>;
 }; //);
 
 // const TestUser = () => <UserProfileComponent />;
 
-function AppRoutes(props) {
+function AppRoutes() {
   //  const user = props.context;
   const { user, loading } = React.useContext(UserContext);
   const history = useHistory();
@@ -170,7 +156,7 @@ function AppRoutes(props) {
       <Route exact path="/" component={DashBoardContainer} user={user} />
       <Route exact path="/newspage" component={NewsPage} />
       <Route exact path="/cloudsuites" component={CloudSuites} history={history} user={user} />
-      {/* <Route exact path="/cloudsuites/product/:id" component={Product} history={history} user={user} /> */}
+
       <Route exact path="/priority" component={PriorityDashboard} history={history} user={user} />
 
       <EnhancedRoute auth="admin" editors={["Admin", "PO"]} user={user} exact path="/supportcard" component={SupportCards} />
@@ -181,19 +167,19 @@ function AppRoutes(props) {
       <Route exact path="/region/:region" component={DashBoardContainer} user={user} />
       <Route exact path="/team/:team" component={DashBoardStatsNew} />
       {/* <Route exact path="/team/:team/region/:region" component={DashBoardStats} /> */}
-      <Route exact path="/fileupload" component={CourseFileUpload} />
+      {/* <Route exact path="/fileupload" component={CourseFileUpload} />
       <EnhancedRoute exact path="/scheduledcourses/:id" component={PlannedCourses} user={user} />
-      <Route exact path="/plannedcourserequestlist" component={PlannedCourseRequestList} />
+      <Route exact path="/plannedcourserequestlist" component={PlannedCourseRequestList} /> */}
       {/* <EnhancedRoute exact path="/bla" component={RequireAuth(UserPermissions)} user={user} /> */}
       <EnhancedRoute exact path="/userpermissions" component={RequireAuth(UserPermissions)} user={user} />
       <EnhancedRoute exact path="/b52" component={UserAdmin} user={user} />
       <EnhancedRoute exact path="/setpermissions" component={RequireAuth(UserPermissions)} user={user} />
-      <EnhancedRoute exact path="/xyz/:id" component={CourseEdit} user={user} />
+      {/* <EnhancedRoute exact path="/xyz/:id" component={CourseEdit} user={user} />
       <EnhancedRoute exact path="/xyz/edit/:id" component={CourseEdit} user={user} />
       <EnhancedRoute exact path="/xyz/view/:id" component={CourseEdit} user={user} view={true} />
       <Route exact path="/scheduledcourses/:id/new" component={PlannedCourseAdd} />
-      <Route exact path="/scheduledcourses/:id/edit/:id2" component={PlannedCourseEdit} />
-      <Route exact path="/courses/create" component={CourseAdd} />
+      <Route exact path="/scheduledcourses/:id/edit/:id2" component={PlannedCourseEdit} /> */}
+      {/* <Route exact path="/courses/create" component={CourseAdd} /> */}
       <Route exact path="/testlogin" component={TestLogin} />
       <Route exact path="/smallcard" component={SmallCard} />
       <AuthRoute auth="admin" allowed={["Admin", "PO"]} user={user} exact path="/accounts" component={AccountList} />
@@ -207,7 +193,7 @@ function AppRoutes(props) {
 
       <EnhancedRoute allowed={["Admin", "PO", "SU", "Guest", "Chat"]} user={user} exact path="/cloudinfo" component={CloudInformation} />
       <EnhancedRoute allowed={["Admin", "PO", "SU", "Guest", "Chat"]} user={user} exact path="/cloudinformation" component={CloudInformation} />
-      <EnhancedRoute editors={["Admin", "PO", "SU"]} user={user} exact path="/coursedashboard" component={RequireAuth(CourseDashboard)} />
+      {/* <EnhancedRoute editors={["Admin", "PO", "SU"]} user={user} exact path="/coursedashboard" component={RequireAuth(CourseDashboard)} /> */}
       <EnhancedRoute editors={["Admin", "PO"]} user={user} exact path="/requestlist" component={RequireAuth(RequestList)} />
       <EnhancedRoute editors={["Admin", "PO"]} user={user} exact path="/addrequest" component={RequireAuth(AddSupportCardRequest)} />
       <EnhancedRoute editors={["Admin", "PO"]} user={user} path="/supportcard/request/:id" component={RequireAuth(RequestEdit)} />
@@ -250,19 +236,19 @@ function AppRoutes(props) {
       <Route path="test/edit/:id" component={NewsItemContainer} />
       <Route exact path="/test/dashboard" component={DashBoardStatsNew} />
       <Route exact path="/test/dashboard/team/:team" component={DashBoardStatsNew} />
-      <Route exact path="/courses" component={CourseList} user={user} />
-      <Route exact path="/coursedashboard" component={CourseDashboard} />
-      <Route exact path="/students" component={StudentListContainer} />
-      <Route path="/students/:id" component={StudentView} />
-      <AuthRoute allowed={["Admin", "PO"]} user={user} path="/courses/edit/:id" component={CourseEdit} />
-      <AuthRoute
+      {/* <Route exact path="/courses" component={CourseList} user={user} /> */}
+      {/* <Route exact path="/coursedashboard" component={CourseDashboard} /> */}
+      {/* <Route exact path="/students" component={StudentListContainer} />
+      <Route path="/students/:id" component={StudentView} /> */}
+      {/* <AuthRoute allowed={["Admin", "PO"]} user={user} path="/courses/edit/:id" component={CourseEdit} /> */}
+      {/* <AuthRoute
         allowed={["Admin", "PO", "SU", "Guest", "Chat"]}
         user={user}
         path="/courses/view/:id"
         component={(props) => <CourseEdit {...props} view={true} />}
-      />
+      /> */}
       <Route exact path="/chart" component={VSummaryChart} />
-      <Route exact path="/addplannedcourserequest" component={AddPlannedCourseRequest} />
+      {/* <Route exact path="/addplannedcourserequest" component={AddPlannedCourseRequest} /> */}
       <Route exact path="/about" component={VideoPage} user={user} />
       <EnhancedRoute exact path="/videos" component={VideoPage} user={user} />
       <AuthRoute allowed={["Admin", "PO"]} user={user} exact path="/addvideo" component={AddVideo} />

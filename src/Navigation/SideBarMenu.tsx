@@ -113,22 +113,13 @@ export const SideBarMenu: React.FC<Props> = ({ classes, history, toggleMenu, ope
       {authenticated && (
         <React.Fragment>
           <ToggledNavLink title="Requests SupportCards" Icon={RequestListIcon} navigateTo="/requestlist" history={history} />
-          <ToggledNavLink title="Submit Scheduled Training Request" Icon={RequestListIcon} navigateTo="/addplannedcourserequest" history={history} />
-          <ToggledNavLink
-            title="View Submitted Scheduled Training Requests"
-            Icon={RequestListIcon}
-            navigateTo="/plannedcourserequestlist"
-            history={history}
-          />
+
           {/* <Divider />
           {(isAdmin || isChat) && <ToggledNavLink title="Chat" Icon={ChatIcon} navigateTo="/chat" history={history} />}
           <Divider /> */}
           {authenticated && isAdmin && <ToggledNavLink title="News" Icon={NewsIcon} navigateTo="/news" history={history} />}
           <ToggledNavLink title="NewsPage" Icon={NewsIcon} navigateTo="/newspage" history={history} />
           <Divider />
-          <ToggledNavLink title="Courses Dashboard" Icon={NewsIcon} navigateTo="/coursedashboard" history={history} />
-          <ToggledNavLink title="Courses" Icon={PageIcon} navigateTo="/courses" history={history} />
-          {validRole && <ToggledNavLink title="Students" Icon={PeopleIcon} navigateTo="/students" history={history} />}
           <MenuItem
             onClick={() => {
               // TODO: replace this

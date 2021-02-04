@@ -1,23 +1,11 @@
+import { useQuery } from "@apollo/client";
 import gql from "graphql-tag";
 import * as React from "react";
-import { useQuery } from "@apollo/client";
-import styled from "styled-components";
 import { Block } from "../elements/Block";
 
-const List = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0px 0px 2rem;
-  padding: 0px;
-  list-style: none;
-`;
+const List = ({ children }: any) => <div className="flex flex-wrap list-none">{children}</div>;
 
-const BrowseTitle = styled.h5`
-  margin-left: 10px;
-  text-transform: uppercase;
-  font-weight: 900;
-  font-size: 1.2rem;
-`;
+const BrowseTitle = ({ children }: any) => <h5 className="ml-2 uppercase font-bold text-xl">{children}</h5>;
 
 const QUERY_VIDEO_CATEGORIES = gql`
   query QUERY_VIDEO_CATEGORIES {
@@ -61,11 +49,9 @@ export const CategoryBar: React.FC<Props> = ({ isSelected, setSelected }) => {
         {categories.map((category: CategoryType) => {
           const { id, name } = category;
           return (
-            <li className="li" key={id}>
-              <Block selected={name === isSelected} onClick={() => setSelected(name)}>
-                {name}
-              </Block>
-            </li>
+            <button className="li" key={id} onClick={() => setSelected(name)}>
+              <Block selected={name === isSelected}>{name}</Block>
+            </button>
           );
         })}
       </List>

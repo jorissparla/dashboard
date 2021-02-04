@@ -1,27 +1,18 @@
 import { useMutation } from "@apollo/client";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import CKEditor from "@ckeditor/ckeditor5-react";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
 import TWButton from "elements/TWButton";
 import { useAlert } from "globalState/AlertContext";
 import { DashBoardContext } from "globalState/Provider";
 import { useUserContext } from "globalState/UserProvider";
-import React, { useRef } from "react";
+import React from "react";
 import { ALL_MAINTENANCE_QUERY, MAINTENANCE_FAQ_QUERY, MUTATION_UPDATE_MAINTENANCE } from "./Queries";
 import "./field.css";
 
-export const Field = ({ name, label, edit = false, Icon, activeVersion, bigger = false, blue = false }) => {
+export const Field = ({ name, label, Icon, activeVersion, blue = false }) => {
   const mutation = MUTATION_UPDATE_MAINTENANCE;
   const [updateField] = useMutation(mutation);
   const alert = useAlert();
-  const config = {
-    readonly: true, // all options from https://xdsoft.net/jodit/doc/,
-    toolbar: false,
-    // theme: 'dark',
-    autoHeight: true,
-    showWordsCounter: false,
-    showXPathInStatusbar: false,
-    showCharsCounter: false,
-  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -41,11 +32,10 @@ export const Field = ({ name, label, edit = false, Icon, activeVersion, bigger =
     });
     alert.setMessage(`Content was updated for field '${name}'`);
   };
-  const { role = "Guest" } = React.useContext(DashBoardContext);
   const { user } = useUserContext();
   // const { activeVersion } = React.useContext(RootContext);
   // console.log('Field', name, activeVersion);
-  const [isOpen, setisOpened] = React.useState(false);
+  const [] = React.useState(false);
   const [value, setValue] = React.useState(activeVersion[name]);
   const id = activeVersion.id;
   let isValidEditor = false;
@@ -93,7 +83,7 @@ export const Field = ({ name, label, edit = false, Icon, activeVersion, bigger =
         config={config2}
         disabled={!isValidEditor}
         data={value}
-        onInit={(editor) => {
+        onReady={(editor) => {
           // You can store the "editor" and use when it is needed.
           console.log("Editor is ready to use!", editor);
           // editor.plugins.get("FileRepository").createUploadAdapter = function (loader) {
@@ -106,17 +96,6 @@ export const Field = ({ name, label, edit = false, Icon, activeVersion, bigger =
           setValue(data);
         }}
       />
-      {/* <JoditEditor
-        id="description"
-        name="description"
-        style={{ font: "24px Arial", color: "#000" }}
-        ref={viewer}
-        value={activeVersion[name]}
-        onChange={(v) => console.log(v)}
-        onBlur={(e) => console.log(e)}
-        config={config}
-        tabIndex={2} // tabIndex of textarea
-      /> */}
     </div>
   );
 };

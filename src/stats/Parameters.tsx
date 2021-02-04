@@ -4,7 +4,7 @@ import { useAlert } from "globalState/AlertContext";
 import * as React from "react";
 import { useLocalStorage } from "../utils/useLocalStorage";
 
-interface Props {
+interface PProps {
   param: string;
   initial: string | number;
   classes?: any;
@@ -15,7 +15,7 @@ interface Props {
   onChange?: any;
 }
 
-export const Parameter: React.FC<Props> = ({ param, initial, classes = "", label, keyUp, color = "blue", onChange }) => {
+export const Parameter: React.FC<PProps> = ({ param, initial, classes = "", label, keyUp, color = "blue", onChange }) => {
   // const { param, initial } = props;
   const baseClass = "rounded w-8 font-normal shadow-md cursor-pointer flex items-center justify-center text-lg ";
   function getColorClasses(color: string) {
@@ -69,7 +69,7 @@ export const Parameters: React.FC<Props> = (props) => {
   function handleKeyUp() {
     console.log("Item changes");
     if (alert) {
-      alert!.setMessage("Parameter Updated");
+      alert.setMessage("Parameter Updated");
     }
   }
 

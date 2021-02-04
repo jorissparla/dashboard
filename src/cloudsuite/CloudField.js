@@ -1,14 +1,16 @@
-import { Backdrop, Modal } from '@material-ui/core';
-import Grid from '@material-ui/core/Grid';
-import EditIcon from '@material-ui/icons/Edit';
-import { DashBoardContext } from 'globalState/Provider';
-import JoditEditor from 'jodit-react';
-import React, { useRef } from 'react';
+import { Backdrop, Modal } from "@material-ui/core";
+import Grid from "@material-ui/core/Grid";
+import EditIcon from "@material-ui/icons/Edit";
+import { DashBoardContext } from "globalState/Provider";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import JoditEditor from "jodit-react";
+import React, { useRef } from "react";
 
 const CloudField = ({ name, edit = false, Icon, initialValue }) => {
-  const { role = 'Guest' } = React.useContext(DashBoardContext);
+  const { role = "Guest" } = React.useContext(DashBoardContext);
   const [isOpen, setisOpened] = React.useState(false);
-  const [value] = React.useState(initialValue[name]);
+  const [value, setValue] = React.useState(initialValue[name]);
 
   const config = {
     readonly: false, // all options from https://xdsoft.net/jodit/doc/,
@@ -16,7 +18,7 @@ const CloudField = ({ name, edit = false, Icon, initialValue }) => {
     // theme: 'dark',
     showWordsCounter: false,
     showXPathInStatusbar: false,
-    showCharsCounter: false
+    showCharsCounter: false,
   };
   const config2 = { ...config, toolbar: false, readonly: true };
   // function handleChange(e) {
@@ -25,39 +27,34 @@ const CloudField = ({ name, edit = false, Icon, initialValue }) => {
 
   const viewer = useRef(null);
   return (
-    <div style={{ border: '1px solid rgba(0,0,0,0.1)', borderRadius: 8 }}>
+    <div style={{ border: "1px solid rgba(0,0,0,0.1)", borderRadius: 8 }}>
       <Grid
         item
         xs={12}
         style={{
-          display: 'flex',
-          justifyContent: 'flex-end'
+          display: "flex",
+          justifyContent: "flex-end",
         }}
         justifyContent="flex-end"
       >
-        {role === 'Admin' && (
-          <EditIcon color="primary" fontSize="small" onClick={() => setisOpened(true)} />
-        )}
+        {role === "Admin" && <EditIcon color="primary" fontSize="small" onClick={() => setisOpened(true)} />}
       </Grid>
-      <Modal
-        onClose={() => setisOpened(false)}
-        open={isOpen}
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500
+      <CKEditor
+        editor={ClassicEditor}
+        // disabled={readOnly}
+        data={value}
+        onReady={(editor) => {
+          // You can store the "editor" and use when it is needed.
+          console.log("Editor is ready to use!", editor);
         }}
-      >
-        {/* <div>
-          <EditCloudFieldDetails
-            onClose={() => setisOpened(false)}
-            name={name}
-            label={label}
-            value={value}
-            id={initialValue.id}
-          />
-        </div> */}
-      </Modal>
-      <JoditEditor
+        onChange={(event, editor) => {
+          const data = editor.getData();
+          // console.log("Change", { event, editor, data });
+          setValue((prev) => data);
+        }}
+      />
+
+      {/* <JoditEditor
         ref={viewer}
         value={value}
         config={config2}
@@ -66,7 +63,7 @@ const CloudField = ({ name, edit = false, Icon, initialValue }) => {
         // onChange={newContent => {
         //   console.log(newContent);
         // }}
-      />
+      /> */}
       {/* <MarkDown source={initialValue[name]} escapeHtml={false}></MarkDown> */}
     </div>
   );

@@ -14,7 +14,6 @@ export default function CloudSuites({ history }) {
 
   const permissions = user ? user.permissions || [] : [];
 
-  const validAdmin = hasPermissionEx("ADMIN", permissions);
   useEffect(() => {
     // setProducts(data.products);
   }, [loading]);

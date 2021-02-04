@@ -63,7 +63,7 @@ export const GenericTable = (props: GenericTableProps) => {
   const alert: any = useAlert();
   useEffect(() => {
     let mydata = data;
-    if (mydata && mydata!?.length > 0) {
+    if (mydata && mydata?.length > 0) {
       if (mydata && fnFilterData) {
         mydata = fnFilterData(mydata, filterValues, fieldFilters);
       }
@@ -97,7 +97,7 @@ export const GenericTable = (props: GenericTableProps) => {
     return <div></div>;
   }
 
-  const orderBy = (collection = [] as any, field: string, dir = "A") => {
+  const orderBy = (collection: any = [], field: string, dir = "A") => {
     return dir.toLowerCase() === "a"
       ? collection.sort((x: any, y: any) => (x[field] > y[field] ? 1 : -1))
       : collection.sort((x: any, y: any) => (x[field] > y[field] ? -1 : 1));

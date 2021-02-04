@@ -1,6 +1,6 @@
 import { useMutation } from "@apollo/client";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import CKEditor from "@ckeditor/ckeditor5-react";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
 import TWButton from "elements/TWButton";
 import { useAlert } from "globalState/AlertContext";
 import { DashBoardContext } from "globalState/Provider";
@@ -83,7 +83,7 @@ export const OtherField = ({ name, label, edit = false, Icon, text, id, bigger =
         config={config}
         // disabled={!edit}
         data={value}
-        onInit={(editor) => {
+        onReady={(editor) => {
           // You can store the "editor" and use when it is needed.
           console.log("Editor is ready to use!", editor);
           // editor.plugins.get("FileRepository").createUploadAdapter = function (loader) {

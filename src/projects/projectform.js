@@ -6,7 +6,7 @@ import gql from "graphql-tag";
 import { format } from "date-fns";
 import { useAlert } from "globalState/AlertContext";
 import { useHistory } from "react-router";
-import CKEditor from "@ckeditor/ckeditor5-react";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import SafeDeleteButton from "videos/SafeDeleteButton";
 
@@ -278,7 +278,7 @@ const ProjectForm = ({ id = null }) => {
                           editor={ClassicEditor}
                           // disabled={readOnly}
                           data={values.notes}
-                          onInit={(editor) => {
+                          onReady={(editor) => {
                             // You can store the "editor" and use when it is needed.
                             console.log("Editor is ready to use!", editor);
                           }}

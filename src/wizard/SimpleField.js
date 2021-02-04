@@ -1,63 +1,45 @@
-import { Backdrop, Modal } from '@material-ui/core';
-import Grid from '@material-ui/core/Grid';
-import EditIcon from '@material-ui/icons/Edit';
-import { DashBoardContext } from 'globalState/Provider';
-import React, { useRef } from 'react';
-import MarkDown from 'react-markdown/with-html';
-import EditWizardDetails from './EditWizardDetails';
+import { Backdrop, Modal } from "@material-ui/core";
+import Grid from "@material-ui/core/Grid";
+import EditIcon from "@material-ui/icons/Edit";
+import { DashBoardContext } from "globalState/Provider";
+import React, { useRef } from "react";
+import MarkDown from "react-markdown/with-html";
+import EditWizardDetails from "./EditWizardDetails";
 
-export const SimpleField = ({ name, label, edit = false, Icon, activeVersion }) => {
-  const { role = 'Guest' } = React.useContext(DashBoardContext);
+export const SimpleField = ({ name, label, activeVersion }) => {
+  const { role = "Guest" } = React.useContext(DashBoardContext);
   // const { activeVersion } = React.useContext(RootContext);
   // console.log('Field', name, activeVersion);
   const [isOpen, setisOpened] = React.useState(false);
   const [value, setValue] = React.useState(activeVersion[name]);
-  const viewer = useRef(null);
-  const config = {
-    readonly: true, // all options from https://xdsoft.net/jodit/doc/,
-    toolbar: false,
-    // theme: 'dark',
-    autoHeight: true,
-    showWordsCounter: false,
-    showXPathInStatusbar: false,
-    showCharsCounter: false
-  };
 
   // console.log('refresh', name, value, activeVersion);
   React.useEffect(() => {
     setValue(activeVersion[name]);
   }, [activeVersion, name]);
   return (
-    <div style={{ border: '1px solid rgba(0,0,0,0.1)', borderRadius: 8 }}>
+    <div style={{ border: "1px solid rgba(0,0,0,0.1)", borderRadius: 8 }}>
       <Grid
         item
         xs={12}
         style={{
-          display: 'flex',
-          justifyContent: 'flex-end'
+          display: "flex",
+          justifyContent: "flex-end",
         }}
         justifyContent="flex-end"
       >
-        {role === 'Admin' && (
-          <EditIcon color="primary" fontSize="small" onClick={() => setisOpened(true)} />
-        )}
+        {role === "Admin" && <EditIcon color="primary" fontSize="small" onClick={() => setisOpened(true)} />}
       </Grid>
       <Modal
         onClose={() => setisOpened(false)}
         open={isOpen}
         BackdropComponent={Backdrop}
         BackdropProps={{
-          timeout: 500
+          timeout: 500,
         }}
       >
         <div>
-          <EditWizardDetails
-            onClose={() => setisOpened(false)}
-            name={name}
-            label={label}
-            value={value}
-            id={activeVersion.id}
-          />
+          <EditWizardDetails onClose={() => setisOpened(false)} name={name} label={label} value={value} id={activeVersion.id} />
         </div>
       </Modal>
       {/* <JoditEditor

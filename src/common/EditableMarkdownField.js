@@ -1,65 +1,76 @@
+import React, { useRef, useState } from "react";
 import { useMutation } from "@apollo/client";
-import { Backdrop, Modal } from "@material-ui/core";
-import EditIcon from "@material-ui/icons/Edit";
+import TWButton from "elements/TWButton";
 import { useAlert } from "globalState/AlertContext";
-import React, { useRef } from "react";
-import MarkDownFieldEditor from "./MarkdownFieldEditor";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 const EditableMarkDownField = ({ canEdit = true, name, label, value, id, updateQuery }) => {
-  const [isOpen, setisOpened] = React.useState(false);
+  const [, setisOpened] = useState(false);
   const [fieldValue, setFieldValue] = React.useState(value);
   const alert = useAlert();
-  // const [editable, toggleEdit] = React.useState(canEdit);
-
+  const [readOnly, toggleEdit] = React.useState(canEdit);
+  console.log(readOnly);
   const [updateMutution] = useMutation(updateQuery);
-  async function handleSaveAndClose(value) {
-    // console.log({ variables: { id, [name]: value } });
-    setFieldValue(value);
+  async function handleSaveAndClose() {
+    console.log({ variables: { id, [name]: fieldValue } });
+    // setFieldValue(value);
     setisOpened(false);
     const input = { id };
-    input[name] = value;
+    input[name] = fieldValue;
     console.log({ input });
     await updateMutution({ variables: { input } });
     alert.setMessage("Thank you for updating " + label);
   }
-
-  const viewer = useRef(null);
+  const config = readOnly
+    ? {
+        toolbar: [""],
+      }
+    : {
+        // toolbar: "",
+        ckfinder: {
+          // Upload the images to the server using the CKFinder QuickUpload command.
+          uploadUrl: "https://nlbavwixs.infor.com:3001/upload",
+        },
+      };
   return (
     <div className="text-gray-700 px-4 py-4 font-sans bg-gray-50">
-      <div item xs={9}>
-        <span className="text-lg font-semibold font-sans">{label}</span>
+      <div className="flex justify-between">
+        <span className="text-lg font-semibold font-pop">{label}</span>
+        {canEdit && (
+          <TWButton color="transp" className="font-sans" onClick={handleSaveAndClose}>
+            Save Content
+          </TWButton>
+        )}
       </div>
-      <div
-        item
-        xs={12}
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-        }}
-        justifyContent="flex-end"
-      >
-        {canEdit || (true && <EditIcon color="primary" fontSize="small" onClick={() => setisOpened(true)} />)}
+
+      <div>
+        <CKEditor
+          editor={ClassicEditor}
+          config={config}
+          disabled={readOnly}
+          data={fieldValue}
+          onReady={(editor) => {
+            // You can store the "editor" and use when it is needed.
+            console.log("Editor is ready to use!", editor);
+          }}
+          onChange={(event, editor) => {
+            const data = editor.getData();
+            // console.log("Change", { event, editor, data });
+            setFieldValue(() => data);
+          }}
+        />
+        {/* <MarkDownFieldEditor
+          onClose={() => setisOpened(false)}
+          onSaveAndClose={handleSaveAndClose}
+          name={name}
+          label={label}
+          value={fieldValue}
+          id={id}
+        /> */}
       </div>
-      <Modal
-        onClose={() => setisOpened(false)}
-        open={isOpen}
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <div>
-          <MarkDownFieldEditor
-            onClose={() => setisOpened(false)}
-            onSaveAndClose={handleSaveAndClose}
-            name={name}
-            label={label}
-            value={fieldValue}
-            id={id}
-          />
-        </div>
-      </Modal>
-      <div className="bg-white px-4 " dangerouslySetInnerHTML={{ __html: fieldValue }}></div>
+
+      {/* <div className="bg-white px-4 " dangerouslySetInnerHTML={{ __html: fieldValue }}></div> */}
     </div>
   );
 };
