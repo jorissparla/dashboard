@@ -1,11 +1,11 @@
-import React, { Component } from "react";
-import gql from "graphql-tag";
-import { Query, Mutation } from "@apollo/client/react/components";
-import { withRouter } from "react-router";
+import { useMutation, useQuery, gql } from "@apollo/client";
+import { useAlert } from "globalState/AlertContext";
+import React from "react";
+import { useHistory, useParams } from "react-router";
+import Spinner from "utils/spinner";
 import NewsItem from "./newsitem";
-import { SharedSnackbarConsumer } from "../globalState/SharedSnackbar.context";
 
-const ALL_NEWS = gql`
+const SPECIFIC_NEWS_ITEM = gql`
   query news($id: ID) {
     news(id: $id) {
       id
@@ -38,66 +38,45 @@ const DELETE_NEWS = gql`
   }
 `;
 
-class NewsItemContainer extends Component {
-  state = {
-    showMessage: false,
-    err: "No error",
-  };
-
-  handleDelete = async (id) => {};
-
-  render() {
-    const id = this.props.match.params.id;
-    return (
-      <Query query={ALL_NEWS} variables={{ id }}>
-        {({ data, loading }) => {
-          if (loading) {
-            return "Loading";
-          }
-          const defaultValues = data.news[0];
-          return (
-            <Mutation mutation={UPDATE_NEWS} refetchQueries={[{ query: ALL_NEWS }]}>
-              {(updateNews) => {
-                return (
-                  <Mutation mutation={DELETE_NEWS} refetchQueries={[{ query: ALL_NEWS }]}>
-                    {(deleteNews) => {
-                      return (
-                        <React.Fragment>
-                          <SharedSnackbarConsumer>
-                            {({ openSnackbar }) => (
-                              <NewsItem
-                                initialValues={defaultValues}
-                                onSave={async (values) => {
-                                  console.log("onSave", values);
-                                  const { id, title, body, link, link_text, img } = values;
-                                  const input = { id, title, body, link, link_text, img };
-                                  await updateNews({ variables: { input } });
-                                  openSnackbar("Item updated");
-                                  setTimeout(() => this.props.history.push("/news"), 500);
-                                }}
-                                onDelete={async (id) => {
-                                  const input = { id };
-                                  await deleteNews({ variables: { input } });
-                                  openSnackbar("Item Deleted");
-                                  setTimeout(() => this.props.history.push("/news"), 500);
-                                }}
-                                title="Edit news item"
-                              />
-                            )}
-                          </SharedSnackbarConsumer>
-                        </React.Fragment>
-                      );
-                    }}
-                  </Mutation>
-                );
-              }}
-            </Mutation>
-          );
-        }}
-      </Query>
-    );
+const NewsItemContainer = (props) => {
+  let { id } = useParams();
+  const history = useHistory();
+  const { data, loading } = useQuery(SPECIFIC_NEWS_ITEM, { variables: { id } });
+  const [updateNews] = useMutation(UPDATE_NEWS);
+  const [deleteNews] = useMutation(DELETE_NEWS);
+  const alert = useAlert();
+  if (loading) {
+    return <Spinner />;
   }
-}
+  if (data.news.length === 0) {
+    alert.setMessage("item not found");
+    history.push("/news");
+    return <div>No item found</div>;
+  }
+  const news = data?.news[0];
+  return (
+    <div>
+      <NewsItem
+        initialValues={news}
+        onSave={async (values) => {
+          console.log("onSave", values);
+          const { id, title, body, link, link_text, img } = values;
+          const input = { id, title, body, link, link_text, img };
+          await updateNews({ variables: { input } });
+          alert.setMessage("Item updated");
+          setTimeout(() => props.history.push("/news"), 1500);
+        }}
+        onDelete={async (id) => {
+          const input = { id };
+          await deleteNews({ variables: { input } });
+          alert.setMessage("Item updated");
+          setTimeout(() => props.history.push("/news"), 1500);
+        }}
+        title="Edit news item"
+      />
+    </div>
+  );
+};
 
-export default withRouter(NewsItemContainer);
+export default NewsItemContainer;
 //);

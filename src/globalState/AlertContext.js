@@ -5,6 +5,7 @@ const AlertContext = createContext(null);
 
 export const AlertContextProvider = ({ children }) => {
   const [message, setMessage] = useState("");
+  const [timerSeconds, setTimerSeconds] = useState(2000);
   // const [messages, setMessages] = useState([]);
   const [error, setError] = useState("");
   const [visible, setIsVisible] = useState(false);
@@ -20,11 +21,11 @@ export const AlertContextProvider = ({ children }) => {
       setMessage("");
       // setMessages([]);
       setError("");
-    }, 2000);
+    }, timerSeconds);
     return () => clearTimeout(handler);
   }, [message, error]);
   return (
-    <AlertContext.Provider value={{ message, setMessage, error, setError }}>
+    <AlertContext.Provider value={{ message, setMessage, error, setError, setTimerSeconds }}>
       {children}
       <div style={{ position: "fixed", right: 0, top: 8, zIndex: 9999 }} className="fixed b-0">
         {/* {moreVisible &&

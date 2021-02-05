@@ -1,44 +1,11 @@
-import { withStyles } from "@material-ui/core/styles";
 import React, { useState } from "react";
-import { withRouter } from "react-router";
-import FileUploaderNew from "../common/FileUploaderNew";
+import { useHistory } from "react-router";
+import { TWFileUpload } from "../common/FileUploaderNew";
 import SafeDeleteButton from "../videos/SafeDeleteButton";
 
-const styles = (theme) => ({
-  root: {
-    ...theme.mixins.gutters(),
-    paddingTop: theme.spacing(2),
-    paddingBottom: theme.spacing(2),
-    padding: theme.spacing(2),
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-    margin: "15px",
-    minWidth: "200px",
-  },
-  button: {
-    margin: theme.spacing(1),
-  },
+const NewsItem = ({ initialValues: newsitem, onSave, onDelete, onCancel, title, classes }) => {
+  const history = useHistory();
 
-  buttonDel: {
-    margin: theme.spacing(1),
-    backgroundColor: "#000",
-  },
-
-  textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    marginBottom: 20,
-  },
-  textField2: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    marginBottom: 20,
-    width: "60vw",
-  },
-});
-
-const NewsItem = ({ initialValues: newsitem, onSave, onDelete, onCancel, title, history, classes }) => {
   const handleDelete = (e) => {
     onDelete(newsitem.id);
   };
@@ -64,14 +31,18 @@ const NewsItem = ({ initialValues: newsitem, onSave, onDelete, onCancel, title, 
             <h1 className="font-pop text-4xl">{title}</h1>
           </div>
           <div className="flex flex-col">
-            <FileUploaderNew
-              link={`\\\\nlbavwixs.infor.com\\images\\news\\`}
-              httpLinkPrefix={`https://nlbavwixs.infor.com/images/news/`}
-              setFile={async (value) => {
-                console.log("NewsItem:::", value);
-                setImageFile(value);
-              }}
-            />
+            <div className="flex justify-start">
+              <TWFileUpload
+                link={`\\\\nlbavwixs.infor.com\\images\\news\\`}
+                httpLinkPrefix={`https://nlbavwixs.infor.com/images/news/`}
+                label="Select Image File"
+                type="image/*"
+                setFile={async (value) => {
+                  console.log("NewsItem:::", value);
+                  setImageFile(value);
+                }}
+              />
+            </div>
             <div
               style={{ width: "70vw" }}
               name="img"
@@ -93,7 +64,7 @@ const NewsItem = ({ initialValues: newsitem, onSave, onDelete, onCancel, title, 
                 Title
               </label>
               <input
-                className="w-32 appearance-none border rounded shadow-xs py-2 px-3 text-gray-700 w-full mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                className="w-full appearance-none border rounded shadow-xs py-2 px-3 text-gray-700  mb-3 leading-tight focus:outline-none focus:shadow-outline"
                 // <TextField
                 type="text"
                 name="title"
@@ -109,7 +80,7 @@ const NewsItem = ({ initialValues: newsitem, onSave, onDelete, onCancel, title, 
                 Description
               </label>
               <textarea
-                className="w-32 resize-none  appearance-none border rounded shadow-xs py-2 px-3 text-gray-700 w-full mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                className="w-full resize-none  appearance-none border rounded shadow-xs py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
                 // <TextField
                 name="body"
                 // className={classes.textField}
@@ -139,4 +110,4 @@ const NewsItem = ({ initialValues: newsitem, onSave, onDelete, onCancel, title, 
   );
 };
 
-export default withRouter(withStyles(styles)(NewsItem));
+export default NewsItem;

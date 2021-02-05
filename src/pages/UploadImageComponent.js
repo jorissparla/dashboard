@@ -1,7 +1,7 @@
-import React, { useState, createContext, useContext } from 'react';
-import FileUploaderNew from 'common/FileUploaderNew';
-import CopyToClipBoard from 'react-copy-to-clipboard';
-import { usePersistentState } from 'hooks';
+import React, { useState, createContext, useContext } from "react";
+import { TWFileUpload } from "common/FileUploaderNew";
+import CopyToClipBoard from "react-copy-to-clipboard";
+import { usePersistentState } from "hooks";
 
 const AlertContext = createContext(null);
 
@@ -37,10 +37,10 @@ const AlertContextProvider = ({ children }) => {
 };
 
 const TestComponent = () => {
-  const [file, setFile] = usePersistentState('');
-  const [folder, setFolder] = usePersistentState('news');
+  const [file, setFile] = usePersistentState("");
+  const [folder, setFolder] = usePersistentState("news");
   const alertContext = useContext(AlertContext);
-  console.log('context', alertContext);
+  console.log("context", alertContext);
 
   function handleSetFile(f) {
     setFile(f);
@@ -49,9 +49,10 @@ const TestComponent = () => {
   return (
     <>
       <div className="flex ">
-        <FileUploaderNew
+        <TWFileUpload
           link={`\\\\nlbavwixs.infor.com\\images\\${folder}\\`}
           httpLinkPrefix={`https://nlbavwixs.infor.com/images/${folder}/`}
+          type="image/*"
           setFile={handleSetFile}
         />
         <div className="ml-2 flex items-baseline">
@@ -62,7 +63,7 @@ const TestComponent = () => {
             <input
               id="folder"
               value={folder}
-              onChange={e => setFolder(e.target.value)}
+              onChange={(e) => setFolder(e.target.value)}
               className="form-input block w-full sm:text-sm sm:leading-5"
               placeholder="news"
             />
@@ -70,11 +71,8 @@ const TestComponent = () => {
         </div>
       </div>
       <div className="flex flex-col m-8 bg-white rounded shadow-lg p-8 bg-cover">
-        <CopyToClipBoard text={file} onCopy={() => console.log('Copied')}>
-          <span
-            title=" click to copy"
-            className="bg-purple-100 mt-2 mb-2 border border-gray-100 rounded-lg p-2 hover:bg-purp hover:text-white"
-          >
+        <CopyToClipBoard text={file} onCopy={() => console.log("Copied")}>
+          <span title=" click to copy" className="bg-purple-100 mt-2 mb-2 border border-gray-100 rounded-lg p-2 hover:bg-purp hover:text-white">
             {file}
           </span>
         </CopyToClipBoard>
