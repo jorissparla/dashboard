@@ -18,7 +18,6 @@ import { FilterFieldContext, useFilterField } from "../globalState/FilterContext
 import { DashBoardContext } from "../globalState/Provider";
 //import format from 'date-fns/format';
 import { format, formatDistanceToNow } from "../utils/format";
-import Loader from "./../utils/Loader";
 import FancyFilter from "./new/FancyFilter";
 import { CREATE_AUDIT_MUTATION } from "./Query";
 import { TenantCard } from "./TenantCard";
@@ -385,9 +384,6 @@ const TenantList = (props) => {
     return <Spinner />;
   }
 
-  // if (loading || detailsloading) {
-  //   return <Loader loading={loading} />;
-  // }
   const { tenants, updatestatus, tenantlogs } = data;
   const { tenantcustomerdetails } = details;
   const { updatedAt } = updatestatus;
@@ -396,7 +392,6 @@ const TenantList = (props) => {
   const uniqueCustomers = filteredTenants.map(({ farm, customer: { name } }) => name).filter((ten, i, all) => all.indexOf(ten) === i);
   return (
     <div className="bg-gray-100 h-screen">
-      <Loader loading={loading} />
       <animated.div
         style={{
           width: x.interpolate((x) => `${100 - x}vw`),

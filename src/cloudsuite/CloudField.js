@@ -1,10 +1,8 @@
-import { Backdrop, Modal } from "@material-ui/core";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
 import Grid from "@material-ui/core/Grid";
 import EditIcon from "@material-ui/icons/Edit";
 import { DashBoardContext } from "globalState/Provider";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import JoditEditor from "jodit-react";
 import React, { useRef } from "react";
 
 const CloudField = ({ name, edit = false, Icon, initialValue }) => {

@@ -7,12 +7,6 @@ interface Props {
   history: any;
 }
 
-interface LoadingOrData {
-  loading: boolean;
-  data: any;
-  history: any;
-}
-
 /*export const AuthenticationSection: React.FC<Props> = (props: any) => {
   let authenticated = true;
   const history = props.history;

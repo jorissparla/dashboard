@@ -1,6 +1,5 @@
 import { Fab } from "@material-ui/core";
 import blue from "@material-ui/core/colors/blue";
-import Paper from "@material-ui/core/Paper";
 import { withStyles } from "@material-ui/core/styles";
 import AddIcon from "@material-ui/icons/Add";
 import React from "react";
@@ -38,19 +37,6 @@ const styles = (theme) => ({
     flexDirection: "column",
   },
 });
-
-const StyledContainer = styled(Paper)`
-  display: flex;
-  flex-direction: column;
-  align-content: center;
-  border: 1 px solid blue;
-  padding: 10px;
-  width: 18%;
-  // height: 200px;
-  margin: 5px;
-  background-color: ${(props) => props.background};
-  border-radius: 14px;
-`;
 
 const Title = styled.div`
   font-family: Roboto;

@@ -8,7 +8,7 @@ import { TWSelectMenu } from "elements/TWSelectMenu";
 import { useAlert } from "globalState/AlertContext";
 
 import PropTypes from "prop-types";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { format } from "utils/format";
 import { MUTATION_UPDATE_DETAIL } from "./../../TenantQueries";
 import TemperatureSlider from "./TemperatureSlider";
@@ -25,17 +25,22 @@ function EditTenantDetails(props) {
 export const EditTenantDetailsWrapped = (props) => {
   const { profile, className, onClose, onView, isTenantEditor = true, ...rest } = props;
 
-  const [values, setValues] = useState({
-    csm: profile.csm || "",
-    pm: profile.pm || "",
-    customerid: profile.customerid,
-    golivedate: format(profile.golivedate, "yyyy-MM-dd"),
-    golivecomments: profile.golivecomments,
-    info: profile.info,
-    temperature: profile.temperature,
-    comments: profile.comments,
-    useproxy: true,
-  });
+  const [values, setValues] = useState(null);
+  useEffect(() => {
+    if (profile) {
+      setValues({
+        csm: profile.csm || "",
+        pm: profile.pm || "",
+        customerid: profile.customerid,
+        golivedate: format(profile.golivedate, "yyyy-MM-dd"),
+        golivecomments: profile.golivecomments,
+        info: profile.info,
+        temperature: profile.temperature,
+        comments: profile.comments,
+        useproxy: true,
+      });
+    }
+  }, []);
   console.log({ props });
   const [updateTenantDetailsMutation] = useMutation(MUTATION_UPDATE_DETAIL);
   const handleChange = (event) => {

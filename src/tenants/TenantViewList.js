@@ -8,7 +8,6 @@ import React, { useEffect, useState } from "react";
 import { animated, useSpring } from "react-spring";
 import Spinner from "utils/spinner";
 import { DashBoardContext } from "../globalState/Provider";
-import Loader from "../utils/Loader";
 import CustomerHistory from "./CustomerHistory";
 import EditTenantDetails from "./details/components/EditTenant";
 import { QUERY_ALL_TENANT_DETAILS } from "./TenantQueries";
@@ -104,7 +103,6 @@ const TenantViewList = (props) => {
   };
   return (
     <div style={{ margin: 5, background: "#EEE" }}>
-      <Loader loading={detailsloading} />
       <div>
         <div className="rounded shadow-lg bg-white p-2 m-2" style={{ marginBottom: 10, padding: 20 }}>
           <div className="flex items-center ">

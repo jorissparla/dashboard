@@ -8,6 +8,7 @@ import _ from "lodash";
 import React, { useState } from "react";
 //import { SmallCard } from "./SupportCard";
 import ReactMarkdown from "react-markdown/with-html";
+import { useHistory } from "react-router";
 import SearchBar from "../common/SearchBar";
 import { SmallCard } from "../common/SmallCard";
 import TWButton from "../elements/TWButton";
@@ -200,9 +201,22 @@ const SupportCards = ({ authenticated = false, isEditor = false, supportcards, c
     return filteredCards;
   };
   let filteredCards = doFilter(supportcards, searchText, selectedCategory);
-
+  const history = useHistory();
   return (
     <div className="flex flex-col  h-full" onDoubleClick={() => setShowRequest(true)}>
+      <header class="flex items-center justify-between">
+        <h2 class=" pl-4 leading-6 font-bold text-2xl text-gray-700 font-pop">Support Cards</h2>
+        <TWButton color="teal" onClick={() => setShowFavorites(!showFavorites)}>
+          Show {showFavorites ? `All` : `Favorites`}
+        </TWButton>
+        {authenticated && isEditor ? (
+          <TWButton color="teal" onClick={() => history.push("supportcard/add")}>
+            Add Card
+          </TWButton>
+        ) : (
+          <TWButton onClick={() => history.push("supportcard/request")}>Request a Card</TWButton>
+        )}
+      </header>
       <Dialog
         title="Add Request"
         actions={actions}
@@ -216,9 +230,7 @@ const SupportCards = ({ authenticated = false, isEditor = false, supportcards, c
       </Dialog>
       <div className="flex w-full justify-between pr-6 flex-wrap">
         <CategoryTabs onChange={(value) => setSelectedCategory(value)} onSave={(v) => console.log(v)} />
-        <TWButton color="tea1l" onClick={() => setShowFavorites(!showFavorites)}>
-          Show {showFavorites ? `All` : `Favorites`}
-        </TWButton>
+
         {/* <Button color="primary" className={classes.button} variant="contained" onClick={() => setShowFavorites(!showFavorites)}>
           Show {showFavorites ? `All` : `Favorites`}
         </Button> */}
@@ -226,12 +238,12 @@ const SupportCards = ({ authenticated = false, isEditor = false, supportcards, c
       <SearchBar onChange={(value) => setSearchText(value)} hintText="Start typing to match title, category or keywords..." />
 
       <div className="flex justify-start flex-wrap bg-gray-100 h-screen m-2">
-        {authenticated && isEditor ? (
+        {/* {authenticated && isEditor ? (
           <AddCard link="/supportcard/add" title="Add a New Card" background="papayawhip" />
         ) : (
           // <TestCard />
           <AddCard link="supportcard/request" title="Request a new Support Card" background="papayawhip" />
-        )}
+        )} */}
 
         {filteredCards.map(
           ({ id, title, description, updatedAt, isfavorite, accessed, category: { name, color, backgroundcolor }, link, keywords }, i) => {

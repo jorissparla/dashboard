@@ -9,7 +9,7 @@ import React from "react";
 import { ALL_MAINTENANCE_QUERY, MAINTENANCE_FAQ_QUERY, MUTATION_UPDATE_MAINTENANCE } from "./Queries";
 import "./field.css";
 
-export const Field = ({ name, label, Icon, activeVersion, blue = false }) => {
+export const Field = ({ name, label, Icon, activeVersion, blue = false, className = "" }) => {
   const mutation = MUTATION_UPDATE_MAINTENANCE;
   const [updateField] = useMutation(mutation);
   const alert = useAlert();
@@ -58,7 +58,7 @@ export const Field = ({ name, label, Icon, activeVersion, blue = false }) => {
     setValue(activeVersion[name]);
   }, [activeVersion, name]);
   return (
-    <div className="p-4 font-sans text-gray-600  bg-blue-200" style={{ background: `${blue ? "aliceblue" : "lightyellow"}` }}>
+    <div className={`p-4 font-sans text-gray-600 ${blue ? "bg-blue-100" : "bg-yellow-50"}`}>
       <div container direction="row" justifyContent="space-between" alignItems="flex-start" className="flex justify-between pb-2">
         <div item xs={9}>
           <div className="text-blue-400 font-sans font-semibold text-xl w-full">

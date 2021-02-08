@@ -2,7 +2,6 @@ import { FormControlLabel, Grid, Switch } from "@material-ui/core";
 import { format } from "date-fns";
 import React from "react";
 import { Field } from "./Field";
-import { SimpleField } from "./SimpleField";
 
 function ReleaseInformation({ versionInfo, handleCustomerHasValidMaintenance, validMaintenance }) {
   // const [valid, setValid] = React.useState(validMaintenance);
@@ -91,12 +90,12 @@ function MaintenanceCheck({ versionInfo, handleCustomerHasValidMaintenance, vali
 
   if (entitled_extended_maintenance !== "N/A")
     return (
-      <div className="p-4 font-sans bg-white rounded shadow m-2">
-        <Grid item xs={12}>
-          <Grid component="label" container alignItems="center" spacing={1} style={{ overflow: "hidden" }}>
-            <div className="w-full flex items-center justify-between">
+      <div className="p-4 font-sans bg-blue-100 rounded shadow  w-full ">
+        <div className="bg-blue-100 w-full" item xs={12}>
+          <div component="label" container alignItems="center" spacing={1} style={{ overflow: "hidden" }}>
+            <div className="w-full flex items-center justify-between bg-blue-100">
               <span className="px-2 ml-4 pb-4 text-blue-500 font-sans font-semibold text-xl">Does the customer have extended maintenance?</span>
-              <div className="flex items-center mx-10">
+              <div className="flex items-center mx-10 bg-blue-100">
                 <span className="mx-2">No</span>
                 <FormControlLabel
                   control={
@@ -114,10 +113,13 @@ function MaintenanceCheck({ versionInfo, handleCustomerHasValidMaintenance, vali
                 <span>Yes</span>
               </div>
             </div>
-            <div className="text-sm font-semibold font-sans">Please check entitlement for extended maintenance below</div>
-            <SimpleField name="checklink" label="" activeVersion={versionInfo} />
-          </Grid>
-        </Grid>
+            <div className="divide-y-2 divide-blue-800">
+              <div className="bg-blue-100">
+                <Field name="checklink" label="Please check entitlement for extended maintenance below" blue={true} activeVersion={versionInfo} />
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   else return <div />;

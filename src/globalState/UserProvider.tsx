@@ -50,6 +50,9 @@ export const useHasPermissions: any = (permissions: string[]) => {
   const { user } = useUserContext();
   let hasPermissions = false; // ["Admin", "PO"].some((u) => (user ? u === user.role : false));
   if (user && user.permissions) {
+    if (user.role === "ADMIN") {
+      return [true, user];
+    }
     const userPermissions = user.permissions.map((p) => p.permission);
     hasPermissions = hasPermissions || permissions.some((p) => userPermissions.includes(p));
   }

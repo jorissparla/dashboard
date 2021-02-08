@@ -6,7 +6,10 @@ import { useUser } from "User";
 
 const TestActivity = (props) => {
   const all = useUser();
-  let email = all?.user ? user.email : "generic";
+  let email = "generic";
+  if (all) {
+    email = all?.user ? all?.user.email : "generic";
+  }
 
   function handleSetFile(v) {
     console.log(v);

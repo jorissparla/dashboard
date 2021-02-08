@@ -1,5 +1,6 @@
 import CloudInformation from "pages/CloudInformation";
 import Mailerlog from "pages/Mailerlog";
+import { useUserContext } from "globalState/UserProvider";
 import MailerLogDetail from "pages/MailerLogDetail";
 import Main from "pages/Main";
 import Projects from "pages/projects";
@@ -45,7 +46,6 @@ import DashBoardContainer from "./pages/dashboardcontainer";
 import KBPage from "./pages/KBPage";
 import MaintenanceVersionList from "./pages/MaintenanceVersionList";
 import NewsPage from "./pages/newspage";
-import Playground from "./pages/Playground";
 import ProfilePage from "./pages/ProfilePage";
 import Stats from "./pages/Stats";
 import { Surveys } from "./pages/Surveys";
@@ -75,8 +75,6 @@ const AddSupportCardRequest = DynamicImport(() => import("./supportcard/Request"
 const ImageConverter = DynamicImport(() => import("./utils/ConvertImages"));
 
 const AnniversaryList = DynamicImport(() => import("./awards/Anniversaries"));
-
-//const ResolutionChart = DynamicImport(() => import('./charts/ResolutionChart'));
 
 const AccountList = DynamicImport(() => import("./Account/AccountList"));
 
@@ -109,6 +107,8 @@ function AppRoutes() {
   //  const user = props.context;
   const { user, loading } = React.useContext(UserContext);
   const history = useHistory();
+  const userctx = useUserContext();
+  // if (!userctx.user) userctx.login("joris.sparla@infor.com", "Infor2019").then(console.log);
   if (loading) return <NiceSpinner />;
 
   return (
@@ -126,7 +126,6 @@ function AppRoutes() {
       <Route exact path="/loggedinusers" component={LoggedInUsers} />
       <Route exact path="/uploadimage" component={UploadImageComponent} />
       <Route exact path="/login" component={LoginForm} />
-      <Route exact path="/playground" component={Playground} />
       <Route exact path="/sumo" component={Sumo} />
       <Route exact path="/sumoalerts" component={SumoAlerts} />
       <Route exact path="/sumoincidents" component={SumoIncidents} />
@@ -161,9 +160,9 @@ function AppRoutes() {
 
       <EnhancedRoute auth="admin" editors={["Admin", "PO"]} user={user} exact path="/supportcard" component={SupportCards} />
       <Route exact path="/tenant" component={TenantPage} />
+      <Route exact path="/tenant/missing" component={MissingTenants} />
       <Route exact path="/tenant/:customerid" component={FullTenantEdit} />
 
-      <Route exact path="/tenant/missing" component={MissingTenants} />
       <Route exact path="/region/:region" component={DashBoardContainer} user={user} />
       <Route exact path="/team/:team" component={DashBoardStatsNew} />
       {/* <Route exact path="/team/:team/region/:region" component={DashBoardStats} /> */}
@@ -172,6 +171,7 @@ function AppRoutes() {
       <Route exact path="/plannedcourserequestlist" component={PlannedCourseRequestList} /> */}
       {/* <EnhancedRoute exact path="/bla" component={RequireAuth(UserPermissions)} user={user} /> */}
       <EnhancedRoute exact path="/userpermissions" component={RequireAuth(UserPermissions)} user={user} />
+      <Route exact path="/userpermissions1" component={UserPermissions} user={user} />
       <EnhancedRoute exact path="/b52" component={UserAdmin} user={user} />
       <EnhancedRoute exact path="/setpermissions" component={RequireAuth(UserPermissions)} user={user} />
       {/* <EnhancedRoute exact path="/xyz/:id" component={CourseEdit} user={user} />
@@ -195,6 +195,8 @@ function AppRoutes() {
       <EnhancedRoute allowed={["Admin", "PO", "SU", "Guest", "Chat"]} user={user} exact path="/cloudinformation" component={CloudInformation} />
       {/* <EnhancedRoute editors={["Admin", "PO", "SU"]} user={user} exact path="/coursedashboard" component={RequireAuth(CourseDashboard)} /> */}
       <EnhancedRoute editors={["Admin", "PO"]} user={user} exact path="/requestlist" component={RequireAuth(RequestList)} />
+      <Route editors={["Admin", "PO"]} user={user} exact path="/requestlist1" component={RequestList} />
+      <Route editors={["Admin", "PO"]} user={user} exact path="/addrequest1" component={AddSupportCardRequest} />
       <EnhancedRoute editors={["Admin", "PO"]} user={user} exact path="/addrequest" component={RequireAuth(AddSupportCardRequest)} />
       <EnhancedRoute editors={["Admin", "PO"]} user={user} path="/supportcard/request/:id" component={RequireAuth(RequestEdit)} />
       <EnhancedRoute editors={["Admin", "PO"]} user={user} path="/supportcard/filter/:text" component={SupportCards} />

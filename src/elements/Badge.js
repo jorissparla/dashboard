@@ -1,18 +1,5 @@
 import React from "react";
-import styled from "styled-components";
 
-// const BadgeWrapper = styled.span`
-//   display: inline-block;
-//   margin: 0 0.25rem;
-//   border-radius: 3px;
-//   border: 1px solid ${props => (props.color ? props.color : "#2eca13")};
-//   background: ${props => (props.color ? props.color : "#2eca13")};
-//   color: white;
-//   letter-spacing: 0.2rem;
-//   padding: 0 0.5rem;
-//   font-family: "Lato", sans-serif;
-//   font-size: ${props => (props.small ? "10.5px" : "1.2rem")};
-// `;
 export default function Badge({ title = "Farm", children, isVisible = false, color = "bg-teal-300", small }) {
   return (
     <div className="flex flex-col">

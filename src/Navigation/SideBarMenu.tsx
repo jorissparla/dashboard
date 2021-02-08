@@ -14,9 +14,6 @@ import GoLiveIcon from "@material-ui/icons/FlightTakeoff";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import ActionHome from "@material-ui/icons/Home";
 import ApplicationIcon from "@material-ui/icons/Launch";
-// import LinkIcon from "@material-ui/icons/Link";
-import PageIcon from "@material-ui/icons/Pages";
-import PeopleIcon from "@material-ui/icons/People";
 import Person from "@material-ui/icons/PeopleOutline";
 import PeopleOutlineIcon from "@material-ui/icons/PeopleOutlineTwoTone";
 import RequestListIcon from "@material-ui/icons/PlaylistAdd";
@@ -38,17 +35,13 @@ interface Props {
 }
 
 export const SideBarMenu: React.FC<Props> = ({ classes, history, toggleMenu, open }) => {
-  let validRole = false;
-  let isChat = false;
   const { user, logout } = React.useContext(UserContext);
 
   let isAdmin = false;
   let authenticated = false;
   if (user) {
     authenticated = true;
-    validRole = user.role !== "Guest";
     isAdmin = user.role === "Admin";
-    isChat = user.role === "Chat";
   }
   async function handleLogout() {
     logout();

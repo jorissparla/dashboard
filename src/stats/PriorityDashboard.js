@@ -1,62 +1,69 @@
+import { useQuery } from "@apollo/client";
 import { usePersistentState } from "hooks";
 import React from "react";
-import { useQuery } from "@apollo/client";
-import styled from "styled-components";
 import Spinner from "../utils/spinner";
 import { format } from "./../utils/format";
 import { QUERY_PRIORITY_BACKLOG } from "./queries/BACKLOG_QUERY2a";
 
-const Container = styled.div`
-  margin-top: -1rem;
-  background: #ededed;
-  height: 100%;
-  display: flex;
-  flex-wrap: wrap;
-`;
+const Box = ({ children, color }) => {
+  let colorStyle = "from-light-blue-200 to-light-blue-400 text-light-blue-700";
+  switch (color) {
+    case "red":
+      colorStyle = "from-red-500 to-pink-200 text-red-700";
+      break;
+    case "orange":
+      colorStyle = "from-orange-500 to-orange-200 text-orange-700";
+      break;
+    case "#40a5ed":
+      colorStyle = "from-purple-500 to-purple-200 text-purple-700";
 
-const Box = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  font-family: Montserrat;
-  margin-left: 0.5rem;
-  width: 22%;
-  min-width: 200px;
+      break;
 
-  color: ${(props) => (props.textcolor ? props.textcolor : "#4a5568")};
-  background-color: ${(props) => (props.color ? props.color : "lightblue")};
-  border-radius: 0.5rem;
-  background-image: ${(props) => `linear-gradient(to bottom right, ${props.color || "black"}, white)`};
-  margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
-  padding: 1rem;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-`;
+    default:
+      break;
+  }
+  return (
+    <div
+      className={`flex flex-col align-center justify-between mx-2 min-w-60 my-2 spacing-x-2 w-1/5 shadow-xl rounded font-semibold font-sans items-center bg-gradient-to-l ${colorStyle}`}
+    >
+      {children}
+    </div>
+  );
+};
+// `
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   justify-content: space-between;
+//   font-family: Montserrat;
+//   margin-left: 0.5rem;
+//   width: 22%;
+//   min-width: 200px;
 
-const P = styled.div`
-  font-size: 3rem;
-  font-weight: 600;
-  line-height: 1.125;
-`;
+//   color: ${(props) => (props.textcolor ? props.textcolor : "#4a5568")};
+//   background-color: ${(props) => (props.color ? props.color : "lightblue")};
+//   border-radius: 0.5rem;
+//   background-image: ${(props) => `linear-gradient(to bottom right, ${props.color || "black"}, white)`};
+//   margin-top: 1.5rem;
+//   margin-bottom: 1.5rem;
+//   padding: 1rem;
+//   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+// `;
 
-const SubP = styled.p`
-  text-align: center;
-  letter-spacing: ${(props) => (props.space ? "0.2rem" : "0")};
-  font-size: 1.25rem;
-  font-weight: 800;
-  line-height: 1.25;
-`;
-const H2 = styled.h2`
-  letter-spacing: 0.2rem;
-  font-size: 1.3rem;
-  color: rgba(0, 0, 0, 0.87);
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-  font-weight: 400;
-  line-height: 1.33;
+const P = ({ children }) => <div className="text-5xl font-bold font-pop my-2  py-1 leading-5">{children}</div>;
+const SubP = ({ children }) => <p className="text-center text-xl font-semibold leading-5 ">{children}</p>;
 
-  margin-left: 1.5rem;
-`;
+const H2 = ({ children }) => <h2 className="font-semibold text-xl bg-white text-gray-700 px-2">{children}</h2>;
+// `
+//   letter-spacing: 0.2rem;
+//   font-size: 1.3rem;
+//   color: rgba(0, 0, 0, 0.87);
+//   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+//   font-weight: 400;
+//   line-height: 1.33;
+
+//   margin-left: 1.5rem;
+// `;
 
 export default function PriorityDashboard() {
   const [region] = usePersistentState("region", "EMEA");
@@ -104,7 +111,7 @@ export default function PriorityDashboard() {
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#ededed" }}>
       <H2>Priority Dashboard - updated {mostRecentUpdate}</H2>
-      <Container>
+      <div className="flex flex-wrap bg-white">
         <Box color="red">
           <SubP space>Severity One</SubP>
           <P>{sev1.length}</P>
@@ -125,9 +132,9 @@ export default function PriorityDashboard() {
           <P>{filterByRegion(all).length}</P>
           <SubP>Incidents</SubP>
         </Box>
-      </Container>
+      </div>
       <hr />
-      <Container>
+      <div className="flex flex-wrap">
         {[...sev1, ...sev2].map((item) => {
           let bgclass = "bg-white shadow-xl";
           if (item.severity === 4) {
@@ -190,8 +197,8 @@ export default function PriorityDashboard() {
             </Box2>
           );
         })} */}
-      </Container>
-      <Container>
+      </div>
+      <div>
         {/* {sev2.map(item => {
           const statusColor =
             item.status === 'Awaiting Infor'
@@ -249,7 +256,7 @@ export default function PriorityDashboard() {
             </div>
           );
         })} */}
-      </Container>
+      </div>
     </div>
   );
 }

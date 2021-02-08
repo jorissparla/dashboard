@@ -1,8 +1,7 @@
 import { UserContext } from "globalState/UserProvider";
-import gql from "graphql-tag";
 import React, { FunctionComponent } from "react";
-import { Query, Mutation } from "@apollo/client/react/components";
-import { useQuery } from "@apollo/client";
+import { Query } from "@apollo/client/react/components";
+import { useQuery, gql } from "@apollo/client";
 
 const CURRENT_USER_QUERY = gql`
   query CURRENT_USER_QUERY_ME {

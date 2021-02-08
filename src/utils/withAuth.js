@@ -1,8 +1,8 @@
-import { UserContext } from 'globalState/UserProvider';
-import React from 'react';
+import { UserContext } from "globalState/UserProvider";
+import React from "react";
 
-export default function(ComposedComponent) {
-  const Authentication = props => {
+export default function withAuth(ComposedComponent) {
+  const Authentication = (props) => {
     const { user, isAuthenticated } = React.useContext(UserContext);
     return <ComposedComponent {...props} authenticated={isAuthenticated || false} user={user} />;
   };
