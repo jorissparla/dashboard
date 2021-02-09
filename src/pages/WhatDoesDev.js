@@ -64,11 +64,11 @@ const WhatDoesDevWrapper = () => {
   // animation
 
   const { user } = React.useContext(UserContext);
+  const owner = user ? (user.fullname ? user.fullname : "") : "";
   const [name, setName] = usePersistentState("DefectGroupOwner", owner || "");
   const [groupsSelected, setGroupsSelected] = usePersistentState("OG_filter", []);
   const [showFilter, setShowFilter] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-  const owner = user ? (user.fullname ? user.fullname : "") : "";
   const [severities, setSeverities] = usePersistentState("defectseverities", [2, 3]);
   const [cloudOnly, setCloudOnly] = usePersistentState("defectCloudOnly", false);
   const [severityList, setSeverityList] = useState([]);
@@ -161,7 +161,7 @@ const WhatDoesDevWrapper = () => {
         <TWButton color="pink" onClick={() => setShowFilter((prev) => !prev)}>
           Filter
         </TWButton>
-        <span className="mx-4 text-lg font-sans font-semibold">Essential Defect List 1</span>{" "}
+        <span className="mx-4 text-lg font-sans font-semibold">Essential Defect List </span>{" "}
         <div className="ml-8 flex items-center">
           <div className="flex items-center flex-nowrap">
             <span className="text-gray-700 font-semibold mr-2">severity</span>
@@ -298,7 +298,7 @@ const WhatDoesDev = ({ name, severities, cloudOnly, severityList, groups }) => {
   return (
     <div>
       <div className=" bg-white pl-2 w-full text-grey-700 ml-2  py-0.5 text-sm shadow font-semibold">
-        last update: {format(parseInt(lastupdated), "EEE, dd MMMM yyyy HH:m")}
+        last update: {format(parseInt(lastupdated), "EEE, dd MMMM yyyy HH:mm")}
       </div>
       <div className="px-2 pt-2 grid grid-cols-2 gap-x-2 gap-y-2">
         <Widget

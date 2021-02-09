@@ -5,7 +5,7 @@ import TextField from "@material-ui/core/TextField";
 import FontIcon from "@material-ui/core/Icon";
 import ActionSearch from "@material-ui/icons/Search";
 
-export default ({
+export default function SearchBar({
   onChange,
   hintText = "Search..",
   defaultValue = "",
@@ -14,7 +14,7 @@ export default ({
   style = { display: "flex", marginBottom: 10, alignItems: "center" },
   shade = true,
   className = "",
-}) => {
+}) {
   const [val, setVal] = useState(defaultValue || "");
   const [changed, setChanged] = useState(false);
 
@@ -94,4 +94,4 @@ export default ({
       )} */}
     </div>
   );
-};
+}

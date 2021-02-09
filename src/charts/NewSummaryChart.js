@@ -47,7 +47,7 @@ const config = {
     text: "Hallo",
   },
 };
-export default (props) => {
+export default function NewSummaryChart(props) {
   const renderSummary = (config, val, team, title, color, type, summary, xvalue) => {
     if (color) {
       config.plotOptions.area.color = color;
@@ -90,4 +90,4 @@ export default (props) => {
       <ReactHighCharts options={newConfig} id={shortid.generate()} highcharts={Highcharts} />
     </div>
   );
-};
+}

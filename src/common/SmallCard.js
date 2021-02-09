@@ -99,7 +99,7 @@ const SmallCard = ({
   );
 };
 
-export default () => {
+export default function DefaultSmallCard() {
   return (
     <div>
       <SmallCard />
@@ -107,6 +107,6 @@ export default () => {
       <SmallCard />
     </div>
   );
-};
+}
 
 export { SmallCard };
