@@ -1,20 +1,15 @@
 import { useMutation } from "@apollo/client";
-import { colors } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
-import { makeStyles } from "@material-ui/styles";
-import clsx from "clsx";
 import Button from "elements/TWButton";
 import { TWSelectMenu } from "elements/TWSelectMenu";
 import { useAlert } from "globalState/AlertContext";
-
-import PropTypes from "prop-types";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { format } from "utils/format";
 import { MUTATION_UPDATE_DETAIL } from "./../../TenantQueries";
-import TemperatureSlider from "./TemperatureSlider";
 
 function EditTenantDetails(props) {
   const { profile, className, onClose, onView, isTenantEditor = true, ...rest } = props;
+  console.log(props);
   return (
     <div {...rest} className="bg-white  px-4 font-sans right-0 w-2/3 flex h-full fixed z-50 shadow-lg rounded  flex-col">
       <EditTenantDetailsWrapped {...props} />
@@ -24,13 +19,12 @@ function EditTenantDetails(props) {
 
 export const EditTenantDetailsWrapped = (props) => {
   const { profile, className, onClose, onView, isTenantEditor = true, ...rest } = props;
-
-  const [values, setValues] = useState(null);
+  const [values, setValues] = useState({ ...profile });
   useEffect(() => {
     if (profile) {
       setValues({
-        csm: profile.csm || "",
-        pm: profile.pm || "",
+        csm: profile?.csm || "",
+        pm: profile?.pm || "",
         customerid: profile.customerid,
         golivedate: format(profile.golivedate, "yyyy-MM-dd"),
         golivecomments: profile.golivecomments,
@@ -41,7 +35,6 @@ export const EditTenantDetailsWrapped = (props) => {
       });
     }
   }, []);
-  console.log({ props });
   const [updateTenantDetailsMutation] = useMutation(MUTATION_UPDATE_DETAIL);
   const handleChange = (event) => {
     event.persist();
@@ -70,7 +63,6 @@ export const EditTenantDetailsWrapped = (props) => {
     // delete x.useproxy;
 
     const result = await updateTenantDetailsMutation({ variables: { input: x } });
-    console.log(result);
     onClose();
     alert.setMessage("Saving content...");
     // setOpenSnackbar(true);

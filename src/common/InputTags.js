@@ -51,7 +51,10 @@ const InputTags = ({
         className={`px-1 py-1 placeholder-gray-400 text-gray-700 relative bg-white rounded text-sm outline-none focus:outline-none border border-light-blue-200 w-full ${className}`}
       >
         {items.map((item) => (
-          <span className="inline-block items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-light-blue-200 text-light-blue-800 mx-1">
+          <span
+            key={item}
+            className="inline-block items-center px-2.5 py-0.5 rounded-md text-sm font-medium bg-light-blue-200 text-light-blue-800 mx-1"
+          >
             {item}
             {!readOnly && (
               <button

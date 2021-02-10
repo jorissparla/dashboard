@@ -59,7 +59,7 @@ import TestLogin from "./TestLogin";
 // import Test
 import UserPermissions from "./UserPermissions";
 import { AddVideo, EditVideo } from "./videos/VideoOperations";
-
+import NewMaintenanceWizard from "./pages/maintenance";
 // const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
 const LoggedInUsers = React.lazy(() => import("./pages/loggedinusers"));
 const Award = DynamicImport(() => import("./awards/award"));
@@ -136,6 +136,7 @@ function AppRoutes() {
       <Route exact path="/cloudreadiness" component={CloudReadiness} />
       <Route exact path="/symptoms" component={SymptomsPage} />
       <Route exact path="/maintenancewizard" component={() => <MaintenanceVersionList productline="LN" />} />
+      <Route exact path="/maintenance" component={() => <NewMaintenanceWizard />} />
       <Route exact path="/maintenancewizardauto" component={() => <MaintenanceVersionList productline="AUTO" />} />
       <Route exact path="/tenantlogs" component={TenantLogsWithData} />
       <Route exact path="/tenantlogs1" component={TenantLogList} />

@@ -1,9 +1,11 @@
-import { gql, useMutation } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import InputTagsDropDown from "common/InputTagsDD";
+import AutoComplete from "elements/AutoComplete";
 import TextInput from "elements/TextInput";
 import TWButton from "elements/TWButton";
+import { TWSelectMenu } from "elements/TWSelectMenu";
 import { useAlert } from "globalState/AlertContext";
-import Sumo from "pages/sumo";
+import { useUserContext } from "globalState/UserProvider";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { format } from "utils/format";
@@ -14,9 +16,12 @@ export const ADDSUMO_MUTATION = gql`
       id
       creator
       created
+      summary
+      archive
+      customername
+      farms
       week
       comments
-      customername
       created
       query
       farms
@@ -33,9 +38,12 @@ export const UPDATE_SUMO_MUTATION = gql`
       id
       creator
       created
+      summary
+      archive
+      customername
+      farms
       week
       comments
-      customername
       created
       query
       farms
@@ -47,10 +55,21 @@ export const UPDATE_SUMO_MUTATION = gql`
   }
 `;
 
+const QUERY_SUPPORT_ACCOUNTS = gql`
+  query QUERY_SUPPORT_ACCOUNTS {
+    accounts {
+      id
+      fullname
+    }
+  }
+`;
+
 function SumoForm({ initialValues = null }) {
   const defaults = initialValues || {
     id: null,
     creator: "",
+    summary: "",
+    archive: 0,
     customername: "",
     created: getCurrentDate(),
     week: getWeek(),
@@ -63,8 +82,12 @@ function SumoForm({ initialValues = null }) {
     module: "",
   };
   const [values, setValues] = useState(defaults);
+  const [enabled, setEnabled] = useState(false);
+  const [support, setSupport] = useState([]);
   const [addSumoInput] = useMutation(ADDSUMO_MUTATION);
   const [updateSumoInput] = useMutation(UPDATE_SUMO_MUTATION);
+  const { data, loading } = useQuery(QUERY_SUPPORT_ACCOUNTS);
+  const { user, hasPermissions } = useUserContext();
   const alert = useAlert();
   const history = useHistory();
 
@@ -74,14 +97,42 @@ function SumoForm({ initialValues = null }) {
       const newDate = format(values.created, "yyyy-MM-dd");
       setValues({ ...values, created: newDate });
     }
-  }, []);
+    if (data) {
+      const accounts = data.accounts.map((a) => a.fullname);
+      setSupport(accounts);
+    }
+    const isValisEditor = hasPermissions(["ADMIN", "SUMOEDIT"]);
+    setEnabled(isValisEditor);
+  }, [data]);
   function handleChange(e) {
-    setValues({ ...values, [e.target.name]: e.target.value });
+    if (enabled) setValues({ ...values, [e.target.name]: e.target.value });
   }
 
-  function handleFarmsInputChange(farms = "") {
-    setValues({ ...values, farms });
+  function setCreator(v) {
+    console.log(v);
+    setValues({ ...values, creator: v });
   }
+  function handleFarmsInputChange(farms = "") {
+    if (enabled) setValues({ ...values, farms });
+  }
+
+  async function archiveEntry(value = 1) {
+    const newArchive = value;
+    setValues({ ...values, archive: value });
+    const newDate = values.created ? new Date(values.created).toISOString() : new Date().toISOString();
+    if (values.id) {
+      const where = { id: values.id };
+      const input = { ...values, archive: newArchive, created: newDate };
+      delete input.__typename;
+      delete input.id;
+      console.log(values);
+      const result = await updateSumoInput({ variables: { where, input } });
+      if (result?.data?.updateSumolog) {
+        alert.setMessage(`Successfully ${value === 1 ? "archived" : "unarchived"} and updated`);
+      }
+    }
+  }
+
   async function addSumoEntry() {
     const newDate = values.created ? new Date(values.created).toISOString() : new Date().toISOString();
     if (values.id) {
@@ -119,13 +170,35 @@ function SumoForm({ initialValues = null }) {
           <header className="flex items-center justify-between">
             <h2 className="text-lg leading-6 font-medium text-black">{values.id ? "Edit" : "Add"} Entry for Sumo</h2>
             <TWButton onClick={() => history.push("/sumo")}>Back to List</TWButton>
-            <TWButton color="pink" onClick={addSumoEntry}>
-              Save
-            </TWButton>
+            {enabled && (
+              <div>
+                {values.archive === 0 ? (
+                  <TWButton color="indigo" onClick={() => archiveEntry(1)}>
+                    Archive
+                  </TWButton>
+                ) : (
+                  <TWButton color="purp" onClick={() => archiveEntry(0)}>
+                    UnArchive
+                  </TWButton>
+                )}
+                <TWButton color="teal" onClick={addSumoEntry}>
+                  Save
+                </TWButton>
+              </div>
+            )}
           </header>
         </section>
         <div className="flex space-x-2">
-          <TextInput label="Name" name="creator" value={values.creator} onChange={handleChange} className="w-48" />
+          <AutoComplete
+            disabled={false}
+            support={support}
+            label="name"
+            name="creator"
+            value={values.creator}
+            onChangeValue={(v) => setCreator(v)}
+            className="mt-5"
+          />
+          {/* <TWSelectMenu items={support} label="name" name="creator" value={values.creator} onChange={(v) => setCreator(v)} /> */}
           <div>
             <label htmlFor="week" className="block text-sm font-medium text-gray-700">
               Date
@@ -147,7 +220,9 @@ function SumoForm({ initialValues = null }) {
           <TextInput label="Module" name="module" value={values.module} onChange={handleChange} className="max-w-16" />
           <InputTagsDropDown values={values.farms} name="farms" readOnly={false} label="Farms" onChange={handleFarmsInputChange} />
         </div>
-        <pre>{JSON.stringify(values, null, -2)}</pre>
+        <div>
+          <TextInput label="Summary" name="summary" value={values.summary} onChange={handleChange} />
+        </div>
         <div className="mt-2">
           <label htmlFor="comments" className="block text-sm font-medium text-gray-700">
             Comments
@@ -162,19 +237,6 @@ function SumoForm({ initialValues = null }) {
           />
         </div>
         <div className="mt-2">
-          <div>
-            <label htmlFor="query" className="block text-sm font-medium text-gray-700">
-              Query
-            </label>
-            <textarea
-              type="text"
-              name="query"
-              value={values.query}
-              onChange={handleChange}
-              className="form-input font-mono resize-none text-2xs"
-              rows="12"
-            />
-          </div>
           <div className="mt-2 mb-2">
             <div>
               <label htmlFor="errormessage" className="block text-sm font-medium text-gray-700">
@@ -187,6 +249,19 @@ function SumoForm({ initialValues = null }) {
                 onChange={handleChange}
                 className="form-input font-mono resize-none text-2xs"
                 rows="15"
+              />
+            </div>
+            <div>
+              <label htmlFor="query" className="block text-sm font-medium text-gray-700">
+                Query
+              </label>
+              <textarea
+                type="text"
+                name="query"
+                value={values.query}
+                onChange={handleChange}
+                className="form-input font-mono resize-none text-2xs"
+                rows="12"
               />
             </div>
           </div>

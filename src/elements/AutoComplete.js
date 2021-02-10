@@ -6,7 +6,9 @@ export default function AutoComplete({
   disabled = true,
   onChangeValue = (v) => console.log(v),
   searchTextFromStart = true,
+  className = "",
 }) {
+  const [name, setName] = useState(value);
   useEffect(() => {
     const x = support
       // map((s) => s.fullname).
@@ -16,7 +18,6 @@ export default function AutoComplete({
     // setFilteredNames(x.filter((n) => n.toLowerCase().startsWith(x.toLowerCase())).slice(0, 9));
   }, [support]);
 
-  const [name, setName] = useState(value);
   const [names, setNames] = useState(
     support
       // map((s) => s.fullname).
@@ -46,9 +47,9 @@ export default function AutoComplete({
 
   function setSelectedName(name) {
     setSelected(name);
+    onChangeValue(name);
     setName(name);
     setFilteredNames([]);
-    onChangeValue(name);
   }
 
   function hide() {
@@ -65,7 +66,7 @@ export default function AutoComplete({
   }
   // console.log("render", names.length, support.length, filteredNames.length);
   return (
-    <div className="flex" onClick={hide}>
+    <div className={`flex ${className}`} onClick={hide}>
       <div className=" z-50 ">
         <input
           placeholder="type name to enter"

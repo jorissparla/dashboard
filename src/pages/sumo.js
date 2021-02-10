@@ -1,15 +1,13 @@
-import { useQuery, gql } from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
 import InputTags from "common/InputTags";
-import InputTagsDropDown from "common/InputTagsDD";
 import SearchBar from "common/SearchBar";
-import Modal from "elements/ModalComponent";
-import TWButton, { TWHyperLink } from "elements/TWButton";
+import TWButton from "elements/TWButton";
+import TWCheckbox from "elements/TWCheckbox";
 import { useHasPermissions } from "globalState/UserProvider";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { format } from "utils/format";
 import Spinner from "utils/spinner";
-import _ from "lodash";
 import { SumoNav } from "./SumoNav";
 
 const ALL_SUMOLOGS_QUERY = gql`
@@ -18,7 +16,10 @@ const ALL_SUMOLOGS_QUERY = gql`
       id
       creator
       created
+      summary
+      archive
       customername
+      farms
       week
       comments
       created
@@ -34,6 +35,7 @@ const ALL_SUMOLOGS_QUERY = gql`
 
 const Sumo = () => {
   const [isShowingAdd, showAdd] = useState(false);
+  const [isShowingArchived, setToggleShowArchive] = useState(false);
   const [searchText, setSearchText] = useState("");
   const history = useHistory();
   const { data, loading } = useQuery(ALL_SUMOLOGS_QUERY);
@@ -44,37 +46,55 @@ const Sumo = () => {
     showAdd(false);
   }
 
-  function search(item) {
-    const query = this;
-    // console.log(query);
-    // Object.keys(query).map((key) => console.log({ key, query: query[key], item: item[key] }));
-    return Object.keys(query).some((key) => (item[key] || "").toLowerCase().includes(query[key].toLowerCase()));
+  function filterOn(object, fields = [], value) {
+    // fields.map((f) => console.log(value, f, object[f]));
+    const res = fields.some((field) => {
+      console.log(field, object[field]?.toUpperCase(), value?.toUpperCase());
+      return object[field]?.toUpperCase().includes(value?.toUpperCase());
+    });
+
+    return res;
+    //|| nestedFields.some(_.includes(object)));
   }
 
-  function doFilter(items, searchText, fields = []) {
-    if (searchText === "") return items;
-    let query = fields.reduce((q, field) => ({ ...q, [field]: searchText }), {});
-    const result = items.filter(search, query);
-    return result;
+  function boolToInt(value) {
+    console.log(value);
+    if (value) {
+      return 1;
+    } else {
+      return 0;
+    }
   }
 
   useEffect(() => {
+    console.log("UseEffect", boolToInt(isShowingArchived));
     if (data) {
+      let newData = data.sumologs;
       if (searchText) {
-        setSumoDisplayData(doFilter(data.sumologs, searchText, ["sessioncode", "creator", "query", "errormessage, farms, module", "customername"]));
-        // setSumoDisplayData(doFilter(data.sumologs, searchText, ["farms"]));
-      } else {
-        setSumoDisplayData(data.sumologs);
+        newData = newData
+          .filter(
+            (item) => filterOn(item, ["sessioncode", "creator", "summary", "errormessage", "farms", "module", "customername"], searchText)
+            //_.includes(user.fullname.toUpperCase(), this.state.searchText.toUpperCase())
+          )
+          .slice(0, 20);
+        console.log(newData);
       }
+
+      if (!isShowingArchived) {
+        newData = newData.filter((item) => item.archive === 0);
+      } else {
+        newData = newData.filter((item) => item.archive > 0);
+      }
+      setSumoDisplayData(newData);
     }
-  }, [searchText, data]);
+  }, [searchText, data, isShowingArchived]);
 
   if (loading) return <Spinner />;
   return (
-    <section className="px-4 sm:px-6 lg:px-4 xl:px-6 pt-4 pb-4 sm:pb-6 lg:pb-4 xl:pb-6 space-y-4">
+    <section className="px-4 sm:px-6 lg:px-4 xl:px-6 pt-4 pb-2 sm:pb-2 lg:pb-4 xl:pb-2 space-y-4">
       <header className="flex items-center justify-between">
         <SumoNav current="Sumo Logs" />
-
+        <TWCheckbox label="Show Archived" value={isShowingArchived} onChange={() => setToggleShowArchive(!isShowingArchived)} />
         {canEdit && (
           <TWButton color="blue" onClick={() => history.push("/addsumo")}>
             New
@@ -86,11 +106,11 @@ const Sumo = () => {
         <SearchBar
           onChange={setSearchText}
           defaultValue={searchText}
-          hintText="Search farm, module,session, query, error, customer"
+          hintText="Search farm, module,session, summary, error, customer"
           className="-mx-10 xl:w-full"
         />
       </div>
-      <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4 list-none">
+      <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 list-none">
         {sumoDisplayData.map((item) => (
           <SumoListItem item={item} />
         ))}
@@ -100,14 +120,13 @@ const Sumo = () => {
 };
 const SumoListItem = ({ item }) => {
   const history = useHistory();
-  console.log(item, item.farms?.split(";"));
   return (
-    <li>
+    <li className="" key={item.id}>
       <button
         onClick={() => history.push(`/editsumo/${item.id}`)}
         className="hover:bg-light-blue-500 hover:border-transparent hover:shadow-lg group block rounded-lg p-4 border border-gray-200 no-underline overflow-hidden bg-light-blue-100 shadow-lg"
       >
-        <dl className="grid sm:block lg:grid xl:block grid-cols-2 grid-rows-2 items-center">
+        <dl className="flex flex-col items-center">
           <div className="flex flex-wrap ">
             <dt className="sr-only">Title</dt>
             <dd className="group-hover:text-white leading-6 font-medium text-black">{item.creator}</dd>
@@ -128,12 +147,8 @@ const SumoListItem = ({ item }) => {
           </div>
           <div className="divide-y divide-blue-200">
             <dt className="sr-only">query</dt>
-            <dd className="group-hover:text-light-blue-200 text-sm font-mono sm:mb-4 lg:mb-0 xl:mb-4">{item.query}</dd>
-          </div>
-          <div className="divide-y divide-blue-200">
-            <dt className="sr-only">query</dt>
-            <dd className="group-hover:text-light-blue-200 text-sm font-mono sm:mb-4 lg:mb-0 xl:mb-4 max-h overflow-hidden">
-              {item.errormessage || "No error"}
+            <dd className="group-hover:text-light-blue-200 text-sm font-semibold text-light-blue-600 font-sans sm:mb-4 lg:mb-0 xl:mb-4 max-h overflow-hidden">
+              {item.summary || "No error"}
             </dd>
           </div>
         </dl>

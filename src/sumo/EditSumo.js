@@ -7,6 +7,8 @@ const ONE_SUMOLOGS_QUERY = gql`
     sumolog(id: $id) {
       id
       creator
+      archive
+      summary
       created
       customername
       week
