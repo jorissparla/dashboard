@@ -9,29 +9,7 @@ import { useHistory } from "react-router";
 import { format } from "utils/format";
 import Spinner from "utils/spinner";
 import { SumoNav } from "./SumoNav";
-
-const ALL_SUMOLOGS_QUERY = gql`
-  query ALL_SUMOLOGS_QUERY {
-    sumologs {
-      id
-      creator
-      created
-      summary
-      archive
-      customername
-      farms
-      week
-      comments
-      created
-      query
-      farms
-      incident
-      sessioncode
-      errormessage
-      module
-    }
-  }
-`;
+import { ALL_SUMOLOGS_QUERY } from "sumo/sumoqueries";
 
 const Sumo = () => {
   const [isShowingAdd, showAdd] = useState(false);

@@ -5,55 +5,13 @@ import TextInput from "elements/TextInput";
 import TWButton from "elements/TWButton";
 import { TWSelectMenu } from "elements/TWSelectMenu";
 import { useAlert } from "globalState/AlertContext";
-import { useUserContext } from "globalState/UserProvider";
+import { useHasPermissions, useUserContext } from "globalState/UserProvider";
+import { usePersistentState } from "hooks";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { format } from "utils/format";
-
-export const ADDSUMO_MUTATION = gql`
-  mutation ADDSUMO_MUTATION($input: SumologInput) {
-    addSumolog(input: $input) {
-      id
-      creator
-      created
-      summary
-      archive
-      customername
-      farms
-      week
-      comments
-      created
-      query
-      farms
-      incident
-      sessioncode
-      errormessage
-      module
-    }
-  }
-`;
-export const UPDATE_SUMO_MUTATION = gql`
-  mutation UPDATE_SUMO_MUTATION($where: SumologWhere, $input: SumologInput) {
-    updateSumolog(where: $where, input: $input) {
-      id
-      creator
-      created
-      summary
-      archive
-      customername
-      farms
-      week
-      comments
-      created
-      query
-      farms
-      incident
-      sessioncode
-      errormessage
-      module
-    }
-  }
-`;
+import SafeDeleteButton from "videos/SafeDeleteButton";
+import { ADDSUMO_MUTATION, UPDATE_SUMO_MUTATION, DELETE_SUMO_MUTATION, ALL_SUMOLOGS_QUERY } from "./sumoqueries";
 
 const QUERY_SUPPORT_ACCOUNTS = gql`
   query QUERY_SUPPORT_ACCOUNTS {
@@ -82,16 +40,23 @@ function SumoForm({ initialValues = null }) {
     module: "",
   };
   const [values, setValues] = useState(defaults);
+  const [debugMode, setDebugMode] = usePersistentState("debug", true);
   const [enabled, setEnabled] = useState(false);
   const [support, setSupport] = useState([]);
+
   const [addSumoInput] = useMutation(ADDSUMO_MUTATION);
   const [updateSumoInput] = useMutation(UPDATE_SUMO_MUTATION);
+  const [deleteSumoInput] = useMutation(DELETE_SUMO_MUTATION);
   const { data, loading } = useQuery(QUERY_SUPPORT_ACCOUNTS);
-  const { user, hasPermissions } = useUserContext();
+  const [hasPermissions, user] = useHasPermissions(["ADMIN", "SUMOEDIT"]);
+  const { login } = useUserContext();
   const alert = useAlert();
   const history = useHistory();
 
   useEffect(() => {
+    if (debugMode && !user) {
+      login("joris.sparla@infor.com", "Infor2019");
+    }
     console.log("date", values.created);
     if (values.id) {
       const newDate = format(values.created, "yyyy-MM-dd");
@@ -101,9 +66,13 @@ function SumoForm({ initialValues = null }) {
       const accounts = data.accounts.map((a) => a.fullname);
       setSupport(accounts);
     }
-    const isValisEditor = hasPermissions(["ADMIN", "SUMOEDIT"]);
+    let isValisEditor = hasPermissions;
+    if (user) {
+      isValisEditor = isValisEditor || user.role === "ADMIN";
+    }
+    console.log({ user }, isValisEditor);
     setEnabled(isValisEditor);
-  }, [data]);
+  }, [data, user]);
   function handleChange(e) {
     if (enabled) setValues({ ...values, [e.target.name]: e.target.value });
   }
@@ -116,6 +85,15 @@ function SumoForm({ initialValues = null }) {
     if (enabled) setValues({ ...values, farms });
   }
 
+  async function handleDelete() {
+    console.log("handleDelete");
+    if (values.id) {
+      const where = { id: values.id };
+      const result = await deleteSumoInput({ variables: { where }, refetchQueries: [{ query: ALL_SUMOLOGS_QUERY }] });
+      alert.setMessage(`Successfully deleted entry`);
+      history.push("/sumo");
+    }
+  }
   async function archiveEntry(value = 1) {
     const newArchive = value;
     setValues({ ...values, archive: value });
@@ -135,21 +113,22 @@ function SumoForm({ initialValues = null }) {
 
   async function addSumoEntry() {
     const newDate = values.created ? new Date(values.created).toISOString() : new Date().toISOString();
+    const input = { ...values, created: newDate };
+    delete input.__typename;
+    delete input.id;
     if (values.id) {
       const where = { id: values.id };
-      const input = { ...values, created: newDate };
-      delete input.__typename;
-      delete input.id;
-      console.log(values);
+      console.log({ values });
       const result = await updateSumoInput({ variables: { where, input } });
       console.log(result);
       if (result?.data?.updateSumolog) {
         alert.setMessage("Successfully updated");
       }
     } else {
-      const input = { ...values };
-      const result = await addSumoInput({ variables: { input } });
+      const result = await addSumoInput({ variables: { input }, refetchQueries: [{ query: ALL_SUMOLOGS_QUERY }] });
       console.log(result);
+      alert.setMessage("Successfully added");
+      history.push("/sumo");
     }
   }
   function getWeek() {
@@ -162,7 +141,6 @@ function SumoForm({ initialValues = null }) {
     const currDate = new Date();
     return format(currDate, "yyyy-MM-dd");
   }
-  console.log(getWeek());
   return (
     <div className="bg-gray-100 h-screen">
       <div className="bg-white m-2 rounded shadow-lg p-2">
@@ -171,7 +149,7 @@ function SumoForm({ initialValues = null }) {
             <h2 className="text-lg leading-6 font-medium text-black">{values.id ? "Edit" : "Add"} Entry for Sumo</h2>
             <TWButton onClick={() => history.push("/sumo")}>Back to List</TWButton>
             {enabled && (
-              <div>
+              <div className="flex">
                 {values.archive === 0 ? (
                   <TWButton color="indigo" onClick={() => archiveEntry(1)}>
                     Archive
@@ -184,13 +162,14 @@ function SumoForm({ initialValues = null }) {
                 <TWButton color="teal" onClick={addSumoEntry}>
                   Save
                 </TWButton>
+                <SafeDeleteButton onDelete={handleDelete}>Delete</SafeDeleteButton>
               </div>
             )}
           </header>
         </section>
         <div className="flex space-x-2">
           <AutoComplete
-            disabled={false}
+            disabled={!enabled}
             support={support}
             label="name"
             name="creator"
@@ -218,7 +197,7 @@ function SumoForm({ initialValues = null }) {
           <TextInput label="Customer" name="customername" value={values.customername} onChange={handleChange} className="min-w-80" />
           <TextInput label="Sessioncode" name="sessioncode" value={values.sessioncode} onChange={handleChange} className="max-w-32" />
           <TextInput label="Module" name="module" value={values.module} onChange={handleChange} className="max-w-16" />
-          <InputTagsDropDown values={values.farms} name="farms" readOnly={false} label="Farms" onChange={handleFarmsInputChange} />
+          <InputTagsDropDown values={values.farms} name="farms" readOnly={!enabled} label="Farms" onChange={handleFarmsInputChange} />
         </div>
         <div>
           <TextInput label="Summary" name="summary" value={values.summary} onChange={handleChange} />

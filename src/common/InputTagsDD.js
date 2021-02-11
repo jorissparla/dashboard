@@ -1,11 +1,22 @@
 import React, { useState, useEffect } from "react";
 
-const InputTagsDropDown = ({ label = "Label", placeholder = "start typing", values = "", onChange = (v) => console.log(v), readOnly = true }) => {
+const defaults = ["Frankfurt", "US-East", "Sydney", "Tokyo"];
+
+const InputTagsDropDown = ({
+  label = "",
+  listitems = defaults,
+  placeholder = "start typing",
+  values = "",
+  onChange = (v) => console.log(v),
+  readOnly = true,
+  className = "",
+}) => {
   const [items, setItems] = useState("");
   const [value, setValue] = useState("");
 
   useEffect(() => {
     setItems(values);
+    console.log({ values });
   }, [values]);
 
   function handleChange(evt) {
@@ -38,10 +49,12 @@ const InputTagsDropDown = ({ label = "Label", placeholder = "start typing", valu
     };
   }
   return (
-    <div>
-      <label htmlFor="email" className="block text-sm font-medium text-gray-700">
-        {label}
-      </label>
+    <div className={className}>
+      {label && (
+        <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+          {label}
+        </label>
+      )}
       <div className="px-1 py-1 placeholder-gray-400 text-gray-700 relative bg-white rounded text-sm outline-none focus:outline-none border border-light-blue-200 w-full ">
         {items?.split(";").map((item) => (
           <span
@@ -68,19 +81,15 @@ const InputTagsDropDown = ({ label = "Label", placeholder = "start typing", valu
             name="Farms"
             id="farms"
             value={value}
-            className=" mt-1  pl-3  py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md "
+            className=" mt-1  pl-3  divide-y-1 divide-color-gray-100 divide-solid  py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md "
             onChange={handleChange}
             onKeyDown={handleInputKeyDown}
           >
-            <option className="text-gray-500 px-1 divide-y-1 py-2 hover:bg-teal-300" value="Frankfurt">
-              Frankfurt
-            </option>
-            <option className="text-gray-500 px-1 divide-y-1" value="Sydney">
-              Sydney
-            </option>
-            <option className="text-gray-500 px-1 divide-y-1" value="US-East01">
-              US-East-1
-            </option>
+            {listitems.map((listitem) => (
+              <option key={listitem} className="text-gray-500 px-1 divide-y-1 py-2 hover:bg-teal-300" value={listitem}>
+                {listitem}
+              </option>
+            ))}
           </select>
         )}
       </div>

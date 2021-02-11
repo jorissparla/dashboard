@@ -132,4 +132,3 @@ const Main = () => (
 ReactDOM.render(<Main />, document.getElementById("root"));
 
 export { Main, client };
-//registerServiceWorker();

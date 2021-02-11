@@ -1,6 +1,5 @@
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Grid from "@material-ui/core/Grid";
-import Paper from "@material-ui/core/Paper";
 import Switch from "@material-ui/core/Switch";
 import Typography from "@material-ui/core/Typography";
 import React from "react";

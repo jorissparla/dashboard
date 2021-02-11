@@ -26,7 +26,6 @@ export default function AutoComplete({
 
   const [filteredNames, setFilteredNames] = useState([]);
   const [selected, setSelected] = useState("");
-  console.log(name, value);
   function searchFromStart(data, value) {
     return data.filter((n) => n.toLowerCase().startsWith(value.toLowerCase()));
   }

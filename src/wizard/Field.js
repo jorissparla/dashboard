@@ -3,11 +3,10 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import TWButton from "elements/TWButton";
 import { useAlert } from "globalState/AlertContext";
-import { DashBoardContext } from "globalState/Provider";
 import { useUserContext } from "globalState/UserProvider";
 import React from "react";
-import { ALL_MAINTENANCE_QUERY, MAINTENANCE_FAQ_QUERY, MUTATION_UPDATE_MAINTENANCE } from "./Queries";
 import "./field.css";
+import { ALL_MAINTENANCE_QUERY, MAINTENANCE_FAQ_QUERY, MUTATION_UPDATE_MAINTENANCE } from "./Queries";
 
 export const Field = ({ name, label, Icon, activeVersion, blue = false, className = "" }) => {
   const mutation = MUTATION_UPDATE_MAINTENANCE;
@@ -33,9 +32,6 @@ export const Field = ({ name, label, Icon, activeVersion, blue = false, classNam
     alert.setMessage(`Content was updated for field '${name}'`);
   };
   const { user } = useUserContext();
-  // const { activeVersion } = React.useContext(RootContext);
-  // console.log('Field', name, activeVersion);
-  const [] = React.useState(false);
   const [value, setValue] = React.useState(activeVersion[name]);
   const id = activeVersion.id;
   let isValidEditor = false;

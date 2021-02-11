@@ -18,7 +18,8 @@ import UserPage from "pages/UserPage";
 import WhatDoesDev from "pages/WhatDoesDev";
 import AddProject from "projects/addproject";
 import UpdateProject from "projects/updateproject";
-import React from "react";
+import React, { useEffect } from "react";
+import { TWFileUpload } from "common/FileUploaderNew";
 import { Route, Switch, useHistory } from "react-router-dom";
 import EditSumo from "sumo/EditSumo";
 import SymptomCategories from "symptoms/SymptomCategories";
@@ -60,6 +61,9 @@ import TestLogin from "./TestLogin";
 import UserPermissions from "./UserPermissions";
 import { AddVideo, EditVideo } from "./videos/VideoOperations";
 import NewMaintenanceWizard from "./pages/maintenance";
+import { usePersistentState } from "hooks";
+import MaintenanceTemplates from "pages/MaintenanceTemplates";
+import EditMaintenanceTemplate from "pages/EditMaintenanceTemplate";
 // const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
 const LoggedInUsers = React.lazy(() => import("./pages/loggedinusers"));
 const Award = DynamicImport(() => import("./awards/award"));
@@ -105,7 +109,13 @@ const NotFound = () => {
 
 function AppRoutes() {
   //  const user = props.context;
-  const { user, loading } = React.useContext(UserContext);
+  const { user, loading, login } = React.useContext(UserContext);
+  const [debugMode, setDebugMode] = usePersistentState("debug", true);
+  // useEffect(() => {
+  //   if (debugMode && !user) {
+  //     // login("joris.sparla@infor.com", "Infor2019");
+  //   }
+  // }, []);
   const history = useHistory();
   const userctx = useUserContext();
   // if (!userctx.user) userctx.login("joris.sparla@infor.com", "Infor2019").then(console.log);
@@ -125,6 +135,8 @@ function AppRoutes() {
       <Route exact path="/symptomcategories" component={SymptomCategories} />
       <Route exact path="/loggedinusers" component={LoggedInUsers} />
       <Route exact path="/uploadimage" component={UploadImageComponent} />
+      <Route exact path="/uploadfile" component={TWFileUpload} />
+
       <Route exact path="/login" component={LoginForm} />
       <Route exact path="/sumo" component={Sumo} />
       <Route exact path="/sumoalerts" component={SumoAlerts} />
@@ -137,6 +149,9 @@ function AppRoutes() {
       <Route exact path="/symptoms" component={SymptomsPage} />
       <Route exact path="/maintenancewizard" component={() => <MaintenanceVersionList productline="LN" />} />
       <Route exact path="/maintenance" component={() => <NewMaintenanceWizard />} />
+      <Route exact path="/maintenancetemplates" component={() => <MaintenanceTemplates />} />
+      <Route exact path="/maintenancetemplate/:id" component={() => <EditMaintenanceTemplate />} />
+
       <Route exact path="/maintenancewizardauto" component={() => <MaintenanceVersionList productline="AUTO" />} />
       <Route exact path="/tenantlogs" component={TenantLogsWithData} />
       <Route exact path="/tenantlogs1" component={TenantLogList} />
