@@ -105,7 +105,7 @@ export default function SupportCardContainer(props) {
   const { text = "" } = props;
   const { user, isAuthenticated } = useUserContext();
   const { data, loading } = useQuery(QUERY_ALL_SUPPORTCARDS);
-  const [createAudit] = useMutation(MUTATION_CREATE_AUDIT);
+
   const [favoriteCard] = useMutation(MUTATION_FAVORITE_CARD);
   const [unfavoriteCard] = useMutation(MUTATION_UNFAVORITE_CARD);
 
@@ -121,7 +121,7 @@ export default function SupportCardContainer(props) {
   return (
     <SupportCards
       supportcards={data.supportcards}
-      createAudit={createAudit}
+      // createAudit={createAudit}
       favoriteCard={favoriteCard}
       unfavoriteCard={unfavoriteCard}
       currentUser={user}
@@ -133,6 +133,7 @@ export default function SupportCardContainer(props) {
 }
 
 const SupportCards = ({ authenticated = false, isEditor = false, supportcards, currentUser, favoriteCard, unfavoriteCard, filter = "" }) => {
+  const [createAuditMutation] = useMutation(MUTATION_CREATE_AUDIT);
   const [searchText, setSearchText] = useState(filter || "");
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedProduct] = usePersistentState("supp_card_product", "LN");
@@ -144,11 +145,12 @@ const SupportCards = ({ authenticated = false, isEditor = false, supportcards, c
   const handleClose = () => setShowRequest(false);
 
   const createAudit = (e, type = "SupporCard", link) => {
+    console.log(e);
     const splitAr = e.split("/");
     const page = splitAr.slice(0, 3).join("/");
     const linkid = splitAr.slice(3, 4)[0];
     const input = { page, linkid, username: currentUser ? currentUser.fullname : "", type };
-    createAudit({ variables: { input } }).then((res) => console.log("RES::", res));
+    createAuditMutation({ variables: { input } }).then((res) => console.log("RES::", res));
   };
 
   const togglePortal = (text) => {
@@ -157,7 +159,6 @@ const SupportCards = ({ authenticated = false, isEditor = false, supportcards, c
   };
 
   const p = { authenticated, isEditor, supportcards, currentUser, favoriteCard, unfavoriteCard };
-  console.log("Auth", p);
   const actions = [
     <Button variant="contained" color="secondary" onClick={handleClose}>
       Cancel
@@ -204,18 +205,20 @@ const SupportCards = ({ authenticated = false, isEditor = false, supportcards, c
   const history = useHistory();
   return (
     <div className="flex flex-col  h-full" onDoubleClick={() => setShowRequest(true)}>
-      <header class="flex items-center justify-between">
-        <h2 class=" pl-4 leading-6 font-bold text-2xl text-gray-700 font-pop">Support Cards</h2>
-        <TWButton color="teal" onClick={() => setShowFavorites(!showFavorites)}>
-          Show {showFavorites ? `All` : `Favorites`}
-        </TWButton>
-        {authenticated && isEditor ? (
-          <TWButton color="teal" onClick={() => history.push("supportcard/add")}>
-            Add Card
+      <header className="flex items-center justify-between">
+        <h2 className=" pl-4 leading-6 font-bold text-2xl text-gray-700 font-pop">Support Cards</h2>
+        <div>
+          <TWButton color="teal" onClick={() => setShowFavorites(!showFavorites)}>
+            Show {showFavorites ? `All` : `Favorites`}
           </TWButton>
-        ) : (
-          <TWButton onClick={() => history.push("supportcard/request")}>Request a Card</TWButton>
-        )}
+          {authenticated && isEditor ? (
+            <TWButton color="amber" onClick={() => history.push("supportcard/add")}>
+              Add Card
+            </TWButton>
+          ) : (
+            <TWButton onClick={() => history.push("supportcard/request")}>Request a Card</TWButton>
+          )}
+        </div>
       </header>
       <Dialog
         title="Add Request"

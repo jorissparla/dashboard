@@ -7,6 +7,7 @@ const grey_forbidden_class = "cursor-not-allowed text-sm bg-gray-200  btn-tw fon
 const teal_class = "bg-teal-300 hover:bg-teal-400 text-teal-800";
 const black_class = "bg-gray-800 hover:bg-bg-gray-600 text-white";
 const pink_class = "bg-pink-200 text-pink-800 hover:bg-pink-300";
+const amber_class = "bg-amber-200 text-amber-800 hover:bg-amber-300";
 const purple_class = "bg-purp text-white hover:bg-purple-400 ";
 const indigo_class =
   "bg-indigo-400 text-indigo-800 hover:bg-indigo-500 focus:outline-none focus:border-indigo-700 focus:shadow-outline-indigo active:bg-indigo-700 ";
@@ -24,6 +25,9 @@ const TWButton = ({ children, className = null, ...props }) => {
   switch (color) {
     case "teal":
       classes = clsx(classes, base_class, teal_class);
+      break;
+    case "amber":
+      classes = clsx(classes, base_class, amber_class);
       break;
     case "black":
       classes = clsx(classes, base_class, black_class);

@@ -31,6 +31,7 @@ const EditSumo = (props) => {
     return <div></div>;
   }
   const { sumolog } = data;
+  console.log(sumolog);
   return (
     <div>
       <SumoForm initialValues={sumolog} />

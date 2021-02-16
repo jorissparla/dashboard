@@ -37,7 +37,7 @@ export function useUpdateMaintenanceTemplateField() {
   return { update };
 }
 
-const MaintenanceTemplateField = ({ name, label, id, initialValue, className = "", forceReadOnly = false }) => {
+export const MaintenanceTemplateField = ({ name, label, id, initialValue, className = "", forceReadOnly = false }) => {
   const updater = useUpdateMaintenanceTemplateField();
   const alert = useAlert();
 
@@ -77,9 +77,9 @@ const MaintenanceTemplateField = ({ name, label, id, initialValue, className = "
           <div className="text-blue-400 font-sans font-semibold text-xl w-full">{label}</div>
         </div>
         <div className="flex">
-          {isValidEditor && (
-            <TWButton color="transp" className="font-sans" onClick={handleSubmit}>
-              Save Content
+          {isValidEditor && !forceReadOnly && (
+            <TWButton color="amber" className="font-sans" onClick={handleSubmit}>
+              Save
             </TWButton>
           )}
         </div>

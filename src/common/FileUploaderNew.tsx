@@ -1,9 +1,7 @@
 import { useMutation } from "@apollo/client";
 import gql from "graphql-tag";
 import React, { useState } from "react";
-const PATH_PREFIX = "\\\\nlbavwixs.infor.com\\images\\news\\";
 // const LINK_PREFIX = 'https://nlbavwdocsup1.infor.com:5001/';
-const HTTP_LINK_PREFIX = `https://nlbavwixs.infor.com/images/profilepics/`;
 
 const UPLOAD_FILE_MUTATION = gql`
   mutation UPLOAD_FILE_MUTATION($files: [Upload!]!, $folder: String) {
@@ -23,6 +21,7 @@ type TWFileUploadProps = {
   readOnly?: boolean;
   setFile?: any;
   title?: string;
+  showLink?: boolean;
 };
 
 export const TWFileUpload: React.FC<TWFileUploadProps> = ({
@@ -31,6 +30,7 @@ export const TWFileUpload: React.FC<TWFileUploadProps> = ({
   setFile = null,
   label = "Select a file",
   type = "*",
+  showLink = false,
 }) => {
   const [fileName, setFileName] = useState("");
   function handleChangeFile(value: string) {
@@ -49,7 +49,7 @@ export const TWFileUpload: React.FC<TWFileUploadProps> = ({
           type="file"
           accept={type}
           className="hidden"
-          onChange={async ({ target: { validity, files } }) => {
+          onChange={async ({ target: { files } }) => {
             const { data } = await uploadFileMutation({ variables: { files, folder: link } });
             if (data) {
               const uploadedFile = data.multipleUpload[0].filename;
@@ -59,7 +59,7 @@ export const TWFileUpload: React.FC<TWFileUploadProps> = ({
           }}
         />
       </label>
-      {/* <a href={fileName}>{fileName}</a> */}
+      {showLink && <a href={fileName}>{fileName}</a>}
     </div>
   );
 };

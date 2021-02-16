@@ -3,7 +3,6 @@ import InputTagsDropDown from "common/InputTagsDD";
 import AutoComplete from "elements/AutoComplete";
 import TextInput from "elements/TextInput";
 import TWButton from "elements/TWButton";
-import { TWSelectMenu } from "elements/TWSelectMenu";
 import { useAlert } from "globalState/AlertContext";
 import { useHasPermissions, useUserContext } from "globalState/UserProvider";
 import { usePersistentState } from "hooks";
@@ -11,7 +10,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { format } from "utils/format";
 import SafeDeleteButton from "videos/SafeDeleteButton";
-import { ADDSUMO_MUTATION, UPDATE_SUMO_MUTATION, DELETE_SUMO_MUTATION, ALL_SUMOLOGS_QUERY } from "./sumoqueries";
+import { ADDSUMO_MUTATION, ALL_SUMOLOGS_QUERY, DELETE_SUMO_MUTATION, UPDATE_SUMO_MUTATION } from "./sumoqueries";
 
 const QUERY_SUPPORT_ACCOUNTS = gql`
   query QUERY_SUPPORT_ACCOUNTS {
@@ -29,7 +28,7 @@ function SumoForm({ initialValues = null }) {
     summary: "",
     archive: 0,
     customername: "",
-    created: getCurrentDate(),
+    created: null,
     week: getWeek(),
     incident: "",
     query: "",
@@ -41,6 +40,7 @@ function SumoForm({ initialValues = null }) {
   };
   const [values, setValues] = useState(defaults);
   const [debugMode, setDebugMode] = usePersistentState("debug", true);
+  const { login } = useUserContext();
   const [enabled, setEnabled] = useState(false);
   const [support, setSupport] = useState([]);
 
@@ -49,17 +49,17 @@ function SumoForm({ initialValues = null }) {
   const [deleteSumoInput] = useMutation(DELETE_SUMO_MUTATION);
   const { data, loading } = useQuery(QUERY_SUPPORT_ACCOUNTS);
   const [hasPermissions, user] = useHasPermissions(["ADMIN", "SUMOEDIT"]);
-  const { login } = useUserContext();
   const alert = useAlert();
   const history = useHistory();
 
   useEffect(() => {
-    if (debugMode && !user) {
-      login("joris.sparla@infor.com", "Infor2019");
-    }
-    console.log("date", values.created);
+    // if (debugMode && !user) {
+    //   login("joris.sparla@infor.com", "Infor2019");
+    // }
+    let newDate = initialValues.created ? initialValues.created : format(new Date(), "yyyy-MM-dd");
+    // console.log("date", initialValues.created);
     if (values.id) {
-      const newDate = format(values.created, "yyyy-MM-dd");
+      // const newDate = format(values.created, "yyyy-MM-dd");
       setValues({ ...values, created: newDate });
     }
     if (data) {
@@ -70,9 +70,10 @@ function SumoForm({ initialValues = null }) {
     if (user) {
       isValisEditor = isValisEditor || user.role === "ADMIN";
     }
-    console.log({ user }, isValisEditor);
+    // console.log({ user }, isValisEditor);
     setEnabled(isValisEditor);
   }, [data, user]);
+
   function handleChange(e) {
     if (enabled) setValues({ ...values, [e.target.name]: e.target.value });
   }
@@ -167,7 +168,7 @@ function SumoForm({ initialValues = null }) {
             )}
           </header>
         </section>
-        <div className="flex space-x-2">
+        <div className="flex space-x-2 flex-wrap">
           <AutoComplete
             disabled={!enabled}
             support={support}
@@ -184,7 +185,7 @@ function SumoForm({ initialValues = null }) {
             </label>
             <input
               id="created"
-              value={values.created}
+              value="2020-02-11"
               name="created"
               onChange={handleChange}
               type="date"
@@ -192,7 +193,6 @@ function SumoForm({ initialValues = null }) {
               onChange={handleChange}
             />
           </div>
-
           <TextInput label="Incident" name="incident" value={values.incident} onChange={handleChange} className="max-w-32" />
           <TextInput label="Customer" name="customername" value={values.customername} onChange={handleChange} className="min-w-80" />
           <TextInput label="Sessioncode" name="sessioncode" value={values.sessioncode} onChange={handleChange} className="max-w-32" />

@@ -18,6 +18,8 @@ import { SideBarMenu } from "./SideBarMenu";
 import SystemMessage from "utils/SystemMessage";
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/client";
+import { useHasPermissions, useUserContext } from "globalState/UserProvider";
+import { usePersistentState } from "hooks";
 
 const drawerWidth = 340;
 
@@ -111,18 +113,34 @@ const SYSTEM_MESSAGE = gql`
 
 const Header = (props) => {
   const [open, setOpen] = useState(false);
+  const [debugMode, setDebugMode] = usePersistentState("debug", true);
+  const { login, user, logout } = useUserContext();
   const { data, loading } = useQuery(SYSTEM_MESSAGE);
   if (loading) return <div></div>;
   const getActiveMessage = data?.getActiveMessage;
   const message = getActiveMessage ? getActiveMessage.message : "";
   console.log(data);
+
   function toggleMenu() {
     setOpen(!open);
   }
+
+  function logMeIn() {
+    if (process.env.NODE_ENV !== "production") {
+      if (debugMode && !user) {
+        login("joris.sparla@infor.com", "Infor2021");
+      }
+      if (user) {
+        logout();
+      }
+    }
+  }
+
   const { classes, theme, history } = props;
   //const currentUser = useUser();
   let titleText = ""; // this.state.ipaddress ? this.state.ipaddress : "";
   titleText = titleText + process.env.NODE_ENV !== "production" ? `(${process.env.NODE_ENV})` : "";
+
   return (
     // <ThemeProvider theme={context.theme}>
     <React.Fragment>
@@ -147,9 +165,9 @@ const Header = (props) => {
               Share
               <CameraIcon />
             </IconButton>
-            <Typography variant="h6" color="inherit" className={classes.grow}>
+            <div variant="h6" color="inherit" className={classes.grow} onClick={logMeIn}>
               Infor Support Dashboard {titleText}
-            </Typography>
+            </div>
             <AuthenticationSection history={history} />
           </Toolbar>
         </AppBar>

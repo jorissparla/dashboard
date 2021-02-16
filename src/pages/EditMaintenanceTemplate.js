@@ -2,6 +2,7 @@ import { useQuery, gql } from "@apollo/client";
 import InputTagsDropDown from "common/InputTagsDD";
 import TWButton from "elements/TWButton";
 import { useAlert } from "globalState/AlertContext";
+import { useUserContext } from "globalState/UserProvider";
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import Spinner from "utils/spinner";
@@ -18,6 +19,8 @@ const QUERY_SINGLE_VERSION = gql`
       versions
       id
       name
+      checksrequired
+      checklink
       solutions
       defects
       portingset
@@ -35,6 +38,7 @@ const EditMaintenanceTemplate = () => {
   const [allversions, setallversions] = useState([]);
   const { id } = useParams();
   const where = { id };
+  const { user } = useUserContext();
   const history = useHistory();
   const alert = useAlert();
   const fieldUpdater = useUpdateMaintenanceTemplateField();
@@ -46,6 +50,10 @@ const EditMaintenanceTemplate = () => {
     }
   }, [data]);
   if (loading) return <Spinner />;
+  let isValidEditor = false;
+  if (user && user.permissions) {
+    isValidEditor = user.permissions.some(({ permission }) => permission === "WIZARDEDIT") || user.role === "Admin";
+  }
   const template = data.maintenanceTemplate;
 
   async function handleChangeVersions(v) {
@@ -68,7 +76,7 @@ const EditMaintenanceTemplate = () => {
           values={versions}
           listitems={allversions}
           className="ml-8 my-4"
-          readOnly={true}
+          readOnly={!isValidEditor}
           onChange={handleChangeVersions}
         />
         <MaintenanceTemplateFields initialTemplate={template} />
@@ -77,7 +85,7 @@ const EditMaintenanceTemplate = () => {
   );
 };
 
-export const MaintenanceTemplateFields = ({ initialTemplate }) => {
+export const MaintenanceTemplateFields = ({ initialTemplate, forceReadOnly = false }) => {
   const [template, setTemplate] = useState(null);
   useEffect(() => {
     setTemplate(initialTemplate);
@@ -92,24 +100,45 @@ export const MaintenanceTemplateFields = ({ initialTemplate }) => {
         name="communication_before"
         initialValue={template.communication_before}
         id={template.id}
+        forceReadOnly={forceReadOnly}
       />
       <MaintenanceTemplateField
         label="Communication - refer to ICS"
         name="communication_ics"
         initialValue={template.communication_ics}
         id={template.id}
+        forceReadOnly={forceReadOnly}
       />
-      <MaintenanceTemplateField label="Communication - Other" name="communication" initialValue={template.communication} id={template.id} />
+      <MaintenanceTemplateField
+        label="Communication - Other"
+        name="communication"
+        initialValue={template.communication}
+        id={template.id}
+        forceReadOnly={forceReadOnly}
+      />
       <MaintenanceTemplateField
         label="Communication - Customer Disappointed"
         name=" communication_disappointed"
         initialValue={template.communication_disappointed}
         id={template.id}
+        forceReadOnly={forceReadOnly}
       />
-      <MaintenanceTemplateField label="Solutions" name="solutions" initialValue={template.solutions} id={template.id} />
-      <MaintenanceTemplateField label="Defects" name="defects" initialValue={template.defects} id={template.id} />
-      <MaintenanceTemplateField label="Porting Sets" name="portingset" initialValue={template.portingset} id={template.id} />
-      <MaintenanceTemplateField label="Data Corruption" name="data_corruption" initialValue={template.data_corruption} id={template.id} />
+      <MaintenanceTemplateField label="Solutions" name="solutions" initialValue={template.solutions} id={template.id} forceReadOnly={forceReadOnly} />
+      <MaintenanceTemplateField label="Defects" name="defects" initialValue={template.defects} id={template.id} forceReadOnly={forceReadOnly} />
+      <MaintenanceTemplateField
+        label="Porting Sets"
+        name="portingset"
+        initialValue={template.portingset}
+        id={template.id}
+        forceReadOnly={forceReadOnly}
+      />
+      <MaintenanceTemplateField
+        label="Data Corruption"
+        name="data_corruption"
+        initialValue={template.data_corruption}
+        id={template.id}
+        forceReadOnly={forceReadOnly}
+      />
     </div>
   );
 };

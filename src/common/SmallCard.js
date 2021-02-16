@@ -1,4 +1,5 @@
 import React from "react";
+import { useHistory } from "react-router";
 import Button from "../elements/TWButton";
 import NumberOfViews from "../pages/NumberOfViews";
 import { format } from "../utils/format";
@@ -31,6 +32,7 @@ const SmallCard = ({
     return link;
   },
 }) => {
+  const history = useHistory();
   const images = {
     cloud: "https://nlbavwixs.infor.com/images/background/cloud.jpg",
     development: "https://nlbavwixs.infor.com/images/background/dev2.png",
@@ -53,7 +55,7 @@ const SmallCard = ({
           <img className="object-cover h-16 w-full border-b border-gray-300" src={image} alt="" />
         </div>
         <div className=" pb-2">
-          <div className="px-3 text-xl overflow-hidden truncate font-bold font-nice text-gray-700" title={title}>
+          <div className="px-3 text-base overflow-hidden truncate font-bold font-sans text-gray-700" title={title}>
             {title}
           </div>
 
@@ -78,9 +80,14 @@ const SmallCard = ({
           </div>
           <div className="border-t border-gray-300  w-full mt-2 "></div>
           <div className="px-3 flex justify-between items-center mt-4">
-            <a href={editLink} onClick={(e) => onAudit(editLink)}>
-              {canEdit === true ? <Button>Open</Button> : <Button color="teal">View</Button>}
-            </a>
+            <Button
+              onClick={(e) => {
+                onAudit(editLink);
+                history.push(editLink);
+              }}
+            >
+              {canEdit === true ? "Open" : "View"}
+            </Button>
             {link && (
               <a
                 target="_blank_"

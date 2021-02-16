@@ -17,6 +17,7 @@ const ALL_MAINTENANCE_VERSIONS = gql`
       id
       name
       solutions
+      checksrequired
       defects
       portingset
       data_corruption

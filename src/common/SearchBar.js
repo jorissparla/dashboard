@@ -1,20 +1,7 @@
-import React, { useState, useEffect, useCallback } from "react";
 import _ from "lodash";
-import Paper from "@material-ui/core/Paper";
-import TextField from "@material-ui/core/TextField";
-import FontIcon from "@material-ui/core/Icon";
-import ActionSearch from "@material-ui/icons/Search";
+import { useCallback, useEffect, useState } from "react";
 
-export default function SearchBar({
-  onChange,
-  hintText = "Search..",
-  defaultValue = "",
-  searchOnEnter = false,
-  width = "100%",
-  style = { display: "flex", marginBottom: 10, alignItems: "center" },
-  shade = true,
-  className = "",
-}) {
+export default function SearchBar({ onChange, hintText = "Search..", defaultValue = "", searchOnEnter = false, className = "" }) {
   const [val, setVal] = useState(defaultValue || "");
   const [changed, setChanged] = useState(false);
 
