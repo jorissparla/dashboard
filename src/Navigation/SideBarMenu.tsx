@@ -21,6 +21,9 @@ import SettingsIcon from "@material-ui/icons/Settings";
 import LinkIcon from "@material-ui/icons/SpeakerNotesTwoTone";
 import SurveysIcon from "@material-ui/icons/Whatshot";
 import { signOut } from "auth/msAuth";
+import TWFileUpload from "common/FileUploaderNew";
+import { CloseIcon } from "elements/Icons";
+import TWButton from "elements/TWButton";
 import { UserContext } from "globalState/UserProvider";
 import React, { useState } from "react";
 // import Signout from '../Signout';
@@ -36,6 +39,7 @@ interface Props {
 
 export const SideBarMenu: React.FC<Props> = ({ classes, history, toggleMenu, open }) => {
   const { user, logout } = React.useContext(UserContext);
+  const [showSideMenu, setShowSideMenu] = useState(false);
 
   let isAdmin = false;
   let authenticated = false;
@@ -54,79 +58,102 @@ export const SideBarMenu: React.FC<Props> = ({ classes, history, toggleMenu, ope
 
   const Divider = () => <hr className="border-t-1  bg-grey-200" />;
   return (
-    <List>
-      <ToggledNavLink title="Home" Icon={ActionHome} navigateTo="/" history={history} color="bg-gray-100 text-gray-600" />
-      {/* <ToggledNavLink title="Cloud Information Page" Icon={CloudQueueIcon} navigateTo="/cloudinformation" history={history} /> */}
-      <ToggledNavLink title="MaintenanceWizard" Icon={SettingsIcon} navigateTo="/maintenancewizard" history={history} />
-      <ToggledNavLink title="MaintenanceWizard AutoExchange" Icon={AutoExchange} navigateTo="/maintenancewizardauto" history={history} />
-      <Divider />
-      <ToggledNavLink title="MultiTenant Customers" Icon={ExtensionIcon} navigateTo="/tenant" history={history} color="text-orange-600" />
-      <ToggledNavLink title="Support Cards" Icon={LinkIcon} navigateTo="/supportcard" history={history} color="text-purp" />
-      <Divider />
-      <ToggledNavLink title="Development SLO" Icon={CodeIcon} navigateTo="/whatdoesdev" history={history} color="text-gray-700" />
+    <div>
+      <List>
+        <ToggledNavLink title="Home" Icon={ActionHome} navigateTo="/" history={history} color="bg-gray-100 text-gray-600" />
+        {/* <ToggledNavLink title="Cloud Information Page" Icon={CloudQueueIcon} navigateTo="/cloudinformation" history={history} /> */}
+        <ToggledNavLink title="MaintenanceWizard" Icon={SettingsIcon} navigateTo="/maintenancewizard" history={history} />
+        <ToggledNavLink title="MaintenanceWizard AutoExchange" Icon={AutoExchange} navigateTo="/maintenancewizardauto" history={history} />
+        <Divider />
+        <ToggledNavLink title="MultiTenant Customers" Icon={ExtensionIcon} navigateTo="/tenant" history={history} color="text-orange-600" />
+        <ToggledNavLink title="Support Cards" Icon={LinkIcon} navigateTo="/supportcard" history={history} color="text-purp" />
+        <Divider />
+        <ToggledNavLink title="Development SLO" Icon={CodeIcon} navigateTo="/whatdoesdev" history={history} color="text-gray-700" />
 
-      <Divider />
-      {/* <ExpandableMenuItem classes={classes} title="Symptoms" Icon={SymptomsIcon} isExpanded={true}> */}
-      <ToggledNavLink title="Symptom Definitions" navigateTo="/symptomcategories" history={history} Icon={SymptomsIcon} color="text-teal-600" />
-      <ToggledNavLink title="KBs linked to Symptoms" navigateTo="/symptomkbs" history={history} Icon={SymptomsIcon} color="text-teal-700" />
-      <ToggledNavLink title="Request Symptoms" navigateTo="/symptoms" history={history} Icon={SymptomsIcon} color="text-teal-800" />
-      {/* </ExpandableMenuItem> */}
-      <Divider />
-      {authenticated && <ToggledNavLink title="My KBPage" Icon={HelpOutlineIcon} navigateTo="/kbpage" history={history} />}
+        <Divider />
+        {/* <ExpandableMenuItem classes={classes} title="Symptoms" Icon={SymptomsIcon} isExpanded={true}> */}
+        <ToggledNavLink title="Symptom Definitions" navigateTo="/symptomcategories" history={history} Icon={SymptomsIcon} color="text-teal-600" />
+        <ToggledNavLink title="KBs linked to Symptoms" navigateTo="/symptomkbs" history={history} Icon={SymptomsIcon} color="text-teal-700" />
+        <ToggledNavLink title="Request Symptoms" navigateTo="/symptoms" history={history} Icon={SymptomsIcon} color="text-teal-800" />
+        {/* </ExpandableMenuItem> */}
+        <Divider />
+        {authenticated && <ToggledNavLink title="My KBPage" Icon={HelpOutlineIcon} navigateTo="/kbpage" history={history} />}
 
-      {authenticated && <ToggledNavLink title="Essential WorkList" Icon={MyWorkList} navigateTo="/essentialworklist" history={history} />}
+        {authenticated && <ToggledNavLink title="Essential WorkList" Icon={MyWorkList} navigateTo="/essentialworklist" history={history} />}
 
-      {authenticated && !isAdmin && <ToggledNavLink title="Worklist" Icon={MyWorkList} navigateTo="/mywork" history={history} />}
-      {isAdmin && <ToggledNavLink title="Admin WorkList" Icon={MyWorkList} navigateTo="/mywork" history={history} />}
-      <Divider />
-      <ToggledNavLink title="Proactive Projects!" Icon={BusinessCenterIcon} navigateTo="/projects" history={history} color="text-blue-800" />
-      {isAdmin && <ToggledNavLink title="Permissions" Icon={Person} navigateTo="/userpermissions" history={history} />}
-      {isAdmin && <ToggledNavLink title="Logged in Users" Icon={PeopleOutlineIcon} navigateTo="/loggedinusers" history={history} />}
-      <ToggledNavLink title="LN Charts" Icon={LNChartsIcon} navigateTo="/historyln" history={history} color="text-blue-800" />
-      <ExpandableMenuItem classes={classes} title="Stats Graphs" Icon={GoLiveIcon}>
-        <ToggledNavLink title="Logistics" Icon={ApplicationIcon} navigateTo="/team/logistics" history={history} />
-        <ToggledNavLink title="Finance" Icon={ApplicationIcon} navigateTo="/team/finance" history={history} />
-        <ToggledNavLink title="Tools" Icon={ApplicationIcon} navigateTo="/team/tools" history={history} />
-        <ToggledNavLink title="Backlog" Icon={ApplicationIcon} navigateTo="/historyall" history={history} />
-        <ToggledNavLink title="Backlog LN " Icon={ApplicationIcon} navigateTo="/historyln" history={history} />
-        <ToggledNavLink title="Backlog Xpert" Icon={XpertIcon} navigateTo="/historyother" history={history} />
-      </ExpandableMenuItem>
-      <hr className="border-t-1  bg-grey-200" />
-      <ToggledNavLink title="Go Lives" Icon={GoLiveIcon} navigateTo="/golives" history={history} />
-      <ToggledNavLink title="Surveys" Icon={SurveysIcon} navigateTo="/surveys" history={history} />
-      {/* <ToggledNavLink title="CloudSuites" Icon={ExtensionIcon} navigateTo="/cloudsuites" history={history} /> */}
-      {/* <ToggledNavLink
+        {authenticated && !isAdmin && <ToggledNavLink title="Worklist" Icon={MyWorkList} navigateTo="/mywork" history={history} />}
+        {isAdmin && <ToggledNavLink title="Admin WorkList" Icon={MyWorkList} navigateTo="/mywork" history={history} />}
+        <Divider />
+        <ToggledNavLink title="Proactive Projects!" Icon={BusinessCenterIcon} navigateTo="/projects" history={history} color="text-blue-800" />
+        {isAdmin && <ToggledNavLink title="Permissions" Icon={Person} navigateTo="/userpermissions" history={history} />}
+        {isAdmin && <ToggledNavLink title="Logged in Users" Icon={PeopleOutlineIcon} navigateTo="/loggedinusers" history={history} />}
+        <ToggledNavLink title="LN Charts" Icon={LNChartsIcon} navigateTo="/historyln" history={history} color="text-blue-800" />
+        <ExpandableMenuItem classes={classes} title="Stats Graphs" Icon={GoLiveIcon}>
+          <ToggledNavLink title="Logistics" Icon={ApplicationIcon} navigateTo="/team/logistics" history={history} />
+          <ToggledNavLink title="Finance" Icon={ApplicationIcon} navigateTo="/team/finance" history={history} />
+          <ToggledNavLink title="Tools" Icon={ApplicationIcon} navigateTo="/team/tools" history={history} />
+          <ToggledNavLink title="Backlog" Icon={ApplicationIcon} navigateTo="/historyall" history={history} />
+          <ToggledNavLink title="Backlog LN " Icon={ApplicationIcon} navigateTo="/historyln" history={history} />
+          <ToggledNavLink title="Backlog Xpert" Icon={XpertIcon} navigateTo="/historyother" history={history} />
+        </ExpandableMenuItem>
+        <hr className="border-t-1  bg-grey-200" />
+        <ToggledNavLink title="Go Lives" Icon={GoLiveIcon} navigateTo="/golives" history={history} />
+        <ToggledNavLink title="Surveys" Icon={SurveysIcon} navigateTo="/surveys" history={history} />
+        {/* <ToggledNavLink title="CloudSuites" Icon={ExtensionIcon} navigateTo="/cloudsuites" history={history} /> */}
+        {/* <ToggledNavLink
         title="Customer Feedback"
         Icon={FeedbackIcon}
         navigateTo="/feedback"
         history={history}
       /> */}
-      <hr className="border-t-1  bg-grey-200" />
+        <hr className="border-t-1  bg-grey-200" />
 
-      {authenticated && (
-        <React.Fragment>
-          <ToggledNavLink title="Requests SupportCards" Icon={RequestListIcon} navigateTo="/requestlist" history={history} />
+        {authenticated && (
+          <React.Fragment>
+            <ToggledNavLink title="Requests SupportCards" Icon={RequestListIcon} navigateTo="/requestlist" history={history} />
 
-          {/* <Divider />
+            {/* <Divider />
           {(isAdmin || isChat) && <ToggledNavLink title="Chat" Icon={ChatIcon} navigateTo="/chat" history={history} />}
           <Divider /> */}
-          {authenticated && isAdmin && <ToggledNavLink title="News" Icon={NewsIcon} navigateTo="/news" history={history} />}
-          <ToggledNavLink title="NewsPage" Icon={NewsIcon} navigateTo="/newspage" history={history} />
-          <Divider />
-          <MenuItem
-            onClick={() => {
-              // TODO: replace this
-              // openSnackbar('Signing out');
-              handleLogout();
-              history.push("/");
-            }}
-          >
-            Signout
-          </MenuItem>
-          <ToggledNavLink title="Videos" navigateTo="/videos" history={history} />
-        </React.Fragment>
+            {authenticated && isAdmin && <ToggledNavLink title="News" Icon={NewsIcon} navigateTo="/news" history={history} />}
+            <ToggledNavLink title="NewsPage" Icon={NewsIcon} navigateTo="/newspage" history={history} />
+            <Divider />
+            <MenuItem
+              onClick={() => {
+                // TODO: replace this
+                // openSnackbar('Signing out');
+                handleLogout();
+                history.push("/");
+              }}
+            >
+              Signout
+            </MenuItem>
+            {/* <ToggledNavLink title="Videos" navigateTo="/videos" history={history} /> */}
+            <TWButton color="transp" onClick={() => setShowSideMenu(!showSideMenu)}>
+              Upload Files
+            </TWButton>
+          </React.Fragment>
+        )}
+      </List>
+      {showSideMenu && (
+        <>
+          <div className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-y-0 right-0  z-50 outline-none focus:outline-none ">
+            <div className="relative  my-6  w-96 bg-white shadow-xl p-2 rounded h-screen">
+              <div className="flex justify-between items-center ml-2 mt-4">
+                <TWButton onClick={() => setShowSideMenu(!showSideMenu)} color="transp">
+                  <CloseIcon />
+                  Close
+                </TWButton>
+              </div>
+              <div className="min-w-128">
+                <TWFileUpload showLink={true} />
+              </div>
+            </div>
+          </div>
+          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+        </>
       )}
-    </List>
+    </div>
   );
 };
 

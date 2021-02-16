@@ -1,13 +1,13 @@
-import { useMutation } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import Chip from "@material-ui/core/Chip";
 import TWButton from "elements/TWButton";
 import { TWSelectMenu } from "elements/TWSelectMenu";
 import FavoriteWrapper from "Favorite";
-import { MUTATION_UPDATE_CARD_KEYWORDS } from "pages/SupportCards";
-import React from "react";
-import { useHistory } from "react-router";
+import { MUTATION_UPDATE_CARD_KEYWORDS, QUERY_SINGLE_SUPPORTCARD } from "pages/SupportCards";
+import React, { useEffect, useState } from "react";
+import { useHistory, useParams } from "react-router";
 import SafeDeleteButton from "videos/SafeDeleteButton";
 import { CardSection } from "../common";
 //import { format } from 'date-fns';
@@ -17,6 +17,7 @@ import SupportCardTags from "./SupportCardTags";
 const owners = [
   { id: "Ricardo Exposito", name: "Ricardo Exposito" },
   { id: "Massimo Favaro", name: "Massimo Favaro" },
+  { id: "Doreen Auerbach", name: "Doreen Auerbach" },
   { id: "Maribel Aguilella", name: "Maribel Aguilella" },
   { id: "Joris Sparla", name: "Joris Sparla" },
   { id: "Luis Casanova", name: "Luis Casanova" },
@@ -28,7 +29,7 @@ const simpOwners = owners.map((owner) => owner.name);
 
 const SupportCardForm = (props) => {
   const {
-    supportcard,
+    // supportcard,
     categories = [
       { id: 1, category: "Cloud" },
       { id: 2, category: "IXS" },
@@ -38,7 +39,21 @@ const SupportCardForm = (props) => {
     authenticated,
     onDelete: handleDelete,
   } = props;
+  const { id } = useParams();
+  const [supportcard, setSupportCard] = useState(null);
+  const { data, loading } = useQuery(QUERY_SINGLE_SUPPORTCARD, { variables: { id } });
   const [updateKeywords] = useMutation(MUTATION_UPDATE_CARD_KEYWORDS);
+  const [values, setValues] = React.useState(initialValues);
+  const history = useHistory();
+  useEffect(() => {
+    if (data) {
+      setSupportCard(data.supportcard);
+    }
+  }, [data]);
+
+  if (loading) return <div />;
+  if (!supportcard) return <div />;
+  console.log("Data", data);
   const handleUpdateKeywords = async (id, keywords) => {
     const input = { id, keywords };
     await updateKeywords({
@@ -50,8 +65,7 @@ const SupportCardForm = (props) => {
   // const [category, setCategory] = useState(initialValues.category);
   const readOnly = !authenticated;
   const updatedAt = supportcard?.updatedAt; //: format(new Date(), "yyyy-MM-dd");
-  const [values, setValues] = React.useState(initialValues);
-  const history = useHistory();
+
   const simpCategories = categories.map((cat) => cat.name);
 
   const handleChange = (event) => {
@@ -122,7 +136,6 @@ const SupportCardForm = (props) => {
                 data={values.description}
                 onReady={(editor) => {
                   // You can store the "editor" and use when it is needed.
-                  console.log("Editor is ready to use!", editor);
                 }}
                 onChange={(event, editor) => {
                   const data = editor.getData();
@@ -174,6 +187,10 @@ const SupportCardForm = (props) => {
             </TWButton>
             <Chip style={{ margin: 4 }} label={updatedAt ? `Last updated at ${format(updatedAt, "EEE, dd MMM yyyy")}` : `Not saved yet`} />
           </CardSection>
+          <div className="w-full text-xs py-2 border-t border-gray-200 mt-2 tracking-tight text-gray-600">
+            created by: {supportcard.createdby} on: {supportcard?.created}, updated by: {supportcard.updatedBy} at:{" "}
+            {format(supportcard?.updatedAt, "yyyy MMM dd, HH:m")}
+          </div>
         </form>
       </div>
     </div>

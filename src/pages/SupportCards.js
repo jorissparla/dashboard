@@ -40,7 +40,9 @@ const suppCardFragment = gql`
     description
     link
     created
+    createdby
     updatedAt
+    updatedBy
     isfavorite
     accessed
     product
@@ -66,6 +68,15 @@ export const QUERY_ALL_SUPPORTCARDS = gql`
   ${suppCardFragment}
   query QUERY_ALL_SUPPORTCARDS {
     supportcards {
+      ...SupportCardDetails
+    }
+  }
+`;
+
+export const QUERY_SINGLE_SUPPORTCARD = gql`
+  ${suppCardFragment}
+  query QUERY_SINGLE_SUPPORTCARD($id: String) {
+    supportcard(id: $id) {
       ...SupportCardDetails
     }
   }

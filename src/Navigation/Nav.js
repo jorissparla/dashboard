@@ -119,7 +119,6 @@ const Header = (props) => {
   if (loading) return <div></div>;
   const getActiveMessage = data?.getActiveMessage;
   const message = getActiveMessage ? getActiveMessage.message : "";
-  console.log(data);
 
   function toggleMenu() {
     setOpen(!open);

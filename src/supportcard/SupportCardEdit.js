@@ -1,7 +1,8 @@
 import { graphql } from "@apollo/client/react/hoc";
 import { useAlert } from "globalState/AlertContext";
+import { useUserContext } from "globalState/UserProvider";
 import gql from "graphql-tag";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useHistory, withRouter } from "react-router";
 import withAuth from "../utils/withAuth";
 import SupportCardForm from "./SupportCardForm";
@@ -9,7 +10,14 @@ import SupportCardForm from "./SupportCardForm";
 const SupportCardEdit = (props) => {
   const history = useHistory();
   const alert = useAlert();
+  const [currentUser, setCurrentUser] = useState(null);
+  const ctx = useUserContext();
 
+  useEffect(() => {
+    if (ctx && ctx.user) {
+      setCurrentUser(ctx.user);
+    }
+  }, [ctx]);
   function handleDelete(e) {
     const { id } = e;
     props
@@ -30,6 +38,7 @@ const SupportCardEdit = (props) => {
         categoryname,
         link,
         owner,
+        updatedBy: currentUser.email,
       })
       // .then(props.data.refetch())
       .then(() => history.push("/supportcard"))

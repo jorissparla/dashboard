@@ -329,7 +329,7 @@ const WhatDoesDev = ({ name, severities, cloudOnly, severityList, groups }) => {
   );
 };
 
-export const Widget = ({ data = [], title, mark = false, replaceField }) => {
+export const Widget = ({ data = [], title, mark = false, replaceField, nodatamessage = "No defects" }) => {
   const len = data.length;
   const MAX_LEN = 10;
   const [currPage, setCurrPage] = useState(len > 0 ? 1 : 0);
@@ -370,7 +370,7 @@ export const Widget = ({ data = [], title, mark = false, replaceField }) => {
         </div>
       </h1>
       {data.length === 0 ? (
-        <h2>No defects </h2>
+        <h2>{nodatamessage} </h2>
       ) : (
         <DefectTable data={data.slice((currPage - 1) * MAX_LEN, currPage * MAX_LEN)} mark={mark} replaceField={replaceField} mark={mark} />
       )}
@@ -378,7 +378,7 @@ export const Widget = ({ data = [], title, mark = false, replaceField }) => {
   );
 };
 
-const DefectTable = ({ data, replaceField = null, mark = false }) => {
+function DefectTable({ data, replaceField = null, mark = false }) {
   function replaceList(fields, replaceField) {
     let replacing = [];
     fields.forEach((item) => {
@@ -421,11 +421,6 @@ const DefectTable = ({ data, replaceField = null, mark = false }) => {
           ) : (
             data?.map((defect) => (
               <tr key={defect.defect_id}>
-                {/* {isStatusToMark(defect.status) ? (
-                  <HyperLinkCellRed value={defect.incident} linkText={defect.defect_id} />
-                ) : (
-                  <HyperLinkCell value={defect.defect_id} linkText={defect.defect_id} />
-                )} */}
                 {fields.map((field, index) => {
                   if (field.hl) {
                     if (defect.targetMet) {
@@ -456,7 +451,7 @@ const DefectTable = ({ data, replaceField = null, mark = false }) => {
       </table>
     </div>
   );
-};
+}
 
 const DefectQueuesFilterList = ({ defectQueues = [], onChange = () => console.log("change"), values = [] }) => {
   const [selectedGroupNames, setSelectedGroupNames] = useState(values);
