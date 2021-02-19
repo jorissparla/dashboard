@@ -10,19 +10,6 @@ const CloudField = ({ name, edit = false, Icon, initialValue }) => {
   const [isOpen, setisOpened] = React.useState(false);
   const [value, setValue] = React.useState(initialValue[name]);
 
-  const config = {
-    readonly: false, // all options from https://xdsoft.net/jodit/doc/,
-    toolbar: true,
-    // theme: 'dark',
-    showWordsCounter: false,
-    showXPathInStatusbar: false,
-    showCharsCounter: false,
-  };
-  const config2 = { ...config, toolbar: false, readonly: true };
-  // function handleChange(e) {
-  //   setValue(e.target.value);
-  // }
-
   const viewer = useRef(null);
   return (
     <div style={{ border: "1px solid rgba(0,0,0,0.1)", borderRadius: 8 }}>
@@ -43,7 +30,6 @@ const CloudField = ({ name, edit = false, Icon, initialValue }) => {
         data={value}
         onReady={(editor) => {
           // You can store the "editor" and use when it is needed.
-          console.log("Editor is ready to use!", editor);
         }}
         onChange={(event, editor) => {
           const data = editor.getData();

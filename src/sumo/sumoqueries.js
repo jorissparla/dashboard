@@ -22,6 +22,21 @@ export const ADDSUMO_MUTATION = gql`
     }
   }
 `;
+export const ADDSUMOALERT_MUTATION = gql`
+  mutation ADDSUMOALERT_MUTATION($input: SumoAlertInput) {
+    addSumoAlert(input: $input) {
+      id
+      creator
+      created
+      alert
+      comments
+      environments
+      archive
+      customerid
+      customername
+    }
+  }
+`;
 export const UPDATE_SUMO_MUTATION = gql`
   mutation UPDATE_SUMO_MUTATION($where: SumologWhere, $input: SumologInput) {
     updateSumolog(where: $where, input: $input) {
@@ -86,6 +101,21 @@ export const ALL_SUMOLOGS_QUERY = gql`
       sessioncode
       errormessage
       module
+    }
+  }
+`;
+export const ALL_SUMOALERTS_QUERY = gql`
+  query ALL_SUMOALERTS_QUERY {
+    sumoalerts {
+      id
+      creator
+      created
+      alert
+      comments
+      environments
+      archive
+      customerid
+      customername
     }
   }
 `;

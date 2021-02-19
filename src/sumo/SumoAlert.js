@@ -10,7 +10,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { format } from "utils/format";
 import SafeDeleteButton from "videos/SafeDeleteButton";
-import { ADDSUMO_MUTATION, ALL_SUMOLOGS_QUERY, DELETE_SUMO_MUTATION, UPDATE_SUMO_MUTATION } from "./sumoqueries";
+import { ADDSUMOALERT_MUTATION, ALL_SUMOLOGS_QUERY, DELETE_SUMO_MUTATION, UPDATE_SUMO_MUTATION } from "./sumoqueries";
 
 const QUERY_SUPPORT_ACCOUNTS = gql`
   query QUERY_SUPPORT_ACCOUNTS {
@@ -21,7 +21,7 @@ const QUERY_SUPPORT_ACCOUNTS = gql`
   }
 `;
 
-function SumoForm({ initialValues = null }) {
+function SumoAlertForm({ initialValues = null }) {
   const defaults = initialValues || {
     id: null,
     creator: "",
@@ -39,10 +39,12 @@ function SumoForm({ initialValues = null }) {
     module: "",
   };
   const [values, setValues] = useState(defaults);
+  const [debugMode, setDebugMode] = usePersistentState("debug", true);
+  const { login } = useUserContext();
   const [enabled, setEnabled] = useState(false);
   const [support, setSupport] = useState([]);
 
-  const [addSumoInput] = useMutation(ADDSUMO_MUTATION);
+  const [addSumoInput] = useMutation(ADDSUMOALERT_MUTATION);
   const [updateSumoInput] = useMutation(UPDATE_SUMO_MUTATION);
   const [deleteSumoInput] = useMutation(DELETE_SUMO_MUTATION);
   const { data, loading } = useQuery(QUERY_SUPPORT_ACCOUNTS);
@@ -54,8 +56,8 @@ function SumoForm({ initialValues = null }) {
     // if (debugMode && !user) {
     //   login("joris.sparla@infor.com", "Infor2019");
     // }
-    let newDate = initialValues?.created ? initialValues.created : format(new Date(), "yyyy-MM-dd");
-    console.log("date", initialValues?.created, newDate);
+    let newDate = initialValues.created ? initialValues.created : format(new Date(), "yyyy-MM-dd");
+    // console.log("date", initialValues.created);
     if (values.id) {
       // const newDate = format(values.created, "yyyy-MM-dd");
       setValues({ ...values, created: newDate });
@@ -183,7 +185,7 @@ function SumoForm({ initialValues = null }) {
             </label>
             <input
               id="created"
-              value={values.created || format(new Date(), "yyyy-MM-dd")}
+              value="2020-02-11"
               name="created"
               onChange={handleChange}
               type="date"
@@ -248,4 +250,4 @@ function SumoForm({ initialValues = null }) {
   );
 }
 
-export default SumoForm;
+export default SumoAlertForm;

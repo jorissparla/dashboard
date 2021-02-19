@@ -48,6 +48,8 @@ const SupportCardForm = (props) => {
   useEffect(() => {
     if (data) {
       setSupportCard(data.supportcard);
+    } else {
+      setSupportCard(initialValues);
     }
   }, [data]);
 
@@ -188,7 +190,7 @@ const SupportCardForm = (props) => {
             <Chip style={{ margin: 4 }} label={updatedAt ? `Last updated at ${format(updatedAt, "EEE, dd MMM yyyy")}` : `Not saved yet`} />
           </CardSection>
           <div className="w-full text-xs py-2 border-t border-gray-200 mt-2 tracking-tight text-gray-600">
-            created by: {supportcard.createdby} on: {supportcard?.created}, updated by: {supportcard.updatedBy} at:{" "}
+            created by: {supportcard?.createdby} on: {supportcard?.created}, updated by: {supportcard?.updatedBy} at:{" "}
             {format(supportcard?.updatedAt, "yyyy MMM dd, HH:m")}
           </div>
         </form>

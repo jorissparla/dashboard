@@ -55,6 +55,7 @@ import WorklistSimple from "./pages/WorklistSimple";
 import { Parameters } from "./stats/Parameters";
 import PriorityDashboard from "./stats/PriorityDashboard";
 import AddSumo from "./sumo/AddSumo";
+
 // import Details from "./tenants/details/index";
 import TestLogin from "./TestLogin";
 // import Test
@@ -64,6 +65,9 @@ import NewMaintenanceWizard from "./pages/maintenance";
 import { usePersistentState } from "hooks";
 import MaintenanceTemplates from "pages/MaintenanceTemplates";
 import EditMaintenanceTemplate from "pages/EditMaintenanceTemplate";
+import AddBlog from "blog/addblog";
+import EditBlog from "blog/EditBlog";
+import BlogList from "blog/BlogList";
 // const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
 const LoggedInUsers = React.lazy(() => import("./pages/loggedinusers"));
 const Award = DynamicImport(() => import("./awards/award"));
@@ -125,6 +129,9 @@ function AppRoutes() {
     <Switch>
       <AuthRoute exact path="/essentialworklist" component={WorklistSimple} />
       <Route exact path="/whatdoesdev" component={WhatDoesDev} />
+      <Route exact path="/addblog" component={AddBlog} />
+      <Route exact path="/blog/:id" component={EditBlog} />
+      <Route exact path="/blogs" component={BlogList} />
       <Route exact path="/essentialworklisttest" component={WorklistSimple} />
       <Route exact path="/testy" component={testActivity} />
       <Route exact path="/trgroups" component={TrainingGroups} />

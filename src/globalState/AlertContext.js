@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import Notification from "./Notification";
 
-const AlertContext = createContext(null);
+const AlertContext = createContext({ setMessage: console.log });
 
 export const AlertContextProvider = ({ children }) => {
   const [message, setMessage] = useState("");

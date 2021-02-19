@@ -1,4 +1,5 @@
 import React from "react";
+import { TWHyperLink } from "./TWButton";
 
 type fieldProps = {
   title: string;
@@ -21,11 +22,11 @@ const HeaderCell = ({ children }: any) => (
   </th>
 );
 
-export const HyperLinkCell = ({ value = "", linkPrefix = "", linkText = "" }) => (
+export const HyperLinkCell = ({ value = "", linkPrefix = "", linkText = "", linkFieldValue = "" }) => (
   <td className="p-2 font-sans text-sm font-semibold text-blue-700">
-    <a className="inline-block align-baseline font-bold text-sm " href={`${linkPrefix}${value}`} target="_blank">
+    <TWHyperLink color="teal" className="pt-1" href={`${linkPrefix}${linkFieldValue || value}`} target="_blank">
       {linkText || value}
-    </a>
+    </TWHyperLink>
   </td>
 );
 
@@ -52,8 +53,16 @@ export const CustomTable: React.FC<CustomTableProps> = ({ data, fields = [], ind
             data?.map((item: any) => (
               <tr key={item[indexField.fld]}>
                 {fields.map((field, index) => {
+                  const linkFieldValue = indexField?.fld ? item[indexField.fld] : field.fn ? field.fn(item[field.fld]) : item[field.fld];
                   if (field.hl) {
-                    return <HyperLinkCell key={index} linkPrefix={linkPrefix} value={field.fn ? field.fn(item[field.fld]) : item[field.fld]} />;
+                    return (
+                      <HyperLinkCell
+                        key={index}
+                        linkPrefix={linkPrefix}
+                        linkFieldValue={linkFieldValue}
+                        value={field.fn ? field.fn(item[field.fld]) : item[field.fld]}
+                      />
+                    );
                   } else {
                     return (
                       <DataCell className={field.className || ""} key={`${index}}`}>

@@ -12,27 +12,13 @@ import Spinner from "utils/spinner";
 import _ from "lodash";
 import { SumoNav } from "./SumoNav";
 import { CustomTable } from "elements/CustomTable";
-
-const ALL_SUMOALERTS_QUERY = gql`
-  query ALL_SUMOALERTS_QUERY {
-    sumoalerts {
-      id
-      creator
-      created
-      alert
-      comments
-      environments
-      archive
-      customerid
-      customername
-    }
-  }
-`;
+import { ALL_SUMOALERTS_QUERY } from "sumo/sumoqueries";
 
 const SumoAlert = () => {
   const [isShowingAdd, showAdd] = useState(false);
   const [searchText, setSearchText] = useState("");
   const history = useHistory();
+
   const { data, loading } = useQuery(ALL_SUMOALERTS_QUERY);
   const [canEdit, user] = useHasPermissions(["SUMOEDIT"]);
   const [sumoDisplayData, setSumoDisplayData] = useState([]);
@@ -41,22 +27,23 @@ const SumoAlert = () => {
     showAdd(false);
   }
 
-  function search(item) {
-    const query = this;
-    return Object.keys(query).some((key) => _.includes(item[key] || "".toLowerCase(), query[key].toLowerCase()));
-  }
+  function filterOn(object, fields = [], value) {
+    // fields.map((f) => console.log(value, f, object[f]));
+    const res = fields.some((field) => {
+      console.log(field, object[field]?.toUpperCase(), value?.toUpperCase());
+      return object[field]?.toUpperCase().includes(value?.toUpperCase());
+    });
 
-  function doFilter(items, searchText, fields = []) {
-    if (searchText === "") return items;
-    let query = fields.reduce((q, field) => ({ ...q, [field]: searchText }), {});
-    const result = items.filter(search, query);
-    return result;
+    return res;
+    //|| nestedFields.some(_.includes(object)));
   }
 
   useEffect(() => {
     if (data) {
       if (searchText) {
-        setSumoDisplayData(doFilter(data.sumoalerts, searchText, ["sessioncode", "creator", "query", "errormessage"]));
+        setSumoDisplayData(
+          data.sumoalerts.slice().filter((item) => filterOn(item, ["", "creator", "comments", "alert", "environments", "customername"], searchText))
+        );
       } else {
         setSumoDisplayData(data.sumoalerts);
       }
@@ -67,8 +54,8 @@ const SumoAlert = () => {
 
   if (loading) return <Spinner />;
   return (
-    <section className="px-4 sm:px-6 lg:px-4 xl:px-6 pt-4 pb-4 sm:pb-6 lg:pb-4 xl:pb-6 space-y-4">
-      <header className="flex items-center justify-between">
+    <section className="px-4 sm:px-6 lg:px-4 xl:px-6 pt-4 pb-4 sm:pb-6 lg:pb-4 xl:pb-6 space-y-4 bg-gray-100 h-screen">
+      <header className="flex items-center justify-between bg-white">
         <SumoNav current="Alerts" />
         {/* <h2 className="text-lg leading-6 font-medium text-black">Sumo Logs</h2> */}
         {canEdit ||
@@ -82,20 +69,22 @@ const SumoAlert = () => {
       <div className="relative">
         <SearchBar onChange={setSearchText} defaultValue={searchText} hintText="Search alert, comment, environments" />
       </div>
-      <CustomTable
-        data={sumoDisplayData}
-        linkPrefix="/editsumoalerts/"
-        fields={[
-          { title: "id", fld: "id", hl: true },
-          { title: "creator", fld: "creator" },
-          { title: "created", fld: "created", fn: formatDate },
-          { title: "comments", fld: "comments" },
-          { title: "alert", fld: "alert", className: "font-mono text-xs bg-teal-300" },
-          { title: "environments", fld: "environments" },
-          { title: "customer", fld: "customer" },
-        ]}
-        indexField={{ title: "id", fld: "id" }}
-      />
+      <div className="bg-white rounded shadow-xl p-2 my-2">
+        <CustomTable
+          data={sumoDisplayData}
+          linkPrefix="/editsumoalerts/"
+          fields={[
+            // { title: "id", fld: "id",  },
+            { title: "creator", fld: "creator", hl: true },
+            { title: "created", fld: "created", fn: formatDate },
+            { title: "comments", fld: "comments" },
+            { title: "alert", fld: "alert", className: "font-mono text-xs bg-teal-300" },
+            { title: "environments", fld: "environments" },
+            { title: "customer", fld: "customer" },
+          ]}
+          indexField={{ title: "id", fld: "id" }}
+        />
+      </div>
       <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4 list-none">
         {sumoDisplayData.map((item) => (
           <SumoAlertListItem item={item} />
