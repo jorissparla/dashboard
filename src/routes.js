@@ -68,6 +68,8 @@ import EditMaintenanceTemplate from "pages/EditMaintenanceTemplate";
 import AddBlog from "blog/addblog";
 import EditBlog from "blog/EditBlog";
 import BlogList from "blog/BlogList";
+import EditSumoAlert from "sumo/EditSumoAlert";
+import AddSumoAlert from "sumo/AddSumoAlert";
 // const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
 const LoggedInUsers = React.lazy(() => import("./pages/loggedinusers"));
 const Award = DynamicImport(() => import("./awards/award"));
@@ -150,6 +152,9 @@ function AppRoutes() {
       <Route exact path="/sumoincidents" component={SumoIncidents} />
 
       <Route exact path="/addsumo" component={AddSumo} />
+      <Route exact path="/addsumoalert" component={AddSumoAlert} />
+
+      <Route exact path="/editsumoalerts/:id" component={EditSumoAlert} />
       <Route exact path="/editsumo/:id" component={EditSumo} />
 
       <Route exact path="/cloudreadiness" component={CloudReadiness} />

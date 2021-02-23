@@ -10,7 +10,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { format } from "utils/format";
 import SafeDeleteButton from "videos/SafeDeleteButton";
-import { ADDSUMOALERT_MUTATION, ALL_SUMOLOGS_QUERY, DELETE_SUMO_MUTATION, UPDATE_SUMO_MUTATION } from "./sumoqueries";
+import { ADDSUMOALERT_MUTATION, ALL_SUMOALERTS_QUERY, DELETE_SUMOALERT_MUTATION, UPDATE_SUMOALERT_MUTATION } from "./sumoqueries";
 
 const QUERY_SUPPORT_ACCOUNTS = gql`
   query QUERY_SUPPORT_ACCOUNTS {
@@ -21,32 +21,45 @@ const QUERY_SUPPORT_ACCOUNTS = gql`
   }
 `;
 
-function SumoAlertForm({ initialValues = null }) {
-  const defaults = initialValues || {
-    id: null,
-    creator: "",
-    summary: "",
-    archive: 0,
-    customername: "",
-    created: null,
-    week: getWeek(),
-    incident: "",
-    query: "",
-    comments: "",
-    errormessage: "",
-    farms: "Frankfurt",
-    sessioncode: "",
-    module: "",
-  };
+type SumoAlertType = {
+  id?: string;
+  creator?: string;
+  created?: string;
+  archive?: number;
+  alert?: string;
+  comments?: string;
+  environments?: string;
+  customerid?: number;
+  customername?: string;
+  __typename?: string;
+};
+
+type AccountType = {
+  id?: string;
+  fullname?: string;
+};
+function SumoAlertForm({ initialValues }: { initialValues?: SumoAlertType }) {
+  const defaults = initialValues
+    ? initialValues
+    : {
+        id: "",
+        creator: "",
+        comments: "",
+        archive: 0,
+        customername: "",
+        created: "",
+        alert: "",
+        environments: "",
+      };
   const [values, setValues] = useState(defaults);
   const [debugMode, setDebugMode] = usePersistentState("debug", true);
   const { login } = useUserContext();
   const [enabled, setEnabled] = useState(false);
   const [support, setSupport] = useState([]);
 
-  const [addSumoInput] = useMutation(ADDSUMOALERT_MUTATION);
-  const [updateSumoInput] = useMutation(UPDATE_SUMO_MUTATION);
-  const [deleteSumoInput] = useMutation(DELETE_SUMO_MUTATION);
+  const [addSumoAlertInput] = useMutation(ADDSUMOALERT_MUTATION);
+  const [updateSumoAlertInput] = useMutation(UPDATE_SUMOALERT_MUTATION);
+  const [deleteSumoAlertInput] = useMutation(DELETE_SUMOALERT_MUTATION);
   const { data, loading } = useQuery(QUERY_SUPPORT_ACCOUNTS);
   const [hasPermissions, user] = useHasPermissions(["ADMIN", "SUMOEDIT"]);
   const alert = useAlert();
@@ -56,14 +69,14 @@ function SumoAlertForm({ initialValues = null }) {
     // if (debugMode && !user) {
     //   login("joris.sparla@infor.com", "Infor2019");
     // }
-    let newDate = initialValues.created ? initialValues.created : format(new Date(), "yyyy-MM-dd");
+    let newDate = defaults.created ? defaults.created : format(new Date(), "yyyy-MM-dd");
     // console.log("date", initialValues.created);
     if (values.id) {
       // const newDate = format(values.created, "yyyy-MM-dd");
       setValues({ ...values, created: newDate });
     }
     if (data) {
-      const accounts = data.accounts.map((a) => a.fullname);
+      const accounts = data.accounts.map((a: AccountType) => a.fullname);
       setSupport(accounts);
     }
     let isValisEditor = hasPermissions;
@@ -72,25 +85,22 @@ function SumoAlertForm({ initialValues = null }) {
     }
     // console.log({ user }, isValisEditor);
     setEnabled(isValisEditor);
-  }, [data, user]);
+  }, [data, user, initialValues]);
 
-  function handleChange(e) {
+  function handleChange(e: { target: { name: any; value: any } }) {
     if (enabled) setValues({ ...values, [e.target.name]: e.target.value });
   }
 
-  function setCreator(v) {
+  function setCreator(v: string) {
     console.log(v);
     setValues({ ...values, creator: v });
-  }
-  function handleFarmsInputChange(farms = "") {
-    if (enabled) setValues({ ...values, farms });
   }
 
   async function handleDelete() {
     console.log("handleDelete");
     if (values.id) {
       const where = { id: values.id };
-      const result = await deleteSumoInput({ variables: { where }, refetchQueries: [{ query: ALL_SUMOLOGS_QUERY }] });
+      const result = await deleteSumoAlertInput({ variables: { where }, refetchQueries: [{ query: ALL_SUMOALERTS_QUERY }] });
       alert.setMessage(`Successfully deleted entry`);
       history.push("/sumo");
     }
@@ -105,7 +115,7 @@ function SumoAlertForm({ initialValues = null }) {
       delete input.__typename;
       delete input.id;
       console.log(values);
-      const result = await updateSumoInput({ variables: { where, input } });
+      const result = await updateSumoAlertInput({ variables: { where, input } });
       if (result?.data?.updateSumolog) {
         alert.setMessage(`Successfully ${value === 1 ? "archived" : "unarchived"} and updated`);
       }
@@ -113,42 +123,34 @@ function SumoAlertForm({ initialValues = null }) {
   }
 
   async function addSumoEntry() {
-    const newDate = values.created ? new Date(values.created).toISOString() : new Date().toISOString();
+    console.log(values.created);
+    const newDate = values.created ? new Date(parseInt(values.created)).toISOString() : new Date().toISOString();
     const input = { ...values, created: newDate };
     delete input.__typename;
     delete input.id;
     if (values.id) {
       const where = { id: values.id };
       console.log({ values });
-      const result = await updateSumoInput({ variables: { where, input } });
+      const result = await updateSumoAlertInput({ variables: { where, input }, refetchQueries: [{ query: ALL_SUMOALERTS_QUERY }] });
       console.log(result);
       if (result?.data?.updateSumolog) {
         alert.setMessage("Successfully updated");
       }
     } else {
-      const result = await addSumoInput({ variables: { input }, refetchQueries: [{ query: ALL_SUMOLOGS_QUERY }] });
+      const result = await addSumoAlertInput({ variables: { input }, refetchQueries: [{ query: ALL_SUMOALERTS_QUERY }] });
       console.log(result);
       alert.setMessage("Successfully added");
       history.push("/sumo");
     }
   }
-  function getWeek() {
-    const year = new Date().getFullYear();
-    var onejan = new Date(year, 0, 1);
-    return year.toString() + "-W" + String(Math.ceil(((new Date() - onejan) / 86400000 + onejan.getDay() + 1) / 7)).padStart(2, "0");
-  }
 
-  function getCurrentDate() {
-    const currDate = new Date();
-    return format(currDate, "yyyy-MM-dd");
-  }
   return (
     <div className="bg-gray-100 h-screen">
       <div className="bg-white m-2 rounded shadow-lg p-2">
         <section className="px-4 sm:px-6 lg:px-4 xl:px-6 pt-4 pb-4 sm:pb-6 lg:pb-4 xl:pb-6 space-y-4">
           <header className="flex items-center justify-between">
             <h2 className="text-lg leading-6 font-medium text-black">{values.id ? "Edit" : "Add"} Entry for Sumo</h2>
-            <TWButton onClick={() => history.push("/sumo")}>Back to List</TWButton>
+            <TWButton onClick={() => history.push("/sumoalerts")}>Back to List</TWButton>
             {enabled && (
               <div className="flex">
                 {values.archive === 0 ? (
@@ -183,65 +185,27 @@ function SumoAlertForm({ initialValues = null }) {
             <label htmlFor="week" className="block text-sm font-medium text-gray-700">
               Date
             </label>
-            <input
-              id="created"
-              value="2020-02-11"
-              name="created"
-              onChange={handleChange}
-              type="date"
-              className="form-input max-w-44"
-              onChange={handleChange}
-            />
+            <input id="created" value="2020-02-11" name="created" onChange={handleChange} type="date" className="form-input max-w-44" />
           </div>
-          <TextInput label="Incident" name="incident" value={values.incident} onChange={handleChange} className="max-w-32" />
           <TextInput label="Customer" name="customername" value={values.customername} onChange={handleChange} className="min-w-80" />
-          <TextInput label="Sessioncode" name="sessioncode" value={values.sessioncode} onChange={handleChange} className="max-w-32" />
-          <TextInput label="Module" name="module" value={values.module} onChange={handleChange} className="max-w-16" />
-          <InputTagsDropDown values={values.farms} name="farms" readOnly={!enabled} label="Farms" onChange={handleFarmsInputChange} />
+          <TextInput label="Environments" name="environments" value={values.environments} onChange={handleChange} className="min-w-80" />
+          {/* <TextInput label="Module" name="module" value={values.module} onChange={handleChange} className="max-w-16" /> */}
+          {/* <InputTagsDropDown values={values.farms} name="farms" readOnly={!enabled} label="Farms" onChange={handleFarmsInputChange} /> */}
         </div>
-        <div>
-          <TextInput label="Summary" name="summary" value={values.summary} onChange={handleChange} />
-        </div>
+
         <div className="mt-2">
           <label htmlFor="comments" className="block text-sm font-medium text-gray-700">
             Comments
           </label>
-          <textarea
-            type="text"
-            name="comments"
-            value={values.comments}
-            onChange={handleChange}
-            className="form-input font-sans resize-none "
-            rows="4"
-          />
+          <textarea name="comments" value={values.comments} onChange={handleChange} className="form-input font-sans resize-none " rows={4} />
         </div>
         <div className="mt-2">
           <div className="mt-2 mb-2">
             <div>
-              <label htmlFor="errormessage" className="block text-sm font-medium text-gray-700">
-                ErrorMessage
+              <label htmlFor="alert" className="block text-sm font-medium text-gray-700">
+                Alert
               </label>
-              <textarea
-                type="text"
-                name="errormessage"
-                value={values.errormessage}
-                onChange={handleChange}
-                className="form-input font-mono resize-none text-2xs"
-                rows="15"
-              />
-            </div>
-            <div>
-              <label htmlFor="query" className="block text-sm font-medium text-gray-700">
-                Query
-              </label>
-              <textarea
-                type="text"
-                name="query"
-                value={values.query}
-                onChange={handleChange}
-                className="form-input font-mono resize-none text-2xs"
-                rows="12"
-              />
+              <textarea name="alert" value={values.alert} onChange={handleChange} className="form-input font-mono resize-none text-2xs" rows={15} />
             </div>
           </div>
         </div>

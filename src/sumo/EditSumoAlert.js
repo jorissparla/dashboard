@@ -1,6 +1,6 @@
 import { useQuery, gql } from "@apollo/client";
 import React from "react";
-import SumoForm from "./SumoForm";
+import SumoAlertForm from "./SumoAlertForm";
 
 const ONE_SUMOALERT_QUERY = gql`
   query ONE_SUMOALERT_QUERY($id: ID) {
@@ -21,14 +21,15 @@ const ONE_SUMOALERT_QUERY = gql`
 const EditSumoAlert = (props) => {
   const { id } = props.match.params;
   const { data, loading } = useQuery(ONE_SUMOALERT_QUERY, { variables: { id } });
+  console.log(data);
   if (loading) {
     return <div></div>;
   }
-  const { sumoalerts } = data;
-  console.log(sumolog);
+  const { sumoalert } = data;
+  console.log({ sumoalert });
   return (
     <div>
-      <SumoForm initialValues={sumoalerts} />
+      <SumoAlertForm initialValues={sumoalert} />
     </div>
   );
 };

@@ -54,13 +54,13 @@ const SumoAlert = () => {
 
   if (loading) return <Spinner />;
   return (
-    <section className="px-4 sm:px-6 lg:px-4 xl:px-6 pt-4 pb-4 sm:pb-6 lg:pb-4 xl:pb-6 space-y-4 bg-gray-100 h-screen">
+    <section className="px-4 sm:px-6 lg:px-4 xl:px-6 pt-4 pb-4 sm:pb-6 lg:pb-4 xl:pb-6 space-y-4  h-screen">
       <header className="flex items-center justify-between bg-white">
         <SumoNav current="Alerts" />
         {/* <h2 className="text-lg leading-6 font-medium text-black">Sumo Logs</h2> */}
         {canEdit ||
           (true && (
-            <TWButton color="blue" onClick={() => history.push("/addalert")}>
+            <TWButton color="blue" onClick={() => history.push("/addsumoalert")}>
               New
             </TWButton>
           ))}
@@ -78,19 +78,19 @@ const SumoAlert = () => {
             { title: "creator", fld: "creator", hl: true },
             { title: "created", fld: "created", fn: formatDate },
             { title: "comments", fld: "comments" },
-            { title: "alert", fld: "alert", className: "font-mono text-xs bg-teal-300" },
+            { title: "alert", fld: "alert", className: "font-mono text-xs text-gray-600" },
             { title: "environments", fld: "environments" },
             { title: "customer", fld: "customer" },
           ]}
           indexField={{ title: "id", fld: "id" }}
         />
       </div>
-      <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4 list-none">
+      {/* <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-4 list-none">
         {sumoDisplayData.map((item) => (
           <SumoAlertListItem item={item} />
         ))}
         Alerts come here
-      </ul>
+      </ul> */}
     </section>
   );
 };

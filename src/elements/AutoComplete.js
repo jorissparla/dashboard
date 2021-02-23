@@ -4,6 +4,8 @@ export default function AutoComplete({
   support = [],
   value = "",
   disabled = true,
+  label = "",
+  // name = "",
   onChangeValue = (v) => console.log(v),
   searchTextFromStart = true,
   className = "",
