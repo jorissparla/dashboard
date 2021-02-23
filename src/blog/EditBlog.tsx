@@ -15,9 +15,25 @@ const SINGLE_BLOG_QUERY = gql`
     }
   }
 `;
+
+function useBlogPermissions() {
+  const { user, hasPermissions } = useUserContext();
+  const [enabled, setEnabled] = useState(false);
+  useEffect(() => {
+    if (user) {
+      if (hasPermissions(user, ["ADMIN"])) {
+        console.log("tes");
+        setEnabled(true);
+      }
+    }
+  }, [user]);
+  return [enabled];
+}
+
 const EditBlog = () => {
   const { id }: { id: string } = useParams();
   const { data, loading } = useQuery(SINGLE_BLOG_QUERY, { variables: { id } });
+  const [enabled] = useBlogPermissions();
   if (loading) {
     return <Spinner />;
   }
@@ -25,7 +41,7 @@ const EditBlog = () => {
   const { blog } = data;
   return (
     <div>
-      <BlogForm blog={blog}></BlogForm>
+      <BlogForm blog={blog} enabled={enabled}></BlogForm>
     </div>
   );
 };

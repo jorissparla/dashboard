@@ -16,7 +16,6 @@ const InputTagsDropDown = ({
 
   useEffect(() => {
     setItems(values);
-    console.log({ values });
   }, [values]);
 
   function handleChange(evt) {

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
-export const TWSelectMenu = ({ items, value, onChange, label = "Assigned To", wide=""}) => {
+export const TWSelectMenu = ({ items, value, onChange, label = "Assigned To", wide = "" }) => {
   const [lbOpen, setlbOpen] = useState(false);
-  const clsName = wide? 'ml-4 space-y-1 w-96':'ml-4 space-y-1 w-48'
+  const clsName = wide ? "ml-4 space-y-1 w-96" : "ml-4 space-y-1 w-48";
   return (
     <div className={clsName}>
       <label id="listbox-label" className="block text-sm leading-5 text-gray-700 font-semibold">
@@ -38,7 +38,6 @@ export const TWSelectMenu = ({ items, value, onChange, label = "Assigned To", wi
               {items.map((item) => (
                 <li
                   id="listbox-item-0"
-                  role="option"
                   key={item}
                   className="text-gray-900 cursor-default select-none relative py-2 pl-8 pr-4 hover:bg-purp hover:text-white"
                   onClick={() => {

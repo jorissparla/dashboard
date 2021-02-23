@@ -15,7 +15,7 @@ const AddBlog: React.FC<{}> = () => {
   };
   return (
     <div>
-      <BlogForm blog={blog} />
+      <BlogForm blog={blog} enabled={true} />
     </div>
   );
 };

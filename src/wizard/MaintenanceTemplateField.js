@@ -42,7 +42,7 @@ export const MaintenanceTemplateField = ({ name, label, id, initialValue, classN
   const alert = useAlert();
 
   const { user } = useUserContext();
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState(initialValue);
   useEffect(() => {
     setValue(initialValue);
   }, [initialValue]);

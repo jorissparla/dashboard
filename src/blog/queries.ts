@@ -43,3 +43,11 @@ export const UPDATE_BLOG_MUTATION = gql`
     }
   }
 `;
+export const DELETE_BLOG_MUTATION = gql`
+  ${BlogFragment}
+  mutation DELETE_BLOG_MUTATION($where: BlogWhere) {
+    deleteBlog(where: $where) {
+      ...BlogFragment
+    }
+  }
+`;

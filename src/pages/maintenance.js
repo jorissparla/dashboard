@@ -64,7 +64,7 @@ function NavVersion({ href, isActive, children, handleClick, isXM }) {
 function MaintenanceWizard() {
   const history = useHistory();
   const [activeVersion, setActiveVersion] = usePersistentState("activeMaintenanceVersion", null);
-  const [templates, setTemplates] = usePersistentState(null);
+  const [templates, setTemplates] = usePersistentState("template", null);
   const [selectedTemplate, setSelectedTemplate] = useState(null);
   const [versions, setVersions] = useState([]);
   const { data, loading } = useQuery(ALL_MAINTENANCE_VERSIONS);
@@ -85,9 +85,10 @@ function MaintenanceWizard() {
   }, [data]);
 
   useEffect(() => {
+    console.log("activeversion", activeVersion);
     if (data) {
-      console.log(activeVersion);
       const selectedTemplates = data.allmaintenanceTemplates.slice().filter((tpl) => tpl.versions.includes(activeVersion.version));
+      console.log({ activeVersion }, { selectedTemplates });
       setTemplates(selectedTemplates);
       if (selectedTemplates.length > 0) {
         setSelectedTemplate(selectedTemplates[0]);

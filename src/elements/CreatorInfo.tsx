@@ -1,15 +1,41 @@
-import React from "react";
+import { gql, useQuery } from "@apollo/client";
+import React, { useState, useEffect } from "react";
+
+const QUERY_ACCOUNTS = gql`
+  query QUERY_ACCOUNTS {
+    user: findAccountByEmail {
+      email
+      image
+    }
+  }
+`;
 
 type CreatorInfoProps = {
   creator: string;
   created: string;
   image?: string;
 };
-
+type UserType = {
+  email?: string;
+  image?: string;
+};
 const CreatorInfo: React.FC<CreatorInfoProps> = ({ creator, created, image = "" }) => {
-  let src = image
-    ? image
-    : "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-1.2.1&ixqx=uZDt5cC8cT&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80";
+  const [src, setSrc] = useState(
+    "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-1.2.1&ixqx=uZDt5cC8cT&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+  );
+
+  const { data, loading } = useQuery(QUERY_ACCOUNTS);
+
+  useEffect(() => {
+    if (data) {
+      const found = data.user;
+      if (found && found.image) {
+        setSrc(found.image);
+      }
+    }
+  }, [data]);
+
+  if (loading) return <div />;
   return (
     <div className="mt-6 flex items-center">
       <div className="flex-shrink-0">

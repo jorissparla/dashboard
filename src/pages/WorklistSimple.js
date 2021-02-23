@@ -75,6 +75,7 @@ const WorklistSimpleWrapper = () => {
   const [includePending, setIncludePending] = usePersistentState("includePending", false);
   const { user } = React.useContext(UserContext);
   const owner = user ? (user.fullname ? user.fullname : "") : "";
+  const ownerId = user ? user.navid : "";
   const [name, setName] = useState(owner || "Ron Bleser");
   const { data, loading } = useQuery(ACCOUNTS_QUERY);
   if (support) {
@@ -121,12 +122,12 @@ const WorklistSimpleWrapper = () => {
           </div>
         </div>
       </div>
-      <WorklistSimple owner={name} includeDevelopment={includeDevelopment} includePending={includePending} />
+      <WorklistSimple owner={name} ownerId={ownerId} includeDevelopment={includeDevelopment} includePending={includePending} />
     </div>
   );
 };
 
-const WorklistSimple = ({ owner = "", includeDevelopment, includePending }) => {
+const WorklistSimple = ({ owner = "", ownerId = "", includeDevelopment, includePending }) => {
   const params = useParams();
   const { data, loading } = useQuery(MY_BACKLOG_QUERY, { variables: { owner } });
   if (loading) return <Spinner />;

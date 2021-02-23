@@ -51,7 +51,7 @@ const SupportCardForm = (props) => {
     } else {
       setSupportCard(initialValues);
     }
-  }, [data]);
+  }, [data, initialValues]);
 
   if (loading) return <div />;
   if (!supportcard) return <div />;

@@ -8,7 +8,7 @@ import { format } from "utils/format";
 import { MUTATION_UPDATE_DETAIL } from "./../../TenantQueries";
 
 function EditTenantDetails(props) {
-  const { profile, className, onClose, onView, isTenantEditor = true, ...rest } = props;
+  const { profile, className, onClose, onView, ...rest } = props;
   console.log(props);
   return (
     <div {...rest} className="bg-white  px-4 font-sans right-0 w-2/3 flex h-full fixed z-50 shadow-lg rounded  flex-col">
@@ -18,7 +18,7 @@ function EditTenantDetails(props) {
 }
 
 export const EditTenantDetailsWrapped = (props) => {
-  const { profile, className, onClose, onView, isTenantEditor = true, ...rest } = props;
+  const { profile, onClose, isTenantEditor = true } = props;
   const [values, setValues] = useState({ ...profile });
   useEffect(() => {
     if (profile) {
@@ -34,7 +34,7 @@ export const EditTenantDetailsWrapped = (props) => {
         useproxy: true,
       });
     }
-  }, []);
+  }, [profile]);
   const [updateTenantDetailsMutation] = useMutation(MUTATION_UPDATE_DETAIL);
   const handleChange = (event) => {
     event.persist();
@@ -51,34 +51,29 @@ export const EditTenantDetailsWrapped = (props) => {
       ...values,
       useproxy: newproxyValue,
     });
-    setProxyUser((prev) => newproxyValue);
+    setProxyUser(() => newproxyValue);
   };
 
   const alert = useAlert();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let useproxyVal = useproxy ? 1 : 0;
+    // let useproxyVal = useproxy ? 1 : 0;
     let x = { ...values };
     // delete x.useproxy;
 
-    const result = await updateTenantDetailsMutation({ variables: { input: x } });
+    await updateTenantDetailsMutation({ variables: { input: x } });
     onClose();
     alert.setMessage("Saving content...");
     // setOpenSnackbar(true);
   };
 
   const handleTemperatureChange = (value) => {
-    console.log({ value });
     setValues({ ...values, temperature: value });
   };
 
-  const handleTChange = (e) => {
-    handleTemperatureChange(e.target.value);
-  };
   // const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:11:54'));
 
-  const TempIsChecked = (v) => v === values.temperature;
   return (
     <form className="mt-12 ml-4" onSubmit={handleSubmit}>
       {/* <CardHeader title={`Details for ${profile.customer.name}"`} /> */}

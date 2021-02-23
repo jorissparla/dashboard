@@ -86,7 +86,7 @@ const EditMaintenanceTemplate = () => {
 };
 
 export const MaintenanceTemplateFields = ({ initialTemplate, forceReadOnly = false }) => {
-  const [template, setTemplate] = useState(null);
+  const [template, setTemplate] = useState(initialTemplate);
   useEffect(() => {
     setTemplate(initialTemplate);
   }, [initialTemplate]);

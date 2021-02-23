@@ -42,7 +42,7 @@ const BlogList = () => {
             </div>
             <div className="flex-1 bg-white p-6 flex flex-col justify-between">
               <div className="text-xl font-semibold text-gray-900 mt-1">{blog.title}</div>
-              <div dangerouslySetInnerHTML={{ __html: blog.content }} className="border-t border-gray-100  max-h-48 overflow-hidden"></div>
+              <div dangerouslySetInnerHTML={{ __html: blog.content }} className="border-t border-gray-100  max-h-72 mb-2 overflow-hidden"></div>
               <TWButton className="w-48" color="teal" onClick={() => history.push(`/blog/${blog.id}`)}>
                 View Details
               </TWButton>

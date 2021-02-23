@@ -10,7 +10,7 @@ export default class Modal extends Component {
         {on && (
           <ModalWrapper>
             <ModalCard height={height}>
-              <div className="flex justify-end text-3xl text-gray-600 " onClick={toggle}>
+              <button className="flex justify-end text-3xl text-gray-600 " onClick={toggle}>
                 <svg
                   className="text-blue-500 w-8 h-8 fill-current"
                   fill="none"
@@ -23,7 +23,7 @@ export default class Modal extends Component {
                 >
                   <path d="M6 18L18 6M6 6l12 12"></path>
                 </svg>
-              </div>
+              </button>
               <div>{children}</div>
             </ModalCard>
             <Background onClick={toggle} />
@@ -33,24 +33,6 @@ export default class Modal extends Component {
     );
   }
 }
-const CloseButton = styled.button`
-  position: absolute;
-  top: -8px;
-  right: 0;
-  background: transparent;
-  font-size: 48px;
-  font-weight: 100;
-  text-align: center;
-  justify-content: center;
-  border: none;
-  width: 57px;
-  height: 57px;
-  :hover {
-    cursor: pointer;
-    background: lightgrey;
-    border-radius: 50%;
-  }
-`;
 
 const ModalWrapper = styled.div`
   position: absolute;

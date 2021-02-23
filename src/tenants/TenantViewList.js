@@ -7,16 +7,11 @@ import { DataCell, HeaderCell } from "pages/Cells";
 import React, { useEffect, useState } from "react";
 import { animated, useSpring } from "react-spring";
 import Spinner from "utils/spinner";
-import { DashBoardContext } from "../globalState/Provider";
 import CustomerHistory from "./CustomerHistory";
 import EditTenantDetails from "./details/components/EditTenant";
 import { QUERY_ALL_TENANT_DETAILS } from "./TenantQueries";
 
-const TenantViewList = (props) => {
-  const dbctx = React.useContext(DashBoardContext);
-
-  let role = dbctx && dbctx.role ? dbctx.role : "Guest";
-
+const TenantViewList = () => {
   const [showNotReady, setShowNotReady] = usePersistentState("not ready", false);
   const [sortedByCSM, setSortedByCSM] = usePersistentState("sort by csm", false);
   const [showLive, setShowLive] = usePersistentState("customers live", false);
@@ -24,7 +19,7 @@ const TenantViewList = (props) => {
   const [searchText, setSearchText] = useState("");
   // const [showFilterDialog, toggleShowFilterDialog] = useState(false);
   const [isShowingDetails, toggleShowDetails] = useState(false);
-  const [isShowingEvents, toggleShowEvents] = useState(false);
+  const [isShowingEvents] = useState(false);
   const [filteredCustomers, setFilteredCustomers] = useState([]);
   const [customerDetails, setCustomerDetails] = useState([]);
 
@@ -71,6 +66,7 @@ const TenantViewList = (props) => {
           sub.map((tenantInstance) => {
             const type = tenantInstance.name.split("_")[1];
             ar[type] = tenantInstance.version;
+            return 1;
           });
           const live = sub && sub.length > 0 ? (sub[0].live === 1 ? "Yes" : "No") : "No";
           const customerid = currcustomer.customerid;
@@ -135,7 +131,7 @@ const TenantViewList = (props) => {
             <div className="inset-0 flex z-50 bg-gray-700  bg-opacity-50 absolute w-5/6 ">
               <EditTenantDetails
                 profile={customerDetails.find((d) => d.customerid === currentId)}
-                onClose={() => toggleShowDetails((prev) => false)}
+                onClose={() => toggleShowDetails(() => false)}
                 isTenantEditor={true}
               />
             </div>
@@ -195,7 +191,7 @@ export const LiveCell = ({ value }) => {
   }
 };
 
-const TenantTable = ({ data, replaceField = null, mark = false, onSelect }) => {
+const TenantTable = ({ data, replaceField = null, onSelect }) => {
   function replaceList(fields, replaceField) {
     let replacing = [];
     fields.forEach((item) => {
@@ -226,10 +222,6 @@ const TenantTable = ({ data, replaceField = null, mark = false, onSelect }) => {
     fields = replaceList(fields, replaceField);
   }
 
-  const handleAction = (value) => {
-    console.log(value);
-    onSelect(value);
-  };
   return (
     <div className="overflow-y-auto scrollbar-w-2 scrollbar-track-gray-lighter scrollbar-thumb-rounded scrollbar-thumb-gray scrolling-touch">
       <table className="w-full text-left table-collapse">

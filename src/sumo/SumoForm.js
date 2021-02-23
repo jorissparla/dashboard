@@ -54,7 +54,7 @@ function SumoForm({ initialValues = null }) {
     // if (debugMode && !user) {
     //   login("joris.sparla@infor.com", "Infor2019");
     // }
-    let newDate = initialValues?.created ? initialValues.created : format(new Date(), "yyyy-MM-dd");
+    let newDate = format(initialValues?.created ? initialValues.created : new Date().getTime(), "yyyy-MM-dd");
     console.log("date", initialValues?.created, newDate);
     if (values.id) {
       // const newDate = format(values.created, "yyyy-MM-dd");

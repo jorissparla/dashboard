@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 const SystemMessage = ({ message = "" }) => {
   const [show, setShow] = useState(true);
-  if (!show ||!message) return <div />;
+  if (!show || !message) return <div />;
   return (
     <div className="fixed top-0 inset-x-0 pb-2 sm:pb-5 mt-20">
       <div className="max-w-screen-xl mx-auto px-2 sm:px-6 lg:px-8">
@@ -26,12 +26,9 @@ const SystemMessage = ({ message = "" }) => {
             </div>
             <div className="order-3 mt-2 flex-shrink-0 w-full sm:order-2 sm:mt-0 sm:w-auto">
               <div className="rounded-md shadow-sm">
-                <a
-                  href="#"
-                  className="flex items-center justify-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-gray-600 bg-white hover:text-gray-500 focus:outline-none focus:shadow-outline transition ease-in-out duration-150"
-                >
+                <button className="flex items-center justify-center px-4 py-2 border border-transparent text-sm leading-5 font-medium rounded-md text-gray-600 bg-white hover:text-gray-500 focus:outline-none focus:shadow-outline transition ease-in-out duration-150">
                   Learn more
-                </a>
+                </button>
               </div>
             </div>
             <div className="order-2 flex-shrink-0 sm:order-3 sm:ml-2">

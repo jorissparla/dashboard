@@ -35,7 +35,8 @@ const prefix = REACT_APP_HTTP.trim();
 const isHttps = HTTPS;
 console.log("🤷‍♂️🤷‍♂️🤷‍♂️", isHttps, process.env);
 export let uri = `${REACT_APP_GRAPHQLSERVER}:${REACT_APP_PORT_GRAPHQL}`;
-const wsuri = prefix === "https" ? "wss://" + uri : "ws://" + uri;
+const wsuri = prefix === "https" ? "wss://" + uri + "/subscriptions" : "ws://" + uri + "/subscriptions";
+console.log({ wsuri });
 const wsLink = new WebSocketLink({
   uri: wsuri, // use wss for a secure endpoint
   options: {
@@ -44,13 +45,13 @@ const wsLink = new WebSocketLink({
 });
 uri = prefix === "https" ? "https://" + uri : "http://" + uri;
 const httpLink: any = createUploadLink({ uri, credentials: "include" });
-interface Definintion {
+interface Definition {
   kind: string;
   operation?: string;
 }
 const link = split(
   ({ query }) => {
-    const { kind, operation }: Definintion = getMainDefinition(query);
+    const { kind, operation }: Definition = getMainDefinition(query);
     return kind === "OperationDefinition" && operation === "subscription";
   },
   wsLink,

@@ -215,7 +215,7 @@ function TenantNote() {
   return <div />;
 }
 
-export const FilterForm = ({ setSearchText, flip }) => {
+export const FilterForm = ({ flip }) => {
   const { setFields, clearFields } = useContext(FilterFieldContext);
 
   const [customer, setCustomer] = useState("");
@@ -296,7 +296,6 @@ const filterTenantsByCustomerFarmVersion = (tenants, fields, details) => {
     csm = "",
     pm = "",
     lastupdated = "999",
-    useproxy = false,
   } = fields;
 
   let filteredCustomerNames = null;
@@ -362,11 +361,6 @@ const TenantList = (props) => {
     // clearFields();
   }
 
-  const simpleFilter = {
-    lastupdated: null,
-    farm: "",
-  };
-
   useEffect(() => {
     const input = {
       username: dbctx.fullname,
@@ -389,7 +383,7 @@ const TenantList = (props) => {
   const { updatedAt } = updatestatus;
   const filteredTenants = filterTenantsByCustomerFarmVersion(tenants, fields, details.tenantcustomerdetails);
   // console.log(applySimpleFilter(filteredTenants));
-  const uniqueCustomers = filteredTenants.map(({ farm, customer: { name } }) => name).filter((ten, i, all) => all.indexOf(ten) === i);
+  const uniqueCustomers = filteredTenants.map(({ customer: { name } }) => name).filter((ten, i, all) => all.indexOf(ten) === i);
   return (
     <div className="bg-gray-100 h-screen">
       <animated.div
@@ -405,7 +399,7 @@ const TenantList = (props) => {
           tenants={tenants}
         />
         {/* <div className="mt-8 mx-4 px-4 rounded-lg ">Filter</div> */}
-        <div className="flex flex-wrap" onKeyDown={(e) => {}}>
+        <div className="flex flex-wrap" onKeyDown={() => {}}>
           {uniqueCustomers.map((customer, index) => {
             const sub = filteredTenants.filter((o) => o.customer.name === customer);
             const liveCust = sub[0].live === 1 ? true : false;
@@ -460,13 +454,9 @@ const TenantList = (props) => {
   );
 };
 
-export const TenantListHeader = ({ updatedAt, tenants, toggleShowLogs, toggleFilter, applyFilter }) => {
+export const TenantListHeader = ({ updatedAt, tenants, toggleShowLogs, applyFilter }) => {
   const max = _.maxBy(tenants, (t) => format(t.lastupdated, "yyyyMMdd")).lastupdated;
-  const [showLast7DaysUpdated, setShowLast7DaysUpdated] = useState(false);
-  const handleChangeLastUpdated = (e) => {
-    console.log(e.target.value);
-    setShowLast7DaysUpdated((prev) => !prev);
-  };
+  // const [, setShowLast7DaysUpdated] = useState(false);
   let tenantcustomersWithFarm = _.countBy(
     tenants.map(({ farm, tenant }) => ({ farm, tenant })),
     "farm"

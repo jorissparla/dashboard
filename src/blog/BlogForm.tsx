@@ -1,16 +1,17 @@
+import { useMutation } from "@apollo/client";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import HTMLEditor from "common/HTMLEditor";
 import TextInput from "elements/TextInput";
 import TWButton from "elements/TWButton";
 import { useAlert } from "globalState/AlertContext";
+import { useUserContext } from "globalState/UserProvider";
+
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
-import SafeDeleteButton from "videos/SafeDeleteButton";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { format } from "utils/format";
-import { useMutation } from "@apollo/client";
-import { ADD_BLOG_MUTATION, UPDATE_BLOG_MUTATION } from "./queries";
-import { hasPermission } from "utils/hasPermission";
-import { useUserContext } from "globalState/UserProvider";
+import SafeDeleteButton from "videos/SafeDeleteButton";
+import { ADD_BLOG_MUTATION, UPDATE_BLOG_MUTATION, DELETE_BLOG_MUTATION, ALL_BLOGS_QUERY } from "./queries";
 
 export type BlogProps = {
   id?: string;
@@ -22,36 +23,25 @@ export type BlogProps = {
 };
 type Blog = BlogProps;
 
-const BlogForm: React.FC<{ blog: BlogProps }> = ({ blog }) => {
+const BlogForm: React.FC<{ blog: BlogProps; enabled: boolean }> = ({ blog, enabled = false }) => {
   const history = useHistory();
-  const { user, hasPermissions } = useUserContext();
+
   const [values, setValues] = useState(blog);
-  const [enabled, setEnabled] = useState(false);
-  const [config, setConfig] = useState<{
-    toolbar?: string;
-    ckfinder?: {
-      uploadUrl: string;
-    };
-  }>({
-    ckfinder: {
-      uploadUrl: "https://nlbavwixs.infor.com:3001/upload",
-    },
-  });
-  const [addBlogMutation] = useMutation(ADD_BLOG_MUTATION);
-  const [updateBlogMutation] = useMutation(UPDATE_BLOG_MUTATION);
-  useEffect(() => {
-    if (user) {
-      if (hasPermissions(user, ["ADMIN"])) {
-        console.log("tes");
-        setEnabled(true);
-        setConfig({
-          ckfinder: {
-            uploadUrl: "https://nlbavwixs.infor.com:3001/upload",
-          },
-        });
+
+  const config = enabled
+    ? {
+        ckfinder: {
+          uploadUrl: "https://nlbavwixs.infor.com:3001/upload",
+        },
       }
-    }
-  }, [user]);
+    : {
+        toolbar: "",
+      };
+
+  const [addBlogMutation] = useMutation(ADD_BLOG_MUTATION, { refetchQueries: [{ query: ALL_BLOGS_QUERY }] });
+  const [updateBlogMutation] = useMutation(UPDATE_BLOG_MUTATION, { refetchQueries: [{ query: ALL_BLOGS_QUERY }] });
+  const [deleteBlogMutation] = useMutation(DELETE_BLOG_MUTATION, { refetchQueries: [{ query: ALL_BLOGS_QUERY }] });
+
   // let initialValues = { created: Date.now(), creator:}
 
   const alert = useAlert();
@@ -74,9 +64,14 @@ const BlogForm: React.FC<{ blog: BlogProps }> = ({ blog }) => {
     if (alert) {
     }
   }
-  function handleBlogEntry() {
-    if (alert) {
+  async function handleDeleteBlogEntry() {
+    if (values.id) {
+      const where = { id: values.id };
+      const res = await deleteBlogMutation({ variables: { where } });
       alert.setMessage("blog entry deleted");
+      history.push("/blogs");
+    }
+    if (alert) {
     }
   }
   function handleChange(e: any) {
@@ -88,25 +83,33 @@ const BlogForm: React.FC<{ blog: BlogProps }> = ({ blog }) => {
       <div className="bg-white rounded shadow-xl p-2 m-2">
         <section className="px-4 sm:px-6 lg:px-4 xl:px-6 pt-4 pb-4 sm:pb-6 lg:pb-4 xl:pb-6 space-y-4">
           <header className="flex items-center justify-between">
-            <h2 className="text-lg leading-6 font-medium text-black">{values.id ? "Edit" : "Add"} Blog Entry</h2>
+            <h2 className="text-lg leading-6 font-medium text-black">{values.id ? (enabled ? "Edit" : "View") : "Add"} Blog Entry</h2>
             <TWButton onClick={() => history.push("/blogs")}>Back to List</TWButton>
-            <div className="flex">
-              <TWButton color="teal" onClick={addBlogEntry}>
-                Save
-              </TWButton>
-              <SafeDeleteButton onDelete={handleBlogEntry}>Delete</SafeDeleteButton>
-            </div>
+            {enabled && (
+              <div className="flex">
+                <TWButton color="teal" onClick={addBlogEntry}>
+                  Save
+                </TWButton>
+                <SafeDeleteButton onDelete={handleDeleteBlogEntry}>Delete</SafeDeleteButton>
+              </div>
+            )}
           </header>
         </section>
         <div className="flex flex-col justify-between">
           <div>
             <div>
-              <TextInput label="title" name="title" value={values.title} onChange={handleChange} />
+              {enabled ? (
+                <TextInput label="title" name="title" value={values.title} onChange={handleChange} />
+              ) : (
+                <div className="text-xl font-bold text-gray-700">{values.title}</div>
+              )}
             </div>
-            <div className="mt-2">
+            <HTMLEditor enabled={enabled} value={values.content} onChange={(v) => console.log(v)} label={enabled ? "Content" : " "} />
+            {/* <div className="mt-2">
               <label htmlFor="content" className="block text-sm font-medium text-gray-700">
                 Content
               </label>
+
               <CKEditor
                 editor={ClassicEditor}
                 enabled={enabled}
@@ -122,7 +125,7 @@ const BlogForm: React.FC<{ blog: BlogProps }> = ({ blog }) => {
                   setValues({ ...values, content: data });
                 }}
               />
-            </div>
+            </div> */}
           </div>
           <div className="flex text-xs text-gray-600 mt-2 ">
             created by <span className="font-semibold px-2">{values.creator} </span> on {format(values.created, "EEEE, do MMM yyyy, HH:mi")}

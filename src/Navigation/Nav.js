@@ -127,7 +127,7 @@ const Header = (props) => {
   function logMeIn() {
     if (process.env.NODE_ENV !== "production") {
       if (debugMode && !user) {
-        login("joris.sparla@infor.com", "Infor2021");
+        login("joris.sparla@infor.com", "Infor2019");
       }
       if (user) {
         logout();

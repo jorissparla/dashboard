@@ -14,7 +14,6 @@ const indigo_class =
 
 const graybut =
   "inline-flex items-center  rounded border border-gray-400 px-4 py-1 bg-transparent uppercase text-sm leading-5 font-medium text-gray-700 hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue active:bg-gray-50 active:text-gray-800 transition ease-in-out duration-150 mx-1";
-const styl = "";
 const TWButton = ({ children, className = null, ...props }) => {
   let classes = className;
   let color = props?.color || "";
