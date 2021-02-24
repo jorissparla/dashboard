@@ -89,6 +89,7 @@ function SumoForm({ initialValues = null }) {
     if (values.id) {
       const where = { id: values.id };
       const result = await deleteSumoInput({ variables: { where }, refetchQueries: [{ query: ALL_SUMOLOGS_QUERY }] });
+      console.log(result);
       alert.setMessage(`Successfully deleted entry`);
       history.push("/sumo");
     }
@@ -103,7 +104,7 @@ function SumoForm({ initialValues = null }) {
       delete input.__typename;
       delete input.id;
       console.log(values);
-      const result = await updateSumoInput({ variables: { where, input } });
+      const result = await updateSumoInput({ variables: { where, input }, refetchQueries: [{ query: ALL_SUMOLOGS_QUERY }] });
       if (result?.data?.updateSumolog) {
         alert.setMessage(`Successfully ${value === 1 ? "archived" : "unarchived"} and updated`);
       }

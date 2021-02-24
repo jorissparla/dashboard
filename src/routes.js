@@ -143,8 +143,8 @@ function AppRoutes() {
       <Route exact path="/symptomkbs" component={SymptomsKBs} />
       <Route exact path="/symptomcategories" component={SymptomCategories} />
       <Route exact path="/loggedinusers" component={LoggedInUsers} />
-      <Route exact path="/uploadimage" component={UploadImageComponent} />
-      <Route exact path="/uploadfile" component={TWFileUpload} />
+      {/* <Route exact path="/uploadimage" component={UploadImageComponent} />
+      <Route exact path="/uploadfile" component={TWFileUpload} /> */}
 
       <Route exact path="/login" component={LoginForm} />
       <Route exact path="/sumo" component={Sumo} />

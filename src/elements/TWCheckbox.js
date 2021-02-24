@@ -19,7 +19,7 @@ const TWCheckbox = ({ value = false, label = "Label", text = "", onChange }) => 
         />
       </div>
       <div className="ml-3 text-sm">
-        <label for="offers" className="font-medium text-gray-700">
+        <label htmlFor="offers" className="font-medium text-gray-700">
           {label}
         </label>
         <p className="text-gray-500">{text}</p>

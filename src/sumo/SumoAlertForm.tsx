@@ -47,7 +47,7 @@ function SumoAlertForm({ initialValues }: { initialValues?: SumoAlertType }) {
         comments: "",
         archive: 0,
         customername: "",
-        created: "",
+        created: format(new Date(), "yyyy-MM-dd"),
         alert: "",
         environments: "",
       };
@@ -69,7 +69,7 @@ function SumoAlertForm({ initialValues }: { initialValues?: SumoAlertType }) {
     // if (debugMode && !user) {
     //   login("joris.sparla@infor.com", "Infor2019");
     // }
-    let newDate = defaults.created ? defaults.created : format(new Date(), "yyyy-MM-dd");
+    let newDate = format(defaults?.created ? defaults.created : new Date().getTime(), "yyyy-MM-dd");
     // console.log("date", initialValues.created);
     if (values.id) {
       // const newDate = format(values.created, "yyyy-MM-dd");
@@ -83,12 +83,15 @@ function SumoAlertForm({ initialValues }: { initialValues?: SumoAlertType }) {
     if (user) {
       isValisEditor = isValisEditor || user.role === "ADMIN";
     }
-    // console.log({ user }, isValisEditor);
+    console.log({ user }, isValisEditor);
     setEnabled(isValisEditor);
   }, [data, user, initialValues]);
 
   function handleChange(e: { target: { name: any; value: any } }) {
-    if (enabled) setValues({ ...values, [e.target.name]: e.target.value });
+    if (enabled) {
+      console.log(e.target.name, e.target.value);
+      setValues({ ...values, [e.target.name]: e.target.value });
+    }
   }
 
   function setCreator(v: string) {
@@ -102,7 +105,7 @@ function SumoAlertForm({ initialValues }: { initialValues?: SumoAlertType }) {
       const where = { id: values.id };
       const result = await deleteSumoAlertInput({ variables: { where }, refetchQueries: [{ query: ALL_SUMOALERTS_QUERY }] });
       alert.setMessage(`Successfully deleted entry`);
-      history.push("/sumo");
+      history.push("/sumoalerts");
     }
   }
   async function archiveEntry(value = 1) {
@@ -124,8 +127,11 @@ function SumoAlertForm({ initialValues }: { initialValues?: SumoAlertType }) {
 
   async function addSumoEntry() {
     console.log(values.created);
-    const newDate = values.created ? new Date(parseInt(values.created)).toISOString() : new Date().toISOString();
+    const newDate = values.created ? new Date(values.created).toISOString() : new Date().toISOString();
     const input = { ...values, created: newDate };
+    if (!values.id) {
+      // const newDate = new Date(values.created);
+    }
     delete input.__typename;
     delete input.id;
     if (values.id) {
@@ -149,7 +155,7 @@ function SumoAlertForm({ initialValues }: { initialValues?: SumoAlertType }) {
       <div className="bg-white m-2 rounded shadow-lg p-2">
         <section className="px-4 sm:px-6 lg:px-4 xl:px-6 pt-4 pb-4 sm:pb-6 lg:pb-4 xl:pb-6 space-y-4">
           <header className="flex items-center justify-between">
-            <h2 className="text-lg leading-6 font-medium text-black">{values.id ? "Edit" : "Add"} Entry for Sumo</h2>
+            <h2 className="text-lg leading-6 font-medium text-black">{values.id ? "Edit" : "Add"} Entry for Alert</h2>
             <TWButton onClick={() => history.push("/sumoalerts")}>Back to List</TWButton>
             {enabled && (
               <div className="flex">
@@ -185,7 +191,14 @@ function SumoAlertForm({ initialValues }: { initialValues?: SumoAlertType }) {
             <label htmlFor="week" className="block text-sm font-medium text-gray-700">
               Date
             </label>
-            <input id="created" value="2020-02-11" name="created" onChange={handleChange} type="date" className="form-input max-w-44" />
+            <input
+              id="created"
+              value={values.created || format(new Date(), "yyyy-MM-dd")}
+              name="created"
+              onChange={handleChange}
+              type="date"
+              className="form-input max-w-44"
+            />
           </div>
           <TextInput label="Customer" name="customername" value={values.customername} onChange={handleChange} className="min-w-80" />
           <TextInput label="Environments" name="environments" value={values.environments} onChange={handleChange} className="min-w-80" />

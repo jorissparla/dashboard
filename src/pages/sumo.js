@@ -54,7 +54,7 @@ const Sumo = () => {
             (item) => filterOn(item, ["sessioncode", "creator", "summary", "errormessage", "farms", "module", "customername"], searchText)
             //_.includes(user.fullname.toUpperCase(), this.state.searchText.toUpperCase())
           )
-          .slice(0, 20);
+          .slice(0, 200);
         console.log(newData);
       }
 

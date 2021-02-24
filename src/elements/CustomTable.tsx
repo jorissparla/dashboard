@@ -22,8 +22,8 @@ const HeaderCell = ({ children }: any) => (
   </th>
 );
 
-export const HyperLinkCell = ({ value = "", linkPrefix = "", linkText = "", linkFieldValue = "" }) => (
-  <td className="p-2 font-sans text-sm font-semibold text-blue-700">
+export const HyperLinkCell = ({ value = "", linkPrefix = "", className = "", linkText = "", linkFieldValue = "" }) => (
+  <td className={`p-2 font-sans text-sm font-semibold text-gray-700 ${className}`}>
     <TWHyperLink color="teal" className="pt-1" href={`${linkPrefix}${linkFieldValue || value}`} target="_blank">
       {linkText || value}
     </TWHyperLink>
@@ -31,7 +31,7 @@ export const HyperLinkCell = ({ value = "", linkPrefix = "", linkText = "", link
 );
 
 export const DataCell: React.FC<{ children: any; className?: string }> = ({ children, className = "" }) => (
-  <td className={`p-2 font-sans text-sm font-semibold text-blue-700 ${className}`}>{children}</td>
+  <td className={`p-2 font-sans text-sm  text-gray-700 ${className}`}>{children}</td>
 );
 export const CustomTable: React.FC<CustomTableProps> = ({ data, fields = [], indexField, linkPrefix = "" }) => {
   return (
@@ -51,7 +51,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({ data, fields = [], ind
             </tr>
           ) : (
             data?.map((item: any) => (
-              <tr key={item[indexField.fld]}>
+              <tr key={item[indexField.fld]} className="border-b border-gray-100 justify-center">
                 {fields.map((field, index) => {
                   const linkFieldValue = indexField?.fld ? item[indexField.fld] : field.fn ? field.fn(item[field.fld]) : item[field.fld];
                   if (field.hl) {
@@ -59,6 +59,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({ data, fields = [], ind
                       <HyperLinkCell
                         key={index}
                         linkPrefix={linkPrefix}
+                        className={field.className || ""}
                         linkFieldValue={linkFieldValue}
                         value={field.fn ? field.fn(item[field.fld]) : item[field.fld]}
                       />

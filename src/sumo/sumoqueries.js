@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 const sumoFragment = gql`
-  fragment sumoFragment on Sumo {
+  fragment sumoFragment on Sumolog {
     id
     creator
     created
