@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import useSWR from "swr";
-import { request } from "graphql-request";
+import { request, gql } from "graphql-request";
 import { uri } from "../index";
 import { format, addHours } from "date-fns";
 import _ from "lodash";
@@ -10,7 +10,7 @@ import { useUserContext } from "globalState/UserProvider";
 import { useHistory } from "react-router";
 import { classNames } from "elements/TableComponent";
 
-const query = `
+const query = gql`
   {
     accounts {
       id
@@ -27,20 +27,14 @@ const query = `
         permission
       }
       managerid
-
-
+    }
   }
-}
-
 `;
 
 const Loggedinusers = ({ admin = false }) => {
-  const { data, error } = useSWR(
-    query,
-
-    (query) => request(uri, query)
-  );
-
+  console.log(query);
+  const { data, error } = useSWR(query);
+  console.log({ data });
   console.log({ admin });
   const { user: current } = useUserContext();
   const history = useHistory();

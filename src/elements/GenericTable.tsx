@@ -1,10 +1,11 @@
+import React, { useEffect, useState } from "react";
+
 import AccordionSummary from "@material-ui/core/AccordionSummary";
+import CopyToClipBoard from "react-copy-to-clipboard";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import classNames from "classnames";
-import { useAlert } from "globalState/AlertContext";
-import React, { useEffect, useState } from "react";
-import CopyToClipBoard from "react-copy-to-clipboard";
 import { format } from "./../utils/format";
+import { useAlert } from "globalState/AlertContext";
 
 interface GenericTableProps {
   data: any[] | null;
@@ -193,7 +194,12 @@ export const GenericTable = (props: GenericTableProps) => {
   );
   const HyperLinkCell = ({ value = "", linkPrefix = "http://navigator.infor.com/n/incident.asp?IncidentID=", linkText = "" }) => (
     <td className="px-5  border border-gray-200  text-sm">
-      <a className="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker" href={`${linkPrefix}${value}`} target="_blank">
+      <a
+        className="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker"
+        href={`${linkPrefix}${value}`}
+        target="_blank"
+        rel="noreferrer"
+      >
         {linkText || value}
       </a>
     </td>

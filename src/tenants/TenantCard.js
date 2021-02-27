@@ -10,7 +10,7 @@ import React, { useContext, useState } from "react";
 import { animated, useSpring } from "react-spring";
 import { format, formatDistanceToNow } from "../utils/format";
 import EditTenantDetails from "./details/components/EditTenant";
-import { MUTATION_MARK_LIVE } from "./TenantQueries";
+import { MUTATION_MARK_LIVE } from "./TenantMutations";
 
 export const TenantCard = ({
   classes,

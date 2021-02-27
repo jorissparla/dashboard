@@ -11,6 +11,7 @@ import Modal from "ModalWrapper";
 import React, { useContext, useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { animated, config, useSpring } from "react-spring";
+import useSWR from "swr";
 import Spinner from "utils/spinner";
 import FavoriteBadge from "../elements/Badge";
 import { FilterFieldContext, useFilterField } from "../globalState/FilterContext";
@@ -195,8 +196,8 @@ const styles = (theme) => ({
 const CloseButton = ({ children }) => <button className="top-0 right-0 text-2xl ">{children}</button>;
 
 function TenantNote() {
-  const { data, loading } = useQuery(TENANT_NOTE);
-  if (loading) return <div />;
+  const { data, loading } = useSWR(TENANT_NOTE);
+  if (!data) return <div />;
   const { updatestatus } = data;
   if (updatestatus.note && updatestatus.note.length > 1) {
     return <span className="marquee">{updatestatus.note}</span>;
@@ -359,10 +360,10 @@ const TenantList = (props) => {
     createAudit({ variables: { input } }).then(console.log);
   }, [createAudit, dbctx.fullname]);
 
-  const { data, loading } = useQuery(ALL_TENANTS);
-  const { data: details, loading: detailsloading } = useQuery(QUERY_ALL_TENANT_DETAILS);
-
-  if (loading || detailsloading) {
+  const { data, loading } = useSWR(ALL_TENANTS);
+  const { data: details, loading: detailsloading } = useSWR(QUERY_ALL_TENANT_DETAILS);
+  console.log({ data });
+  if (!data || !details) {
     return <Spinner />;
   }
 

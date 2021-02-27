@@ -1,8 +1,10 @@
-import { useMutation } from "@apollo/client";
+import React, { useState } from "react";
+
+import CopyToClipboard from "react-copy-to-clipboard";
 import TWButton from "elements/TWButton";
 import gql from "graphql-tag";
-import React, { useState } from "react";
-import CopyToClipboard from "react-copy-to-clipboard";
+import { useMutation } from "@apollo/client";
+
 // const LINK_PREFIX = 'https://nlbavwdocsup1.infor.com:5001/';
 
 const UPLOAD_FILE_MUTATION = gql`
@@ -64,7 +66,7 @@ const TWFileUpload: React.FC<TWFileUploadProps> = ({
       {showLink && (
         <CopyToClipboard text={fileName} onCopy={() => console.log("Copied")}>
           <div className="flex flex-col justify-center">
-            <a href={fileName} target="_blank_" className="mx-2">
+            <a href={fileName} target="_blank_" className="mx-2" rel="noreferrer">
               {fileName}
             </a>
             {fileName && (

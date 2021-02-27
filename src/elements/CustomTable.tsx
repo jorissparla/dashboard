@@ -27,7 +27,7 @@ export const NavigatorLinkCell = ({ value = "", className = "", linkText = "", l
   const linkPrefix = "http://navigator.infor.com/n/incident.asp?IncidentID=";
   return (
     <td className={`p-2 font-sans text-sm font-semibold text-gray-700 ${className}`}>
-      <a className="pt-1" href={`${linkPrefix}${value}`} target="_blank">
+      <a className="pt-1" href={`${linkPrefix}${value}`} target="_blank" rel="noreferrer">
         {linkText || value}
       </a>
     </td>
@@ -36,7 +36,7 @@ export const NavigatorLinkCell = ({ value = "", className = "", linkText = "", l
 
 export const HyperLinkCell = ({ value = "", linkPrefix = "", className = "", linkText = "", linkFieldValue = "" }) => (
   <td className={`p-2 font-sans text-sm font-semibold text-gray-700 ${className}`}>
-    <TWHyperLink color="transp" className="pt-1" href={`${linkPrefix}${linkFieldValue || value}`} target="_blank">
+    <TWHyperLink color="transp" className="pt-1" href={`${linkPrefix}${linkFieldValue || value}`} target="_blank" rel="noreferrer">
       {linkText || value}
     </TWHyperLink>
   </td>

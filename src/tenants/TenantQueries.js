@@ -1,4 +1,5 @@
-import gql from "graphql-tag";
+import { gql } from "graphql-request";
+// import { gqls } from "@apollo/client";
 
 export const TENANT_NOTE = gql`
   query TENANT_NOTE {
@@ -9,7 +10,7 @@ export const TENANT_NOTE = gql`
   }
 `;
 export const ALL_TENANTS = gql`
-  query q {
+  query ALL_TENANTS {
     tenants {
       id
       farm

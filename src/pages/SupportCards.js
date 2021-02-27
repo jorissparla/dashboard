@@ -1,23 +1,27 @@
-import { useMutation, useQuery } from "@apollo/client";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import { useUserContext } from "globalState/UserProvider";
-import gql from "graphql-tag";
-import { usePersistentState } from "hooks";
-import _ from "lodash";
 import React, { useState } from "react";
-//import { SmallCard } from "./SupportCard";
+
+import Button from "@material-ui/core/Button";
+import CategoryTabs from "../supportcard/CategoryTabs";
+import Dialog from "@material-ui/core/Dialog";
+import Modal from "../ModalWrapper";
+import NewRequestForm from "../supportcard/Request";
+import { QUERY_ALL_SUPPORTCARDS } from "supportcard/queries/AllCards";
 import ReactMarkdown from "react-markdown/with-html";
-import { useHistory } from "react-router";
 import SearchBar from "../common/SearchBar";
 import { SmallCard } from "../common/SmallCard";
-import TWButton from "../elements/TWButton";
-import Modal from "../ModalWrapper";
-import AddCard from "../supportcard/AddCard";
-import CategoryTabs from "../supportcard/CategoryTabs";
-// import Typography from '@material-ui/core/Typography';
-import NewRequestForm from "../supportcard/Request";
 import Spinner from "../utils/spinner";
+import TWButton from "../elements/TWButton";
+import _ from "lodash";
+import gql from "graphql-tag";
+import { useHistory } from "react-router";
+import { useMutation } from "@apollo/client";
+import { usePersistentState } from "hooks";
+import useSWR from "swr";
+import { useUserContext } from "globalState/UserProvider";
+
+//import { SmallCard } from "./SupportCard";
+
+// import Typography from '@material-ui/core/Typography';
 
 const cardColors = [
   { back: "#7fbadb", front: "#000" },
@@ -64,24 +68,6 @@ export const MUTATION_UPDATE_CARD_KEYWORDS = gql`
   }
 `;
 
-export const QUERY_ALL_SUPPORTCARDS = gql`
-  ${suppCardFragment}
-  query QUERY_ALL_SUPPORTCARDS {
-    supportcards {
-      ...SupportCardDetails
-    }
-  }
-`;
-
-export const QUERY_SINGLE_SUPPORTCARD = gql`
-  ${suppCardFragment}
-  query QUERY_SINGLE_SUPPORTCARD($id: String) {
-    supportcard(id: $id) {
-      ...SupportCardDetails
-    }
-  }
-`;
-
 const MUTATION_CREATE_AUDIT = gql`
   mutation MUTATION_CREATE_AUDIT($input: InputAuditType) {
     createAudit(input: $input) {
@@ -115,12 +101,13 @@ const customContentStyle = {
 export default function SupportCardContainer(props) {
   const { text = "" } = props;
   const { user, isAuthenticated } = useUserContext();
-  const { data, loading } = useQuery(QUERY_ALL_SUPPORTCARDS);
+
+  const { data, loading, isValidating } = useSWR(QUERY_ALL_SUPPORTCARDS);
 
   const [favoriteCard] = useMutation(MUTATION_FAVORITE_CARD);
   const [unfavoriteCard] = useMutation(MUTATION_UNFAVORITE_CARD);
 
-  if (loading) return <Spinner />;
+  if (!data) return <Spinner />;
   const authenticated = isAuthenticated;
   let isEditor = ["Admin", "PO"].some((u) => (user ? u === user.role : false));
   let hasperm;
@@ -130,16 +117,19 @@ export default function SupportCardContainer(props) {
   isEditor = isEditor || hasperm;
   console.log("☀", isEditor, hasperm);
   return (
-    <SupportCards
-      supportcards={data.supportcards}
-      // createAudit={createAudit}
-      favoriteCard={favoriteCard}
-      unfavoriteCard={unfavoriteCard}
-      currentUser={user}
-      authenticated={authenticated}
-      isEditor={isEditor}
-      filter={text}
-    />
+    <div>
+      {/* {isValidating && <span>fetching...</span>} */}
+      <SupportCards
+        supportcards={data.supportcards}
+        // createAudit={createAudit}
+        favoriteCard={favoriteCard}
+        unfavoriteCard={unfavoriteCard}
+        currentUser={user}
+        authenticated={authenticated}
+        isEditor={isEditor}
+        filter={text}
+      />
+    </div>
   );
 }
 

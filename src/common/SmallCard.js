@@ -1,8 +1,8 @@
-import React from "react";
-import { useHistory } from "react-router";
 import Button from "../elements/TWButton";
 import NumberOfViews from "../pages/NumberOfViews";
+import React from "react";
 import { format } from "../utils/format";
+import { useHistory } from "react-router";
 
 const SmallCard = ({
   title = "Procedure",
@@ -91,6 +91,7 @@ const SmallCard = ({
             {link && (
               <a
                 target="_blank_"
+                rel="noreferrer"
                 href={link}
                 onClick={() => onFollowLink(viewLink, link)}
                 className="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker"

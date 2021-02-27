@@ -5,14 +5,14 @@ import { TWSelectMenu } from "elements/TWSelectMenu";
 import { useAlert } from "globalState/AlertContext";
 import React, { useEffect, useState } from "react";
 import { format } from "utils/format";
-import { MUTATION_UPDATE_DETAIL } from "./../../TenantQueries";
+import { MUTATION_UPDATE_DETAIL } from "tenants/TenantMutations";
 
-function EditTenantDetails(props) {
+function EditTenantDetails({ isTenantEditor, ...props }) {
   const { profile, className, onClose, onView, ...rest } = props;
   console.log(props);
   return (
     <div {...rest} className="bg-white  px-4 font-sans right-0 w-2/3 flex h-full fixed z-50 shadow-lg rounded  flex-col">
-      <EditTenantDetailsWrapped {...props} />
+      <EditTenantDetailsWrapped isTenantEditor={isTenantEditor} {...props} />
     </div>
   );
 }

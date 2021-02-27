@@ -1,18 +1,24 @@
-import { useMutation, useQuery } from "@apollo/client";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import Chip from "@material-ui/core/Chip";
-import TWButton from "elements/TWButton";
-import { TWSelectMenu } from "elements/TWSelectMenu";
-import FavoriteWrapper from "Favorite";
-import { MUTATION_UPDATE_CARD_KEYWORDS, QUERY_SINGLE_SUPPORTCARD } from "pages/SupportCards";
 import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
-import SafeDeleteButton from "videos/SafeDeleteButton";
+import { useMutation, useQuery } from "@apollo/client";
+
+import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { CardSection } from "../common";
-//import { format } from 'date-fns';
-import { format } from "../utils/format";
+import Chip from "@material-ui/core/Chip";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import FavoriteWrapper from "Favorite";
+import { MUTATION_UPDATE_CARD_KEYWORDS } from "pages/SupportCards";
+import { QUERY_SINGLE_SUPPORTCARD } from "./queries/AUDIT_QUERY";
+import SafeDeleteButton from "videos/SafeDeleteButton";
 import SupportCardTags from "./SupportCardTags";
+import TWButton from "elements/TWButton";
+import { TWSelectMenu } from "elements/TWSelectMenu";
+import { format } from "../utils/format";
+
+//import { format } from 'date-fns';
+
+
+
 
 const owners = [
   { id: "Ricardo Exposito", name: "Ricardo Exposito" },
@@ -168,7 +174,7 @@ const SupportCardForm = (props) => {
               onBlur={handleChange}
             />
           ) : (
-            <a href={values.link} target="_blank_" className="underline text-gray-600 w-full mb-2">
+            <a href={values.link} target="_blank_" rel="noreferrer" className="underline text-gray-600 w-full mb-2">
               {values.link}
             </a>
           )}

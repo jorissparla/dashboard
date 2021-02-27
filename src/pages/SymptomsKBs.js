@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
+
+import SearchBar from "common/SearchBar";
+import Spinner from "utils/spinner";
+import { TWHyperLink } from "elements/TWButton";
+import _ from "lodash";
+import { format } from "utils/format";
 import gql from "graphql-tag";
 import { useQuery } from "@apollo/client";
-import Spinner from "utils/spinner";
-import SearchBar from "common/SearchBar";
-import _ from "lodash";
-import { TWHyperLink } from "elements/TWButton";
-import { format } from "utils/format";
 
 const SYMPTOM_KB_QUERY = gql`
   query SYMPTOM_KB_QUERY {
@@ -131,6 +132,7 @@ const SymptomsKBs = () => {
               <li className="list-none">
                 <a
                   target="_blank_"
+                  rel="noreferrer"
                   href={`https://support.infor.com/espublic/EN/AnswerLinkDotNet/SoHo/Solutions/SoHoViewSolution.aspx?SolutionID=${entry.kb}`}
                 >
                   {entry.kb}

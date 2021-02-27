@@ -1,5 +1,6 @@
 import React from "react";
 import clsx from "clsx";
+
 const base_class = "mx-2 rounded px-4  py-2  font-semibold font-sans   leading-tight shadow-md pointer";
 const def_classes = "bg-gray-700 text-white hover:bg-gray-400";
 const grey_class = "text-sm bg-gray-300 hover:bg-gray-400 text-gray-800 btn-tw font-semibold font-sansI";
@@ -95,7 +96,7 @@ const TWHyperLink = ({ children, className = null, link = "", ...props }) => {
       break;
   }
   return (
-    <a href={link} className={classes} {...props} target="_blank_">
+    <a href={link} className={classes} {...props} target="_blank_" rel="noreferrer">
       {children}
     </a>
   );
