@@ -5,6 +5,7 @@ type fieldProps = {
   title: string;
   fld: string;
   hl?: boolean;
+  nl?: boolean;
   fn?: (val: any) => any;
   className?: string;
 };
@@ -22,9 +23,20 @@ const HeaderCell = ({ children }: any) => (
   </th>
 );
 
+export const NavigatorLinkCell = ({ value = "", className = "", linkText = "", linkFieldValue = "" }) => {
+  const linkPrefix = "http://navigator.infor.com/n/incident.asp?IncidentID=";
+  return (
+    <td className={`p-2 font-sans text-sm font-semibold text-gray-700 ${className}`}>
+      <a className="pt-1" href={`${linkPrefix}${value}`} target="_blank">
+        {linkText || value}
+      </a>
+    </td>
+  );
+};
+
 export const HyperLinkCell = ({ value = "", linkPrefix = "", className = "", linkText = "", linkFieldValue = "" }) => (
   <td className={`p-2 font-sans text-sm font-semibold text-gray-700 ${className}`}>
-    <TWHyperLink color="teal" className="pt-1" href={`${linkPrefix}${linkFieldValue || value}`} target="_blank">
+    <TWHyperLink color="transp" className="pt-1" href={`${linkPrefix}${linkFieldValue || value}`} target="_blank">
       {linkText || value}
     </TWHyperLink>
   </td>
@@ -65,11 +77,22 @@ export const CustomTable: React.FC<CustomTableProps> = ({ data, fields = [], ind
                       />
                     );
                   } else {
-                    return (
-                      <DataCell className={field.className || ""} key={`${index}}`}>
-                        {field.fn ? field.fn(item[field.fld]) : item[field.fld]}
-                      </DataCell>
-                    );
+                    if (field.nl) {
+                      return (
+                        <NavigatorLinkCell
+                          key={index}
+                          className={field.className || ""}
+                          linkFieldValue={linkFieldValue}
+                          value={field.fn ? field.fn(item[field.fld]) : item[field.fld]}
+                        />
+                      );
+                    } else {
+                      return (
+                        <DataCell className={field.className || ""} key={`${index}}`}>
+                          {field.fn ? field.fn(item[field.fld]) : item[field.fld]}
+                        </DataCell>
+                      );
+                    }
                   }
                 })}
               </tr>

@@ -61,12 +61,11 @@ const SumoAlert = () => {
         <SumoNav current="Alerts" />
         <TWCheckbox label="Show Archived" value={isShowingArchived} onChange={() => setToggleShowArchive(!isShowingArchived)} />
         {/* <h2 className="text-lg leading-6 font-medium text-black">Sumo Logs</h2> */}
-        {canEdit ||
-          (true && (
-            <TWButton color="blue" onClick={() => history.push("/addsumoalert")}>
-              New
-            </TWButton>
-          ))}
+        {canEdit && (
+          <TWButton color="blue" onClick={() => history.push("/addsumoalert")}>
+            New
+          </TWButton>
+        )}
       </header>
 
       <div className="relative">
@@ -83,7 +82,7 @@ const SumoAlert = () => {
             { title: "comments", fld: "comments" },
             { title: "alert", fld: "alert", className: "font-mono text-xs text-gray-600" },
             { title: "environments", fld: "environments" },
-            { title: "customer", fld: "customer" },
+            { title: "customer", fld: "customername" },
           ]}
           indexField={{ title: "id", fld: "id" }}
         />

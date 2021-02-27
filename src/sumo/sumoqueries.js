@@ -34,6 +34,22 @@ const sumoAlertFragment = gql`
   }
 `;
 
+const sumoIncidentFragment = gql`
+  fragment sumoIncidentFragment on SumoIncident {
+    id
+    incident
+    archive
+    internal
+    customerid
+    customername
+    summary
+    creator
+    created
+    action
+    status
+  }
+`;
+
 export const ADDSUMO_MUTATION = gql`
   ${sumoFragment}
   mutation ADDSUMO_MUTATION($input: SumologInput) {
@@ -94,11 +110,56 @@ export const DELETE_SUMOALERT_MUTATION = gql`
     }
   }
 `;
+
+export const ONE_SUMOINCIDENT_QUERY = gql`
+  ${sumoIncidentFragment}
+  query ONE_SUMOINCIDENT_QUERY($id: ID) {
+    sumoincident(id: $id) {
+      ...sumoIncidentFragment
+    }
+  }
+`;
+
+export const ADDSUMOINCIDENT_MUTATION = gql`
+  ${sumoIncidentFragment}
+  mutation ADDSUMOINCIDENT_MUTATION($input: SumoIncidentInput) {
+    addSumoIncident(input: $input) {
+      ...sumoIncidentFragment
+    }
+  }
+`;
+
+export const UPDATE_SUMOINCIDENT_MUTATION = gql`
+  ${sumoIncidentFragment}
+  mutation UPDATE_SUMOINCIDENT_MUTATION($where: SumoIncidentWhere, $input: SumoIncidentInput) {
+    updateSumoIncident(where: $where, input: $input) {
+      ...sumoIncidentFragment
+    }
+  }
+`;
+export const DELETE_SUMOINCIDENT_MUTATION = gql`
+  ${sumoIncidentFragment}
+  mutation DELETE_SUMOINCIDENT_MUTATION($where: SumoIncidentWhere) {
+    deleteSumoIncident(where: $where) {
+      ...sumoIncidentFragment
+    }
+  }
+`;
+
 export const ALL_SUMOALERTS_QUERY = gql`
   ${sumoAlertFragment}
   query ALL_SUMOALERTS_QUERY {
     sumoalerts {
       ...sumoAlertFragment
+    }
+  }
+`;
+
+export const ALL_SUMO_INCIDENTS_QUERY = gql`
+  ${sumoIncidentFragment}
+  query ALL_SUMO_INCIDENTS_QUERY {
+    sumoincidents {
+      ...sumoIncidentFragment
     }
   }
 `;

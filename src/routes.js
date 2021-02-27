@@ -9,7 +9,7 @@ import SumoAlerts from "pages/sumoalerts";
 import SumoIncidents from "pages/sumoincidents";
 import SymptomsPage from "pages/Symptoms";
 import SymptomsKBs from "pages/SymptomsKBs";
-import TenantLogList from "pages/TenantLogList";
+import TenantLogList from "pages/TenantLogListNew";
 import testActivity from "pages/testActivity";
 import TestChart from "pages/testchart";
 import TrainingGroups from "pages/TrainingGroups";
@@ -70,7 +70,10 @@ import EditBlog from "blog/EditBlog";
 import BlogList from "blog/BlogList";
 import EditSumoAlert from "sumo/EditSumoAlert";
 import AddSumoAlert from "sumo/AddSumoAlert";
-// const StatsMain = DynamicImport(() => import('./pages/StatsMain'));
+import SumoIncidentForm from "sumo/SumoIncidentForm";
+import EditSumoIncident from "sumo/EditSumoIncident";
+
+// const StatsMain = DynamicImport(() => import('./pages/StatsMain'))
 const LoggedInUsers = React.lazy(() => import("./pages/loggedinusers"));
 const Award = DynamicImport(() => import("./awards/award"));
 const ResetPasswordForm = DynamicImport(() => import("./auth/ResetPasswordForm"));
@@ -94,6 +97,8 @@ const SmallCard = DynamicImport(() => import("./supportcard/SupportCard"));
 const HistoryDayContainer = DynamicImport(() => import("./charts/historydaycontainer"));
 const HistoryDayAll = DynamicImport(() => import("./charts/historydayallcontainer"));
 const GoLiveListNew = DynamicImport(() => import("./pages/goLiveListNew"));
+const GoLiveList = DynamicImport(() => import("./pages/goLiveList"));
+
 // const GoLiveListSide = DynamicImport(() => import('./golives/golivelistside'));
 const DashBoardStatsNew = DynamicImport(() => import("./pages/DashBoardStatsNew"));
 const SupportCards = DynamicImport(() => import("./pages/SupportCards"));
@@ -131,6 +136,7 @@ function AppRoutes() {
     <Switch>
       <AuthRoute exact path="/essentialworklist" component={WorklistSimple} />
       <Route exact path="/whatdoesdev" component={WhatDoesDev} />
+      <Route exact path="/tenantlog" component={TenantLogList} />
       <Route exact path="/addblog" component={AddBlog} />
       <Route exact path="/blog/:id" component={EditBlog} />
       <Route exact path="/blogs" component={BlogList} />
@@ -153,6 +159,9 @@ function AppRoutes() {
 
       <Route exact path="/addsumo" component={AddSumo} />
       <Route exact path="/addsumoalert" component={AddSumoAlert} />
+
+      <Route exact path="/addsumoincident" component={SumoIncidentForm} />
+      <Route exact path="/editsumoincident/:id" component={EditSumoIncident} />
 
       <Route exact path="/editsumoalerts/:id" component={EditSumoAlert} />
       <Route exact path="/editsumo/:id" component={EditSumo} />
@@ -250,7 +259,7 @@ function AppRoutes() {
       <Route exact path="/news" component={NewsListContainer} />
       <AuthRoute allowed={["Admin", "PO", "SU"]} user={user} exact path="/news/edit/:id" component={RequireAuth(NewsItemContainer)} />
       <AuthRoute allowed={["Admin", "PO", "SU", "Guest"]} user={user} exact path="/news/add" component={RequireAuth(NewsItemAddContainer)} />
-      <Route path="/golivelist" component={GoLiveListNew} />
+      <Route path="/golivelist" component={GoLiveList} />
       <Route path="/golives" component={GoLiveListNew} />
       <Route exact path="/surveys/:id" component={Surveys} />
       <Route exact path="/surveys" component={Surveys} />

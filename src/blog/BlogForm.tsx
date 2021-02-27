@@ -1,17 +1,13 @@
 import { useMutation } from "@apollo/client";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
 import HTMLEditor from "common/HTMLEditor";
 import TextInput from "elements/TextInput";
 import TWButton from "elements/TWButton";
 import { useAlert } from "globalState/AlertContext";
-import { useUserContext } from "globalState/UserProvider";
-
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router";
 import { format } from "utils/format";
 import SafeDeleteButton from "videos/SafeDeleteButton";
-import { ADD_BLOG_MUTATION, UPDATE_BLOG_MUTATION, DELETE_BLOG_MUTATION, ALL_BLOGS_QUERY } from "./queries";
+import { ADD_BLOG_MUTATION, ALL_BLOGS_QUERY, DELETE_BLOG_MUTATION, UPDATE_BLOG_MUTATION } from "./queries";
 
 export type BlogProps = {
   id?: string;
@@ -105,27 +101,6 @@ const BlogForm: React.FC<{ blog: BlogProps; enabled: boolean }> = ({ blog, enabl
               )}
             </div>
             <HTMLEditor enabled={enabled} value={values.content} onChange={(v) => console.log(v)} label={enabled ? "Content" : " "} />
-            {/* <div className="mt-2">
-              <label htmlFor="content" className="block text-sm font-medium text-gray-700">
-                Content
-              </label>
-
-              <CKEditor
-                editor={ClassicEditor}
-                enabled={enabled}
-                config={config}
-                // disabled={readOnly}
-                data={values.content}
-                onReady={(_editor: any) => {
-                  // You can store the "editor" and use when it is needed.
-                }}
-                onChange={(_event: any, editor: { getData: () => any }) => {
-                  const data = editor.getData();
-                  // console.log("Change", { event, editor, data });
-                  setValues({ ...values, content: data });
-                }}
-              />
-            </div> */}
           </div>
           <div className="flex text-xs text-gray-600 mt-2 ">
             created by <span className="font-semibold px-2">{values.creator} </span> on {format(values.created, "EEEE, do MMM yyyy, HH:mi")}

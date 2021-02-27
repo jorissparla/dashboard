@@ -22,14 +22,14 @@ import LinkIcon from "@material-ui/icons/SpeakerNotesTwoTone";
 import SurveysIcon from "@material-ui/icons/Whatshot";
 import { signOut } from "auth/msAuth";
 import TWFileUpload from "common/FileUploaderNew";
-import { CloseIcon } from "elements/Icons";
+import { CloseIcon, SumoIcon } from "elements/Icons";
 import TWButton from "elements/TWButton";
 import { UserContext } from "globalState/UserProvider";
 import React, { useState } from "react";
 // import Signout from '../Signout';
 import { NavLink } from "./NavLink";
 
-interface Props {
+interface ISideBarProps {
   classes: any;
   history: any;
   authenticated?: boolean;
@@ -37,7 +37,7 @@ interface Props {
   open: boolean;
 }
 
-export const SideBarMenu: React.FC<Props> = ({ classes, history, toggleMenu, open }) => {
+export function SideBarMenu({ classes, history, toggleMenu, open }: ISideBarProps) {
   const { user, logout } = React.useContext(UserContext);
   const [showSideMenu, setShowSideMenu] = useState(false);
 
@@ -84,6 +84,8 @@ export const SideBarMenu: React.FC<Props> = ({ classes, history, toggleMenu, ope
         {authenticated && !isAdmin && <ToggledNavLink title="Worklist" Icon={MyWorkList} navigateTo="/mywork" history={history} />}
         {isAdmin && <ToggledNavLink title="Admin WorkList" Icon={MyWorkList} navigateTo="/mywork" history={history} />}
         <Divider />
+        <ToggledNavLink title="Sumo Proactive" Icon={SumoIcon} navigateTo="/sumo" history={history} color="text-blue-800" />
+
         <ToggledNavLink title="Proactive Projects!" Icon={BusinessCenterIcon} navigateTo="/projects" history={history} color="text-blue-800" />
         {isAdmin && <ToggledNavLink title="Permissions" Icon={Person} navigateTo="/userpermissions" history={history} />}
         {isAdmin && <ToggledNavLink title="Logged in Users" Icon={PeopleOutlineIcon} navigateTo="/loggedinusers" history={history} />}
@@ -129,9 +131,9 @@ export const SideBarMenu: React.FC<Props> = ({ classes, history, toggleMenu, ope
               Signout
             </MenuItem>
             {/* <ToggledNavLink title="Videos" navigateTo="/videos" history={history} /> */}
-            <TWButton color="transp" onClick={() => setShowSideMenu(!showSideMenu)}>
+            {/* <TWButton color="transp" onClick={() => setShowSideMenu(!showSideMenu)}>
               Upload Files
-            </TWButton>
+            </TWButton> */}
           </React.Fragment>
         )}
       </List>
@@ -155,7 +157,7 @@ export const SideBarMenu: React.FC<Props> = ({ classes, history, toggleMenu, ope
       )}
     </div>
   );
-};
+}
 
 interface ExpandableProps {
   title: string;

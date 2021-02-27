@@ -87,6 +87,9 @@ const TWHyperLink = ({ children, className = null, link = "", ...props }) => {
     case "primary":
       classes = clsx(classes, newBaseClass, purple_class);
       break;
+    case "transp":
+      classes = clsx(graybut);
+      break;
     default:
       classes = clsx(classes, newBaseClass, def_classes);
       break;

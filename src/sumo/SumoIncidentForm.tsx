@@ -3,6 +3,7 @@ import InputTagsDropDown from "common/InputTagsDD";
 import AutoComplete from "elements/AutoComplete";
 import TextInput from "elements/TextInput";
 import TWButton from "elements/TWButton";
+import TWCheckbox from "elements/TWCheckbox";
 import { useAlert } from "globalState/AlertContext";
 import { useHasPermissions, useUserContext } from "globalState/UserProvider";
 import { usePersistentState } from "hooks";
@@ -10,7 +11,8 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { format } from "utils/format";
 import SafeDeleteButton from "videos/SafeDeleteButton";
-import { ADDSUMOALERT_MUTATION, ALL_SUMOALERTS_QUERY, DELETE_SUMOALERT_MUTATION, UPDATE_SUMOALERT_MUTATION } from "./sumoqueries";
+import { ADDSUMOINCIDENT_MUTATION, ALL_SUMO_INCIDENTS_QUERY, DELETE_SUMOINCIDENT_MUTATION, UPDATE_SUMOINCIDENT_MUTATION } from "./sumoqueries";
+import { ISumoIncident } from "./sumotypes";
 
 const QUERY_SUPPORT_ACCOUNTS = gql`
   query QUERY_SUPPORT_ACCOUNTS {
@@ -21,45 +23,32 @@ const QUERY_SUPPORT_ACCOUNTS = gql`
   }
 `;
 
-type SumoAlertType = {
-  id?: string;
-  creator?: string;
-  created?: string;
-  archive?: number;
-  alert?: string;
-  comments?: string;
-  environments?: string;
-  customerid?: number;
-  customername?: string;
-  __typename?: string;
-};
-
 type AccountType = {
   id?: string;
   fullname?: string;
 };
-function SumoAlertForm({ initialValues }: { initialValues?: SumoAlertType }) {
+function SumoIncidentForm({ initialValues }: { initialValues?: ISumoIncident }) {
   const defaults = initialValues
     ? initialValues
     : {
         id: "",
         creator: "",
-        comments: "",
+        action: "",
         archive: 0,
+        internal: 1,
         customername: "",
+        incident: "",
         created: format(new Date(), "yyyy-MM-dd"),
-        alert: "",
-        environments: "",
+        summary: "",
+        status: "Open",
       };
   const [values, setValues] = useState(defaults);
-  const [debugMode, setDebugMode] = usePersistentState("debug", true);
-  const { login } = useUserContext();
   const [enabled, setEnabled] = useState(false);
   const [support, setSupport] = useState([]);
 
-  const [addSumoAlertInput] = useMutation(ADDSUMOALERT_MUTATION);
-  const [updateSumoAlertInput] = useMutation(UPDATE_SUMOALERT_MUTATION);
-  const [deleteSumoAlertInput] = useMutation(DELETE_SUMOALERT_MUTATION);
+  const [addSumoIncidentInput] = useMutation(ADDSUMOINCIDENT_MUTATION);
+  const [updateSumoIncidentInput] = useMutation(UPDATE_SUMOINCIDENT_MUTATION);
+  const [deleteSumoIncidentInput] = useMutation(DELETE_SUMOINCIDENT_MUTATION);
   const { data, loading } = useQuery(QUERY_SUPPORT_ACCOUNTS);
   const [hasPermissions, user] = useHasPermissions(["ADMIN", "SUMOEDIT"]);
   const alert = useAlert();
@@ -89,23 +78,26 @@ function SumoAlertForm({ initialValues }: { initialValues?: SumoAlertType }) {
 
   function handleChange(e: { target: { name: any; value: any } }) {
     if (enabled) {
-      console.log(e.target.name, e.target.value);
       setValues({ ...values, [e.target.name]: e.target.value });
     }
   }
 
   function setCreator(v: string) {
-    console.log(v);
     setValues({ ...values, creator: v });
+  }
+
+  function toggleInternal() {
+    const current: number = values ? values.internal || 1 : 0;
+    setValues({ ...values, internal: 1 - current });
   }
 
   async function handleDelete() {
     console.log("handleDelete");
     if (values.id) {
       const where = { id: values.id };
-      const result = await deleteSumoAlertInput({ variables: { where }, refetchQueries: [{ query: ALL_SUMOALERTS_QUERY }] });
+      const result = await deleteSumoIncidentInput({ variables: { where }, refetchQueries: [{ query: ALL_SUMO_INCIDENTS_QUERY }] });
       alert.setMessage(`Successfully deleted entry`);
-      history.push("/sumoalerts");
+      history.push("/sumoincidents");
     }
   }
   async function archiveEntry(value = 1) {
@@ -118,8 +110,8 @@ function SumoAlertForm({ initialValues }: { initialValues?: SumoAlertType }) {
       delete input.__typename;
       delete input.id;
       console.log(values);
-      const result = await updateSumoAlertInput({ variables: { where, input } });
-      if (result?.data?.updateSumoAlert) {
+      const result = await updateSumoIncidentInput({ variables: { where, input } });
+      if (result?.data?.updateIncident) {
         alert.setMessage(`Successfully ${value === 1 ? "archived" : "unarchived"} and updated`);
       }
     }
@@ -137,16 +129,16 @@ function SumoAlertForm({ initialValues }: { initialValues?: SumoAlertType }) {
     if (values.id) {
       const where = { id: values.id };
       console.log({ values });
-      const result = await updateSumoAlertInput({ variables: { where, input }, refetchQueries: [{ query: ALL_SUMOALERTS_QUERY }] });
+      const result = await updateSumoIncidentInput({ variables: { where, input }, refetchQueries: [{ query: ALL_SUMO_INCIDENTS_QUERY }] });
       console.log(result);
-      if (result?.data?.updateSumoAlert) {
+      if (result?.data?.updateIncident) {
         alert.setMessage("Successfully updated");
       }
     } else {
-      const result = await addSumoAlertInput({ variables: { input }, refetchQueries: [{ query: ALL_SUMOALERTS_QUERY }] });
+      const result = await addSumoIncidentInput({ variables: { input }, refetchQueries: [{ query: ALL_SUMO_INCIDENTS_QUERY }] });
       console.log(result);
       alert.setMessage("Successfully added");
-      history.push("/sumo");
+      history.push("/sumoincidents");
     }
   }
 
@@ -155,8 +147,8 @@ function SumoAlertForm({ initialValues }: { initialValues?: SumoAlertType }) {
       <div className="bg-white m-2 rounded shadow-lg p-2">
         <section className="px-4 sm:px-6 lg:px-4 xl:px-6 pt-4 pb-4 sm:pb-6 lg:pb-4 xl:pb-6 space-y-4">
           <header className="flex items-center justify-between">
-            <h2 className="text-lg leading-6 font-medium text-black">{values.id ? "Edit" : "Add"} Entry for Alert</h2>
-            <TWButton onClick={() => history.push("/sumoalerts")}>Back to List</TWButton>
+            <h2 className="text-lg leading-6 font-medium text-black">{values.id ? "Edit" : "Add"} Entry for Incident</h2>
+            <TWButton onClick={() => history.push("/sumoincidents")}>Back to List</TWButton>
             {enabled && (
               <div className="flex">
                 {values.archive === 0 ? (
@@ -187,7 +179,7 @@ function SumoAlertForm({ initialValues }: { initialValues?: SumoAlertType }) {
           />
           {/* <TWSelectMenu items={support} label="name" name="creator" value={values.creator} onChange={(v) => setCreator(v)} /> */}
           <div>
-            <label htmlFor="week" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="created" className="block text-sm font-medium text-gray-700">
               Date
             </label>
             <input
@@ -200,24 +192,27 @@ function SumoAlertForm({ initialValues }: { initialValues?: SumoAlertType }) {
             />
           </div>
           <TextInput label="Customer" name="customername" value={values.customername} onChange={handleChange} className="min-w-80" />
-          <TextInput label="Environments" name="environments" value={values.environments} onChange={handleChange} className="min-w-80" />
-          {/* <TextInput label="Module" name="module" value={values.module} onChange={handleChange} className="max-w-16" /> */}
+          <TextInput label="Incident" name="incident" value={values.incident} onChange={handleChange} />
+          <TextInput label="Status" name="status" value={values.status} onChange={handleChange} className="min-w-80" />
           {/* <InputTagsDropDown values={values.farms} name="farms" readOnly={!enabled} label="Farms" onChange={handleFarmsInputChange} /> */}
+          <div className=" flex items-center ml-2 pl-2 pt-4">
+            <TWCheckbox label="Internal Incident" value={values.internal === 1} onChange={toggleInternal} />
+          </div>
         </div>
 
         <div className="mt-2">
-          <label htmlFor="comments" className="block text-sm font-medium text-gray-700">
-            Comments
+          <label htmlFor="summary" className="block text-sm font-medium text-gray-700">
+            Summary
           </label>
-          <textarea name="comments" value={values.comments} onChange={handleChange} className="form-input font-sans resize-none " rows={4} />
+          <textarea name="summary" value={values.summary} onChange={handleChange} className="form-input font-mono resize-none text-2xs" rows={10} />
         </div>
         <div className="mt-2">
           <div className="mt-2 mb-2">
             <div>
-              <label htmlFor="alert" className="block text-sm font-medium text-gray-700">
-                Alert
+              <label htmlFor="action" className="block text-sm font-medium text-gray-700">
+                Action
               </label>
-              <textarea name="alert" value={values.alert} onChange={handleChange} className="form-input font-mono resize-none text-2xs" rows={15} />
+              <textarea name="action" value={values.action} onChange={handleChange} className="form-input font-sans resize-none " rows={5} />
             </div>
           </div>
         </div>
@@ -226,4 +221,4 @@ function SumoAlertForm({ initialValues }: { initialValues?: SumoAlertType }) {
   );
 }
 
-export default SumoAlertForm;
+export default SumoIncidentForm;

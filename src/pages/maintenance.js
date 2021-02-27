@@ -88,7 +88,6 @@ function MaintenanceWizard() {
     console.log("activeversion", activeVersion);
     if (data) {
       const selectedTemplates = data.allmaintenanceTemplates.slice().filter((tpl) => tpl.versions.includes(activeVersion.version));
-      console.log({ activeVersion }, { selectedTemplates });
       setTemplates(selectedTemplates);
       if (selectedTemplates.length > 0) {
         setSelectedTemplate(selectedTemplates[0]);
@@ -102,7 +101,6 @@ function MaintenanceWizard() {
     const newActiveVersion = versions.find((item) => item.version === v);
     setActiveVersion(newActiveVersion);
   }
-  console.log(activeVersion.extended_startdate, new Date().getTime());
 
   function changeSelectedTemplate(id) {
     const currTemplate = data.allmaintenanceTemplates.find((tpl) => tpl.id === id);
@@ -176,7 +174,12 @@ function MaintenanceWizard() {
             </TWButton>
           </div>
         </div>
-        <MaintenanceTemplateField label="Checks Required?" name="checksrequired" initialValue={selectedTemplate.checksrequired} />
+        <MaintenanceTemplateField
+          label="Checks Required?"
+          name="checksrequired"
+          initialValue={selectedTemplate.checksrequired}
+          forceReadOnly={true}
+        />
         <MaintenanceTemplateFields initialTemplate={selectedTemplate} forceReadOnly={true} />
         {/* <pre>{JSON.stringify(selectedTemplate)}</pre> */}
       </div>

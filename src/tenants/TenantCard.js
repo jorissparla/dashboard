@@ -195,7 +195,7 @@ export const TenantCard = ({
             })}
           </div>
           <Divider />
-          <div className="flex items-center justify-between" alignItems="center" container justify="space-between" spacing={3}>
+          <div className="flex items-center justify-between">
             <div item className="max-w-md">
               <div className="font-sans font-semibold text-gray-600">PM</div>
               <div className="text-sm font-sans" variant="body2">

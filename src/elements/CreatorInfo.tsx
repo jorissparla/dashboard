@@ -10,6 +10,13 @@ const QUERY_ACCOUNTS = gql`
   }
 `;
 
+interface IAccount {
+  email: string;
+  image: string;
+}
+interface IAccountData {
+  user: IAccount;
+}
 type CreatorInfoProps = {
   creator: string;
   created: string;
@@ -19,12 +26,12 @@ type UserType = {
   email?: string;
   image?: string;
 };
-const CreatorInfo: React.FC<CreatorInfoProps> = ({ creator, created, image = "" }) => {
+const CreatorInfo = ({ creator, created, image = "" }: CreatorInfoProps) => {
   const [src, setSrc] = useState(
     "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-1.2.1&ixqx=uZDt5cC8cT&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
   );
 
-  const { data, loading } = useQuery(QUERY_ACCOUNTS);
+  const { data, loading } = useQuery<IAccountData>(QUERY_ACCOUNTS);
 
   useEffect(() => {
     if (data) {

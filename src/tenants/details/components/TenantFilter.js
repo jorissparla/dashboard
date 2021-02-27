@@ -1,82 +1,13 @@
-import { Button, Drawer, Switch, TextField, Typography } from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
-import DeleteIcon from "@material-ui/icons/DeleteOutlined";
-import { makeStyles } from "@material-ui/styles";
-import clsx from "clsx";
-import PropTypes from "prop-types";
+import { Drawer } from "@material-ui/core";
+import { CloseIcon } from "elements/Icons";
+import TextInput from "elements/TextInput";
+import Button from "elements/TWButton";
+import TWCheckbox from "elements/TWCheckbox";
 import React from "react";
 import { usePersistentState } from "../../../hooks";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    height: "100%",
-    display: "flex",
-    flexDirection: "column",
-  },
-  drawer: {
-    width: 420,
-    maxWidth: "100%",
-  },
-  header: {
-    padding: theme.spacing(2),
-    display: "flex",
-    justifyContent: "space-between",
-  },
-  buttonIcon: {
-    marginRight: theme.spacing(1),
-  },
-  content: {
-    padding: theme.spacing(3),
-    flexGrow: 1,
-  },
-  contentSection: {
-    padding: theme.spacing(2),
-  },
-  contentSectionHeader: {
-    display: "flex",
-    justifyContent: "space-between",
-    cursor: "pointer",
-  },
-  contentSectionContent: {},
-  formGroup: {
-    padding: theme.spacing(2),
-  },
-  fieldGroup: {
-    display: "flex",
-    alignItems: "center",
-  },
-  field: {
-    marginTop: 0,
-    marginBottom: 0,
-  },
-  flexGrow: {
-    flexGrow: 1,
-  },
-  addButton: {
-    marginLeft: theme.spacing(1),
-  },
-  tags: {
-    marginTop: theme.spacing(1),
-  },
-  minAmount: {
-    marginRight: theme.spacing(3),
-  },
-  maxAmount: {
-    marginLeft: theme.spacing(3),
-  },
-  radioGroup: {},
-  actions: {
-    padding: theme.spacing(3),
-    "& > * + *": {
-      marginTop: theme.spacing(2),
-    },
-  },
-}));
-
 const Filter = (props) => {
-  const { open, onClose, onFilter, className, onhandleSetFilterActive = () => console.log, ...rest } = props;
-
-  const classes = useStyles();
+  const { open, onClose, onFilter, className, clearFilter, onhandleSetFilterActive = () => console.log, ...rest } = props;
 
   const initialValues = {
     customerName: "",
@@ -88,13 +19,15 @@ const Filter = (props) => {
     pm: "",
     temperature: "",
     lastupdated: "999",
+    useproxy: false,
   };
 
   const [values, setValues] = usePersistentState("filters", { ...initialValues });
 
   const handleClear = () => {
     setValues({ ...initialValues });
-    onhandleSetFilterActive(false);
+    clearFilter();
+    // onhandleSetFilterActive(false);
     // console.log()
   };
 
@@ -105,15 +38,13 @@ const Filter = (props) => {
       [field]: value,
     }));
   };
-  const handleChange = (event) => {
-    event.persist();
 
-    setValues({
-      ...values,
-      [event.target.name]: event.target.type === "checkbox" ? event.target.checked : event.target.value,
-    });
-  };
-
+  function handleChangeLive(value) {
+    setValues({ ...values, isLive: 1 - values.isLive });
+  }
+  function handleChangeUseProxy(value) {
+    setValues({ ...values, useproxy: 1 - values.useproxy });
+  }
   const handleSubmit = (event) => {
     event.preventDefault();
     console.log({ values });
@@ -123,155 +54,115 @@ const Filter = (props) => {
 
   const customerStatusOptions = ["", "NORMAL", "WATCH", "ALERT"];
   return (
-    <Drawer anchor="right" classes={{ paper: classes.drawer }} onClose={onClose} open={open} variant="temporary">
-      <form {...rest} className={clsx(classes.root, className)} onSubmit={handleSubmit}>
-        <div className={classes.header}>
-          <Button onClick={onClose} size="small">
-            <CloseIcon className={classes.buttonIcon} />
+    <Drawer anchor="right" className="w-full" onClose={onClose} open={open} variant="temporary">
+      <div {...rest} className={` ml-6 flex flex-col ${className}`}>
+        <div className="flex items-center justify-between py-3">
+          <Button color="primary" onClick={handleSubmit}>
+            Apply filters
+          </Button>
+          <Button onClick={handleClear}>Clear</Button>
+          <Button onClick={onClose} className="w-48" color="transp">
+            <CloseIcon />
             Close
           </Button>
         </div>
-        <div className={classes.content}>
-          <div className={classes.contentSection}>
-            <div className={classes.contentSectionHeader}>
-              <Typography variant="h5">Filter</Typography>
+        <div className="mt-4 border-t border-gray-100">
+          <div className="">
+            <div className="flex items-center">
+              <div className="font-semibold text-2xl">Filter</div>
             </div>
-            <div className={classes.contentSectionContent}>
-              <div className={classes.contentSectionContent}>
-                <div className={classes.formGroup}>
-                  <TextField
-                    className={classes.field}
-                    fullWidth
+            <div className="p-2">
+              <div className="p-2">
+                <div className="m-2 px-2 py-1">
+                  <TextInput
+                    className=""
                     label="Customer name"
-                    margin="dense"
                     name="customerName"
                     onChange={(event) => handleFieldChange(event, "customerName", event.target.value)}
                     value={values.customerName}
-                    variant="outlined"
                   />
                 </div>
-                <div className={classes.formGroup}>
-                  <Typography variant="h6">Live</Typography>
-                  <Typography variant="body2">Shows only customers that are live</Typography>
-                  <Switch checked={values.isLive} color="primary" edge="start" name="isLive" onChange={handleChange} />
+
+                <div className="m-2 px-2 py-1">
+                  <div className=" py-1 ">
+                    {/* <div className="text-sm">Shows only customers that are live</div> */}
+                    <TWCheckbox checked={values.useproxy} label="Show  customers with Proxy agreement" onChange={handleChangeUseProxy} />
+                  </div>
+                  <div className="font-semibold text-2xl text-gray-600">Live</div>
+                  {/* <div className="text-sm">Shows only customers that are live</div> */}
+                  <TWCheckbox checked={values.isLive} label="Show live customers" onChange={handleChangeLive} />
                 </div>
-                <div className={classes.formGroup}>
-                  <TextField
-                    className={classes.field}
-                    fullWidth
+                <div className="m-2 px-2 py-1">
+                  <TextInput
+                    className=""
                     label="Tenant Version"
-                    margin="dense"
                     name="tenantVersion"
                     onChange={(event) => handleFieldChange(event, "tenantVersion", event.target.value)}
                     value={values.tenantVersion}
-                    variant="outlined"
                   />
                 </div>
-                <div className={classes.formGroup}>
-                  <TextField
-                    className={classes.field}
-                    fullWidth
+                <div className="m-2 px-2 py-1">
+                  <TextInput
+                    className=""
                     label="Last Updated"
-                    margin="dense"
                     name="lastupdated"
                     onChange={(event) => handleFieldChange(event, "lastupdated", event.target.value)}
                     value={values.lastupdated}
-                    variant="outlined"
                   />
                 </div>
-                <div className={classes.formGroup}>
-                  <TextField
-                    className={classes.field}
-                    fullWidth
+                <div className="m-2 px-2 py-1">
+                  <TextInput
+                    className=""
                     label="Tenant name"
-                    margin="dense"
                     name="tenantName"
                     onChange={(event) => handleFieldChange(event, "tenantName", event.target.value)}
                     value={values.tenantName}
-                    variant="outlined"
                   />
                 </div>
-                <div className={classes.formGroup}>
-                  <TextField
-                    className={classes.field}
-                    fullWidth
+                <div className="m-2 px-2 py-1">
+                  <TextInput
+                    className=""
                     label="Farm Name"
-                    margin="dense"
                     name="farmName"
                     onChange={(event) => handleFieldChange(event, "farmName", event.target.value)}
                     value={values.farmName}
-                    variant="outlined"
                   />
                 </div>
-                <div className={classes.formGroup}>
-                  <TextField
-                    className={classes.field}
-                    fullWidth
+                <div className="m-2 px-2 py-1">
+                  <TextInput
+                    className=""
                     label="Project Manager"
-                    margin="dense"
                     name="pm"
                     onChange={(event) => handleFieldChange(event, "pm", event.target.value)}
                     value={values.pm}
-                    variant="outlined"
                   />
                 </div>
-                <div className={classes.formGroup}>
-                  <TextField
-                    className={classes.field}
-                    fullWidth
+                <div className="m-2 px-2 py-1">
+                  <TextInput
+                    className=""
                     label="Customer Success Manager"
-                    margin="dense"
                     name="csm"
                     onChange={(event) => handleFieldChange(event, "csm", event.target.value)}
                     value={values.csm}
-                    variant="outlined"
                   />
                 </div>
-                <div className={classes.formGroup}>
-                  <TextField
-                    className={classes.field}
-                    fullWidth
+                <div className="m-2 px-2 py-1">
+                  <TextInput
+                    className=""
                     label="Customer Temperature"
-                    margin="dense"
                     name="temperature"
+                    placeholder="Normal, Alert, Critical..."
                     onChange={(event) => handleFieldChange(event, "temperature", event.target.value)}
-                    select
-                    // eslint-disable-next-line react/jsx-sort-props
-                    SelectProps={{ native: true }}
                     value={values.temperature}
-                    variant="outlined"
-                  >
-                    <option disabled value="" />
-                    {customerStatusOptions.map((option) => (
-                      <option key={option} value={option}>
-                        {option}
-                      </option>
-                    ))}
-                  </TextField>
+                  ></TextInput>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div className={classes.actions}>
-          <Button fullWidth onClick={handleClear} variant="contained">
-            <DeleteIcon className={classes.buttonIcon} />
-            Clear
-          </Button>
-          <Button color="primary" fullWidth type="submit" variant="contained">
-            Apply filters
-          </Button>
-        </div>
-      </form>
+      </div>
     </Drawer>
   );
-};
-
-Filter.propTypes = {
-  className: PropTypes.string,
-  onClose: PropTypes.func,
-  onFilter: PropTypes.func,
-  open: PropTypes.bool.isRequired,
 };
 
 export default Filter;

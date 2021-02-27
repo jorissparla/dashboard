@@ -60,7 +60,7 @@ export const MaintenanceTemplateField = ({ name, label, id, initialValue, classN
     alert.setMessage(`Content was updated for field '${name}'`);
   };
   const config2 =
-    isValidEditor && forceReadOnly
+    isValidEditor && !forceReadOnly
       ? {
           ckfinder: {
             uploadUrl: "https://nlbavwixs.infor.com:3001/upload",
