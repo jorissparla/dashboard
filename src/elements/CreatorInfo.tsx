@@ -1,9 +1,9 @@
+import React, { useEffect, useState } from "react";
 import { gql, useQuery } from "@apollo/client";
-import React, { useState, useEffect } from "react";
 
 const QUERY_ACCOUNTS = gql`
-  query QUERY_ACCOUNTS {
-    user: findAccountByEmail {
+  query QUERY_ACCOUNTS($email: String) {
+    user: findAccountByEmail(email: $email) {
       email
       image
     }
@@ -21,41 +21,61 @@ type CreatorInfoProps = {
   creator: string;
   created: string;
   image?: string;
+  label?: string;
 };
 type UserType = {
   email?: string;
   image?: string;
 };
-const CreatorInfo = ({ creator, created, image = "" }: CreatorInfoProps) => {
-  const [src, setSrc] = useState(
-    "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?ixlib=rb-1.2.1&ixqx=uZDt5cC8cT&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-  );
 
-  const { data, loading } = useQuery<IAccountData>(QUERY_ACCOUNTS);
+function findInitialsFromEmail(email: string): string {
+  let name = email.split("@");
+  if (name.length && name.length === 2) {
+    let firstLast = name[0].split(".");
+    if (firstLast.length && firstLast.length === 2) {
+      const result = `${firstLast[0][0]}${firstLast[1][0]}`.toUpperCase();
+      return result;
+    }
+  }
+  return email.slice(0, 2).toUpperCase();
+}
+
+const CreatorInfo = ({ creator, created, image = "", label = "created on" }: CreatorInfoProps) => {
+  const [src, setSrc] = useState("");
+
+  const { data, loading } = useQuery<IAccountData>(QUERY_ACCOUNTS, { variables: { email: creator } });
 
   useEffect(() => {
     if (data) {
       const found = data.user;
       if (found && found.image) {
         setSrc(found.image);
+      } else {
       }
     }
   }, [data]);
 
   if (loading) return <div />;
   return (
-    <div className="mt-6 flex items-center">
+    <div className="mt-2 flex items-center">
       <div className="flex-shrink-0">
         <div>
-          <span className="sr-only">Daniela Metz</span>
-          <img className="h-10 w-10 rounded-full" src={src} alt="" />
+          <span className="sr-only">Creator or user</span>
+          {src ? (
+            <img className="h-10 w-10 rounded-full" src={src} alt="" />
+          ) : (
+            <div className="rounded-full w-10 h-10 bg-teal-300 text-teal-800 flex items-center justify-center text-xl font-bold">
+              {findInitialsFromEmail(creator)}
+            </div>
+          )}
         </div>
       </div>
       <div className="ml-3">
         <p className="text-sm font-medium text-gray-900">
           <span className="hover:underline">{creator}</span>
         </p>
-        <div className="flex space-x-1 text-sm text-gray-500">
+        <div className="flex space-x-1 text-xs text-gray-500 ml-3">
+          <span className="font-semibold tracking-wide">{label}</span>
           <span>{created}</span>
         </div>
       </div>

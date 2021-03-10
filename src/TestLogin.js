@@ -1,10 +1,14 @@
-import React from "react";
-import { Query, Mutation } from "@apollo/client/react/components";
-import gql from "graphql-tag";
-import Button from "@material-ui/core/Button";
-import Signout from "./Signout";
+import { Mutation, Query } from "@apollo/client/react/components";
+import React, { Children, useEffect, useState } from "react";
+import Signout, { SignOut2 } from "./Signout";
+import { useMutation, useQuery } from "@apollo/client";
 
-const MY_CURRENT_USER_QUERY = gql`
+import Button from "elements/TWButton";
+import { ChatOutlined } from "@material-ui/icons";
+import { fql } from "utils/fql";
+import gql from "graphql-tag";
+
+const qq = fql`
   query MY_CURRENT_USER_QUERY {
     me {
       id
@@ -20,78 +24,114 @@ const MY_CURRENT_USER_QUERY = gql`
   }
 `;
 
+const EMAILUSER = fql`{
+  user: findAccountByEmail(email:"joris.sparla@infor.com") {
+    email
+    fullname
+    image
+  }
+}
+`;
+
+const MY_CURRENT_USER_QUERY = gql(qq);
+
 const SIGNIN_MUTATION = gql`
   mutation m {
-    signinUser(input: { email: "joris.sparla@infor.com", password: "Infor2018" }) {
+    signinUser(input: { email: "joris.sparla@infor.com", password: "Infor2019" }) {
       user {
         firstname
+        fullname
+        image
       }
     }
   }
 `;
 
-const User = (props) => <Query query={MY_CURRENT_USER_QUERY}>{(payload) => props.children(payload)}</Query>;
+function Me({ children }) {
+  const { data, loading } = useQuery(gql(EMAILUSER));
+  if (loading || !data) return null;
+  console.log("data", data?.user);
+  const user = data.user;
+  return children(user);
+}
 
-const Index = () => (
-  <Mutation mutation={SIGNIN_MUTATION} refetchQueries={[{ query: MY_CURRENT_USER_QUERY }]}>
-    {(signin) => {
-      return (
-        <div>
-          <h1>Hallo Joris</h1>
-          <svg>
-            <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z" />
-          </svg>
-          <User>
-            {({ data, loading, error }) => {
-              if (loading) {
-                return "Loading.console..";
+const Index = () => {
+  const [signin] = useMutation(SIGNIN_MUTATION);
+  const [currentUser, setCurrentUser] = useState(null);
+  const { data, loading } = useQuery(MY_CURRENT_USER_QUERY);
+  useEffect(() => {
+    if (data) {
+      setCurrentUser(data?.me);
+    }
+  }, [data]);
+  if (loading) return null;
+  console.log("data", data);
+  return (
+    <div>
+      <h1>
+        <Me>
+          {(user) => (
+            <div>
+              hello {user.fullname}
+              <img src={user.image} alt="" className="w-48 rounded m-2 p-2 shadow-xl" />
+            </div>
+          )}
+        </Me>
+      </h1>
+      <SignOut2>
+        {(signout) => (
+          <Button
+            color="teal"
+            onClick={async () => {
+              console.log("signout", signout);
+              const res = await signout();
+              console.log("res", res);
+            }}
+          >
+            Signout again
+          </Button>
+        )}
+      </SignOut2>
+      <React.Fragment>
+        {!currentUser ? (
+          <Button
+            onClick={async () => {
+              const result = await signin();
+              console.log("result", result);
+              const curr = result?.data?.signinUser?.user?.fullname;
+              console.log("curr", curr);
+              if (curr) {
+                setCurrentUser(curr);
               }
-              if (error) {
-                return "Error " + error;
-              }
-              if (!data) {
-                return "no data";
-              }
-              console.log(data);
-
-              const { me } = data;
-
+            }}
+          >
+            Sign Me in{" "}
+          </Button>
+        ) : (
+          <Signout>
+            {(signout) => {
               return (
-                <React.Fragment>
-                  {!me ? (
-                    <Button variant="contained" onClick={() => signin().then((data) => console.log(data))}>
-                      Sign Me in{" "}
-                    </Button>
-                  ) : (
-                    <Signout>
-                      {(signout) => {
-                        return (
-                          <div
-                            style={{
-                              display: "flex",
-                              flexDirection: "column",
-                              margin: 10,
-                              width: 200,
-                            }}
-                          >
-                            <img src={me.image} style={{ borderRadius: "50%", width: 48 }} alt="me" />
-                            <Button variant="contained" onClick={signout}>
-                              Sign you out
-                              {me.fullname}
-                            </Button>
-                          </div>
-                        );
-                      }}
-                    </Signout>
-                  )}
-                </React.Fragment>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    margin: 10,
+                    width: 200,
+                  }}
+                >
+                  <img src={currentUser?.image} className="rounded-full w-48" style={{ borderRadius: "50%", width: 48 }} alt="me" />
+                  <Button variant="contained" onClick={signout}>
+                    Sign you out
+                    {currentUser.fullname}
+                  </Button>
+                </div>
               );
             }}
-          </User>
-        </div>
-      );
-    }}
-  </Mutation>
-);
+          </Signout>
+        )}
+      </React.Fragment>
+    </div>
+  );
+};
 
 export default Index;

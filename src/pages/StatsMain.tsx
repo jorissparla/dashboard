@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import BacklogTableNewStyle from "stats/BacklogTableNewStyle";
+
 import { Backlog } from "stats/BacklogType";
+import BacklogTableNewStyle from "stats/BacklogTableNewStyle";
 import LoadingDots from "./../utils/LoadingDots";
 import { useParams } from "./useParam";
 
@@ -22,6 +23,9 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
   // console.log(allKB);
 
   const blBase = new Backlog(data.everything, data.accounts);
+
+  // console.log("sev4WithDefects", sev4WithDefects);
+
   const sev12notrestored = blBase
     .notServicedRestored()
     .hasSeverity(["Major Impact", "Production Outage / Critical Application halted"])
@@ -79,7 +83,7 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
     )
     .filter((x: any) => x.Tenant !== "Multi-Tenant");
 
-  const multitenant = new Backlog(data.multitenant).isMT().dayssincelastupdate(params.C_MT).sort("dayssincelastupdate", "D").getData();
+  const multitenant = new Backlog(data.multitenant, data.accounts).isMT().dayssincelastupdate(params.C_MT).sort("dayssincelastupdate", "D").getData();
 
   const awaiting_customer = blBase
     .init()
@@ -111,6 +115,7 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
     .getData();
   const on_hold = blBase.init().status("On Hold by customer").invalid_onhold_date().sort("dayssincelastupdate", "D").getData();
   console.log({ on_hold });
+
   const aging = blBase
     .init()
     .hasStatus(["Researching", "On Hold by Customer", "Awaiting Infor", "Awaiting Customer"])
@@ -125,6 +130,9 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
     .sort("dayssincelastupdate", "D")
     .getData();
   const aging_dev = blBase.init().hasStatus(["Awaiting Development"]).daysSinceCreated(90).sort("dayssincelastupdate", "D").getData();
+  console.log("aging_dev", aging_dev);
+  const sev4WithDefects = blBase.init().hasStatus(["Awaiting Development"]).hasSeverity(["Standard"]).sort("dayssincelastupdate", "D").getData();
+  console.log("sev4WithDefects", sev4WithDefects);
   const major_impact = blBase
     .init()
     .severity("Major Impact")
@@ -179,6 +187,13 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
           data={multitenant}
           title="Multitenant"
           description={`All Incidents open for our MT customers not updated > ${params.C_MT} days`}
+          actionHeader={true}
+        />
+        <BacklogTableNewStyle
+          filterValues={filterValues}
+          data={sev4WithDefects}
+          title="Severity 4 Defects"
+          description={`All Incidents with severity 4 Standard with defects`}
           actionHeader={true}
         />
 

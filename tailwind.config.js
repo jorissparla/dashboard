@@ -1,7 +1,7 @@
 const colors = require("tailwindcss/colors");
 
 module.exports = {
-  purge: ["./public/**/*.html", "./public/**/*.html", "./src/**/*.js", "./src/**/*.tsx"],
+  purge: { enabled: true, content: ["./public/**/*.html", "./public/**/*.html", "./src/**/*.js", "./src/**/*.tsx"] },
   theme: {
     extend: {
       inset: {
@@ -228,7 +228,7 @@ module.exports = {
     require("@tailwindcss/forms"),
     require("@tailwindcss/typography"),
     require("@tailwindcss/aspect-ratio"),
-    require("@tailwindcss/custom-forms"),
+    // require("@tailwindcss/custom-forms"),
     require("tailwindcss-hero-patterns"),
   ],
 };

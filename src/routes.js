@@ -1,115 +1,113 @@
-import CloudInformation from "pages/CloudInformation";
-import Mailerlog from "pages/Mailerlog";
-import { useUserContext } from "globalState/UserProvider";
-import MailerLogDetail from "pages/MailerLogDetail";
-import Main from "pages/Main";
-import Projects from "pages/projects";
-import Sumo from "pages/sumo";
-import SumoAlerts from "pages/sumoalerts";
-import SumoIncidents from "pages/sumoincidents";
-import SymptomsPage from "pages/Symptoms";
-import SymptomsKBs from "pages/SymptomsKBs";
-import TenantLogList from "pages/TenantLogListNew";
-import testActivity from "pages/testActivity";
-import TestChart from "pages/testchart";
-import TrainingGroups from "pages/TrainingGroups";
-import UploadImageComponent from "pages/UploadImageComponent";
-import UserPage from "pages/UserPage";
-import WhatDoesDev from "pages/WhatDoesDev";
-import AddProject from "projects/addproject";
-import UpdateProject from "projects/updateproject";
-import React, { useEffect } from "react";
-import { TWFileUpload } from "common/FileUploaderNew";
-import { Route, Switch, useHistory } from "react-router-dom";
-import EditSumo from "sumo/EditSumo";
-import SymptomCategories from "symptoms/SymptomCategories";
-import FullTenantEdit from "tenants/details/components/FullTenantEdit";
-import MissingTenants from "tenants/MissingTenants";
-import { TenantLogsWithData } from "tenants/TenantLogs";
-import TenantViewList from "tenants/TenantViewList";
-import UserAdmin from "UserAdmin";
-import NiceSpinner from "utils/NiceSpinner";
-// import CloudInfo from "./pages/CloudInfo";
-import LoginForm from "./auth/LoginForm";
+import { AddVideo, EditVideo } from "./videos/VideoOperations";
+import React, { lazy, useEffect } from "react";
 import RequireAuth, { AuthRoute, EnhancedRoute } from "./auth/require_auth";
+import { Route, Switch, useHistory } from "react-router-dom";
+
 import Signin from "./auth/signin";
 import SigninWithPIN from "./auth/SigninWithPIN";
 import Signout from "./auth/signout";
-import LNByRegionContainer from "./charts/LNByRegionContainer";
-import OtherTeamsChartContainer from "./charts/OtherTeamChartsContainer";
-import DynamicImport from "./DynamicImport";
-import { withDashBoardContext } from "./globalState/Provider";
+import { TWFileUpload } from "common/FileUploaderNew";
 import { UserContext } from "./globalState/UserProvider";
-import NewsItemContainer from "./news/newsitemcontainer";
-import CloudReadiness from "./pages/CloudReadiness";
-import CloudSuites from "./pages/CloudSuites";
-import DashBoardContainer from "./pages/dashboardcontainer";
-import KBPage from "./pages/KBPage";
-import MaintenanceVersionList from "./pages/MaintenanceVersionList";
-import NewsPage from "./pages/newspage";
-import ProfilePage from "./pages/ProfilePage";
-import Stats from "./pages/Stats";
-import { Surveys } from "./pages/Surveys";
-import VideoPage from "./pages/Videos";
-import WorklistSimple from "./pages/WorklistSimple";
-import { Parameters } from "./stats/Parameters";
-import PriorityDashboard from "./stats/PriorityDashboard";
-import AddSumo from "./sumo/AddSumo";
-
-// import Details from "./tenants/details/index";
-import TestLogin from "./TestLogin";
-// import Test
-import UserPermissions from "./UserPermissions";
-import { AddVideo, EditVideo } from "./videos/VideoOperations";
-import NewMaintenanceWizard from "./pages/maintenance";
 import { usePersistentState } from "hooks";
-import MaintenanceTemplates from "pages/MaintenanceTemplates";
-import EditMaintenanceTemplate from "pages/EditMaintenanceTemplate";
-import AddBlog from "blog/addblog";
-import EditBlog from "blog/EditBlog";
-import BlogList from "blog/BlogList";
-import EditSumoAlert from "sumo/EditSumoAlert";
-import AddSumoAlert from "sumo/AddSumoAlert";
-import SumoIncidentForm from "sumo/SumoIncidentForm";
-import EditSumoIncident from "sumo/EditSumoIncident";
+import { useUserContext } from "globalState/UserProvider";
+import { withDashBoardContext } from "./globalState/Provider";
 
-// const StatsMain = DynamicImport(() => import('./pages/StatsMain'))
-const LoggedInUsers = React.lazy(() => import("./pages/loggedinusers"));
-const Award = DynamicImport(() => import("./awards/award"));
-const ResetPasswordForm = DynamicImport(() => import("./auth/ResetPasswordForm"));
-const RequestResetPassword = DynamicImport(() => import("./auth/RequestResetPassword"));
+const AddBlog = lazy(() => import("blog/addblog"));
+const AddProject = lazy(() => import("projects/addproject"));
+const AddSumo = lazy(() => import("./sumo/AddSumo"));
+const AddSumoAlert = lazy(() => import("sumo/AddSumoAlert"));
+const BlogList = lazy(() => import("blog/BlogList"));
+const CloudInformation = lazy(() => import("pages/CloudInformation"));
+const CloudReadiness = lazy(() => import("./pages/CloudReadiness"));
+const CloudSuites = lazy(() => import("./pages/CloudSuites"));
+const DashBoardContainer = lazy(() => import("./pages/dashboardcontainer"));
+const DynamicImport = lazy(() => import("./DynamicImport"));
+const EditBlog = lazy(() => import("blog/EditBlog"));
 
-const NewsListContainer = DynamicImport(() => import("./pages/newslistcontainer"));
+const UserAdmin = lazy(() => import("UserAdmin"));
+const UserPage = lazy(() => import("pages/UserPage"));
+const UserPermissions = lazy(() => import("./UserPermissions"));
+const VideoPage = lazy(() => import("./pages/Videos"));
+const WorklistSimple = lazy(() => import("./pages/WorklistSimple"));
+const testActivity = lazy(() => import("pages/testActivity"));
+const TenantLogList = lazy(() => import("pages/TenantLogListNew"));
+const SumoIncidentForm = lazy(() => import("sumo/SumoIncidentForm"));
+const { Surveys } = lazy(() => import("./pages/Surveys"));
+const SymptomCategories = lazy(() => import("symptoms/SymptomCategories"));
+const { TenantLogsWithData } = lazy(() => import("tenants/TenantLogs"));
+const TenantViewList = lazy(() => import("tenants/TenantViewList"));
+const TestChart = lazy(() => import("pages/testchart"));
+const TestLogin = lazy(() => import("./TestLogin"));
+const TrainingGroups = lazy(() => import("pages/TrainingGroups"));
+const UpdateProject = lazy(() => import("projects/updateproject"));
+const UploadImageComponent = lazy(() => import("pages/UploadImageComponent"));
+const MissingTenants = lazy(() => import("tenants/MissingTenants"));
+const NewMaintenanceWizard = lazy(() => import("./pages/maintenance"));
+const NewsItemContainer = lazy(() => import("./news/newsitemcontainer"));
+const NewsPage = lazy(() => import("./pages/newspage"));
+const NiceSpinner = lazy(() => import("utils/NiceSpinner"));
+const OtherTeamsChartContainer = lazy(() => import("./charts/OtherTeamChartsContainer"));
+const { Parameters } = lazy(() => import("./stats/Parameters"));
+const PriorityDashboard = lazy(() => import("./stats/PriorityDashboard"));
+const ProfilePage = lazy(() => import("./pages/ProfilePage"));
+const Projects = lazy(() => import("pages/projects"));
+const EditMaintenanceTemplate = lazy(() => import("pages/EditMaintenanceTemplate"));
+const EditSumo = lazy(() => import("sumo/EditSumo"));
+const EditSumoAlert = lazy(() => import("sumo/EditSumoAlert"));
+const EditSumoIncident = lazy(() => import("sumo/EditSumoIncident"));
+const FullTenantEdit = lazy(() => import("tenants/details/components/FullTenantEdit"));
+const LNByRegionContainer = lazy(() => import("./charts/LNByRegionContainer"));
+const LoginForm = lazy(() => import("./auth/LoginForm"));
+const MailerLogDetail = lazy(() => import("pages/MailerLogDetail"));
+const Mailerlog = lazy(() => import("pages/Mailerlog"));
+const Main = lazy(() => import("pages/Main"));
+const MaintenanceTemplates = lazy(() => import("pages/MaintenanceTemplates"));
+const MaintenanceVersionList = lazy(() => import("./pages/MaintenanceVersionList"));
+const Stats = lazy(() => import("./pages/Stats"));
+const KBPage = lazy(() => import("./pages/KBPage"));
+// const StatsMain = lazy(() => import('./pages/StatsMain'))
+const SumoAlerts = lazy(() => import("pages/sumoalerts"));
+const SumoIncidents = lazy(() => import("pages/sumoincidents"));
+const SymptomsPage = lazy(() => import("pages/Symptoms"));
+const SymptomsKBs = lazy(() => import("pages/SymptomsKBs"));
+const Sumo = lazy(() => import("pages/sumo"));
+const WhatDoesDev = lazy(() => import("pages/WhatDoesDev"));
+const LoggedInUsers = lazy(() => import("./pages/loggedinusers"));
+const Award = lazy(() => import("./awards/award"));
+const ResetPasswordForm = lazy(() => import("./auth/ResetPasswordForm"));
+const RequestResetPassword = lazy(() => import("./auth/RequestResetPassword"));
 
-const NewsItemAddContainer = DynamicImport(() => import("./news/newsitemaddcontainer"));
-const RequestList = DynamicImport(() => import("./supportcard/RequestContainer"));
-const RequestEdit = DynamicImport(() => import("./supportcard/RequestEdit"));
-const AddSupportCardRequest = DynamicImport(() => import("./supportcard/Request"));
-const ImageConverter = DynamicImport(() => import("./utils/ConvertImages"));
+const NewsListContainer = lazy(() => import("./pages/newslistcontainer"));
 
-const AnniversaryList = DynamicImport(() => import("./awards/Anniversaries"));
+const NewsItemAddContainer = lazy(() => import("./news/newsitemaddcontainer"));
+const RequestList = lazy(() => import("./supportcard/RequestContainer"));
+const RequestEdit = lazy(() => import("./supportcard/RequestEdit"));
+const AddSupportCardRequest = lazy(() => import("./supportcard/Request"));
+const ImageConverter = lazy(() => import("./utils/ConvertImages"));
 
-const AccountList = DynamicImport(() => import("./Account/AccountList"));
+const AnniversaryList = lazy(() => import("./awards/Anniversaries"));
 
-const SmallCard = DynamicImport(() => import("./supportcard/SupportCard"));
-// const DashBoardStats = DynamicImport(() => import("./pages/dashboardstats"));
+const AccountList = lazy(() => import("./Account/AccountList"));
 
-const HistoryDayContainer = DynamicImport(() => import("./charts/historydaycontainer"));
-const HistoryDayAll = DynamicImport(() => import("./charts/historydayallcontainer"));
-const GoLiveListNew = DynamicImport(() => import("./pages/goLiveListNew"));
-const GoLiveList = DynamicImport(() => import("./pages/goLiveList"));
+const SmallCard = lazy(() => import("./supportcard/SupportCard"));
+// const DashBoardStats = lazy(() => import("./pages/dashboardstats"));
 
-// const GoLiveListSide = DynamicImport(() => import('./golives/golivelistside'));
-const DashBoardStatsNew = DynamicImport(() => import("./pages/DashBoardStatsNew"));
-const SupportCards = DynamicImport(() => import("./pages/SupportCards"));
+const HistoryDayContainer = lazy(() => import("./charts/historydaycontainer"));
+const HistoryDayAll = lazy(() => import("./charts/historydayallcontainer"));
+const GoLiveListNew = lazy(() => import("./pages/goLiveListNew"));
+const GoLiveList = lazy(() => import("./pages/goLiveList"));
 
-const RequestEditAdd = DynamicImport(() => import("./supportcard/Request"));
-const SupportCardEdit = DynamicImport(() => import("./supportcard/SupportCardEdit"));
-const SupportCardAdd = DynamicImport(() => import("./supportcard/SupportCardAdd"));
+// const GoLiveListSide = lazy(() => import('./golives/golivelistside'));
+const DashBoardStatsNew = lazy(() => import("./pages/DashBoardStatsNew"));
+const SupportCards = lazy(() => import("./pages/SupportCards"));
+
+const RequestEditAdd = lazy(() => import("./supportcard/Request"));
+const SupportCardEdit = lazy(() => import("./supportcard/SupportCardEdit"));
+const SupportCardAdd = lazy(() => import("./supportcard/SupportCardAdd"));
 
 /*  */
-const TenantPage = DynamicImport(() => import("./pages/TenantPage"));
-const VSummaryChart = DynamicImport(() => import("./charts/VSummaryChart"));
+const TenantPage = lazy(() => import("./pages/TenantPage"));
+const VSummaryChart = lazy(() => import("./charts/VSummaryChart"));
 
 const NotFound = () => {
   //withDashBoardContext(props => {

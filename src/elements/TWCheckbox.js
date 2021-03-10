@@ -1,7 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const TWCheckbox = ({ value = false, label = "Label", text = "", onChange }) => {
+const TWCheckbox = ({ value = false, label = "Label", text = "", onChange, checked = false }) => {
   const [val, setVal] = useState(value);
+
+  useEffect(() => {
+    setVal(value);
+  }, [value]);
   function handleChange(value) {
     setVal(!val);
     if (onChange) onChange(!val);

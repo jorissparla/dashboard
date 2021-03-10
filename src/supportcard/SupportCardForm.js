@@ -6,6 +6,7 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { CardSection } from "../common";
 import Chip from "@material-ui/core/Chip";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import CreatorInfo from "elements/CreatorInfo";
 import FavoriteWrapper from "Favorite";
 import { MUTATION_UPDATE_CARD_KEYWORDS } from "pages/SupportCards";
 import { QUERY_SINGLE_SUPPORTCARD } from "./queries/AUDIT_QUERY";
@@ -16,9 +17,6 @@ import { TWSelectMenu } from "elements/TWSelectMenu";
 import { format } from "../utils/format";
 
 //import { format } from 'date-fns';
-
-
-
 
 const owners = [
   { id: "Ricardo Exposito", name: "Ricardo Exposito" },
@@ -155,7 +153,7 @@ const SupportCardForm = (props) => {
           </div>
           <div className="flex items-center mb-4">
             <TWSelectMenu items={simpCategories} value={values.categoryname} onChange={handleChangeCategory} label="Enter Category" />
-            <TWSelectMenu items={simpOwners} value={values.owner} onChange={handleChangeOwner} />
+            {/* <TWSelectMenu items={simpOwners} value={values.owner} onChange={handleChangeOwner} /> */}
           </div>
           <div className="w-full mb-4" disabled={readOnly}>
             {supportcard && (
@@ -195,9 +193,13 @@ const SupportCardForm = (props) => {
             </TWButton>
             <Chip style={{ margin: 4 }} label={updatedAt ? `Last updated at ${format(updatedAt, "EEE, dd MMM yyyy")}` : `Not saved yet`} />
           </CardSection>
-          <div className="w-full text-xs py-2 border-t border-gray-200 mt-2 tracking-tight text-gray-600">
+          {/* <div className="w-full text-xs py-2 border-t border-gray-200 mt-2 tracking-tight text-gray-600">
             created by: {supportcard?.createdby} on: {supportcard?.created}, updated by: {supportcard?.updatedBy} at:{" "}
             {format(supportcard?.updatedAt, "yyyy MMM dd, HH:m")}
+          </div> */}
+          <div className="w-full text-xs py-2 border-t border-gray-200 mt-2 tracking-tight text-gray-600 flex space-x-4">
+            <CreatorInfo creator={supportcard?.createdby} created={supportcard.created} label="created on" />
+            <CreatorInfo creator={supportcard?.updatedBy} created={format(supportcard?.updatedAt, "yyyy MMM dd, HH:m")} label="updated on" />
           </div>
         </form>
       </div>

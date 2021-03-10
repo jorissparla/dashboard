@@ -1,9 +1,9 @@
-import { Drawer } from "@material-ui/core";
-import { CloseIcon } from "elements/Icons";
-import TextInput from "elements/TextInput";
 import Button from "elements/TWButton";
-import TWCheckbox from "elements/TWCheckbox";
+import { CloseIcon } from "elements/Icons";
+import { Drawer } from "@material-ui/core";
 import React from "react";
+import TWCheckbox from "elements/TWCheckbox";
+import TextInput from "elements/TextInput";
 import { usePersistentState } from "../../../hooks";
 
 const Filter = (props) => {
@@ -20,12 +20,15 @@ const Filter = (props) => {
     temperature: "",
     lastupdated: "999",
     useproxy: false,
+    showupcominggolives: false,
+    golive_nrdays: -1,
   };
 
   const [values, setValues] = usePersistentState("filters", { ...initialValues });
 
   const handleClear = () => {
     setValues({ ...initialValues });
+    onFilter && onFilter(initialValues);
     clearFilter();
     // onhandleSetFilterActive(false);
     // console.log()
@@ -41,6 +44,9 @@ const Filter = (props) => {
 
   function handleChangeLive(value) {
     setValues({ ...values, isLive: 1 - values.isLive });
+  }
+  function handleShowUpcomingLives() {
+    setValues({ ...values, showupcominggolives: !values.showupcominggolives });
   }
   function handleChangeUseProxy(value) {
     setValues({ ...values, useproxy: 1 - values.useproxy });
@@ -86,11 +92,14 @@ const Filter = (props) => {
                 <div className="m-2 px-2 py-1">
                   <div className=" py-1 ">
                     {/* <div className="text-sm">Shows only customers that are live</div> */}
-                    <TWCheckbox checked={values.useproxy} label="Show  customers with Proxy agreement" onChange={handleChangeUseProxy} />
+                    <TWCheckbox value={values.useproxy} label="Show  customers with Proxy agreement" onChange={handleChangeUseProxy} />
                   </div>
-                  <div className="font-semibold text-2xl text-gray-600">Live</div>
+                  <div className="font-semibold text-2xl text-gray-600 mb-2">Live</div>
                   {/* <div className="text-sm">Shows only customers that are live</div> */}
-                  <TWCheckbox checked={values.isLive} label="Show live customers" onChange={handleChangeLive} />
+                  <TWCheckbox value={values.isLive} label="Show live customers" onChange={handleChangeLive} />
+                </div>
+                <div className="m-2 px-2 py-1">
+                  <TWCheckbox value={values.showupcominggolives} label="Show Upcoming Go Lives (next 30 days)" onChange={handleShowUpcomingLives} />
                 </div>
                 <div className="m-2 px-2 py-1">
                   <TextInput

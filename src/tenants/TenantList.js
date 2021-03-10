@@ -1,29 +1,33 @@
-import { useMutation, useQuery } from "@apollo/client";
-import Button from "@material-ui/core/Button";
-import deepOrange from "@material-ui/core/colors/deepOrange";
-import deepPurple from "@material-ui/core/colors/deepPurple";
-import { withStyles } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
-import { differenceInCalendarDays } from "date-fns";
-import TWButton from "elements/TWButton";
-import _ from "lodash";
-import Modal from "ModalWrapper";
-import React, { useContext, useEffect, useState } from "react";
-import { useHistory } from "react-router";
-import { animated, config, useSpring } from "react-spring";
-import useSWR from "swr";
-import Spinner from "utils/spinner";
-import FavoriteBadge from "../elements/Badge";
+import "./tenants.css";
+
+import { ALL_TENANTS, QUERY_ALL_TENANT_DETAILS, TENANT_NOTE } from "./TenantQueries";
 import { FilterFieldContext, useFilterField } from "../globalState/FilterContext";
-import { DashBoardContext } from "../globalState/Provider";
-//import format from 'date-fns/format';
+import React, { useContext, useEffect, useState } from "react";
+import { animated, config, useSpring } from "react-spring";
 import { format, formatDistanceToNow } from "../utils/format";
-import FancyFilter from "./new/FancyFilter";
+import { useMutation, useQuery } from "@apollo/client";
+
+import Button from "@material-ui/core/Button";
 import { CREATE_AUDIT_MUTATION } from "./Query";
+import { DashBoardContext } from "../globalState/Provider";
+import FancyFilter from "./new/FancyFilter";
+import FavoriteBadge from "../elements/Badge";
+import Modal from "ModalWrapper";
+import Spinner from "utils/spinner";
+import TWButton from "elements/TWButton";
 import { TenantCard } from "./TenantCard";
 import TenantCustomerDetailsForm from "./TenantCustomerDetailsForm";
-import { ALL_TENANTS, QUERY_ALL_TENANT_DETAILS, TENANT_NOTE } from "./TenantQueries";
-import "./tenants.css";
+import TextField from "@material-ui/core/TextField";
+import _ from "lodash";
+import { addDays } from "date-fns";
+import deepOrange from "@material-ui/core/colors/deepOrange";
+import deepPurple from "@material-ui/core/colors/deepPurple";
+import { differenceInCalendarDays } from "date-fns";
+import { useHistory } from "react-router";
+import useSWR from "swr";
+import { withStyles } from "@material-ui/core/styles";
+
+//import format from 'date-fns/format';
 
 const styles = (theme) => ({
   root: {
@@ -286,6 +290,8 @@ const filterTenantsByCustomerFarmVersion = (tenants, fields, details) => {
     csm = "",
     pm = "",
     lastupdated = "999",
+    golive_nrdays = 0,
+    showupcominggolives = false,
     useproxy = false,
   } = fields;
   console.log({ useproxy });
@@ -295,7 +301,27 @@ const filterTenantsByCustomerFarmVersion = (tenants, fields, details) => {
       .filter((detail) => detail.temperature.toUpperCase().includes(temperature.toUpperCase()))
       .filter((detail) => detail.csm.toUpperCase().includes(csm.toUpperCase()))
       .filter((detail) => detail.pm.toUpperCase().includes(pm.toUpperCase()))
+      .filter(filterGoLiveDays(showupcominggolives))
       .filter((t) => (useproxy === 1 ? t.useproxy === true : true));
+  }
+
+  function filterGoLiveDays(showupcominggolives, detail) {
+    return function (detail) {
+      if (!showupcominggolives) {
+        return true;
+      }
+      let days = 30;
+      const startDate = new Date();
+      const endDate = addDays(new Date(), parseInt(days));
+      const glDate = parseInt(detail.golivedate);
+      if (glDate) {
+        const nDate = new Date(glDate);
+        if (nDate >= startDate && nDate <= endDate) {
+          return true;
+        }
+      }
+      return false;
+    };
   }
 
   const f = applySimpleFilter(parseInt(lastupdated));
@@ -330,16 +356,7 @@ const TenantList = (props) => {
   const [showFilterDialog, toggleShowFilterDialog] = useState(false);
   const [isShowingDetails, toggleShowDetails] = useState(false);
   const [counter, setCounter] = useState(0);
-  const keysPressed = useMultiKeyPress();
-  const happyPress = areKeysPressed(["Shift", "C"], keysPressed); //false; //useKeyPress('C');
 
-  function areKeysPressed(keys = [], keysPressed = []) {
-    const required = new Set(keys);
-    for (var elem of keysPressed) {
-      required.delete(elem);
-    }
-    return required.size === 0;
-  }
   const { x } = useSpring({
     x: showFilterDialog ? 15 : 0,
     config: config.wobbly,
@@ -347,6 +364,7 @@ const TenantList = (props) => {
   const flip = () => toggleShowFilterDialog(!showFilterDialog);
 
   const applyFilter = (values) => {
+    console.log("Filter values", values);
     setFields(values);
   };
 

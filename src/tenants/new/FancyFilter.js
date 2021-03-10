@@ -1,9 +1,10 @@
+import React, { useState } from "react";
+
+import { Filter } from "../details/components";
 import FilterListIcon from "@material-ui/icons/FilterList";
 import Modal from "elements/ModalComponent";
-import TWButton from "elements/TWButton";
 import PropTypes from "prop-types";
-import React, { useState } from "react";
-import { Filter } from "../details/components";
+import TWButton from "elements/TWButton";
 
 const FancyFilter = (props) => {
   const { onFilter, count = 0 } = props;
@@ -24,11 +25,11 @@ const FancyFilter = (props) => {
   // }
   return (
     <>
-      <div className="flex flex-col">
-        <TWButton color="transp" onClick={handleFilterOpen}>
-          <FilterListIcon className="mx-2" /> Show filters {filterActive ? "***" : ""}
+      <div className="flex flex-row">
+        {filterActive && <span className="bg-green-200 text-green-700 text-sm font-pop my-1 p-2">Filter is active</span>}
+        <TWButton color="green" onClick={handleFilterOpen}>
+          <FilterListIcon className="mx-2" /> Show filter
         </TWButton>
-        {filterActive && <span className="bg-teal-200 text-teal-700 text-sm font-sans my-1 p-2">Filter is active</span>}
       </div>
       <Filter
         onClose={handleFilterClose}

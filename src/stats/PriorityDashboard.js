@@ -1,9 +1,9 @@
-import { useQuery } from "@apollo/client";
-import { usePersistentState } from "hooks";
+import { QUERY_PRIORITY_BACKLOG } from "./queries/BACKLOG_QUERY2a";
 import React from "react";
 import Spinner from "../utils/spinner";
 import { format } from "./../utils/format";
-import { QUERY_PRIORITY_BACKLOG } from "./queries/BACKLOG_QUERY2a";
+import { usePersistentState } from "hooks";
+import { useQuery } from "@apollo/client";
 
 const Box = ({ children, color }) => {
   let colorStyle = "from-light-blue-200 to-light-blue-400 text-light-blue-700";
@@ -30,40 +30,11 @@ const Box = ({ children, color }) => {
     </div>
   );
 };
-// `
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   justify-content: space-between;
-//   font-family: Montserrat;
-//   margin-left: 0.5rem;
-//   width: 22%;
-//   min-width: 200px;
-
-//   color: ${(props) => (props.textcolor ? props.textcolor : "#4a5568")};
-//   background-color: ${(props) => (props.color ? props.color : "lightblue")};
-//   border-radius: 0.5rem;
-//   background-image: ${(props) => `linear-gradient(to bottom right, ${props.color || "black"}, white)`};
-//   margin-top: 1.5rem;
-//   margin-bottom: 1.5rem;
-//   padding: 1rem;
-//   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-// `;
 
 const P = ({ children }) => <div className="text-5xl font-bold font-pop my-2  py-1 leading-5">{children}</div>;
 const SubP = ({ children }) => <p className="text-center text-xl font-semibold leading-5 ">{children}</p>;
 
 const H2 = ({ children }) => <h2 className="font-semibold text-xl bg-white text-gray-700 px-2">{children}</h2>;
-// `
-//   letter-spacing: 0.2rem;
-//   font-size: 1.3rem;
-//   color: rgba(0, 0, 0, 0.87);
-//   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
-//   font-weight: 400;
-//   line-height: 1.33;
-
-//   margin-left: 1.5rem;
-// `;
 
 export default function PriorityDashboard() {
   const [region] = usePersistentState("region", "EMEA");
@@ -107,7 +78,7 @@ export default function PriorityDashboard() {
         return { ...item, image };
       })
   );
-  // console.log(sev1);
+
   return (
     <div style={{ minHeight: "100vh", backgroundColor: "#ededed" }}>
       <H2>Priority Dashboard - updated {mostRecentUpdate}</H2>

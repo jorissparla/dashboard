@@ -1,33 +1,35 @@
 import { Accordion, AccordionDetails, AccordionSummary, List, ListItemIcon } from "@material-ui/core";
-import MenuItem from "@material-ui/core/MenuItem";
+import { CloseIcon, SumoIcon } from "elements/Icons";
+import React, { useState } from "react";
+
+import ActionHome from "@material-ui/icons/Home";
+import ApplicationIcon from "@material-ui/icons/Launch";
 import AutoExchange from "@material-ui/icons/AirportShuttle";
-import LNChartsIcon from "@material-ui/icons/AssessmentTwoTone";
 import BusinessCenterIcon from "@material-ui/icons/BusinessCenter";
-import XpertIcon from "@material-ui/icons/Commute";
 import CodeIcon from "@material-ui/icons/DeveloperMode";
-import SymptomsIcon from "@material-ui/icons/ErrorOutline";
-import NewsIcon from "@material-ui/icons/Event";
-import MyWorkList from "@material-ui/icons/EventNote";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExtensionIcon from "@material-ui/icons/ExtensionTwoTone";
 import GoLiveIcon from "@material-ui/icons/FlightTakeoff";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
-import ActionHome from "@material-ui/icons/Home";
-import ApplicationIcon from "@material-ui/icons/Launch";
-import Person from "@material-ui/icons/PeopleOutline";
+import LNChartsIcon from "@material-ui/icons/AssessmentTwoTone";
+import LinkIcon from "@material-ui/icons/SpeakerNotesTwoTone";
+import MenuItem from "@material-ui/core/MenuItem";
+import MyWorkList from "@material-ui/icons/EventNote";
+import { NavLink } from "./NavLink";
+import NewsIcon from "@material-ui/icons/Event";
 import PeopleOutlineIcon from "@material-ui/icons/PeopleOutlineTwoTone";
+import Person from "@material-ui/icons/PeopleOutline";
 import RequestListIcon from "@material-ui/icons/PlaylistAdd";
 import SettingsIcon from "@material-ui/icons/Settings";
-import LinkIcon from "@material-ui/icons/SpeakerNotesTwoTone";
 import SurveysIcon from "@material-ui/icons/Whatshot";
-import { signOut } from "auth/msAuth";
-import TWFileUpload from "common/FileUploaderNew";
-import { CloseIcon, SumoIcon } from "elements/Icons";
+import SymptomsIcon from "@material-ui/icons/ErrorOutline";
 import TWButton from "elements/TWButton";
+import TWFileUpload from "common/FileUploaderNew";
 import { UserContext } from "globalState/UserProvider";
-import React, { useState } from "react";
+import XpertIcon from "@material-ui/icons/Commute";
+import { signOut } from "auth/msAuth";
+
 // import Signout from '../Signout';
-import { NavLink } from "./NavLink";
 
 interface ISideBarProps {
   classes: any;
@@ -62,7 +64,7 @@ export function SideBarMenu({ classes, history, toggleMenu, open }: ISideBarProp
       <List>
         <ToggledNavLink title="Home" Icon={ActionHome} navigateTo="/" history={history} color="bg-gray-100 text-gray-600" />
         {/* <ToggledNavLink title="Cloud Information Page" Icon={CloudQueueIcon} navigateTo="/cloudinformation" history={history} /> */}
-        <ToggledNavLink title="MaintenanceWizard" Icon={SettingsIcon} navigateTo="/maintenancewizard" history={history} />
+        <ToggledNavLink title="MaintenanceWizard" Icon={SettingsIcon} navigateTo="/maintenance" history={history} />
         <ToggledNavLink title="MaintenanceWizard AutoExchange" Icon={AutoExchange} navigateTo="/maintenancewizardauto" history={history} />
         <Divider />
         <ToggledNavLink title="MultiTenant Customers" Icon={ExtensionIcon} navigateTo="/tenant" history={history} color="text-orange-600" />
@@ -131,9 +133,9 @@ export function SideBarMenu({ classes, history, toggleMenu, open }: ISideBarProp
               Signout
             </MenuItem>
             {/* <ToggledNavLink title="Videos" navigateTo="/videos" history={history} /> */}
-            <TWButton color="transp" onClick={() => setShowSideMenu(!showSideMenu)}>
+            {/* <TWButton color="transp" onClick={() => setShowSideMenu(!showSideMenu)}>
               Upload Files
-            </TWButton>
+            </TWButton> */}
           </React.Fragment>
         )}
       </List>
