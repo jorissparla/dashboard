@@ -12,6 +12,8 @@ import { usePersistentState } from "hooks";
 import { useUserContext } from "globalState/UserProvider";
 import { withDashBoardContext } from "./globalState/Provider";
 
+const TestRechart = lazy(() => import("pages/testrechart"));
+
 const AddBlog = lazy(() => import("blog/addblog"));
 const AddProject = lazy(() => import("projects/addproject"));
 const AddSumo = lazy(() => import("./sumo/AddSumo"));
@@ -139,7 +141,7 @@ function AppRoutes() {
       <Route exact path="/blog/:id" component={EditBlog} />
       <Route exact path="/blogs" component={BlogList} />
       <Route exact path="/essentialworklisttest" component={WorklistSimple} />
-      <Route exact path="/testy" component={testActivity} />
+      <Route exact path="/testy" component={TestRechart} />
       <Route exact path="/trgroups" component={TrainingGroups} />
       <Route exact path="/charts" component={TestChart} />
       <Route exact path="/mailerlogs" component={Mailerlog} />

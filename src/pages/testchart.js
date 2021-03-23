@@ -78,27 +78,27 @@ const TOP10_QUERY = gql`
   }
 `;
 
-// function TestChart() {
-//   const { data, loading } = useQuery(TOP10_QUERY);
-//   if (loading) return <div></div>;
-//   console.log(data);
-//   const { top10 } = data;
-//   const {updated} = top10[0]
-//   const updatedDate = format(updated, 'EEE, dd MMMM yyyy HH:mi')
-//   const count_ar = top10.map((item) => item.count);
-//   const esc_ar = top10.map((item) => item.esc);
-//   const label_ar = top10.map((item) => item.customer);
+function TestChart1() {
+  const { data, loading } = useQuery(TOP10_QUERY);
+  if (loading) return <div></div>;
+  console.log(data);
+  const { top10 } = data;
+  const { updated } = top10[0];
+  const updatedDate = format(updated, "EEE, dd MMMM yyyy HH:mi");
+  const count_ar = top10.map((item) => item.count);
+  const esc_ar = top10.map((item) => item.esc);
+  const label_ar = top10.map((item) => item.customer);
 
-//   options.series[0].data = count_ar;
-//   options.series[1].data = esc_ar;
-//   options.subtitle.text = 'Latest update: '+updatedDate
-//   label_ar.map((label, index) => (options.xAxis.categories[index] = label));
-//   return (
-//     <div>
-//       <HighchartsReact highcharts={Highcharts} options={options} />
-//     </div>
-//   );
-// }
+  options.series[0].data = count_ar;
+  options.series[1].data = esc_ar;
+  options.subtitle.text = "Latest update: " + updatedDate;
+  label_ar.map((label, index) => (options.xAxis.categories[index] = label));
+  return (
+    <div>
+      <HighchartsReact highcharts={Highcharts} options={options} />
+    </div>
+  );
+}
 
 function TestChart() {
   return (
@@ -337,4 +337,4 @@ function TestChart() {
   );
 }
 
-export default TestChart;
+export default TestChart1;

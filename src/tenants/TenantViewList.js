@@ -1,15 +1,16 @@
-import { useQuery } from "@apollo/client";
-import SearchBar from "common/SearchBar";
-import Button from "elements/TWButton";
-import { usePersistentState } from "hooks";
-import _ from "lodash";
 import { DataCell, HeaderCell } from "pages/Cells";
 import React, { useEffect, useState } from "react";
 import { animated, useSpring } from "react-spring";
-import Spinner from "utils/spinner";
+import { gql, useQuery } from "@apollo/client";
+
+import Button from "elements/TWButton";
 import CustomerHistory from "./CustomerHistory";
 import EditTenantDetails from "./details/components/EditTenant";
 import { QUERY_ALL_TENANT_DETAILS } from "./TenantQueries";
+import SearchBar from "common/SearchBar";
+import Spinner from "utils/spinner";
+import _ from "lodash";
+import { usePersistentState } from "hooks";
 
 const TenantViewList = () => {
   const [showNotReady, setShowNotReady] = usePersistentState("not ready", false);
@@ -23,7 +24,7 @@ const TenantViewList = () => {
   const [filteredCustomers, setFilteredCustomers] = useState([]);
   const [customerDetails, setCustomerDetails] = useState([]);
 
-  const { data: details, loading: detailsloading } = useQuery(QUERY_ALL_TENANT_DETAILS);
+  const { data: details, loading: detailsloading } = useQuery(gql(QUERY_ALL_TENANT_DETAILS));
   const tenantProps = useSpring({ opacity: isShowingDetails ? 1 : 0 });
 
   useEffect(() => {

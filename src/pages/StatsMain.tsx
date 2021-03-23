@@ -114,7 +114,7 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
     .sort("awaitcount", "D")
     .getData();
   const on_hold = blBase.init().status("On Hold by customer").invalid_onhold_date().sort("dayssincelastupdate", "D").getData();
-  console.log({ on_hold });
+  // console.log({ on_hold });
 
   const aging = blBase
     .init()
@@ -130,9 +130,9 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
     .sort("dayssincelastupdate", "D")
     .getData();
   const aging_dev = blBase.init().hasStatus(["Awaiting Development"]).daysSinceCreated(90).sort("dayssincelastupdate", "D").getData();
-  console.log("aging_dev", aging_dev);
+  // console.log("aging_dev", aging_dev);
   const sev4WithDefects = blBase.init().hasStatus(["Awaiting Development"]).hasSeverity(["Standard"]).sort("dayssincelastupdate", "D").getData();
-  console.log("sev4WithDefects", sev4WithDefects);
+  // console.log("sev4WithDefects", sev4WithDefects);
   const major_impact = blBase
     .init()
     .severity("Major Impact")

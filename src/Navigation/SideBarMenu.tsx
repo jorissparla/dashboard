@@ -133,9 +133,11 @@ export function SideBarMenu({ classes, history, toggleMenu, open }: ISideBarProp
               Signout
             </MenuItem>
             {/* <ToggledNavLink title="Videos" navigateTo="/videos" history={history} /> */}
-            {/* <TWButton color="transp" onClick={() => setShowSideMenu(!showSideMenu)}>
-              Upload Files
-            </TWButton> */}
+            {isAdmin && (
+              <TWButton color="transp" onClick={() => setShowSideMenu(!showSideMenu)}>
+                Upload Files
+              </TWButton>
+            )}
           </React.Fragment>
         )}
       </List>

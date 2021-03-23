@@ -6,6 +6,7 @@ type fieldProps = {
   fld: string;
   hl?: boolean;
   nl?: boolean;
+  action?: (val: any) => any;
   fn?: (val: any) => any;
   className?: string;
 };
@@ -42,8 +43,10 @@ export const HyperLinkCell = ({ value = "", linkPrefix = "", className = "", lin
   </td>
 );
 
-export const DataCell: React.FC<{ children: any; className?: string }> = ({ children, className = "" }) => (
-  <td className={`p-2 font-sans text-sm  text-gray-700 ${className}`}>{children}</td>
+export const DataCell: React.FC<{ children: any; className?: string; action?: any }> = ({ children, className = "", action = console.log }) => (
+  <td className={`p-2 font-sans text-sm  text-gray-700 ${className}`} onClick={() => (action ? action(children) : console.log(children))}>
+    {children}
+  </td>
 );
 export const CustomTable: React.FC<CustomTableProps> = ({ data, fields = [], indexField, linkPrefix = "" }) => {
   return (
@@ -88,7 +91,7 @@ export const CustomTable: React.FC<CustomTableProps> = ({ data, fields = [], ind
                       );
                     } else {
                       return (
-                        <DataCell className={field.className || ""} key={`${index}}`}>
+                        <DataCell className={field.className || ""} key={`${index}}`} action={field.action || null}>
                           {field.fn ? field.fn(item[field.fld]) : item[field.fld]}
                         </DataCell>
                       );

@@ -80,7 +80,7 @@ const client = new ApolloClient({
 //   fullname: localStorage.getItem("name"),
 // };
 
-const fetcher = (query: any) => request(uri, query);
+const fetcher = (query: any, variables?: any) => request(uri, query);
 const muiTheme = createMuiTheme({
   palette: {
     primary: {

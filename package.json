@@ -5,6 +5,7 @@
   "devDependencies": {
     "@fullhuman/postcss-purgecss": "^4.0.0",
     "@graphql-codegen/cli": "^1.20.1",
+    "@tailwindcss/jit": "^0.1.1",
     "@types/apollo-upload-client": "^14.1.0",
     "@types/classnames": "^2.2.11",
     "@types/react": "^17.0.1",
@@ -63,6 +64,7 @@
     "react-router": "5.2.0",
     "react-router-dom": "5.2.0",
     "react-spring": "^8.0.27",
+    "recharts": "^2.0.8",
     "shortid": "^2.2.16",
     "styled-components": "^5.2.1",
     "subscriptions-transport-ws": "^0.9.18",
@@ -75,10 +77,12 @@
   "scripts": {
     "start-unsec": "npm run copy:unsecure-env && SET PORT=3000 && react-scripts start",
     "start": "set HTTPS=true&&set PORT=8762 && npm run copy:secure-env &&react-scripts start  ",
+    "start:local": "set HTTPS=true&&set PORT=8762 && npm run copy:local &&react-scripts start  ",
     "start2": "set HTTPS=true&&set PORT=8762 && npm run copy:secure-env &&react-app-rewired start  ",
     "start3": "set HTTPS=true&&set PORT=8762 && react-scripts start",
     "build-unsecure": "react-scripts build",
     "copy:unsecure-env": "xcopy /Y .env.unsecure.env .env",
+    "copy:local": "xcopy /Y .env.local .env",
     "copy:secure-env": "xcopy /Y .env.secure.env .env",
     "build": "npm run build:secure",
     "build:secure": "SET REACT_APP_HTTP=https && SET REACT_APP_PORT_GRAPHQL=4001 && SET REACT_APP_PORT1_REST=3002  && react-scripts build",
