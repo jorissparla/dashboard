@@ -1,13 +1,14 @@
-import { gql, useQuery } from "@apollo/client";
-import AutoComplete from "../elements/AutoComplete";
-import TWButton from "../elements/TWButton";
-import { UserContext } from "./../globalState/UserProvider";
+import { DataCell, HeaderCell, HyperLinkCell, HyperLinkCellRed } from "./Cells";
 import React, { useEffect, useState } from "react";
+import { gql, useQuery } from "@apollo/client";
+
+import AutoComplete from "../elements/AutoComplete";
 import { Backlog } from "../stats/BacklogType";
 import Spinner from "../utils/spinner";
+import TWButton from "../elements/TWButton";
+import { UserContext } from "./../globalState/UserProvider";
 import { useParams } from "./useParam";
 import { usePersistentState } from "../hooks";
-import { HeaderCell, DataCell, HyperLinkCellRed, HyperLinkCell } from "./Cells";
 
 const MY_BACKLOG_QUERY = gql`
   fragment backlogfragment on DWH {
@@ -136,7 +137,11 @@ const WorklistSimple = ({ owner = "", ownerId = "", includeDevelopment, includeP
 
   // const multitenantcustomers = data.multitenantcustomers;
 
-  const mtincidents = blBase.filterField("Tenant", "Multi-Tenant").notStatus(["Solution Proposed", "Solution Pending Maintenance"]).getData();
+  const mtincidents = blBase
+    .filterField("Tenant", "Multi-Tenant")
+    .notStatus(["Solution Proposed", "Solution Pending Maintenance"])
+    .sort("dayssincelastupdate", "D")
+    .getData();
 
   // .filter(
   //   (inc) => multitenantcustomers.find((cust) => parseInt(cust.customerid) === inc.customerid)

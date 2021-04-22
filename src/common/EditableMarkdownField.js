@@ -1,19 +1,20 @@
 import React, { useRef, useState } from "react";
-import { useMutation } from "@apollo/client";
+
+import HTMLEditor from "common/HTMLEditor";
 import TWButton from "elements/TWButton";
 import { useAlert } from "globalState/AlertContext";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import { useMutation } from "@apollo/client";
+
+// import { CKEditor } from "@ckeditor/ckeditor5-react";
+// import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 const EditableMarkDownField = ({ canEdit = true, name, label, value, id, updateQuery }) => {
   const [, setisOpened] = useState(false);
   const [fieldValue, setFieldValue] = React.useState(value);
   const alert = useAlert();
   const [readOnly, toggleEdit] = React.useState(canEdit);
-  console.log(readOnly);
   const [updateMutution] = useMutation(updateQuery);
   async function handleSaveAndClose() {
-    console.log({ variables: { id, [name]: fieldValue } });
     // setFieldValue(value);
     setisOpened(false);
     const input = { id };
@@ -45,21 +46,21 @@ const EditableMarkDownField = ({ canEdit = true, name, label, value, id, updateQ
       </div>
 
       <div>
-        <CKEditor
+        <HTMLEditor value={fieldValue} onChange={(data) => setFieldValue(data)} enabled={!readOnly} />
+        {/* <CKEditor
           editor={ClassicEditor}
           config={config}
           disabled={readOnly}
           data={fieldValue}
           onReady={(editor) => {
             // You can store the "editor" and use when it is needed.
-            console.log("Editor is ready to use!", editor);
           }}
           onChange={(event, editor) => {
             const data = editor.getData();
             // console.log("Change", { event, editor, data });
             setFieldValue(() => data);
           }}
-        />
+        /> */}
         {/* <MarkDownFieldEditor
           onClose={() => setisOpened(false)}
           onSaveAndClose={handleSaveAndClose}

@@ -27,3 +27,6 @@ export const HyperLinkCellRed = ({ value = "", linkPrefix = "http://navigator.in
   </td>
 );
 export const DataCell = ({ children }) => <td className="p-2 font-sans text-sm font-semibold text-blue-700 ">{children}</td>;
+export const HTMLCell = ({ children }) => (
+  <td className="p-2 font-sans text-sm font-semibold text-blue-700 " dangerouslySetInnerHTML={{ __html: children }}></td>
+);

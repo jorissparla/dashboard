@@ -1,14 +1,14 @@
-import React, { useState, useEffect } from "react";
-import TWButton from "elements/TWButton";
+import React, { useEffect, useState } from "react";
+import { useMutation, useQuery } from "@apollo/client";
+
+import HTMLEditor from "common/HTMLEditor";
 import Keywords from "supportcard/SupportCardTags";
-import { useQuery, useMutation } from "@apollo/client";
-import gql from "graphql-tag";
+import SafeDeleteButton from "videos/SafeDeleteButton";
+import TWButton from "elements/TWButton";
 import { format } from "date-fns";
+import gql from "graphql-tag";
 import { useAlert } from "globalState/AlertContext";
 import { useHistory } from "react-router";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import SafeDeleteButton from "videos/SafeDeleteButton";
 
 const MUTATION_UPDATE_PROJECT = gql`
   mutation MUTATION_UPDATE_PROJECT($input: UpdateProjectType, $where: WhereProject) {
@@ -274,20 +274,21 @@ const ProjectForm = ({ id = null }) => {
                     <div className="flex text-gray-600 mb-4 text-sm">
                       {
                         // !readOnly ? (
-                        <CKEditor
-                          editor={ClassicEditor}
-                          // disabled={readOnly}
-                          data={values.notes}
-                          onReady={(editor) => {
-                            // You can store the "editor" and use when it is needed.
-                            console.log("Editor is ready to use!", editor);
-                          }}
-                          onChange={(event, editor) => {
-                            const data = editor.getData();
-                            // console.log("Change", { event, editor, data });
-                            setValues((prev) => ({ ...prev, notes: data }));
-                          }}
-                        />
+                        <HTMLEditor value={values.notes} onChange={(data) => setValues((prev) => ({ ...prev, notes: data }))} enabled={true} />
+                        // <CKEditor
+                        //   editor={ClassicEditor}
+                        //   // disabled={readOnly}
+                        //   data={values.notes}
+                        //   onReady={(editor) => {
+                        //     // You can store the "editor" and use when it is needed.
+                        //     console.log("Editor is ready to use!", editor);
+                        //   }}
+                        //   onChange={(event, editor) => {
+                        //     const data = editor.getData();
+                        //     // console.log("Change", { event, editor, data });
+                        //     setValues((prev) => ({ ...prev, notes: data }));
+                        //   }}
+                        // />
                       }
                     </div>
                     {/* <textarea

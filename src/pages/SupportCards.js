@@ -115,7 +115,6 @@ export default function SupportCardContainer(props) {
     hasperm = user.permissions.some(({ permission }) => ["SUPPCARDEDIT", "ADMIN"].includes(permission));
   }
   isEditor = isEditor || hasperm;
-  console.log("☀", isEditor, hasperm);
   return (
     <div>
       {/* {isValidating && <span>fetching...</span>} */}

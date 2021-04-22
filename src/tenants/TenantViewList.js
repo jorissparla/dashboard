@@ -1,4 +1,4 @@
-import { DataCell, HeaderCell } from "pages/Cells";
+import { DataCell, HTMLCell, HeaderCell } from "pages/Cells";
 import React, { useEffect, useState } from "react";
 import { animated, useSpring } from "react-spring";
 import { gql, useQuery } from "@apollo/client";
@@ -217,7 +217,7 @@ const TenantTable = ({ data, replaceField = null, onSelect }) => {
     { title: "DEM", fld: "DEM" },
     { title: "PM", fld: "pm" },
     { title: "CSM", fld: "csm" },
-    { title: "comments", fld: "comments" },
+    { title: "comments", fld: "comments", html: true },
   ];
   if (replaceField && replaceField.name && replaceField.toField) {
     fields = replaceList(fields, replaceField);
@@ -252,7 +252,12 @@ const TenantTable = ({ data, replaceField = null, onSelect }) => {
                         <path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-7.59V4h2v5.59l3.95 3.95-1.41 1.41L9 10.41z" />
                       </svg>
                     );
-                  } else return <DataCell key={`${items.customerid}${index}}`}>{items[field.fld]}</DataCell>;
+                  } else
+                    return field?.html ? (
+                      <HTMLCell key={`${items.customerid}${index}}`}>{items[field.fld]}</HTMLCell>
+                    ) : (
+                      <DataCell key={`${items.customerid}${index}}`}>{items[field.fld]}</DataCell>
+                    );
                 })}
               </tr>
             ))

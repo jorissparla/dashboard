@@ -698,6 +698,26 @@ select {
   outline: 1px auto -webkit-focus-ring-color;
 }
 
+:root {
+  --color-text-base: #ffffff;
+  --color-text-muted: #c7d2fe;
+  --color-text-inverted: #4f46e5;
+  --color-fill: #4338ca;
+  --color-button-accent: #ffffff;
+  --color-button-accent-hover: #eef2ff;
+  --color-button-muted: #6366f1;
+}
+
+.theme-swiss {
+  --color-text-base: #ffffff;
+  --color-text-muted: #fecaca;
+  --color-text-inverted: #dc2626;
+  --color-fill: #b91c1c;
+  --color-button-accent: #ffffff;
+  --color-button-accent-hover: #fefef2;
+  --color-button-muted: #ef4444;
+}
+
 .container {
   width: 100%;
 }
@@ -1208,6 +1228,11 @@ select {
   background-color: rgba(14, 165, 233, var(--tw-bg-opacity));
 }
 
+.hover\:bg-teal-200:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgba(175, 236, 239, var(--tw-bg-opacity));
+}
+
 .hover\:bg-teal-300:hover {
   --tw-bg-opacity: 1;
   background-color: rgba(126, 220, 226, var(--tw-bg-opacity));
@@ -1263,6 +1288,10 @@ select {
   background-color: rgba(81, 69, 205, var(--tw-bg-opacity));
 }
 
+.bg-gradient-to-br {
+  background-image: linear-gradient(to bottom right, var(--tw-gradient-stops));
+}
+
 .bg-gradient-to-l {
   background-image: linear-gradient(to left, var(--tw-gradient-stops));
 }
@@ -1285,6 +1314,19 @@ select {
 .from-orange-500 {
   --tw-gradient-from: #ff5a1f;
   --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 90, 31, 0));
+}
+
+.from-skin-hue {
+  --tw-gradient-from: var(--color-fill);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+}
+
+.via-skin-hue {
+  --tw-gradient-stops: var(--tw-gradient-from), var(--color-fill), var(--tw-gradient-to, rgba(255, 255, 255, 0));
+}
+
+.to-transparent {
+  --tw-gradient-to: transparent;
 }
 
 .to-purple-200 {
@@ -1382,6 +1424,11 @@ select {
 .border-indigo-500 {
   --tw-border-opacity: 1;
   border-color: rgba(104, 117, 245, var(--tw-border-opacity));
+}
+
+.border-amber-300 {
+  --tw-border-opacity: 1;
+  border-color: rgba(252, 211, 77, var(--tw-border-opacity));
 }
 
 .border-light-blue-200 {
@@ -1509,6 +1556,10 @@ select {
 
 .border-2 {
   border-width: 2px;
+}
+
+.border-4 {
+  border-width: 4px;
 }
 
 .border {

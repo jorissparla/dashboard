@@ -141,6 +141,9 @@ const Testnewlogin = () => {
       {/* <div className="flex">{JSON.stringify(newme, null, 2)}</div> */}
       <SearchBar hintText="type email of session" onChange={(value: string) => setSearchText(value)} />
       <div className="text-2xl font-bold text-gray-700 m-2">Sessions</div>
+      <div className="theme-neon  flex">
+        <button className="w-32 bg-gradient-to-br from-skin-hue via-skin-hue to-transparent">Test</button>
+      </div>
       <div className="m-2 rounded-sm shadow-lg p-2 bg-white">
         <CustomTable
           data={sessions}

@@ -1,11 +1,11 @@
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { Card, colors } from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
-import { makeStyles } from "@material-ui/styles";
-import clsx from "clsx";
-import TWButton from "elements/TWButton";
 import React, { useState } from "react";
+
+import CloseIcon from "@material-ui/icons/Close";
+import HTMLEditor from "common/HTMLEditor";
+import TWButton from "elements/TWButton";
+import clsx from "clsx";
+import { makeStyles } from "@material-ui/styles";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -36,27 +36,13 @@ const MarkDownFieldEditor = (props) => {
 
     onSaveAndClose(value);
   };
-  console.log(id);
 
   return (
     <Card {...rest} className={clsx(classes.root, className)}>
       <form onSubmit={handleSubmit}>
         <div title={`Edit ${label}`} />
         <div className="flex items-center justify-start mt-4 w-full z-50 flex-1 flex-col">
-          <CKEditor
-            editor={ClassicEditor}
-            // disabled={readOnly}
-            data={value}
-            onReady={(editor) => {
-              // You can store the "editor" and use when it is needed.
-              console.log("Editor is ready to use!", editor);
-            }}
-            onChange={(event, editor) => {
-              const data = editor.getData();
-              // console.log("Change", { event, editor, data });
-              setValue(() => data);
-            }}
-          />
+          <HTMLEditor value={value} onChange={(data) => setValue(data)} />
         </div>
         <div className="flex mt-2 w-1/5 justify-between items-center">
           <TWButton color="primary" type="submit" variant="contained">

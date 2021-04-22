@@ -235,7 +235,7 @@ export const GenericTable = (props: GenericTableProps) => {
             if (typeof value === "number") {
               text = key + " >= " + value;
             } else text = key + " - " + value;
-            console.log("typeof ", typeof value);
+            // console.log("typeof ", typeof value);
           }
 
           return (
@@ -292,7 +292,7 @@ export const GenericTable = (props: GenericTableProps) => {
               text={exportedData}
               onCopy={(d) => {
                 alert?.setMessage("table copied to clipboard");
-                console.log(d);
+                // console.log(d);
               }}
               options={{ format: "text/html" }}
             >

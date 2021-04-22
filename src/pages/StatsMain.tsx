@@ -27,9 +27,9 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
   // console.log("sev4WithDefects", sev4WithDefects);
 
   const sev12notrestored = blBase
-    .notServicedRestored()
+    // .notServicedRestored()
     .hasSeverity(["Major Impact", "Production Outage / Critical Application halted"])
-    .notStatus(["Solution Proposed"])
+    .notStatus(["Solution Proposed", "Solution Pending Maintenance", "Awaiting Development"])
     .getData();
   // const critical = blBase
   //   .init()
@@ -217,7 +217,8 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
           filterValues={filterValues}
           data={sev12notrestored}
           title="Critical/Major Not restored"
-          description="All Incidents with a severity of 'Production Outage / Major Impact' without a restored date"
+          description="All Incidents with a severity of 'Production Outage / Major Impact' in Support Backlog"
+          // description="All Incidents with a severity of 'Production Outage / Major Impact' without a restored date"
           actionHeader={true}
         />
         <BacklogTableNewStyle

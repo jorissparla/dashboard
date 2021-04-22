@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useHistory, useParams } from "react-router";
 import { useMutation, useQuery } from "@apollo/client";
 
-import { CKEditor } from "@ckeditor/ckeditor5-react";
 import { CardSection } from "../common";
 import Chip from "@material-ui/core/Chip";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import CreatorInfo from "elements/CreatorInfo";
 import FavoriteWrapper from "Favorite";
+import HTMLEditor from "common/HTMLEditor";
 import { MUTATION_UPDATE_CARD_KEYWORDS } from "pages/SupportCards";
 import { QUERY_SINGLE_SUPPORTCARD } from "./queries/AUDIT_QUERY";
 import SafeDeleteButton from "videos/SafeDeleteButton";
@@ -15,6 +14,10 @@ import SupportCardTags from "./SupportCardTags";
 import TWButton from "elements/TWButton";
 import { TWSelectMenu } from "elements/TWSelectMenu";
 import { format } from "../utils/format";
+
+// import { CKEditor } from "@ckeditor/ckeditor5-react";
+
+// import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 //import { format } from 'date-fns';
 
@@ -135,20 +138,22 @@ const SupportCardForm = (props) => {
           <div className="flex text-gray-600 mb-4">
             {
               // !readOnly ? (
-              <CKEditor
-                editor={ClassicEditor}
-                config={config}
-                disabled={readOnly}
-                data={values.description}
-                onReady={(editor) => {
-                  // You can store the "editor" and use when it is needed.
-                }}
-                onChange={(event, editor) => {
-                  const data = editor.getData();
-                  // console.log("Change", { event, editor, data });
-                  setValues({ ...values, description: data });
-                }}
-              />
+
+              <HTMLEditor value={values.description} onChange={(data) => setValues({ ...values, description: data })} enabled={!readOnly} />
+              // <CKEditor
+              //   editor={ClassicEditor}
+              //   config={config}
+              //   disabled={readOnly}
+              //   data={values.description}
+              //   onReady={(editor) => {
+              //     // You can store the "editor" and use when it is needed.
+              //   }}
+              //   onChange={(event, editor) => {
+              //     const data = editor.getData();
+              //     // console.log("Change", { event, editor, data });
+              //     setValues({ ...values, description: data });
+              //   }}
+              // />
             }
           </div>
           <div className="flex items-center mb-4">

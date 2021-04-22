@@ -1,5 +1,5 @@
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { CKEditor } from "@ckeditor/ckeditor5-react";
+import Editor from "ckeditor5-custom-build/build/ckeditor";
 import React from "react";
 
 type HTMLEditorProps = {
@@ -10,45 +10,79 @@ type HTMLEditorProps = {
 };
 
 const HTMLEditor: React.FC<HTMLEditorProps> = ({ enabled = false, value, onChange = console.log, label = "Content" }) => {
-  // const [config, setConfig] = useState<{
-  //   toolbar?: string;
-  //   ckfinder?: {
-  //     uploadUrl: string;
-  //   };
-  // }>({
-  //   toolbar: "",
-  // });
-  // useEffect(() => {
-  //   if (enabled) {
-  //     setConfig({
-  //       ckfinder: {
-  //         uploadUrl: "https://nlbavwixs.infor.com:3001/upload",
-  //       },
-  //     });
-  //   } else {
-  //     setConfig({
-  //       toolbar: "",
-  //     });
-  //   }
-  // }, [enabled]);
-  const config = enabled
-    ? {
-        ckfinder: {
-          uploadUrl: "https://nlbavwixs.infor.com:3001/upload",
-        },
-      }
-    : {
-        toolbar: "",
-      };
+  const editorConfiguration = {
+    fontFamily: {
+      options: ["default", "Ubuntu, Arial, sans-serif", "Poppins", "Ubuntu Mono, Courier New, Courier, monospace"],
+    },
+    image: {
+      // Configure the available styles.
+      styles: ["alignLeft", "alignCenter", "alignRight"],
+    },
+    toolbar: [
+      "heading",
+      "|",
+      "bold",
+      "italic",
+      "link",
+      "blockquote",
+      "|",
+      "bulletedlist",
+      "numberedlist",
+      "horizontalLine",
+      "|",
+      "indent",
+      "outdent",
+      "|",
+      "imageupload",
+      "imageStyle:full",
+      "imageStyle:side",
+      "|",
+      "imageTextAlternative",
+      "imageStyle:alignLeft",
+      "imageStyle:alignCenter",
+      "imageStyle:alignRight",
+      "|",
+      "resizeImage",
+      "|",
+      "imageTextAlternative",
+
+      "inserttable",
+
+      "|",
+      "fontFamily",
+      "fontSize",
+      "highlight",
+      "|",
+      "subscript",
+      "superscript",
+      "|",
+      "undo",
+      "redo",
+    ],
+    ckfinder: {
+      // Upload the images to the server using the CKFinder QuickUpload command.
+      uploadUrl: "https://nlbavwixs.infor.com:3001/upload",
+    },
+    table: {
+      contentToolbar: ["tableColumn", "tableRow", "mergeTableCells", "tableProperties", "tableCellProperties"],
+    },
+  };
+
+  const NoEditorConfiguration = {
+    toolbar: "",
+  };
+
   return (
     <div className="mt-2">
-      <label htmlFor="content" className="block text-sm font-medium text-gray-700">
-        {label}
-      </label>
+      {label !== "nolabel" && (
+        <label htmlFor="content" className="block text-sm font-medium text-gray-700">
+          {label}
+        </label>
+      )}
       <CKEditor
-        editor={ClassicEditor}
+        editor={Editor}
         disabled={!enabled}
-        config={config}
+        config={!enabled ? NoEditorConfiguration : editorConfiguration}
         // disabled={readOnly}
         data={value}
         onReady={(_editor: any) => {

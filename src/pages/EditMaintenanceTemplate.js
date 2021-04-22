@@ -1,12 +1,14 @@
-import { useQuery, gql } from "@apollo/client";
+import MaintenanceTemplateField, { useUpdateMaintenanceTemplateField } from "wizard/MaintenanceTemplateField";
+import React, { useEffect, useState } from "react";
+import { gql, useQuery } from "@apollo/client";
+import { useHistory, useParams } from "react-router";
+
 import InputTagsDropDown from "common/InputTagsDD";
+import Spinner from "utils/spinner";
 import TWButton from "elements/TWButton";
 import { useAlert } from "globalState/AlertContext";
 import { useUserContext } from "globalState/UserProvider";
-import React, { useEffect, useState } from "react";
-import { useHistory, useParams } from "react-router";
-import Spinner from "utils/spinner";
-import MaintenanceTemplateField, { useUpdateMaintenanceTemplateField } from "wizard/MaintenanceTemplateField";
+
 const QUERY_SINGLE_VERSION = gql`
   query ALL_MAINTENANCE_VERSIONS($where: MaintenanceTemplateWhere) {
     allmaintenanceVersions(productline: "LN") {
@@ -94,7 +96,7 @@ export const MaintenanceTemplateFields = ({ initialTemplate, forceReadOnly = fal
     return <div />;
   }
   return (
-    <div className="p-2 grid md: grid-cols-3 grid-rows-4 grid-cols-4 divide-y-1 divide-gray-100">
+    <div className="p-2 grid md:grid-cols-3 grid-rows-4 grid-cols-4 divide-y-1 divide-gray-100">
       <MaintenanceTemplateField
         label="Communication before starting"
         name="communication_before"

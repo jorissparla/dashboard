@@ -1,8 +1,12 @@
-import React from "react";
-// import ReactHighCharts from "react-highcharts";
-import shortid from "shortid";
 import Highcharts from "highcharts";
+import React from "react";
 import ReactHighCharts from "highcharts-react-official";
+import shortid from "shortid";
+
+// import ReactHighCharts from "react-highcharts";
+
+
+
 
 const arColors = ["#c62828", "#90caf9", "#01579b", "#ffa726", "#4db6ac", "#fbc02d", "#4527a0"];
 
@@ -81,9 +85,7 @@ export default function NewSummaryChart(props) {
   };
 
   const { value, team, title, color, type, data, xvalue } = props;
-  console.log(JSON.stringify(data));
   const newConfig = renderSummary(config, value, team, title, color, type, data, xvalue);
-  console.log("summary");
   // console.log("newConfig", JSON.stringify(newConfig), newConfig.yAxis);
   return (
     <div className="shadow-lg m-4 rounded-lg" id={shortid.generate()}>

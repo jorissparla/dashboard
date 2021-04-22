@@ -1,11 +1,13 @@
-import { useMutation } from "@apollo/client";
-import CloseIcon from "@material-ui/icons/Close";
-import Button from "elements/TWButton";
-import { TWSelectMenu } from "elements/TWSelectMenu";
-import { useAlert } from "globalState/AlertContext";
 import React, { useEffect, useState } from "react";
-import { format } from "utils/format";
+
+import Button from "elements/TWButton";
+import CloseIcon from "@material-ui/icons/Close";
+import HTMLEditor from "common/HTMLEditor";
 import { MUTATION_UPDATE_DETAIL } from "tenants/TenantMutations";
+import { TWSelectMenu } from "elements/TWSelectMenu";
+import { format } from "utils/format";
+import { useAlert } from "globalState/AlertContext";
+import { useMutation } from "@apollo/client";
 
 function EditTenantDetails({ isTenantEditor, ...props }) {
   const { profile, className, onClose, onView, ...rest } = props;
@@ -53,6 +55,9 @@ export const EditTenantDetailsWrapped = (props) => {
     });
     setProxyUser(() => newproxyValue);
   };
+  function handleSetHTMLComments(comments) {
+    setValues({ ...values, comments });
+  }
 
   const alert = useAlert();
 
@@ -151,7 +156,8 @@ export const EditTenantDetailsWrapped = (props) => {
             />
           </div>
           <div className="col-span-3 row-start-5 space-y-1 sm:col-span-3">
-            <label htmlFor="pm" className="block text-sm font-medium leading-5 text-gray-700">
+            <HTMLEditor onChange={handleSetHTMLComments} value={values.comments} label="Customer Comments" enabled={isTenantEditor} />
+            {/* <label htmlFor="pm" className="block text-sm font-medium leading-5 text-gray-700">
               Customer Comments
             </label>
             <textarea
@@ -161,7 +167,7 @@ export const EditTenantDetailsWrapped = (props) => {
               // multiline
               rows="8"
               value={values.comments}
-            />
+            /> */}
           </div>
           <div className="col-span-3 row-start-6 space-y-1 sm:col-span-2 ">
             <label className="inline-flex items-center">

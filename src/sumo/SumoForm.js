@@ -232,6 +232,7 @@ function SumoForm({ initialValues = null }) {
             <div>
               <label htmlFor="query" className="block text-sm font-medium text-gray-700">
                 Query
+                <button className="bg-amber-100 font-semibold mt-1 px-2 py-1 shadow-lg">Copy</button>
               </label>
               <textarea
                 type="text"

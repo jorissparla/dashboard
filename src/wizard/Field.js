@@ -1,12 +1,13 @@
-import { useMutation } from "@apollo/client";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
+import "./field.css";
+
+import { ALL_MAINTENANCE_QUERY, MAINTENANCE_FAQ_QUERY, MUTATION_UPDATE_MAINTENANCE } from "./Queries";
+
+import HTMLEditor from "common/HTMLEditor";
+import React from "react";
 import TWButton from "elements/TWButton";
 import { useAlert } from "globalState/AlertContext";
+import { useMutation } from "@apollo/client";
 import { useUserContext } from "globalState/UserProvider";
-import React from "react";
-import "./field.css";
-import { ALL_MAINTENANCE_QUERY, MAINTENANCE_FAQ_QUERY, MUTATION_UPDATE_MAINTENANCE } from "./Queries";
 
 export const Field = ({ name, label, Icon, activeVersion, blue = false, className = "" }) => {
   const mutation = MUTATION_UPDATE_MAINTENANCE;
@@ -73,25 +74,7 @@ export const Field = ({ name, label, Icon, activeVersion, blue = false, classNam
           )}
         </div>
       </div>
-
-      <CKEditor
-        editor={ClassicEditor}
-        config={config2}
-        disabled={!isValidEditor}
-        data={value}
-        onReady={(editor) => {
-          // You can store the "editor" and use when it is needed.
-          console.log("Editor is ready to use!", editor);
-          // editor.plugins.get("FileRepository").createUploadAdapter = function (loader) {
-          //   return new MyUploadAdapter(loader);
-          // };
-        }}
-        onChange={(event, editor) => {
-          const data = editor.getData();
-          // console.log("Change", { event, editor, data });
-          setValue(data);
-        }}
-      />
+      <HTMLEditor value={value} onChange={(data) => setValue(data)} enabled={isValidEditor} />
     </div>
   );
 };

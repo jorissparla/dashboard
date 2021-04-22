@@ -1,9 +1,9 @@
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import Grid from "@material-ui/core/Grid";
-import EditIcon from "@material-ui/icons/Edit";
-import { DashBoardContext } from "globalState/Provider";
 import React, { useRef } from "react";
+
+import { DashBoardContext } from "globalState/Provider";
+import EditIcon from "@material-ui/icons/Edit";
+import Grid from "@material-ui/core/Grid";
+import HTMLEditor from "common/HTMLEditor";
 
 const CloudField = ({ name, edit = false, Icon, initialValue }) => {
   const { role = "Guest" } = React.useContext(DashBoardContext);
@@ -24,31 +24,7 @@ const CloudField = ({ name, edit = false, Icon, initialValue }) => {
       >
         {role === "Admin" && <EditIcon color="primary" fontSize="small" onClick={() => setisOpened(true)} />}
       </Grid>
-      <CKEditor
-        editor={ClassicEditor}
-        // disabled={readOnly}
-        data={value}
-        onReady={(editor) => {
-          // You can store the "editor" and use when it is needed.
-        }}
-        onChange={(event, editor) => {
-          const data = editor.getData();
-          // console.log("Change", { event, editor, data });
-          setValue((prev) => data);
-        }}
-      />
-
-      {/* <JoditEditor
-        ref={viewer}
-        value={value}
-        config={config2}
-        tabIndex={2} // tabIndex of textarea
-        // onBlur={newContent => setValue(newContent)} // preferred to use only this option to update the content for performance reasons
-        // onChange={newContent => {
-        //   console.log(newContent);
-        // }}
-      /> */}
-      {/* <MarkDown source={initialValue[name]} escapeHtml={false}></MarkDown> */}
+      <HTMLEditor value={value} onChange={(data) => setValue(data)} enabled={edit} />
     </div>
   );
 };

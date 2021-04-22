@@ -7,11 +7,11 @@ export function classNames(...classes) {
 
 const ColumnHeader = ({ label, onSort = () => null }) => {
   function handleSortUp() {
-    console.log("Clicked up for " + label);
+    // console.log("Clicked up for " + label);
     onSort(label, "A");
   }
   function handleSortDown() {
-    console.log("Clicked down for " + label);
+    // console.log("Clicked down for " + label);
     onSort(label, "D");
   }
   return (

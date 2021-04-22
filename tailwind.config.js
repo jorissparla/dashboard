@@ -4,6 +4,26 @@ module.exports = {
   purge: { enabled: true, content: ["./public/**/*.html", "./public/**/*.html", "./src/**/*.js", "./src/**/*.tsx"] },
   theme: {
     extend: {
+      textColor: {
+        skin: {
+          base: "var(--color-text-base)",
+          muted: "var(--color-text-muted)",
+          inverted: "var(--color-text-inverted)",
+        },
+      },
+      backgroundColor: {
+        skin: {
+          fill: "var(--color-fill)",
+          "button-accent": "var(--color-button-accent)",
+          "button-accent-hover": "var(--color-button-accent-hover)",
+          "button-muted": "var(--color-button-muted)",
+        },
+      },
+      gradientColorStops: {
+        skin: {
+          hue: "var(--color-fill)",
+        },
+      },
       inset: {
         "-1": "-0.25rem",
         "-2": "-0.5rem",

@@ -49,7 +49,7 @@ const NewsItemContainer = lazy(() => import("./news/newsitemcontainer"));
 const NewsPage = lazy(() => import("./pages/newspage"));
 const NiceSpinner = lazy(() => import("utils/NiceSpinner"));
 const OtherTeamsChartContainer = lazy(() => import("./charts/OtherTeamChartsContainer"));
-const { Parameters } = lazy(() => import("./stats/Parameters"));
+const Parameters = lazy(() => import("./stats/Parameters"));
 const PriorityDashboard = lazy(() => import("./stats/PriorityDashboard"));
 const ProfilePage = lazy(() => import("./pages/ProfilePage"));
 const Projects = lazy(() => import("pages/projects"));
@@ -188,7 +188,7 @@ function AppRoutes() {
       <AuthRoute exact path="/kbpage" component={KBPage} user={user} history={history} />
       <Route exact path="/main" component={Main} user={user} history={history} />
 
-      <AuthRoute exact path="/myworkparams" component={Parameters} user={user} history={history} />
+      <Route exact path="/myworkparams" component={Parameters} user={user} history={history} />
       <Route exact path="/" component={DashBoardContainer} user={user} />
       <Route exact path="/newspage" component={NewsPage} />
       <Route exact path="/cloudsuites" component={CloudSuites} history={history} user={user} />

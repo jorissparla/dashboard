@@ -1,16 +1,17 @@
-import { useQuery } from "@apollo/client";
-import SearchBar from "common/SearchBar";
-import { CustomTable } from "elements/CustomTable";
-import TWButton from "elements/TWButton";
-import TWCheckbox from "elements/TWCheckbox";
-import { useHasPermissions } from "globalState/UserProvider";
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router";
+
 import { ALL_SUMO_INCIDENTS_QUERY } from "sumo/sumoqueries";
+import { CustomTable } from "elements/CustomTable";
 import { ISumoIncidentData } from "sumo/sumotypes";
-import { format } from "utils/format";
+import SearchBar from "common/SearchBar";
 import Spinner from "utils/spinner";
 import { SumoNav } from "./SumoNav";
+import TWButton from "elements/TWButton";
+import TWCheckbox from "elements/TWCheckbox";
+import { format } from "utils/format";
+import { useHasPermissions } from "globalState/UserProvider";
+import { useHistory } from "react-router";
+import { useQuery } from "@apollo/client";
 
 function SumoIncidents() {
   const [isShowingAdd, showAdd] = useState(false);
@@ -80,7 +81,7 @@ function SumoIncidents() {
         <TWCheckbox label="Show Archived" value={isShowingArchived} onChange={() => setToggleShowArchive(!isShowingArchived)} />
         {/* <h2 className="text-lg leading-6 font-medium text-black">Sumo Logs</h2> */}
         {canEdit && (
-          <TWButton color="blue" onClick={() => history.push("/addsumo")}>
+          <TWButton color="blue" onClick={() => history.push("/addsumoincident")}>
             New
           </TWButton>
         )}

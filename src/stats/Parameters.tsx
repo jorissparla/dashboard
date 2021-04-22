@@ -1,7 +1,8 @@
-import clsx from "clsx";
-import Button from "elements/TWButton";
-import { useAlert } from "globalState/AlertContext";
 import * as React from "react";
+
+import Button from "elements/TWButton";
+import clsx from "clsx";
+import { useAlert } from "globalState/AlertContext";
 import { useLocalStorage } from "../utils/useLocalStorage";
 
 interface PProps {
@@ -65,7 +66,7 @@ interface Props {
 
 export const Parameters: React.FC<Props> = (props) => {
   const alert: any = useAlert();
-
+  console.log(`hi`, alert);
   function handleKeyUp() {
     console.log("Item changes");
     if (alert) {
@@ -98,3 +99,5 @@ export const Parameters: React.FC<Props> = (props) => {
     </div>
   );
 };
+
+export default Parameters;

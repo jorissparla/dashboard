@@ -1,16 +1,17 @@
 import { Button, Card, CardContent, CardHeader, Divider, Grid, Input, Typography } from "@material-ui/core";
+
+import { ALL_FOLLOWED_QUERY } from "./queries";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import { makeStyles } from "@material-ui/core/styles";
-import SearchIcon from "@material-ui/icons/Search";
 import React from "react";
 import ReactDOM from "react-dom";
+import SearchIcon from "@material-ui/icons/Search";
+import Spinner from "utils/spinner";
 import TimeLine from "./components/TimeLineLoaded";
 import events from "./events";
-import { ALL_FOLLOWED_QUERY } from "./queries";
+import { makeStyles } from "@material-ui/core/styles";
 import { useQuery } from "@apollo/client";
-import Spinner from "utils/spinner";
 
 const useStyles = makeStyles((theme) => ({
   App: {
@@ -88,7 +89,6 @@ function CustomerFollow() {
 
   React.useEffect(() => {
     loadData();
-    console.log(loading);
   }, [loading]);
 
   const handleInputChange = (event) => {

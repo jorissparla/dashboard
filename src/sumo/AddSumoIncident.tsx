@@ -1,8 +1,7 @@
 import React from "react";
-
 import SumoIncidentForm from "./SumoIncidentForm";
 
-const AddSumoAlert = () => {
+const AddSumoIncident = () => {
   return <SumoIncidentForm />;
 };
-export default AddSumoAlert;
+export default AddSumoIncident;

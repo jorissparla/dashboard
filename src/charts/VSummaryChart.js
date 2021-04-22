@@ -1,7 +1,8 @@
-import { Query } from "@apollo/client/react/components";
-import gql from "graphql-tag";
-import React from "react";
 import { VictoryArea, VictoryChart, VictoryLabel, VictoryTheme } from "victory";
+
+import { Query } from "@apollo/client/react/components";
+import React from "react";
+import gql from "graphql-tag";
 
 const querySummariesv2 = gql`
   query summaries2($team: String) {
@@ -33,10 +34,8 @@ class VSummaryChart extends React.Component {
       <Query query={querySummariesv2} variables={{ team }}>
         {({ data, loading }) => {
           if (loading) return "Loading....";
-          console.log("data", data);
           const { summaries2 } = data;
           const range = summaries2.map((item) => item[field]);
-          console.log("range", range);
           let ymin;
           let ymax;
           if (range.length > 0) {

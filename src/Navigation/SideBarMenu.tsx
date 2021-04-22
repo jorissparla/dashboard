@@ -27,6 +27,7 @@ import TWButton from "elements/TWButton";
 import TWFileUpload from "common/FileUploaderNew";
 import { UserContext } from "globalState/UserProvider";
 import XpertIcon from "@material-ui/icons/Commute";
+import { hasPermission } from "utils/hasPermission";
 import { signOut } from "auth/msAuth";
 
 // import Signout from '../Signout';
@@ -44,10 +45,13 @@ export function SideBarMenu({ classes, history, toggleMenu, open }: ISideBarProp
   const [showSideMenu, setShowSideMenu] = useState(false);
 
   let isAdmin = false;
+  let isSuperUser = false;
   let authenticated = false;
   if (user) {
     authenticated = true;
     isAdmin = user.role === "Admin";
+    isSuperUser = user.role === "PO";
+    isSuperUser = isSuperUser || hasPermission(user.permissions, ["PO", "ADMIN"]);
   }
   async function handleLogout() {
     logout();
@@ -133,11 +137,12 @@ export function SideBarMenu({ classes, history, toggleMenu, open }: ISideBarProp
               Signout
             </MenuItem>
             {/* <ToggledNavLink title="Videos" navigateTo="/videos" history={history} /> */}
-            {isAdmin && (
-              <TWButton color="transp" onClick={() => setShowSideMenu(!showSideMenu)}>
-                Upload Files
-              </TWButton>
-            )}
+            {isAdmin ||
+              (isSuperUser && (
+                <TWButton color="transp" onClick={() => setShowSideMenu(!showSideMenu)}>
+                  Upload Files
+                </TWButton>
+              ))}
           </React.Fragment>
         )}
       </List>
