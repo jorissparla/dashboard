@@ -51,7 +51,7 @@ export function SideBarMenu({ classes, history, toggleMenu, open }: ISideBarProp
     authenticated = true;
     isAdmin = user.role === "Admin";
     isSuperUser = user.role === "PO";
-    isSuperUser = isSuperUser || hasPermission(user.permissions, ["PO", "ADMIN"]);
+    isSuperUser = isSuperUser || hasPermission(user.permissions, ["PO", "ADMIN", "FILEUPLOAD"]);
   }
   async function handleLogout() {
     logout();
@@ -61,7 +61,8 @@ export function SideBarMenu({ classes, history, toggleMenu, open }: ISideBarProp
   function ToggledNavLink(props: any) {
     return <NavLink {...props} toggleMenu={toggleMenu} history={history} open={open} color={props?.color} />;
   }
-
+  isSuperUser = isAdmin || isSuperUser;
+  console.log(`isSuperUser`, isSuperUser, isAdmin);
   const Divider = () => <hr className="border-t-1  bg-grey-200" />;
   return (
     <div>
@@ -137,12 +138,11 @@ export function SideBarMenu({ classes, history, toggleMenu, open }: ISideBarProp
               Signout
             </MenuItem>
             {/* <ToggledNavLink title="Videos" navigateTo="/videos" history={history} /> */}
-            {isAdmin ||
-              (isSuperUser && (
-                <TWButton color="transp" onClick={() => setShowSideMenu(!showSideMenu)}>
-                  Upload Files
-                </TWButton>
-              ))}
+            {isSuperUser && (
+              <TWButton color="transp" onClick={() => setShowSideMenu(!showSideMenu)}>
+                Upload Files
+              </TWButton>
+            )}
           </React.Fragment>
         )}
       </List>

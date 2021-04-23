@@ -204,6 +204,7 @@ export const QUERY_BACKLOG_TEXT = gql`
     summary
     title
     status
+    action
     dayssincelastupdate
     ownergroup
     daysSinceCreated

@@ -3,6 +3,7 @@ import { CloseIcon } from "elements/Icons";
 import { Drawer } from "@material-ui/core";
 import React from "react";
 import TWCheckbox from "elements/TWCheckbox";
+import TWListBox from "elements/TWListBox";
 import TextInput from "elements/TextInput";
 import { usePersistentState } from "../../../hooks";
 
@@ -42,6 +43,9 @@ const Filter = (props) => {
     }));
   };
 
+  function handleSetFarm(farm) {
+    setValues((values) => ({ ...values, farmName: farm }));
+  }
   function handleChangeLive(value) {
     setValues({ ...values, isLive: 1 - values.isLive });
   }
@@ -128,13 +132,21 @@ const Filter = (props) => {
                     value={values.tenantName}
                   />
                 </div>
-                <div className="m-2 px-2 py-1">
+                {/* <div className="m-2 px-2 py-1">
                   <TextInput
                     className=""
                     label="Farm Name"
                     name="farmName"
                     onChange={(event) => handleFieldChange(event, "farmName", event.target.value)}
                     value={values.farmName}
+                  />
+                </div> */}
+                <div className="m-2 px-2 py-1 mb-10">
+                  <div className="font-semibold  text-gray-600 ">Farm Name</div>
+                  <TWListBox
+                    items={["Frankfurt", "US-East-1", "Sydney", "US-Gov-West-1", "Tokyo"]}
+                    onChange={handleSetFarm}
+                    defaultValue={values.farmName}
                   />
                 </div>
                 <div className="m-2 px-2 py-1">

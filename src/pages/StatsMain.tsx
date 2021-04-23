@@ -159,7 +159,12 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
     .sort("dayssincelastupdate", "D")
     .addManager()
     .getData();
-
+  const pendingDeploy = blBase
+    .init()
+    // .region("EMEA")
+    .status("Pending Deploy")
+    .sort("dayssincelastupdate", "D")
+    .getData();
   const cloudops = blBase
     .init()
     // .region("EMEA")
@@ -194,6 +199,14 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
           data={sev4WithDefects}
           title="Severity 4 Defects"
           description={`All Incidents with severity 4 Standard with defects`}
+          actionHeader={true}
+        />
+        <BacklogTableNewStyle
+          filterValues={filterValues}
+          additionalFields={["action"]}
+          data={pendingDeploy}
+          title="Incidents Pending Deploy"
+          description={`All Incidents waiting for a hotfix`}
           actionHeader={true}
         />
 
