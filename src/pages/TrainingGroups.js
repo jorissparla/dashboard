@@ -1,8 +1,8 @@
 import gql from "graphql-tag";
 import React, { useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
-import Loader from "utils/Loader";
 import SearchBar from "common/SearchBar";
+import Spinner from "utils/spinner";
 
 const ALL_TRAININGROUPS = gql`
   query ALL_TRAINING_GROUPS {
@@ -45,7 +45,7 @@ function TrainingGroups() {
   );
 
   if (loading) {
-    return <Loader />;
+    return <Spinner />;
   }
 
   const handleGroupClick = (item) => {

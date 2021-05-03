@@ -1,10 +1,11 @@
-import { useMutation } from "@apollo/client";
-import gql from "graphql-tag";
 import React, { useState } from "react";
 import { useHistory, useLocation } from "react-router-dom";
+
 import Button from "../elements/TWButton";
-import { useUserContext } from "../globalState/UserProvider";
+import gql from "graphql-tag";
 import { signIn } from "./msAuth";
+import { useMutation } from "@apollo/client";
+import { useUserContext } from "../globalState/UserProvider";
 
 const MUTATION_SIGNIN = gql`
   mutation loginUser($input: AUTH_PROVIDER_EMAIL) {
@@ -41,7 +42,7 @@ const LoginForm = ({}) => {
     if (auth) {
       const { userName: email, name: username } = auth;
       const result = await loginSSO(email, username);
-      // console.log("sso", result, userContext.user);
+      console.log("sso", result, email, username);
       if (!result) {
         setErrors(" Unregistered email");
         return;

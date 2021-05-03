@@ -3,7 +3,7 @@ import { useAlert } from "globalState/AlertContext";
 import { useUserContext } from "globalState/UserProvider";
 import React from "react";
 import { useMutation } from "@apollo/client";
-import FileUploader from "../common/FileUploaderNew";
+import { TWFileUpload } from "../common/FileUploaderNew";
 import { UPDATE_PROFILE_PIC_MUTATION } from "../graphql/UPDATE_PROFILE_PIC";
 
 const ProfilePage = ({ active = null }) => {
@@ -34,10 +34,12 @@ const ProfilePage = ({ active = null }) => {
         <a href={image}>{image}</a>
         {current?.role === "Admin" ||
           (true && (
-            <FileUploader
+            <TWFileUpload
               link={`\\\\nlbavwixs.infor.com\\images\\profilepics\\${email}`}
               httpLinkPrefix={`https://nlbavwixs.infor.com/images/profilepics/${email}/`}
               readOnly={false}
+              label="Select Image File"
+              type="image/*"
               setFile={handleSetFile}
               title="Profile Picture"
             />

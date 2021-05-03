@@ -11,17 +11,17 @@ interface NavLinkProps {
 }
 
 export const NavLink: React.FC<NavLinkProps> = ({ title, color = "text-gray-600", Icon, navigateTo, history, toggleMenu, open = true }) => (
-  <a
-    href={navigateTo}
+  <button
+    // href={navigateTo}
     className={`font-sans font-semibold text-xs flex items-center py-1 ml-2 cursor-pointer no-underline ${color}`}
-    // onClick={() => {
-    //   // toggleMenu();
-    //   setTimeout(() => {
-    //     toggleMenu();
-    //     history.push(navigateTo);
-    //   }, 500);
-    //   return null;
-    // }}
+    onClick={() => {
+      // toggleMenu();
+      setTimeout(() => {
+        toggleMenu();
+        history.push(navigateTo);
+      }, 500);
+      return null;
+    }}
   >
     {Icon && (
       <span className="px-2">
@@ -29,5 +29,5 @@ export const NavLink: React.FC<NavLinkProps> = ({ title, color = "text-gray-600"
       </span>
     )}
     {open && <span>{title}</span>}
-  </a>
+  </button>
 );

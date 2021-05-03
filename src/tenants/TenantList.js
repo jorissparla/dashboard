@@ -1,30 +1,33 @@
-import { useMutation, useQuery } from "@apollo/client";
-import Button from "@material-ui/core/Button";
-import deepOrange from "@material-ui/core/colors/deepOrange";
-import deepPurple from "@material-ui/core/colors/deepPurple";
-import { withStyles } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
-import { differenceInCalendarDays } from "date-fns";
-import TWButton from "elements/TWButton";
-import _ from "lodash";
-import Modal from "ModalWrapper";
-import TenantLogs from "pages/TenantLogList";
+import "./tenants.css";
+
+import { ALL_TENANTS, QUERY_ALL_TENANT_DETAILS, TENANT_NOTE } from "./TenantQueries";
+import { FilterFieldContext, useFilterField } from "../globalState/FilterContext";
 import React, { useContext, useEffect, useState } from "react";
 import { animated, config, useSpring } from "react-spring";
-import styled from "styled-components";
-import Spinner from "utils/spinner";
-import FavoriteBadge from "../elements/Badge";
-import { FilterFieldContext, useFilterField } from "../globalState/FilterContext";
-import { DashBoardContext } from "../globalState/Provider";
-//import format from 'date-fns/format';
 import { format, formatDistanceToNow } from "../utils/format";
-import Loader from "./../utils/Loader";
-import FancyFilter from "./new/FancyFilter";
+import { useMutation, useQuery } from "@apollo/client";
+
+import Button from "@material-ui/core/Button";
 import { CREATE_AUDIT_MUTATION } from "./Query";
+import { DashBoardContext } from "../globalState/Provider";
+import FancyFilter from "./new/FancyFilter";
+import FavoriteBadge from "../elements/Badge";
+import Modal from "ModalWrapper";
+import Spinner from "utils/spinner";
+import TWButton from "elements/TWButton";
 import { TenantCard } from "./TenantCard";
 import TenantCustomerDetailsForm from "./TenantCustomerDetailsForm";
-import { ALL_TENANTS, QUERY_ALL_TENANT_DETAILS, TENANT_NOTE } from "./TenantQueries";
-import "./tenants.css";
+import TextField from "@material-ui/core/TextField";
+import _ from "lodash";
+import { addDays } from "date-fns";
+import deepOrange from "@material-ui/core/colors/deepOrange";
+import deepPurple from "@material-ui/core/colors/deepPurple";
+import { differenceInCalendarDays } from "date-fns";
+import { useHistory } from "react-router";
+import useSWR from "swr";
+import { withStyles } from "@material-ui/core/styles";
+
+//import format from 'date-fns/format';
 
 const styles = (theme) => ({
   root: {
@@ -194,21 +197,11 @@ const styles = (theme) => ({
   },
 });
 
-const CloseButton = styled.button`
-  position: relarive;
-  top: 0;
-  right: 0;
-  background: transparent;
-  font-size: 48px;
-  font-weight: 100;
-  border: none;
-  align-self: flex-end;
-  align-self: center;
-`;
+const CloseButton = ({ children }) => <button className="top-0 right-0 text-2xl ">{children}</button>;
 
 function TenantNote() {
-  const { data, loading } = useQuery(TENANT_NOTE);
-  if (loading) return <div />;
+  const { data, loading } = useSWR(TENANT_NOTE);
+  if (!data) return <div />;
   const { updatestatus } = data;
   if (updatestatus.note && updatestatus.note.length > 1) {
     return <span className="marquee">{updatestatus.note}</span>;
@@ -216,7 +209,7 @@ function TenantNote() {
   return <div />;
 }
 
-export const FilterForm = ({ setSearchText, flip }) => {
+export const FilterForm = ({ flip }) => {
   const { setFields, clearFields } = useContext(FilterFieldContext);
 
   const [customer, setCustomer] = useState("");
@@ -250,7 +243,7 @@ export const FilterForm = ({ setSearchText, flip }) => {
         name="customer.name"
         type="text"
         label="Customer Name"
-        placeholder="Customer Name"
+        placeholder="Customer"
         onChange={(e) => setCustomer(e.target.value)}
         value={customer}
       />
@@ -264,7 +257,7 @@ export const FilterForm = ({ setSearchText, flip }) => {
         onChange={(e) => setVersion(e.target.value)}
         value={version}
       />
-      <Button
+      <TWButton
         style={{ marginTop: 10 }}
         variant="contained"
         color="primary"
@@ -272,7 +265,7 @@ export const FilterForm = ({ setSearchText, flip }) => {
         // type="submit"
       >
         Filter
-      </Button>
+      </TWButton>
       <Button style={{ marginTop: 10 }} variant="contained" color="secondary" onClick={() => clearAllFields()}>
         Clear
       </Button>
@@ -297,15 +290,38 @@ const filterTenantsByCustomerFarmVersion = (tenants, fields, details) => {
     csm = "",
     pm = "",
     lastupdated = "999",
+    golive_nrdays = 0,
+    showupcominggolives = false,
     useproxy = false,
   } = fields;
-
+  console.log({ useproxy });
   let filteredCustomerNames = null;
   if (details) {
     filteredCustomerNames = details
       .filter((detail) => detail.temperature.toUpperCase().includes(temperature.toUpperCase()))
       .filter((detail) => detail.csm.toUpperCase().includes(csm.toUpperCase()))
-      .filter((detail) => detail.pm.toUpperCase().includes(pm.toUpperCase()));
+      .filter((detail) => detail.pm.toUpperCase().includes(pm.toUpperCase()))
+      .filter(filterGoLiveDays(showupcominggolives))
+      .filter((t) => (useproxy === 1 ? t.useproxy === true : true));
+  }
+
+  function filterGoLiveDays(showupcominggolives, detail) {
+    return function (detail) {
+      if (!showupcominggolives) {
+        return true;
+      }
+      let days = 30;
+      const startDate = new Date();
+      const endDate = addDays(new Date(), parseInt(days));
+      const glDate = parseInt(detail.golivedate);
+      if (glDate) {
+        const nDate = new Date(glDate);
+        if (nDate >= startDate && nDate <= endDate) {
+          return true;
+        }
+      }
+      return false;
+    };
   }
 
   const f = applySimpleFilter(parseInt(lastupdated));
@@ -317,6 +333,7 @@ const filterTenantsByCustomerFarmVersion = (tenants, fields, details) => {
     .filter((t) => t.version.toUpperCase().includes(tenantVersion.toUpperCase()))
     .filter((t) => t.name.toUpperCase().includes(tenantName.toUpperCase()))
     .filter((t) => (isLive ? t.live === 1 : true))
+
     .filter(f)
     .sortBy((o) => o.customer.name)
     .value();
@@ -337,19 +354,9 @@ const TenantList = (props) => {
   const { classes } = props;
   const [setSearchText] = useState("");
   const [showFilterDialog, toggleShowFilterDialog] = useState(false);
-  const [showLogs, setShowLogs] = useState(false);
   const [isShowingDetails, toggleShowDetails] = useState(false);
   const [counter, setCounter] = useState(0);
-  const keysPressed = useMultiKeyPress();
-  const happyPress = areKeysPressed(["Shift", "C"], keysPressed); //false; //useKeyPress('C');
 
-  function areKeysPressed(keys = [], keysPressed = []) {
-    const required = new Set(keys);
-    for (var elem of keysPressed) {
-      required.delete(elem);
-    }
-    return required.size === 0;
-  }
   const { x } = useSpring({
     x: showFilterDialog ? 15 : 0,
     config: config.wobbly,
@@ -357,15 +364,8 @@ const TenantList = (props) => {
   const flip = () => toggleShowFilterDialog(!showFilterDialog);
 
   const applyFilter = (values) => {
+    console.log("Filter values", values);
     setFields(values);
-  };
-  if (happyPress) {
-    // clearFields();
-  }
-
-  const simpleFilter = {
-    lastupdated: null,
-    farm: "",
   };
 
   useEffect(() => {
@@ -378,39 +378,47 @@ const TenantList = (props) => {
     createAudit({ variables: { input } }).then(console.log);
   }, [createAudit, dbctx.fullname]);
 
-  const { data, loading } = useQuery(ALL_TENANTS);
-  const { data: details, loading: detailsloading } = useQuery(QUERY_ALL_TENANT_DETAILS);
-
-  if (loading || detailsloading) {
+  const { data, loading } = useSWR(ALL_TENANTS);
+  const { data: details, loading: detailsloading } = useSWR(QUERY_ALL_TENANT_DETAILS);
+  console.log({ data });
+  if (!data || !details) {
     return <Spinner />;
   }
 
-  // if (loading || detailsloading) {
-  //   return <Loader loading={loading} />;
-  // }
-  const { tenants, updatestatus, tenantlogs } = data;
+  const { tenants, updatestatus } = data;
   const { tenantcustomerdetails } = details;
   const { updatedAt } = updatestatus;
   const filteredTenants = filterTenantsByCustomerFarmVersion(tenants, fields, details.tenantcustomerdetails);
   // console.log(applySimpleFilter(filteredTenants));
-  const uniqueCustomers = filteredTenants.map(({ farm, customer: { name } }) => name).filter((ten, i, all) => all.indexOf(ten) === i);
+  const uniqueCustomers = filteredTenants.map(({ customer: { name } }) => name).filter((ten, i, all) => all.indexOf(ten) === i);
+  const xx = _.countBy(
+    _.uniqWith(
+      filteredTenants.map(({ customer: { name } }) => name),
+      _.isEqual
+    ),
+    "name"
+  );
+  console.log({ xx });
+  console.log(uniqueCustomers.length);
   return (
     <div className="bg-gray-100 h-screen">
-      <Loader loading={loading} />
       <animated.div
         style={{
           width: x.interpolate((x) => `${100 - x}vw`),
         }}
       >
-        <TenantListHeader
-          updatedAt={updatedAt}
-          applyFilter={applyFilter}
-          toggleShowLogs={() => setShowLogs(!showLogs)}
-          toggleFilter={() => toggleShowFilterDialog(!showFilterDialog)}
-          tenants={tenants}
-        />
+        <div className="flex">
+          <TenantListHeader
+            updatedAt={updatedAt}
+            applyFilter={applyFilter}
+            // toggleShowLogs={() => setShowLogs(!showLogs)}
+            toggleFilter={() => toggleShowFilterDialog(!showFilterDialog)}
+            tenants={tenants}
+            count={uniqueCustomers.length}
+          />
+        </div>
         {/* <div className="mt-8 mx-4 px-4 rounded-lg ">Filter</div> */}
-        <div className="flex flex-wrap" onKeyDown={(e) => {}}>
+        <div className="flex flex-wrap" onKeyDown={() => {}}>
           {uniqueCustomers.map((customer, index) => {
             const sub = filteredTenants.filter((o) => o.customer.name === customer);
             const liveCust = sub[0].live === 1 ? true : false;
@@ -453,11 +461,9 @@ const TenantList = (props) => {
         }}
       >
         {/* <SearchBar onChange={e => setSearchText(e)} /> */}
-        <FilterForm setSearchText={setSearchText} flip={flip} />
+        {/* <FilterForm setSearchText={setSearchText} flip={flip} /> */}
       </animated.div>
-      <Modal on={showLogs} toggle={() => setShowLogs(!showLogs)} height={80}>
-        <TenantLogs tenantlogs={tenantlogs} />
-      </Modal>
+
       <Modal on={isShowingDetails} toggle={() => toggleShowDetails(!isShowingDetails)} height={80}>
         <TenantCustomerDetailsForm closeForm={() => toggleShowDetails(false)} />
       </Modal>
@@ -465,13 +471,10 @@ const TenantList = (props) => {
   );
 };
 
-export const TenantListHeader = ({ updatedAt, tenants, toggleShowLogs, toggleFilter, applyFilter }) => {
+export const TenantListHeader = ({ updatedAt, tenants, applyFilter, count = 0 }) => {
+  const history = useHistory();
   const max = _.maxBy(tenants, (t) => format(t.lastupdated, "yyyyMMdd")).lastupdated;
-  const [showLast7DaysUpdated, setShowLast7DaysUpdated] = useState(false);
-  const handleChangeLastUpdated = (e) => {
-    console.log(e.target.value);
-    setShowLast7DaysUpdated((prev) => !prev);
-  };
+  // const [, setShowLast7DaysUpdated] = useState(false);
   let tenantcustomersWithFarm = _.countBy(
     tenants.map(({ farm, tenant }) => ({ farm, tenant })),
     "farm"
@@ -485,16 +488,16 @@ export const TenantListHeader = ({ updatedAt, tenants, toggleShowLogs, toggleFil
   ).filter((t) => t.live === 1);
   const totalCustomers = Object.entries(custFarms).reduce((count, item) => count + item[1], 0);
 
-  // const nrOfLiveCustomers = uniqueCustomers.filter(t => t.live).length;
   const totalTenants = Object.entries(tenantcustomersWithFarm).reduce((count, item) => count + item[1], 0);
   return (
-    <div className="flex flex-col justify-between shadow-lg bg-white p-2 m-2">
+    <div className="flex flex-col justify-between shadow-lg bg-white p-2 m-2 w-full">
+      <div></div>
       <div className="flex justify-between tracking-widest  ">
         <div className="flex font-sans tracking-normal mb-2">
           <div className="text-sm px-2 items-center flex font-semibold py-0.5 rounded-lg bg-gray-300 mr-4 text-gray-600">
             {updatedAt ? `Last check:  ${formatDistanceToNow(updatedAt)} ago,  Last change made ${format(max, "dd MMM yyyy")} ` : "not Saved yet"}
           </div>
-          <TWButton variant="outlined" color="transp" onClick={toggleShowLogs}>
+          <TWButton color="transp" onClick={() => history.push("/tenantlog")}>
             Logs
           </TWButton>
           <span className="tracking-wide  mx-4 font-sans font-semibold text-2xl text-gray-600">{` Multitenant customers `}</span>
@@ -503,7 +506,7 @@ export const TenantListHeader = ({ updatedAt, tenants, toggleShowLogs, toggleFil
           </div>
           <TenantNote />
         </div>
-        <FancyFilter onFilter={applyFilter} />
+        <FancyFilter onFilter={applyFilter} count={count} />
         {/* <Button variant="contained" onClick={toggleFilter}>
           Filter
         </Button> */}

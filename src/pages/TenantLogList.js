@@ -44,11 +44,11 @@ const TenantLogList = () => {
       // console.log(fmtData);
       setFormattedData(fmtData);
     }
-  }, [data]);
+  }, [data, tenantlogs]);
   if (loading) return <Spinner />;
   const { tenantlogs } = data;
 
-  let fields = getfieldNamesFromData({ log: "", fmtDate: "", log: "" });
+  let fields = getfieldNamesFromData({ log: "", fmtDate: "" });
   return (
     <div className=" w-full bg-gray-100 flex  justify-center">
       <div className="m-4 rounded shadow-lg ">

@@ -1,19 +1,8 @@
-import React, { useState, useEffect, useCallback } from "react";
-import _ from "lodash";
-import Paper from "@material-ui/core/Paper";
-import TextField from "@material-ui/core/TextField";
-import FontIcon from "@material-ui/core/Icon";
-import ActionSearch from "@material-ui/icons/Search";
+import { useCallback, useEffect, useState } from "react";
 
-export default ({
-  onChange,
-  hintText = "Search..",
-  defaultValue = "",
-  searchOnEnter = false,
-  width = "100%",
-  style = { display: "flex", marginBottom: 10, alignItems: "center" },
-  shade = true,
-}) => {
+import _ from "lodash";
+
+export default function SearchBar({ onChange, hintText = "Search..", defaultValue = "", searchOnEnter = false, className = "" }) {
   const [val, setVal] = useState(defaultValue || "");
   const [changed, setChanged] = useState(false);
 
@@ -25,7 +14,7 @@ export default ({
   }, [changed]);
   return (
     <div className="w-full bg-white py-2 flex  pt-1 mt-2">
-      <div className="w-full lg:px-6 xl:w-3/4 xl:px-12 sm:px-4">
+      <div className={`w-full lg:px-6 xl:w-3/4 xl:px-12 sm:px-4 ${className}`}>
         <div className="mt-1 relative rounded-md shadow-sm">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
             <svg className="fill-current pointer-events-none text-gray-600 w-4 h-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -35,10 +24,10 @@ export default ({
           {searchOnEnter ? (
             <input
               id="email"
-              className="transition-colors duration-100 ease-in-out focus:outline-0 border border-transparent focus:bg-white focus:border-gray-300 placeholder-gray-600 rounded-lg bg-gray-200 py-2 pr-4 pl-10 block w-full appearance-none leading-normal ds-input"
+              className="transition-colors duration-100 ease-in-out focus:outline-0 border border-transparent focus:bg-white focus:border-gray-300  rounded-lg bg-gray-200 py-2 pr-4 pl-10 block w-full appearance-none leading-normal ds-input placeholder-gray-400"
               placeholder={hintText}
               value={val}
-              type="text"
+              type="search"
               onChange={({ target: { value } }) => setVal(value)}
               onKeyDown={(e) => {
                 if (e.keyCode === 13) {
@@ -51,6 +40,7 @@ export default ({
           ) : (
             <input
               id="email"
+              type="search"
               className="transition-colors duration-100 ease-in-out focus:outline-0 border border-transparent focus:bg-white focus:border-gray-300 placeholder-gray-600 rounded-lg bg-gray-200 py-2 pr-4 pl-10 block w-full appearance-none leading-normal ds-input"
               placeholder={hintText}
               value={val}
@@ -93,4 +83,4 @@ export default ({
       )} */}
     </div>
   );
-};
+}

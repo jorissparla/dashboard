@@ -1,191 +1,107 @@
-import React, { Component } from "react";
-import gql from "graphql-tag";
-import { graphql } from "@apollo/client/react/hoc";
-import styled from "styled-components";
-import { withRouter } from "react-router";
-import TextField from "@material-ui/core/TextField";
-import Paper from "@material-ui/core/Paper";
-import Button from "@material-ui/core/Button";
-import { withStyles } from "@material-ui/core/styles";
-import { ViewText } from "../styles";
+import { gql, useMutation } from "@apollo/client";
+import TextArea from "elements/TextArea";
+import TextInput from "elements/TextInput";
+import TWButton from "elements/TWButton";
+import { useAlert } from "globalState/AlertContext";
+import React, { useEffect, useState } from "react";
 export const niceblue = "#40a5ed";
 export const babyblue = "#ecf6fd";
 export const twitterblue = "#1da1f2";
 
-const paperStyle = {
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "space-between",
-  margin: "15px",
-  padding: "10px",
-  minWidth: "200px",
-};
-
-const styles = (theme) => ({
-  container: {
-    display: "flex",
-    flexWrap: "wrap",
-  },
-  button: {
-    margin: theme.spacing(1),
-    width: 250,
-  },
-
-  buttonDel: {
-    margin: theme.spacing(1),
-    backgroundColor: "#000",
-  },
-
-  textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    width: 200,
-    height: "100%",
-  },
-  titleField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    fontSize: "40px",
-    color: "#039BE5",
-  },
-  contentField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    backgroundColor: "#eeeeee99",
-    fontSize: 40,
-  },
-});
-
-const H3 = styled.h3`
-  color: black;
-`;
-
-const FlexRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-`;
-const FlexCol = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const Error = styled.div`
-  display: flex;
-  align-items: flex-start;
-  height: 40px;
-  padding: 0 16px;
-  font-weight: 500;
-  border-radius: 4px;
-  border: 1px solid red;
-  text-decoration: none;
-  background-color: red;
-  opacity: 0.7;
-  color: white;
-  font-family: Roboto;
-  font-size: 15px;
-
-  transition: all 0.45s;
-  text-align: center;
-  line-height: 36px;
-  margin-left: 8px;
-`;
-
-class Request extends Component {
-  state = {
-    name: this.props.user.name,
-    email: this.props.user.email,
-    text: "",
-    page: "SupportCard",
-    error: "",
-    buttonText: "Enter Request",
-  };
-
-  isNotEmpty = (value) => (value ? true : false);
-  isValidEmail = (email) => /\S+@\S+\.\S+/.test(email);
-
-  checkErrors = ({ email, name, text }) => {
-    let error = "";
-    if (!this.isValidEmail(email)) {
-      error += " Invalid email address ";
-    }
-    if (!this.isNotEmpty(name)) {
-      error += " - Name cannot be empty ";
-    }
-    if (!this.isNotEmpty(text)) {
-      error += " - Text  cannot be empty ";
-    }
-    this.setState({ error });
-    return error === "";
-  };
-
-  componentWillMount() {
-    if (this.props.user) {
-      console.log("request", this.props);
-      this.setState({
-        ...this.state,
-        email: this.props.user.email,
-        name: this.props.user.fullname,
-      });
-    }
-  }
-  onChangeName = ({ target: { value } }) => {
-    this.setState({ name: value });
-  };
-  onChangeEmail = ({ target: { value } }) => {
-    this.setState({ email: value });
-  };
-  onChangeText = ({ target: { value } }) => {
-    this.setState({ text: value });
-  };
-  render() {
-    const { classes } = this.props;
-    return (
-      <Paper style={paperStyle}>
-        <H3>New Supportcard Request</H3>
-        <FlexCol>
-          {/*<H1>{this.state.page} Request</H1> */}
-          <FlexRow>
-            <ViewText placeholder="Enter Name" name="name" onChange={this.onChangeName} value={this.state.name}>
-              {this.state.name}
-            </ViewText>
-            <ViewText placeholder="Enter email" name="email" onChange={this.onChangeEmail} value={this.state.email}>
-              {this.state.email}
-            </ViewText>
-          </FlexRow>
-          <TextField
-            className={classes.contentField}
-            placeholder="Enter Text"
-            name="Request"
-            multiLine
-            rows={4}
-            fullWidth
-            onChange={this.onChangeText}
-          />
-          <Button className={classes.button} variant="contained" type="submit" onClick={this._onSubmit}>
-            {this.state.buttonText}
-          </Button>
-          {this.state.error && <Error>{this.state.error}</Error>}
-        </FlexCol>
-      </Paper>
-    );
-  }
-
-  _onSubmit = async (e) => {
-    e.preventDefault();
-    if (!this.checkErrors(this.state)) {
-      return;
-    } else {
-      this.setState({ buttonText: "submitting.." });
-      await this.props.createRequest({ variables: this.state });
-      setTimeout(() => {
-        this.props.onSubmit ? this.props.onSubmit() : this.props.history.push("/supportcard");
-      }, 2000);
-    }
-  };
+function isNotEmpty(value) {
+  return value ? true : false;
+}
+function isValidEmail(email) {
+  return /\S+@\S+\.\S+/.test(email);
 }
 
-const createRequestMutation = gql`
+const Request1 = () => {
+  const [addRequest] = useMutation(MUTATION_CREATE_REQUEST);
+  const [values, setValues] = useState({ name: "", email: "", text: "" });
+  const [errors, setErrors] = useState([]);
+  const alert = useAlert();
+  const handleChange = (e) => setValues({ ...values, [e.target.name]: e.target.value });
+
+  async function handleSave() {
+    if (errors.length === 0) {
+      const result = await addRequest({ variables: { values } });
+      alert.setMessage("Request added");
+    }
+  }
+
+  useEffect(() => {
+    const { name, email, text } = values;
+    let newErrors = [];
+
+    if (!isNotEmpty(name)) {
+      newErrors = [...newErrors, "Name not entered "];
+    }
+    if (!isNotEmpty(email)) {
+      newErrors = [...newErrors, "Email not entered "];
+    }
+    if (!isValidEmail(email)) {
+      newErrors = [...newErrors, "Email not valid "];
+    }
+    if (!isNotEmpty(text)) {
+      newErrors = [...newErrors, "Suggestion not entered "];
+    }
+    setErrors(newErrors);
+  }, [values]);
+  return (
+    <div className="bg-gray-100">
+      <div className="bg-white rounded shadow-xl p-2 m-2">
+        <header className="flex items-center justify-between">
+          <h2 className="text-xl font-bold text-blue-500">Request a new SupportCard</h2>
+        </header>
+        <div className="flex flex-wrap space-x-2 w-full">
+          <TextInput value={values.name} onChange={handleChange} name="name" label="Name" />
+          <TextInput value={values.email} onChange={handleChange} name="email" label="Email" type="email" className="min-w-96" />
+        </div>
+        <TextArea rows={10} value={values.text} onChange={handleChange} name="text" label="Suggestion" type="text" />
+        <ErrorComponent errors={errors} />
+        <div className="flex w-1/2  mt-2">
+          <TWButton color="teal" onClick={handleSave} className={`${errors.length === 0 ? "" : "cursor-not-allowed"}`}>
+            Save
+          </TWButton>
+          <TWButton>Cancel</TWButton>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const ErrorComponent = ({ errors = [] }) => {
+  if (errors.length === 0) {
+    return <div />;
+  }
+  return (
+    <div className="rounded-md bg-red-50 p-4 border-red-500 border transition duration-500 ease-in-out">
+      <div className="flex">
+        <div className="flex-shrink-0">
+          <svg className="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path
+              fillRule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+              clipRule="evenodd"
+            />
+          </svg>
+        </div>
+        <div className="ml-3">
+          <h3 className="text-sm font-medium text-red-800">There are {errors.length} errors that need to be fixed</h3>
+          <div className="mt-2 text-sm text-red-700">
+            <ul className="list-disc pl-5 space-y-1">
+              {errors.map((e, index) => (
+                <li key={index}>{e}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const MUTATION_CREATE_REQUEST = gql`
   mutation createRequest($name: String, $email: String, $text: String) {
     createRequest(input: { name: $name, email: $email, text: $text }) {
       id
@@ -193,4 +109,4 @@ const createRequestMutation = gql`
   }
 `;
 
-export default graphql(createRequestMutation, { name: "createRequest" })(withRouter(withStyles(styles)(Request)));
+export default Request1;

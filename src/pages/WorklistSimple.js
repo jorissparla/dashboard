@@ -1,13 +1,14 @@
-import { gql, useQuery } from "@apollo/client";
-import AutoComplete from "../elements/AutoComplete";
-import TWButton from "../elements/TWButton";
-import { UserContext } from "./../globalState/UserProvider";
+import { DataCell, HeaderCell, HyperLinkCell, HyperLinkCellRed } from "./Cells";
 import React, { useEffect, useState } from "react";
+import { gql, useQuery } from "@apollo/client";
+
+import AutoComplete from "../elements/AutoComplete";
 import { Backlog } from "../stats/BacklogType";
 import Spinner from "../utils/spinner";
+import TWButton from "../elements/TWButton";
+import { UserContext } from "./../globalState/UserProvider";
 import { useParams } from "./useParam";
 import { usePersistentState } from "../hooks";
-import { HeaderCell, DataCell, HyperLinkCellRed, HyperLinkCell } from "./Cells";
 
 const MY_BACKLOG_QUERY = gql`
   fragment backlogfragment on DWH {
@@ -75,6 +76,7 @@ const WorklistSimpleWrapper = () => {
   const [includePending, setIncludePending] = usePersistentState("includePending", false);
   const { user } = React.useContext(UserContext);
   const owner = user ? (user.fullname ? user.fullname : "") : "";
+  const ownerId = user ? user.navid : "";
   const [name, setName] = useState(owner || "Ron Bleser");
   const { data, loading } = useQuery(ACCOUNTS_QUERY);
   if (support) {
@@ -121,12 +123,12 @@ const WorklistSimpleWrapper = () => {
           </div>
         </div>
       </div>
-      <WorklistSimple owner={name} includeDevelopment={includeDevelopment} includePending={includePending} />
+      <WorklistSimple owner={name} ownerId={ownerId} includeDevelopment={includeDevelopment} includePending={includePending} />
     </div>
   );
 };
 
-const WorklistSimple = ({ owner = "", includeDevelopment, includePending }) => {
+const WorklistSimple = ({ owner = "", ownerId = "", includeDevelopment, includePending }) => {
   const params = useParams();
   const { data, loading } = useQuery(MY_BACKLOG_QUERY, { variables: { owner } });
   if (loading) return <Spinner />;
@@ -135,7 +137,11 @@ const WorklistSimple = ({ owner = "", includeDevelopment, includePending }) => {
 
   // const multitenantcustomers = data.multitenantcustomers;
 
-  const mtincidents = blBase.filterField("Tenant", "Multi-Tenant").notStatus(["Solution Proposed", "Solution Pending Maintenance"]).getData();
+  const mtincidents = blBase
+    .filterField("Tenant", "Multi-Tenant")
+    .notStatus(["Solution Proposed", "Solution Pending Maintenance"])
+    .sort("dayssincelastupdate", "D")
+    .getData();
 
   // .filter(
   //   (inc) => multitenantcustomers.find((cust) => parseInt(cust.customerid) === inc.customerid)

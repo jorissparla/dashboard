@@ -1,15 +1,16 @@
+import React, { useContext, useState } from "react";
 import { Typography, withStyles } from "@material-ui/core";
+
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import ExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import { SelectionContext } from "../globalState/SelectionContext";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import React, { useContext, useState } from "react";
-import { SelectionContext } from "../globalState/SelectionContext";
 import { format } from "./../utils/format";
 
 const CustomTableCell = withStyles((theme) => ({
@@ -138,7 +139,7 @@ export const BacklogTable = ({
             {mydata.sort(sortUp).map((row: any, index: number) => (
               <TableRow key={index} className={classes.row}>
                 <TableCell component="th" scope="row">
-                  <a href={`http://navigator.infor.com/n/incident.asp?IncidentID=${row.incident}`} target="_blank">
+                  <a href={`http://navigator.infor.com/n/incident.asp?IncidentID=${row.incident}`} target="_blank" rel="noreferrer">
                     {row.incident}
                   </a>
                 </TableCell>

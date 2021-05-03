@@ -1,21 +1,29 @@
+import "./index.css";
+import "./styles/app.css";
+
 import { ApolloClient, ApolloProvider, InMemoryCache, split } from "@apollo/client";
-import { WebSocketLink } from "@apollo/client/link/ws";
-import { getMainDefinition } from "@apollo/client/utilities";
-import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
-import { createUploadLink } from "apollo-upload-client";
+import { MuiThemeProvider, createMuiTheme } from "@material-ui/core/styles";
+import { cache, mutate } from "swr";
+
+import App from "./Navigation/Nav";
+import AppRoutes from "./routes";
+import { BrowserRouter } from "react-router-dom";
+import ContextProvider from "./globalState";
 import React from "react";
 import ReactDOM from "react-dom";
-import { BrowserRouter } from "react-router-dom";
-import { createGlobalStyle } from "styled-components";
+import { SWRConfig } from "swr";
+import SWRDevtools from "@jjordy/swr-devtools";
 import Spinner from "utils/spinner";
-// import { AUTH_USER } from "./actions";
-import ContextProvider from "./globalState";
-import "./index.css";
-import App from "./Navigation/Nav";
-// import reducers from "./reducers";
-import AppRoutes from "./routes";
-import "./styles/app.css";
+import { WebSocketLink } from "@apollo/client/link/ws";
+import { createGlobalStyle } from "styled-components";
+import { createUploadLink } from "apollo-upload-client";
+import { getMainDefinition } from "@apollo/client/utilities";
 import { main } from "./styles/globalstyles";
+import { request } from "graphql-request";
+
+// import { AUTH_USER } from "./actions";
+
+// import reducers from "./reducers";
 
 // import { SharedSnackbarProvider } from './globalState/SharedSnackbar.context';
 
@@ -35,31 +43,32 @@ const prefix = REACT_APP_HTTP.trim();
 const isHttps = HTTPS;
 console.log("🤷‍♂️🤷‍♂️🤷‍♂️", isHttps, process.env);
 export let uri = `${REACT_APP_GRAPHQLSERVER}:${REACT_APP_PORT_GRAPHQL}`;
-const wsuri = prefix === "https" ? "wss://" + uri : "ws://" + uri;
-const wsLink = new WebSocketLink({
-  uri: wsuri, // use wss for a secure endpoint
-  options: {
-    reconnect: true,
-  },
-});
+const wsuri = prefix === "https" ? "wss://" + uri.trim() + "/subscriptions" : "ws://" + uri.trim() + "/subscriptions";
+console.log({ wsuri });
+// const wsLink = new WebSocketLink({
+//   uri: wsuri, // use wss for a secure endpoint
+//   options: {
+//     reconnect: true,
+//   },
+// });
 uri = prefix === "https" ? "https://" + uri : "http://" + uri;
 const httpLink: any = createUploadLink({ uri, credentials: "include" });
-interface Definintion {
+interface Definition {
   kind: string;
   operation?: string;
 }
-const link = split(
-  ({ query }) => {
-    const { kind, operation }: Definintion = getMainDefinition(query);
-    return kind === "OperationDefinition" && operation === "subscription";
-  },
-  wsLink,
-  httpLink
-);
+// const link = split(
+//   ({ query }) => {
+//     const { kind, operation }: Definition = getMainDefinition(query);
+//     return kind === "OperationDefinition" && operation === "subscription";
+//   },
+//   wsLink,
+//   httpLink
+// );
 
 //`${REACT_APP_HTTP}://${REACT_APP_GRAPHQLSERVER}:${REACT_APP_PORT_GRAPHQL}/${REACT_APP_GRAPHQL_PATH}`;
 const client = new ApolloClient({
-  link,
+  link: httpLink,
   cache: new InMemoryCache(),
 });
 
@@ -71,6 +80,7 @@ const client = new ApolloClient({
 //   fullname: localStorage.getItem("name"),
 // };
 
+const fetcher = (query: any, variables?: any) => request(uri, query);
 const muiTheme = createMuiTheme({
   palette: {
     primary: {
@@ -109,22 +119,29 @@ const muiTheme = createMuiTheme({
 
 const Main = () => (
   <ApolloProvider client={client}>
-    <Global />
+    {/* <Global /> */}
     {/* <Provider store={store}> */}
-    <MuiThemeProvider theme={muiTheme}>
-      <ContextProvider>
-        <BrowserRouter>
-          {/* <SharedSnackbarProvider> */}
-          <>
-            <App />
-            <React.Suspense fallback={<Spinner loadingMessage="Loading data" />}>
-              <AppRoutes />
-            </React.Suspense>
-          </>
-          {/* </SharedSnackbarProvider> */}
-        </BrowserRouter>
-      </ContextProvider>
-    </MuiThemeProvider>
+    <SWRConfig
+      value={{
+        refreshInterval: 3000,
+        fetcher,
+      }}
+    >
+      <MuiThemeProvider theme={muiTheme}>
+        <ContextProvider>
+          <BrowserRouter>
+            {/* <SharedSnackbarProvider> */}
+            <>
+              <App />
+              <React.Suspense fallback={<Spinner loadingMessage="Loading data" />}>
+                <AppRoutes />
+              </React.Suspense>
+            </>
+            {/* </SharedSnackbarProvider> */}
+          </BrowserRouter>
+        </ContextProvider>
+      </MuiThemeProvider>
+    </SWRConfig>
     {/* </Provider> */}
   </ApolloProvider>
 );
@@ -132,4 +149,3 @@ const Main = () => (
 ReactDOM.render(<Main />, document.getElementById("root"));
 
 export { Main, client };
-//registerServiceWorker();

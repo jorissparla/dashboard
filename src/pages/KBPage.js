@@ -1,5 +1,4 @@
 import { GenericTable } from "elements/GenericTable";
-import { request } from "graphql-request";
 import { usePersistentState } from "hooks";
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
@@ -44,13 +43,8 @@ const KBPage = (props) => {
   }
   console.log("Start:", new Date());
   // const parms = useParams(!isValidSuperUser && !enableIt);
-  const API = "https://nlbavwixs.infor.com:4001";
-  const { data, error } = useSWR(
-    KBQUERY,
-
-    (query) => request(API, query),
-    { refreshInterval: 200000 }
-  );
+  console.log({ KBQUERY });
+  const { data, error } = useSWR(KBQUERY, { refreshInterval: 200000 });
 
   if (error) return <div>failed to load</div>;
   if (!data) return <NiceSpinner />;

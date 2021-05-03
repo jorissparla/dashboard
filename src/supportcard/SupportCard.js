@@ -1,21 +1,22 @@
-import { Query } from "@apollo/client/react/components";
+import "./my.css";
+
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Collapse from "@material-ui/core/Collapse";
-import red from "@material-ui/core/colors/red";
-import IconButton from "@material-ui/core/IconButton";
-import { withStyles } from "@material-ui/core/styles";
-import Typography from "@material-ui/core/Typography";
-import ModeEdit from "@material-ui/icons/Edit";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import IconButton from "@material-ui/core/IconButton";
+import { Link } from "react-router-dom";
+import ModeEdit from "@material-ui/icons/Edit";
+import { Query } from "@apollo/client/react/components";
+import React from "react";
+import Typography from "@material-ui/core/Typography";
 import classnames from "classnames";
 import gql from "graphql-tag";
-import React from "react";
-import { Link } from "react-router-dom";
+import red from "@material-ui/core/colors/red";
 import styled from "styled-components";
-import "./my.css";
+import { withStyles } from "@material-ui/core/styles";
 
 const Outer = styled.div`
   display: flex;
@@ -139,7 +140,7 @@ class SupportCard extends React.Component {
               Open
             </Button>
           )}
-          <IconButton primary={true} target="_blank_" href={link} onClick={() => onFollowLink(viewLink, link)}>
+          <IconButton primary={true} target="_blank_" rel="noreferrer" href={link} onClick={() => onFollowLink(viewLink, link)}>
             {buttonText}
           </IconButton>
           <IconButton

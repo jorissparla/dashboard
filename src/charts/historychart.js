@@ -1,6 +1,7 @@
 import React from "react";
-import ReactHighCharts from "react-highcharts";
-
+// import ReactHighCharts from "react-highcharts";
+import Highcharts from "highcharts";
+import ReactHighCharts from "highcharts-react-official";
 const baseConfiguration = {
   chart: {
     type: "column",
@@ -109,7 +110,7 @@ const historyChart = ({
   return (
     <div className="rounded shadow-md p-4">
       <div className="card">
-        <ReactHighCharts config={newConfig} />
+        <ReactHighCharts options={newConfig} highcharts={Highcharts} />
       </div>
     </div>
   );

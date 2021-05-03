@@ -1,7 +1,7 @@
-import { useMutation, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import React from "react";
 import Spinner from "utils/spinner";
-import { MUTATION_UPDATE_DETAIL, QUERY_TENANT_DETAIL } from "../../TenantQueries";
+import { QUERY_TENANT_DETAIL } from "../../TenantQueries";
 import CustomerEvents from "./CustomerEvents";
 import { EditTenantDetailsWrapped } from "./EditTenant";
 function FullTenantEdit({
@@ -10,7 +10,7 @@ function FullTenantEdit({
   },
 }) {
   console.log(customerid);
-  const [updateTenantDetail] = useMutation(MUTATION_UPDATE_DETAIL);
+  // const [] = useMutation(MUTATION_UPDATE_DETAIL);
   const { data, loading } = useQuery(QUERY_TENANT_DETAIL, { variables: { input: { customerid } } });
   // const {cus}
   if (loading) return <Spinner />;

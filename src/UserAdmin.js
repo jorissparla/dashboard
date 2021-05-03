@@ -1,13 +1,13 @@
-import { useQuery } from "@apollo/client";
-import Avatar from "@material-ui/core/Avatar";
-import deepOrange from "@material-ui/core/colors/deepOrange";
-import { withStyles } from "@material-ui/core/styles";
-import SearchBar from "common/SearchBar";
-import { useAlert } from "globalState/AlertContext";
-import gql from "graphql-tag";
-import _ from "lodash";
 import React, { useEffect, useState } from "react";
+import { gql, useQuery } from "@apollo/client";
+
+import Avatar from "@material-ui/core/Avatar";
+import SearchBar from "common/SearchBar";
+import _ from "lodash";
+import deepOrange from "@material-ui/core/colors/deepOrange";
 import { hasPermission } from "./utils/hasPermission";
+import { useAlert } from "globalState/AlertContext";
+import { withStyles } from "@material-ui/core/styles";
 
 const styles = (theme) => ({
   root: {
@@ -43,8 +43,8 @@ const UPDATE_PERMISSIONS_MUTATION = gql`
   }
 `;
 
-const QUERY_ALL_PERMISSIONS = gql`
-  query QUERY_ALL_PERMISSIONS {
+const QUERY_ALL_USER_PERMISSIONS = gql`
+  query QUERY_ALL_USER_PERMISSIONS {
     allPermissions {
       id
       permission
@@ -84,7 +84,7 @@ const UpdatePermissions = (props) => {
   const [searchText, setSearchText] = useState("");
   const [selectedUsers, setSelectedUsers] = useState([]);
   const alert = useAlert();
-  const { data, loading } = useQuery(QUERY_ALL_PERMISSIONS);
+  const { data, loading } = useQuery(QUERY_ALL_USER_PERMISSIONS);
 
   useEffect(() => {
     if (data) {

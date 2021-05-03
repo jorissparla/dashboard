@@ -1,17 +1,12 @@
-<div
-  md-cell="4"
-  ng-repeat="featureCard in controller.featureCards"
-  layout="column"
-  class="layout-column"
->
+<div md-cell="4" ng-repeat="featureCard in controller.featureCards" layout="column" className="layout-column">
   <md-card
     layout="column"
     layout-align="center stretch"
-    class="c5e-overview-feature-card _md md-gmp-blue-theme layout-align-center-stretch layout-column flex"
+    className="c5e-overview-feature-card _md md-gmp-blue-theme layout-align-center-stretch layout-column flex"
     flex=""
   >
     <!---->
-    <div ng-if="featureCard.bannerImage" class="c5e-overview-feature-card-banner-header">
+    <div ng-if="featureCard.bannerImage" className="c5e-overview-feature-card-banner-header">
       <img
         ng-src="//www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/config.png"
         src="//www.gstatic.com/mobilesdk/160505_mobilesdk/discoverycards/2x/config.png"
@@ -19,28 +14,23 @@
     </div>
     <!---->
     <!---->
-    <div class="c5e-overview-feature-card-content flex" flex="">
-      <div class="c5e-overview-feature-card-title">Remote Config</div>
-      <div class="c5e-overview-feature-card-description">
-        Gebruik configuratieparameters op de server om appgedrag aan te passen en ermee te
-        experimenteren
+    <div className="c5e-overview-feature-card-content flex" flex="">
+      <div className="c5e-overview-feature-card-title">Remote Config</div>
+      <div className="c5e-overview-feature-card-description">
+        Gebruik configuratieparameters op de server om appgedrag aan te passen en ermee te experimenteren
       </div>
     </div>
-    <div
-      class="c5e-overview-feature-card-links layout-align-space-between-center layout-row"
-      layout="row"
-      layout-align="space-between center"
-    >
+    <div className="c5e-overview-feature-card-links layout-align-space-between-center layout-row" layout="row" layout-align="space-between center">
       <a
         fb-doc-href="/docs/remote-config/"
         target="_blank"
-        class="c5e-overview-feature-card-learnmore md-gmp-blue-theme"
+        className="c5e-overview-feature-card-learnmore md-gmp-blue-theme"
         href="https://firebase.google.com/docs/remote-config/"
       >
         Meer informatie</a
       >
       <button
-        class="md-primary c5e-overview-feature-card-getstarted md-button md-gmp-blue-theme md-ink-ripple"
+        className="md-primary c5e-overview-feature-card-getstarted md-button md-gmp-blue-theme md-ink-ripple"
         type="button"
         ng-transclude=""
         ng-hide="!featureCard.moduleName"

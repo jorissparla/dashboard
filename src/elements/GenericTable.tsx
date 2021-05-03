@@ -1,10 +1,11 @@
+import React, { useEffect, useState } from "react";
+
 import AccordionSummary from "@material-ui/core/AccordionSummary";
+import CopyToClipBoard from "react-copy-to-clipboard";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import classNames from "classnames";
-import { useAlert } from "globalState/AlertContext";
-import React, { useEffect, useState } from "react";
-import CopyToClipBoard from "react-copy-to-clipboard";
 import { format } from "./../utils/format";
+import { useAlert } from "globalState/AlertContext";
 
 interface GenericTableProps {
   data: any[] | null;
@@ -63,7 +64,7 @@ export const GenericTable = (props: GenericTableProps) => {
   const alert: any = useAlert();
   useEffect(() => {
     let mydata = data;
-    if (mydata && mydata!?.length > 0) {
+    if (mydata && mydata?.length > 0) {
       if (mydata && fnFilterData) {
         mydata = fnFilterData(mydata, filterValues, fieldFilters);
       }
@@ -97,7 +98,7 @@ export const GenericTable = (props: GenericTableProps) => {
     return <div></div>;
   }
 
-  const orderBy = (collection = [] as any, field: string, dir = "A") => {
+  const orderBy = (collection: any = [], field: string, dir = "A") => {
     return dir.toLowerCase() === "a"
       ? collection.sort((x: any, y: any) => (x[field] > y[field] ? 1 : -1))
       : collection.sort((x: any, y: any) => (x[field] > y[field] ? -1 : 1));
@@ -193,7 +194,12 @@ export const GenericTable = (props: GenericTableProps) => {
   );
   const HyperLinkCell = ({ value = "", linkPrefix = "http://navigator.infor.com/n/incident.asp?IncidentID=", linkText = "" }) => (
     <td className="px-5  border border-gray-200  text-sm">
-      <a className="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker" href={`${linkPrefix}${value}`} target="_blank">
+      <a
+        className="inline-block align-baseline font-bold text-sm text-blue hover:text-blue-darker"
+        href={`${linkPrefix}${value}`}
+        target="_blank"
+        rel="noreferrer"
+      >
         {linkText || value}
       </a>
     </td>
@@ -229,7 +235,7 @@ export const GenericTable = (props: GenericTableProps) => {
             if (typeof value === "number") {
               text = key + " >= " + value;
             } else text = key + " - " + value;
-            console.log("typeof ", typeof value);
+            // console.log("typeof ", typeof value);
           }
 
           return (
@@ -286,7 +292,7 @@ export const GenericTable = (props: GenericTableProps) => {
               text={exportedData}
               onCopy={(d) => {
                 alert?.setMessage("table copied to clipboard");
-                console.log(d);
+                // console.log(d);
               }}
               options={{ format: "text/html" }}
             >

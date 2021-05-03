@@ -3,7 +3,7 @@ import { client } from "../index";
 import { MUTATION_SIGNIN, MUTATION_SIGNIN_MICROSOFT } from "./../auth/signin";
 import { MUTATION_SIGNOUT } from "./../auth/signout";
 import { CURRENT_USER_QUERY } from "./../graphql/CURRENT_USER_QUERY";
- 
+
 interface User {
   id: string;
   fullname: string;
@@ -45,6 +45,18 @@ export const useIsValidEditor: any = (role: string) => {
     validEditor = validEditor || user.permissions.some(({ permission }) => permission === role);
   }
   return [validEditor, user];
+};
+export const useHasPermissions: any = (permissions: string[]) => {
+  const { user } = useUserContext();
+  let hasPermissions = false; // ["Admin", "PO"].some((u) => (user ? u === user.role : false));
+  if (user && user.permissions) {
+    if (user.role === "ADMIN") {
+      return [true, user];
+    }
+    const userPermissions = user.permissions.map((p) => p.permission);
+    hasPermissions = hasPermissions || permissions.some((p) => userPermissions.includes(p));
+  }
+  return [hasPermissions, user];
 };
 
 export const UserContextProvider: React.FC<{ children: any }> = ({ children }) => {

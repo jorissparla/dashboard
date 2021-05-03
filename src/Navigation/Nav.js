@@ -1,23 +1,26 @@
+import React, { useState } from "react";
+import { useHasPermissions, useUserContext } from "globalState/UserProvider";
+
 import AppBar from "@material-ui/core/AppBar";
+import { AuthenticationSection } from "./AuthSection";
+import CameraIcon from "@material-ui/icons/PhotoCamera";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
 import IconButton from "@material-ui/core/IconButton";
-import { withStyles } from "@material-ui/core/styles";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import MenuIcon from "@material-ui/icons/Menu";
-import CameraIcon from "@material-ui/icons/PhotoCamera";
-import classNames from "classnames";
-import React, { useState } from "react";
-import { withRouter } from "react-router";
-import withAuth from "../utils/withAuth";
-import { AuthenticationSection } from "./AuthSection";
 import { SideBarMenu } from "./SideBarMenu";
 import SystemMessage from "utils/SystemMessage";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import classNames from "classnames";
 import gql from "graphql-tag";
+import { usePersistentState } from "hooks";
 import { useQuery } from "@apollo/client";
+import withAuth from "../utils/withAuth";
+import { withRouter } from "react-router";
+import { withStyles } from "@material-ui/core/styles";
 
 const drawerWidth = 340;
 
@@ -111,18 +114,34 @@ const SYSTEM_MESSAGE = gql`
 
 const Header = (props) => {
   const [open, setOpen] = useState(false);
+  const [debugMode, setDebugMode] = usePersistentState("debug1", false);
+  const { login, user, logout } = useUserContext();
   const { data, loading } = useQuery(SYSTEM_MESSAGE);
   if (loading) return <div></div>;
   const getActiveMessage = data?.getActiveMessage;
   const message = getActiveMessage ? getActiveMessage.message : "";
-  console.log(data);
+
   function toggleMenu() {
     setOpen(!open);
   }
+
+  function logMeIn() {
+    if (process.env.NODE_ENV !== "production") {
+      console.log({ debugMode });
+      if (debugMode && !user) {
+        login("joris.sparla@infor.com", "Infor2019");
+      }
+      if (user) {
+        logout();
+      }
+    }
+  }
+
   const { classes, theme, history } = props;
   //const currentUser = useUser();
   let titleText = ""; // this.state.ipaddress ? this.state.ipaddress : "";
   titleText = titleText + process.env.NODE_ENV !== "production" ? `(${process.env.NODE_ENV})` : "";
+
   return (
     // <ThemeProvider theme={context.theme}>
     <React.Fragment>
@@ -147,9 +166,9 @@ const Header = (props) => {
               Share
               <CameraIcon />
             </IconButton>
-            <Typography variant="h6" color="inherit" className={classes.grow}>
+            <div variant="h6" color="inherit" className={classes.grow} onClick={logMeIn}>
               Infor Support Dashboard {titleText}
-            </Typography>
+            </div>
             <AuthenticationSection history={history} />
           </Toolbar>
         </AppBar>

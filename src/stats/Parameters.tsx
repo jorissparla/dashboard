@@ -1,10 +1,11 @@
-import clsx from "clsx";
-import Button from "elements/TWButton";
-import { useAlert } from "globalState/AlertContext";
 import * as React from "react";
+
+import Button from "elements/TWButton";
+import clsx from "clsx";
+import { useAlert } from "globalState/AlertContext";
 import { useLocalStorage } from "../utils/useLocalStorage";
 
-interface Props {
+interface PProps {
   param: string;
   initial: string | number;
   classes?: any;
@@ -15,7 +16,7 @@ interface Props {
   onChange?: any;
 }
 
-export const Parameter: React.FC<Props> = ({ param, initial, classes = "", label, keyUp, color = "blue", onChange }) => {
+export const Parameter: React.FC<PProps> = ({ param, initial, classes = "", label, keyUp, color = "blue", onChange }) => {
   // const { param, initial } = props;
   const baseClass = "rounded w-8 font-normal shadow-md cursor-pointer flex items-center justify-center text-lg ";
   function getColorClasses(color: string) {
@@ -65,11 +66,11 @@ interface Props {
 
 export const Parameters: React.FC<Props> = (props) => {
   const alert: any = useAlert();
-
+  console.log(`hi`, alert);
   function handleKeyUp() {
     console.log("Item changes");
     if (alert) {
-      alert!.setMessage("Parameter Updated");
+      alert.setMessage("Parameter Updated");
     }
   }
 
@@ -98,3 +99,5 @@ export const Parameters: React.FC<Props> = (props) => {
     </div>
   );
 };
+
+export default Parameters;

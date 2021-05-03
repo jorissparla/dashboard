@@ -1,4 +1,4 @@
-import gql from "graphql-tag";
+import { gql } from "graphql-request";
 
 export const ACCOUNTS_QUERY = gql`
   query ACCOUNTS_QUERY {
@@ -190,7 +190,7 @@ export const QUERY_BACKLOG = gql`
     }
   }
 `;
-export const QUERY_BACKLOG_TEXT = `
+export const QUERY_BACKLOG_TEXT = gql`
   # Write your query or mutation here
   fragment backlogfragment on DWH {
     incident
@@ -204,6 +204,7 @@ export const QUERY_BACKLOG_TEXT = `
     summary
     title
     status
+    action
     dayssincelastupdate
     ownergroup
     daysSinceCreated
@@ -221,11 +222,7 @@ export const QUERY_BACKLOG_TEXT = `
     escalation_time
     action_date
   }
-  query QUERY_BACKLOG(
-    $date: String
-    $owner: String
-    $products: [String]
-  ) {
+  query QUERY_BACKLOG($date: String, $owner: String, $products: [String]) {
     mostRecentUpdate
     extendedMaintenance {
       customerid
@@ -239,32 +236,15 @@ export const QUERY_BACKLOG_TEXT = `
       }
     }
 
-
-    active: backlog(
-      owner: $owner
-      orderBy: DAYS_DESC
-      statusFilter: ACTIVE
-      productFilters: $products
-    ) {
+    active: backlog(owner: $owner, orderBy: DAYS_DESC, statusFilter: ACTIVE, productFilters: $products) {
       ...backlogfragment
     }
 
-    everything: backlog(
-      owner: $owner
-      orderBy: DAYS_DESC
-      productFilters: $products
-    ) {
+    everything: backlog(owner: $owner, orderBy: DAYS_DESC, productFilters: $products) {
       ...backlogfragment
     }
 
-    multitenant: backlog(
-      owner: $owner
-      orderBy: CREATED_ASC
-      deployment: "CLOUD"
-      statusFilter: BACKLOG
-      date: $date
-      productFilters: $products
-    ) {
+    multitenant: backlog(owner: $owner, orderBy: CREATED_ASC, deployment: "CLOUD", statusFilter: BACKLOG, date: $date, productFilters: $products) {
       ...backlogfragment
     }
     accounts {
@@ -273,29 +253,25 @@ export const QUERY_BACKLOG_TEXT = `
       navid
       managerid
     }
-    
-
   }
 `;
 
-export const KBQUERY = `
-query allKB {
-
-  allKB {
-    kbid
-    owner:fullname
-    region
-    daysSinceCreated
-    dayssincelastupdate
-    productline
-    ownergroup: ownerGroupName
-    status
-    type: typeName
-    viewCount
-    summary
-  }
-    
+export const KBQUERY = gql`
+  {
+    allKB {
+      kbid
+      owner: fullname
+      region
+      daysSinceCreated
+      dayssincelastupdate
+      productline
+      ownergroup: ownerGroupName
+      status
+      type: typeName
+      viewCount
+      summary
     }
+  }
 `;
 // export const QUERY_BACKLOG_TEXT1 = `
 //   # Write your query or mutation here

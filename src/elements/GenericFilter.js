@@ -15,7 +15,6 @@ const Filter = ({
   showRight = true,
   ...rest
 }) => {
-  // const classes = useStyles();
   const initialValues = {};
   const [values, setValues] = useState(initialValues);
 

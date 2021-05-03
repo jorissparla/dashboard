@@ -1,8 +1,8 @@
 import React from "react";
-import gql from "graphql-tag";
-import { useQuery } from "@apollo/client";
 import SummaryChart from "./NewSummaryChart";
+import gql from "graphql-tag";
 import shortid from "shortid";
+import { useQuery } from "@apollo/client";
 
 const QUERY_SUMMARY_DATA = gql`
   query summaries($team: String) {
@@ -36,9 +36,7 @@ const SummaryChartContainer = ({
   const { data, loading } = useQuery(QUERY_SUMMARY_DATA, {
     variables: { team },
   });
-  console.log("TEAM", team, data);
-  //  const summary = summaries; // .reverse()
-  // const color = props.color;
+
   if (loading) return <div>Loading....</div>;
   if (data && data.summaries) {
     const summary = data.summaries;

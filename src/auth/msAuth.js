@@ -43,9 +43,9 @@ export async function signIn() {
     if (loginResponse) {
       console.log("id_token acquired at: " + new Date().toString());
       console.log(loginResponse);
-
-      if (myMSALObj.getAccount()) {
-        const auth = myMSALObj.getAccount();
+      const auth = myMSALObj.getAccount();
+      console.log({ auth });
+      if (auth) {
         if (auth && auth.userName) {
           return auth;
         }

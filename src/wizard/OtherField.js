@@ -1,11 +1,14 @@
-import { useMutation } from "@apollo/client";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import CKEditor from "@ckeditor/ckeditor5-react";
+import { ALL_MAINTENANCE_QUERY, MAINTENANCE_FAQ_QUERY, MUTATION_UPDATE_MAINTENANCE_FAQ } from "./Queries";
+import React, { useEffect } from "react";
+
+import { DashBoardContext } from "globalState/Provider";
+import HTMLEditor from "common/HTMLEditor";
 import TWButton from "elements/TWButton";
 import { useAlert } from "globalState/AlertContext";
-import { DashBoardContext } from "globalState/Provider";
-import React, { useEffect } from "react";
-import { ALL_MAINTENANCE_QUERY, MAINTENANCE_FAQ_QUERY, MUTATION_UPDATE_MAINTENANCE_FAQ } from "./Queries";
+import { useMutation } from "@apollo/client";
+
+// import { CKEditor } from "@ckeditor/ckeditor5-react";
+// import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 export const OtherField = ({ name, label, edit = false, Icon, text, id, bigger = false, blue = false, productline = "LN" }) => {
   const { role = "Guest" } = React.useContext(DashBoardContext);
@@ -78,25 +81,7 @@ export const OtherField = ({ name, label, edit = false, Icon, text, id, bigger =
           )}
         </div>
       </div>
-      <CKEditor
-        editor={ClassicEditor}
-        config={config}
-        // disabled={!edit}
-        data={value}
-        onInit={(editor) => {
-          // You can store the "editor" and use when it is needed.
-          console.log("Editor is ready to use!", editor);
-          // editor.plugins.get("FileRepository").createUploadAdapter = function (loader) {
-          //   return new MyUploadAdapter(loader);
-          // };
-        }}
-        onChange={(event, editor) => {
-          const data = editor.getData();
-          // console.log("Change", { event, editor, data });
-          setValue(data);
-        }}
-      />
-      {/* <MarkDown source={value} escapeHtml={false}></MarkDown> */}
+      <HTMLEditor value={value} onChange={(data) => setValue(data)} enabled={canEdit} />
     </div>
   );
 };

@@ -4,6 +4,7 @@ import React from "react";
 import { withRouter } from "react-router";
 import SupportCardForm from "./SupportCardForm";
 import withAuth from "../utils/withAuth";
+import { format } from "utils/format";
 
 const SupportCardAdd = ({ data: { loading, error, categories }, addSupportCard, authenticated, user, history }) => {
   const handleAdd = (e) => {
@@ -35,7 +36,14 @@ const SupportCardAdd = ({ data: { loading, error, categories }, addSupportCard, 
         readOnly={false}
         authenticated={authenticated}
         categories={categories}
-        initialValues={{ category: "Portal", title: "Title comes here", description, updatedAt: null }}
+        initialValues={{
+          category: "Portal",
+          title: "Title comes here",
+          createdby: "",
+          updatedBy: "",
+          description,
+          updatedAt: format(new Date(), "yyyy-MMM-dd HH:mi"),
+        }}
       />
     </div>
   );
@@ -53,6 +61,7 @@ const addSupportCard = gql`
         }
         link
         createdby
+        created
       }
     }
   }

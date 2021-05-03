@@ -1,23 +1,18 @@
-import { useQuery } from "@apollo/client";
-import SearchBar from "common/SearchBar";
-import Button from "elements/TWButton";
-import { usePersistentState } from "hooks";
-import _ from "lodash";
-import { DataCell, HeaderCell } from "pages/Cells";
+import { DataCell, HTMLCell, HeaderCell } from "pages/Cells";
 import React, { useEffect, useState } from "react";
 import { animated, useSpring } from "react-spring";
-import Spinner from "utils/spinner";
-import { DashBoardContext } from "../globalState/Provider";
-import Loader from "../utils/Loader";
+import { gql, useQuery } from "@apollo/client";
+
+import Button from "elements/TWButton";
 import CustomerHistory from "./CustomerHistory";
 import EditTenantDetails from "./details/components/EditTenant";
 import { QUERY_ALL_TENANT_DETAILS } from "./TenantQueries";
+import SearchBar from "common/SearchBar";
+import Spinner from "utils/spinner";
+import _ from "lodash";
+import { usePersistentState } from "hooks";
 
-const TenantViewList = (props) => {
-  const dbctx = React.useContext(DashBoardContext);
-
-  let role = dbctx && dbctx.role ? dbctx.role : "Guest";
-
+const TenantViewList = () => {
   const [showNotReady, setShowNotReady] = usePersistentState("not ready", false);
   const [sortedByCSM, setSortedByCSM] = usePersistentState("sort by csm", false);
   const [showLive, setShowLive] = usePersistentState("customers live", false);
@@ -25,11 +20,11 @@ const TenantViewList = (props) => {
   const [searchText, setSearchText] = useState("");
   // const [showFilterDialog, toggleShowFilterDialog] = useState(false);
   const [isShowingDetails, toggleShowDetails] = useState(false);
-  const [isShowingEvents, toggleShowEvents] = useState(false);
+  const [isShowingEvents] = useState(false);
   const [filteredCustomers, setFilteredCustomers] = useState([]);
   const [customerDetails, setCustomerDetails] = useState([]);
 
-  const { data: details, loading: detailsloading } = useQuery(QUERY_ALL_TENANT_DETAILS);
+  const { data: details, loading: detailsloading } = useQuery(gql(QUERY_ALL_TENANT_DETAILS));
   const tenantProps = useSpring({ opacity: isShowingDetails ? 1 : 0 });
 
   useEffect(() => {
@@ -72,6 +67,7 @@ const TenantViewList = (props) => {
           sub.map((tenantInstance) => {
             const type = tenantInstance.name.split("_")[1];
             ar[type] = tenantInstance.version;
+            return 1;
           });
           const live = sub && sub.length > 0 ? (sub[0].live === 1 ? "Yes" : "No") : "No";
           const customerid = currcustomer.customerid;
@@ -104,7 +100,6 @@ const TenantViewList = (props) => {
   };
   return (
     <div style={{ margin: 5, background: "#EEE" }}>
-      <Loader loading={detailsloading} />
       <div>
         <div className="rounded shadow-lg bg-white p-2 m-2" style={{ marginBottom: 10, padding: 20 }}>
           <div className="flex items-center ">
@@ -127,7 +122,7 @@ const TenantViewList = (props) => {
               </label>
             </div>
           </div>
-          <SearchBar hintText="type part of customer name or csm" onChange={(v) => setSearchText(v)} className="bg-teal-200" />
+          <SearchBar hintText="type part of customer name or csm" onChange={(v) => setSearchText(v)} className="bg-white" />
         </div>
         <div className="p-2 rounded-lg shadow-lg bg-white mx-2">
           <TenantTable data={filteredCustomers} onSelect={handleSelect} />
@@ -137,7 +132,7 @@ const TenantViewList = (props) => {
             <div className="inset-0 flex z-50 bg-gray-700  bg-opacity-50 absolute w-5/6 ">
               <EditTenantDetails
                 profile={customerDetails.find((d) => d.customerid === currentId)}
-                onClose={() => toggleShowDetails((prev) => false)}
+                onClose={() => toggleShowDetails(() => false)}
                 isTenantEditor={true}
               />
             </div>
@@ -197,7 +192,7 @@ export const LiveCell = ({ value }) => {
   }
 };
 
-const TenantTable = ({ data, replaceField = null, mark = false, onSelect }) => {
+const TenantTable = ({ data, replaceField = null, onSelect }) => {
   function replaceList(fields, replaceField) {
     let replacing = [];
     fields.forEach((item) => {
@@ -222,16 +217,12 @@ const TenantTable = ({ data, replaceField = null, mark = false, onSelect }) => {
     { title: "DEM", fld: "DEM" },
     { title: "PM", fld: "pm" },
     { title: "CSM", fld: "csm" },
-    { title: "comments", fld: "comments" },
+    { title: "comments", fld: "comments", html: true },
   ];
   if (replaceField && replaceField.name && replaceField.toField) {
     fields = replaceList(fields, replaceField);
   }
 
-  const handleAction = (value) => {
-    console.log(value);
-    onSelect(value);
-  };
   return (
     <div className="overflow-y-auto scrollbar-w-2 scrollbar-track-gray-lighter scrollbar-thumb-rounded scrollbar-thumb-gray scrolling-touch">
       <table className="w-full text-left table-collapse">
@@ -261,7 +252,12 @@ const TenantTable = ({ data, replaceField = null, mark = false, onSelect }) => {
                         <path d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16zm-1-7.59V4h2v5.59l3.95 3.95-1.41 1.41L9 10.41z" />
                       </svg>
                     );
-                  } else return <DataCell key={`${items.customerid}${index}}`}>{items[field.fld]}</DataCell>;
+                  } else
+                    return field?.html ? (
+                      <HTMLCell key={`${items.customerid}${index}}`}>{items[field.fld]}</HTMLCell>
+                    ) : (
+                      <DataCell key={`${items.customerid}${index}}`}>{items[field.fld]}</DataCell>
+                    );
                 })}
               </tr>
             ))

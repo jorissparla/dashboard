@@ -10,7 +10,7 @@ import React, { useContext, useState } from "react";
 import { animated, useSpring } from "react-spring";
 import { format, formatDistanceToNow } from "../utils/format";
 import EditTenantDetails from "./details/components/EditTenant";
-import { MUTATION_MARK_LIVE } from "./TenantQueries";
+import { MUTATION_MARK_LIVE } from "./TenantMutations";
 
 export const TenantCard = ({
   classes,
@@ -195,7 +195,7 @@ export const TenantCard = ({
             })}
           </div>
           <Divider />
-          <div className="flex items-center justify-between" alignItems="center" container justify="space-between" spacing={3}>
+          <div className="flex items-center justify-between">
             <div item className="max-w-md">
               <div className="font-sans font-semibold text-gray-600">PM</div>
               <div className="text-sm font-sans" variant="body2">

@@ -1,24 +1,20 @@
-import React, { Component } from "react";
-import gql from "graphql-tag";
 import { graphql } from "@apollo/client/react/hoc";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
-import { withRouter } from "react-router-dom";
 import Avatar from "@material-ui/core/Avatar";
 import Divider from "@material-ui/core/Divider";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import ListItemText from "@material-ui/core/ListItemText";
 import NewIcon from "@material-ui/icons/NewReleases";
 import { addDays, formatDistanceToNow } from "date-fns";
+import gql from "graphql-tag";
+import React, { Component } from "react";
+import { withRouter } from "react-router-dom";
 import { Loading } from "../styles";
-import styled from "styled-components";
 import { format } from "../utils/format";
 
-const Title = styled.h3`
-  font-weight: 200;
-  font-family: Raleway;
-  padding-left: 30px;
-`;
+const Title = ({ children }) => <h3 className="font-pop font-semibold text-xl pl-4">{children}</h3>;
+
 const { REACT_APP_SERVER = "nlbavwixs" } = process.env;
 const defaultPicture = `https://${REACT_APP_SERVER}/images/male.png`;
 
@@ -28,11 +24,16 @@ const RequestItem = ({ item, handleClick }) => {
   const completeStatus = complete === 1 ? "Completed" : "";
   const assignedTo = assigned ? ` Assigned to ${assigned} ` : "";
   const isNew = Date.parse(createdAt) > addDays(new Date(), -7);
-  console.log("RequestItem", createdAt, format(createdAt, "dd MMMM yyyy"), formatDistanceToNow(new Date(createdAt)));
+  console.log("RequestItem", createdAt, format(parseInt(createdAt), "dd MMMM yyyy"), formatDistanceToNow(new Date(createdAt)));
   return (
     <ListItem onClick={() => handleClick(item)}>
       <Avatar src={picture} />
-      <ListItemText primary={text} secondary={`requested by ${name} , ${format(createdAt, "dd MMMM yyyy")} , ${completeStatus}, ${assignedTo}`} />
+      <ListItemText
+        primary={text}
+        secondary={`requested by ${name} , ${format(new Date(createdAt), "dd MMMM yyyy")} , ${completeStatus ? completeStatus : "Not completed"}, ${
+          assignedTo ? assignedTo : "Unassigned !"
+        }`}
+      />
       <ListItemSecondaryAction>{isNew ? <NewIcon color={"#3db5e8"} /> : <div />}</ListItemSecondaryAction>
     </ListItem>
   );

@@ -1,21 +1,24 @@
+import React, { useEffect, useState } from "react";
 import { useMutation, useQuery } from "@apollo/client";
+
+import { ALL_TENANTS_SIMPLE } from "./TenantQueries";
+import { MUTATION_UPDATE_TENANT_CUSTOMERID } from "./TenantMutations";
+import Spinner from "utils/spinner";
 import TWButton from "elements/TWButton";
 import { useAlert } from "globalState/AlertContext";
-import React, { useEffect, useState } from "react";
-import Spinner from "utils/spinner";
-import { ALL_TENANTS_SIMPLE, MUTATION_UPDATE_TENANT_CUSTOMERID } from "./TenantQueries";
+import useSWR from "swr";
 
 const MissingTenants = () => {
   const [updateTenantCustomerId] = useMutation(MUTATION_UPDATE_TENANT_CUSTOMERID);
   const [missingTenants, setMissingTenants] = useState([]);
-  const { data, loading } = useQuery(ALL_TENANTS_SIMPLE);
+  const { data, loading } = useSWR(ALL_TENANTS_SIMPLE);
   const [error, setError] = useState("");
   const alert = useAlert();
   useEffect(() => {
     if (data)
       setMissingTenants(tenants.filter((t) => !t.customerid && !notValidPrefix(t.name)).sort((x, y) => (x.lastupdated < y.lastupdated ? 1 : -1)));
   }, [data]);
-  if (loading) return <Spinner />;
+  if (!data) return <Spinner />;
   const { tenants } = data;
 
   function notValidPrefix(name) {
@@ -35,7 +38,7 @@ const MissingTenants = () => {
     setError("");
     const res = await updateTenantCustomerId({
       variables: { customerid, id },
-      refetchQueries: [{ query: ALL_TENANTS_SIMPLE }],
+      // refetchQueries: [{ query: ALL_TENANTS_SIMPLE }],
     });
     const updatedMissingTenantsId = res?.data?.updatetenantcustomerid?.id;
     console.log(updatedMissingTenantsId);

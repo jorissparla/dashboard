@@ -1,42 +1,42 @@
-import { useMutation } from "@apollo/client";
-import { colors } from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
-import { makeStyles } from "@material-ui/styles";
-import clsx from "clsx";
+import React, { useEffect, useState } from "react";
+
 import Button from "elements/TWButton";
+import CloseIcon from "@material-ui/icons/Close";
+import HTMLEditor from "common/HTMLEditor";
+import { MUTATION_UPDATE_DETAIL } from "tenants/TenantMutations";
 import { TWSelectMenu } from "elements/TWSelectMenu";
-import { useAlert } from "globalState/AlertContext";
-
-import PropTypes from "prop-types";
-import React, { useState } from "react";
 import { format } from "utils/format";
-import { MUTATION_UPDATE_DETAIL } from "./../../TenantQueries";
-import TemperatureSlider from "./TemperatureSlider";
+import { useAlert } from "globalState/AlertContext";
+import { useMutation } from "@apollo/client";
 
-function EditTenantDetails(props) {
-  const { profile, className, onClose, onView, isTenantEditor = true, ...rest } = props;
+function EditTenantDetails({ isTenantEditor, ...props }) {
+  const { profile, className, onClose, onView, ...rest } = props;
+  console.log(props);
   return (
     <div {...rest} className="bg-white  px-4 font-sans right-0 w-2/3 flex h-full fixed z-50 shadow-lg rounded  flex-col">
-      <EditTenantDetailsWrapped {...props} />
+      <EditTenantDetailsWrapped isTenantEditor={isTenantEditor} {...props} />
     </div>
   );
 }
 
 export const EditTenantDetailsWrapped = (props) => {
-  const { profile, className, onClose, onView, isTenantEditor = true, ...rest } = props;
-
-  const [values, setValues] = useState({
-    csm: profile.csm || "",
-    pm: profile.pm || "",
-    customerid: profile.customerid,
-    golivedate: format(profile.golivedate, "yyyy-MM-dd"),
-    golivecomments: profile.golivecomments,
-    info: profile.info,
-    temperature: profile.temperature,
-    comments: profile.comments,
-    useproxy: true,
-  });
-  console.log({ props });
+  const { profile, onClose, isTenantEditor = true } = props;
+  const [values, setValues] = useState({ ...profile });
+  useEffect(() => {
+    if (profile) {
+      setValues({
+        csm: profile?.csm || "",
+        pm: profile?.pm || "",
+        customerid: profile.customerid,
+        golivedate: format(profile.golivedate, "yyyy-MM-dd"),
+        golivecomments: profile.golivecomments,
+        info: profile.info,
+        temperature: profile.temperature,
+        comments: profile.comments,
+        useproxy: true,
+      });
+    }
+  }, [profile]);
   const [updateTenantDetailsMutation] = useMutation(MUTATION_UPDATE_DETAIL);
   const handleChange = (event) => {
     event.persist();
@@ -53,35 +53,32 @@ export const EditTenantDetailsWrapped = (props) => {
       ...values,
       useproxy: newproxyValue,
     });
-    setProxyUser((prev) => newproxyValue);
+    setProxyUser(() => newproxyValue);
   };
+  function handleSetHTMLComments(comments) {
+    setValues({ ...values, comments });
+  }
 
   const alert = useAlert();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let useproxyVal = useproxy ? 1 : 0;
+    // let useproxyVal = useproxy ? 1 : 0;
     let x = { ...values };
     // delete x.useproxy;
 
-    const result = await updateTenantDetailsMutation({ variables: { input: x } });
-    console.log(result);
+    await updateTenantDetailsMutation({ variables: { input: x } });
     onClose();
     alert.setMessage("Saving content...");
     // setOpenSnackbar(true);
   };
 
   const handleTemperatureChange = (value) => {
-    console.log({ value });
     setValues({ ...values, temperature: value });
   };
 
-  const handleTChange = (e) => {
-    handleTemperatureChange(e.target.value);
-  };
   // const [selectedDate, setSelectedDate] = React.useState(new Date('2014-08-18T21:11:54'));
 
-  const TempIsChecked = (v) => v === values.temperature;
   return (
     <form className="mt-12 ml-4" onSubmit={handleSubmit}>
       {/* <CardHeader title={`Details for ${profile.customer.name}"`} /> */}
@@ -159,7 +156,8 @@ export const EditTenantDetailsWrapped = (props) => {
             />
           </div>
           <div className="col-span-3 row-start-5 space-y-1 sm:col-span-3">
-            <label htmlFor="pm" className="block text-sm font-medium leading-5 text-gray-700">
+            <HTMLEditor onChange={handleSetHTMLComments} value={values.comments} label="Customer Comments" enabled={isTenantEditor} />
+            {/* <label htmlFor="pm" className="block text-sm font-medium leading-5 text-gray-700">
               Customer Comments
             </label>
             <textarea
@@ -169,7 +167,7 @@ export const EditTenantDetailsWrapped = (props) => {
               // multiline
               rows="8"
               value={values.comments}
-            />
+            /> */}
           </div>
           <div className="col-span-3 row-start-6 space-y-1 sm:col-span-2 ">
             <label className="inline-flex items-center">

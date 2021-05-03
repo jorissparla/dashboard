@@ -5,7 +5,7 @@ import CheckCircle from "@material-ui/icons/CheckCircle";
 import ErrorOutline from "@material-ui/icons/ErrorOutline";
 import React from "react";
 import { useMutation } from "@apollo/client";
-import { MUTATION_UPDATE_DETAIL } from "./TenantQueries";
+import { MUTATION_UPDATE_DETAIL } from "./TenantMutations";
 
 type Props = {
   id: string;

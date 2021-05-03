@@ -1,36 +1,15 @@
-import { Button } from "@material-ui/core";
-import FilterListIcon from "@material-ui/icons/FilterList";
-import { makeStyles } from "@material-ui/styles";
-import PropTypes from "prop-types";
 import React, { useState } from "react";
-import { Filter } from "../details/components";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    flexWrap: "wrap",
-  },
-  search: {
-    flexGrow: 1,
-    maxWidth: 480,
-    flexBasis: 480,
-  },
-  filterButton: {
-    marginLeft: "auto",
-  },
-  filterIcon: {
-    marginRight: theme.spacing(1),
-  },
-}));
+import { Filter } from "../details/components";
+import FilterListIcon from "@material-ui/icons/FilterList";
+import Modal from "elements/ModalComponent";
+import PropTypes from "prop-types";
+import TWButton from "elements/TWButton";
 
 const FancyFilter = (props) => {
-  const { onFilter } = props;
+  const { onFilter, count = 0 } = props;
   const [filterActive, setFilterActive] = useState(false);
-
-  const classes = useStyles();
-
+  console.log(count);
   const [openFilter, setOpenFilter] = useState(false);
 
   const handleFilterOpen = () => {
@@ -46,21 +25,30 @@ const FancyFilter = (props) => {
   // }
   return (
     <>
-      <div className="flex flex-col">
-        <Button className={classes.filterButton} color="primary" onClick={handleFilterOpen} size="small" variant="outlined">
-          <FilterListIcon className={classes.filterIcon} /> Show filters {filterActive ? "***" : ""}
-        </Button>
-        {filterActive && <span className="bg-teal-200 text-teal-700 text-sm font-sans my-1 p-2">Filter is active</span>}
+      <div className="flex flex-row">
+        {filterActive && <span className="bg-green-200 text-green-700 text-sm font-pop my-1 p-2">Filter is active</span>}
+        <TWButton color="green" onClick={handleFilterOpen}>
+          <FilterListIcon className="mx-2" /> Show filter
+        </TWButton>
       </div>
       <Filter
         onClose={handleFilterClose}
         onFilter={(v) => {
           onFilter(v);
+          setFilterActive(true);
           handleFilterClose();
         }}
         open={openFilter}
-        onhandleSetFilterActive={setFilterActive}
+        clearFilter={() => setFilterActive(false)}
+        onhandleSetFilterActive={() => {
+          console.log("toggle");
+        }}
       />
+      {/* <Modal visible={true} toggle={() => setOpenFilter(!openFilter)}>
+        <h1>Header</h1>
+        <p>paragraph</p>
+        <input className="form-input" type="text" />
+      </Modal> */}
     </>
   );
 };

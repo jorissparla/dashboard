@@ -1,9 +1,29 @@
 const colors = require("tailwindcss/colors");
 
 module.exports = {
-  purge: ["./public/**/*.html", "./public/**/*.html", "./src/**/*.js", "./src/**/*.tsx"],
+  purge: { enabled: true, content: ["./public/**/*.html", "./public/**/*.html", "./src/**/*.js", "./src/**/*.tsx"] },
   theme: {
     extend: {
+      textColor: {
+        skin: {
+          base: "var(--color-text-base)",
+          muted: "var(--color-text-muted)",
+          inverted: "var(--color-text-inverted)",
+        },
+      },
+      backgroundColor: {
+        skin: {
+          fill: "var(--color-fill)",
+          "button-accent": "var(--color-button-accent)",
+          "button-accent-hover": "var(--color-button-accent-hover)",
+          "button-muted": "var(--color-button-muted)",
+        },
+      },
+      gradientColorStops: {
+        skin: {
+          hue: "var(--color-fill)",
+        },
+      },
       inset: {
         "-1": "-0.25rem",
         "-2": "-0.5rem",
@@ -22,6 +42,31 @@ module.exports = {
         52: "13rem",
         56: "14rem",
         60: "15rem",
+        64: "16rem",
+        68: "17rem",
+        72: "18rem",
+        72: "19rem",
+        80: "20rem",
+      },
+      maxWidth: {
+        12: "3rem",
+        16: "4rem",
+        20: "5rem",
+        24: "6rem",
+        28: "7rem",
+        32: "8rem",
+        36: "9rem",
+        40: "10rem",
+        44: "11rem",
+        48: "12rem",
+        52: "13rem",
+        56: "14rem",
+        60: "15rem",
+        64: "16rem",
+        68: "17rem",
+        72: "18rem",
+        72: "19rem",
+        80: "20rem",
       },
       gridTemplateRows: {
         smaller: "10fr 5fr 2fr",
@@ -48,13 +93,21 @@ module.exports = {
         open: ["Open Sans"],
         sansI: ["Inter var"],
       },
+      fontSize: {
+        xsm: "0.675rem",
+        xxs: "0.625rem",
+        "2xs": "0.5rem",
+      },
       colors: {
         purp: "#524763",
         current: "currentColor",
         transparent: "transparent",
         white: "#ffffff",
         black: "#000000",
+        amber: colors.amber,
         gray: colors.blueGray,
+        paleblue: colors.lightBlue,
+        "light-blue": colors.lightBlue,
         wiep: colors.pink,
         emerald: colors.emerald,
         // gray: {
@@ -195,7 +248,7 @@ module.exports = {
     require("@tailwindcss/forms"),
     require("@tailwindcss/typography"),
     require("@tailwindcss/aspect-ratio"),
-    require("@tailwindcss/custom-forms"),
+    // require("@tailwindcss/custom-forms"),
     require("tailwindcss-hero-patterns"),
   ],
 };

@@ -10,16 +10,7 @@ import { useHistory } from "react-router";
 import Spinner from "utils/spinner";
 import NewsList from "../news/newslist";
 import withAuth from "../utils/withAuth";
-
-const styles = (theme) => ({
-  button: {
-    margin: theme.spacing(1),
-  },
-
-  root: theme.mixins.gutters({
-    marginTop: theme.spacing(3),
-  }),
-});
+import TWButton from "elements/TWButton";
 
 export const QUERY_ALL_NEWS_EDIT_PAGE = gql`
   query QUERY_ALL_NEWS_EDIT_PAGE {
@@ -47,17 +38,21 @@ function NewsListContainer({ authenticated, classes }) {
   const { news } = data;
   return (
     <React.Fragment>
-      <Paper className={classes.root}>
-        <Typography variant="h3" gutterBottom>
+      <div className="">
+        <header class="flex items-center justify-between">
+          <h2 class=" pl-4 leading-6 font-medium text-2xl text-gray-700 font-pop">News</h2>
+          <TWButton onClick={onNew}>New</TWButton>
+        </header>
+        {/* <Typography variant="h3" gutterBottom>
           News
         </Typography>
         <Fab color="secondary" aria-label="add" className={classes.button} onClick={onNew}>
           <AddIcon />
-        </Fab>
+        </Fab> */}
         <NewsList news={news} onEdit={onOpen} authenticated={authenticated} />
-      </Paper>
+      </div>
     </React.Fragment>
   );
 }
 
-export default withAuth(withStyles(styles)(NewsListContainer));
+export default withAuth(NewsListContainer);

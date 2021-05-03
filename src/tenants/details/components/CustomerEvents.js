@@ -2,7 +2,8 @@ import { useMutation, useQuery, gql } from "@apollo/client";
 import Button from "elements/TWButton";
 import React, { useState, useEffect } from "react";
 import { format } from "date-fns";
-import { QUERY_CUSTOMER_EVENTS, MUTATION_ADD_CUSTOMER_EVENT, DELETE_CUSTOMER_EVENT } from "tenants/TenantQueries";
+import { QUERY_CUSTOMER_EVENTS } from "tenants/TenantQueries";
+import { MUTATION_ADD_CUSTOMER_EVENT, DELETE_CUSTOMER_EVENT } from "tenants/TenantMutations";
 import { useAlert } from "globalState/AlertContext";
 import _ from "lodash";
 
@@ -22,7 +23,6 @@ const CustomerEvents = ({ customerid }) => {
                   comment
                   eventtype
                   nrusers
-                  type
                 }
               `,
             });
