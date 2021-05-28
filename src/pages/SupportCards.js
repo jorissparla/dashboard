@@ -6,7 +6,6 @@ import Dialog from "@material-ui/core/Dialog";
 import Modal from "../ModalWrapper";
 import NewRequestForm from "../supportcard/Request";
 import { QUERY_ALL_SUPPORTCARDS } from "supportcard/queries/AllCards";
-import ReactMarkdown from "react-markdown/with-html";
 import SearchBar from "../common/SearchBar";
 import { SmallCard } from "../common/SmallCard";
 import Spinner from "../utils/spinner";
@@ -18,6 +17,8 @@ import { useMutation } from "@apollo/client";
 import { usePersistentState } from "hooks";
 import useSWR from "swr";
 import { useUserContext } from "globalState/UserProvider";
+
+// import ReactMarkdown from "react-markdown/with-html";
 
 //import { SmallCard } from "./SupportCard";
 
@@ -197,10 +198,15 @@ const SupportCards = ({ authenticated = false, isEditor = false, supportcards, c
         return selectedCategory === "" ? true : selectedCategory.toUpperCase() === card.category.name.toUpperCase();
       });
     if (showFavorites) {
+      console.log("showFavorites", showFavorites);
       filteredCards = filteredCards.filter((card) => card.isfavorite === true);
     }
     return filteredCards;
   };
+  function handleToggleShowFavorites() {
+    console.log(`showFavorites`, showFavorites);
+    setShowFavorites(!showFavorites);
+  }
   let filteredCards = doFilter(supportcards, searchText, selectedCategory);
   const history = useHistory();
   return (
@@ -208,7 +214,7 @@ const SupportCards = ({ authenticated = false, isEditor = false, supportcards, c
       <header className="flex items-center justify-between">
         <h2 className=" pl-4 leading-6 font-bold text-2xl text-gray-700 font-pop">Support Cards</h2>
         <div>
-          <TWButton color="teal" onClick={() => setShowFavorites(!showFavorites)}>
+          <TWButton color="teal" onClick={handleToggleShowFavorites}>
             Show {showFavorites ? `All` : `Favorites`}
           </TWButton>
           {authenticated && isEditor ? (
@@ -295,9 +301,9 @@ const SupportCards = ({ authenticated = false, isEditor = false, supportcards, c
           }
         )}
       </div>
-      <Modal on={showPortal} toggle={() => setShowPortal(!showPortal)}>
+      {/* <Modal on={showPortal} toggle={() => setShowPortal(!showPortal)}>
         <ReactMarkdown source={portalText} escapeHtml={false}></ReactMarkdown>
-      </Modal>
+      </Modal> */}
     </div>
   );
 };

@@ -1,12 +1,12 @@
 import { AddVideo, EditVideo } from "./videos/VideoOperations";
-import React, { lazy, useEffect } from "react";
+import React, { lazy } from "react";
 import RequireAuth, { AuthRoute, EnhancedRoute } from "./auth/require_auth";
 import { Route, Switch, useHistory } from "react-router-dom";
 
 import Signin from "./auth/signin";
 import SigninWithPIN from "./auth/SigninWithPIN";
 import Signout from "./auth/signout";
-import { TWFileUpload } from "common/FileUploaderNew";
+import ToolsBacklogPage from "pages/tools";
 import { UserContext } from "./globalState/UserProvider";
 import { usePersistentState } from "hooks";
 import { useUserContext } from "globalState/UserProvider";
@@ -21,7 +21,7 @@ const AddSumoAlert = lazy(() => import("sumo/AddSumoAlert"));
 const BlogList = lazy(() => import("blog/BlogList"));
 const CloudInformation = lazy(() => import("pages/CloudInformation"));
 const CloudReadiness = lazy(() => import("./pages/CloudReadiness"));
-const CloudSuites = lazy(() => import("./pages/CloudSuites"));
+// const CloudSuites = lazy(() => import("./pages/CloudSuites"));
 const DashBoardContainer = lazy(() => import("./pages/dashboardcontainer"));
 const DynamicImport = lazy(() => import("./DynamicImport"));
 const EditBlog = lazy(() => import("blog/EditBlog"));
@@ -135,6 +135,7 @@ function AppRoutes() {
   return (
     <Switch>
       <AuthRoute exact path="/essentialworklist" component={WorklistSimple} />
+      <Route exact path="/tools" component={ToolsBacklogPage} />
       <Route exact path="/whatdoesdev" component={WhatDoesDev} />
       <Route exact path="/tenantlog" component={TenantLogList} />
       <Route exact path="/addblog" component={AddBlog} />
@@ -191,7 +192,6 @@ function AppRoutes() {
       <Route exact path="/myworkparams" component={Parameters} user={user} history={history} />
       <Route exact path="/" component={DashBoardContainer} user={user} />
       <Route exact path="/newspage" component={NewsPage} />
-      <Route exact path="/cloudsuites" component={CloudSuites} history={history} user={user} />
 
       <Route exact path="/priority" component={PriorityDashboard} history={history} user={user} />
 

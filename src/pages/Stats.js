@@ -1,16 +1,18 @@
+import React, { useState } from "react";
+
+import NiceSpinner from "./../utils/NiceSpinner";
+import { QUERY_BACKLOG_TEXT } from "../stats/queries/BACKLOG_QUERY2";
+import { SelectionForm } from "../stats/NewSelectionForm";
+import { StatsMain } from "./StatsMain";
+import { UserContext } from "./../globalState/UserProvider";
+import { format } from "../utils/format";
 import { makeStyles } from "@material-ui/core/styles";
 import { request } from "graphql-request";
-import { usePersistentState } from "hooks";
-import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
-import useSWR from "swr";
-import { SelectionForm } from "../stats/NewSelectionForm";
-import { QUERY_BACKLOG_TEXT } from "../stats/queries/BACKLOG_QUERY2";
-import { format } from "../utils/format";
-import { UserContext } from "./../globalState/UserProvider";
-import NiceSpinner from "./../utils/NiceSpinner";
-import { StatsMain } from "./StatsMain";
 import { useParams } from "./useParam";
+import { usePersistentState } from "hooks";
+import useSWR from "swr";
+
 const useStyles = makeStyles((theme) => ({
   root: theme.mixins.gutters({
     marginTop: theme.spacing(3),
@@ -91,6 +93,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 export const PRODUCT_LIST = ["LN", "PLM", "Protean", "InforOS", "Xpert", "Swan", "AutoConnect", "AutoRelease", "SupplyWeb", "TRANS4M"];
+export const PRODUCT_LIST_EXT = [
+  { id: "LN", name: "LN" },
+  { id: "PLM", name: "PLM" },
+  { id: "InforOS", name: "InforOS" },
+  { id: "Xpert", name: "Xpert" },
+  { id: "Swan", name: "Swan" },
+  { id: "AutoConnect", name: "Automotive Exchange" },
+  { id: "SupplyWeb", name: "Supplier Exchange" },
+  { id: "TRANS4M", name: "TRANS4M" },
+];
+
 export const REGION_LIST = ["APJ", "EMEA", "NA", "LA"];
 export const REGION_LIST_2 = [
   {
@@ -145,7 +158,7 @@ const Stats = (props) => {
 
   if (error) return <div>failed to load</div>;
   if (!data) return <NiceSpinner />;
-  console.log(data);
+  // console.log(data);
 
   // return <div>Hallo</div>;
   {
@@ -160,13 +173,16 @@ const StatsPage = ({ data, classes, owner, isValidSuperUser }) => {
   const mostRecentUpdate = data ? data.mostRecentUpdate : new Date().toLocaleTimeString();
   const [selectedProducts] = usePersistentState("selectedproducts", ["LN"]);
   const [region] = usePersistentState("region", "EMEA");
+  const regions = usePersistentState("selectedRegions", "EMEA");
   const [filterValues, setFilterValues] = useState({
     owner,
     products: selectedProducts,
     region,
+    regions,
   });
   function handleChange(values) {
     setFilterValues(values);
+    console.log(`values`, values);
   }
   return (
     <div className="font-sans text-lg  bg-gray-200 min-h-screen flex items-center mb-10 px-2 flex-col w-full">

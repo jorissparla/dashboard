@@ -21,8 +21,8 @@ function calculateAverageAgeFromData(data, ageColumn = "daysSinceCreated") {
   return avg;
 }
 
-function filterBacklogData(data = [], filterValues = { owner: "", products: ["LN"], region: "EMEA" }, fieldFilters) {
-  const { owner, products, region } = filterValues;
+function filterBacklogData(data = [], filterValues = { owner: "", products: ["LN"], region: "EMEA", regions: ["EMEA"] }, fieldFilters) {
+  const { owner, products, region, regions } = filterValues;
   let correctedRegion = region === "All" ? "" : region;
   let mydata = [...data];
   if (data?.length > 0) {
@@ -30,6 +30,8 @@ function filterBacklogData(data = [], filterValues = { owner: "", products: ["LN
       mydata = data && owner ? data.filter((o) => o.owner === owner) : data;
       mydata = products.length ? mydata.filter((o) => products.includes(o.productline)) : mydata;
       mydata = correctedRegion ? mydata.filter((o) => o.owner_region === correctedRegion) : mydata;
+      // mydata = mydata.filter((o) => regions.includes(o.owner_region));
+      // console.log(`mydata table`, filterValues);
     }
     for (let [key, value] of Object.entries(fieldFilters)) {
       if (value) {

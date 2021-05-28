@@ -77,7 +77,7 @@ export const GenericTable = (props: GenericTableProps) => {
   }, [data, filterValues, fieldFilters]);
 
   const exportToFile = (data: any): string => {
-    const tableHeaders = `<tr>` + fieldList.map((fld) => `<th style="border: 1px solid black">${fld.title}</th>`).join("") + `<tr>`;
+    const tableHeaders = `<tr>` + fieldList.map((fld) => `<th style="border: 1px solid black">${fld.title}</th>`).join("") + `</tr>`;
     const tableContents = data
       .map((row: any) => {
         const tableRow = fieldList.map((fld) => `<td style="border: 1px solid black">${row[fld.name]}</td>`).join("");

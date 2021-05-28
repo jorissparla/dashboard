@@ -19,6 +19,7 @@ import { NavLink } from "./NavLink";
 import NewsIcon from "@material-ui/icons/Event";
 import PeopleOutlineIcon from "@material-ui/icons/PeopleOutlineTwoTone";
 import Person from "@material-ui/icons/PeopleOutline";
+import PriorityHighIcon from "@material-ui/icons/PriorityHigh";
 import RequestListIcon from "@material-ui/icons/PlaylistAdd";
 import SettingsIcon from "@material-ui/icons/Settings";
 import SurveysIcon from "@material-ui/icons/Whatshot";
@@ -108,13 +109,7 @@ export function SideBarMenu({ classes, history, toggleMenu, open }: ISideBarProp
         <hr className="border-t-1  bg-grey-200" />
         <ToggledNavLink title="Go Lives" Icon={GoLiveIcon} navigateTo="/golives" history={history} />
         <ToggledNavLink title="Surveys" Icon={SurveysIcon} navigateTo="/surveys" history={history} />
-        {/* <ToggledNavLink title="CloudSuites" Icon={ExtensionIcon} navigateTo="/cloudsuites" history={history} /> */}
-        {/* <ToggledNavLink
-        title="Customer Feedback"
-        Icon={FeedbackIcon}
-        navigateTo="/feedback"
-        history={history}
-      /> */}
+        <ToggledNavLink title="Priority Dashboard" Icon={PriorityHighIcon} navigateTo="/priority" history={history} />
         <hr className="border-t-1  bg-grey-200" />
 
         {authenticated && (

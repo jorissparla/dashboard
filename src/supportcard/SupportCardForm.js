@@ -129,6 +129,7 @@ const SupportCardForm = (props) => {
                 onChange={handleChange}
                 type="text"
               />
+              favo
               <FavoriteWrapper id={values.id} isFavorite={values.isFavorite} />
             </div>
           ) : (

@@ -1,10 +1,10 @@
-import { UserContext } from "globalState/UserProvider";
 import React, { useEffect, useState } from "react";
-import PriorityDashboard from "stats/PriorityDashboard";
+
 import Anniversaries from "../awards/Anniversaries";
 import DynamicImport from "../DynamicImport";
-import CloudSuites from "./CloudSuites";
+import PriorityDashboard from "stats/PriorityDashboard";
 import { Surveys } from "./Surveys";
+import { UserContext } from "globalState/UserProvider";
 
 const DashBoardStats = DynamicImport(() => import("./DashBoardStatsNew"));
 const GoLives = DynamicImport(() => import("./goLiveListNew"));
@@ -16,7 +16,6 @@ const DashBoardContainer = (props) => {
   const region = props.region || "EMEA";
   const { user } = React.useContext(UserContext);
   const components = [
-    <CloudSuites user={user} />,
     <PriorityDashboard user={user} />,
 
     <NewsPage region={region} />,

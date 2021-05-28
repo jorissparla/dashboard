@@ -1,11 +1,12 @@
-import { useQuery } from "@apollo/client";
-import TWButton from "elements/TWButton";
 import React, { useEffect } from "react";
-import { useUser } from "User";
-import { hasPermissionEx } from "utils/hasPermission";
-import Spinner from "utils/spinner";
-import { QUERY_PRODUCTS_SUITES } from "../cloudsuite/graphql/Queries";
+
 import { Block } from "../elements/Block";
+import { QUERY_PRODUCTS_SUITES } from "../cloudsuite/graphql/Queries";
+import Spinner from "utils/spinner";
+import TWButton from "elements/TWButton";
+import { hasPermissionEx } from "utils/hasPermission";
+import { useQuery } from "@apollo/client";
+import { useUser } from "User";
 
 export default function CloudSuites({ history }) {
   const { loading, data } = useQuery(QUERY_PRODUCTS_SUITES, {});
@@ -34,8 +35,12 @@ export default function CloudSuites({ history }) {
                 <div className="font-pop text-xl font-bold text-gray-600">{suite.name}</div>
                 <div className="text-gray-500">{suite.description}</div>
               </div>
-              <div className="h-28">
-                <img className="w-full h-full object-cover" src={suiteImage} alt="CloudSuite" />
+              <div className="h-28 filter sepia">
+                <img
+                  className="w-full h-full object-cover backdrop-grayscale backdrop-blur-md backdrop-contrast-200"
+                  src={suiteImage}
+                  alt="CloudSuite"
+                />
               </div>
               <div>
                 <div className="bg-white p-2 flex flex-wrap">
@@ -53,15 +58,7 @@ export default function CloudSuites({ history }) {
                 </div>
               </div>
               <div className="bg-white p-2">
-                <TWButton
-                  onClick={() =>
-                    window.open(
-                      "https://development.home.infor.com/pmprojects/Lists/Product%20Contacts%20List/All%20Contacts.aspx?mkt_tok=eyJpIjoiTldJMFlqRTJOamczWXpWbSIsInQiOiJaTjRzakE1VDI2ZFFha1d3eHFSdFdCKzRvSkFGUk5iaFNnQW1mZ3U4dHNXNllvZmJ0UlR1MnVTTk1raHZLXC9JRHFNV1g4a3lIU3JiXC9VYVwvT2k5V2thSU41TUtSSWhHRHVMbTNMY2lqSzJjK1ZHem9iTythRzd5cGwwSTA1Q1g0QSJ9"
-                    )
-                  }
-                >
-                  contacts
-                </TWButton>
+                <TWButton onClick={() => window.open("https://inforonline.sharepoint.com/sites/ProductContacts")}>contacts</TWButton>
               </div>
             </article>
           );

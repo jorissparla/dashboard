@@ -230,6 +230,10 @@ class Backlog {
     this.temp = this.temp.filter((item: { region: string }) => item.region.toLowerCase() === region.toLowerCase());
     return this;
   }
+  regions(regions: string[]) {
+    this.temp = this.temp.filter((item: any) => regions.includes(item.region));
+    return this;
+  }
   // releasename
   releasename(releasename: string) {
     this.temp = this.temp.filter((item: { releasename: string }) => item.releasename.toLowerCase() === releasename.toLowerCase());
@@ -268,6 +272,13 @@ class Backlog {
     const sum = this.temp.reduce((total: any, item: { daysSinceCreated: any }) => total + item.daysSinceCreated, 0);
     const avg = (sum / (this.temp.length || 0 + 1)).toFixed(0);
     return [avg, this.temp];
+  }
+  getAvgOver30AndOver60AndData() {
+    const sum = this.temp.reduce((total: any, item: { daysSinceCreated: any }) => total + item.daysSinceCreated, 0);
+    const avg = (sum / (this.temp.length || 0 + 1)).toFixed(0);
+    const over30 = this.temp.reduce((total: number, item: { daysSinceCreated: number }) => (total += item.daysSinceCreated >= 30 ? 1 : 0), 0);
+    const over60 = this.temp.reduce((total: number, item: { daysSinceCreated: number }) => (total += item.daysSinceCreated >= 60 ? 1 : 0), 0);
+    return [avg, this.temp, over30, over60];
   }
 }
 

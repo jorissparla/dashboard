@@ -1,46 +1,24 @@
-import { Switch } from "@material-ui/core";
-import AutoComplete from "elements/AutoComplete";
-import { usePersistentState } from "hooks";
-import { PRODUCT_LIST, REGION_LIST_2 } from "pages/Stats";
+import { PRODUCT_LIST, PRODUCT_LIST_EXT, REGION_LIST, REGION_LIST_2 } from "pages/Stats";
 import React, { useState } from "react";
 
+import AutoComplete from "elements/AutoComplete";
+import { Switch } from "@material-ui/core";
+import TWMulticheck from "elements/TWMulticheck";
+import { usePersistentState } from "hooks";
+
 export const SelectionForm = ({ classes, initialValue, valuesChanged, isValidSuperUser, onChange, onNavigateToParams, accounts }) => {
-  const [selectedProducts, setSelectedProducts] = usePersistentState("selectedproducts", ["LN"]);
+  const [selectedProducts, setSelectedProducts] = usePersistentState("selectedproducts_1", ["LN"]);
+  const [selectedRegions, setSelectedRegions] = usePersistentState("selectedRegions", ["EMEA"]);
   const [ownerVal, setOwnerVal] = useState(initialValue.owner);
   const [region, setRegion] = usePersistentState("region", "EMEA");
   const [showDropDown, toggle] = useState(false);
   const [allOwners, toggleAllOwners] = useState(false);
-
-  // const [labelWidth, setLabelWidth] = React.useState(0);
-  // React.useEffect(() => {
-  //   setLabelWidth(inputLabel.current.offsetWidth);
-  // }, []);
 
   const getPersons = () => {
     const item = window.localStorage.getItem("worklist.favorite.persons");
     let persons = JSON.parse(item);
     return persons ? persons.sort() : [];
   };
-
-  // React.useEffect(() => {
-  //   doAddPersonToLocalStorage(initialValue.owner);
-  // }, []);
-
-  // const doAddPersonToLocalStorage = (newPerson) => {
-  //   const item = window.localStorage.getItem("worklist.favorite.persons");
-  //   let persons = [];
-  //   if (!item || item.length === 0) {
-  //     persons = [];
-  //   } else {
-  //     persons = JSON.parse(item);
-  //     console.log("do", item, persons, typeof persons);
-  //   }
-  //   persons = persons.filter((person) => newPerson !== person.name).concat({ name: newPerson });
-
-  //   window.localStorage.setItem("worklist.favorite.persons", JSON.stringify(persons));
-  //   // setPersons(persons);
-  //   return persons;
-  // };
 
   function toggleSet(value) {
     console.log("toggle selectedProducts", selectedProducts, value);
@@ -51,6 +29,10 @@ export const SelectionForm = ({ classes, initialValue, valuesChanged, isValidSup
     }
   }
 
+  function handleSetSelectedRegions(value) {
+    console.log(value);
+    setSelectedRegions(value);
+  }
   function getValue(value) {
     return selectedProducts.indexOf(value) >= 0;
   }
@@ -95,10 +77,12 @@ export const SelectionForm = ({ classes, initialValue, valuesChanged, isValidSup
         // disabled={!criteriaChange}
         variant="contained"
         onClick={() => {
+          console.log(selectedRegions);
           onChange({
             owner: ownerVal,
             products: selectedProducts,
             region: region,
+            regions: selectedRegions,
           });
         }}
       >
@@ -106,21 +90,22 @@ export const SelectionForm = ({ classes, initialValue, valuesChanged, isValidSup
       </button>
 
       <div className="border border-gray-200 p-2 m-2 rounded">
-        {PRODUCT_LIST.map((product) => (
-          <label className="inline-flex items-center" key={product}>
+        {PRODUCT_LIST_EXT.map((product) => (
+          <label className="inline-flex items-center" key={product.id}>
             {/* control={ */}
             <input
               type="checkbox"
               className="form-checkbox mx-2"
-              defaultChecked={getValue(product)}
-              onChange={() => toggleSet(product)}
-              value={getValue(product)}
+              defaultChecked={getValue(product.id)}
+              onChange={() => toggleSet(product.id)}
+              value={getValue(product.id)}
               color="primary"
             />
-            <span className="mr-3">{product}</span>
+            <span className="mr-3">{product.name}</span>
           </label>
         ))}
       </div>
+      {/* <TWMulticheck initialValue={selectedRegions} onChange={handleSetSelectedRegions} allValues={REGION_LIST} /> */}
       <div className="border-gray-50 p-2 m-2 rounded">
         {/* <FormControl variant="outlined" className={classes.formControl}> */}
         <div className="relative inline-block text-left">

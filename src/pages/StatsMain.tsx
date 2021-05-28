@@ -229,7 +229,7 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
         <BacklogTableNewStyle
           filterValues={filterValues}
           data={sev12notrestored}
-          title="Critical/Major Not restored"
+          title="Critical/Major "
           description="All Incidents with a severity of 'Production Outage / Major Impact' in Support Backlog"
           // description="All Incidents with a severity of 'Production Outage / Major Impact' without a restored date"
           actionHeader={true}
@@ -376,6 +376,7 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
         <BacklogTableNewStyle filterValues={filterValues} data={data.active} title="Active" description="All Active Support Backlog" />
         <BacklogTableNewStyle
           filterValues={filterValues}
+          additionalFields={["ownergroup", "region"]}
           data={all}
           subtitle={` age ${avgAgeSupport} days`}
           title={`All  `}
@@ -384,6 +385,7 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
         <BacklogTableNewStyle
           filterValues={filterValues}
           data={allOver30}
+          additionalFields={["ownergroup", "region"]}
           subtitle={` age ${avgAge} days`}
           title={`All `}
           description="Aged over 30"
