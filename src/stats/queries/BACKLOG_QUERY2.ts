@@ -221,6 +221,7 @@ export const QUERY_BACKLOG_TEXT = gql`
     scheduled_activity_date
     escalation_time
     action_date
+    rank
   }
   query QUERY_BACKLOG($date: String, $owner: String, $products: [String]) {
     mostRecentUpdate

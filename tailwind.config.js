@@ -106,8 +106,8 @@ module.exports = {
         black: "#000000",
         amber: colors.amber,
         gray: colors.blueGray,
-        paleblue: colors.lightBlue,
-        "light-blue": colors.lightBlue,
+        paleblue: colors.sky,
+        "light-blue": colors.sky,
         wiep: colors.pink,
         emerald: colors.emerald,
         // gray: {

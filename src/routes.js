@@ -136,6 +136,7 @@ function AppRoutes() {
     <Switch>
       <AuthRoute exact path="/essentialworklist" component={WorklistSimple} />
       <Route exact path="/tools" component={ToolsBacklogPage} />
+      <Route exact path="/products/:product" component={ToolsBacklogPage} />
       <Route exact path="/whatdoesdev" component={WhatDoesDev} />
       <Route exact path="/tenantlog" component={TenantLogList} />
       <Route exact path="/addblog" component={AddBlog} />

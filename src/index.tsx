@@ -12,7 +12,6 @@ import ContextProvider from "./globalState";
 import React from "react";
 import ReactDOM from "react-dom";
 import { SWRConfig } from "swr";
-import SWRDevtools from "@jjordy/swr-devtools";
 import Spinner from "utils/spinner";
 import { WebSocketLink } from "@apollo/client/link/ws";
 import { createGlobalStyle } from "styled-components";

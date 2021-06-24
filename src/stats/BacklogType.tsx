@@ -38,19 +38,35 @@ interface IAccount {
 
 const lower = (item: string) => item.toLowerCase();
 
+export interface IConfig {
+  over30?: boolean;
+  over60?: boolean;
+  over90?: boolean;
+}
+
 class Backlog {
   data: IBacklog[];
   includeDevelopment: boolean;
   temp: any;
+  config: IConfig | null = null;
   includePending: boolean;
   accounts: IAccount[];
-  constructor(data: IBacklog[], accounts: IAccount[], includeDevelopment = true, includePending = true) {
+  constructor(data: IBacklog[], accounts: IAccount[], includeDevelopment = true, includePending = true, config: IConfig | null = null) {
     this.data = data;
     this.temp = data;
     this.includeDevelopment = includeDevelopment;
     this.includePending = includePending;
     if (data) {
       this.temp = this.temp.filter((item: { status: string }) => item.status !== "Awaiting Development");
+      if (config && config.over30) {
+        this.temp = this.temp.filter((item: { daysSinceCreated: number }) => item.daysSinceCreated > 30);
+      }
+      if (config && config.over60) {
+        this.temp = this.temp.filter((item: { daysSinceCreated: number }) => item.daysSinceCreated > 60);
+      }
+    }
+    if (config) {
+      this.config = config;
     }
     this.accounts = accounts;
   }
@@ -278,7 +294,8 @@ class Backlog {
     const avg = (sum / (this.temp.length || 0 + 1)).toFixed(0);
     const over30 = this.temp.reduce((total: number, item: { daysSinceCreated: number }) => (total += item.daysSinceCreated >= 30 ? 1 : 0), 0);
     const over60 = this.temp.reduce((total: number, item: { daysSinceCreated: number }) => (total += item.daysSinceCreated >= 60 ? 1 : 0), 0);
-    return [avg, this.temp, over30, over60];
+    const over90 = this.temp.reduce((total: number, item: { daysSinceCreated: number }) => (total += item.daysSinceCreated >= 90 ? 1 : 0), 0);
+    return [avg, this.temp, over30, over60, over90];
   }
 }
 

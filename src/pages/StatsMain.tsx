@@ -220,7 +220,7 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
         />
         <BacklogTableNewStyle
           filterValues={filterValues}
-          additionalFields={["managername", "daysEscalated"]}
+          additionalFields={["managername", "daysEscalated", "rank"]}
           data={escalated}
           title="Escalated"
           description="All Incidents escalated"

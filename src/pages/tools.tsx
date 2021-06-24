@@ -1,15 +1,21 @@
+import { Backlog, IConfig } from "../stats/BacklogType";
 import { DataCell, HeaderCell, HyperLinkCell, HyperLinkCellRed } from "./Cells";
+import { REGION_LIST, REGION_LIST_2 } from "./Stats";
 import React, { useEffect, useState } from "react";
-import { gql, useQuery } from "@apollo/client";
+import TWButton, { TWHyperLink } from "../elements/TWButton";
+import { gql, request } from "graphql-request";
 
-import { Backlog } from "../stats/BacklogType";
 import CopyToClipBoard from "react-copy-to-clipboard";
 import Spinner from "../utils/spinner";
-import TWButton from "../elements/TWButton";
+import TWCheckbox from "elements/TWCheckbox";
 import { UserContext } from "./../globalState/UserProvider";
 import { useAlert } from "globalState/AlertContext";
-import { useParams } from "./useParam";
+import { useParams } from "react-router";
 import { usePersistentState } from "../hooks";
+import { useQuery } from "@apollo/client";
+import useSWR from "swr";
+
+// import { useParams } from "./useParam";
 
 const MY_BACKLOG_QUERY = gql`
   fragment backlogfragment on DWH {
@@ -57,7 +63,10 @@ const MY_BACKLOG_QUERY = gql`
   }
 `;
 
-const ToolsBacklogPage = () => {
+const ToolsBacklogPage = (props: any) => {
+  const { product }: { product: string } = useParams();
+  console.log(`product`, product);
+  const allRegions = REGION_LIST;
   const [includeDevelopment, setIncludeDevelopment] = usePersistentState("includeDevelopment1", false);
   const [includePending, setIncludePending] = usePersistentState("includePending1", false);
   const { user } = React.useContext(UserContext);
@@ -69,41 +78,198 @@ const ToolsBacklogPage = () => {
   }
   isValidSuperUser = isValidSuperUser || enableIt;
 
+  let ownergroups = "";
+  switch (product) {
+    case "tools":
+      ownergroups = "LN Tools Support";
+      break;
+    case "logistics":
+      ownergroups = "LN Logistics Support";
+      break;
+    case "finance":
+      ownergroups = "LN Finance Support";
+      break;
+
+    default:
+      ownergroups = "LN Tools Support";
+      break;
+  }
   return (
     <div className="bg-gray-100 h-screen">
-      <WorklistSimple includeDevelopment={includeDevelopment} includePending={includePending} />
+      <WorklistSimple includeDevelopment={includeDevelopment} includePending={includePending} ownergroup={ownergroups} />
     </div>
   );
 };
 
-const WorklistSimple = ({ owner = "", ownerId = "", includeDevelopment = false, includePending = false }) => {
+// interface TWRegionListProps {
+//   onChangeRegion: ;
+// }
+function TWRegionList({ onChangeRegion }: any) {
+  const [regions, setRegions] = usePersistentState("regionlist_backlog", ["EMEA", "APJ"]);
+  function handleRegionChange(region: string) {
+    return function (v: boolean) {
+      let newRegions: string[] = regions;
+      if (v) {
+        newRegions = [region, ...newRegions.filter((reg: string) => reg !== region)];
+        // console.log(region, v, newRegions);
+        onChangeRegion(newRegions);
+      } else {
+        newRegions = newRegions.filter((reg: string) => reg !== region);
+        // console.log(region, v, newRegions);
+        onChangeRegion(newRegions);
+      }
+      setRegions(newRegions);
+    };
+  }
+  function getValue(region: string): boolean {
+    if (regions.find((reg: string) => reg == region)) {
+      return true;
+    } else return false;
+  }
+  return (
+    <div className="flex space-x-2 items-center">
+      {REGION_LIST.map((region) => (
+        <TWCheckbox key={region} value={getValue(region)} onChange={handleRegionChange(region)} label={region} />
+      ))}
+    </div>
+  );
+}
+
+const WorklistSimple = ({ owner = "", ownerId = "", includeDevelopment = false, includePending = false, ownergroup = "LN Tools Support" }) => {
   const params = useParams();
-  const { data, loading } = useQuery(MY_BACKLOG_QUERY);
-  if (loading) return <Spinner />;
-  let blBase = new Backlog(data.backlog, data.accounts, includeDevelopment, includePending);
-  // console.log(includeDevelopment, blBase.getData().length);
-
-  // const multitenantcustomers = data.multitenantcustomers;
-
-  const [avgAge, all, over30, over60] = blBase
+  const [filterOver30, setFilterOver30] = useState(false);
+  const [filterOver60, setFilterOver60] = useState(false);
+  const [regions, setRegions] = usePersistentState("toolsregions", ["EMEA", "APJ"]);
+  const [nrIncidentsShown, setNrIncidentsShown] = useState(0);
+  const [config, setConfig] = useState<IConfig | null>(null);
+  const { data, error } = useSWR(MY_BACKLOG_QUERY);
+  // const { data, loading } = useQuery(MY_BACKLOG_QUERY);
+  useEffect(() => {
+    let cfg = {
+      over30: filterOver30,
+      over60: filterOver60,
+    };
+    setConfig(cfg);
+  }, [filterOver30]);
+  if (!data) return <Spinner />;
+  let blBase = new Backlog(data.backlog, data.accounts, includeDevelopment, includePending, config);
+  console.log(`regions`, regions);
+  const [avgAge, all, over30, over60, over90] = blBase
     .init()
     // .hasStatus(["Researching", "On Hold by Customer", "Awaiting Infor", "Awaiting Customer"])
     .notStatus(["Solution Proposed", "Solution Pending Maintenance", "Awaiting Development"])
-    .ownergroup("LN Tools Support")
-    .regions(["EMEA", "APJ"])
+    .ownergroup(ownergroup)
+    .regions(regions)
     .sort("daysSinceCreated", "D")
+    .daysSinceCreated(filterOver30 ? 30 : filterOver60 ? 60 : 0)
     .getAvgOver30AndOver60AndData();
-  const researching = blBase.init().status("Researching").dayssincelastupdate(params["N_RESEARCHING"]).sort("dayssincelastupdate", "D").getData();
-  // console.log("mutllt", { mtincidents });
 
+  if (filterOver30) {
+  }
+
+  function toggleOver30() {
+    setFilterOver30(!filterOver30);
+  }
+  function toggleOver60() {
+    setFilterOver60(!filterOver60);
+    // if (!filterOver60) {
+    //   console.log("toggle");
+    //   setFilterOver30(false);
+    // }
+  }
+  const pctover30 = (100 * (over30 / all.length)).toFixed(0);
+  const pctover60 = (100 * (over60 / all.length)).toFixed(0);
+  const pctover90 = (100 * (over90 / all.length)).toFixed(0);
+  const targetOver60 = Math.round(0.05 * all.length);
+  const nrIncidents = all.length;
+  function changeRegion(values: string[]): void {
+    setRegions(values);
+  }
   return (
-    <div className="px-2 pt-2 grid grid-cols-1 gap-x-2 gap-y-2">
-      <Widget data={all} title={`Tools incidents - average age: ${avgAge} days - over 30 days: ${over30} - over 60 days: ${over60}`} />
+    <div className="">
+      {/* <Example /> */}
+      <div className="flex flex-col">
+        <div className="mx-2 p-2 rounded bg-white">
+          <NavLinks linksAr={linksAr} />
+          <span className="text-xl font-bold">{`${ownergroup}`} incidents - Filter</span>
+          <div className="flex space-x-2 items-center">
+            <TWCheckbox label="Over 30" onChange={toggleOver30} value={filterOver30} />
+            <TWCheckbox label="Over 60" onChange={toggleOver60} value={filterOver60} />
+            <span className=" font-sans font-semibold pb-3 px-3">{`(${all.length})`}</span>
+            <TWRegionList onChangeRegion={changeRegion} />
+          </div>
+        </div>
+        <div className="px-2 pt-2 grid grid-cols-1 gap-x-2 gap-y-2">
+          <Widget
+            data={all}
+            title={
+              <div>
+                <div>{`average age: ${avgAge} days  (${nrIncidents})`}</div>
+                <div className="flex space-x-2">
+                  <StatsBlock text="over 30 days" over={over30} pct={pctover30} />
+                  <StatsBlock text="over 60 days" over={over60} pct={pctover60} />
+                  <StatsBlock text="Target over 60 days" over={targetOver60} pct={`5`} bgColor="red" />
+                  <StatsBlock text="over 90 days" over={over90} pct={pctover90} />
+                </div>
+              </div>
+            }
+          />
+        </div>
+      </div>
     </div>
   );
 };
 
-export const Widget = ({ data = [], title = "", mark = false }) => {
+interface StatsBlockProps {
+  text?: string;
+  over?: number;
+  pct?: string;
+  bgColor?: string;
+}
+function StatsBlock(props: StatsBlockProps) {
+  return (
+    <div
+      className={`px-4 py-2  shadow-lg my-2
+  flex flex-col align-center justify-between mx-2 min-w-60 spacing-x-2 w-1 rounded font-semibold font-sans items-center bg-gradient-to-l ${
+    props.bgColor ? "from-orange-500 to-orange-200 text-red-700" : "from-light-blue-200 to-light-blue-400 text-light-blue-700"
+  } `}
+    >
+      <span className="text-2xl font-bold">{`${props.text}`}</span> {`${props.over} incidents`}
+      <span className="text-2xl font-bold">{`${props.pct}% `}</span>
+    </div>
+  );
+}
+
+interface WidgetProperties {
+  data: any;
+  title: any;
+  mark?: boolean;
+}
+interface TLink {
+  name: string;
+  link: string;
+}
+interface TLinksAr {
+  linksAr: TLink[];
+}
+const linksAr: TLink[] = [
+  { name: "Tools", link: "/products/tools" },
+  { name: "Logistics", link: "/products/logistics" },
+  { name: "Finance", link: "/products/finance" },
+];
+function NavLinks({ linksAr }: TLinksAr) {
+  return (
+    <nav className="my-2 py-1">
+      {linksAr.map((item) => (
+        <TWHyperLink color="teal" link={item.link}>
+          {item.name}
+        </TWHyperLink>
+      ))}
+    </nav>
+  );
+}
+
+export const Widget = ({ data = [], title = "", mark = false }: WidgetProperties) => {
   const len = data.length;
   const MAX_LEN = 50;
   const [currPage, setCurrPage] = useState(len > 0 ? 1 : 0);
@@ -114,7 +280,7 @@ export const Widget = ({ data = [], title = "", mark = false }) => {
   const handlePrevPage = () => {
     if (currPage > 1) setCurrPage((old) => old - 1);
   };
-  useEffect(() => {}, [currPage]);
+  useEffect(() => {}, [currPage, data]);
   const prevDisabled = currPage <= 0;
   const nextDisabled = currPage >= nrPages || nrPages === 0;
   const alert: any = useAlert();
@@ -122,7 +288,7 @@ export const Widget = ({ data = [], title = "", mark = false }) => {
   return (
     <div className="p-2 rounded-lg shadow-lg bg-white">
       <h1 className={`flex justify-items-center py-1 font-semibold items-center ${mark ? "text-red-700" : "text-gray-700"}`}>
-        {title} - ({len})
+        {title}
         <div className="flex-1 flex justify-between sm:justify-end">
           <CopyToClipBoard
             text={exportedData}
