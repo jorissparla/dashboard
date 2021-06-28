@@ -1,11 +1,13 @@
 import * as React from "react";
-import { useQuery } from "@apollo/client";
-import gql from "graphql-tag";
-import { withRouter } from "react-router";
-import { SurveyComponent } from "../surveys/SurveyComponent";
+
+import { gql, useQuery } from "@apollo/client";
+import { useParams, withRouter } from "react-router";
+
 import Spinner from "../utils/spinner";
 import SurveyComments from "../surveys/SurveyComments";
+import { SurveyComponent } from "../surveys/SurveyComponent";
 
+console.log("surveys");
 const QUERY_SURVEY_RATIOS = gql`
   query QUERY_SURVEY_RATIOS($region: String) {
     getSurveyRatios(region: $region) {
@@ -23,9 +25,10 @@ const QUERY_SURVEY_RATIOS = gql`
   }
 `;
 
-const SurveysInner = (props) => {
-  let region = props.match.params.id || "EMEA";
-  console.log("🗑🗑", region, props.match.params.id);
+function SurveysInner(props) {
+  const params = useParams();
+  let region = params.id || "EMEA";
+  console.log(params);
 
   const { data, loading } = useQuery(QUERY_SURVEY_RATIOS, {
     variables: { region },
@@ -67,6 +70,14 @@ const SurveysInner = (props) => {
       <SurveyComments region={region} />
     </div>
   );
+}
+
+const Srvs = () => {
+  return (
+    <div>
+      <SurveysInner />
+    </div>
+  );
 };
 
-export const Surveys = withRouter(SurveysInner);
+export default Srvs;

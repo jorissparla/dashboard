@@ -6,6 +6,7 @@ import { Route, Switch, useHistory } from "react-router-dom";
 import Signin from "./auth/signin";
 import SigninWithPIN from "./auth/SigninWithPIN";
 import Signout from "./auth/signout";
+import Surveys from "./pages/Surveys";
 import ToolsBacklogPage from "pages/tools";
 import { UserContext } from "./globalState/UserProvider";
 import { usePersistentState } from "hooks";
@@ -34,7 +35,6 @@ const WorklistSimple = lazy(() => import("./pages/WorklistSimple"));
 const testActivity = lazy(() => import("pages/testActivity"));
 const TenantLogList = lazy(() => import("pages/TenantLogListNew"));
 const SumoIncidentForm = lazy(() => import("sumo/SumoIncidentForm"));
-const { Surveys } = lazy(() => import("./pages/Surveys"));
 const SymptomCategories = lazy(() => import("symptoms/SymptomCategories"));
 const { TenantLogsWithData } = lazy(() => import("tenants/TenantLogs"));
 const TenantViewList = lazy(() => import("tenants/TenantViewList"));
@@ -262,8 +262,8 @@ function AppRoutes() {
       <AuthRoute allowed={["Admin", "PO", "SU", "Guest"]} user={user} exact path="/news/add" component={RequireAuth(NewsItemAddContainer)} />
       <Route path="/golivelist" component={GoLiveList} />
       <Route path="/golives" component={GoLiveListNew} />
-      <Route exact path="/surveys/:id" component={Surveys} />
       <Route exact path="/surveys" component={Surveys} />
+      <Route exact path="/surveys/:id" component={Surveys} />
       <Route path="/signin" component={Signin} />
       <Route path="/signinPIN" component={SigninWithPIN} />
       <Route path="/signout" component={Signout} />

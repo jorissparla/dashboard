@@ -1,18 +1,19 @@
+import { ADDSUMOINCIDENT_MUTATION, ALL_SUMO_INCIDENTS_QUERY, DELETE_SUMOINCIDENT_MUTATION, UPDATE_SUMOINCIDENT_MUTATION } from "./sumoqueries";
+import React, { useEffect, useState } from "react";
 import { gql, useMutation, useQuery } from "@apollo/client";
-import InputTagsDropDown from "common/InputTagsDD";
+import { useHasPermissions, useUserContext } from "globalState/UserProvider";
+
 import AutoComplete from "elements/AutoComplete";
-import TextInput from "elements/TextInput";
+import { ISumoIncident } from "./sumotypes";
+import InputTagsDropDown from "common/InputTagsDD";
+import SafeDeleteButton from "videos/SafeDeleteButton";
 import TWButton from "elements/TWButton";
 import TWCheckbox from "elements/TWCheckbox";
-import { useAlert } from "globalState/AlertContext";
-import { useHasPermissions, useUserContext } from "globalState/UserProvider";
-import { usePersistentState } from "hooks";
-import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router";
+import TextInput from "elements/TextInput";
 import { format } from "utils/format";
-import SafeDeleteButton from "videos/SafeDeleteButton";
-import { ADDSUMOINCIDENT_MUTATION, ALL_SUMO_INCIDENTS_QUERY, DELETE_SUMOINCIDENT_MUTATION, UPDATE_SUMOINCIDENT_MUTATION } from "./sumoqueries";
-import { ISumoIncident } from "./sumotypes";
+import { useAlert } from "globalState/AlertContext";
+import { useHistory } from "react-router";
+import { usePersistentState } from "hooks";
 
 const QUERY_SUPPORT_ACCOUNTS = gql`
   query QUERY_SUPPORT_ACCOUNTS {
@@ -204,7 +205,13 @@ function SumoIncidentForm({ initialValues }: { initialValues?: ISumoIncident }) 
           <label htmlFor="summary" className="block text-sm font-medium text-gray-700">
             Summary
           </label>
-          <textarea name="summary" value={values.summary} onChange={handleChange} className="form-input font-mono resize-none text-2xs" rows={10} />
+          <textarea
+            name="summary"
+            value={values.summary}
+            onChange={handleChange}
+            className="form-input font-mono resize-none text-2xs w-full"
+            rows={10}
+          />
         </div>
         <div className="mt-2">
           <div className="mt-2 mb-2">
@@ -212,7 +219,7 @@ function SumoIncidentForm({ initialValues }: { initialValues?: ISumoIncident }) 
               <label htmlFor="action" className="block text-sm font-medium text-gray-700">
                 Action
               </label>
-              <textarea name="action" value={values.action} onChange={handleChange} className="form-input font-sans resize-none " rows={5} />
+              <textarea name="action" value={values.action} onChange={handleChange} className="form-input font-sans resize-none w-funll" rows={5} />
             </div>
           </div>
         </div>

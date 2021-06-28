@@ -1,16 +1,17 @@
-import { gql, useMutation, useQuery } from "@apollo/client";
-import InputTagsDropDown from "common/InputTagsDD";
-import AutoComplete from "elements/AutoComplete";
-import TextInput from "elements/TextInput";
-import TWButton from "elements/TWButton";
-import { useAlert } from "globalState/AlertContext";
-import { useHasPermissions, useUserContext } from "globalState/UserProvider";
-import { usePersistentState } from "hooks";
-import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router";
-import { format } from "utils/format";
-import SafeDeleteButton from "videos/SafeDeleteButton";
 import { ADDSUMOALERT_MUTATION, ALL_SUMOALERTS_QUERY, DELETE_SUMOALERT_MUTATION, UPDATE_SUMOALERT_MUTATION } from "./sumoqueries";
+import React, { useEffect, useState } from "react";
+import { gql, useMutation, useQuery } from "@apollo/client";
+import { useHasPermissions, useUserContext } from "globalState/UserProvider";
+
+import AutoComplete from "elements/AutoComplete";
+import InputTagsDropDown from "common/InputTagsDD";
+import SafeDeleteButton from "videos/SafeDeleteButton";
+import TWButton from "elements/TWButton";
+import TextInput from "elements/TextInput";
+import { format } from "utils/format";
+import { useAlert } from "globalState/AlertContext";
+import { useHistory } from "react-router";
+import { usePersistentState } from "hooks";
 
 const QUERY_SUPPORT_ACCOUNTS = gql`
   query QUERY_SUPPORT_ACCOUNTS {
@@ -209,7 +210,7 @@ function SumoAlertForm({ initialValues }: { initialValues?: SumoAlertType }) {
           <label htmlFor="comments" className="block text-sm font-medium text-gray-700">
             Comments
           </label>
-          <textarea name="comments" value={values.comments} onChange={handleChange} className="form-input font-sans resize-none " rows={4} />
+          <textarea name="comments" value={values.comments} onChange={handleChange} className="form-input font-sans resize-none w-full" rows={4} />
         </div>
         <div className="mt-2">
           <div className="mt-2 mb-2">
@@ -217,7 +218,13 @@ function SumoAlertForm({ initialValues }: { initialValues?: SumoAlertType }) {
               <label htmlFor="alert" className="block text-sm font-medium text-gray-700">
                 Alert
               </label>
-              <textarea name="alert" value={values.alert} onChange={handleChange} className="form-input font-mono resize-none text-2xs" rows={15} />
+              <textarea
+                name="alert"
+                value={values.alert}
+                onChange={handleChange}
+                className="form-input font-mono resize-none text-2xs w-full"
+                rows={15}
+              />
             </div>
           </div>
         </div>

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Anniversaries from "../awards/Anniversaries";
 import DynamicImport from "../DynamicImport";
 import PriorityDashboard from "stats/PriorityDashboard";
-import { Surveys } from "./Surveys";
+import Surveys from "./Surveys";
 import { UserContext } from "globalState/UserProvider";
 
 const DashBoardStats = DynamicImport(() => import("./DashBoardStatsNew"));

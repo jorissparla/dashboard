@@ -210,7 +210,7 @@ function SumoForm({ initialValues = null }) {
             name="comments"
             value={values.comments}
             onChange={handleChange}
-            className="form-input font-sans resize-none "
+            className="form-input font-sans resize-none w-full"
             rows="4"
           />
         </div>
@@ -225,21 +225,21 @@ function SumoForm({ initialValues = null }) {
                 name="errormessage"
                 value={values.errormessage}
                 onChange={handleChange}
-                className="form-input font-mono resize-none text-2xs"
+                className="form-input font-mono resize-none text-2xs w-full"
                 rows="15"
               />
             </div>
             <div>
               <label htmlFor="query" className="block text-sm font-medium text-gray-700">
                 Query
-                <button className="bg-amber-100 font-semibold mt-1 px-2 py-1 shadow-lg">Copy</button>
+                <button className="bg-amber-100 font-semibold mt-1 px-2 py-1 shadow-lg ">Copy</button>
               </label>
               <textarea
                 type="text"
                 name="query"
                 value={values.query}
                 onChange={handleChange}
-                className="form-input font-mono resize-none text-2xs"
+                className="form-input font-mono resize-none text-2xs w-full"
                 rows="12"
               />
             </div>
