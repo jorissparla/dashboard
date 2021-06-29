@@ -120,7 +120,7 @@ export const MaintenanceTemplateFields = ({ initialTemplate, forceReadOnly = fal
       />
       <MaintenanceTemplateField
         label="Communication - Customer Disappointed"
-        name=" communication_disappointed"
+        name="communication_disappointed"
         initialValue={template.communication_disappointed}
         id={template.id}
         forceReadOnly={forceReadOnly}
