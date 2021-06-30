@@ -239,6 +239,14 @@ class Backlog {
     this.temp = this.temp.filter((item: { productline: string }) => productlines.map(lower).includes(item.productline.toLowerCase()));
     return this;
   }
+  notReleases(releases = [""]) {
+    this.temp = this.temp.filter((item: { release: string }) => releases.map(lower).includes(item.release.toLowerCase()));
+    return this;
+  }
+  releases(releases = [""]) {
+    this.temp = this.temp.filter((item: any) => releases.includes(item.releasename));
+    return this;
+  }
   // Tenant
   // release
   // region

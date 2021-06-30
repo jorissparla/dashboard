@@ -15,7 +15,8 @@ interface Props {
   filterValues?: any;
 }
 
-const RELEASE_FILTER = ["Baan 4", "Baan 5", "LN FP5", "LN FP6", "LN FP7", "LN FP3", "10.2", "10.3"];
+const SUSTAINED_FILTER = ["Baan 4", "Baan 5", "LN FP5", "LN FP6", "LN FP7", "LN FP3", "10.2"];
+const RELEASE_FILTER = ["10.3"];
 
 export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"], filterValues }) => {
   const params = useParams();
@@ -51,6 +52,7 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
     .sort("daysSinceCreated", "D")
     .getAvgAndData();
   const all_dev = blBase.init().status("Awaiting Development").sort("dayssincelastupdate", "D").getData();
+  const allSustaining = blBase.init().status("Awaiting Development").releases(SUSTAINED_FILTER).sort("dayssincelastupdate", "D").getData();
   React.useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 2000);
     return () => {
@@ -262,6 +264,13 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
           additionalFields={["Deployment", "Tenant", "release"]}
           title="Multitenant customer incidents"
           description="All Incidents open for our MT not logged as multi tenant"
+        />
+        <BacklogTableNewStyle
+          filterValues={filterValues}
+          data={allSustaining}
+          additionalFields={["releasename", "extended"]}
+          title="Sustaining Maintenance Check"
+          description="All Incidents open with defects for customers logging on a version that has sustaining maintenance"
         />
         <BacklogTableNewStyle
           filterValues={filterValues}

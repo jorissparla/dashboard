@@ -3,6 +3,7 @@ import React, { useState } from "react";
 
 import AutoComplete from "elements/AutoComplete";
 import { Switch } from "@material-ui/core";
+import TWButton from "elements/TWButton";
 import TWMulticheck from "elements/TWMulticheck";
 import { usePersistentState } from "hooks";
 
@@ -71,11 +72,8 @@ export const SelectionForm = ({ classes, initialValue, valuesChanged, isValidSup
           />
         </label>
       )}
-      <button
+      <TWButton
         color="primary"
-        className="btn-tw bg-purp text-white mr-3"
-        // disabled={!criteriaChange}
-        variant="contained"
         onClick={() => {
           console.log(selectedRegions);
           onChange({
@@ -87,7 +85,7 @@ export const SelectionForm = ({ classes, initialValue, valuesChanged, isValidSup
         }}
       >
         Search
-      </button>
+      </TWButton>
 
       <div className="border border-gray-200 p-2 m-2 rounded">
         {PRODUCT_LIST_EXT.map((product) => (
@@ -169,9 +167,9 @@ export const SelectionForm = ({ classes, initialValue, valuesChanged, isValidSup
         last updated {initialValue?.lastUpdated || "Data not available yet"}
       </div>
       {/* {isValidSuperUser && ( */}
-      <button className="btn-tw bg-pink-200 text-pink-800 hover:bg-pink-300" onClick={onNavigateToParams}>
+      <TWButton color="pink" onClick={onNavigateToParams}>
         Parameters
-      </button>
+      </TWButton>
       {/* )} */}
       {persons && persons.length > 0 && (
         <label className="flex mr-4 items-center px-4">
