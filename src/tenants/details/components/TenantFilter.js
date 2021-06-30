@@ -142,7 +142,7 @@ const Filter = (props) => {
                   />
                 </div> */}
                 <div className="m-2 px-2 py-1 mb-10">
-                  <div className="font-semibold  text-gray-600 ">Farm Name</div>
+                  <div className="font-semibold text-sm text-gray-600 ">Farm Name</div>
                   <TWListBox
                     items={["Frankfurt", "US-East-1", "Sydney", "US-Gov-West-1", "Tokyo"]}
                     onChange={handleSetFarm}

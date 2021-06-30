@@ -1,16 +1,19 @@
-import { Mutation } from "@apollo/client/react/components";
 import { CardHeader, Divider, Switch } from "@material-ui/core";
-import ListIcon from "@material-ui/icons/List";
-import classNames from "classnames";
-import { addHours } from "date-fns";
-import Button from "elements/TWButton";
-import { UserContext } from "globalState/UserProvider";
-import _ from "lodash";
 import React, { useContext, useState } from "react";
 import { animated, useSpring } from "react-spring";
 import { format, formatDistanceToNow } from "../utils/format";
+
+import Button from "elements/TWButton";
 import EditTenantDetails from "./details/components/EditTenant";
+import ListIcon from "@material-ui/icons/List";
 import { MUTATION_MARK_LIVE } from "./TenantMutations";
+import { Mutation } from "@apollo/client/react/components";
+import TWSwitch from "elements/TWSwitch";
+import { UserContext } from "globalState/UserProvider";
+import _ from "lodash";
+import { addHours } from "date-fns";
+import classNames from "classnames";
+import { useMutation } from "@apollo/client";
 
 export const TenantCard = ({
   classes,
@@ -23,6 +26,8 @@ export const TenantCard = ({
   onStatusChange = () => console.log("change"),
   infoClicked,
 }) => {
+  console.log(`classes`, classes);
+  const [toggleMarkLive] = useMutation(MUTATION_MARK_LIVE);
   const [isLive, setLive] = useState(live);
   const [isOpen, setisOpened] = useState(false);
   const [showStatus, setShowStatus] = useState(false);
@@ -121,7 +126,7 @@ export const TenantCard = ({
   return (
     <>
       <div className={customer === "Infor" ? classes.card3 : classes.card}>
-        <div className="p-2 ">
+        <div className="pb-2 ">
           {/* <Header>
           <H2>{customer}</H2>
 
@@ -301,29 +306,47 @@ export const TenantCard = ({
           </Button>
           {/* )} */}
           {isTenantEditor && (
-            <Mutation mutation={MUTATION_MARK_LIVE}>
-              {(mutate) => (
-                <Switch
-                  checked={live}
-                  onChange={() => {
-                    // console.log("change" + tenants[0].customerid);
-                    setLive((prev) => {
-                      const input = {
-                        live: 1 - prev,
-                        number: tenants[0].customerid,
-                      };
-                      // console.log(input);
-                      mutate({ variables: { input } });
-                      onStatusChange();
-                      return prev === 1 ? false : true;
-                    });
-                  }}
-                  value="checkedB"
-                  color="secondary"
-                  inputProps={{ "aria-label": "primary checkbox" }}
-                />
-              )}
-            </Mutation>
+            <div className="mr-2">
+              <TWSwitch
+                value={live}
+                onChange={() => {
+                  // console.log("change" + tenants[0].customerid);
+                  setLive((prev) => {
+                    const input = {
+                      live: 1 - prev,
+                      number: tenants[0].customerid,
+                    };
+                    console.log(input);
+                    toggleMarkLive({ variables: { input } });
+                    onStatusChange();
+                    return prev === 1 ? false : true;
+                  });
+                }}
+              />
+            </div>
+            // <Mutation mutation={MUTATION_MARK_LIVE}>
+            //   {(mutate) => (
+            //     <Switch
+            //       checked={live}
+            //       onChange={() => {
+            //         // console.log("change" + tenants[0].customerid);
+            //         setLive((prev) => {
+            //           const input = {
+            //             live: 1 - prev,
+            //             number: tenants[0].customerid,
+            //           };
+            //           // console.log(input);
+            //           mutate({ variables: { input } });
+            //           onStatusChange();
+            //           return prev === 1 ? false : true;
+            //         });
+            //       }}
+            //       value="checkedB"
+            //       color="secondary"
+            //       inputProps={{ "aria-label": "primary checkbox" }}
+            //     />
+            //   )}
+            // </Mutation>
           )}
         </div>
       </div>

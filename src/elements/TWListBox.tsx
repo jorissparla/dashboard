@@ -26,7 +26,7 @@ export default function TWListBox({ items = [], defaultValue = "", onChange = (v
     onChange(value);
   }
   return (
-    <div className="w-72 fixed top-16">
+    <div className="w-72  top-16">
       <Listbox value={selected} onChange={handleSelectedChange}>
         {({ open }) => (
           <>

@@ -55,6 +55,7 @@ const styles = (theme) => ({
     justifyContent: "space-between",
     // backgroundImage: 'linear-gradient(to right bottom, rgb(128, 216, 255), white)',
     padding: "0 0.25rem",
+    paddingBottom: "0.25rem",
     margin: "0.5rem",
     overflow: "visible",
     backgroundImage: "linear-gradient(to right bottom,rgba(29, 161, 242, 0.4), white)",
