@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
+import SearchBar, { filterOn } from "common/SearchBar";
 import { gql, useQuery } from "@apollo/client";
 
 import Avatar from "@material-ui/core/Avatar";
-import SearchBar from "common/SearchBar";
-import _ from "lodash";
 import deepOrange from "@material-ui/core/colors/deepOrange";
 import { hasPermission } from "./utils/hasPermission";
 import { useAlert } from "globalState/AlertContext";
@@ -68,17 +67,6 @@ const QUERY_ALL_USER_PERMISSIONS = gql`
     }
   }
 `;
-
-function filterOn(object, fields = [], nestedFields = "", value) {
-  const res = fields.some((field) => _.includes(object[field].toUpperCase(), value.toUpperCase()));
-  let res2 = false;
-  if (nestedFields) {
-    const [field, subfield] = nestedFields.split(".");
-    res2 = object[field].some((sf) => _.includes(sf[subfield].toUpperCase(), value.toUpperCase()));
-  }
-  return res || res2;
-  //|| nestedFields.some(_.includes(object)));
-}
 
 const UpdatePermissions = (props) => {
   const [searchText, setSearchText] = useState("");

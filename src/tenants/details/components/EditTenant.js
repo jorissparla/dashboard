@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { gql, useMutation, useQuery } from "@apollo/client";
 
 import Button from "elements/TWButton";
 import CloseIcon from "@material-ui/icons/Close";
@@ -6,21 +7,48 @@ import HTMLEditor from "common/HTMLEditor";
 import { MUTATION_UPDATE_DETAIL } from "tenants/TenantMutations";
 import { TWSelectMenu } from "elements/TWSelectMenu";
 import { format } from "utils/format";
+import { toSizeString } from "pages/TenantStorage";
 import { useAlert } from "globalState/AlertContext";
-import { useMutation } from "@apollo/client";
+
+const QUERY_STORAGE_USAGE = gql`
+  query storageByCustomer($name: String) {
+    storageByCustomer(name: $name) {
+      id
+      date
+      customer
+      size
+    }
+    currentTenantStorageByCustomer(name: $name) {
+      id
+      date
+      customer
+      tenant
+      size
+    }
+  }
+`;
 
 function EditTenantDetails({ isTenantEditor, ...props }) {
   const { profile, className, onClose, onView, ...rest } = props;
-  console.log(props);
+  const name = profile.baseTenantId || "";
+  const { data, loading } = useQuery(QUERY_STORAGE_USAGE, { variables: { name } });
+  if (loading) {
+    return <div>Loading</div>;
+  }
+  const storage = data.storageByCustomer; //.sort((s1, s2) => (s2.date > s1.date ? 1 : -1));
+  const tenantStorage = data.currentTenantStorageByCustomer; //.sort((s1, s2) => (s2.date > s1.date ? 1 : -1));
+  console.log(`data deytails`, tenantStorage);
+
   return (
     <div {...rest} className="bg-white  px-4 font-sans right-0 w-2/3 flex h-full fixed z-50 shadow-lg rounded  flex-col">
-      <EditTenantDetailsWrapped isTenantEditor={isTenantEditor} {...props} />
+      <EditTenantDetailsWrapped isTenantEditor={isTenantEditor} storage={storage} tenantStorage={tenantStorage} {...props} />
     </div>
   );
 }
 
 export const EditTenantDetailsWrapped = (props) => {
-  const { profile, onClose, isTenantEditor = true } = props;
+  const { profile, onClose, storage, tenantStorage, isTenantEditor = true } = props;
+
   const [values, setValues] = useState({ ...profile });
   useEffect(() => {
     if (profile) {
@@ -37,6 +65,14 @@ export const EditTenantDetailsWrapped = (props) => {
       });
     }
   }, [profile]);
+  let firstStorageItem = null;
+  if (storage && storage.length) {
+    const sortedStorage = storage.slice().sort((s1, s2) => (s1.date > s2.date ? -1 : 1));
+    firstStorageItem = sortedStorage[0];
+    console.log(`firstStorageItem`, firstStorageItem);
+  }
+  let size = firstStorageItem ? firstStorageItem.size : 0;
+  const sizeString = toSizeString(size);
   const [updateTenantDetailsMutation] = useMutation(MUTATION_UPDATE_DETAIL);
   const handleChange = (event) => {
     event.persist();
@@ -93,8 +129,18 @@ export const EditTenantDetailsWrapped = (props) => {
           Close
         </Button>
       </div>
-      <div className="text-lg font-semibold font-sans p-2">{`Details for ${profile.customer.name}"`}</div>
-      <hr className="bg-grey-100 mb-2" />
+      <div className="text-lg font-semibold font-sans p-2">{`Details for ${profile.customer.name}`}</div>
+      <span className="font-semibold text-sm">Storage</span>
+      <hr />
+      <div className="flex space-x-1 space-y-1 flex-wrap mb-6">
+        {tenantStorage.map(({ size, tenant }) => (
+          <div
+            className={`flex items-center justify-center min-w-32 ${
+              tenant.includes("PRD") ? "bg-red-200 text-red-600" : "bg-amber-200 text-amber-600"
+            } font-semibold text-sm px-2 py-1 rounded-full `}
+          >{`${tenant}: ${toSizeString(size)}`}</div>
+        ))}
+      </div>
       <div>
         <div className="grid grid-cols-6 gap-6">
           <div className="col-span-3 row-start-1 space-y-1 sm:col-span-2">
@@ -134,12 +180,11 @@ export const EditTenantDetailsWrapped = (props) => {
             <input
               className="form-input flex-grow block w-full min-w-0 rounded-none rounded-r-md transition duration-150 ease-in-out sm:text-sm sm:leading-5"
               type="date"
-              defaultValue="2019-12-12"
+              defaultValue={values.golivedate}
               label="Go live date"
               name="golivedate"
               onChange={handleChange}
-              value={values.golivedate}
-              variant="outlined"
+              // value=
             />
           </div>
           <div className="col-span-3 row-start-4 space-y-1 sm:col-span-3">

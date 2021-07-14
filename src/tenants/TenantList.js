@@ -295,7 +295,7 @@ const filterTenantsByCustomerFarmVersion = (tenants, fields, details) => {
     showupcominggolives = false,
     useproxy = false,
   } = fields;
-  console.log({ useproxy });
+  // console.log({ useproxy });
   let filteredCustomerNames = null;
   if (details) {
     filteredCustomerNames = details
@@ -312,7 +312,7 @@ const filterTenantsByCustomerFarmVersion = (tenants, fields, details) => {
         return true;
       }
       let days = 30;
-      const startDate = new Date();
+      const startDate = addDays(new Date(), -2);
       const endDate = addDays(new Date(), parseInt(days));
       const glDate = parseInt(detail.golivedate);
       if (glDate) {
@@ -381,7 +381,7 @@ const TenantList = (props) => {
 
   const { data, loading } = useSWR(ALL_TENANTS);
   const { data: details, loading: detailsloading } = useSWR(QUERY_ALL_TENANT_DETAILS);
-  console.log({ data });
+  // console.log({ data });
   if (!data || !details) {
     return <Spinner />;
   }
@@ -399,8 +399,8 @@ const TenantList = (props) => {
     ),
     "name"
   );
-  console.log({ xx });
-  console.log(uniqueCustomers.length);
+  // console.log({ xx });
+  // console.log(uniqueCustomers.length);
   return (
     <div className="bg-gray-100 h-screen">
       <animated.div
@@ -425,10 +425,10 @@ const TenantList = (props) => {
             const liveCust = sub[0].live === 1 ? true : false;
             const customerid = sub[0].customerid;
             const tenantdetails = tenantcustomerdetails.filter((d) => d.customerid === customerid);
-            if (tenantdetails.length) {
-            } else {
-            }
-            if (customer === "Azteka Consulting GmbH") console.log("👍", customer, liveCust, sub);
+            // if (tenantdetails.length) {
+            // } else {
+            // }
+            // if (customer === "Azteka Consulting GmbH") console.log("👍", customer, liveCust, sub);
             return (
               <TenantCard
                 key={index}

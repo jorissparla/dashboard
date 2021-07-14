@@ -89,6 +89,9 @@ const ToolsBacklogPage = (props: any) => {
     case "finance":
       ownergroups = "LN Finance Support";
       break;
+    case "all":
+      ownergroups = "";
+      break;
 
     default:
       ownergroups = "LN Tools Support";
@@ -202,6 +205,7 @@ const WorklistSimple = ({ owner = "", ownerId = "", includeDevelopment = false, 
         <div className="px-2 pt-2 grid grid-cols-1 gap-x-2 gap-y-2">
           <Widget
             data={all}
+            fieldList={fieldList}
             title={
               <div>
                 <div>{`average age: ${avgAge} days  (${nrIncidents})`}</div>
@@ -244,6 +248,7 @@ interface WidgetProperties {
   data: any;
   title: any;
   mark?: boolean;
+  fieldList: TField[];
 }
 interface TLink {
   name: string;
@@ -256,6 +261,7 @@ const linksAr: TLink[] = [
   { name: "Tools", link: "/products/tools" },
   { name: "Logistics", link: "/products/logistics" },
   { name: "Finance", link: "/products/finance" },
+  { name: "All", link: "/products/all" },
 ];
 function NavLinks({ linksAr }: TLinksAr) {
   return (
@@ -269,7 +275,8 @@ function NavLinks({ linksAr }: TLinksAr) {
   );
 }
 
-export const Widget = ({ data = [], title = "", mark = false }: WidgetProperties) => {
+export const Widget = ({ data = [], fieldList = [], title = "", mark = false }: WidgetProperties) => {
+  const [currData, setCurrData] = useState([]);
   const len = data.length;
   const MAX_LEN = 50;
   const [currPage, setCurrPage] = useState(len > 0 ? 1 : 0);
@@ -280,7 +287,10 @@ export const Widget = ({ data = [], title = "", mark = false }: WidgetProperties
   const handlePrevPage = () => {
     if (currPage > 1) setCurrPage((old) => old - 1);
   };
-  useEffect(() => {}, [currPage, data]);
+  useEffect(() => {
+    console.log(`data`, data);
+    setCurrData(data);
+  }, [currPage, data]);
   const prevDisabled = currPage <= 0;
   const nextDisabled = currPage >= nrPages || nrPages === 0;
   const alert: any = useAlert();
@@ -314,13 +324,21 @@ export const Widget = ({ data = [], title = "", mark = false }: WidgetProperties
         </div>
       </h1>
       <span></span>
-      {data.length === 0 ? <h2>No {title} incidents </h2> : <Table data={data.slice((currPage - 1) * MAX_LEN, currPage * MAX_LEN)} mark={mark} />}
+      {currData.length === 0 ? (
+        <h2>No {title} data </h2>
+      ) : (
+        <GenericDataTable data={currData.slice((currPage - 1) * MAX_LEN, currPage * MAX_LEN)} mark={mark} fieldList={fieldList} />
+      )}
     </div>
   );
 };
-
-const fieldList = [
-  { title: "Incident", name: "incident" },
+export interface TField {
+  title: string;
+  name: string;
+  isKey?: boolean;
+}
+const fieldList: TField[] = [
+  { title: "Incident", name: "incident", isKey: true },
   { title: "Owner", name: "owner" },
   { title: "Customer", name: "customername" },
   { title: "Severity", name: "severityname" },
@@ -328,6 +346,8 @@ const fieldList = [
   { title: "Created", name: "daysSinceCreated" },
   { title: "Updated", name: "dayssincelastupdate" },
   { title: "Summary", name: "title" },
+  { title: "Escalated", name: "escalated" },
+  { title: "Ownergroup", name: "ownergroup" },
 ];
 const exportToFile = (data: any): string => {
   const tableHeaders = `<tr>` + fieldList.map((fld) => `<th style="border: 1px solid #eded">${fld.title}</th>`).join("") + `</tr>`;
@@ -340,11 +360,15 @@ const exportToFile = (data: any): string => {
   return `<table style="border: 1px ; border-collapse: collapse;">${tableHeaders}${tableContents}</table>`;
 };
 
-const Table = ({ data }: any) => {
+export const GenericDataTable = ({ data, fieldList }: any) => {
   function isStatusToMark(status: string) {
     return ["New", "Awaiting Infor", "Researching"].includes(status);
   }
-
+  console.log(`data`, data);
+  const keyField = fieldList.find((fld: TField) => fld.isKey === true);
+  if (!keyField) {
+    return <div>No keyfield found</div>;
+  }
   return (
     <div className="overflow-y-auto scrollbar-w-2 scrollbar-track-gray-lighter scrollbar-thumb-rounded scrollbar-thumb-gray scrolling-touch">
       <table className="w-full text-left table-collapse">
@@ -358,24 +382,13 @@ const Table = ({ data }: any) => {
         <tbody className="align-baseline">
           {data.length === 0 ? (
             <tr>
-              <DataCell>No incidents..</DataCell>
+              <DataCell>No data..</DataCell>
             </tr>
           ) : (
             data.map((item: any) => (
-              <tr key={item.incident}>
-                {isStatusToMark(item.status) ? (
-                  <HyperLinkCellRed value={item.incident} linkText={item.incident} />
-                ) : (
-                  <HyperLinkCell value={item.incident} linkText={item.incident} />
-                )}
+              <tr key={item[keyField.name]}>
+                <HyperLinkCell value={item.incident} linkText={item[keyField.name]} />
                 {fieldList.map((field: any, index: number) => (index !== 0 ? <DataCell key={index}>{item[field.name]}</DataCell> : null))}
-                {/* <DataCell>{item.owner}</DataCell>
-                <DataCell>{item.customername}</DataCell>
-                <DataCell>{item.severityname}</DataCell>
-                <DataCell>{item.status}</DataCell>
-                <DataCell>{item.daysSinceCreated}</DataCell>
-                <DataCell>{item.dayssincelastupdate}</DataCell>
-                <DataCell>{item.title}</DataCell> */}
               </tr>
             ))
           )}

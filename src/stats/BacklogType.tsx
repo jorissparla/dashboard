@@ -197,7 +197,10 @@ class Backlog {
 
   // ownergroup
   ownergroup(ownergroup: string) {
-    this.temp = this.temp.filter((item: { ownergroup: string }) => item.ownergroup.toLowerCase() === ownergroup.toLowerCase());
+    if (ownergroup) {
+      this.temp = this.temp.filter((item: { ownergroup: string }) => item.ownergroup.toLowerCase() === ownergroup.toLowerCase());
+    }
+
     return this;
   }
   // daysSinceCreated

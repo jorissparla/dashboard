@@ -60,6 +60,7 @@ const TenantViewList = () => {
       // if (showLive) {
       //   x = x.filter((t) => t.live === "Yes");
       // }
+
       x = x
         .map((currcustomer) => {
           const sub = currcustomer.tenants || [];
@@ -94,10 +95,21 @@ const TenantViewList = () => {
   // console.log(uniqueCustomers);
 
   const handleSelect = (id) => {
-    console.log(id);
+    console.log("id", id);
     toggleShowDetails((prev) => !prev);
     setCurrentId(id);
   };
+  function getProfile(customerid) {
+    console.log(`customerid`, customerid);
+    const currcustomer = customerDetails.find((d) => d.customerid === customerid);
+    let baseTenantId = "";
+    if (currcustomer) {
+      const tenants = currcustomer.tenants || [];
+      baseTenantId = tenants && tenants.length && tenants.length > 0 ? tenants[0].name.split("_")[0] : "";
+    } else baseTenantId = "";
+    return { ...currcustomer, baseTenantId };
+  }
+  const profile = getProfile(currentId);
   return (
     <div style={{ margin: 5, background: "#EEE" }}>
       <div>
@@ -130,11 +142,7 @@ const TenantViewList = () => {
         {isShowingDetails && (
           <animated.div style={tenantProps}>
             <div className="inset-0 flex z-50 bg-gray-700  bg-opacity-50 absolute w-5/6 ">
-              <EditTenantDetails
-                profile={customerDetails.find((d) => d.customerid === currentId)}
-                onClose={() => toggleShowDetails(() => false)}
-                isTenantEditor={true}
-              />
+              <EditTenantDetails profile={profile} onClose={() => toggleShowDetails(() => false)} isTenantEditor={true} />
             </div>
           </animated.div>
         )}

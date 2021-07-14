@@ -1,4 +1,5 @@
 import { gql } from "graphql-request";
+
 // import { gqls } from "@apollo/client";
 
 export const TENANT_NOTE = gql`

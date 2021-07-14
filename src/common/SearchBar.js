@@ -2,6 +2,17 @@ import { useCallback, useEffect, useState } from "react";
 
 import _ from "lodash";
 
+export function filterOn(object, fields = [], nestedFields = "", value) {
+  const res = fields.some((field) => _.includes(object[field].toUpperCase(), value.toUpperCase()));
+  let res2 = false;
+  if (nestedFields) {
+    const [field, subfield] = nestedFields.split(".");
+    res2 = object[field].some((sf) => _.includes(sf[subfield].toUpperCase(), value.toUpperCase()));
+  }
+  return res || res2;
+  //|| nestedFields.some(_.includes(object)));
+}
+
 export default function SearchBar({ onChange, hintText = "Search..", defaultValue = "", searchOnEnter = false, className = "" }) {
   const [val, setVal] = useState(defaultValue || "");
   const [changed, setChanged] = useState(false);

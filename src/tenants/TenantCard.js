@@ -26,7 +26,6 @@ export const TenantCard = ({
   onStatusChange = () => console.log("change"),
   infoClicked,
 }) => {
-  console.log(`classes`, classes);
   const [toggleMarkLive] = useMutation(MUTATION_MARK_LIVE);
   const [isLive, setLive] = useState(live);
   const [isOpen, setisOpened] = useState(false);
@@ -39,13 +38,15 @@ export const TenantCard = ({
   const props = useSpring({ opacity: isOpen ? 1 : 0 });
   const isTenantEditor = hasPermissions(user, ["TENANTEDIT", "ADMIN"]);
   // const isAdmin = hasPermissions(user, ['ADMIN']);
-
+  const baseTenantId = tenants && tenants.length && tenants.length > 0 ? tenants[0].name.split("_")[0] : "";
   let tenantcustomerdetail;
   if (customer !== "Infor" && tenantdetails) {
-    tenantcustomerdetail = tenantdetails;
+    tenantcustomerdetail = { ...tenantdetails, baseTenantId };
   } else {
     tenantcustomerdetail = {
       id: "",
+      baseTenantId,
+      tenants,
       customer: {
         name: "",
       },
@@ -121,7 +122,7 @@ export const TenantCard = ({
     });
   }
   // console.log(customer, tags);
-  const baseTenantId = tenants && tenants.length && tenants.length > 0 ? tenants[0].name.split("_")[0] : "";
+
   // console.log(customer, tenants[0]);
   return (
     <>

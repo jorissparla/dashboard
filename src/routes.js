@@ -7,6 +7,7 @@ import Signin from "./auth/signin";
 import SigninWithPIN from "./auth/SigninWithPIN";
 import Signout from "./auth/signout";
 import Surveys from "./pages/Surveys";
+import TenantStorage from "pages/TenantStorage";
 import ToolsBacklogPage from "pages/tools";
 import { UserContext } from "./globalState/UserProvider";
 import { usePersistentState } from "hooks";
@@ -197,8 +198,10 @@ function AppRoutes() {
       <Route exact path="/priority" component={PriorityDashboard} history={history} user={user} />
 
       <EnhancedRoute auth="admin" editors={["Admin", "PO"]} user={user} exact path="/supportcard" component={SupportCards} />
+
       <Route exact path="/tenant" component={TenantPage} />
       <Route exact path="/tenant/missing" component={MissingTenants} />
+      <Route exact path="/tenant/storage" component={TenantStorage} />
       <Route exact path="/tenant/:customerid" component={FullTenantEdit} />
 
       <Route exact path="/region/:region" component={DashBoardContainer} user={user} />

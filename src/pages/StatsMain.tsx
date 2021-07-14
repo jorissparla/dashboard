@@ -52,7 +52,13 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
     .sort("daysSinceCreated", "D")
     .getAvgAndData();
   const all_dev = blBase.init().status("Awaiting Development").sort("dayssincelastupdate", "D").getData();
-  const allSustaining = blBase.init().status("Awaiting Development").releases(SUSTAINED_FILTER).sort("dayssincelastupdate", "D").getData();
+  const allSustainingDev = blBase.init().status("Awaiting Development").releases(SUSTAINED_FILTER).sort("dayssincelastupdate", "D").getData();
+  const allSustaining = blBase
+    .init()
+    .releases(SUSTAINED_FILTER)
+    .notStatus(["Solution Proposed", "Solution Pending Maintenance"])
+    .sort("dayssincelastupdate", "D")
+    .getData();
   React.useEffect(() => {
     const timer = setTimeout(() => setLoading(false), 2000);
     return () => {
@@ -267,9 +273,9 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
         />
         <BacklogTableNewStyle
           filterValues={filterValues}
-          data={allSustaining}
+          data={allSustainingDev}
           additionalFields={["releasename", "extended"]}
-          title="Sustaining Maintenance Check"
+          title="Sustaining Maintenance Check Defects"
           description="All Incidents open with defects for customers logging on a version that has sustaining maintenance"
         />
         <BacklogTableNewStyle
@@ -278,6 +284,13 @@ export const StatsMain: React.FC<Props> = ({ data, owner = "", products = ["LN"]
           additionalFields={["releasename", "extended"]}
           title="Extended Maintenance Check"
           description="All Incidents open for customers logging on a version that has extended maintenance"
+        />
+        <BacklogTableNewStyle
+          filterValues={filterValues}
+          data={allSustaining}
+          additionalFields={["releasename"]}
+          title="Sustaining Maintenance Check"
+          description="All Incidents open  for customers logging on a version that has sustaining maintenance"
         />
         <BacklogTableNewStyle
           filterValues={filterValues}
