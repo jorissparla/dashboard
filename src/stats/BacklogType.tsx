@@ -47,15 +47,24 @@ export interface IConfig {
 class Backlog {
   data: IBacklog[];
   includeDevelopment: boolean;
+  includeAll: boolean;
   temp: any;
   config: IConfig | null = null;
   includePending: boolean;
   accounts: IAccount[];
-  constructor(data: IBacklog[], accounts: IAccount[], includeDevelopment = true, includePending = true, config: IConfig | null = null) {
+  constructor(
+    data: IBacklog[],
+    accounts: IAccount[],
+    includeDevelopment = true,
+    includePending = true,
+    config: IConfig | null = null,
+    includeAll = false
+  ) {
     this.data = data;
     this.temp = data;
     this.includeDevelopment = includeDevelopment;
     this.includePending = includePending;
+    this.includeAll = includeAll;
     if (data) {
       this.temp = this.temp.filter((item: { status: string }) => item.status !== "Awaiting Development");
       if (config && config.over30) {
@@ -178,7 +187,16 @@ class Backlog {
     return this;
   }
   notStatus(statusAr = ["Solution Proposed"]) {
-    this.temp = this.temp.filter((item: { status: string }) => !statusAr.map(lower).includes(item.status.toLowerCase()));
+    const newStatusAr = statusAr.filter((s) => !(s === "Awaiting Development"));
+    if (this.includeAll) {
+      return this;
+    } else {
+      if (!this.includeDevelopment) {
+        this.temp = this.temp.filter((item: { status: string }) => !newStatusAr.map(lower).includes(item.status.toLowerCase()));
+      } else {
+        this.temp = this.temp.filter((item: { status: string }) => !["Solution Proposed"].map(lower).includes(item.status.toLowerCase()));
+      }
+    }
     return this;
   }
   getDefects() {

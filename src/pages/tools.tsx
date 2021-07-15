@@ -142,6 +142,8 @@ const WorklistSimple = ({ owner = "", ownerId = "", includeDevelopment = false, 
   const params = useParams();
   const [filterOver30, setFilterOver30] = useState(false);
   const [filterOver60, setFilterOver60] = useState(false);
+  const [includeDev, setIncludeDev] = useState(includeDevelopment);
+  const [includeAll, setIncludeAll] = useState(false);
   const [regions, setRegions] = usePersistentState("toolsregions", ["EMEA", "APJ"]);
   const [nrIncidentsShown, setNrIncidentsShown] = useState(0);
   const [config, setConfig] = useState<IConfig | null>(null);
@@ -155,7 +157,7 @@ const WorklistSimple = ({ owner = "", ownerId = "", includeDevelopment = false, 
     setConfig(cfg);
   }, [filterOver30]);
   if (!data) return <Spinner />;
-  let blBase = new Backlog(data.backlog, data.accounts, includeDevelopment, includePending, config);
+  let blBase = new Backlog(data.backlog, data.accounts, includeDev, includePending, config, includeAll);
   console.log(`regions`, regions);
   const [avgAge, all, over30, over60, over90] = blBase
     .init()
@@ -170,6 +172,12 @@ const WorklistSimple = ({ owner = "", ownerId = "", includeDevelopment = false, 
   if (filterOver30) {
   }
 
+  function toggleIncludeAll() {
+    setIncludeAll(!includeAll);
+  }
+  function toggleIncludeDevelopment() {
+    setIncludeDev(!includeDev);
+  }
   function toggleOver30() {
     setFilterOver30(!filterOver30);
   }
@@ -200,6 +208,8 @@ const WorklistSimple = ({ owner = "", ownerId = "", includeDevelopment = false, 
             <TWCheckbox label="Over 60" onChange={toggleOver60} value={filterOver60} />
             <span className=" font-sans font-semibold pb-3 px-3">{`(${all.length})`}</span>
             <TWRegionList onChangeRegion={changeRegion} />
+            <TWCheckbox label="Include Development" onChange={toggleIncludeDevelopment} value={includeDev} />
+            <TWCheckbox label="Include All Statuses" onChange={toggleIncludeAll} value={includeAll} />
           </div>
         </div>
         <div className="px-2 pt-2 grid grid-cols-1 gap-x-2 gap-y-2">
@@ -336,9 +346,10 @@ export interface TField {
   title: string;
   name: string;
   isKey?: boolean;
+  linkPrefix?: string;
 }
 const fieldList: TField[] = [
-  { title: "Incident", name: "incident", isKey: true },
+  { title: "Incident", name: "incident", isKey: true, linkPrefix: "http://navigator.infor.com/n/incident.asp?IncidentID=" },
   { title: "Owner", name: "owner" },
   { title: "Customer", name: "customername" },
   { title: "Severity", name: "severityname" },
@@ -348,12 +359,20 @@ const fieldList: TField[] = [
   { title: "Summary", name: "title" },
   { title: "Escalated", name: "escalated" },
   { title: "Ownergroup", name: "ownergroup" },
+  { title: "Contact", name: "contactname" },
 ];
+function fieldOrHyperLink(row: any, fld: TField) {
+  if (fld.linkPrefix) {
+    return `<a href=${fld.linkPrefix + row[fld.name]} target="_BLANK_">${row[fld.name]}</a>`;
+  } else {
+    return `${row[fld.name]}`;
+  }
+}
 const exportToFile = (data: any): string => {
   const tableHeaders = `<tr>` + fieldList.map((fld) => `<th style="border: 1px solid #eded">${fld.title}</th>`).join("") + `</tr>`;
   const tableContents = data
     .map((row: any) => {
-      const tableRow = fieldList.map((fld) => `<td style="border: 1px solid #eded">${row[fld.name]}</td>`).join("");
+      const tableRow = fieldList.map((fld) => `<td style="border: 1px solid #eded">${fieldOrHyperLink(row, fld)}</td>`).join("");
       return `<tr style="border: 1px solid #eded">${tableRow}</tr>`;
     })
     .join("");

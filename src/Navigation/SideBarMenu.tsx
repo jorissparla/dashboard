@@ -107,6 +107,7 @@ export function SideBarMenu({ classes, history, toggleMenu, open }: ISideBarProp
           <ToggledNavLink title="Backlog Xpert" Icon={XpertIcon} navigateTo="/historyother" history={history} />
         </ExpandableMenuItem>
         <hr className="border-t-1  bg-grey-200" />
+        <ToggledNavLink title="Backlog List" Icon={ApplicationIcon} navigateTo="/products/all" history={history} />
         <ToggledNavLink title="Go Lives" Icon={GoLiveIcon} navigateTo="/golives" history={history} />
         <ToggledNavLink title="Surveys" Icon={SurveysIcon} navigateTo="/surveys" history={history} />
         <ToggledNavLink title="Priority Dashboard" Icon={PriorityHighIcon} navigateTo="/priority" history={history} />
