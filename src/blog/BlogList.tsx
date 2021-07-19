@@ -1,15 +1,14 @@
-import { useQuery } from "@apollo/client";
-import CreatorInfo from "elements/CreatorInfo";
-import TWButton from "elements/TWButton";
-import { values } from "lodash";
-import React from "react";
-import { useHistory } from "react-router";
-import { format } from "utils/format";
-
-import Spinner from "utils/spinner";
-import SafeDeleteButton from "videos/SafeDeleteButton";
-import { BlogProps } from "./BlogForm";
 import { ALL_BLOGS_QUERY } from "./queries";
+import { BlogProps } from "./BlogForm";
+import CreatorInfo from "elements/CreatorInfo";
+import React from "react";
+import SafeDeleteButton from "elements/SafeDeleteButton";
+import Spinner from "utils/spinner";
+import TWButton from "elements/TWButton";
+import { format } from "utils/format";
+import { useHistory } from "react-router";
+import { useQuery } from "@apollo/client";
+import { values } from "lodash";
 
 const BlogList = () => {
   const { data, loading } = useQuery(ALL_BLOGS_QUERY);

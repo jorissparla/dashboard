@@ -1,4 +1,5 @@
-import { AddVideo, EditVideo } from "./videos/VideoOperations";
+// import { AddVideo, EditVideo } from "./videos/VideoOperations";
+
 import React, { lazy } from "react";
 import RequireAuth, { AuthRoute, EnhancedRoute } from "./auth/require_auth";
 import { Route, Switch, useHistory } from "react-router-dom";
@@ -8,7 +9,7 @@ import SigninWithPIN from "./auth/SigninWithPIN";
 import Signout from "./auth/signout";
 import Surveys from "./pages/Surveys";
 import TenantStorage from "pages/TenantStorage";
-import ToolsBacklogPage from "pages/tools";
+import ToolsBacklogPage from "pages/BacklogList";
 import { UserContext } from "./globalState/UserProvider";
 import { usePersistentState } from "hooks";
 import { useUserContext } from "globalState/UserProvider";
@@ -31,7 +32,6 @@ const EditBlog = lazy(() => import("blog/EditBlog"));
 const UserAdmin = lazy(() => import("UserAdmin"));
 const UserPage = lazy(() => import("pages/UserPage"));
 const UserPermissions = lazy(() => import("./UserPermissions"));
-const VideoPage = lazy(() => import("./pages/Videos"));
 const WorklistSimple = lazy(() => import("./pages/WorklistSimple"));
 const testActivity = lazy(() => import("pages/testActivity"));
 const TenantLogList = lazy(() => import("pages/TenantLogListNew"));
@@ -292,10 +292,7 @@ function AppRoutes() {
       /> */}
       <Route exact path="/chart" component={VSummaryChart} />
       {/* <Route exact path="/addplannedcourserequest" component={AddPlannedCourseRequest} /> */}
-      <Route exact path="/about" component={VideoPage} user={user} />
-      <EnhancedRoute exact path="/videos" component={VideoPage} user={user} />
-      <AuthRoute allowed={["Admin", "PO"]} user={user} exact path="/addvideo" component={AddVideo} />
-      <AuthRoute allowed={["Admin", "PO"]} user={user} exact path="/editvideo/:id" component={EditVideo} />
+
       <Route component={NotFound} />
     </Switch>
   );

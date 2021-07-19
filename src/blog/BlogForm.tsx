@@ -1,13 +1,14 @@
-import { useMutation } from "@apollo/client";
-import HTMLEditor from "common/HTMLEditor";
-import TextInput from "elements/TextInput";
-import TWButton from "elements/TWButton";
-import { useAlert } from "globalState/AlertContext";
-import React, { useState } from "react";
-import { useHistory } from "react-router";
-import { format } from "utils/format";
-import SafeDeleteButton from "videos/SafeDeleteButton";
 import { ADD_BLOG_MUTATION, ALL_BLOGS_QUERY, DELETE_BLOG_MUTATION, UPDATE_BLOG_MUTATION } from "./queries";
+import React, { useState } from "react";
+
+import HTMLEditor from "common/HTMLEditor";
+import SafeDeleteButton from "elements/SafeDeleteButton";
+import TWButton from "elements/TWButton";
+import TextInput from "elements/TextInput";
+import { format } from "utils/format";
+import { useAlert } from "globalState/AlertContext";
+import { useHistory } from "react-router";
+import { useMutation } from "@apollo/client";
 
 export type BlogProps = {
   id?: string;

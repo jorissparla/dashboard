@@ -5,7 +5,7 @@ import { useHasPermissions, useUserContext } from "globalState/UserProvider";
 
 import AutoComplete from "elements/AutoComplete";
 import InputTagsDropDown from "common/InputTagsDD";
-import SafeDeleteButton from "videos/SafeDeleteButton";
+import SafeDeleteButton from "elements/SafeDeleteButton";
 import TWButton from "elements/TWButton";
 import TextInput from "elements/TextInput";
 import { format } from "utils/format";

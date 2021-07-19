@@ -3,7 +3,7 @@ import { useMutation, useQuery } from "@apollo/client";
 
 import HTMLEditor from "common/HTMLEditor";
 import Keywords from "supportcard/SupportCardTags";
-import SafeDeleteButton from "videos/SafeDeleteButton";
+import SafeDeleteButton from "elements/SafeDeleteButton";
 import TWButton from "elements/TWButton";
 import { format } from "date-fns";
 import gql from "graphql-tag";

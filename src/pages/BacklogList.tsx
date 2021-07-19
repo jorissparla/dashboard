@@ -6,9 +6,10 @@ import TWButton, { TWHyperLink } from "../elements/TWButton";
 import { gql, request } from "graphql-request";
 
 import CopyToClipBoard from "react-copy-to-clipboard";
+import SearchBar from "common/SearchBar";
 import Spinner from "../utils/spinner";
 import TWCheckbox from "elements/TWCheckbox";
-import { UserContext } from "./../globalState/UserProvider";
+import { UserContext } from "../globalState/UserProvider";
 import { useAlert } from "globalState/AlertContext";
 import { useParams } from "react-router";
 import { usePersistentState } from "../hooks";
@@ -31,6 +32,7 @@ const MY_BACKLOG_QUERY = gql`
     status
     dayssincelastupdate
     ownergroup
+    product
     daysSinceCreated
     contactname
     escalated
@@ -68,7 +70,7 @@ const ToolsBacklogPage = (props: any) => {
   console.log(`product`, product);
   const allRegions = REGION_LIST;
   const [includeDevelopment, setIncludeDevelopment] = usePersistentState("includeDevelopment1", false);
-  const [includePending, setIncludePending] = usePersistentState("includePending1", false);
+
   const { user } = React.useContext(UserContext);
 
   let enableIt = false;
@@ -99,7 +101,7 @@ const ToolsBacklogPage = (props: any) => {
   }
   return (
     <div className="bg-gray-100 h-screen">
-      <WorklistSimple includeDevelopment={includeDevelopment} includePending={includePending} ownergroup={ownergroups} />
+      <WorklistSimple includeDevelopment={includeDevelopment} ownergroup={ownergroups} active={product} />
     </div>
   );
 };
@@ -138,12 +140,15 @@ function TWRegionList({ onChangeRegion }: any) {
   );
 }
 
-const WorklistSimple = ({ owner = "", ownerId = "", includeDevelopment = false, includePending = false, ownergroup = "LN Tools Support" }) => {
+const WorklistSimple = ({ owner = "", ownerId = "", includeDevelopment = false, ownergroup = "LN Tools Support", active = "All" }) => {
   const params = useParams();
+  const [searchText, setSearchText] = useState("");
   const [filterOver30, setFilterOver30] = useState(false);
   const [filterOver60, setFilterOver60] = useState(false);
   const [includeDev, setIncludeDev] = useState(includeDevelopment);
+  // const [includePending, setIncludePending] = useState(false);
   const [includeAll, setIncludeAll] = useState(false);
+  const [includePending, setIncludePending] = usePersistentState("includePending1", false);
   const [regions, setRegions] = usePersistentState("toolsregions", ["EMEA", "APJ"]);
   const [nrIncidentsShown, setNrIncidentsShown] = useState(0);
   const [config, setConfig] = useState<IConfig | null>(null);
@@ -159,12 +164,19 @@ const WorklistSimple = ({ owner = "", ownerId = "", includeDevelopment = false, 
   if (!data) return <Spinner />;
   let blBase = new Backlog(data.backlog, data.accounts, includeDev, includePending, config, includeAll);
   console.log(`regions`, regions);
+  let statusAr = ["Solution Proposed", "Solution Pending Maintenance", "Awaiting Development"];
+
+  if (includePending) {
+    statusAr = statusAr.filter((s) => s === "Solution Pending Maintenance");
+  }
+
   const [avgAge, all, over30, over60, over90] = blBase
     .init()
     // .hasStatus(["Researching", "On Hold by Customer", "Awaiting Infor", "Awaiting Customer"])
-    .notStatus(["Solution Proposed", "Solution Pending Maintenance", "Awaiting Development"])
+    .notStatus(statusAr)
     .ownergroup(ownergroup)
     .regions(regions)
+    .customername(searchText)
     .sort("daysSinceCreated", "D")
     .daysSinceCreated(filterOver30 ? 30 : filterOver60 ? 60 : 0)
     .getAvgOver30AndOver60AndData();
@@ -174,6 +186,9 @@ const WorklistSimple = ({ owner = "", ownerId = "", includeDevelopment = false, 
 
   function toggleIncludeAll() {
     setIncludeAll(!includeAll);
+  }
+  function togglePending() {
+    setIncludePending(!includePending);
   }
   function toggleIncludeDevelopment() {
     setIncludeDev(!includeDev);
@@ -201,15 +216,25 @@ const WorklistSimple = ({ owner = "", ownerId = "", includeDevelopment = false, 
       {/* <Example /> */}
       <div className="flex flex-col">
         <div className="mx-2 p-2 rounded bg-white">
-          <NavLinks linksAr={linksAr} />
+          <div className="flex items-center">
+            <NavLinks linksAr={linksAr} active={active} />
+            <SearchBar onChange={setSearchText} hintText="Enter part of customer name" />
+          </div>
           <span className="text-xl font-bold">{`${ownergroup}`} incidents - Filter</span>
-          <div className="flex space-x-2 items-center">
-            <TWCheckbox label="Over 30" onChange={toggleOver30} value={filterOver30} />
-            <TWCheckbox label="Over 60" onChange={toggleOver60} value={filterOver60} />
-            <span className=" font-sans font-semibold pb-3 px-3">{`(${all.length})`}</span>
-            <TWRegionList onChangeRegion={changeRegion} />
-            <TWCheckbox label="Include Development" onChange={toggleIncludeDevelopment} value={includeDev} />
-            <TWCheckbox label="Include All Statuses" onChange={toggleIncludeAll} value={includeAll} />
+          <div className="flex w-full items-center justify-between">
+            <div className="flex items-center">
+              <TWCheckbox label="Over 30" onChange={toggleOver30} value={filterOver30} />
+              <TWCheckbox label="Over 60" onChange={toggleOver60} value={filterOver60} />
+              <span className=" font-sans font-semibold pb-3 px-3">{`(${all.length})`}</span>
+              <TWRegionList onChangeRegion={changeRegion} />
+            </div>
+            <div className="flex items-center space-x-2 border-l border-gray-300">
+              <div className="font-semibold pl-24 mx-2 ">Status</div>
+              <TWCheckbox label="Sol.Pending Maintenance" onChange={togglePending} value={includePending} />
+              <TWCheckbox label="Awaiting Development" onChange={toggleIncludeDevelopment} value={includeDev} />
+              <TWCheckbox label="All Statuses" onChange={toggleIncludeAll} value={includeAll} />
+            </div>
+            <div></div>
           </div>
         </div>
         <div className="px-2 pt-2 grid grid-cols-1 gap-x-2 gap-y-2">
@@ -268,17 +293,21 @@ interface TLinksAr {
   linksAr: TLink[];
 }
 const linksAr: TLink[] = [
-  { name: "Tools", link: "/products/tools" },
-  { name: "Logistics", link: "/products/logistics" },
-  { name: "Finance", link: "/products/finance" },
-  { name: "All", link: "/products/all" },
+  { name: "tools", link: "/products/tools" },
+  { name: "logistics", link: "/products/logistics" },
+  { name: "finance", link: "/products/finance" },
+  { name: "all", link: "/products/all" },
 ];
-function NavLinks({ linksAr }: TLinksAr) {
+interface NavLinksProps {
+  linksAr: TLink[];
+  active: string;
+}
+function NavLinks({ linksAr, active }: NavLinksProps) {
   return (
     <nav className="my-2 py-1">
       {linksAr.map((item) => (
-        <TWHyperLink color="teal" link={item.link}>
-          {item.name}
+        <TWHyperLink color={`${active === item.name ? "amber" : "teal"}`} link={item.link}>
+          <span className="capitalize">{item.name}</span>
         </TWHyperLink>
       ))}
     </nav>
@@ -359,6 +388,7 @@ const fieldList: TField[] = [
   { title: "Summary", name: "title" },
   { title: "Escalated", name: "escalated" },
   { title: "Ownergroup", name: "ownergroup" },
+  { title: "Product", name: "product" },
   { title: "Contact", name: "contactname" },
 ];
 function fieldOrHyperLink(row: any, fld: TField) {

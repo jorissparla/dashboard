@@ -120,7 +120,7 @@ class Backlog {
   }
   init() {
     this.temp = this.includeDevelopment ? this.data : this.data.filter((item) => item.status !== "Awaiting Development");
-    this.temp = this.includePending ? this.temp : this.temp.filter((item: { status: string }) => item.status !== "Solution Pending Maintenance");
+    // this.temp = this.temp.includePending ? this.temp : this.temp.filter((item: { status: string }) => item.status !== "Solution Pending Maintenance");
     return this;
   }
 
@@ -173,7 +173,9 @@ class Backlog {
   }
   // customername
   customername(customername: string) {
-    this.temp = this.temp.filter((item: { customername: string }) => item.customername.toLowerCase().includes(customername.toLowerCase()));
+    if (customername) {
+      this.temp = this.temp.filter((item: { customername: string }) => item.customername.toLowerCase().includes(customername.toLowerCase()));
+    }
     return this;
   }
   // customerid

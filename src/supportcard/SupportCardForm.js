@@ -9,7 +9,7 @@ import FavoriteWrapper from "Favorite";
 import HTMLEditor from "common/HTMLEditor";
 import { MUTATION_UPDATE_CARD_KEYWORDS } from "pages/SupportCards";
 import { QUERY_SINGLE_SUPPORTCARD } from "./queries/AUDIT_QUERY";
-import SafeDeleteButton from "videos/SafeDeleteButton";
+import SafeDeleteButton from "elements/SafeDeleteButton";
 import SupportCardTags from "./SupportCardTags";
 import TWButton from "elements/TWButton";
 import { TWSelectMenu } from "elements/TWSelectMenu";

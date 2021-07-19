@@ -1,4 +1,4 @@
-import { GenericDataTable, TField, Widget } from "./tools";
+import { GenericDataTable, TField, Widget } from "./BacklogList";
 import SearchBar, { filterOn } from "common/SearchBar";
 import { gql, useQuery } from "@apollo/client";
 import { useEffect, useState } from "react";

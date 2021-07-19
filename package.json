@@ -101,9 +101,9 @@
     "build:css2": "tailwindcss build src/styles/tailwind.css -o src/styles/app.css "
   },
   "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
+    "ignorePatterns": [
+      "src/*",
+      "!src/test.js"
     ]
   },
   "browserslist": {

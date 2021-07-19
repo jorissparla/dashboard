@@ -70,6 +70,9 @@ const TWHyperLink = ({ children, className = null, link = "", ...props }) => {
     case "teal":
       classes = clsx(classes, newBaseClass, teal_class);
       break;
+    case "amber":
+      classes = clsx(classes, newBaseClass, amber_class);
+      break;
     case "black":
       classes = clsx(classes, newBaseClass, black_class);
       break;

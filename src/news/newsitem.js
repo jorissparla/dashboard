@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router";
+
+import SafeDeleteButton from "../elements/SafeDeleteButton";
 import { TWFileUpload } from "../common/FileUploaderNew";
-import SafeDeleteButton from "../videos/SafeDeleteButton";
+import { useHistory } from "react-router";
 
 const NewsItem = ({ initialValues: newsitem, onSave, onDelete, onCancel, title, classes }) => {
   const history = useHistory();
