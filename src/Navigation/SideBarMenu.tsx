@@ -6,6 +6,7 @@ import ActionHome from "@material-ui/icons/Home";
 import ApplicationIcon from "@material-ui/icons/Launch";
 import AutoExchange from "@material-ui/icons/AirportShuttle";
 import BusinessCenterIcon from "@material-ui/icons/BusinessCenter";
+import { ChartBarIcon } from "@heroicons/react/outline";
 import CodeIcon from "@material-ui/icons/DeveloperMode";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import ExtensionIcon from "@material-ui/icons/ExtensionTwoTone";
@@ -97,13 +98,12 @@ export function SideBarMenu({ classes, history, toggleMenu, open }: ISideBarProp
         <ToggledNavLink title="Proactive Projects!" Icon={BusinessCenterIcon} navigateTo="/projects" history={history} color="text-blue-800" />
         {isAdmin && <ToggledNavLink title="Permissions" Icon={Person} navigateTo="/userpermissions" history={history} />}
         {isAdmin && <ToggledNavLink title="Logged in Users" Icon={PeopleOutlineIcon} navigateTo="/loggedinusers" history={history} />}
-        <ToggledNavLink title="LN Charts" Icon={LNChartsIcon} navigateTo="/historyln" history={history} color="text-blue-800" />
         <ExpandableMenuItem classes={classes} title="Stats Graphs" Icon={GoLiveIcon}>
-          <ToggledNavLink title="Logistics" Icon={ApplicationIcon} navigateTo="/team/logistics" history={history} />
-          <ToggledNavLink title="Finance" Icon={ApplicationIcon} navigateTo="/team/finance" history={history} />
-          <ToggledNavLink title="Tools" Icon={ApplicationIcon} navigateTo="/team/tools" history={history} />
-          <ToggledNavLink title="Backlog" Icon={ApplicationIcon} navigateTo="/historyall" history={history} />
-          <ToggledNavLink title="Backlog LN " Icon={ApplicationIcon} navigateTo="/historyln" history={history} />
+          <ToggledNavLink title="Backlog LN APJ " Icon={LNChartsIcon} navigateTo="/historyln/APJ" history={history} />
+          <ToggledNavLink title="Backlog LN EMEA" Icon={LNChartsIcon} navigateTo="/historyln/EMEA" history={history} />
+          <ToggledNavLink title="Backlog LN LA" Icon={LNChartsIcon} navigateTo="/historyln/LA" history={history} />
+          <ToggledNavLink title="Backlog LN NA" Icon={LNChartsIcon} navigateTo="/historyln/NA" history={history} />
+          <ToggledNavLink title="Backlog LN All" Icon={LNChartsIcon} navigateTo="/historyln/All" history={history} />
           <ToggledNavLink title="Backlog Xpert" Icon={XpertIcon} navigateTo="/historyother" history={history} />
         </ExpandableMenuItem>
         <hr className="border-t-1  bg-grey-200" />

@@ -1,10 +1,11 @@
-import { useQuery } from "@apollo/client";
-import gql from "graphql-tag";
-import { usePersistentState } from "hooks";
-import React from "react";
-import { format } from "utils/format";
-import Spinner from "utils/spinner";
 import HistoryChart from "./historychart";
+import React from "react";
+import Spinner from "utils/spinner";
+import { TWHyperLink } from "../elements/TWButton";
+import { format } from "utils/format";
+import gql from "graphql-tag";
+import { useParams } from "react-router";
+import { useQuery } from "@apollo/client";
 
 const transform = (data, value) =>
   data.map(({ date, number }) => ({
@@ -23,23 +24,36 @@ const transform2 = (data, value) =>
     data: { y: number, color: "rgba(144, 202, 249, 0.75)" },
   }));
 
-const LNByRegionContainer = ({ color = "#ffb74d" }) => {
-  const [region, setRegion] = usePersistentState("");
-  const [displayRegion, setDisplayRegion] = usePersistentState("ALL");
-  const { data, loading } = useQuery(QUERY_HISTORY_LN, {
-    variables: { region },
-  });
-  if (loading) return <Spinner />;
-  console.log(data);
+const linksAr = [
+  { name: "APJ", link: "/historyLN/APJ" },
+  { name: "EMEA", link: "/historyLN/EMEA" },
+  { name: "LA", link: "/historyLN/LA" },
+  { name: "NA", link: "/historyLN/NA" },
+  { name: "All", link: "/historyLN/ALL" },
+];
 
-  function changeRegion(val) {
-    setDisplayRegion(val);
-    if (val === "ALL") {
-      setRegion("");
-    } else {
-      setRegion(val);
-    }
-  }
+function NavLinks({ linksAr, active }) {
+  return (
+    <nav className="my-2 py-1">
+      {linksAr.map((item) => (
+        <TWHyperLink key={item.name} color={`${active.toUpperCase() === item.name.toUpperCase() ? "amber" : "teal"}`} link={item.link}>
+          <span className="capitalize">{item.name}</span>
+        </TWHyperLink>
+      ))}
+    </nav>
+  );
+}
+
+const LNByRegionContainer = ({ color = "#ffb74d" }) => {
+  const { region } = useParams();
+  let defaultRegion = region === "ALL" ? "" : region;
+  const { data, loading } = useQuery(QUERY_HISTORY_LN, {
+    variables: { region: defaultRegion },
+  });
+
+  if (loading) return <Spinner />;
+  console.log("displayRegion", defaultRegion, region, color);
+
   // return <div>{JSON.stringify(data, null, 2)}</div>;
   // const { All, Logistics, Finance, Tools } = data;
   if (!data) return <div>No data</div>;
@@ -51,25 +65,13 @@ const LNByRegionContainer = ({ color = "#ffb74d" }) => {
   const ageLogistics = transform2(data.Logistics, "ageLogistics");
   const ageFinance = transform2(data.Finance, "ageFinance");
   const ageTools = transform2(data.Tools, "ageTools");
-  console.log(All);
-  // const historyPLM = transform(data.PLM, 'plm');
-  // return <div>Data</div>;
 
   return (
     <div className="h-screen bg-gray-100">
+      <div className="m-2 p-2">
+        <NavLinks active={region} linksAr={linksAr} />
+      </div>
       <div className="flex flex-wrap mx-4">
-        <div className="m-2 w-full rounded shadow-md bg-white p-2">
-          <label className="block">
-            <span className="text-gray-700">Filter Region</span>
-            <select className="form-select block w-32 mt-1" value={displayRegion} onChange={(e) => changeRegion(e.target.value)}>
-              <option>ALL</option>
-              <option>EMEA</option>
-              <option>NA</option>
-              <option>APJ</option>
-              <option>LA</option>
-            </select>
-          </label>
-        </div>
         <div className="m-2 rounded shadow-lg ">
           <HistoryChart data={All} title={`Backlog LN (excl. Sol.Proposed)`} type="area" color={color} xvalue="date" value={`All`} />
         </div>

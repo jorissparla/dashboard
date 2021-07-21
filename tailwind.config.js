@@ -110,6 +110,7 @@ module.exports = {
         "light-blue": colors.sky,
         wiep: colors.pink,
         emerald: colors.emerald,
+
         // gray: {
         //   50: "#f9fafb",
         //   100: "#f4f5f7",

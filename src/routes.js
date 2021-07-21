@@ -4,6 +4,7 @@ import React, { lazy } from "react";
 import RequireAuth, { AuthRoute, EnhancedRoute } from "./auth/require_auth";
 import { Route, Switch, useHistory } from "react-router-dom";
 
+import Landingpage from "./pages/Landingpage";
 import Signin from "./auth/signin";
 import SigninWithPIN from "./auth/SigninWithPIN";
 import Signout from "./auth/signout";
@@ -136,6 +137,7 @@ function AppRoutes() {
   return (
     <Switch>
       <AuthRoute exact path="/essentialworklist" component={WorklistSimple} />
+      <Route exact path="/landing" component={Landingpage} />
       <Route exact path="/tools" component={ToolsBacklogPage} />
       <Route exact path="/products/:product" component={ToolsBacklogPage} />
       <Route exact path="/whatdoesdev" component={WhatDoesDev} />
@@ -192,7 +194,7 @@ function AppRoutes() {
       <Route exact path="/main" component={Main} user={user} history={history} />
 
       <Route exact path="/myworkparams" component={Parameters} user={user} history={history} />
-      <Route exact path="/" component={DashBoardContainer} user={user} />
+      <Route exact path="/" component={Landingpage} user={user} />
       <Route exact path="/newspage" component={NewsPage} />
 
       <Route exact path="/priority" component={PriorityDashboard} history={history} user={user} />
@@ -275,7 +277,12 @@ function AppRoutes() {
       <Route path="/historyday" component={HistoryDayContainer} />
       <Route path="/historyall" component={HistoryDayAll} />
       <Route path="/historyother" component={OtherTeamsChartContainer} />
-      <Route path="/historyln" component={LNByRegionContainer} />
+      <Route path="/historyln/:region" component={LNByRegionContainer} defaultRegion="" color="black" />
+      <Route path="/historylnAll" component={LNByRegionContainer} defaultRegion="" color="black" />
+      <Route path="/historylnAPJ" component={LNByRegionContainer} defaultRegion="APJ" color="black" />
+      <Route path="/historylnEMEA" component={LNByRegionContainer} defaultRegion="EMEA" color="black" />
+      <Route path="/historylnLA" component={LNByRegionContainer} defaultRegion="LA" color="black" />
+      <Route path="/historylnNA" component={LNByRegionContainer} defaultRegion="NA" color="black" />
       <Route path="test/edit/:id" component={NewsItemContainer} />
       <Route exact path="/test/dashboard" component={DashBoardStatsNew} />
       <Route exact path="/test/dashboard/team/:team" component={DashBoardStatsNew} />
